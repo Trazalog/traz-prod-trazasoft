@@ -6,11 +6,14 @@ class Dash extends CI_Controller {
       parent::__construct();
       $this->load->helper('menu_helper');
       $this->load->helper('file');
+      $this->load->model('sistema/Lenguajes');
    }
    function index(){
      
-      $data['menu'] = menu(file_get_contents("C:/xampp7.3/htdocs/traz-prod-trazasoft/menu.json"));
-      
+      $data['menu'] = menu($this->session->userdata['id']);
+      $leng="spanish";
+      $page="layout";
+      $data['lang'] = $this->Lenguajes->get($leng,$page);
       $this->load->view('layout/Admin',$data);
    }
 }

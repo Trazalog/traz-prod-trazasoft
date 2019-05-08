@@ -2,9 +2,15 @@
 
 if(!function_exists('menu')){
 
-    function menu($json)
+    function menu($user)
     {
-        $array =  json_decode($json);
+        $REST= 'http://localhost:8080/';
+        $parametros["http"]["method"] = "GET";		 
+        $param = stream_context_create($parametros);
+        $resource = 'menu?user='.$user;	 	
+        $url = $REST.$resource;
+        $array = file_get_contents($url, false, $param);
+        $array =  json_decode($array);
        // var_dump($array->menu);die;
         $html = '<ul class="sidebar-menu menu" data-widget="tree">
         <li class="header">MAIN NAVIGATION</li>';
