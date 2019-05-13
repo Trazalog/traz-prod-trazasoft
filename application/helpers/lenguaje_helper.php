@@ -1,12 +1,8 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-class Lenguajes extends CI_Model
-{
-	function __construct()
-	{
-		parent::__construct();
-    }
+<?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-    public function get($leng,$page)
+if(!function_exists('lang_get')){
+
+    function lang_get($leng, $page)
     {
         $parametros["http"]["method"] = "GET";		 
         $param = stream_context_create($parametros);

@@ -4,14 +4,31 @@
         <div class="box-header">
           <h3 class="box-title">Etapas</h3>
           <div class="row">
+            <div class="col-xs-10">
+            <?php
+                       
+                  	foreach($etapas->etapas as $fila)
+                    {
+                      echo "<button class='btn btn-app' onclick='muestra(`".$fila->titulo."`,`".json_encode($list->etapas)."`)'> ".$fila->titulo."  </button>
+                      <i class='".$fila->icon."'></i>";
+                    }
+                    ?>
+          <button class="btn btn-app" onclick='muestra(`todas`,`<?php echo json_encode($list->etapas);?>`)'> Todas</button>
+           </div>
+          <div class="col-xs-2">
+            <button type="button" class=" btn btn-primary
+  glyphicon glyphicon-plus dropdown-toggle"  data-toggle="dropdown"  aria-expanded="false" >Nuevo
+                    <span class="fa fa-caret-down"></span></button>
+                    <ul class="dropdown-menu" id="nuevo">
+                    <?php
+                       
+                       foreach($etapas->etapas as $fila)
+                       {
+                         echo "<li data-value='".$fila->titulo."'><a >".$fila->titulo."</a></li>";
+                       }
+                       ?>
+                  </ul>
           </div>
-          <div class="row mt-4">
-          <button class="btn btn-app" onclick='muestra(`siembra`,`<?php echo json_encode($list->etapas);?>`)'> Siembra  </button>
-         <button class="btn btn-app" onclick='muestra(`zaranda`,`<?php echo json_encode($list->etapas);?>`)'> Zaranda  </button>
-         <button class="btn btn-app" onclick='muestra(`limpieza`,`<?php echo json_encode($list->etapas);?>`)'> Limpieza  </button>
-         <button class="btn btn-app" onclick='muestra(`estacionamiento`,`<?php echo json_encode($list->etapas);?>`)'> Estacionamiento  </button>
-         <button class="btn btn-app" onclick='muestra(`fraccionamiento`,`<?php echo json_encode($list->etapas);?>`)'> Fraccionamiento </button>
-         <button class="btn btn-app" onclick='muestra(`todas`,`<?php echo json_encode($list->etapas);?>`)'> Todas</button>
           </div>
          
         </div><!-- /.box-header -->
@@ -35,10 +52,10 @@
                     {
                   
                         $id=$fila->id;
-                        echo '<tr  id="'.$id.'" >';
+                        echo '<tr  id="'.$id.'" data-json:'.json_encode($fila).'>';
 
                         echo '<td>';
-                        echo '<i class="fa fa-fw fa-pencil text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Editar" data-toggle="modal" data-target="#modaleditar"></i>';
+                        echo '<i class="fa fa-fw fa-pencil text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Editar" onclick="Editar()"></i>';
                         echo '<i class="fa fa-fw fa-times-circle text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Eliminar" onclick="seleccionar(this)"></i>';
                         echo '</td>';
                         
@@ -55,6 +72,10 @@
                 ?>
             </tbody>
           </table>
+          
+          
+                 
+         
         </div><!-- /.box-body -->
       </div><!-- /.box -->
     </div><!-- /.col -->
@@ -70,7 +91,7 @@
       "targets": [0],
       "orderable": false
     }],
-    "order": [[1, "asc"]],
+    
   }); 
   function muestra(op,etapas)
   {
@@ -135,10 +156,12 @@
      document.getElementById('etapas').innerHTML='';
      document.getElementById('etapas').innerHTML = html;
      $("#etapas").dataTable().fnDestroy();
-
-$("#etapas").dataTable({
-   // ... skipped ...
-});
+     $("#etapas").dataTable({});
 
   }
+  var ul = document.getElementById('nuevo');
+   ul.onclick = function(event) {
+    var target = event.target.innerHTML;
+    linkTo('general/Etapa/nuevo?op='+target);
+    }
   </script>
