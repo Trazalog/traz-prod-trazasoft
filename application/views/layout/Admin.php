@@ -118,7 +118,7 @@
    
         var link = '';
        
-        $('.menu a').on('click',function(){
+        $('.menu .link').on('click',function(){
             link = $(this).data('link');
             linkTo();
         });

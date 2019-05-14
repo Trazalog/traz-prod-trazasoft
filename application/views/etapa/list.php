@@ -7,13 +7,13 @@
             <div class="col-xs-10">
             <?php
                        
-                  	foreach($etapas->etapas as $fila)
+                  	foreach($etapas as $fila)
                     {
-                      echo "<button class='btn btn-app' onclick='muestra(`".$fila->titulo."`,`".json_encode($list->etapas)."`)'> ".$fila->titulo."  </button>
+                      echo "<button class='btn btn-app' onclick='muestra(`".$fila->titulo."`,`".json_encode($list)."`)'> ".$fila->titulo."  </button>
                       <i class='".$fila->icon."'></i>";
                     }
                     ?>
-          <button class="btn btn-app" onclick='muestra(`todas`,`<?php echo json_encode($list->etapas);?>`)'> Todas</button>
+          <button class="btn btn-app" onclick='muestra(`todas`,`<?php echo json_encode($list);?>`)'> Todas</button>
            </div>
           <div class="col-xs-2">
             <button type="button" class=" btn btn-primary
@@ -22,7 +22,7 @@
                     <ul class="dropdown-menu" id="nuevo">
                     <?php
                        
-                       foreach($etapas->etapas as $fila)
+                       foreach($etapas as $fila)
                        {
                          echo "<li data-value='".$fila->titulo."'><a >".$fila->titulo."</a></li>";
                        }
@@ -34,7 +34,7 @@
         </div><!-- /.box-header -->
         <div class="box-body">
           <table id="etapas" class="table table-bordered table-hover">
-            <thead>
+          <thead class="thead-dark">
               <tr>
                 <th>Acciones</th>
                 <th>Etapa</th>
@@ -48,7 +48,7 @@
             <tbody>
               <?php
                        
-                  	foreach($list->etapas as $fila)
+                  	foreach($list as $fila)
                     {
                   
                         $id=$fila->id;
@@ -59,7 +59,7 @@
                         echo '<i class="fa fa-fw fa-times-circle text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Eliminar" onclick="seleccionar(this)"></i>';
                         echo '</td>';
                         
-                        echo '<td>'.$fila->etapa.'</td>';
+                        echo '<td>'.$fila->titulo.'</td>';
       	                echo '<td>'.$fila->producto.'</td>';
                         echo '<td>'.$fila->cantidad.' '.$fila->unidad.'</td>';  
                         echo '<td>'.$fila->establecimiento.'</td>';
@@ -70,7 +70,7 @@
                     }
        
                 ?>
-            </tbody>
+            </tbody> 
           </table>
           
           
@@ -80,24 +80,17 @@
       </div><!-- /.box -->
     </div><!-- /.col -->
   </div><!-- /.row -->
+  </body>
   <script>
+  
   $('#etapas').DataTable({
-    "aLengthMenu": [10, 25, 50, 100],
-    "columnDefs": [{
-      "targets": [0],
-      "searchable": false
-    },
-    {
-      "targets": [0],
-      "orderable": false
-    }],
-    
+  
   }); 
   function muestra(op,etapas)
   {
      etapas= JSON.parse(etapas);
      html="";
-     html= '<thead>'+
+     html= '<thead class="thead-dark">'+
               '<tr>'+
                 '<th>Acciones</th>'+
                ' <th>Etapa</th>'+
@@ -119,7 +112,7 @@
                          '<i class="fa fa-fw fa-pencil text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Editar" data-toggle="modal" data-target="#modaleditar"></i>'+
                          '<i class="fa fa-fw fa-times-circle text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Eliminar" onclick="seleccionar(this)"></i>'+
                          '</td>'+
-                         '<td>'+etapas[i].etapa+'</td>'+
+                         '<td>'+etapas[i].titulo+'</td>'+
       	                 '<td>'+etapas[i].producto+'</td>'+
                          '<td>'+etapas[i].cantidad+' '+etapas[i].unidad+'</td>'+  
                          '<td>'+etapas[i].establecimiento+'</td>'+
@@ -132,13 +125,13 @@
      {
         for(var i=0; i<etapas.length; i++)
                 {
-              if(etapas[i].etapa === op)
+              if(etapas[i].titulo === op)
               {
                         html= html + '<tr  id="'+etapas[i].id+'" ><td>'+
                          '<i class="fa fa-fw fa-pencil text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Editar" data-toggle="modal" data-target="#modaleditar"></i>'+
                          '<i class="fa fa-fw fa-times-circle text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Eliminar" onclick="seleccionar(this)"></i>'+
                          '</td>'+
-                         '<td>'+etapas[i].etapa+'</td>'+
+                         '<td>'+etapas[i].titulo+'</td>'+
       	                 '<td>'+etapas[i].producto+'</td>'+
                          '<td>'+etapas[i].cantidad+' '+etapas[i].unidad+'</td>'+  
                          '<td>'+etapas[i].establecimiento+'</td>'+
@@ -165,3 +158,4 @@
     linkTo('general/Etapa/nuevo?op='+target);
     }
   </script>
+  

@@ -46,7 +46,8 @@
     <!-- <script src="<?php base_url() ?>lib/dist/js/pages/dashboard.js"></script> -->
     <!-- AdminLTE for demo purposes -->
     <!-- <script src="<?php base_url() ?>lib/dist/js/demo.js"></script> -->
-
+    <!--Arma Tablas -->
+    <script src="<?php echo base_url('application/js/tabla.js');?>"></script>
 
 
 

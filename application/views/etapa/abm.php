@@ -24,7 +24,7 @@
                 <label for="establecimientos" class="form-label">Establecimiento:</label>
                </div>
                <div class="col-xs-4">
-                <select class="form-control" onchange="actualizaRecipiente()" id="establecimientos">
+                <select class="form-control select2 select2-hidden-accesible" onchange="actualizaRecipiente()" id="establecimientos">
                     <option value="" disabled selected>-Seleccione Establecimiento-</option>
                     <?php
                     foreach($establecimientos as $fila)
@@ -69,34 +69,58 @@
                 </div>
             </div>
            </div>
-           <div class="row">
+           <div class="row" style="margin-top: 40px ">
              <div class="col-xs-12">
-             <div class="box-group" id="accordion">
              <div class="nav-tabs-custom">
-            <ul class="nav nav-tabs">
-              <li class=""><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" class="collapsed" aria-expanded="false">
-                        Tareas
-                      </a></li>
-              <li class=""> <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" class="collapsed">
-                        Calendario
-                      </a></li>
-            </ul>
-               
-                  <div id="collapseOne" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
-                    <div class="box-body">
-                    Aca iria el Calendario.
-                    </div>
-                  </div>
-                
-                  <div id="collapseTwo" class="panel-collapse collapse" aria-expanded="false">
-                    <div class="box-body">
-                     Aca las Tareas
-                    </div>
-                  </div>
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">Calendario</a></li>
+                  <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">Tareas</a></li>
+                </ul>
+            <div class="tab-content">
+              <div class="tab-pane active" id="tab_1">
+                <p>Aca iria el Calendario</p>
+              </div>
+              <div class="tab-pane" id="tab_2">
+             <div class="row form-group">
+              <div class="col-xs-1">
+                  <label for="tarea" class="form-label">Tarea:</label>
+              </div>
+              <div class="col-xs-5 input-group">
+                  <select name="tarea" id="tarea" class="form-control select2">
+                    <option disabled value="" selected>-Seleccione Tarea-</option>
+                  </select>
+                  <span class="input-group-btn">
+                  <button class='btn btn-sm btn-primary' onclick='armaTabla("tabla1","divtabla",`<?php echo json_encode($establecimientos);?>`)'><i class="glyphicon glyphicon-search"></i></button>
+                  </span>
+              </div>
+              <div class="col-xs-6"></div>
+             </div>
+             <div class="row form-group">
+              <div class="col-xs-1">
+                  <label for="template" class="form-label">Template:</label>
+              </div>
+              <div class="col-xs-5 input-group">
+                  <select name="template" id="template" class="form-control select2">
+                    <option disabled value="" selected>-Seleccione Template-</option>
+                  </select>
+                  <span class="input-group-btn">
+                  <button class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-plus"></i>Agregar</button>
+                  </span>
+              </div>
+              <div class="col-xs-6"></div>
+             </div>
+             <div class="row">
+                <div class="col-sm-12" id="divtabla">
                 </div>
               </div>
-             </div>
-           </div>
+              </div>
+             
+              </div>
+              
+            </div>
+          </div>
+         </div>
+        </div>
            <div class="row">
              <div class="col-xs-10"></div>
              <div class="col-xs-2">
@@ -109,6 +133,7 @@
     </div><!-- /.col -->
   </div><!-- /.row -->
   <script>
+
   function actualizaRecipiente()
   {
      
@@ -120,15 +145,14 @@
       url: 'general/Recipiente/listarPorEstablecimiento', 
       success: function(result){
       result = JSON.parse(result);
-      alert(result);
-      /*var html="";
+      var html="";
        html = html +'<option value="" disabled selected>-Seleccione Recipiente-</option>';
        for(var i =0;i<result.length;i++)
        {
            html = html + '<option value="'+result[i].id+'">'+result[i].titulo+'</option>';
        }
         document.getElementById('recipientes').disabled = false;
-        document.getElementById('recipientes').innerHTML = html;*/
+        document.getElementById('recipientes').innerHTML = html;
       }
      
     });
@@ -168,3 +192,4 @@
     }
   }
   </script>
+  

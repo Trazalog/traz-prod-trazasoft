@@ -14,8 +14,8 @@ class Etapa extends CI_Controller {
 	// Muestra listado de articulos
 	public function index()
 	{
-				$data['list'] = $this->Etapas->listar();
-				$data['etapas'] = $this->Etapas->listarEtapas();
+				$data['list'] =$this->Etapas->listar()->etapas->etapa;
+				$data['etapas'] = $this->Etapas->listarEtapas()->etapas->etapa;
 		//$data['permission'] = 'Add-Edit-Del-View';
 		$this->load->view('etapa/list', $data);
 		}
@@ -23,11 +23,11 @@ class Etapa extends CI_Controller {
 	 {
 		$data['op'] = $this->input->get('op');
 		$data['accion'] = 'Nuevo';
-		$data['establecimientos'] = $this->Establecimientos->listar($data['op'])->establecimientos;
+		$data['establecimientos'] = $this->Establecimientos->listar($data['op'])->establecimientos->establecimiento;
 		$this->load->view('etapa/abm', $data);
 	 }
 	 public function crear()
 	 {
-		
+
 	 }
 }
