@@ -12,7 +12,16 @@ class Tabla extends CI_Controller {
     {
         $json = $this->input->post('json');
         $id = $this->input->post('idtabla');
-        $res = armaBusca($json,$id);
+        $acciones = $this->input->post('acciones');
+        $res = armaBusca($json,$id,$acciones);
+        echo $res;
+    }
+    function insertaFila()
+    {
+        $json = $this->input->post('json');
+        $id = $this->input->post('idtabla');
+        $acciones = $this->input->post('acciones');
+        $res = insertarFila($json,$id,$acciones);
         echo $res;
     }
 }

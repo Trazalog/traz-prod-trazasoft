@@ -1,3 +1,4 @@
+<?php $this->load->view('etapa/modal_tareas');?>
 <div class="row">
     <div class="col-xs-12">
       <div class="box container-fluid">
@@ -86,11 +87,18 @@
                   <label for="tarea" class="form-label">Tarea:</label>
               </div>
               <div class="col-xs-5 input-group">
-                  <select name="tarea" id="tarea" class="form-control select2">
-                    <option disabled value="" selected>-Seleccione Tarea-</option>
-                  </select>
+              <input list="tareas" class="form-control">
+                <datalist id="tareas">
+                <?php foreach($tareas as $fila)
+                {
+                 echo  '<option value="'.$fila->titulo.'">';
+                }
+                  ?>
+                </datalist>
                   <span class="input-group-btn">
-                  <button class='btn btn-sm btn-primary' onclick='armaTabla("tabla1","divtabla",`<?php echo json_encode($establecimientos);?>`)'><i class="glyphicon glyphicon-search"></i></button>
+                  <button class='btn btn-sm btn-primary' 
+                  onclick='armaTabla("tablatareas","modaltareas",`<?php echo json_encode($tareas);?>`,"Add")' data-toggle="modal" data-target="#modal_tareas">
+                  <i class="glyphicon glyphicon-search"></i></button>
                   </span>
               </div>
               <div class="col-xs-6"></div>
@@ -110,6 +118,7 @@
               <div class="col-xs-6"></div>
              </div>
              <div class="row">
+             <input type="hidden" id="existe_tabla" value="no">
                 <div class="col-sm-12" id="divtabla">
                 </div>
               </div>
@@ -191,5 +200,6 @@
       return true;
     }
   }
+ 
   </script>
   
