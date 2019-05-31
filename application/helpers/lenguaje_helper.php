@@ -4,9 +4,17 @@ if(!function_exists('lang_get')){
 
     function lang_get($leng, $page)
     {
+        if($leng == 'spanish')
+        {
+            $resource = 'languageesp'; 
+        }
+        if($leng == 'english')
+        {
+            $resource = 'languageing'; 
+        }
         $parametros["http"]["method"] = "GET";		 
         $param = stream_context_create($parametros);
-        $resource = 'language?lang='.$leng.'&page='.$page;	 	
+       	
         $url = 'http://localhost:8080/'.$resource;
         $lang = file_get_contents($url, false, $param);
         $lang = json_decode($lang,true);

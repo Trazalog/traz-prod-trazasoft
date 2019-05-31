@@ -9,7 +9,7 @@ class Tabla extends CI_Controller {
 		$this->load->model('general/Recipientes');
     }
     function armaTabla()
-    {
+    {   
         $json = $this->input->post('json');
         $id = $this->input->post('idtabla');
         $acciones = $this->input->post('acciones');

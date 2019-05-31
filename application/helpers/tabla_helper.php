@@ -13,12 +13,13 @@ if(!function_exists('armaBusca')){
             $html = $html.'<th>Acciones</th>';
         }
         $keys = array();
-        while($element = current($array[0])) {
-            $head=key($array[0]);
+        for($i = 0;$i<count(array_keys((array)$array[0]));$i++)
+        {
+            $head=array_keys((array)$array[0])[$i];
             array_push($keys,$head);
             $html = $html.'<th>'.$head.'</th>';
-            next($array[0]);
         }
+        
        
         $html = $html.'</tr></thead><tbody>';
         foreach($array as $fila)
@@ -33,7 +34,19 @@ if(!function_exists('armaBusca')){
             for($i = 0;$i<count($keys);$i++)
                 {
                 $key = $keys[$i];
+                if(is_array($fila->$key))
+                    {
+                        $html= $html.'<td> <button class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-search"';
+                       $title='title="';
+                       for($j=0;$j<count($fila->$key);$j++)
+                       {
+                           $title = $title.$j.' '.$fila->$key[$j]->titulo.PHP_EOL;
+                       }
+                       $title = $title.'"';
+                        $html= $html.$title.'></i></button></td>';
+                    }else{
                 $html= $html.'<td>'.$fila->$key.'</td>';
+                    }
             }
             $html = $html.'</tr>';
         }
@@ -45,16 +58,16 @@ if(!function_exists('armaBusca')){
     {
         $acc = '<td>';
         if(strpos($acciones,'Edit') !== false) {
-            $acc= $acc.'<i class="fa fa-fw fa-pencil text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Editar" id="'.$id.'_editar"></i>';
+            $acc= $acc.'<i class="fa fa-fw fa-pencil text-light-blue '.$id.'_editar" style="cursor: pointer; margin-left: 15px;" title="Editar" ></i>';
           }
           if(strpos($acciones,'Add') !== false) {
             $acc= $acc.'<i class="fa fa-fw fa-plus text-light-blue '.$id.'_nuevo" style="cursor: pointer; margin-left: 15px;" title="Nuevo"></i>';
           }
           if(strpos($acciones,'Del') !== false) {
-            $acc= $acc.'<i class="fa fa-fw fa-minus-circle text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Borrar" id="'.$id.'_borrar"></i>';
+            $acc= $acc.'<i class="fa fa-fw fa-minus-circle text-light-blue '.$id.'_borrar" style="cursor: pointer; margin-left: 15px;" title="Borrar"></i>';
           }
           if(strpos($acciones,'View') !== false) {
-            $acc= $acc.'<i class="fa fa-fw fa-search text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Ver" id="'.$id.'_ver"></i>';
+            $acc= $acc.'<i class="fa fa-fw fa-search text-light-blue '.$id.'_ver" style="cursor: pointer; margin-left: 15px;" title="Ver" ></i>';
           }
           $acc = $acc.'</td>';
           return $acc;
@@ -70,7 +83,7 @@ if(!function_exists('armaBusca')){
             next($array[0]);
         };
         $jason = "'".json_encode(array($array))."'";
-        $ret = '<tr id="'.$array[0]->id.'" data-json="'.$jason.'">';
+        $ret = '<tr id="'.$array[0]->id.'" data-json='.$jason.'>';
         $acc = agregaAcciones($id,$acciones);
         $ret = $ret.$acc;
         for($i = 0;$i<count($keys);$i++)

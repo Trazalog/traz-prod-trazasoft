@@ -55,7 +55,7 @@
                         echo '<tr  id="'.$id.'" data-json:'.json_encode($fila).'>';
 
                         echo '<td>';
-                        echo '<i class="fa fa-fw fa-pencil text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Editar" onclick="Editar()"></i>';
+                        echo '<i class="fa fa-fw fa-pencil text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Editar" onclick=linkTo("general/Etapa/editar?id='.$id.'")></i>';
                         echo '<i class="fa fa-fw fa-times-circle text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Eliminar" onclick="seleccionar(this)"></i>';
                         echo '</td>';
                         
@@ -109,7 +109,7 @@
                   	for(var i=0; i<etapas.length; i++)
                     {
                         html= html + '<tr  id="'+etapas[i].id+'" ><td>'+
-                         '<i class="fa fa-fw fa-pencil text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Editar" data-toggle="modal" data-target="#modaleditar"></i>'+
+                         '<i class="fa fa-fw fa-pencil text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Editar" onclick="linkTo("general/Etapa/editar/'+etapas[i].id+'")"></i>'+
                          '<i class="fa fa-fw fa-times-circle text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Eliminar" onclick="seleccionar(this)"></i>'+
                          '</td>'+
                          '<td>'+etapas[i].titulo+'</td>'+
@@ -128,7 +128,7 @@
               if(etapas[i].titulo === op)
               {
                         html= html + '<tr  id="'+etapas[i].id+'" ><td>'+
-                         '<i class="fa fa-fw fa-pencil text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Editar" data-toggle="modal" data-target="#modaleditar"></i>'+
+                         '<i class="fa fa-fw fa-pencil text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Editar" onclick="linkTo("general/Etapa/editar/'+etapas[i].id+'")"></i>'+
                          '<i class="fa fa-fw fa-times-circle text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Eliminar" onclick="seleccionar(this)"></i>'+
                          '</td>'+
                          '<td>'+etapas[i].titulo+'</td>'+

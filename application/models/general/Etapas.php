@@ -9,22 +9,58 @@ class Etapas extends CI_Model
     }
     function listar()
     {
-        $REST= 'http://localhost:8080/';
+        
         $parametros["http"]["method"] = "GET";		 
         $param = stream_context_create($parametros);
         $resource = 'etapatodo';	 	
-        $url = $REST.$resource;
+        $url = REST.$resource;
         $array = file_get_contents($url, false, $param);
         return json_decode($array);
     }
     function listarEtapas()
     {
-        $REST= 'http://localhost:8080/';
+       
         $parametros["http"]["method"] = "GET";		 
         $param = stream_context_create($parametros);
         $resource = 'etapas';	 	
-        $url = $REST.$resource;
+        $url = REST.$resource;
         $array = file_get_contents($url, false, $param);
         return json_decode($array);
+    }
+    function buscar($id)
+    {
+        $parametros["http"]["method"] = "GET";		 
+        $param = stream_context_create($parametros);
+        if ($id == 1)
+        {
+            $resource = 'etapaeditar';	
+        }
+        if ($id == 2)
+        {
+            $resource = 'etapa2';	
+        }
+        $url = REST.$resource;
+        $array = file_get_contents($url, false, $param);
+        return json_decode($array);
+    }
+    function nuevo($opcion)
+    {
+        $parametros["http"]["method"] = "GET";		 
+        $param = stream_context_create($parametros);
+        $resource = 'etapasnuevo';	 	
+        $url = REST.$resource;
+        $array = file_get_contents($url, false, $param);
+        return json_decode($array);
+    }
+    function guardar($etapa)
+    {
+        /*$parametros["http"]["method"] = "GET";		 
+        $param = stream_context_create($parametros);
+        $resource = 'etapasnuevo';	 	
+        $url = REST.$resource;
+        $array = file_get_contents($url, false, $param);
+        return json_decode($array);*/
+        
+        return;
     }
 }
