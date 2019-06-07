@@ -48,4 +48,14 @@ function listarPorMateria($id)
         $array = file_get_contents($url, false, $param);
         return json_decode($array);
     }
+    function listar()
+    {
+        
+        $parametros["http"]["method"] = "GET";		 
+        $param = stream_context_create($parametros);
+        $resource = 'lotestodo';
+        $url = REST.$resource;
+        $array = file_get_contents($url, false, $param);
+        return json_decode($array);
+    }
 }

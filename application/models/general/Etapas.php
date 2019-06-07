@@ -35,9 +35,9 @@ class Etapas extends CI_Model
         {
             $resource = 'etapaeditar';	
         }
-        if ($id == 2)
+        if ($id == 3)
         {
-            $resource = 'etapa2';	
+            $resource = 'fraccioneditar';	
         }
         $url = REST.$resource;
         $array = file_get_contents($url, false, $param);
@@ -45,9 +45,15 @@ class Etapas extends CI_Model
     }
     function nuevo($opcion)
     {
+        if($opcion == 3)
+        {
+            $resource = 'fraccionarnuevo';
+        }else{
+            $resource = 'etapasnuevo';
+        }
         $parametros["http"]["method"] = "GET";		 
         $param = stream_context_create($parametros);
-        $resource = 'etapasnuevo';	 	
+        	 	
         $url = REST.$resource;
         $array = file_get_contents($url, false, $param);
         return json_decode($array);

@@ -16,4 +16,5 @@ class Recipiente extends CI_Controller {
         $res = $this->Recipientes->listarPorEstablecimiento($establecimiento)->recipientes->recipiente; 
         echo json_encode($res);
     }
+  
 }

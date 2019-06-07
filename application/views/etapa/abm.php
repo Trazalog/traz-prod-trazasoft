@@ -16,13 +16,13 @@ $this->load->view('etapa/modal_finalizar');
                 <label for="Lote" class="form-label">Lote</label>
                </div>
                <div class="col-xs-5">
-                <input type="text" id="Lote" <?php if($accion == 'Editar'){echo ('value="'.$etapa->lote.'"');}?> class="form-control" placeholder="Inserte Lote">
+                <input type="text" id="Lote" <?php if($accion == 'Editar'){echo ('value="'.$etapa->lote.'"');}?> class="form-control" placeholder="Inserte Lote" <?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
                </div>
                <div class="col-xs-1">
                 <label for="fecha" class="form-label">Fecha:</label>
                </div>
                <div class="col-xs-5">
-                <input type="date" id="fecha" class="form-control" <?php if($accion == 'Editar'){echo ('value="'.$etapa->fecha.'"');}?>>
+                <input type="date" id="fecha" class="form-control" <?php if($accion == 'Editar'){echo ('value="'.$etapa->fecha.'"');}else if($accion == 'Nuevo'){echo ('value="' .$fecha.'"');}?> <?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
                </div>
            </div>  
            <div class="row" style="margin-top: 50px">
@@ -30,7 +30,7 @@ $this->load->view('etapa/modal_finalizar');
                 <label for="establecimientos" class="form-label">Establecimiento:</label>
                </div>
                <div class="col-xs-4">
-                <select class="form-control select2 select2-hidden-accesible" onchange="actualizaRecipiente(this.value,'recipientes')" id="establecimientos">
+                <select class="form-control select2 select2-hidden-accesible" onchange="actualizaRecipiente(this.value,'recipientes')" id="establecimientos" <?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
                     <option value="" disabled selected>-Seleccione Establecimiento-</option>
                     <?php
                     foreach($establecimientos as $fila)
@@ -53,7 +53,12 @@ $this->load->view('etapa/modal_finalizar');
                <?php if($accion == 'Nuevo'){
                     echo '<select class="form-control" id="recipientes" disabled></select>';
                     }if($accion == 'Editar'){
+                      if($etapa->estado == 'En Curso')
+                      {
+                        echo '<select class="form-control" id="recipientes" disabled>';
+                      }else{
                       echo '<select class="form-control" id="recipientes">';
+                      }
                       echo '<option value="" disabled selected>-Seleccione Recipiente-</option>';
                       foreach($recipientes as $recipiente)
                       {
@@ -74,7 +79,7 @@ $this->load->view('etapa/modal_finalizar');
                 <label for="op" class="form-label">Orden de Produccion:</label>
                </div>
                <div class="col-xs-4">
-               <input type="text" id="ordenproduccion" class="form-control" <?php if($accion == 'Editar'){echo ('value="'.$etapa->op.'"');}?> placeholder="Inserte Orde de Produccion">
+               <input type="text" id="ordenproduccion" class="form-control" <?php if($accion == 'Editar'){echo ('value="'.$etapa->op.'"');}?> placeholder="Inserte Orde de Produccion" <?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
                </div>
                <div class="col-xs-6">
                </div>
@@ -87,6 +92,7 @@ $this->load->view('etapa/modal_finalizar');
              </div>
              </div>
            </div>
+          <?php if($etapa->estado != 'En Curso'){?>
            <div class="row" style="margin-top: 40px">
            <div class="col-xs-4">
            <div class="row form-group">
@@ -128,6 +134,7 @@ $this->load->view('etapa/modal_finalizar');
            </span> 
      </div>
     </div>
+    <?}?>
     <div class="row" style="margin-top: 40px ">
     <input type="hidden" id="materiasexiste" value="no">
         <div class="col-xs-12" id="materiasasignadas">
@@ -160,7 +167,9 @@ $this->load->view('etapa/modal_finalizar');
                 </div>
             </div>
            </div>
-           <div class="row">
+    
+        </div><!-- /.box-body -->
+        <div class="row">
              <div class="col-xs-8"></div>
              <div class="col-xs-2">
              <?php if($etapa->estado == 'planificado')
@@ -176,7 +185,6 @@ $this->load->view('etapa/modal_finalizar');
               <button class="btn btn-primary btn-block" onclick="guardar()">Guardar</button>
              </div>
            </div>   
-        </div><!-- /.box-body -->
       </div><!-- /.box -->
     </div><!-- /.col -->
   </div><!-- /.row -->

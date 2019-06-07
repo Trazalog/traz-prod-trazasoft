@@ -24,4 +24,9 @@ class Lote extends CI_Controller {
 		$res =$this->Lotes->listarPorEstablecimientoConSalida($establecimiento,$salida)->lotes->lote;
 		echo json_encode($res);
 	}
+	public function listar()
+	{
+		$res =$this->Lotes->listar()->lotes->lote;
+		echo json_encode($res);
+	}
 }

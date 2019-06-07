@@ -22,5 +22,14 @@ class Camiones extends CI_Model
         $array = file_get_contents($url, false, $param);
         return json_decode($array);
     }
+    public function listarProveedores()
+    {
+        $parametros["http"]["method"] = "GET";		 
+        $param = stream_context_create($parametros);
+        $resource = 'proveedores';
+        $url = REST.$resource;
+        $array = file_get_contents($url, false, $param);
+        return json_decode($array);
+    }
     
 }

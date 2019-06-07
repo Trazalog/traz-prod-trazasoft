@@ -24,7 +24,7 @@
                        
                        foreach($etapas as $fila)
                        {
-                         echo "<li data-value='".$fila->titulo."'><a >".$fila->titulo."</a></li>";
+                         echo "<li data-value='".$fila->id."'><a >".$fila->titulo."</a></li>";
                        }
                        ?>
                   </ul>
@@ -109,7 +109,7 @@
                   	for(var i=0; i<etapas.length; i++)
                     {
                         html= html + '<tr  id="'+etapas[i].id+'" ><td>'+
-                         '<i class="fa fa-fw fa-pencil text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Editar" onclick="linkTo("general/Etapa/editar/'+etapas[i].id+'")"></i>'+
+                         '<i class="fa fa-fw fa-pencil text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Editar" onclick=linkTo("general/Etapa/editar?id='+etapas[i].id+'")></i>'+
                          '<i class="fa fa-fw fa-times-circle text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Eliminar" onclick="seleccionar(this)"></i>'+
                          '</td>'+
                          '<td>'+etapas[i].titulo+'</td>'+
@@ -128,7 +128,7 @@
               if(etapas[i].titulo === op)
               {
                         html= html + '<tr  id="'+etapas[i].id+'" ><td>'+
-                         '<i class="fa fa-fw fa-pencil text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Editar" onclick="linkTo("general/Etapa/editar/'+etapas[i].id+'")"></i>'+
+                         '<i class="fa fa-fw fa-pencil text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Editar" onclick=linkTo("general/Etapa/editar?id='+etapas[i].id+'")></i>'+
                          '<i class="fa fa-fw fa-times-circle text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Eliminar" onclick="seleccionar(this)"></i>'+
                          '</td>'+
                          '<td>'+etapas[i].titulo+'</td>'+
@@ -155,7 +155,11 @@
   var ul = document.getElementById('nuevo');
    ul.onclick = function(event) {
     var target = event.target.innerHTML;
-    linkTo('general/Etapa/nuevo?op='+target);
+    if (target == 'fraccionamiento'){
+      linkTo('general/Etapa/fraccionar');
+    }else{
+      linkTo('general/Etapa/nuevo?op='+target);
+    }
     }
   </script>
   

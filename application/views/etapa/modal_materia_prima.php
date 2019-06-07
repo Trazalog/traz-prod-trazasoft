@@ -33,6 +33,7 @@
   });
   function agregaMateria(materia)
   {
+    estado ='<?php echo $etapa->estado;?>'
   existe = document.getElementById('materiasexiste').value;
   var html = '';
   materia = JSON.stringify(materia);
@@ -44,13 +45,17 @@
       html +='<table id="tablamateriasasignadas" class="table">';
       html +="<thead>";
       html +="<tr>";
+      if(estado != 'En Curso'){
       html +="<th>Acciones</th>";
+      }
       html +="<th>Titulo</th>";
       html +="<th>Stock Actual</th>";
       html +="<th>Cantidad</th>";
       html +='</tr></thead><tbody>';
       html += '<tr data-json="'+materia[0]+'" id="'+materia[0].id+'">';
+      if(estado != 'En Curso'){
       html += '<td><i class="fa fa-fw fa-minus text-light-blue tablamateriasasignadas_borrar" style="cursor: pointer; margin-left: 15px;" title="Nuevo"></i></td>';
+      }
       html += '<td>'+materia[0].titulo+'</td>';
       html += '<td>'+materia[0].stock+'</td>';
       html += '<td>'+materia[0].cantidad+'</td>';
@@ -64,7 +69,9 @@
    } else  if(existe == 'si')
    {
       html += '<tr data-json="'+materia[0]+'" id="'+materia[0].id+'">';
+      if(estado != 'En Curso'){
       html += '<td><i class="fa fa-fw fa-minus text-light-blue tablamateriasasignadas_borrar" style="cursor: pointer; margin-left: 15px;" title="Nuevo"></i></td>';
+      }
       html += '<td>'+materia[0].titulo+'</td>';
       html += '<td>'+materia[0].stock+'</td>';
       html += '<td>'+materia[0].cantidad+'</td>';

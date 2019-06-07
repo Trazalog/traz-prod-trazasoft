@@ -55,7 +55,6 @@ function insertaFila(idtabla, idrecipiente, json, acciones = "") {
 }
 
 function remover(event) {
-    console.log(event);
     id = $(this).closest('tr').attr('id');
     $(this).closest('tr').remove();
     tabla = document.getElementById(event.data.idtabla).innerHTML;
@@ -67,4 +66,15 @@ function remover(event) {
         document.getElementById(event.data.idrecipiente).innerHTML = "";
         document.getElementById(event.data.idbandera).value = 'no';
     }
+}
+
+function recuperarDatos(idtabla) {
+    var ret = [];
+    $('#' + idtabla + ' tbody').find('tr').each(function() {
+        json = "";
+        json = $(this).attr('data-json');
+        ret.push(json);
+    });
+    ret = JSON.stringify(ret);
+    return ret;
 }

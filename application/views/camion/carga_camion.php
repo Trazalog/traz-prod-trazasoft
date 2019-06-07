@@ -25,7 +25,7 @@
                 <label for="fecha" class="form-label">Fecha:</label>
                </div>
                <div class="col-xs-3">
-                <input type="date" id="fecha" class="form-control">
+                <input type="date" id="fecha" value="<?php echo $fecha;?>" class="form-control">
                </div>
                <div class="col-xs-2"></div>
          </div>
@@ -212,23 +212,23 @@ function ActualizaLote(lote)
          if(document.getElementById('establecimientos').value =="")
          {
             ban=false;
-            msj+="- No Ha ingresado establecimiento <br>";
+            msj+="- No Ha ingresado establecimiento \n";
          }
          if(document.getElementById('camiones').value =="")
          {
             ban=false;
-            msj+="- No Ha Seleccionado Camion <br>";
+            msj+="- No Ha Seleccionado Camion \n";
          }
          if(document.getElementById('inputlotes').value =="")
          {
             ban=false;
-            msj+="- No Ha Seleccionado lote <br>";
+            msj+="- No Ha Seleccionado lote \n";
          }else{
             carga =JSON.parse($("#lotes option[value='" + $('#inputlotes').val() + "']").attr('data-json'));
          if(document.getElementById('cantidadcarga').value =="" || document.getElementById('cantidadcarga').value> carga.stock )
          {
             ban=false;
-            msj+="- No Ha Cargado la cantidad o la cantidad es superior al stock <br>";
+            msj+="- No Ha Cargado la cantidad o la cantidad es superior al stock \n";
          }
          }
         if(!ban)

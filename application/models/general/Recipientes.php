@@ -24,5 +24,14 @@ class Recipientes extends CI_Model
         $array = file_get_contents($url, false, $param);
         return json_decode($array);
     }
+    public function listarEmpaques()
+    {
+        $parametros["http"]["method"] = "GET";		 
+        $param = stream_context_create($parametros);
+        $resource="empaques";
+        $url = REST.$resource;
+        $array = file_get_contents($url, false, $param);
+        return json_decode($array);
+    }
     
 }

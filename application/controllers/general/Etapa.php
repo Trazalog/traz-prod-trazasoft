@@ -27,7 +27,7 @@ class Etapa extends CI_Controller {
 		}
 		public function nuevo()
 	 {
-	  
+		$data['fecha'] = date('Y-m-d');
 		$data['op'] = $this->input->get('op');
 		$data['etapa']= $this->Etapas->nuevo($data['op'])->etapa;
 		$data['idetapa'] = $data['etapa']->id;
@@ -58,18 +58,38 @@ class Etapa extends CI_Controller {
 		$id = $this->input->get('id');
 		$data['accion'] = 'Editar';
 		$data['etapa'] = $this->Etapas->buscar($id)->etapa;
+		//var_dump($data['etapa']);die;
 		$data['idetapa'] = $data['etapa']->id;
 		$data['recipientes'] = $this->Recipientes->listarPorEstablecimiento($data['etapa']->establecimiento->id)->recipientes->recipiente;
 		$data['op'] = 	$data['etapa']->titulo;
+		$data['lang'] = lang_get('spanish',4);
+		$data['establecimientos'] = $this->Establecimientos->listar($data['op'])->establecimientos->establecimiento;
 		$data['materias'] = $this->Materias->listar()->materias->materia;
+		$data['fecha'] = $data['etapa']->fecha;
+		if($data['op'] == 'fraccionamiento')
+		{
+			$data['empaques'] = $this->Recipientes->listarEmpaques()->empaques->empaque;
+			$this->load->view('etapa/fraccionar/fraccionar', $data);
+		}else{
+
 		$data['tareas'] = $this->Tareas->listar()->tareas->tarea; 
 		$data['templates'] = $this->Templates->listar()->templates->template; 
-		$data['establecimientos'] = $this->Establecimientos->listar($data['op'])->establecimientos->establecimiento;
 		$data['recursosmateriales'] = $this->Recursos_Materiales->listar()->recursos->recurso;
 		$trabajo =$this->Recursos_Trabajo->listar()->trabajos->trabajo;
 		$data['recursostrabajo'] = $trabajo;
-		$data['lang'] = lang_get('spanish',4);
 		$this->load->view('etapa/abm', $data);
+		}
+	 }
+	 public function guardarFraccionar()
+	 {
+		 $data['idetapa'] = $this->input->post('idetapa');
+		 $data['establecimiento'] =$this->input->post('establecimiento');
+		 $data['recipiente'] =$this->input->post('recipiente');
+		 $data['fecha'] =$this->input->post('fecha');
+		 $data['productos'] = $this->input->post('productos');
+		 var_dump( json_decode($data['productos']));
+		 $this->Etapas->guardar($data);
+		 echo("ok");
 	 }
 	 public function Finalizar()
 	 {
@@ -78,6 +98,13 @@ class Etapa extends CI_Controller {
 	 }
 	 public function fraccionar()
 	 {
-		$this->load->view('etapa/fraccionar/fraccionar');
+		$data['accion'] = 'Nuevo';
+		$data['etapa']= $this->Etapas->nuevo(3)->etapa;
+		$data['fecha'] = date('Y-m-d');
+		$data['lang'] = lang_get('spanish',5);
+		$data['establecimientos'] = $this->Establecimientos->listarTodo()->establecimientos->establecimiento;
+		$data['empaques'] = $this->Recipientes->listarEmpaques()->empaques->empaque;
+		$data['materias'] = $this->Materias->listar()->materias->materia;
+		$this->load->view('etapa/fraccionar/fraccionar', $data);
 	 }
 }
