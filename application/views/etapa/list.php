@@ -1,22 +1,25 @@
-<div class="row">
-    <div class="col-xs-12">
-      <div class="box">
-        <div class="box-header">
+
+      <div class="box table-responsive"> 
+      <div class="box-header">
           <h3 class="box-title">Etapas</h3>
-          <div class="row">
-            <div class="col-xs-10">
+          <div class="row" style="width:900px;">
+           <div class="col-xs-10">
             <?php
                        
-                  	foreach($etapas as $fila)
+                  	for($i=0;$i<count($etapas);$i++)
                     {
-                      echo "<button class='btn btn-app' onclick='muestra(`".$fila->titulo."`,`".json_encode($list)."`)'> ".$fila->titulo."  </button>
-                      <i class='".$fila->icon."'></i>";
+                      if($i<count($etapas)-1){
+                      echo "<button class='btn btn-primary btn-arrow-right outline' onclick='muestra(`".$etapas[$i]->titulo."`,`".json_encode($list)."`)'> ".$etapas[$i]->titulo."  </button>";
+                      }else{
+                        echo "<button class='btn btn-primary btn-arrow-right-final outline' onclick='muestra(`".$etapas[$i]->titulo."`,`".json_encode($list)."`)'> ".$etapas[$i]->titulo."  </button>";
+                      }
+                      
                     }
                     ?>
-          <button class="btn btn-app" onclick='muestra(`todas`,`<?php echo json_encode($list);?>`)'> Todas</button>
+          <button class="btn btn-primary outline" onclick='muestra(`todas`,`<?php echo json_encode($list);?>`)'> Todas</button>
            </div>
           <div class="col-xs-2">
-            <button type="button" class=" btn btn-primary
+            <button type="button" class=" btn btn-primary btn-block
   glyphicon glyphicon-plus dropdown-toggle"  data-toggle="dropdown"  aria-expanded="false" >Nuevo
                     <span class="fa fa-caret-down"></span></button>
                     <ul class="dropdown-menu" id="nuevo">
@@ -24,57 +27,56 @@
                        
                        foreach($etapas as $fila)
                        {
-                         echo "<li data-value='".$fila->id."'><a >".$fila->titulo."</a></li>";
+                         echo "<li  data-value='".$fila->id."'><a data-json='".json_encode($fila)."'>".$fila->titulo."</a></li>";
                        }
                        ?>
                   </ul>
           </div>
           </div>
-         
         </div><!-- /.box-header -->
         <div class="box-body">
-          <table id="etapas" class="table table-bordered table-hover">
-          <thead class="thead-dark">
-              <tr>
-                <th>Acciones</th>
-                <th>Etapa</th>
-                <th>Producto Origen</th>
-                <th>Cantidad</th>
-                <th>Establecimiento</th>
-                <th>Recipiente</th>
-                <th>OP</th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php
-                       
-                  	foreach($list as $fila)
-                    {
-                  
-                        $id=$fila->id;
-                        echo '<tr  id="'.$id.'" data-json:'.json_encode($fila).'>';
-
-                        echo '<td>';
-                        echo '<i class="fa fa-fw fa-pencil text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Editar" onclick=linkTo("general/Etapa/editar?id='.$id.'")></i>';
-                        echo '<i class="fa fa-fw fa-times-circle text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Eliminar" onclick="seleccionar(this)"></i>';
-                        echo '</td>';
+          <div class="row">
+            <div class="col-xs-12">
+            <table id="etapas" class="table table-bordered table-hover">
+            <thead class="thead-dark">
+                <tr>
+                  <th>Acciones</th>
+                  <th>Etapa</th>
+                  <th>Producto Origen</th>
+                  <th>Cantidad</th>
+                  <th>Establecimiento</th>
+                  <th>Recipiente</th>
+                  <th>OP</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php
                         
-                        echo '<td>'.$fila->titulo.'</td>';
-      	                echo '<td>'.$fila->producto.'</td>';
-                        echo '<td>'.$fila->cantidad.' '.$fila->unidad.'</td>';  
-                        echo '<td>'.$fila->establecimiento.'</td>';
-                        echo '<td>'.$fila->recipiente.'</td>';
-                        echo '<td>'.$fila->orden.'</td>';
-      	                echo '</tr>';
-          		        
-                    }
-       
-                ?>
-            </tbody> 
-          </table>
-          
-          
-                 
+                      foreach($list as $fila)
+                      {
+                    
+                          $id=$fila->id;
+                          echo '<tr  id="'.$id.'" data-json:'.json_encode($fila).'>';
+
+                          echo '<td>';
+                          echo '<i class="fa fa-fw fa-pencil text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Editar" onclick=linkTo("general/Etapa/editar?id='.$id.'")></i>';
+                          echo '<i class="fa fa-fw fa-times-circle text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Eliminar" onclick="seleccionar(this)"></i>';
+                          echo '</td>';
+                          
+                          echo '<td>'.$fila->titulo.'</td>';
+                          echo '<td>'.$fila->producto.'</td>';
+                          echo '<td>'.$fila->cantidad.' '.$fila->unidad.'</td>';  
+                          echo '<td>'.$fila->establecimiento.'</td>';
+                          echo '<td>'.$fila->recipiente.'</td>';
+                          echo '<td>'.$fila->orden.'</td>';
+                          echo '</tr>';
+                        
+                      }
+        
+                  ?>
+              </tbody> 
+            </table>
+              
          
         </div><!-- /.box-body -->
       </div><!-- /.box -->
@@ -154,12 +156,8 @@
   }
   var ul = document.getElementById('nuevo');
    ul.onclick = function(event) {
-    var target = event.target.innerHTML;
-    if (target == 'fraccionamiento'){
-      linkTo('general/Etapa/fraccionar');
-    }else{
-      linkTo('general/Etapa/nuevo?op='+target);
-    }
+   target= JSON.parse(event.target.getAttribute('data-json'));
+      linkTo(target.link);
     }
   </script>
   

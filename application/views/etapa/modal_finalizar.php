@@ -9,15 +9,15 @@
 
       <div class="modal-body" id="modalBodyArticle">
       <div class="row">
-          <div class="col-xs-3"><label class="form-label">Lote Origen:</label></div>
-          <div class="col-xs-4"><input class="form-control" type="text" id="loteorigen" value="<?php echo $etapa->lote;?>" disabled></div>
-          <div class="col-xs-5"></div>
+          <div class="col-md-3 col-xs-12"><label class="form-label">Lote Origen:</label></div>
+          <div class="col-md-4 col-xs-12"><input class="form-control" type="text" id="loteorigen" value="<?php echo $etapa->lote;?>" disabled></div>
+          <div class="col-md-5"></div>
       </div>
       <div class="row form-group" style="margin-top:20px">
-   <div class="col-xs-3">
-     <label for="Producto" class="form-label">Producto:</label>
-   </div>
-   <div class="col-xs-6 input-group">
+   <div class="col-md-3 col-xs-12">
+     <label for="Producto" class="form-label">Producto*:</label>
+  </div>
+   <div class="col-md-6 col-xs-12 input-group">
       <input list="Productos" id="inputproducto" class="form-control" autocomplete="off">
       <input type="hidden" id="idproducto" value="" data-json="">
        <datalist id="Productos">
@@ -33,22 +33,22 @@
             <i class="glyphicon glyphicon-search"></i></button>
            </span> 
       </div>
-      <div class="col-xs-3"></div>
+      <div class="col-md-3"></div>
       </div>
       <div class="row" style="margin-top:20px">
-          <div class="col-xs-3"><label class="form-label">Cantidad:</label></div>
-          <div class="col-xs-4"><input class="form-control" id="cantidadproducto" type="text" value="" placeholder ="Inserte Cantidad"></div>
-          <div class="col-xs-5"></div>
+          <div class="col-md-3 col-xs-12"><label class="form-label">Cantidad*:</label></div>
+          <div class="col-md-4 col-xs-12"><input class="form-control" id="cantidadproducto" type="text" value="" placeholder ="Inserte Cantidad"></div>
+          <div class="col-md-5"></div>
       </div>
       <div class="row" style="margin-top:20px">
-          <div class="col-xs-3"><label class="form-label">Lote Destino:</label></div>
-          <div class="col-xs-4"><input class="form-control" type="text" id="lotedestino" value="" placeholder ="Inserte Lote destino"></div>
-          <div class="col-xs-4"><button class="btn btn-primary btn-block" onclick="copiaOrigen()">Copiar Lote Origen</button></div>
-          <div class="col-xs-1"></div>
+          <div class="col-md-3 col-xs-12"><label class="form-label">Lote Destino*:</label></div>
+          <div class="col-md-4 col-xs-12"><input class="form-control" type="text" id="lotedestino" value="" placeholder ="Inserte Lote destino"></div>
+          <div class="col-md-4 col-xs-12"><button class="btn btn-primary btn-block" onclick="copiaOrigen()">Copiar Lote Origen</button></div>
+          <div class="col-md-1"></div>
       </div>
       <div class="row" style="margin-top:20px">
-          <div class="col-xs-3"><label class="form-label">Destino:</label></div>
-          <div class="col-xs-6">
+          <div class="col-md-3 col-xs-12"><label class="form-label">Destino*:</label></div>
+          <div class="col-md-6 col-xs-12">
           <?php if($accion == 'Editar'){
                       echo '<select class="form-control" id="productodestino">';
                       echo '<option value="" disabled selected>-Seleccione Destino-</option>';
@@ -60,13 +60,13 @@
                     }
                     ?>
           </div>
-          <div class="col-xs-3"></div>
+          <div class="col-md-3"></div>
       </div>
       <div class="row" style="margin-top: 20px">
-               <div class="col-xs-3">
+               <div class="col-md-3 col-xs-12">
                 <label for="establecimientos" class="form-label">Establecimiento Final:</label>
                </div>
-               <div class="col-xs-6">
+               <div class="col-md-6 col-xs-12">
                 <select class="form-control select2 select2-hidden-accesible" onchange="actualizaRecipiente(this.value, 'productorecipientes')" id="productoestablecimientos">
                     <option value="" disabled selected>-Seleccione Establecimiento-</option>
                     <?php
@@ -78,39 +78,45 @@
                 </select>
                 
                </div>
-               <div class="col-xs-3"></div>
+               <div class="col-md-3"></div>
             </div>
             <div class="row" style="margin-top: 20px">
-               <div class="col-xs-3">
+               <div class="col-md-3 col-xs-12">
                 <label for="establecimientos" class="form-label">Recipiente Final:</label>
                </div>
-               <div class="col-xs-6">
+               <div class="col-md-6 col-xs-12">
                 <select class="form-control select2 select2-hidden-accesible"  id="productorecipientes" disabled>
                 <option value="" disabled selected>-Seleccione Establecimiento-</option>
                 </select>
                </div>
-               <div class="col-xs-3"></div>
+               <div class="col-md-3"></div>
             </div>
      <div class="row" style="margin-top:20px">
-          <div class="col-xs-3"><label class="form-label">Requiere Fraccionada:</label></div>
-          <div class="col-xs-1"><input  type="checkbox" id="fraccionado" value=""></div>
-          <div class="col-xs-8"></div>
+          <div class="col-md-3 col-xs-12"><label class="form-label">Requiere Fraccionada:</label></div>
+          <div class="col-md-1 col-xs-12"><input  type="checkbox" id="fraccionado" value=""></div>
+          <div class="col-md-8"></div>
       </div>
       <div class="row" style="margin-top:20px">
-          <div class="col-xs-3"></div>
-          <div class="col-xs-3"><button class="btn btn-success btn-block" onclick="AgregarProducto()">Agregar</button></div>
-          <div class="col-xs-6"></div>
+          <div class="col-md-3 col-xs-12"></div>
+          <div class="col-md-3 col-xs-12"><button class="btn btn-success btn-block" onclick="AgregarProducto()">Agregar</button></div>
+          <div class="col-md-6"></div>
       </div>
       <div class="row">
       <input type="hidden" value="no" id="productos_existe">
-             <div class="col-xs-12" id="productosasignados">
+             <div class="col-xs-12 table-responsive" id="productosasignados">
              </div>
-        </div>
+         </div>
       </div>
-
       <div class="modal-footer">
-        <button type="button" class="btn btn-success " onclick="FinalizarEtapa()">Aceptar</button>
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+        <div class="row">
+          <div class="col-md-8"></div>
+          <div class="col-md-2 col-xs-6">
+           <button type="button" class="btn btn-success btn-block " onclick="FinalizarEtapa()">Aceptar</button>
+          </div>
+          <div class="col-md-2 col-xs-6">
+          <button type="button" class="btn btn-default btn-block" data-dismiss="modal">Cancelar</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>

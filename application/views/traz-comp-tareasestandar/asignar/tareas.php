@@ -5,11 +5,11 @@
 <?php $this->load->view(TAREAS_ASIGNAR.'/modal_recurso_trabajo');?>
 <?php $this->load->view(TAREAS_ASIGNAR.'/modal_trabajo_asigna');?>
 <div class="row form-group">
-   <div class="col-xs-1">
+   <div class="col-md-1 col-xs-12">
        <label for="tarea" class="form-label">Tarea:</label>
     </div>
-     <div class="col-xs-5 input-group">
-         <input list="tareas" id="inputtarea" class="form-control">
+     <div class="col-md-5 col-xs-11 input-group margin">
+         <input list="tareas" id="inputtarea" class="form-control" autocomplete="off">
            <datalist id="tareas">
            <?php foreach($tareas as $fila)
            {
@@ -18,19 +18,19 @@
             ?>
             </datalist>
             <span class="input-group-btn">
-              <button class='btn btn-sm btn-primary' 
+              <button class='btn btn-primary' 
                   onclick='checkTabla("tablatareas","modaltareas",`<?php echo json_encode($tareas);?>`,"Add")' data-toggle="modal" data-target="#modal_tareas">
                   <i class="glyphicon glyphicon-search"></i></button>
              </span> 
        </div>
-       <div class="col-xs-6"></div>
+       <div class="col-md-6"></div>
  </div>
  <div class="row form-group">
-   <div class="col-xs-1">
+   <div class="col-md-1 col-xs-12">
      <label for="template" class="form-label">Template:</label>
    </div>
-   <div class="col-xs-5 input-group">
-      <input list="templates" id="inputtemplate" class="form-control">
+   <div class="col-md-5 col-xs-11 input-group margin">
+      <input list="templates" id="inputtemplate" class="form-control" autocomplete="off">
        <datalist id="templates">
         <?php foreach($templates as $fila)
          {
@@ -39,16 +39,16 @@
           ?>
         </datalist>
         <span class="input-group-btn">
-          <button class='btn btn-sm btn-primary' 
+          <button class='btn btn-primary' 
             onclick='checkTabla("tablatemplate","modaltemplates",`<?php echo json_encode($templates);?>`,"Add")' data-toggle="modal" data-target="#modal_templates">
             <i class="glyphicon glyphicon-search"></i></button>
            </span> 
       </div>
-      <div class="col-xs-6"></div>
+      <div class="col-md-6"></div>
     </div>
    <div class="row">
     <input type="hidden" id="existe_tabla" value="no">
-      <div class="col-sm-12" id="divtabla">
+      <div class="col-sm-12 table-responsive" id="divtabla">
       </div>
      </div>
     <script>
@@ -65,7 +65,32 @@
     insertaTarea(tarea);
   }
 }
-  $(document).off('click', '.tabla_tareas_asignadas_borrar').on('click', '.tabla_tareas_asignadas_borrar',{ idtabla:'tabla_tareas_asignadas', idrecipiente:'divtabla', idbandera:'existe_tabla' }, remover);
+  $(document).off('click', '.tabla_tareas_asignadas_borrar').on('click', '.tabla_tareas_asignadas_borrar',function()
+  {
+    fila = $(this).closest('tr');
+    tarea = JSON.parse(fila.attr('data-json'));
+    if(tarea.estado == 'En Curso')
+    {
+      tarea.estado = 'Anulado';
+      fila.find('.tabla_tareas_asignadas_borrar').remove();
+      fila.attr('data-json', JSON.stringify(tarea));
+      fila.find('.estadotarea').html(tarea.estado);
+    }
+    if(tarea.estado == 'Planificado')
+    {
+      id = fila.attr('id');
+      fila.remove();
+      tabla = document.getElementById('tabla_tareas_asignadas').innerHTML;
+      tabla = '<table id="' + 'tabla_tareas_asignadas' + '" class="table table-bordered table-hover">' + tabla + '</table>';
+      $('#' + 'tabla_tareas_asignadas').dataTable().fnDestroy();
+      document.getElementById('divtabla').innerHTML = tabla;
+      $('#' + 'tabla_tareas_asignadas').DataTable({});
+      if ($(this).closest('tbody').children().length == 1) {
+          document.getElementById('divtabla').innerHTML = "";
+          document.getElementById('existe_tabla').value = 'no';
+      }
+      }
+  });
 
 function checkTabla(idtabla, idrecipiente, json, acciones)
 {
@@ -102,7 +127,7 @@ $("#inputtarea").on('change', function () {
       success: function(result){
       tarea.id = result;
       tarea.asignado = "Sin Asignar";
-      tarea.estado ="Incompleto";
+      tarea.estado ="Planificado";
       tarea = JSON.stringify(tarea);
       tarea = '['+tarea+']';
       tarea = JSON.parse(tarea);
@@ -147,7 +172,7 @@ $("#inputtemplate").on('change', function () {
       success: function(result){
       fila.id = result;
       fila.asignado = "Sin Asignar";
-      fila.estado ="Incompleto";
+      fila.estado ="Planificado";
       fila = JSON.stringify(fila);
       fila = '['+fila+']';
       fila = JSON.parse(fila);
@@ -164,6 +189,22 @@ $(document).off('click', '.tabla_tareas_asignadas_recursos').on('click', '.tabla
   {
    document.getElementById('rowactual').value= $(this).closest('tr').attr('id');
    idtarea=$(this).closest('tr').attr('id');
+   formula= JSON.parse($(this).closest('tr').attr('data-json')).formula;
+ 
+   if(formula.length>0){
+    html = "";
+    html+= "<h4>Formula:</h4>"
+    for(i=0;i<formula.length;i++)
+    {
+      html+= "<div class='row' style='margin-top:20px;'>";
+      html+= "<div class='col-md-2 col-xs-12'>";
+      html+=  "<label class='form-label'>"+formula[i].titulo+"</label></div>";
+      html+= "<div class='col-md-10 col-xs-12'>";
+      html+= "<input type='text' class='form-control' disabled value='"+formula[i].cantidad+" "+formula[i].unidad+"'>";
+      html+= "</div></div>";
+    }
+    document.getElementById('formula').innerHTML = html;
+   }
    idetapa =<?php echo $idetapa?>;
    $.ajax({
       type: 'POST',
@@ -181,6 +222,8 @@ $(document).off('click', '.tabla_tareas_asignadas_recursos').on('click', '.tabla
             agregaRecursoMaterial(material);
           }
         }
+       // tarea = JSON.parse($(this).closest('tr').attr('data-json'));
+       
         $("#modal_recurso_material").modal('show');
       }
     

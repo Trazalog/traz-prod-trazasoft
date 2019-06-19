@@ -10,7 +10,7 @@
       <div class="modal-body" id="modalBodyArticle">
       
       <div class="row">
-          <div class="col-xs-12" id="modalrecursostrabajo">
+          <div class="col-xs-12 table-responsive" id="modalrecursostrabajo">
           </div>
       </div>
       </div>

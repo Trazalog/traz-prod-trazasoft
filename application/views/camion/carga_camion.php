@@ -1,99 +1,110 @@
 <?php $this->load->view('camion/modal_lotes')?>
 <div class="box">
         <div class="box-header with-border">
-          <h3 class="box-title"><?php echo $lang["CargarCamion"];?></h3>
+          <h3><?php echo $lang["CargarCamion"];?></h3>
           <div class="box-tools pull-right">
           </div>
         </div>
         <div class="box-body">
          <div class="row">
-         <div class="col-xs-2">
-                <label for="establecimientos" class="form-label">Establecimiento:</label>
-               </div>
-               <div class="col-xs-4">
-                <select class="form-control select2 select2-hidden-accesible" onchange="Actualiza(this.value)" id="establecimientos">
-                    <option value="" disabled selected>-Seleccione Establecimiento-</option>
-                    <?php
-                    foreach($establecimientos as $fila)
-                    {
-                        echo '<option value="'.$fila->id.'" >'.$fila->titulo.'</option>';
-                    } 
-                    ?>
-                </select>
-               </div>
-               <div class="col-xs-1">
-                <label for="fecha" class="form-label">Fecha:</label>
-               </div>
-               <div class="col-xs-3">
-                <input type="date" id="fecha" value="<?php echo $fecha;?>" class="form-control">
-               </div>
-               <div class="col-xs-2"></div>
+            <div class="col-md-2 col-xs-12">
+                  <label for="establecimientos" class="form-label">Establecimiento*:</label>
+                  </div>
+                  <div class="col-md-4 col-xs-12">
+                  <select class="form-control select2 select2-hidden-accesible" onchange="Actualiza(this.value)" id="establecimientos">
+                     <option value="" disabled selected>-Seleccione Establecimiento-</option>
+                     <?php
+                     foreach($establecimientos as $fila)
+                     {
+                           echo '<option value="'.$fila->id.'" >'.$fila->titulo.'</option>';
+                     } 
+                     ?>
+                  </select>
+                  </div>
+                  <div class="col-md-1 col-xs-12">
+                  <label for="fecha" class="form-label">Fecha*:</label>
+                  </div>
+                  <div class="col-md-3 col-xs-12">
+                  <input type="date" id="fecha" value="<?php echo $fecha;?>" class="form-control">
+                  </div>
+                  <div class="col-md-2"></div>
+            </div>
          </div>
+       </div>
+    </div>
+    <div class="box">
+      <div class="box-header"><h4>Datos camion</h4></div>
+       <div class="box-body">
          <div class="row" style="margin-top:40px;">
-            <div class="col-xs-6">
-                <label class="form-label" for="">Camiones ingresados:</label>
+            <div class="col-md-6 col-xs-12">
+                <label class="form-label" for="">Camiones ingresados*:</label>
                 <select  id="camiones"class="form-control" onchange="DatosCamion()" disabled>
                 </select>
             </div>
-            <div class="col-xs-6">
+            <div class="col-md-6 col-xs-12">
              <div class="row">
              <input type="hidden" id="idcamion">
-                <div class="col-xs-2"><label class="form-label">Fecha</label></div>
-                <div class="col-xs-8"><input class="form-control" id="fechacamion" type="date" disabled></div>
-                <div class="col-xs-2"></div>
+                <div class="col-md-2 col-xs-12"><label class="form-label">Fecha</label></div>
+                <div class="col-md-8 col-xs-12"><input class="form-control" id="fechacamion" type="date" disabled></div>
+                <div class="col-md-2"></div>
              </div>
              <div class="row">
-                <div class="col-xs-2"><label class="form-label">Patente</label></div>
-                <div class="col-xs-8"><input class="form-control"  id="patentecamion" type="text"  disabled></div>
-                <div class="col-xs-2"></div>
+                <div class="col-md-2 col-xs-12"><label class="form-label">Patente</label></div>
+                <div class="col-md-8 col-xs-12"><input class="form-control"  id="patentecamion" type="text"  disabled></div>
+                <div class="col-md-2"></div>
              </div>
              <div class="row">
-                <div class="col-xs-2"><label class="form-label">Conductor</label></div>
-                <div class="col-xs-8"><input class="form-control" id="conductorcamion" type="text" disabled></div>
-                <div class="col-xs-2"></div>
+                <div class="col-md-2 col-xs-12"><label class="form-label">Conductor</label></div>
+                <div class="col-md-8 col-xs-12"><input class="form-control" id="conductorcamion" type="text" disabled></div>
+                <div class="col-md-2"></div>
              </div>
             </div>
          </div>
+      </div>
+   </div>
+   <div class="box">
+      <div class="box-header"><h4>Datos de Carga</h4></div>
+       <div class="box-body">
          <div class="row" style="margin-top:40px;">
-            <div class="col-xs-6">
-                <label class="form-label" for="">Lotes: &nbsp;&nbsp;</label><input onchange="Blanquealote()" type="checkbox" id="checklote"><small>&nbsp;&nbsp;&nbsp;&nbsp;Solo los que salen</small>
+            <div class="col-md-6 col-xs-12">
+                <label class="form-label" for="">Lotes*: &nbsp;&nbsp;</label><input onchange="ActualizaLotes()" type="checkbox" id="checklote"><small>&nbsp;&nbsp;&nbsp;&nbsp;Solo los que salen</small>
                 <div class="row">
-                 <div class="col-xs-12 input-group">
-                    <input list="lotes" id="inputlotes" onfocus="ActualizaLotes()"  class="form-control" autocomplete="off" disabled>
+                 <div class="col-xs-11 input-group margin">
+                    <input list="lotes" id="inputlotes"   class="form-control" autocomplete="off" disabled>
                     <input type="hidden" id="idlote" value="" data-json="">
                    <div id="divlotes"></div> 
                         <span class="input-group-btn">
-                        <button class='btn btn-sm btn-primary' onclick=ModalLotes(); disabled id="btnlotes">
+                        <button class='btn btn-primary' onclick=ModalLotes(); disabled id="btnlotes">
                             <i class="glyphicon glyphicon-search"></i></button>
                         </span> 
                     </div>
                 </div>  
             </div>
-            <div class="col-xs-6">
+            <div class="col-xs-12 col-md-6">
              <div class="row">
-                <div class="col-xs-2"><label class="form-label">Fecha</label></div>
-                <div class="col-xs-8"><input class="form-control" type="date" disabled id="fechalote"></div>
-                <div class="col-xs-2"></div>
+                <div class="col-md-2 col-xs-12"><label class="form-label">Fecha</label></div>
+                <div class="col-md-8 col-xs-12"><input class="form-control" type="date" disabled id="fechalote"></div>
+                <div class="col-md-2"></div>
              </div>
              <div class="row">
-                <div class="col-xs-2"><label class="form-label">Envase</label></div>
-                <div class="col-xs-8"><input class="form-control" type="text" id="envaselote" disabled></div>
-                <div class="col-xs-2"></div>
+                <div class="col-md-2 col-xs-12"><label class="form-label">Envase</label></div>
+                <div class="col-md-8 col-xs-12"><input class="form-control" type="text" id="envaselote" disabled></div>
+                <div class="col-md-2"></div>
              </div>
              <div class="row">
-                <div class="col-xs-2"><label class="form-label">Producto</label></div>
-                <div class="col-xs-8"><input class="form-control"type="text" id="productolote" disabled></div>
-                <div class="col-xs-2"></div>
+                <div class="col-md-2 col-xs-12"><label class="form-label">Producto</label></div>
+                <div class="col-md-8 col-xs-12"><input class="form-control"type="text" id="productolote" disabled></div>
+                <div class="col-md-2"></div>
              </div>
              <div class="row">
-                <div class="col-xs-2"><label class="form-label">Stock</label></div>
-                <div class="col-xs-8"><input class="form-control"type="text" id="stocklote" disabled></div>
-                <div class="col-xs-2"></div>
+                <div class="col-md-2 col-xs-12"><label class="form-label">Stock</label></div>
+                <div class="col-md-8 col-xs-12"><input class="form-control"type="text" id="stocklote" disabled></div>
+                <div class="col-md-2 "></div>
              </div>
              <div class="row">
-                <div class="col-xs-2"><label class="form-label">Cantidad</label></div>
-                <div class="col-xs-8"><input class="form-control"type="number" placeholder="Inserte Cantidad" id="cantidadcarga"></div>
-                <div class="col-xs-2"></div>
+                <div class="col-md-2 col-xs-12"><label class="form-label">Cantidad*</label></div>
+                <div class="col-md-8 col-xs-12"><input class="form-control"type="number" placeholder="Inserte Cantidad" id="cantidadcarga"></div>
+                <div class="col-md-2"></div>
              </div>
             </div>
          </div>
@@ -105,17 +116,17 @@
         </div>
         <div class="row" style="margin-top: 20px">
         <input type="hidden" id="existe_tabla" value="no">
-           <div class="col-xs-12" id="tablacargas"></div>
+           <div class="col-xs-12 table-responsive" id="tablacargas"></div>
         </div>
 
         <!-- /.box-body -->
         <div class="box-footer">
             <div class="row">
-               <div class="col-xs-8"></div>
-               <div class="col-xs-2">
+               <div class="col-md-8"></div>
+               <div class="col-md-2 col-xs-6">
                 <button type="button" class="btn btn-block btn-success " onclick="FinalizarCarga()">Finalzar</button>
                </div>
-               <div class="col-xs-2">
+               <div class="col-md-2 col-xs-6">
                   <button type="button" class="btn btn-block btn-danger" onclick="linkTo('general/Etapa/index');">Cancelar</button> 
                </div>
             </div>
@@ -141,6 +152,7 @@
        {
            html = html + "<option data-json= '"+JSON.stringify(result[i])+"'value='"+result[i].id+"'>"+result[i].patente+"</option>";
        }
+       ActualizaLotes();
        document.getElementById('camiones').innerHTML = "";
         document.getElementById('camiones').innerHTML = html;
         document.getElementById('camiones').disabled= false;
@@ -174,7 +186,7 @@
       var html=" <datalist id='lotes'>";
        for(var i =0;i<result.length;i++)
        {
-           html = html + "<option data-json= '"+JSON.stringify(result[i])+"'value='"+result[i].titulo+"'></option>";
+           html = html + "<option data-json= '"+JSON.stringify(result[i])+"'value='"+result[i].titulo+"'>"+result[i].tituloproducto+"</option>";
        }
       
             html+='</datalist>';

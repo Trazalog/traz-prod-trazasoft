@@ -29,7 +29,7 @@
   <!-- Bootstrap datetimepicker -->
   <link rel="stylesheet" href="<?php base_url();?>lib/plugins/datetimepicker/css/bootstrap-datetimepicker.min.css">
 
-
+  <link rel="stylesheet" href="<?php base_url();?>application/css/etapa/list.css">
 
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -53,9 +53,9 @@
 
   <header class="main-header">
     <!-- Logo -->
-    <a href="lib/index2.html" class="logo">
+    <a href="" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><b>A</b>LT</span>
+      <span class="logo-mini"><b>TRAZA</span>
       <!-- logo for regular state and mobile devices -->
       <span class="logo-lg"><b>TrazaSOFT</b></span>
     </a>

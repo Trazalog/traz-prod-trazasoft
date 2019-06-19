@@ -7,8 +7,8 @@
         <h4 class="modal-title" id="myModalLabel"><span id="modalAction"> </span> Productos</h4>
       </div>
 
-      <div class="modal-body" id="modalBodyArticle">
-      <div class="row">
+      <div class="modal-body table-responsive" id="modalBodyArticle">
+      <div class="row ">
           <div class="col-xs-12" id="modalproductos">
           </div>
       </div>

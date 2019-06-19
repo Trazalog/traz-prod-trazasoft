@@ -9,7 +9,7 @@
 
       <div class="modal-body" id="modalBodyArticle">
          <div class="row">
-             <div class="col-xs-12" id="modalproductos">
+             <div class="col-xs-12 table-responsive" id="modalproductos">
              </div>
         </div>
       </div>

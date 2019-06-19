@@ -11,10 +11,10 @@
       <div class="row">    
       </div>
       <div class="row form-group">
-   <div class="col-xs-2">
+   <div class="col-md-2 col-xs-12">
      <label  class="form-label">Recurso:</label>
    </div>
-   <div class="col-xs-5 input-group">
+   <div class="col-md-5 col-xs-12 input-group">
       <input list="recursostrabajo" id="inputrecursostrabajo" class="form-control">
        <datalist id="recursostrabajo">
        <?php foreach($recursostrabajo as $fila)
@@ -29,11 +29,11 @@
             <i class="glyphicon glyphicon-search"></i></button>
            </span> 
       </div>
-      <div class="col-xs-5"></div>
+      <div class="col-md-5"></div>
     </div>
       <div class="row">
       <input type="hidden" id="recursotrabajoexiste" value="no">
-          <div class="col-xs-12" id="recursostrabajoasignados">
+          <div class="col-xs-12 table-responsive" id="recursostrabajoasignados">
           </div>
       </div>
       </div>

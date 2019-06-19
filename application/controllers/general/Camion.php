@@ -24,6 +24,7 @@ class Camion extends CI_Controller {
 		{
 			$data['fecha'] = date('Y-m-d');
 			$data['lang'] = lang_get('spanish',4);
+			$data['camiones'] = $this->Camiones->listarCargados()->camiones->camion;
 			$data['establecimientos'] = $this->Establecimientos->listarTodo()->establecimientos->establecimiento;
 			$this->load->view('camion/salida_camion',$data);
 			}

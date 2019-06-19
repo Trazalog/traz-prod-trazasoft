@@ -31,5 +31,14 @@ class Camiones extends CI_Model
         $array = file_get_contents($url, false, $param);
         return json_decode($array);
     }
+    public function listarCargados()
+    {
+        $parametros["http"]["method"] = "GET";		 
+        $param = stream_context_create($parametros);
+        $resource = 'cargados';
+        $url = REST.$resource;
+        $array = file_get_contents($url, false, $param);
+        return json_decode($array);
+    }
     
 }

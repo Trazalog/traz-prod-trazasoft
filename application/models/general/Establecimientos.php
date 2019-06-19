@@ -9,10 +9,10 @@ class Establecimientos extends CI_Model
     }
     public function listar($etapa)
     {
-        if($etapa == 'siembra' || $etapa == 'estacionamiento')
+        if($etapa == 1|| $etapa == 4)
         {
         $resource = 'establecimientos1';
-        }	elseif ($etapa == 'zaranda' || $etapa == 'limpieza' || $etapa == 'fraccionamiento')
+        }	elseif ($etapa == 2 || $etapa == 3 || $etapa == 5)
         { 
             $resource = 'establecimientos2'; 
         }

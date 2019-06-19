@@ -5,6 +5,7 @@ if(!function_exists('armaBusca')){
     function armaBusca($json, $id, $acciones)
     {
         $array =  json_decode($json);
+        
         $html = '<table id="'.$id.'" class="table table-bordered table-hover">
         <thead class="thead-dark">
         <tr>';
@@ -24,9 +25,10 @@ if(!function_exists('armaBusca')){
         $html = $html.'</tr></thead><tbody>';
         foreach($array as $fila)
         {
+            $json =json_encode(array($fila));
+            $html = $html."<tr  id='".$fila->id."' data-json='".$json."'>";
             if($acciones !== '')
-            $json = "'".json_encode(array($fila))."'";
-            $html = $html.'<tr  id="'.$fila->id.'" data-json='.$json.'>';
+            
         {
            $acc = agregaAcciones($id, $acciones);
            $html = $html.$acc;

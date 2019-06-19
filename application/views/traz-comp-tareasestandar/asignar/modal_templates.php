@@ -9,7 +9,7 @@
 
       <div class="modal-body" id="modalBodyArticle">
       <div class="row">
-          <div class="col-xs-12" id="modaltemplates">
+          <div class="col-xs-12 table-responsive" id="modaltemplates">
           </div>
       </div>
       </div>
@@ -38,7 +38,7 @@
       success: function(result){
       fila.id = result;
       fila.asignado = "Sin Asignar";
-      fila.estado ="Incompleto";
+      fila.estado ="Planificado";
       fila = JSON.stringify(fila);
       fila = '['+fila+']';
       fila = JSON.parse(fila);

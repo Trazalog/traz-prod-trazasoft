@@ -10,7 +10,7 @@
       <div class="modal-body" id="modalBodyArticle">
       <input type="hidden" id="idtareaasignada" value=1>  
       <div class="row">
-          <div class="col-xs-12" id="modaltareas">
+          <div class="col-xs-12 table-responsive" id="modaltareas">
           
           </div>
       </div>
@@ -34,7 +34,7 @@
       success: function(result){
       tarea[0].id = result;
       tarea[0].asignado = "Sin Asignar";
-      tarea[0].estado ="Incompleto";
+      tarea[0].estado ="Planificado";
       insertaTarea(tarea);
       }
   }
@@ -59,10 +59,13 @@
       html +="<th>Estado</th>";
       html +='</tr></thead><tbody>';
       html += "<tr data-json='"+JSON.stringify(tarea[0])+"'id='"+id+"'>";
-      html += '<td><i class="fa fa-fw fa-minus text-light-blue tabla_tareas_asignadas_borrar" style="cursor: pointer; margin-left: 15px;" title="Remover Tarea"></i>';
-      html += '<i class="fa fa-fw fa-plus text-light-blue tabla_tareas_asignadas_encargado" style="cursor: pointer; margin-left: 15px;" title="Asignar Encargado"></i>';
-      html += '<i class="fa fa-fw fa-plus text-light-blue tabla_tareas_asignadas_trabajo" style="cursor: pointer; margin-left: 15px;" title="Asignar Recurso de trabajo"></i>';
-      html += '<i class="fa fa-fw fa-plus text-light-blue tabla_tareas_asignadas_recursos" style="cursor: pointer; margin-left: 15px;" title="Asignar Recurso Material"></i></td>';
+      html += '<td>';
+      if(tarea[0].estado != 'Terminado' ||tarea[0].estado != 'Anulado' ){
+        html += '<i class="fa fa-fw fa-minus text-light-blue tabla_tareas_asignadas_borrar" style="cursor: pointer; margin-left: 15px;" title="Remover Tarea"></i>';
+      }
+      html += '<i class="fa fa-fw  fa-male text-light-blue tabla_tareas_asignadas_encargado" style="cursor: pointer; margin-left: 15px;" title="Asignar Encargado"></i>';
+      html += '<i class="fa fa-fw fa-truck text-light-blue tabla_tareas_asignadas_trabajo" style="cursor: pointer; margin-left: 15px;" title="Asignar Recurso de trabajo"></i>';
+      html += '<i class="fa fa-fw fa-leaf text-green tabla_tareas_asignadas_recursos" style="cursor: pointer; margin-left: 15px;" title="Asignar Recurso Material"></i></td>';
       html += '<td>'+tarea[0].titulo+'</td>';
       html += '<td>'+tarea[0].duracion+'</td><td>';
       if(tarea[0].formula != ""){
@@ -71,10 +74,10 @@
       if(tarea[0].formulario != ""){
       html +='  <i class="fa fa-edit" title="Formulario"></i> ';
       }
-      html +=' <i class="fa fa-edit tabla_tareas_asignadas_recursos" style="display:none" title="Recursos Materiales asignados"></i> ';
+      html +=' <i class="fa fa-fw fa-leaf text-green tabla_tareas_asignadas_recursos" style="display:none" title="Recursos Materiales asignados"></i> ';
       html +='  <i class="fa fa-edit tabla_tareas_asignadas_trabajo" style="display:none" title="Recursos de trabajo asignados"></i> </td>';
       html += '<td>'+tarea[0].asignado+'</td>';
-      html += '<td>'+tarea[0].estado+'</td>';
+      html += '<td class="estadotarea">'+tarea[0].estado+'</td>';
       html += '</tr>';
       html += '</tbody></table>';
       document.getElementById('divtabla').innerHTML = "";
@@ -84,10 +87,13 @@
    }else if(existe == 'si')
    {
       html += "<tr data-json='"+JSON.stringify(tarea[0])+"'id='"+id+"'>";
-      html += '<td><i class="fa fa-fw fa-minus text-light-blue tabla_tareas_asignadas_borrar" style="cursor: pointer; margin-left: 15px;" title="Remover Tarea"></i>';
-      html += '<i class="fa fa-fw fa-plus text-light-blue tabla_tareas_asignadas_encargado" style="cursor: pointer; margin-left: 15px;" title="Asignar Encargado"></i>';
-      html += '<i class="fa fa-fw fa-plus text-light-blue tabla_tareas_asignadas_trabajo" style="cursor: pointer; margin-left: 15px;" title="Asignar Recurso de trabajo"></i>';
-      html += '<i class="fa fa-fw fa-plus text-light-blue tabla_tareas_asignadas_recursos"  style="cursor: pointer; margin-left: 15px;" title="Asignar Recurso Material"></i></td>';
+      html += "<td>";
+      if(tarea[0].estado == 'Planificado' || tarea[0].estado == 'En Curso' ){
+        html += '<i class="fa fa-fw fa-minus text-light-blue tabla_tareas_asignadas_borrar" style="cursor: pointer; margin-left: 15px;" title="Remover Tarea"></i>';
+      }
+      html += '<i class="fa fa-fw  fa-male text-light-blue tabla_tareas_asignadas_encargado" style="cursor: pointer; margin-left: 15px;" title="Asignar Encargado"></i>';
+      html += '<i class="fa fa-fw fa-truck text-light-blue tabla_tareas_asignadas_trabajo" style="cursor: pointer; margin-left: 15px;" title="Asignar Recurso de trabajo"></i>';
+      html += '<i class="fa fa-fw fa-leaf text-green tabla_tareas_asignadas_recursos" style="cursor: pointer; margin-left: 15px;" title="Asignar Recurso Material"></i></td>';
       html += '<td>'+tarea[0].titulo+'</td>';
       html += '<td>'+tarea[0].duracion+'</td><td>';
       if(tarea[0].formula != ""){
@@ -97,9 +103,9 @@
       html +='  <i class="fa fa-edit" title="Formulario"></i> ';
       }
       html +=' <i class="fa fa-edit tabla_tareas_asignadas_recursos" style="display:none" title="Recursos Materiales asignados"></i> ';
-      html +=' <i class="fa fa-edit tabla_tareas_asignadas_trabajo" style="display:none" title="Recursos de trabajo asignados"></i> </td>';
+      html +=' <i class="fa fa-fw fa-leaf text-green tabla_tareas_asignadas_trabajo" style="display:none" title="Recursos de trabajo asignados"></i> </td>';
       html += '<td>'+tarea[0].asignado+'</td>';
-      html += '<td>'+tarea[0].estado+'</td>';
+      html += '<td class="estadotarea">'+tarea[0].estado+'</td>';
       html += '</tr>';
       $('#tabla_tareas_asignadas tbody').append(html);
       tabla = document.getElementById('tabla_tareas_asignadas').innerHTML;

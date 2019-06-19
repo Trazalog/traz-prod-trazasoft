@@ -8,13 +8,13 @@
       </div>
 
       <div class="modal-body" id="modalBodyArticle">
-      <div class="row">    
-      </div>
-      <div class="row form-group">
-   <div class="col-xs-2">
+      
+      <div id="formula"></div> 
+      <div class="row form-group" style="margin-top:20px;">
+   <div class="col-md-2 col-xs-12">
      <label for="template" class="form-label">Recurso:</label>
    </div>
-   <div class="col-xs-5 input-group">
+   <div class="col-md-5 col-xs-12 input-group">
       <input list="recursos" id="inputrecursosmateriales" class="form-control">
        <datalist id="recursos">
        <?php foreach($recursosmateriales as $fila)
@@ -29,11 +29,11 @@
             <i class="glyphicon glyphicon-search"></i></button>
            </span> 
       </div>
-      <div class="col-xs-5"></div>
+      <div class="col-md-5"></div>
     </div>
       <div class="row">
       <input type="hidden" id="recursomaterialexiste" value="no">
-          <div class="col-xs-12" id="recursosmaterialesasignados">
+          <div class="col-xs-12 table-responsive" id="recursosmaterialesasignados">
           </div>
           <input type="hidden" id="rowactual">
       </div>

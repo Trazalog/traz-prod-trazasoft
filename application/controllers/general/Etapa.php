@@ -63,7 +63,7 @@ class Etapa extends CI_Controller {
 		$data['recipientes'] = $this->Recipientes->listarPorEstablecimiento($data['etapa']->establecimiento->id)->recipientes->recipiente;
 		$data['op'] = 	$data['etapa']->titulo;
 		$data['lang'] = lang_get('spanish',4);
-		$data['establecimientos'] = $this->Establecimientos->listar($data['op'])->establecimientos->establecimiento;
+		$data['establecimientos'] = $this->Establecimientos->listar(2)->establecimientos->establecimiento;
 		$data['materias'] = $this->Materias->listar()->materias->materia;
 		$data['fecha'] = $data['etapa']->fecha;
 		if($data['op'] == 'fraccionamiento')
