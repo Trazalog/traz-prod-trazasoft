@@ -1,7 +1,7 @@
 <?php $this->load->view('camion/modal_lotes')?>
 <div class="box">
         <div class="box-header with-border">
-          <h3><?php echo $lang["CargarCamion"];?></h3>
+          <h3><?php echo $lang["DescargaCamion"];?></h3>
           <div class="box-tools pull-right">
           </div>
         </div>
@@ -63,11 +63,11 @@
       </div>
    </div>
    <div class="box">
-      <div class="box-header"><h4>Datos de Carga</h4></div>
+      <div class="box-header"><h4>Datos de Descarga</h4></div>
        <div class="box-body">
          <div class="row" style="margin-top:40px;">
             <div class="col-md-6 col-xs-12">
-                <label class="form-label" for="">Codigos Lotes*: &nbsp;&nbsp;</label><input onchange="ActualizaLotes()" type="checkbox" id="checklote"><small>&nbsp;&nbsp;&nbsp;&nbsp;Solo los que salen</small>
+                <label class="form-label" for="">Codigos Lotes*: </label>
                 <div class="row">
                  <div class="col-xs-11 input-group margin">
                     <input list="lotes" id="inputlotes"   class="form-control" autocomplete="off" disabled>
@@ -97,7 +97,7 @@
                 <div class="col-md-2"></div>
              </div>
              <div class="row">
-                <div class="col-md-2 col-xs-12"><label class="form-label">Stock</label></div>
+                <div class="col-md-2 col-xs-12"><label class="form-label">Cantidad en camion</label></div>
                 <div class="col-md-8 col-xs-12"><input class="form-control"type="text" id="stocklote" disabled></div>
                 <div class="col-md-2 "></div>
              </div>
@@ -110,7 +110,7 @@
          </div>
          <div class="row" style="margin-top: 20px">
                 <div class="col-xs-3"></div>
-                <div class="col-xs-6"><button class="btn btn-block btn-primary" type="button" onclick="Cargar();"><?php echo $lang["CargarCamion"];?></button></div>
+                <div class="col-xs-6"><button class="btn btn-block btn-primary" type="button" onclick="Cargar();"><?php echo $lang["DescargaCamion"];?></button></div>
                 <div class="col-xs-3"></div>
              </div>
         </div>
@@ -124,7 +124,7 @@
             <div class="row">
                <div class="col-md-8"></div>
                <div class="col-md-2 col-xs-6">
-                <button type="button" class="btn btn-block btn-success " onclick="FinalizarCarga()">Finalzar</button>
+                <button type="button" class="btn btn-block btn-success " onclick="FinalizarCarga()">Finalizar</button>
                </div>
                <div class="col-md-2 col-xs-6">
                   <button type="button" class="btn btn-block btn-danger" onclick="linkTo('general/Etapa/index');">Cancelar</button> 
@@ -152,12 +152,10 @@
        {
            html = html + "<option data-json= '"+JSON.stringify(result[i])+"'value='"+result[i].id+"'>"+result[i].patente+"</option>";
        }
-       ActualizaLotes();
        document.getElementById('camiones').innerHTML = "";
         document.getElementById('camiones').innerHTML = html;
         document.getElementById('camiones').disabled= false;
-        document.getElementById('inputlotes').disabled= false;
-        document.getElementById('btnlotes').disabled= false;
+       
       }
      
     });
@@ -171,16 +169,17 @@
         document.getElementById('idcamion').value = camion.id;
         document.getElementById('existe_tabla').value = 'no';
         document.getElementById('tablacargas').innerHTML ="";
-        
+        ActualizaLotes();
+        document.getElementById('inputlotes').disabled= false;
+        document.getElementById('btnlotes').disabled= false;
       }
       function ActualizaLotes()
       {
-        establecimiento =  document.getElementById('establecimientos').value;
-        salida = document.getElementById('checklote').checked;
+        camion =  document.getElementById('camiones').value;
         $.ajax({
       type: 'POST',
-      data: {establecimiento:establecimiento, salida:salida },
-      url: 'general/Lote/listarPorEstablecimientoConSalida', 
+      data: {camion:camion},
+      url: 'general/Lote/listarPorCamion', 
       success: function(result){
       result = JSON.parse(result);
       var html=" <datalist id='lotes'>";
@@ -213,7 +212,7 @@ function ActualizaLote(lote)
       document.getElementById('fechalote').value = lote.fecha;
       document.getElementById('envaselote').value = lote.tituloenvase;
       document.getElementById('productolote').value = lote.tituloproducto;
-       document.getElementById('stocklote').value = lote.stock;
+       document.getElementById('stocklote').value = lote.cantidad;
  }
       function Cargar()
       {
@@ -304,12 +303,11 @@ function ActualizaLote(lote)
       }
       function ModalLotes()
       {
-        establecimiento =  document.getElementById('establecimientos').value;
-        salida = document.getElementById('checklote').checked;
+        camion =  document.getElementById('camiones').value;
         $.ajax({
       type: 'POST',
-      data: {establecimiento:establecimiento, salida:salida },
-      url: 'general/Lote/listarPorEstablecimientoConSalida', 
+      data: {camion:camion},
+      url: 'general/Lote/listarPorCamion', 
       success: function(result){
       result = JSON.parse(result);
       var html="";
@@ -330,7 +328,7 @@ function ActualizaLote(lote)
       html +="<th>Lote</th>";
       html +="<th>Envase</th>";
       html +="<th>Producto</th>";
-      html +="<th>Stock</th>";
+      html +="<th>Cantidad</th>";
       html +='</tr></thead><tbody>';
       
        for( i =0;i<result.length;i++)
@@ -340,7 +338,7 @@ function ActualizaLote(lote)
              html += '<td>'+result[i].titulo+'</td>';    
              html += '<td>'+result[i].tituloenvase+'</td>';
              html += '<td>'+result[i].tituloproducto+'</td>';
-             html += '<td>'+result[i].stock+'</td>';
+             html += '<td>'+result[i].cantidad+'</td>';
              html += '</tr>';
        }
             html+='</tbody></table>';

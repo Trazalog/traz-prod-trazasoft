@@ -2,7 +2,7 @@
 
 if(!function_exists('armaBusca')){
 
-    function armaBusca($json, $id, $acciones)
+    function armaBusca($json, $id, $acciones,$lenguaje)
     {
         $array =  json_decode($json);
         
@@ -18,7 +18,8 @@ if(!function_exists('armaBusca')){
         {
             $head=array_keys((array)$array[0])[$i];
             array_push($keys,$head);
-            $html = $html.'<th>'.$head.'</th>';
+            $head2= $lenguaje[$head];
+            $html = $html.'<th>'.$head2.'</th>';
         }
         
        

@@ -39,7 +39,7 @@
           <div class="col-md-5"></div>
       </div>
       <div class="row" style="margin-top:20px">
-          <div class="col-md-3 col-xs-12"><label class="form-label">Lote Destino:</label></div>
+          <div class="col-md-3 col-xs-12"><label class="form-label">Codigo Lote Destino:</label></div>
           <div class="col-md-4 col-xs-12"><input class="form-control" type="text" id="lotedestino" value="" placeholder ="Inserte Lote destino"></div>
           <div class="col-md-4 col-xs-12"><button class="btn btn-primary btn-block" onclick="copiaOrigen()">Copiar Lote Origen</button></div>
           <div class="col-md-1"></div>

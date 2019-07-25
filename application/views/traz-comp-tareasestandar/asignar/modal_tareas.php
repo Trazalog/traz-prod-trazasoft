@@ -75,7 +75,7 @@
       html +='  <i class="fa fa-edit" title="Formulario"></i> ';
       }
       html +=' <i class="fa fa-fw fa-leaf text-green tabla_tareas_asignadas_recursos" style="display:none" title="Recursos Materiales asignados"></i> ';
-      html +='  <i class="fa fa-edit tabla_tareas_asignadas_trabajo" style="display:none" title="Recursos de trabajo asignados"></i> </td>';
+      html +='  <i class="fa fa-fw fa-truck text-light-blue tabla_tareas_asignadas_trabajo" style="display:none" title="Recursos de trabajo asignados"></i> </td>';
       html += '<td>'+tarea[0].asignado+'</td>';
       html += '<td class="estadotarea">'+tarea[0].estado+'</td>';
       html += '</tr>';
@@ -102,8 +102,8 @@
       if(tarea[0].formulario != ""){
       html +='  <i class="fa fa-edit" title="Formulario"></i> ';
       }
-      html +=' <i class="fa fa-edit tabla_tareas_asignadas_recursos" style="display:none" title="Recursos Materiales asignados"></i> ';
-      html +=' <i class="fa fa-fw fa-leaf text-green tabla_tareas_asignadas_trabajo" style="display:none" title="Recursos de trabajo asignados"></i> </td>';
+      html +=' <i class="fa fa-fw fa-leaf text-green tabla_tareas_asignadas_recursos" style="display:none" title="Recursos Materiales asignados"></i> ';
+      html +=' <i class=" fa fa-fw fa-truck text-ligth-blue tabla_tareas_asignadas_trabajo" style="display:none" title="Recursos de trabajo asignados"></i> </td>';
       html += '<td>'+tarea[0].asignado+'</td>';
       html += '<td class="estadotarea">'+tarea[0].estado+'</td>';
       html += '</tr>';

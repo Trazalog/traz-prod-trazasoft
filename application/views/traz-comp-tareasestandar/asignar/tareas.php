@@ -52,7 +52,7 @@
       </div>
      </div>
     <script>
-    accion ='<?php echo $accion;?>';
+    var accion ='<?php echo $accion;?>';
     if (accion == "Editar")
 {
   tareas = <?php echo json_encode($etapa->tareas);?>;

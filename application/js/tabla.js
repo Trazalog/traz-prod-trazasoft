@@ -1,27 +1,9 @@
 function armaTabla(idtabla, idrecipiente, json, lenguaje, acciones = "") {
 
-    json1 = JSON.parse(json)[0];
-    var hasOwn = Object.prototype.hasOwnProperty;
-    var keys = [],
-        name;
-    for (name in json1) {
-        if (hasOwn.call(json1, name)) {
-            keys.push(name);
-        }
-    }
-    var jsontrarr = [];
-    json = JSON.parse(json);
-    for (j = 0; j < json.length; j++) {
-        jsontr = {};
-        for (i = 0; i < keys.length; i++) {
-            jsontr[lenguaje[keys[i]]] = json[j][keys[i]];
-        }
-        jsontrarr.push(jsontr);
-    }
-    json = JSON.stringify(jsontrarr);
+
     $.ajax({
         type: 'POST',
-        data: { json: json, idtabla: idtabla, acciones: acciones },
+        data: { json: json, idtabla: idtabla, acciones: acciones, lenguaje: lenguaje },
         url: 'general/Tabla/armaTabla',
         async: true,
         success: function(result) {

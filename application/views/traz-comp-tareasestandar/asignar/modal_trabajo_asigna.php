@@ -1,4 +1,4 @@
-<div class="modal" id="modal_trabajo_asigna" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal" id="modal_trabajo_asigna" style="z-index:1250; overflow-y:auto;"tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -35,7 +35,10 @@
   var html = '';
   recursotrabajo = JSON.stringify(recursotrabajo);
   recursotrabajo =JSON.parse(recursotrabajo);
-  document.getElementById('inputrecursostrabajo').value = recursotrabajo[0].Equipo;
+  document.getElementById('inputrecursostrabajo').value = recursotrabajo[0].equipo;
+  disponible = '';
+  
+
    if(existe == 'no')
    {
    
@@ -51,8 +54,8 @@
       html += '<tr data-json="'+recursotrabajo[0]+'" id="'+recursotrabajo[0].id+'">';
       html += '<td><i class="fa fa-fw fa-minus text-light-blue tablarecursostrabajoasignados_borrar" style="cursor: pointer; margin-left: 15px;" title="Nuevo"></i></td>';
       html += '<td>'+recursotrabajo[0].id+'</td>';
-      html += '<td>'+recursotrabajo[0].Equipo+'</td>';
-      html += '<td>'+recursotrabajo[0].Capacidad+'</td>';
+      html += '<td>'+recursotrabajo[0].equipo+'</td>';
+      html += '<td>'+recursotrabajo[0].capacidad+'</td>';
       html += '<td>'+recursotrabajo[0].disponible+'</td>';
       html += '</tr>';
       html += '</tbody></table>';
@@ -66,8 +69,8 @@
       html += '<tr data-json="'+recursotrabajo[0]+'" id="'+recursotrabajo[0].id+'">';
       html += '<td><i class="fa fa-fw fa-minus text-light-blue tablarecursostrabajoasignados_borrar" style="cursor: pointer; margin-left: 15px;" title="Nuevo"></i></td>';
       html += '<td>'+recursotrabajo[0].id+'</td>';
-      html += '<td>'+recursotrabajo[0].Equipo+'</td>';
-      html += '<td>'+recursotrabajo[0].Capacidad+'</td>';
+      html += '<td>'+recursotrabajo[0].equipo+'</td>';
+      html += '<td>'+recursotrabajo[0].capacidad+'</td>';
       html += '<td>'+recursotrabajo[0].disponible+'</td>';
       html += '</tr>';
       $('#tablarecursostrabajoasignados tbody').append(html);

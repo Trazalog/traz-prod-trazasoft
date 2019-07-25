@@ -157,6 +157,7 @@
   var ul = document.getElementById('nuevo');
    ul.onclick = function(event) {
    target= JSON.parse(event.target.getAttribute('data-json'));
+   console.log(target);
       linkTo(target.link);
     }
   </script>

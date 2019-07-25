@@ -19,7 +19,14 @@ class Camion extends CI_Controller {
 		$data['lang'] = lang_get('spanish',4);
 		$data['establecimientos'] = $this->Establecimientos->listarTodo()->establecimientos->establecimiento;
 		$this->load->view('camion/carga_camion',$data);
-		}
+	}
+	public function descargarCamion()
+	{
+		$data['fecha'] = date('Y-m-d');
+		$data['lang'] = lang_get('spanish',4);
+		$data['establecimientos'] = $this->Establecimientos->listarTodo()->establecimientos->establecimiento;
+		$this->load->view('camion/descarga_camion',$data);
+	}
 		public function salidaCamion()
 		{
 			$data['fecha'] = date('Y-m-d');

@@ -26,14 +26,13 @@
          </div>
         </div>
         <div class="row" style="margin-top: 40px">
-         <div class="col-md-6 col-xs-12">
+         <div class="col-md-1 col-xs-12">
             <label class="form-label">Boleta*:</label>
          </div>
-       </div>
          <div class="col-md-6 col-xs-12">
             <input type="text" class="form-control" placeholder="Inserte Numero de Boleta">
          </div>
-         <div class="col-md-4"> 
+         <div class="col-md-5"> 
          </div>
         </div>
         <div class="row" style="margin-top:40px">
@@ -101,7 +100,7 @@
         <hr>
      </div>
   </div>
-  <div class="box">
+  <div class="box" id="boxproductos">
       <div class="box-header"><h4>Datos Productos entrantes</h4></div>
        <div class="box-body">
          <div class="row" style="margin-top: 40px">
@@ -426,6 +425,7 @@ $("#inputproductos").on('change', function(){
     document.getElementById('cargacamion').style.borderColor="blue";
     document.getElementById('descargacamion').style.borderColor="white";
     document.getElementById('accioncamion').value="carga";
+    document.getElementById('boxproductos').hidden = true;
 }
 function descargacamion()
 {
@@ -433,6 +433,7 @@ function descargacamion()
     document.getElementById('cargacamion').style.borderColor="white";
     document.getElementById('descargacamion').style.borderColor="blue";
     document.getElementById('accioncamion').value="descarga";
+    document.getElementById('boxproductos').hidden = false;
 }
  function actualizaNeto()
  {

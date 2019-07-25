@@ -48,6 +48,22 @@ function listarPorMateria($id)
         $array = file_get_contents($url, false, $param);
         return json_decode($array);
     }
+    function listarPorCamion($camion)
+    {
+        $parametros["http"]["method"] = "GET";		 
+        $param = stream_context_create($parametros);
+        if($camion == 1 || $camion == 3)
+        { 
+            $resource = 'loteentrada1';
+        }
+        if($camion == 2 || $camion == 4)
+        {
+            $resource = 'loteentrada2';
+        }
+        $url = REST.$resource;
+        $array = file_get_contents($url, false, $param);
+        return json_decode($array);
+    }
     function listar()
     {
         

@@ -1,4 +1,4 @@
-<div class="modal" id="modal_recurso_trabajo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal" id="modal_recurso_trabajo" tabindex="-1" role="dialog" style="z-index:1200; overflow-y:auto;"aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -19,7 +19,7 @@
        <datalist id="recursostrabajo">
        <?php foreach($recursostrabajo as $fila)
            {
-             echo  '<option value="'.$fila->Equipo.'">';
+             echo  '<option value="'.$fila->equipo.'">';
             }
             ?>
         </datalist>
@@ -53,7 +53,7 @@
 i=0;
       while(!ban && i<recursos.length)
       {
-        if(titulo == recursos[i].Equipo)
+        if(titulo == recursos[i].equipo)
         {
           ban = true;
           recurso = recursos[i];

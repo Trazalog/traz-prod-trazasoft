@@ -9,7 +9,7 @@
 
       <div class="modal-body" id="modalBodyArticle">
       <div class="row">
-          <div class="col-md-3 col-xs-12"><label class="form-label">Lote Origen:</label></div>
+          <div class="col-md-3 col-xs-12"><label class="form-label">Codigo Lote Origen:</label></div>
           <div class="col-md-4 col-xs-12"><input class="form-control" type="text" id="loteorigen" value="<?php echo $etapa->lote;?>" disabled></div>
           <div class="col-md-5"></div>
       </div>

@@ -28,15 +28,16 @@ class Etapa extends CI_Controller {
 		public function nuevo()
 	 {
 		$data['fecha'] = date('Y-m-d');
-		$data['op'] = $this->input->get('op');
-		$data['etapa']= $this->Etapas->nuevo($data['op'])->etapa;
+		$data['id'] = $this->input->get('op');
+		$data['etapa']= $this->Etapas->nuevo($data['id'])->etapa;
 		$data['idetapa'] = $data['etapa']->id;
 		$data['accion'] = 'Nuevo';
+		$data['op'] = 	$data['etapa']->titulo;
 		$data['materias'] = $this->Materias->listar()->materias->materia;
 		$data['lang'] = lang_get('spanish',5);
 		$data['tareas'] = $this->Tareas->listar()->tareas->tarea; 
 		$data['templates'] = $this->Templates->listar()->templates->template; 
-		$data['establecimientos'] = $this->Establecimientos->listar($data['op'])->establecimientos->establecimiento;
+		$data['establecimientos'] = $this->Establecimientos->listar($data['id'])->establecimientos->establecimiento;
 		$data['recursosmateriales'] = $this->Recursos_Materiales->listar()->recursos->recurso;
 		$trabajo =$this->Recursos_Trabajo->listar()->trabajos->trabajo;
 		$data['recursostrabajo'] = $trabajo;
@@ -87,7 +88,7 @@ class Etapa extends CI_Controller {
 		 $data['recipiente'] =$this->input->post('recipiente');
 		 $data['fecha'] =$this->input->post('fecha');
 		 $data['productos'] = $this->input->post('productos');
-		 var_dump( json_decode($data['productos']));
+		 
 		 $this->Etapas->guardar($data);
 		 echo("ok");
 	 }
