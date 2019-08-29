@@ -147,7 +147,7 @@ $this->load->view('etapa/modal_finalizar');}?>
             </span>
             </div>
         </div>
-        <?}?>
+        <?php } ?>
             <div class="row" style="margin-top: 40px ">
                 <input type="hidden" id="materiasexiste" value="no">
                 <div class="col-xs-12 table-responsive" id="materiasasignadas">
@@ -373,7 +373,7 @@ $this->load->view('etapa/modal_finalizar');}?>
         }
 
         function finalizar() {
-            /* idetapa = <?//php echo $idetapa;?>;
+            /* idetapa = //php echo $idetapa;?>;
    $.ajax({
       type: 'POST',
       data: {idetapa:idetapa },
