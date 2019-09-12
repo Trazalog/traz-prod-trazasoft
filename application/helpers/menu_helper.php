@@ -2,28 +2,28 @@
 
 if(!function_exists('menu')){
 
-    function menu($user)
+    function menu($lang,$user)
     {
-        $REST= 'http://localhost:8080/';
+      
         $parametros["http"]["method"] = "GET";		 
         $param = stream_context_create($parametros);
         $resource = 'menu?user='.$user;	 	
-        $url = $REST.$resource;
+        $url = REST.$resource;
         $array = file_get_contents($url, false, $param);
         $array =  json_decode($array);
        // var_dump($array->menu);die;
         $html = '<ul class="sidebar-menu menu" data-widget="tree">
-        <li class="header">MAIN NAVIGATION</li>';
-        foreach ($array->menu as $i) {
+        <li class="header">'.$lang['navegacion'].'</li>';
+        foreach ($array->menus->menu as $i) {
 
             switch ($i->nivel) {
                 case 1:
-                    $html .= '<li><a href="#" data-link="'.$i->link.'"><i class="fa fa-circle-o"></i>'.$i->titulo.'</a></li>';
+                    $html .= '<li ><a class="link" href="#" data-link="'.$i->link.'"><i class="'.$i->icono.'"></i>'.$lang[$i->titulo].'</a></li>';
                     break;
                 case 2:
                     $html .= '<li class="treeview">
                     <a href="#">
-                        <i class="fa fa-fw fa-check"></i> <span>'.$i->titulo.'</span>
+                        <i class="'.$i->icono.'"></i> <span>'.$i->titulo.'</span>
                         <span class="pull-right-container">
                             <i class="fa fa-angle-left pull-right"></i>
                         </span>
@@ -44,7 +44,7 @@ if(!function_exists('menu')){
     {
         $html = ' <ul class="treeview-menu">';
         foreach ($data as $i) {
-            $html.= '<li><a href="#" data-link="'.$i->link.'"><i class="fa fa-fw fa-barcode"></i>'.$i->titulo.'</a></li>';
+            $html.= '<li ><a href="#" class="link"data-link="'.$i->link.'"><i class="'.$i->icono.'"></i>'.$i->titulo.'</a></li>';
         }
         return $html.'</ul>';
     }

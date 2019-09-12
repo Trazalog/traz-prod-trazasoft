@@ -13,16 +13,7 @@
                     <a href="<?php echo base_url('Login/edit');?>"><i class="fa fa-pencil"></i> Editar Perfil</a>
                 </li>
                 <li class="user-body">
-                    <a href="#" data-ui=""><i class="fa fa-check"></i> U industrial activa</a>
-                    <a href="#" data-ui="1"><i class="notFA"></i> veladero</a>
-                    <a href="#" data-ui="2"><i class="notFA"></i> nueva unidad insdutrial 2</a>
-                    <a href="#" data-ui="5"><i class="notFA"></i> <?php echo $lang['label1'];?></a>
-                    <a href="#" data-ui="6"><i class="notFA"></i> <?php echo $lang['label2'];?></a>
-                    <a href="#" data-ui="7"><i class="notFA"></i> <?php echo $lang['label3'];?></a>
-                    <a href="#" data-ui="8"><i class="notFA"></i> unidad agregada 4</a>
-                    <a href="#" data-ui="9"><i class="notFA"></i> unidad agregada 5</a>
-                    <a href="#" data-ui="10"><i class="notFA"></i> unidadagregada 6</a>
-                    <a href="#" data-ui="11"><i class="notFA"></i> La laja</a>
+                  
                 </li>
                 <style>
                     .notFA {

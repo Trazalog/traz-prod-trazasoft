@@ -6,14 +6,13 @@ class Dash extends CI_Controller {
       parent::__construct();
       $this->load->helper('menu_helper');
       $this->load->helper('file');
-      $this->load->model('sistema/Lenguajes');
    }
    function index(){
-     
-      $data['menu'] = menu($this->session->userdata['id']);
       $leng="spanish";
       $page="layout";
-      $data['lang'] = $this->Lenguajes->get($leng,$page);
+      $data['lang'] = lang_get($leng,$page);
+      $data['menu'] = menu($data['lang'],$this->session->userdata['id']);
+ 
       $this->load->view('layout/Admin',$data);
    }
 }
