@@ -5,12 +5,12 @@ if(!function_exists('menu')){
     function menu($lang,$user)
     {
       
-        $parametros["http"]["method"] = "GET";		 
-        $param = stream_context_create($parametros);
-        $resource = 'menu?user='.$user;	 	
-        $url = REST.$resource;
-        $array = file_get_contents($url, false, $param);
-        $array =  json_decode($array);
+        // $parametros["http"]["method"] = "GET";		 
+        // $param = stream_context_create($parametros);
+        // $resource = 'menu?user='.$user;	 	
+        // $url = REST.$resource;
+        // $array = file_get_contents($url, false, $param);
+         $array =  getJson('menu');//json_decode($array);
        // var_dump($array->menu);die;
         $html = '<ul class="sidebar-menu menu" data-widget="tree">
         <li class="header">'.$lang['navegacion'].'</li>';

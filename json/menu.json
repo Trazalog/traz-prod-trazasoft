@@ -1,0 +1,60 @@
+{
+    "menus": {
+        "menu": [
+            {
+                "link": "Articulo/index",
+                "icono": "fa fa-fw fa-barcode ",
+                "titulo": "Articulos",
+                "nivel": "1"
+            },
+            {
+                "link": "Lote/index",
+                "icono": "fa fa-fw fa-cubes",
+                "titulo": "Stock",
+                "nivel": "1"
+            },
+            {
+                "link": "new/Entrega_Material/index",
+                "icono": "fa fa-fw fa-check",
+                "titulo": "Entrega Materiales",
+                "nivel": "1"
+            },
+            {
+                "link": "Remito/index",
+                "icono": "fa fa-fw fa-paperclip ",
+                "titulo": "Recepción Materiales",
+                "nivel": "1"
+            },
+            {
+                "link": "Lote/puntoPedList",
+                "icono": "fa fa-fw fa-bookmark",
+                "titulo": "Punto Pedido",
+                "nivel": "1"
+            },
+            {
+                "link": "Notapedido/index",
+                "icono": "fa fa-fw fa-cart-plus",
+                "titulo": "Pedido Materiales",
+                "nivel": "1"
+            },
+            {
+                "link": "Proceso/index",
+                "icono": "fa fa-cogs",
+                "titulo": "Proceso",
+                "nivel": "1"
+            },
+            {
+                "link": "Proceso/pedidoNormal",
+                "icono": "fa fa-cogs",
+                "titulo": "Lanzar Pedido Materiales",
+                "nivel": "1"
+            },
+            {
+                "link": "Proceso/pedidoExtraordinario",
+                "icono": "fa fa-cogs",
+                "titulo": "Lanzar Pedido Extraordinario",
+                "nivel": "1"
+            }
+        ]
+    }
+}
