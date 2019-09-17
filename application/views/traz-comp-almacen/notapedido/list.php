@@ -205,7 +205,7 @@ var tablaDeposito = $('#deposito').DataTable({});
              <div class="modal-body table-responsive" id="modalBodyArticle">
                 <?php 
                 
-                $this->load->view(CMP_ALM.'/notapedido/generar_pedido');?>
+                $this->load->view(ALM.'notapedido/generar_pedido');?>
             </div> <!-- /.modal-body -->
                         
                     </div> <!-- /.modal-content -->

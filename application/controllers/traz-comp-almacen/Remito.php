@@ -8,9 +8,9 @@ class Remito extends CI_Controller {
     {
 		parent::__construct();
 		
-		$this->load->model(CMP_ALM.'/Remitos');
-		$this->load->model(CMP_ALM.'/Articulos');
-		$this->load->model(CMP_ALM.'/Lotes');
+		$this->load->model(ALM.'Remitos');
+		$this->load->model(ALM.'Articulos');
+		$this->load->model(ALM.'Lotes');
     }
 
     public function index() // Ok
@@ -18,7 +18,7 @@ class Remito extends CI_Controller {
 		 
       	$data['permission'] = $this->permission;
       	$data['list'] = $this->Remitos->getRemitosList();
-		$this->load->view(CMP_ALM.'/remito/list',$data);
+		$this->load->view(ALM.'remito/list',$data);
     }
 
     public function cargarlista() // Ok
@@ -30,7 +30,7 @@ class Remito extends CI_Controller {
 		$data['lang'] = lang_get('spanish', 'Ejecutar OT');
 
 		$data['permission'] = $this->permission;
-        $this->load->view(CMP_ALM.'/remito/view_',$data);
+        $this->load->view(ALM.'remito/view_',$data);
 	}
 	
 	public function getcodigo($json=true)

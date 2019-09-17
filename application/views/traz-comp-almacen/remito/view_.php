@@ -44,7 +44,7 @@
                                                 <div class="col-xs-12 col-sm-12 col-md-12"><br>
                                                     <label for="lote">Seleccionar Articulo <strong
                                                             style="color: #dd4b39">*</strong>:</label>
-                                                    <?php $this->load->view(CMP_ALM.'/articulo/componente'); ?>
+                                                    <?php $this->load->view(ALM.'articulo/componente'); ?>
                                                 </div>
 
                                                 <div class="col-xs-12 col-sm-3 col-md-3"><br>

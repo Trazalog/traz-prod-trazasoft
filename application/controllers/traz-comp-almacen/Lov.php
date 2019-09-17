@@ -4,7 +4,7 @@ class Lov extends CI_Controller {
     function __construct(){
 
       parent::__construct();
-      $this->load->model(CMP_ALM.'/Lovs'); 
+      $this->load->model(ALM.'Lovs'); 
    }
    function lista($grupo){
       echo var_dump($this->Lovs->lista($grupo));

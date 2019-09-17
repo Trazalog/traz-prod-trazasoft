@@ -5,21 +5,21 @@ class Ordeninsumo extends CI_Controller {
     public function __construct()
     {
         parent::__construct();
-        $this->load->model(CMP_ALM.'/Ordeninsumos');
+        $this->load->model(ALM.'Ordeninsumos');
     }
 
     public function index()
     {
     	$data['list']       = $this->Ordeninsumos->getList();
       	$data['permission'] = "Add-Edit-Del-View";
-        $this->load->view(CMP_ALM.'/ordeninsumos/list',$data);
+        $this->load->view(ALM.'ordeninsumos/list',$data);
     }
 
     public function cargarlista()
     {
 		$data['permission'] = "Add-Edit-Del-View";
 		$data['list'] = $this->getcodigo();
-        $this->load->view(CMP_ALM.'/ordeninsumos/view_',$data);
+        $this->load->view(ALM.'ordeninsumos/view_',$data);
     }
 
 	public function getcodigo()

@@ -1,7 +1,7 @@
 <input id="pema_id" type="number" class="hidden" value="<?php echo $pema_id ?>">
 <input id="peex_id" type="number" class="hidden" value="<?php echo $peex_id ?>">
 
-<?php $this->load->view(CMP_ALM.'/Proceso/tareas/componentes/pedido_materiales')?>
+<?php $this->load->view(ALM.'Proceso/tareas/componentes/pedido_materiales')?>
 
 <script>
 

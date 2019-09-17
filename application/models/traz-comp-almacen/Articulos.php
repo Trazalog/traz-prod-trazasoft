@@ -19,7 +19,8 @@ class Articulos extends CI_Model
 		$this->db->group_by('arti_id');
 			
 		$query = $this->db->get();	
-		if ($query->num_rows()!=0)
+		
+		if ($query && $query->num_rows() > 0)
 		{
 			return $query->result_array();	
 		}

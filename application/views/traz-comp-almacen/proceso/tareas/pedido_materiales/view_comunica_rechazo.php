@@ -18,7 +18,7 @@
 </form>
 <hr>
 <div id="view_pedidoMateriales">
-<?php echo $this->load->view(CMP_ALM.'/proceso/tareas/componentes/pedido_materiales',null,true); ?>
+<?php echo $this->load->view(ALM.'proceso/tareas/componentes/pedido_materiales',null,true); ?>
 </div>
 <script>
 

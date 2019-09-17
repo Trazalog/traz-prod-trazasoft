@@ -84,10 +84,31 @@ defined('EXIT_DATABASE')       OR define('EXIT_DATABASE', 8); // database error
 defined('EXIT__AUTO_MIN')      OR define('EXIT__AUTO_MIN', 9); // lowest automatically-assigned error code
 defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
 
-define('TAREAS_ASIGNAR', 'traz-comp-tareasestandar/asignar');
+#BONITA SOFT
+define('BONITA_URL', 'http://localhost:8080/bonita/');  
+define('BPM_ADMIN_USER', 'mantenedor1');
+define('BPM_ADMIN_PASS', 'bpm');
+define('BPM_USER_PASS', 'bpm');
 
+#COMPONENTE BPM
+define('BPM', 'traz-comp-bpm/');
+
+#COMPONENTE ALMACENES
+define('ALM', 'traz-comp-almacen/');
+define('BPM_PROCESS_ID_PEDIDOS_NORMALES', '6833268789089291878'); 
+define('BPM_PROCESS_ID_PEDIDOS_EXTRAORDINARIOS', '7321139677245257050');
+define('viewOT', true);
+
+
+#COMPONENTE FORMULARIOS
+define('FRM', 'traz-comp-form/');
+define('FILES', 'files/');
+
+#REST
+define('TAREAS_ASIGNAR', 'traz-comp-tareasestandar/asignar');
 define('REST', 'http://localhost:8080/');
+
 
 # >> Proyecto
 # Default View
-define('DEFAULT_VIEW', 'Test');
+define('DEFAULT_VIEW', FRM.'Form');

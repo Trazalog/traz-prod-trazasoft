@@ -18,7 +18,7 @@ if(!function_exists('menu')){
 
             switch ($i->nivel) {
                 case 1:
-                    $html .= '<li ><a class="link" href="#" data-link="'.$i->link.'"><i class="'.$i->icono.'"></i>'.$lang[$i->titulo].'</a></li>';
+                    $html .= '<li ><a class="link" href="#" data-link="'.ALM.$i->link.'"><i class="'.$i->icono.'"></i>'.$i->titulo.'</a></li>';
                     break;
                 case 2:
                     $html .= '<li class="treeview">

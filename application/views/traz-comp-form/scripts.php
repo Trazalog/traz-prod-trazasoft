@@ -1,4 +1,4 @@
-<script src="<?php echo base_url() ?>assets/props/forms.js"></script>
+<script src="<?php echo base_url() ?>lib/props/forms.js"></script>
 
 <script>
 var frmUrl = "<?php echo FRM ?>";

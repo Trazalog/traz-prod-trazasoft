@@ -8,10 +8,10 @@ class Proceso extends CI_Controller
         parent::__construct();
 
          
-        $this->load->model(CMP_ALM.'Ordeninsumos');
-        $this->load->model(CMP_ALM.'Notapedidos');
-        $this->load->model(CMP_ALM.'new/Pedidos_Materiales');
-        $this->load->model(CMP_ALM.'Pedidoextra');
+        $this->load->model(ALM.'Ordeninsumos');
+        $this->load->model(ALM.'Notapedidos');
+        $this->load->model(ALM.'new/Pedidos_Materiales');
+        $this->load->model(ALM.'Pedidoextra');
     }
 
     public function index()
@@ -21,7 +21,7 @@ class Proceso extends CI_Controller
         $data['device'] = "";
         $res =  $this->bpm->getToDoList();
         $data['list'] = $res['data'];
-        $this->load->view(CMP_ALM.'/proceso/tareas/list', $data);
+        $this->load->view(ALM.'proceso/tareas/list', $data);
 
     }
 
@@ -67,11 +67,11 @@ class Proceso extends CI_Controller
 
         //COMENTARIOS
         $data_aux = ['case_id' => $tarea['rootCaseId'], 'comentarios' => $this->bpm->ObtenerComentarios($tarea['rootCaseId'])['data']];
-        $data['comentarios'] = $this->load->view(CMP_ALM.'/proceso/tareas/componentes/comentarios', $data_aux, true);
+        $data['comentarios'] = $this->load->view(ALM.'proceso/tareas/componentes/comentarios', $data_aux, true);
 
         //DESPLEGAR VISTA
         $data['view'] = $this->deplegarVista($tarea);
-        $this->load->view(CMP_ALM.'/proceso/tareas/view_', $data);
+        $this->load->view(ALM.'proceso/tareas/view_', $data);
     }
 
      public function tomarTarea($id)
@@ -127,7 +127,7 @@ class Proceso extends CI_Controller
 
             case 'Entrega pedido pendiente':
            
-                $this->load->model(CMP_ALM.'/Ordeninsumos');
+                $this->load->model(ALM.'Ordeninsumos');
        
                 $this->Ordeninsumos->insert_entrega_materiales($form);
 
@@ -207,7 +207,7 @@ class Proceso extends CI_Controller
 
                 $data['pema_id'] = $this->Notapedidos->getXCaseId($tarea['rootCaseId'])['pema_id'];
 
-                return $this->load->view(CMP_ALM.'/proceso/tareas/pedido_materiales/view_aprueba_pedido', $data, true);
+                return $this->load->view(ALM.'proceso/tareas/pedido_materiales/view_aprueba_pedido', $data, true);
 
                 break;
 
@@ -236,7 +236,7 @@ class Proceso extends CI_Controller
 
                 $data['estadoOT'] = !($ot->estado == 'T' || $ot->estado=='CA');
 
-                return $this->load->view(CMP_ALM.'/proceso/tareas/pedido_materiales/view_entrega_pedido_pendiente', $data, true);
+                return $this->load->view(ALM.'proceso/tareas/pedido_materiales/view_entrega_pedido_pendiente', $data, true);
 
                 break;
 
@@ -270,7 +270,7 @@ class Proceso extends CI_Controller
                 $data['info'] = $obj;
 
 
-                return $this->load->view(CMP_ALM.'/proceso/tareas/pedido_materiales/view_comunica_rechazo', $data, true);
+                return $this->load->view(ALM.'proceso/tareas/pedido_materiales/view_comunica_rechazo', $data, true);
 
                 break;
 
@@ -280,7 +280,7 @@ class Proceso extends CI_Controller
 
                 $data = $this->Pedidoextra->getXCaseId($tarea['rootCaseId']);
 
-                return $this->load->view(CMP_ALM.'/proceso/tareas/pedido_extraordinario/view_aprueba_pedido', $data, true);
+                return $this->load->view(ALM.'proceso/tareas/pedido_extraordinario/view_aprueba_pedido', $data, true);
 
                 break;
 
@@ -288,7 +288,7 @@ class Proceso extends CI_Controller
 
                 $data = $this->Pedidoextra->getXCaseId($tarea['rootCaseId']);
 
-                return $this->load->view(CMP_ALM.'/proceso/tareas/pedido_extraordinario/view_aprueba_compras', $data, true);
+                return $this->load->view(ALM.'proceso/tareas/pedido_extraordinario/view_aprueba_compras', $data, true);
 
                 break;
 
@@ -296,7 +296,7 @@ class Proceso extends CI_Controller
 
                 $data['motivo'] = $this->Pedidoextra->getXCaseId($tarea['rootCaseId'])['motivo_rechazo'];
 
-                return $this->load->view(CMP_ALM.'/proceso/tareas/pedido_materiales/view_comunica_rechazo', $data, true);
+                return $this->load->view(ALM.'proceso/tareas/pedido_materiales/view_comunica_rechazo', $data, true);
 
                 break;
 
@@ -312,7 +312,7 @@ class Proceso extends CI_Controller
 
                 $data['peex_id'] = $peex['peex_id'];
 
-                return $this->load->view(CMP_ALM.'/proceso/tareas/pedido_extraordinario/view_generar_pedido_materiales', $data, true);
+                return $this->load->view(ALM.'proceso/tareas/pedido_extraordinario/view_generar_pedido_materiales', $data, true);
 
                 break;
 

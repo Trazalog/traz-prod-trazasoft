@@ -263,7 +263,7 @@ function guardarComentario() {
             'processInstanceId': id,
             'content': comentario
         },
-        url: '<?php echo base_url(CMP_ALM) ?>Proceso/guardarComentario',
+        url: '<?php echo base_url(ALM) ?>Proceso/guardarComentario',
         success: function(result) {
             console.log("Submit");
             var lista = $('#listaComentarios');
@@ -282,7 +282,7 @@ function tomarTarea() {
     var idTarBonita = $('#idTarBonita').val();
     $.ajax({
         type: 'POST',
-        url: '<?php echo base_url(CMP_ALM) ?>Proceso/tomarTarea/' + idTarBonita,
+        url: '<?php echo base_url(ALM) ?>Proceso/tomarTarea/' + idTarBonita,
         success: function(data) {
 
             if (data['status']) {
@@ -303,7 +303,7 @@ function soltarTarea() {
     var idTarBonita = $('#idTarBonita').val();
     $.ajax({
         type: 'POST',
-        url: '<?php echo base_url(CMP_ALM) ?>Proceso/soltarTarea/' + idTarBonita,
+        url: '<?php echo base_url(ALM) ?>Proceso/soltarTarea/' + idTarBonita,
         success: function(data) {
 
             // toma a tarea exitosamente

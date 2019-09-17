@@ -7,8 +7,8 @@ class Articulo extends CI_Controller {
     {
 		parent::__construct();
 
-		$this->load->model(CMP_ALM.'/Articulos');
-		$this->load->model(CMP_ALM.'/Lotes');
+		$this->load->model(ALM.'Articulos');
+		$this->load->model(ALM.'Lotes');
 
 	}
 
@@ -17,7 +17,7 @@ class Articulo extends CI_Controller {
 	{
 		$data['list'] = $this->Articulos->getList();
 		$data['permission'] = $permission;
-		$this->load->view(CMP_ALM.'/articulo/list', $data);
+		$this->load->view(ALM.'articulo/list', $data);
 	}
 		
 	public function getdatosart() // Ok
@@ -39,7 +39,7 @@ class Articulo extends CI_Controller {
 	public function getArticle() // Ok
 	{
 		$data['data']   = $this->Articulos->getArticle($this->input->post());
-		$response['html'] = $this->load->view(CMP_ALM.'/articulo/view_', $data, true);
+		$response['html'] = $this->load->view(ALM.'articulo/view_', $data, true);
 
 		echo json_encode($response);
 	}
@@ -126,7 +126,7 @@ class Articulo extends CI_Controller {
 
 		$data['list'] = $this->Articulos->getLotes($id);
 			
-		$this->load->view(CMP_ALM.'/proceso/tareas/componentes/tabla_lote_deposito', $data);
+		$this->load->view(ALM.'proceso/tareas/componentes/tabla_lote_deposito', $data);
 	}
 
 }

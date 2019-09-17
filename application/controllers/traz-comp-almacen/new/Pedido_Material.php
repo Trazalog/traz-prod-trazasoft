@@ -4,7 +4,7 @@ class Pedido_Material extends CI_Controller {
     function __construct(){
 
       parent::__construct();
-      $this->load->model(CMP_ALM.'/new/Pedidos_Materiales'); 
+      $this->load->model(ALM.'new/Pedidos_Materiales'); 
    }
    function index(){
       echo var_dump($this->Pedidos_Materiales->obtener(1));
@@ -26,7 +26,7 @@ class Pedido_Material extends CI_Controller {
    {
      $data['list'] = $this->Pedidos_Materiales->getListado($ot);
      $data['permission'] = 'View';
-     $this->load->view(CMP_ALM.'/notapedido/list', $data);
+     $this->load->view(ALM.'notapedido/list', $data);
    }
 }
 ?>

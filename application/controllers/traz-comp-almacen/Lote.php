@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Lote extends CI_Controller {
 
-	private $path = CMP_ALM.'/';
+	private $path = ALM.'/';
 
 	function __construct()
   {

@@ -9,6 +9,13 @@ class Form extends CI_Controller
         $this->load->model(FRM.'Forms');
     }
 
+    public function index()
+    {
+        $data['forms'] = $this->Forms->listadoPlantillas();
+
+        $this->load->view(FRM.'test', $data);
+    }
+
     public function obtener($info, $modal = false)
     {
 
@@ -27,6 +34,26 @@ class Form extends CI_Controller
 
         $data['html'] = $html;
         
+        echo json_encode($data);
+    }
+
+      public function obtenerNuevo($form, $modal = false)
+    {
+
+        $html = form($this->Forms->obtenerPlantilla($form), $modal);
+
+        if ($modal) {
+            $modal = new StdClass();
+            $modal->id = "frm-modal-$info";
+            $modal->titulo = 'Formulario Tarea';
+            $modal->body = $html;
+            $modal->accion = 'Guardar';
+
+            $html = modal($modal);
+        }
+
+        $data['html'] = $html;
+
         echo json_encode($data);
     }
 
@@ -96,7 +123,7 @@ class Form extends CI_Controller
     public function uploadFile($nom)
     {
         $conf = [
-            'upload_path' => './files/',
+            'upload_path' => './'.FILES,
             'allowed_types' => '*',
             'max_size' => '*',
         ];

@@ -13,7 +13,7 @@
     <div class="col-xs-6 col-sm-6 col-md-6">
         <div class="form-group">
             <label>Seleccionar Artículo:</label>
-            <?php $this->load->view(CMP_ALM.'/articulo/componente'); ?>
+            <?php $this->load->view(ALM.'articulo/componente'); ?>
         </div>
     </div>
     <div class="col-xs-3 col-sm-3 col-md-3">
@@ -283,10 +283,10 @@ function lanzarPedido() {
         },
         dataType: 'json',
         type: 'POST',
-        url: '<?php echo base_url(CMP_ALM) ?>new/Pedido_Material/pedidoNormal',
+        url: '<?php echo base_url(ALM) ?>new/Pedido_Material/pedidoNormal',
         success: function(result) {
             if (result.status) {
-                linkTo('<?php echo CMP_ALM ?>Notapedido');
+                linkTo('<?php echo ALM ?>Notapedido');
             } else {
                 alert(result.msj);
             }

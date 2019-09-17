@@ -5,7 +5,7 @@
     <div class="box-body">
 
         <?php 
-          $this->load->view(CMP_ALM.'/proceso/tareas/componentes/pedido_materiales');
+          $this->load->view(ALM.'proceso/tareas/componentes/pedido_materiales');
         ?>
 
     </div><!-- /.box-body -->
