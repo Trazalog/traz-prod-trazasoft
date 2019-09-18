@@ -2,25 +2,25 @@
     "menus": {
         "menu": [
             {
-                "link": "Articulo/index",
+                "link": "Articulo",
                 "icono": "fa fa-fw fa-barcode ",
                 "titulo": "Articulos",
                 "nivel": "1"
             },
             {
-                "link": "Lote/index",
+                "link": "Lote",
                 "icono": "fa fa-fw fa-cubes",
                 "titulo": "Stock",
                 "nivel": "1"
             },
             {
-                "link": "new/Entrega_Material/index",
+                "link": "new/Entrega_Material",
                 "icono": "fa fa-fw fa-check",
                 "titulo": "Entrega Materiales",
                 "nivel": "1"
             },
             {
-                "link": "Remito/index",
+                "link": "Remito",
                 "icono": "fa fa-fw fa-paperclip ",
                 "titulo": "Recepción Materiales",
                 "nivel": "1"
@@ -32,13 +32,13 @@
                 "nivel": "1"
             },
             {
-                "link": "Notapedido/index",
+                "link": "Notapedido",
                 "icono": "fa fa-fw fa-cart-plus",
                 "titulo": "Pedido Materiales",
                 "nivel": "1"
             },
             {
-                "link": "Proceso/index",
+                "link": "Proceso",
                 "icono": "fa fa-cogs",
                 "titulo": "Proceso",
                 "nivel": "1"

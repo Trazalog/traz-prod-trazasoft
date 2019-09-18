@@ -120,7 +120,7 @@ $('.cant_insumos').prop('disabled',true);
   $("#listado").click(function (e) {
     WaitingOpen();
     $('#content').empty();
-    $("#content").load("<?php echo base_url(); ?>index.php/almacen/Notapedido/index/<?php echo $permission; ?>");
+    $("#content").load("<?php echo base_url(); ?>index.php/<?php echo ALM ?>Notapedido/index/<?php echo $permission; ?>");
     WaitingClose();
   });
 
@@ -196,7 +196,7 @@ $('.cant_insumos').prop('disabled',true);
           data: { idinsumos, cantidades, idOT },
           type: 'POST',
           dataType: 'json',
-          url: 'index.php/almacen/Notapedido/setNotaPedido',
+          url: 'index.php/<?php echo ALM ?>Notapedido/setNotaPedido',
           success: function (result) {
             WaitingClose();
             cargarPedidos();
@@ -222,7 +222,7 @@ $('.cant_insumos').prop('disabled',true);
         justif,
         ot
       },
-      url: 'index.php/almacen/Notapedido/setPedidoEspecial',
+      url: 'index.php/<?php echo ALM ?>Notapedido/setPedidoEspecial',
       success: function (data) {
         cargarPedidos();
         $('.modal').modal('hide');

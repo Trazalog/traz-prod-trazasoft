@@ -77,7 +77,7 @@ $(".fa-search-plus").click(function(e) {
         data: {
             idor: idor
         },
-        url: 'index.php/almacen/Ordeninsumo/consultar',
+        url: 'index.php/<?php echo ALM ?>Ordeninsumo/consultar',
         success: function(data) {
 
             // datos={

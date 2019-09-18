@@ -29,9 +29,13 @@ if(!function_exists('userPass')){
 }
 
 if(!function_exists('empresa')){
+
+   
     function empresa(){
+        return 1;
+
         $ci =& get_instance();			
         $userdata  = $ci->session->userdata('user_data');
-		return  $userdata[0]['id_empresa'];
+		return  empresa();
     }
 }

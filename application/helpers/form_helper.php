@@ -3,7 +3,7 @@
 if (!function_exists('form')) {
     function form($data, $modal = false)
     {   
-        $html = "<form id='frm-$data->id' data-info='".(isset($data->info_id)?$data->info_id:null)."' data-valido='false'>";
+        $html = "<form id='frm-$data->id' data-form='$data->form_id' data-info='".(isset($data->info_id)?$data->info_id:null)."' data-valido='false'>";
 
         if(!$data) return 'Formulario No encontrado.';
 
@@ -127,7 +127,7 @@ if (!function_exists('form')) {
         $file  = null;
 
         if(isset($e->valor)){
-            $url = base_url(files.$e->valor);
+            $url = base_url(FILES.$e->valor);
             $file = " download='$e->valor' href='$url' ";
         }else{
             $file = "style='display: none;'";

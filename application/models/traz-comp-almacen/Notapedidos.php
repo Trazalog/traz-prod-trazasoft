@@ -58,7 +58,7 @@ class Notapedidos extends CI_Model
     public function getNotasxOT($id)
     {
         $userdata = $this->session->userdata('user_data');
-        $empId = $userdata[0]['id_empresa'];
+        $empId = empresa();
         $this->db->select('
             alm_pedidos_materiales.pema_id as id_notaPedido,
             alm_pedidos_materiales.fecha,
@@ -142,7 +142,7 @@ class Notapedidos extends CI_Model
     public function setNotaPedidos($data)
     {
         $userdata = $this->session->userdata('user_data');
-        $empId = $userdata[0]['id_empresa'];
+        $empId = empresa();
 
         $orden = $data['orden_Id'][0];
         $notaP = array(

@@ -129,7 +129,7 @@
         $.ajax({
             type: 'POST',
             data: {completa, info_entrega: get_info_entrega(), detalles, cantidades, pema_id},
-            url: '<?php base_url() ?>index.php/almacen/Proceso/cerrarTarea/' + id,
+            url: '<?php base_url() ?>index.php/<?php echo ALM ?>Proceso/cerrarTarea/' + id,
             success: function (data) {
 
                linkTo('Tarea');

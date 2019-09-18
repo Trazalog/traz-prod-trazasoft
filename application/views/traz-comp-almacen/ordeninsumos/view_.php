@@ -135,7 +135,7 @@
         'type': "POST",
         'global': false,
         'dataType': 'json',
-        'url': "index.php/almacen/Ordeninsumo/getcodigo",
+        'url': "index.php/<?php echo ALM ?>Ordeninsumo/getcodigo",
         'success': function (data) {
 
           tmp = data;
@@ -184,7 +184,7 @@
         'type': "POST",
         'global': false,
         'dataType': 'json',
-        'url': "index.php/almacen/Ordeninsumo/getOT",
+        'url': "index.php/<?php echo ALM ?>Ordeninsumo/getOT",
         'success': function (data) {
           tmp = data;
           console.table(tmp);
@@ -199,7 +199,7 @@
       $.ajax({
         type: 'POST',
         data: { artId: artId },
-        url: 'index.php/almacen/Ordeninsumo/getdeposito',
+        url: 'index.php/<?php echo ALM ?>Ordeninsumo/getdeposito',
         success: function (data) {
           var opcion = "<option value='-1'>Seleccione...</option>";
           $('#deposito').append(opcion);
@@ -291,7 +291,7 @@
         $.ajax({
           type: 'POST',
           data: { data: parametros, comp: comp, idslote: idslote, depo: depo, art: art },
-          url: 'index.php/almacen/Ordeninsumo/guardar',  //index.php/
+          url: 'index.php/<?php echo ALM ?>Ordeninsumo/guardar',  //index.php/
           success: function (data) {
         
            $('.modal').modal('hide');
@@ -338,7 +338,7 @@
         $.ajax({
           type: 'POST',
           data: { id_her: id_her, id_deposito: id_deposito },
-          url: 'index.php/almacen/Ordeninsumo/alerta',
+          url: 'index.php/<?php echo ALM ?>Ordeninsumo/alerta',
           success: function (data) {
             console.log("exito en la alerta");
             console.log(data);
@@ -384,7 +384,7 @@
     function regresa() {
       WaitingOpen();
       $('#content').empty();
-      $("#content").load("<?php echo base_url(); ?>index.php/almacen/Ordeninsumo/index/<?php echo $permission; ?>");
+      $("#content").load("<?php echo base_url(); ?>index.php/<?php echo ALM ?>Ordeninsumo/index/<?php echo $permission; ?>");
       WaitingClose();
     }
 

@@ -64,7 +64,7 @@ $(".fa-search").click(function (e) {
       data: { idremito: idremito},
       dataType: 'json',
       type: 'POST',
-      url: 'index.php/almacen/Remito/consultar',
+      url: 'index.php/<?php echo ALM ?>Remito/consultar',
       success: function(data){
 
         $('#comprobanteV').val(data['datosRemito'][0]['comprobante']);

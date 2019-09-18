@@ -68,7 +68,7 @@ function del_detalle() {
             data: {
                 id: $(selectRow).data('id')
             },
-            url: 'index.php/almacen/Notapedido/eliminarDetalle',
+            url: 'index.php/<?php echo ALM ?>Notapedido/eliminarDetalle',
             success: function(data) {
                 //$('.modal #eliminar').modal('hide');
                 $('#eliminar').modal('hide');
@@ -92,7 +92,7 @@ function edit() {
             id,
             cantidad
         },
-        url: 'index.php/almacen/Notapedido/editarDetalle',
+        url: 'index.php/<?php echo ALM ?>Notapedido/editarDetalle',
         success: function(data) {
             get_detalle();
             selectRow = null;
@@ -120,7 +120,7 @@ function get_detalle() {
     }
     $.ajax({
         type: 'POST',
-        url: 'index.php/almacen/Notapedido/getNotaPedidoId?id_nota=' + id,
+        url: 'index.php/<?php echo ALM ?>Notapedido/getNotaPedidoId?id_nota=' + id,
         success: function(data) {
             tablaDetalle2.clear();
 
@@ -250,7 +250,7 @@ function set_pedido() {
         },
         type: 'POST',
         dataType: 'json',
-        url: 'index.php/almacen/Notapedido/setNotaPedido',
+        url: 'index.php/<?php echo ALM ?>Notapedido/setNotaPedido',
         success: function(result) {
             $('#pema_id').val(result.pema_id);
             WaitingClose();
@@ -351,7 +351,7 @@ function lanzarPedidoModal() {
     if (conexion()) {
         $.ajax({
             type: 'POST',
-            url: 'index.php/almacen/Notapedido/pedidoNormal/' + notaid,
+            url: 'index.php/<?php echo ALM ?>Notapedido/pedidoNormal/' + notaid,
             success: function() {
                 $('#' + notaid).find('.ped-estado').html(
                     '<span data-toggle="tooltip" title="" class="badge bg-orange estado">Solicitado</span>'
@@ -369,7 +369,7 @@ function lanzarPedidoModal() {
                 idOT: idOT
             },
             type: 'POST',
-            url: 'index.php/almacen/Notapedido/pedidoOffline',
+            url: 'index.php/<?php echo ALM ?>Notapedido/pedidoOffline',
             success: function(result) {
                 console.log('OFFLINE | Pedido Material Enviado');
 
@@ -411,7 +411,7 @@ function edit_pedido() {
         },
         type: 'POST',
         dataType: 'json',
-        url: 'index.php/almacen/Notapedido/editPedido',
+        url: 'index.php/<?php echo ALM ?>Notapedido/editPedido',
         success: function(result) {
             WaitingClose();
             get_detalle();

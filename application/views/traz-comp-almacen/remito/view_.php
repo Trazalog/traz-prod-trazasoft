@@ -145,7 +145,7 @@ function verificarExistenciaLote() {
 
     $.ajax({
         type: 'POST',
-        url: 'index.php/almacen/Lote/verificarExistencia',
+        url: 'index.php/<?php echo ALM ?>Lote/verificarExistencia',
         data: {
             lote,
             depo,
@@ -188,7 +188,7 @@ var dataF = function() {
         'type': "POST",
         'global': false,
         'dataType': 'json',
-        'url': "index.php/almacen/Remito/getcodigo",
+        'url': "index.php/<?php echo ALM ?>Remito/getcodigo",
         'success': function(data) {
             tmp = data;
         }
@@ -231,7 +231,7 @@ function traer_deposito() {
     $.ajax({
         type: 'POST',
         data: {},
-        url: 'index.php/almacen/Remito/getdeposito',
+        url: 'index.php/<?php echo ALM ?>Remito/getdeposito',
         success: function(data) {
             var opcion = "<option value='-1'>Seleccione...</option>";
             $('#deposito').append(opcion);
@@ -257,7 +257,7 @@ function traer_proveedor() { // Ok
     $.ajax({
         type: 'POST',
         data: {},
-        url: 'index.php/almacen/Remito/getproveedor',
+        url: 'index.php/<?php echo ALM ?>Remito/getproveedor',
         success: function(data) {
             var opcion = "<option value='-1'>Seleccione...</option>";
             $('#proveedor').append(opcion);
@@ -283,7 +283,7 @@ function traer_lote(id_her, id_deposito) {
             id_her: id_her,
             id_deposito: id_deposito
         },
-        url: 'index.php/almacen/Remito/getlote', //index.php/
+        url: 'index.php/<?php echo ALM ?>Remito/getlote', //index.php/
         success: function(data) {
 
             for (var i = 0; i < data.length; i++) {
@@ -412,7 +412,7 @@ function guardar() {
             info,
             detalles
         },
-        url: 'index.php/almacen/Remito/guardar_mejor', //index.php/
+        url: 'index.php/<?php echo ALM ?>Remito/guardar_mejor', //index.php/
         success: function(data) {
 
             linkTo('almacen/Remito');
@@ -426,7 +426,7 @@ function guardar() {
 function regresa() {
     WaitingOpen();
     $('#content').empty();
-    $("#content").load("<?php echo base_url(); ?>index.php/almacen/Remito/index/<?php echo $permission; ?>");
+    $("#content").load("<?php echo base_url(); ?>index.php/<?php echo ALM ?>Remito/index/<?php echo $permission; ?>");
     WaitingClose();
 }
 

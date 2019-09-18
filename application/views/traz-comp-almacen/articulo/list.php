@@ -74,7 +74,7 @@ function LoadArt(id_, action) {
             id: id_,
             act: action
         },
-        url: 'index.php/almacen/Articulo/getArticle',
+        url: 'index.php/<?php echo ALM ?>Articulo/getArticle',
         success: function(result) {
 
             $("#modalBodyArticle").html(result.html);
@@ -133,7 +133,7 @@ $('#btnSave').click(function() {
             puntped: $('#puntped').val(),
             es_loteado: $('#new_articulo #es_loteado').prop('checked') ? 1 : 0
         },
-        url: 'index.php/almacen/Articulo/setArticle',
+        url: 'index.php/<?php echo ALM ?>Articulo/setArticle',
         success: function(result) {
             console.log("estoy Guardando");
             WaitingClose();
@@ -182,7 +182,7 @@ $(".fa-pencil").click(function(e) { // Ok
         },
         dataType: 'json',
         type: 'POST',
-        url: 'index.php/almacen/Articulo/getpencil',
+        url: 'index.php/<?php echo ALM ?>Articulo/getpencil',
         success: function(data) {
             datos = {
                 'codigoart': data[0]['barcode'],
@@ -249,7 +249,7 @@ function traer_unidad(idunidad) { // Ok
         data: {},
         dataType: 'json',
         type: 'POST',
-        url: 'index.php/almacen/Articulo/getdatosart',
+        url: 'index.php/<?php echo ALM ?>Articulo/getdatosart',
         success: function(data) {
             $('#unidmed').empty();
             for (var i = 0; i < data.length; i++) {
@@ -301,7 +301,7 @@ function guardareditar() { // Ok
             data: parametros,
             ida: ida
         },
-        url: 'index.php/almacen/Articulo/editar_art',
+        url: 'index.php/<?php echo ALM ?>Articulo/editar_art',
         success: function(data) {
             linkTo();
         },
@@ -328,7 +328,7 @@ function eliminar_articulo() {
         data: {
             idelim: id
         },
-        url: 'index.php/almacen/Articulo/baja_articulo', //index.php/
+        url: 'index.php/<?php echo ALM ?>Articulo/baja_articulo', //index.php/
         success: function(data) {
             alert("Articulo Eliminado");
             linkTo();
@@ -357,7 +357,7 @@ function ver_detalles(e) {
         },
         dataType: 'json',
         type: 'POST',
-        url: 'index.php/almacen/Articulo/getpencil',
+        url: 'index.php/<?php echo ALM ?>Articulo/getpencil',
         success: function(data) {
             datos = {
                 'codigoart': data[0]['barcode'],

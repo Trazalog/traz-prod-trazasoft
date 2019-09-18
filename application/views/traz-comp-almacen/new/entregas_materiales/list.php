@@ -52,7 +52,7 @@ function ConsultarEntrega(e)
     rellenarCabecera(json);
     $.ajax({
         type: 'GET',
-        url: 'index.php/almacen/new/Entrega_Material/detalle?id='+id,
+        url: 'index.php/<?php echo ALM ?>new/Entrega_Material/detalle?id='+id,
         success: function(result) {
             var tabla = $('#modal_detalle_entrega table');
     

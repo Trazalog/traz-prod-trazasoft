@@ -98,7 +98,7 @@ function traer_unidad(){
   $.ajax({
     type: 'POST',
     data: { },
-    url: 'index.php/almacen/Articulo/getdatosart', 
+    url: 'index.php/<?php echo ALM ?>Articulo/getdatosart', 
     success: function(data){
       var opcion  = "<option value='-1'>Seleccione...</option>" ; 
       $('#unidmed').append(opcion); 

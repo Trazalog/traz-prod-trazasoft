@@ -167,7 +167,7 @@
       data: { idinsumos, cantidades, idOT: $('#ot').val(), peex_id: $('#peex_id').val()},
       type: 'POST',
       dataType: 'json',
-      url: 'index.php/almacen/Notapedido/setNotaPedido',
+      url: 'index.php/<?php echo ALM ?>Notapedido/setNotaPedido',
       success: function (result) {
         $('#pema_id').val(result.pema_id);
         WaitingClose();
@@ -232,7 +232,7 @@
       data: { idinsumos, cantidades, idOT, pema: $('#pema_id').val()},
       type: 'POST',
       dataType: 'json',
-      url: 'index.php/almacen/Notapedido/editPedido',
+      url: 'index.php/<?php echo ALM ?>Notapedido/editPedido',
       success: function (result) {
         WaitingClose();
         get_detalle();

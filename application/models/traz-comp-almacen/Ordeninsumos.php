@@ -13,7 +13,7 @@ class Ordeninsumos extends CI_Model
     public function getList()
     {
         $userdata  = $this->session->userdata('user_data');
-        $empresaId = $userdata[0]['id_empresa'];
+        $empresaId = empresa();
 
         $this->db->select('A.enma_id as id_orden,C.ortr_id as id_ot, A.fecha, A.solicitante, A.comprobante');
         $this->db->from('asset_almacen_v3.alm_entrega_materiales A');
@@ -34,7 +34,7 @@ class Ordeninsumos extends CI_Model
     public function getcodigo()
     {
         $userdata  = $this->session->userdata('user_data');
-        $empresaId = $userdata[0]['id_empresa'];
+        $empresaId = empresa();
         $this->db->select('alm_articulos.arti_id as artId ,alm_lotes.lote_id as loteid,alm_articulos.barcode as artBarCode, alm_articulos.descripcion as artDescription');
 
         $this->db->from('alm_articulos');
@@ -56,7 +56,7 @@ class Ordeninsumos extends CI_Model
     public function getsolicitante()
     {
         $userdata = $this->session->userdata('user_data');
-        $empresaId = $userdata[0]['id_empresa'];
+        $empresaId = empresa();
 
         $this->db->select('id_solicitud, solicitante');
         $this->db->from('solicitud_reparacion');
@@ -76,7 +76,7 @@ class Ordeninsumos extends CI_Model
     {
 
         $userdata = $this->session->userdata('user_data');
-        $empresaId = $userdata[0]['id_empresa'];
+        $empresaId = empresa();
 
         $this->db->select('orden_trabajo.id_orden, orden_trabajo.descripcion');
         $this->db->from('orden_trabajo');
@@ -111,7 +111,7 @@ class Ordeninsumos extends CI_Model
     public function insert_orden($data)
     {
         $userdata = $this->session->userdata('user_data');
-        $data['empr_id'] = $userdata[0]['id_empresa'];
+        $data['empr_id'] = empresa();
         $query = $this->db->insert("alm_entrega_materiales", $data);
         return $query;
     }
@@ -204,7 +204,7 @@ class Ordeninsumos extends CI_Model
     public function insert_detaordeninsumo($data2)
     {
         $userdata = $this->session->userdata('user_data');
-        $data2['empr_id'] = $userdata[0]['id_empresa'];
+        $data2['empr_id'] = empresa();
         $query = $this->db->insert("alm_deta_entrega_materiales", $data2);
         return $query;
     }
@@ -215,7 +215,7 @@ class Ordeninsumos extends CI_Model
             return false;
         } else {
             $userdata  = $this->session->userdata('user_data');
-            $empresaId = $userdata[0]['id_empresa'];
+            $empresaId = empresa();
             $id = $data['artId'];
 
             $this->db->select('alm_articulos.arti_id as artId, alm_depositos.depo_id as depositoId, alm_depositos.descripcion as depositodescrip');
@@ -385,7 +385,7 @@ class Ordeninsumos extends CI_Model
     public function getequipos($id)
     {
         $userdata  = $this->session->userdata('user_data');
-        $empresaId = $userdata[0]['id_empresa'];
+        $empresaId = empresa();
         $sql = "SELECT T.deen_id as id_detaordeninsumo, T.enma_id as ortr_idinsumo, T.lote_id as loteid, T.cantidad, alm_lotes.codigo, alm_lotes.depo_id, art.arti_id, art.barcode as artBarCode, art.descripcion as artDescription, alm_depositos.descripcion as depositodescrip
     		FROM alm_deta_entrega_materiales T
 			JOIN alm_lotes ON alm_lotes.lote_id = T.lote_id
@@ -405,7 +405,7 @@ class Ordeninsumos extends CI_Model
     public function total($id)
     {
         $userdata  = $this->session->userdata('user_data');
-        $empresaId = $userdata[0]['id_empresa'];
+        $empresaId = empresa();
 
         $sql = "SELECT SUM(alm_deta_entrega_materiales.cantidad) as cantidad
     		FROM alm_deta_entrega_materiales

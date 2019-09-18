@@ -20,9 +20,11 @@ class Forms extends CI_Model
 
         $aux = array();
 
-        foreach ($items as $key => $o) {
+        foreach ($items->items as $key => $o) {
 
             $o->info_id = $newInfo;
+            unset($o->nombre);
+            unset($o->tipo);
 
             if ($o->name) {
                 $o->valor = $data ? $data[$o->name] : null;
@@ -95,7 +97,8 @@ class Forms extends CI_Model
         $newInfo = $this->db->select_max('info_id')->get('frm_instancias_formularios')->row('info_id') + 1;
         
         $aux = new StdClass();
-        $aux->info_id = $newInfo;
+        $aux->info_id = false;
+        $aux->form_id = $id;
         $aux->nombre = $res->row()->nombre;
         $aux->id = $newInfo; 
         $aux->items = $res->result();
@@ -123,7 +126,7 @@ class Forms extends CI_Model
         $this->db->select('nombre, A.form_id, info_id');
         $this->db->from('frm_instancias_formularios as A');
         $this->db->join('frm_formularios as B', 'B.form_id = A.form_id');
-        $this->db->group_by('A.form_id');
+        $this->db->group_by('A.info_id');
         return $this->db->get()->result();
     }
 

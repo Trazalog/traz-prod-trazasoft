@@ -43,7 +43,7 @@ function EstadoPedido(e)
     if (id == '' || id == null) return;
     $.ajax({
         type: 'GET',
-        url: 'index.php/almacen/new/Pedido_Material/estado?id='+id,
+        url: 'index.php/<?php echo ALM ?>new/Pedido_Material/estado?id='+id,
         success: function(result) {
             var tabla = $('#tablapedido');
             $(tabla).DataTable().destroy();

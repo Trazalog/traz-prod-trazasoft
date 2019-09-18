@@ -12,6 +12,7 @@ class Form extends CI_Controller
     public function index()
     {
         $data['forms'] = $this->Forms->listadoPlantillas();
+        $data['forms_guardados'] = $this->Forms->listado();
 
         $this->load->view(FRM.'test', $data);
     }
@@ -37,7 +38,7 @@ class Form extends CI_Controller
         echo json_encode($data);
     }
 
-      public function obtenerNuevo($form, $modal = false)
+    public function obtenerNuevo($form, $modal = false)
     {
 
         $html = form($this->Forms->obtenerPlantilla($form), $modal);
@@ -57,7 +58,7 @@ class Form extends CI_Controller
         echo json_encode($data);
     }
 
-    public function guardar($info_id = false)
+    public function guardar($info_id = false, $new = false)
     {
         $data = $this->input->post();
         foreach ($data as $key => $o) {
@@ -76,13 +77,13 @@ class Form extends CI_Controller
 
         }
 
-        if ($info_id) {
+        if ($new) {
 
-            $res = $this->Forms->actualizar($info_id, $data);
-
+            $res = $this->Forms->guardar($info_id, $data);
+            
         } else {
-
-            $res = $this->Forms->guardar($form_id, $data);
+            
+            $res = $this->Forms->actualizar($info_id, $data);
 
         }
 

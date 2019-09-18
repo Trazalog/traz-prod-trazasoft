@@ -48,7 +48,12 @@ $.widget.bridge('uibutton', $.ui.button);
        <!--Validator
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/js/bootstrapValidator.min.js"></script>-->
 
+       <script>
+            function conexion() {
+                return true;
+            }
+       </script>
 
        <?php 
         $this->load->view(FRM . 'scripts');
-    ?>
+        ?>

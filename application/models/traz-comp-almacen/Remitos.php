@@ -10,7 +10,7 @@ class Remitos extends CI_Model {
     function getRemitosList()
     {
         $userdata  = $this->session->userdata('user_data');
-        $empresaId = $userdata[0]['id_empresa'];
+        $empresaId = empresa();
 
         $this->db->select('T.rema_id as remitoId, T.fecha, T.comprobante, A.prov_id as provid,  A.nombre as provnombre');
         $this->db->from('alm_recepcion_materiales as T');
@@ -30,7 +30,7 @@ class Remitos extends CI_Model {
     function getcodigo()
     {
         $userdata  = $this->session->userdata('user_data');
-        $empresaId = $userdata[0]['id_empresa'];
+        $empresaId = empresa();
 
         $this->db->select('T.arti_id as artId, T.barcode as artBarCode, T.descripcion as artDescription,T.es_loteado, T.es_caja, T.cantidad_caja');
         $this->db->from('alm_articulos as T');
@@ -53,7 +53,7 @@ class Remitos extends CI_Model {
     function getdeposito()
     {
         $userdata  = $this->session->userdata('user_data');
-        $empresaId = $userdata[0]['id_empresa'];
+        $empresaId = empresa();
      
         $query = $this->db->get_where('alm_depositos', array('empr_id' => $empresaId, 'depo_id!='=>1));
             if($query->num_rows()>0){
@@ -67,7 +67,7 @@ class Remitos extends CI_Model {
 	function getproveedor()
     {
         $userdata  = $this->session->userdata('user_data');
-        $empresaId = $userdata[0]['id_empresa'];
+        $empresaId = empresa();
 		$query     = $this->db->get_where('alm_proveedores', array('empr_id' => $empresaId));
 			if($query->num_rows()>0){
 	   	 	return $query->result();
@@ -118,7 +118,7 @@ class Remitos extends CI_Model {
     function getDetaRemitos($idRemito)
     {
         $userdata  = $this->session->userdata('user_data');
-        $empresaId = $userdata[0]['id_empresa'];
+        $empresaId = empresa();
         
         $sql       = "SELECT T.dere_id as detaremitoid, T.rema_id as id_remito, T.lote_id as loteid, T.cantidad, 
             art.barcode as codigo, alm_lotes.depo_id as depositoid, 
@@ -146,7 +146,7 @@ class Remitos extends CI_Model {
     {
         //arriba es artId, prodId
         $userdata  = $this->session->userdata('user_data');
-        $empresaId = $userdata[0]['id_empresa'];
+        $empresaId = empresa();
 
         $sql       = "SELECT  alm_lotes.cantidad
             FROM alm_lotes
@@ -166,7 +166,7 @@ class Remitos extends CI_Model {
 	function getlote($idHerramienta,$idDeposito)
     {
 		$userdata  = $this->session->userdata('user_data');
-        $empresaId = $userdata[0]['id_empresa'];
+        $empresaId = empresa();
 
         $sql       = "SELECT alm_lotes.lote_id as loteid
     		FROM alm_lotes
@@ -187,7 +187,7 @@ class Remitos extends CI_Model {
     function insert_orden($data)
     {
         $userdata = $this->session->userdata('user_data');
-        $data['empr_id'] =$userdata[0]['id_empresa'];
+        $data['empr_id'] =empresa();
         $data['prov_id']  = $data['provid'];unset($data['provid']);
 
         $query = $this->db->insert("alm_recepcion_materiales", $data);
@@ -256,7 +256,7 @@ class Remitos extends CI_Model {
     function loteres($idArticulo,$idDeposito)
     {
         $userdata  = $this->session->userdata('user_data');
-        $empresaId = $userdata[0]['id_empresa'];
+        $empresaId = empresa();
 
         $sql       = "SELECT alm_lotes.lote_id as loteid
             FROM alm_lotes
@@ -280,7 +280,7 @@ class Remitos extends CI_Model {
     function insert_detaremito($data2)
     {
         $userdata          = $this->session->userdata('user_data');
-        $data2['empr_id'] = $userdata[0]['id_empresa'];
+        $data2['empr_id'] = empresa();
 
         $query = $this->db->insert("alm_deta_recepcion_materiales", $data2);
         return $query;
@@ -335,7 +335,7 @@ class Remitos extends CI_Model {
     function insert_lote($data3)
     {
         $userdata  = $this->session->userdata('user_data');
-        $data3['empr_id'] = $userdata[0]['id_empresa'];
+        $data3['empr_id'] = empresa();
         $query   = $this->db->insert("alm_lotes",$data3);
         return $query;
     }

@@ -79,7 +79,7 @@ function ver(e) {
  
     $.ajax({
         type: 'GET',
-        url: 'index.php/almacen/Notapedido/getNotaPedidoId?id_nota='+id_nota,
+        url: 'index.php/<?php echo ALM ?>Notapedido/getNotaPedidoId?id_nota='+id_nota,
         success: function(data) {
           
             tablaDetalle.clear().draw();
@@ -111,7 +111,7 @@ function ConsultarEntrega(e)
     rellenarCabecera(json);
     $.ajax({
         type: 'GET',
-        url: 'index.php/almacen/new/Entrega_Material/detalle?id='+id,
+        url: 'index.php/<?php echo ALM ?>new/Entrega_Material/detalle?id='+id,
         success: function(result) {
             var tabla = $('#modal_detalle_entrega table');
     
@@ -144,7 +144,7 @@ function EstadoPedido(e)
     if (id == '' || id == null) return;
     $.ajax({
         type: 'GET',
-        url: 'index.php/almacen/new/Pedido_Material/estado?id='+id,
+        url: 'index.php/<?php echo ALM ?>new/Pedido_Material/estado?id='+id,
         success: function(result) {
             var tabla = $('#tablapedido');
             $(tabla).DataTable().destroy();
@@ -175,7 +175,7 @@ function EstadoPedido(e)
 function getEntregasPedidoOffline(pema) {
     $.ajax({
         type: 'GET',
-        url: 'index.php/almacen/new/Entrega_Material/getEntregasPedidoOffline?pema='+pema,
+        url: 'index.php/<?php echo ALM ?>new/Entrega_Material/getEntregasPedidoOffline?pema='+pema,
         success: function(data) {
          
           document.getElementById('tab_2').innerHTML =data;
