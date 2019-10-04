@@ -55,7 +55,7 @@ class Remitos extends CI_Model {
         $userdata  = $this->session->userdata('user_data');
         $empresaId = empresa();
      
-        $query = $this->db->get_where('alm_depositos', array('empr_id' => $empresaId, 'depo_id!='=>1));
+        $query = $this->db->get_where('alm_depositos', array('empr_id' => $empresaId));
             if($query->num_rows()>0){
             return $query->result();
         }

@@ -44,7 +44,7 @@ $.widget.bridge('uibutton', $.ui.button);
        <!-- AdminLTE for demo purposes -->
        <!-- <script src="<?php base_url()?>lib/dist/js/demo.js"></script> -->
        <!--Arma Tablas -->
-       <script src="<?php echo base_url('application/js/tabla.js'); ?>"></script>
+       <script src="<?php echo base_url('lib/props/tabla.js'); ?>"></script>
        <!--Validator
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/js/bootstrapValidator.min.js"></script>-->
 

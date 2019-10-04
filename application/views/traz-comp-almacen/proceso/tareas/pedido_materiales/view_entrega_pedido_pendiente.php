@@ -79,7 +79,7 @@
         var id = $(select_row).data('id');
 
         $('#modal_view .view').empty();
-        $('#modal_view .view').load("almacen/Articulo/getLotes/" + id);
+        $('#modal_view .view').load("<?php echo ALM ?>Articulo/getLotes/" + id);
         $('#modal_view').modal('show');
     }
 

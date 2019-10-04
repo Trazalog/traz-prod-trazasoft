@@ -4,6 +4,8 @@ if(!function_exists('userId')){
 
     function userId()
     {
+        return 401;//!HARDCODE
+
         $ci =& get_instance();			
         $userdata  = $ci->session->userdata('user_data');
 		return  $userdata[0]['userBpm'];
@@ -11,9 +13,10 @@ if(!function_exists('userId')){
 }
 
 if(!function_exists('userNick')){
-
+    
     function userNick()
     {
+        return 'almacen1'; //!HARDCODE
         $ci =& get_instance();			
         $userdata  = $ci->session->userdata('user_data');
 		return  $userdata[0]['usrNick'];
@@ -32,8 +35,7 @@ if(!function_exists('empresa')){
 
    
     function empresa(){
-        return 1;
-
+        return 1; //!HARDCODE
         $ci =& get_instance();			
         $userdata  = $ci->session->userdata('user_data');
 		return  empresa();

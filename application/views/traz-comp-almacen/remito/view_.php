@@ -415,7 +415,7 @@ function guardar() {
         url: 'index.php/<?php echo ALM ?>Remito/guardar_mejor', //index.php/
         success: function(data) {
 
-            linkTo('almacen/Remito');
+            linkTo('<?php echo ALM ?>Remito');
         },
         error: function(result) {
             alert('Error');

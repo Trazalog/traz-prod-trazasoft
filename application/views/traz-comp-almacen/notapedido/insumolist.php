@@ -92,7 +92,7 @@
 
       <!-- I removed `in` class here so it will have a fade in effect when showed -->
       <div class="tab-pane fade" id="two">
-          <?php $this->load->view('almacen/notapedido/viewPedidoEspecial_')?>
+          <?php $this->load->view(ALM.'notapedido/viewPedidoEspecial_')?>
 
       </div>
 

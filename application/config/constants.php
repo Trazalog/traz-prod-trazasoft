@@ -86,12 +86,31 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 
 #BONITA SOFT
 define('BONITA_URL', 'http://localhost:8080/bonita/');  
-define('BPM_ADMIN_USER', 'mantenedor1');
+define('BPM_ADMIN_USER', 'almacen1');
 define('BPM_ADMIN_PASS', 'bpm');
 define('BPM_USER_PASS', 'bpm');
 
 #COMPONENTE BPM
 define('BPM', 'traz-comp-bpm/');
+
+// ERRORES DE BONITA
+define('ASP_100', 'Fallo Conexión BPM');
+define('ASP_101', 'Error al Inciar Proceso');
+define('ASP_102', 'Error al Tomar Tarea');
+define('ASP_103', 'Error al Soltar Tarea');
+define('ASP_104', 'Error al Cerrar Tarea');
+define('ASP_105', 'Error al Obtener Vista Global');
+define('ASP_106', 'Error al Obtener Usuarios');
+define('ASP_107', 'Error al Asignar Usuario');
+define('ASP_108', 'Error al Guardar Comentarios');
+define('ASP_109', 'Error de Loggin');
+define('ASP_110', 'Error al Obtener Detalle Tarea');
+define('ASP_111', 'Error al Obtener Bandeja de Tareas');
+define('ASP_112', 'Error al Obtener Comentarios');
+define('ASP_113', 'Usuario No Encontrado');
+define('ASP_114', 'Error al Actualizar Variable');
+define('ASP_115', 'Error al Leer Variable');
+
 
 #COMPONENTE ALMACENES
 define('ALM', 'traz-comp-almacen/');
@@ -111,4 +130,4 @@ define('REST', 'http://localhost:8080/');
 
 # >> Proyecto
 # Default View
-define('DEFAULT_VIEW', FRM.'Form');
+define('DEFAULT_VIEW', ALM.'Almacen');

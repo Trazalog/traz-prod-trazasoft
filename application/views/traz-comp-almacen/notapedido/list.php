@@ -1,4 +1,3 @@
-<section class="content">
     <div class="box box-primary">
         <div class="box-header">
             <h3 class="box-title">Pedido Materiales</h3>
@@ -6,7 +5,7 @@
             if(!viewOT)
             {
             echo '<button class="btn btn-block btn-primary" style="width: 100px; margin-top: 10px;"
-                onclick="linkTo(\'almacen/Notapedido/crearPedido\')">Agregar</button>';
+                onclick="linkTo(\'<?php echo ALM ?>Notapedido/crearPedido\')">Agregar</button>';
             }else{
                 echo '<button class="btn btn-block btn-primary" style="width: 100px; margin-top: 10px;"
                 onclick="AbrirModal()">Agregar</button>';
@@ -53,8 +52,6 @@
             </table>
         </div><!-- /.box-body -->
     </div><!-- /.box -->
-
-</section><!-- /.content -->
 
 <script>
   var tablaDetalle=$('#tabladetalle').DataTable({}); 

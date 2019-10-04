@@ -1,4 +1,4 @@
-<section class="content">
+
 <div class="box box-primary">
     <div class="box-header">
         <h3 class="box-title">Entrega Materiales</h3>
@@ -40,7 +40,7 @@
         </table>
     </div><!-- /.box-body -->
 </div><!-- /.box -->
-</section>
+
 <script>
 //DataTable('#entregas');
 
