@@ -118,10 +118,13 @@ define('BPM_PROCESS_ID_PEDIDOS_NORMALES', '6833268789089291878');
 define('BPM_PROCESS_ID_PEDIDOS_EXTRAORDINARIOS', '7321139677245257050');
 define('viewOT', true);
 
-
 #COMPONENTE FORMULARIOS
 define('FRM', 'traz-comp-form/');
 define('FILES', 'files/');
+
+#COMPONENTE TAREAS
+define('TSK', 'traz-comp-tareas/');
+
 
 #REST
 define('TAREAS_ASIGNAR', 'traz-comp-tareasestandar/asignar');
@@ -130,4 +133,4 @@ define('REST', 'http://localhost:8080/');
 
 # >> Proyecto
 # Default View
-define('DEFAULT_VIEW', ALM.'Almacen');
+define('DEFAULT_VIEW', 'Test');
