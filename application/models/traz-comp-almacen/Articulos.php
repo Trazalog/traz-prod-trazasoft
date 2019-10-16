@@ -10,24 +10,31 @@ class Articulos extends CI_Model
 	
 	function getList()  
 	{	
-		$this->db->select('A.*, B.descripcion as medida,"AC" as valor, IFNULL(sum(C.cantidad),0) as stock');
+		$this->db->select('A.*, coalesce(sum(cantidad),0) as stock');
 		$this->db->from('alm_articulos A');
-		$this->db->join('utl_tablas B', 'B.tabl_id = A.unidad_id','left');
 		$this->db->join('alm_lotes C', 'C.arti_id = A.arti_id','left');
 		$this->db->where('A.empr_id', empresa());
-		$this->db->where('not A.eliminado');
-		$this->db->group_by('arti_id');
+		$this->db->where('A.eliminado', false);
+		$this->db->group_by('A.arti_id');
 			
 		$query = $this->db->get();	
 		
 		if ($query && $query->num_rows() > 0)
 		{
-			return $query->result_array();	
+			return $query->result();	
 		}
 		else
 		{	
 			return array();
 		}
+	}
+
+	public function guardar($data)
+	{
+		$data['es_caja'] = isset($data['cantidad_caja']);
+		$data['empr_id'] = empresa();
+		$this->db->insert('alm_articulos',$data);
+		return $this->db->insert_id();
 	}
 
 	function get($id)

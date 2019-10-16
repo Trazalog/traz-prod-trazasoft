@@ -7,100 +7,111 @@
                 </div><!-- /.box-header -->
 
                 <div class="box-body">
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <div class="panel panel-default">
 
-                                <div class="panel-body">
-                                    <div class="row">
-                                        <div class="col-xs-12 col-sm-4 col-md-4">
-                                            <label for="comprobante">Comprobante <strong
-                                                    style="color: #dd4b39">*</strong> :</label>
-                                            <input type="text" placeholder="Ingrese Numero..." class="form-control"
-                                                id="comprobante" name="comprobante">
-                                        </div>
-                                        <div class="col-xs-12 col-sm-4 col-md-4">
-                                            <label for="fecha">Fecha <strong style="color: #dd4b39">*</strong> :</label>
-                                            <input type="text" class="form-control fecha" id="fecha" name="fecha">
-                                        </div>
-                                        <div class="col-xs-12 col-sm-4 col-md-4">
-                                            <label for="proveedor">Proveedor <strong style="color: #dd4b39">*</strong>
-                                                :</label>
-                                            <select id="proveedor" name="proveedor" class="form-control"></select>
-                                        </div>
-                                    </div><br>
-
-                                    <!-- Nav tabs -->
-                                    <ul class="nav nav-tabs" role="tablist">
-                                        <li role="presentation" class="active"><a href="#insum" aria-controls="home"
-                                                role="tab" data-toggle="tab" class="fa fa-file-text-o icotitulo">
-                                                Insumos</a></li>
-                                    </ul>
-
-                                    <!-- Tab panes -->
-                                    <div class="tab-content">
-                                        <div role="tabpanel" class="tab-pane active" id="insum">
-                                            <div class="row"><br>
-                                                <div class="col-xs-12 col-sm-12 col-md-12"><br>
-                                                    <label for="lote">Seleccionar Articulo <strong
-                                                            style="color: #dd4b39">*</strong>:</label>
-                                                    <?php $this->load->view(ALM.'articulo/componente'); ?>
-                                                </div>
-
-                                                <div class="col-xs-12 col-sm-3 col-md-3"><br>
-                                                    <label for="lote">Lote <strong
-                                                            style="color: #dd4b39">*</strong>:</label>
-                                                    <input type="text" id="lote" name="lote" placeholder="Lote"
-                                                        class="form-control">
-                                                </div>
-                                                <div class="col-xs-12 col-sm-3 col-md-3"><br>
-                                                    <label for="vencimiento">Fecha Vencimiento:</label>
-                                                    <input type="text" id="vencimiento" name="vencimiento"
-                                                        placeholder="dd/mm/yyyy" class="form-control fecha">
-                                                </div>
-                                                <div class="col-xs-12 col-sm-3 col-md-3"><br>
-                                                    <label for="cantidad">Cantidad <strong
-                                                            style="color: #dd4b39">*</strong> :</label>
-                                                    <input type="number" id="cantidad" name="cantidad"
-                                                        placeholder="Ingrese Cantidad..." class="form-control">
-                                                </div>
-                                                <div class="col-xs-12 col-sm-3 col-md-3"><br>
-                                                    <label for="deposito">Depósito <strong
-                                                            style="color: #dd4b39">*</strong> :</label>
-                                                    <select id="deposito" name="deposito" class="form-control"></select>
-                                                </div>
-                                                <div class="col-xs-12 col-sm-12 col-md-12"><br>
-                                                    <br>
-                                                    <button class="btn btn-primary " style="float:right;"
-                                                       onclick="verificarExistenciaLote()"><i class="fa fa-check"></i>Agregar</button>
-                                                </div>
-                                            </div><br>
-
-                                            <div class="row">
-                                                <div class="col-xs-12 table-responsive">
-                                                    <table class="table table-bordered table-striped" id="tablainsumo">
-                                                        <thead>
-                                                            <tr>
-                                                                <th></th>
-                                                                <th>Lote</th>
-                                                                <th>Fec. Vencimiento</th>
-                                                                <th>Código</th>
-                                                                <th>Descripción</th>
-                                                                <th>Cantidad</th>
-                                                                <th>Depósito</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody></tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div><!-- /. tab-pane -->
-                                    </div><!-- /.tab-content -->
-                                </div> <!-- /.panel-body -->
-
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Datos del Comprobante</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                    <label for="comprobante">Comprobante <strong style="color: #dd4b39">*</strong>
+                                        :</label>
+                                    <input type="text" placeholder="Ingrese Numero..." class="form-control"
+                                        id="comprobante" name="comprobante">
+                                </div>
+                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                    <label for="fecha">Fecha <strong style="color: #dd4b39">*</strong> :</label>
+                                    <input type="text" class="form-control datetime" id="fecha" name="fecha">
+                                </div>
+                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                    <label for="proveedor">Proveedor <strong style="color: #dd4b39">*</strong>
+                                        :</label>
+                                    <select id="proveedor" name="proveedor" class="form-control">
+                                        <option value="false"> - Seleccionar - </option>
+                                        <?php 
+                                                    foreach ($proveedores as $o) {
+                                                        echo "<option value='$o->prov_id'>$o->nombre</option>";
+                                                    }
+                                                    ?>
+                                    </select>
+                                </div>
                             </div>
+                        </div> <!-- /.panel-body -->
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"> Detalle de Recepción</h3>
+                        </div>
+
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12"><br>
+                                    <label for="lote">Seleccionar Articulo <strong
+                                            style="color: #dd4b39">*</strong>:</label>
+                                    <?php $this->load->view(ALM.'articulo/componente'); ?>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-3 col-md-3"><br>
+                                    <label for="lote">Lote <strong style="color: #dd4b39">*</strong>:</label>
+                                    <input type="text" id="lote" name="lote" placeholder="Lote" class="form-control">
+                                </div>
+                                <div class="col-xs-12 col-sm-3 col-md-3"><br>
+                                    <label for="vencimiento">Fecha Vencimiento:</label>
+                                    <input type="text" id="vencimiento" name="vencimiento" placeholder="dd/mm/yyyy"
+                                        class="form-control date">
+                                </div>
+                                <div class="col-xs-12 col-sm-3 col-md-3"><br>
+                                    <label for="cantidad">Cantidad <strong style="color: #dd4b39">*</strong>
+                                        :</label>
+                                    <input type="number" id="cantidad" name="cantidad" placeholder="Ingrese Cantidad..."
+                                        class="form-control">
+                                </div>
+                                <div class="col-xs-12 col-sm-3 col-md-3"><br>
+                                    <label for="deposito">Depósito <strong style="color: #dd4b39">*</strong>
+                                        :</label>
+                                    <select id="deposito" name="deposito" class="form-control">
+                                        <option value="false"> - Seleccionar - </option>
+                                        <?php 
+                                            foreach ($depositos as $o) {
+                                                echo "<option value='$o->depo_id'>$o->descripcion</option>";
+                                            }
+                                        ?>
+                                    </select>
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12"><br>
+                                    <br>
+                                    <button class="btn btn-primary " style="float:right;"
+                                        onclick="verificarExistenciaLote()"><i class="fa fa-check"></i>Agregar</button>
+                                </div>
+                            </div><br>
                         </div>
                     </div>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="insum">
+                            <div class="row">
+                                <div class="col-xs-12 table-responsive">
+                                    <table class="table table-bordered table-striped" id="tablainsumo">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Lote</th>
+                                                <th>Fec. Vencimiento</th>
+                                                <th>Código</th>
+                                                <th>Descripción</th>
+                                                <th>Cantidad</th>
+                                                <th>Depósito</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div><!-- /. tab-pane -->
+                    </div><!-- /.tab-content -->
                 </div><!-- /.box-body -->
 
                 <div class="modal-footer">
@@ -130,7 +141,7 @@ function verificarExistenciaLote() {
         alert('Campos Obligatorios(*) Incompletos');
         return;
     }
-    if(selectItem.es_loteado == 0){
+    if (selectItem.es_loteado == 0) {
         agregar();
         return;
     }
@@ -152,9 +163,9 @@ function verificarExistenciaLote() {
             arti
         },
         success: function(result) {
-            if(result == 1){
+            if (result == 1) {
                 $('#acumular').modal('show');
-            }else{
+            } else {
                 agregar();
             }
         },
@@ -168,13 +179,13 @@ function verificarExistenciaLote() {
 var idslote = {};
 var j = 0;
 
-$("#fecha").datetimepicker({
+$(".datetime").datetimepicker({
     format: 'YYYY-MM-DD HH:mm',
-    locale: 'en',
+    locale: 'es',
     date: new Date()
 });
 
-$("#vencimiento").datetimepicker({
+$(".date").datetimepicker({
     format: 'YYYY-MM-DD',
     locale: 'en'
 });
@@ -224,57 +235,6 @@ $("#codigo").autocomplete({
     },
 });
 
-traer_deposito();
-
-function traer_deposito() {
-    $('#deposito').empty();
-    $.ajax({
-        type: 'POST',
-        data: {},
-        url: 'index.php/<?php echo ALM ?>Remito/getdeposito',
-        success: function(data) {
-            var opcion = "<option value='-1'>Seleccione...</option>";
-            $('#deposito').append(opcion);
-            for (var i = 0; i < data.length; i++) {
-                var nombre = data[i]['descripcion'];
-                var opcion = "<option value='" + data[i]['depo_id'] + "'>" + nombre + "</option>";
-                $('#deposito').append(opcion);
-            }
-        },
-        error: function(result) {
-            console.log("entre por el error en deposito");
-            //alert("este articulo no está en deposito");
-            console.log(result);
-        },
-        dataType: 'json'
-    });
-}
-
-traer_proveedor();
-
-function traer_proveedor() { // Ok
-    $('#proveedor').empty();
-    $.ajax({
-        type: 'POST',
-        data: {},
-        url: 'index.php/<?php echo ALM ?>Remito/getproveedor',
-        success: function(data) {
-            var opcion = "<option value='-1'>Seleccione...</option>";
-            $('#proveedor').append(opcion);
-            for (var i = 0; i < data.length; i++) {
-                var nombre = data[i]['nombre'];
-                var opcion = "<option value='" + data[i]['prov_id'] + "'>" + nombre + "</option>";
-                $('#proveedor').append(opcion);
-            }
-        },
-        error: function(result) {
-            console.error("entre por el error en proveedor");
-
-        },
-        dataType: 'json'
-    });
-}
-
 function traer_lote(id_her, id_deposito) {
 
     $.ajax({
@@ -315,6 +275,7 @@ function limpiar() {
 
 //agrega insumos a la tabla detainsumos
 var i = 1;
+
 function agregar() {
 
     var lote = $('#lote').val();
@@ -335,7 +296,7 @@ function agregar() {
         // lote_id: (selectItem.es_loteado == 0 ? 1 : lote),
         fec_vencimiento: vencimiento,
         arti_id: id_her,
-        loteado: selectItem.es_loteado,
+        loteado: (selectItem.es_loteado == 't'?1:0),
         codigo: selectItem.es_loteado == 0 ? 1 : lote,
         cantidad: (cantidad * (selectItem.es_caja == 1 ? selectItem.cantidad_caja : 1)),
         depo_id: id_deposito,
@@ -415,7 +376,7 @@ function guardar() {
         url: 'index.php/<?php echo ALM ?>Remito/guardar_mejor', //index.php/
         success: function(data) {
 
-            linkTo('<?php echo ALM ?>Remito');
+            //linkTo('<?php #echo ALM ?>Remito');
         },
         error: function(result) {
             alert('Error');
@@ -423,12 +384,7 @@ function guardar() {
     });
 }
 
-function regresa() {
-    WaitingOpen();
-    $('#content').empty();
-    $("#content").load("<?php echo base_url(); ?>index.php/<?php echo ALM ?>Remito/index/<?php echo $permission; ?>");
-    WaitingClose();
-}
+
 
 function get_info_remito() {
 
@@ -467,17 +423,18 @@ function selectItemiculo(e) {
 </script>
 
 <!-- Modal -->
-<div class="modal fade" id="acumular" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-body text-center">
-        <h4>El Nro de Lote ya existe en el Deposito Seleccionado</h4>
-        <h4>¿Desea acumular las cantidades?</h4>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="agregar()">Si</button>
-      </div>
+<div class="modal fade" id="acumular" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <h4>El Nro de Lote ya existe en el Deposito Seleccionado</h4>
+                <h4>¿Desea acumular las cantidades?</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="agregar()">Si</button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>

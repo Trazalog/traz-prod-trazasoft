@@ -13,13 +13,13 @@ class Entregas_Materiales extends CI_Model
         parent::__construct();
     }
 
-    function listado($ot = null) {
+    function listado($ot = false) {
         $this->db->select('T.enma_id, T.fecha, T.comprobante, T.solicitante');
         $this->db->select('A.pema_id, A.estado, A.ortr_id');
         $this->db->from($this->tabla.' T');
         $this->db->join('alm_pedidos_materiales A','A.pema_id = T.pema_id');
         $this->db->order_by('T.fecha','desc');
-        $this->db->where('T.eliminado',0);
+        $this->db->where('T.eliminado', false);
         $this->db->where('T.empr_id',empresa());
 
         if($ot) $this->db->where('A.ortr_id', $ot);

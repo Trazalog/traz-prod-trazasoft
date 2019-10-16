@@ -11,12 +11,14 @@ class Remito extends CI_Controller {
 		$this->load->model(ALM.'Remitos');
 		$this->load->model(ALM.'Articulos');
 		$this->load->model(ALM.'Lotes');
+		$this->load->model(ALM.'Proveedores');
+		$this->load->model(ALM.'Depositos');
     }
 
     public function index() // Ok
     {
-		 
-      	$data['permission'] = $this->permission;
+
+		$data['permission'] = $this->permission;
       	$data['list'] = $this->Remitos->getRemitosList();
 		$this->load->view(ALM.'remito/list',$data);
     }
@@ -26,6 +28,8 @@ class Remito extends CI_Controller {
 		$this->load->model('traz-comp/Componentes');
 		
 		#COMPONENTE ARTICULOS
+		$data['proveedores'] = $this->Proveedores->obtener();
+		$data['depositos'] = $this->Depositos->obtener();
 		$data['items'] = $this->Componentes->listaArticulos();
 		$data['lang'] = lang_get('spanish', 'Ejecutar OT');
 
@@ -196,12 +200,14 @@ class Remito extends CI_Controller {
 		$info = $this->input->post('info');
 
 		$detalles = $this->input->post('detalles');
+		
+		log_message('DEBUG','#Remito >> guardar_mejor > info: '.json_encode($info).' | detalles: '.json_encode($detalles));
 
-		$this->Remitos->insert_orden($info);
+		$id = $this->Remitos->insert_orden($info);
 
-		$id = $this->db->insert_id();
+		if(!$id){ log_message('ERROR','#Remito | MSJ: No se genero Registro de Entrega'); return false;}
 
-		$this->Remitos->guardar_detalles($id,$detalles);
+		if(!$this->Remitos->guardar_detalles($id,$detalles)){log_message('ERROR','#Remito | MSJ: No se Registro Detalle de Entrega');}
 
 		return $data;
 	}

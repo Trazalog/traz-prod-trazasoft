@@ -20,7 +20,7 @@ CREATE TABLE alm_depositos (
  descripcion varchar(255) DEFAULT NULL,
  direccion varchar(255) DEFAULT NULL,
  GPS varchar(255) DEFAULT NULL,
- estado int4  DEFAULT NULL,
+ estado varchar(45) DEFAULT NULL,
  loca_id varchar(255) DEFAULT NULL,
  esta_id varchar(255) DEFAULT NULL,
  pais_id varchar(255) DEFAULT NULL,
@@ -39,7 +39,7 @@ CREATE TABLE alm_deta_entrega_materiales (
  lote_id int4  NOT NULL,
  depo_id int4  DEFAULT NULL,
  empr_id int4  NOT NULL,
- precio double DEFAULT NULL,
+ precio float DEFAULT NULL,
  fec_alta timestamp DEFAULT CURRENT_TIMESTAMP,
  eliminado bool DEFAULT '0',
   PRIMARY KEY (deen_id)
@@ -60,8 +60,8 @@ CREATE TABLE alm_deta_pedidos_materiales (
 
 CREATE TABLE alm_deta_recepcion_materiales (
  dere_id serial  NOT NULL ,
- cantidad double NOT NULL,
- precio double NOT NULL,
+ cantidad float NOT NULL,
+ precio float,
  empr_id int4  NOT NULL,
  rema_id int4  NOT NULL,
  lote_id int4  NOT NULL,
@@ -96,7 +96,7 @@ CREATE TABLE alm_lotes (
  cantidad float DEFAULT NULL,
  empr_id int4  NOT NULL,
  user_id int4  DEFAULT NULL,
- estado int4  DEFAULT NULL,
+ estado varchar(10)  DEFAULT 'AC',
  fec_alta timestamp DEFAULT CURRENT_TIMESTAMP,
  eliminado bool DEFAULT '0',
   PRIMARY KEY (lote_id)
@@ -134,7 +134,7 @@ CREATE TABLE alm_pedidos_materiales (
 
 
 CREATE TABLE alm_proveedores (
- prov_id int4  NOT NULL,
+ prov_id serial  NOT NULL,
  nombre varchar(255) DEFAULT NULL,
  cuit varchar(50) DEFAULT NULL,
  domicilio varchar(255) DEFAULT NULL,
@@ -169,7 +169,16 @@ CREATE TABLE alm_recepcion_materiales (
 ALTER TABLE public.alm_deta_pedidos_materiales ADD CONSTRAINT alm_deta_pedidos_materiales_fk FOREIGN KEY (arti_id) REFERENCES public.alm_articulos(arti_id);
 ALTER TABLE public.alm_deta_pedidos_materiales ADD CONSTRAINT alm_deta_pedidos_materiales_fk_1 FOREIGN KEY (pema_id) REFERENCES public.alm_pedidos_materiales(pema_id);
 ALTER TABLE public.alm_entrega_materiales ADD CONSTRAINT alm_entrega_materiales_fk FOREIGN KEY (pema_id) REFERENCES public.alm_pedidos_materiales(pema_id);
-ALTER TABLE public.alm_lotes ADD CONSTRAINT alm_lotes_fk FOREIGN KEY (prov_id,arti_id) REFERENCES public.alm_proveedores_articulos(prov_id,arti_id);
+ALTER TABLE public.alm_lotes ADD CONSTRAINT alm_lotes_fk FOREIGN KEY (arti_id) REFERENCES public.alm_articulos(arti_id);
+ALTER TABLE public.alm_lotes ADD CONSTRAINT alm_lotes_fk_1 FOREIGN KEY (prov_id) REFERENCES public.alm_proveedores(prov_id);
 ALTER TABLE public.alm_proveedores_articulos ADD CONSTRAINT alm_proveedores_articulos_fk FOREIGN KEY (arti_id) REFERENCES public.alm_articulos(arti_id);
 ALTER TABLE public.alm_proveedores_articulos ADD CONSTRAINT alm_proveedores_articulos_fk_1 FOREIGN KEY (prov_id) REFERENCES public.alm_proveedores(prov_id);
 ALTER TABLE public.alm_recepcion_materiales ADD CONSTRAINT alm_recepcion_materiales_fk FOREIGN KEY (prov_id) REFERENCES public.alm_proveedores(prov_id);
+
+
+ALTER TABLE public.alm_deta_recepcion_materiales ADD CONSTRAINT alm_deta_recepcion_materiales_fk FOREIGN KEY (rema_id) REFERENCES public.alm_recepcion_materiales(rema_id);
+ALTER TABLE public.alm_deta_recepcion_materiales ADD CONSTRAINT alm_deta_recepcion_materiales_fk_1 FOREIGN KEY (lote_id) REFERENCES public.alm_lotes(lote_id);
+ALTER TABLE public.alm_deta_recepcion_materiales ADD CONSTRAINT alm_deta_recepcion_materiales_fk_2 FOREIGN KEY (arti_id) REFERENCES public.alm_articulos(arti_id);
+ALTER TABLE public.alm_deta_recepcion_materiales ADD CONSTRAINT alm_deta_recepcion_materiales_fk_3 FOREIGN KEY (prov_id) REFERENCES public.alm_proveedores(prov_id);
+
+

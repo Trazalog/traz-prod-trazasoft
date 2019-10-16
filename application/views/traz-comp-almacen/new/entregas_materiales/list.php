@@ -42,7 +42,7 @@
 </div><!-- /.box -->
 
 <script>
-//DataTable('#entregas');
+DataTable($('#entregas'));
 
 function ConsultarEntrega(e)
 {

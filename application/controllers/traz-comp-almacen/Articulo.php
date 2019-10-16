@@ -9,17 +9,25 @@ class Articulo extends CI_Controller {
 
 		$this->load->model(ALM.'Articulos');
 		$this->load->model(ALM.'Lotes');
+		$this->load->model('Tablas');
 
 	}
 
 	// Muestra listado de articulos
-	public function index($permission='Add-Edit-Del-View')
+	public function index()
 	{
 		$data['list'] = $this->Articulos->getList();
-		$data['permission'] = $permission;
+		$data['unidades_medida'] = $this->Tablas->obtener('unidades_medida');
 		$this->load->view(ALM.'articulo/list', $data);
 	}
 		
+	public function guardar()
+	{
+		$data = $this->input->post();
+		$data = $this->Articulos->guardar($data);
+		echo json_encode($data);
+	}
+
 	public function getdatosart() // Ok
 	{
 		$art = $this->Articulos->getUnidadesMedidas();

@@ -29,14 +29,10 @@ class Remitos extends CI_Model {
 
     function getcodigo()
     {
-        $userdata  = $this->session->userdata('user_data');
-        $empresaId = empresa();
-
         $this->db->select('T.arti_id as artId, T.barcode as artBarCode, T.descripcion as artDescription,T.es_loteado, T.es_caja, T.cantidad_caja');
         $this->db->from('alm_articulos as T');
-        $this->db->where('empr_id',$empresaId);
+        $this->db->where('empr_id', empresa());
         $this->db->where('T.eliminado',false);
-        $this->db->group_by('barcode');
      
     	$query = $this->db->get();
 
@@ -117,10 +113,9 @@ class Remitos extends CI_Model {
 
     function getDetaRemitos($idRemito)
     {
-        $userdata  = $this->session->userdata('user_data');
         $empresaId = empresa();
         
-        $sql       = "SELECT T.dere_id as detaremitoid, T.rema_id as id_remito, T.lote_id as loteid, T.cantidad, 
+        $sql = "SELECT T.dere_id as detaremitoid, T.rema_id as id_remito, T.lote_id as loteid, T.cantidad, 
             art.barcode as codigo, alm_lotes.depo_id as depositoid, 
             art.arti_id as artId, art.barcode as artBarCode, art.descripcion as artDescription, 
             alm_depositos.descripcion as depositodescrip
@@ -186,12 +181,12 @@ class Remitos extends CI_Model {
 
     function insert_orden($data)
     {
-        $userdata = $this->session->userdata('user_data');
         $data['empr_id'] =empresa();
         $data['prov_id']  = $data['provid'];unset($data['provid']);
 
-        $query = $this->db->insert("alm_recepcion_materiales", $data);
-        return $query;
+        $this->db->insert("alm_recepcion_materiales", $data);
+
+        return $this->db->insert_id();
     }
 
     /**
@@ -422,7 +417,7 @@ class Remitos extends CI_Model {
 
     public function verificar_lote($data)
     {
-        //? SI EXISTE LO TE RETORNA ID
+        //? SI EXISTE LOTE RETORNA ID
 
         if($data['loteado'] == 1){
 
@@ -438,12 +433,10 @@ class Remitos extends CI_Model {
         
         $res =  $this->db->get('alm_lotes')->row();
 
-
+        //? SI EXISTE LOTE LO ACTUALIZA
         if($res){ $this->actualizar_lote($res->lote_id, $data); return $res->lote_id;}
 
         //? SI NO EXISTE LOTE LO CREA
-
-        $data['estado_id'] = 1;
         unset($data['loteado']);
 
         $this->insert_lote($data);
