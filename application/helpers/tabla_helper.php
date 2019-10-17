@@ -2,7 +2,7 @@
 
 if(!function_exists('armaBusca')){
 
-    function armaBusca($json, $id, $acciones,$lenguaje)
+    function armaBusca($json, $id, $acciones,$lenguaje = false)
     {
         $array =  json_decode($json);
         

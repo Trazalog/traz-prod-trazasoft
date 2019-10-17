@@ -1,0 +1,76 @@
+{
+    "tareas": [
+        {
+            "id": "1",
+            "nombre": "Tarea 1",
+            "descripcion": "Descripcion 1",
+            "duracion": "1 horas",
+            "subtareas": [
+                1,
+                2,
+                3
+            ]
+        },
+        {
+            "id": "2",
+            "nombre": "Tarea 2",
+            "descripcion": "Descripcion 2",
+            "duracion": "2 horas",
+            "subtareas": [
+                1,
+                2
+            ]
+        },
+        {
+            "id": "3",
+            "nombre": "Tarea 3",
+            "descripcion": "Descripcion 3",
+            "duracion": "3 horas",
+            "subtareas": [
+                1,
+                3
+            ]
+        }
+    ],
+    "subtareas": [
+        {
+            "id": "1",
+            "nombre": "Subtarea 1",
+            "descripcion": "Descripcion 1",
+            "duracion": "1 horas"
+        },
+        {
+            "id": "2",
+            "nombre": "Subtarea 2",
+            "descripcion": "Descripcion 2",
+            "duracion": "2 horas"
+        },
+        {
+            "id": "3",
+            "nombre": "Subtarea 3",
+            "descripcion": "Descripcion 3",
+            "duracion": "3 horas"
+        }
+    ],
+    "plantillas": [
+        {
+            "id": "1",
+            "nombre": "Plantilla 1",
+            "descripcion": "Descripcion 1",
+            "tareas": [
+                1,
+                2,
+                3
+            ]
+        },
+        {
+            "id": "2",
+            "nombre": "Plantilla 2",
+            "descripcion": "Descripcion 2",
+            "tareas": [
+                1,
+                3
+            ]
+        }
+    ]
+}

@@ -1,0 +1,30 @@
+{
+    "labels": {
+        "label": [
+            {
+                "id": "codigo",
+                "texto": "Codigo"
+            },
+            {
+                "id": "id",
+                "texto": "id"
+            },
+            {
+                "id": "descripcion",
+                "texto": "Descripcion"
+            },
+            {
+                "id": "proveedores",
+                "texto": "Proveedores"
+            },
+            {
+                "id": "cantidad",
+                "texto": "Cant. Pedida"
+            },
+            {
+                "id": "stock",
+                "texto": "Stock"
+            }
+        ]
+    }
+}

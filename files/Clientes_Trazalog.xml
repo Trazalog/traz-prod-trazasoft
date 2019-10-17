@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<organization:Organization xmlns:organization="http://documentation.bonitasoft.com/organization-xml-schema/1.1">
+  <customUserInfoDefinitions/>
+  <users>
+    <user userName="mantenedor1">
+      <firstName>Mantenedor1</firstName>
+      <lastName>Test</lastName>
+      <manager></manager>
+      <personalData/>
+      <professionalData/>
+      <password encrypted="false">bpm</password>
+      <customUserInfoValues/>
+    </user>
+    <user userName="supervisor1">
+      <firstName>Supervisor1</firstName>
+      <lastName>Test</lastName>
+      <title></title>
+      <manager></manager>
+      <personalData/>
+      <professionalData/>
+      <password encrypted="false">bpm</password>
+      <customUserInfoValues/>
+    </user>
+    <user userName="planificador1">
+      <firstName>Planificador1</firstName>
+      <lastName>Test</lastName>
+      <manager></manager>
+      <personalData/>
+      <professionalData/>
+      <password encrypted="false">bpm</password>
+      <customUserInfoValues/>
+    </user>
+    <user userName="solicitante1">
+      <firstName>Solicitante1</firstName>
+      <lastName>Test</lastName>
+      <manager></manager>
+      <personalData/>
+      <professionalData/>
+      <password encrypted="false">bpm</password>
+      <customUserInfoValues/>
+    </user>
+  </users>
+  <roles>
+    <role name="Mantenedor">
+      <displayName>Mantenedor</displayName>
+    </role>
+    <role name="Planificador Mantenimiento">
+      <displayName>Planificador Mantenimiento</displayName>
+    </role>
+    <role name="Supervisor Taller">
+      <displayName>Supervisor Taller</displayName>
+    </role>
+    <role name="Solicitante">
+      <displayName>Solicitante</displayName>
+    </role>
+  </roles>
+  <groups>
+    <group name="Clientes Trazalog">
+      <displayName>ClientesTrazalog</displayName>
+      <description>Todos los clientes de Trazalog, pudiendo dentro de cada cliente dividir por distintos departamentos</description>
+    </group>
+    <group name="SIM" parentPath="/Clientes Trazalog">
+      <displayName>SIM</displayName>
+      <description>SIM Mantenimento y Limpieza</description>
+    </group>
+    <group name="Empreminsa" parentPath="/Clientes Trazalog">
+      <displayName>Empreminsa</displayName>
+      <description>Empreminsa</description>
+    </group>
+  </groups>
+  <memberships>
+    <membership>
+      <userName>mantenedor1</userName>
+      <roleName>Mantenedor</roleName>
+      <groupName>Empreminsa</groupName>
+      <groupParentPath>/Clientes Trazalog</groupParentPath>
+    </membership>
+    <membership>
+      <userName>supervisor1</userName>
+      <roleName>Supervisor Taller</roleName>
+      <groupName>Empreminsa</groupName>
+      <groupParentPath>/Clientes Trazalog</groupParentPath>
+    </membership>
+    <membership>
+      <userName>planificador1</userName>
+      <roleName>Planificador Mantenimiento</roleName>
+      <groupName>Empreminsa</groupName>
+      <groupParentPath>/Clientes Trazalog</groupParentPath>
+    </membership>
+    <membership>
+      <userName>solicitante1</userName>
+      <roleName>Solicitante</roleName>
+      <groupName>Empreminsa</groupName>
+      <groupParentPath>/Clientes Trazalog</groupParentPath>
+    </membership>
+  </memberships>
+</organization:Organization>
