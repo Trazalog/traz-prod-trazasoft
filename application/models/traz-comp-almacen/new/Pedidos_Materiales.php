@@ -15,9 +15,10 @@ class Pedidos_Materiales extends CI_Model
 
     public function getListado($ot = null)
     {
-        $this->db->select('T.pema_id as id_notaPedido,T.fecha,T.ortr_id as id_ordTrabajo,orden_trabajo.descripcion,T.justificacion, T.estado');
+        $this->db->select('T.pema_id as id_notaPedido,T.fecha,T.ortr_id as id_ordTrabajo,T.justificacion, T.estado');
+        if($ot) $this->db->select('orden_trabajo.descripcion');
         $this->db->from('alm_pedidos_materiales T');
-        $this->db->join('orden_trabajo', 'T.ortr_id = orden_trabajo.id_orden','left');
+        if($ot)$this->db->join('orden_trabajo', 'T.ortr_id = orden_trabajo.id_orden','left');
         $this->db->where('T.empr_id', empresa());
         if($ot)  $this->db->where('orden_trabajo.id_orden', $ot);
         $query = $this->db->get();

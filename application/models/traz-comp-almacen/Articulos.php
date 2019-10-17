@@ -32,6 +32,7 @@ class Articulos extends CI_Model
 	public function guardar($data)
 	{
 		$data['es_caja'] = isset($data['cantidad_caja']);
+		$data['es_loteado'] = isset($data['es_loteado']);
 		$data['empr_id'] = empresa();
 		$this->db->insert('alm_articulos',$data);
 		return $this->db->insert_id();

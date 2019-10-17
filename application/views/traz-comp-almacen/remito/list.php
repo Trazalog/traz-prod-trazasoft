@@ -75,8 +75,8 @@ $(".fa-search").click(function (e) {
         tabla.clear().draw();
         for (var i = 0; i < data['datosDetaRemitos'].length; i++) { 
           $('#tablaconsulta').DataTable().row.add( [
-            data['datosDetaRemitos'][i]['artBarCode'],
-            data['datosDetaRemitos'][i]['artDescription'],
+            data['datosDetaRemitos'][i]['codigo'],
+            data['datosDetaRemitos'][i]['artdescription'],
             data['datosDetaRemitos'][i]['cantidad'],
             data['datosDetaRemitos'][i]['depositodescrip'],
           ]).draw();

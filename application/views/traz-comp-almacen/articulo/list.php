@@ -35,7 +35,7 @@
                     echo "<td class='codigo'>$a->barcode</td>";
                     echo "<td>$a->descripcion</td>";
                     echo "<td>$a->unidad_medida</td>";
-                    echo "<td class='text-center'>$a->estado</td>";
+                    echo "<td class='text-center'>".estado($a->estado)."</td>";
                     echo "</tr>";
 
                 }
@@ -61,6 +61,7 @@ function guardarArticulo() {
         contentType: false,
         processData: false,
         success: function(rsp) {
+            $('.modal-backdrop').remove();
             linkTo();
         },
         error: function(rsp) {
@@ -114,7 +115,7 @@ $("#new_articulo").on("hide.bs.modal", function() {
 </script>
 
 <!-- Modal -->
-<div class="modal fade" id="new_articulo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal" id="new_articulo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">

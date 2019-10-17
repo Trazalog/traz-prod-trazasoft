@@ -126,7 +126,7 @@
 <script>
 function eventSelect() {
 
-    if (selectItem.es_loteado == 0) {
+    if (selectItem.es_loteado == 'f') {
         $('#lote').prop('disabled', true);
         $('#lote').val('S/L');
     } else {
@@ -141,7 +141,7 @@ function verificarExistenciaLote() {
         alert('Campos Obligatorios(*) Incompletos');
         return;
     }
-    if (selectItem.es_loteado == 0) {
+    if (selectItem.es_loteado == 'f') {
         agregar();
         return;
     }
@@ -376,7 +376,7 @@ function guardar() {
         url: 'index.php/<?php echo ALM ?>Remito/guardar_mejor', //index.php/
         success: function(data) {
 
-            //linkTo('<?php #echo ALM ?>Remito');
+            linkTo('<?php echo ALM ?>Remito');
         },
         error: function(result) {
             alert('Error');
@@ -411,7 +411,7 @@ function selectItemiculo(e) {
     selectItem = JSON.parse(JSON.stringify($(e).data('json')));
     $('#art_select').val($(e).find('a').html());
     $('#articulos').modal('hide');
-    if (selectItem.es_loteado == 0) {
+    if (selectItem.es_loteado == 't') {
         $('#lote').prop('disabled', true);
         $('#lote').val('S/L');
     } else {

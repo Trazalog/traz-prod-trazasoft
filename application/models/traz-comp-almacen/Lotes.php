@@ -29,7 +29,7 @@ class Lotes extends CI_Model {
 	public function getPuntoPedido()
 	{
 		  // OBTENER CANTIDADES RESERVADAS
-		  $this->db->select('arti_id, IFNULL(sum(resto),0) as cant_reservada');
+		  $this->db->select('arti_id, COALESCE(sum(resto),0) as cant_reservada');
 		  $this->db->from('alm_deta_pedidos_materiales');
 		  $this->db->join('alm_pedidos_materiales', 'alm_deta_pedidos_materiales.pema_id = alm_pedidos_materiales.pema_id');
 		  $this->db->where('estado!=','Entregado');
@@ -37,14 +37,14 @@ class Lotes extends CI_Model {
 		  $this->db->where('estado!=','Cancelado');
 		  $this->db->where('alm_pedidos_materiales.empr_id', empresa());
 		  $this->db->group_by('arti_id');
-		  $C = '(' . $this->db->get_compiled_select() . ') C';
+		  $C = '(' . $this->db->get_compiled_select() . ') as "C"';
 
-		  $this->db->select('ART.arti_id, ART.barcode, ART.descripcion, punto_pedido, IFNULL(sum(LOTE.cantidad), 0) as cantidad_stock, IFNULL(sum(LOTE.cantidad),0)-cant_reservada as cantidad_disponible');
-		  $this->db->from('alm_articulos ART');
-		  $this->db->join('alm_lotes LOTE','LOTE.arti_id = ART.arti_id');
+		  $this->db->select('ART.arti_id, ART.barcode, ART.descripcion, punto_pedido, COALESCE(sum("LOTE".cantidad), 0) as cantidad_stock, COALESCE(sum("LOTE".cantidad),0)-cant_reservada as cantidad_disponible');
+		  $this->db->from('alm_articulos as ART');
+		  $this->db->join('alm_lotes as LOTE','LOTE.arti_id = ART.arti_id');
 		  $this->db->join($C,'C.arti_id = ART.arti_id');
-		  $this->db->group_by('ART.arti_id');
-		  $sql = '('.$this->db->get_compiled_select().') AUX';
+		  $this->db->group_by('ART.arti_id, C.cant_reservada');
+		  $sql = '('.$this->db->get_compiled_select().') as "AUX"';
 
 		  $this->db->where('AUX.cantidad_disponible < AUX.punto_pedido');
 		  $this->db->from($sql);

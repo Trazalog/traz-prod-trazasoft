@@ -213,7 +213,7 @@ class Proceso extends CI_Controller
 
             case 'Entrega pedido pendiente':
 
-                $this->load->model('Otrabajos');
+                if(viewOT)$this->load->model('Otrabajos');
                 $proceso = $tarea['processId'];
 
                 $aux = null;
@@ -232,10 +232,11 @@ class Proceso extends CI_Controller
 
                 $data['list_deta_pema'] = $this->Ordeninsumos->get_detalle_entrega($data['pema_id']);
 
-                $ot = $this->Otrabajos->obtenerOT($aux['ortr_id']);
+                if(viewOT){
+                    $ot = $this->Otrabajos->obtenerOT($aux['ortr_id']);
 
-                $data['estadoOT'] = !($ot->estado == 'T' || $ot->estado=='CA');
-
+                    $data['estadoOT'] = !($ot->estado == 'T' || $ot->estado=='CA');
+                }
                 return $this->load->view(ALM.'proceso/tareas/pedido_materiales/view_entrega_pedido_pendiente', $data, true);
 
                 break;

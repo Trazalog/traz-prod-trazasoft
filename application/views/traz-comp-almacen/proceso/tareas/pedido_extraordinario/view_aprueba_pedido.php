@@ -47,7 +47,7 @@
             url: '<?php base_url() ?>index.php/<?php echo ALM ?>Proceso/cerrarTarea/'+id,
             success: function (data) {
                 //WaitingClose();
-                linkTo('Tarea');
+                back();
 
             },
             error: function (data) {

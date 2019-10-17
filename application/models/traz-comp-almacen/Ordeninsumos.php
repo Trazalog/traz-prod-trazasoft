@@ -175,25 +175,25 @@ class Ordeninsumos extends CI_Model
     public function get_detalle_entrega($pema)
     {
         // FILTRAR ARTICULOS PEDIDO MATERIALES
-        $this->db->select('ART.arti_id, ART.barcode, ART.descripcion, PEMA.cantidad as cant_pedida, sum(LOTE.cantidad) as cantidad_stock');
-        $this->db->from('alm_deta_pedidos_materiales PEMA');
-        $this->db->join('alm_articulos ART', 'ART.arti_id = PEMA.arti_id');
-        $this->db->join('alm_lotes LOTE','LOTE.arti_id = ART.arti_id', 'left');
+        $this->db->select('ART.arti_id, ART.barcode, ART.descripcion, PEMA.cantidad as cant_pedida, sum("LOTE".cantidad) as cantidad_stock');
+        $this->db->from('alm_deta_pedidos_materiales as PEMA');
+        $this->db->join('alm_articulos as ART', 'ART.arti_id = PEMA.arti_id');
+        $this->db->join('alm_lotes as LOTE','LOTE.arti_id = ART.arti_id', 'left');
         $this->db->where('pema_id', $pema);
         $this->db->where('ART.empr_id', empresa());
-        $this->db->group_by('ART.arti_id');
-        $A = '(' . $this->db->get_compiled_select() . ') A';
+        $this->db->group_by('ART.arti_id, PEMA.cantidad');
+        $A = '(' . $this->db->get_compiled_select() . ') as "A"';
 
         // SUMAR ENTREGAS
-        $this->db->select('B.arti_id, sum(cantidad) as cant_entregada');
-        $this->db->from('alm_entrega_materiales A');
-        $this->db->join('alm_deta_entrega_materiales B', 'B.enma_id = A.enma_id');
-        $this->db->where('A.pema_id', $pema);
-        $this->db->group_by('B.arti_id');
-        $B = '(' . $this->db->get_compiled_select() . ') B';
+        $this->db->select('DEEN.arti_id, sum(cantidad) as cant_entregada');
+        $this->db->from('alm_entrega_materiales as ENMA');
+        $this->db->join('alm_deta_entrega_materiales as DEEN', 'DEEN.enma_id = ENMA.enma_id');
+        $this->db->where('ENMA.pema_id', $pema);
+        $this->db->group_by('DEEN.arti_id');
+        $B = '(' . $this->db->get_compiled_select() . ') as "B"';
 
         // OBTENER EXISTENCIAS
-        $this->db->select('A.barcode, A.descripcion, A.arti_id, A.cant_pedida, IFNULL(cantidad_stock,0) as cant_disponible, IFNULL(B.cant_entregada,0) as cant_entregada');
+        $this->db->select('A.barcode, A.descripcion, A.arti_id, A.cant_pedida, COALESCE(cantidad_stock,0) as cant_disponible, COALESCE("B".cant_entregada,0) as cant_entregada');
         $this->db->from($A);
         $this->db->join($B, 'B.arti_id = A.arti_id', 'left');
 

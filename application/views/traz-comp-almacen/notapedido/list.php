@@ -5,7 +5,7 @@
             if(!viewOT)
             {
             echo '<button class="btn btn-block btn-primary" style="width: 100px; margin-top: 10px;"
-                onclick="linkTo(\'<?php echo ALM ?>Notapedido/crearPedido\')">Agregar</button>';
+                onclick="linkTo(\''.ALM.'Notapedido/crearPedido\')">Agregar</button>';
             }else{
                 echo '<button class="btn btn-block btn-primary" style="width: 100px; margin-top: 10px;"
                 onclick="AbrirModal()">Agregar</button>';

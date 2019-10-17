@@ -104,6 +104,7 @@ $('.item').single_double_click(function() {
     $('.view').empty();
     $('.view').load('<?php base_url()?>Tarea/detalleTarea/' + $(this).attr('id'));
 }, function() {
+    alert('Culo de Mono');
     linkTo('<?php base_url()?>Tarea/detalleTarea/' + $(this).attr('id'));
 });
 

@@ -182,3 +182,4 @@ ALTER TABLE public.alm_deta_recepcion_materiales ADD CONSTRAINT alm_deta_recepci
 ALTER TABLE public.alm_deta_recepcion_materiales ADD CONSTRAINT alm_deta_recepcion_materiales_fk_3 FOREIGN KEY (prov_id) REFERENCES public.alm_proveedores(prov_id);
 
 
+ALTER TABLE public.alm_deta_entrega_materiales ADD CONSTRAINT alm_deta_entrega_materiales_fk FOREIGN KEY (enma_id) REFERENCES public.alm_entrega_materiales(enma_id);

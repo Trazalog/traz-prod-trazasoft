@@ -39,4 +39,19 @@ if (!function_exists('bolita')) {
         }
     }
 
+    function estado($estado)
+    {
+        switch ($estado) {
+            case 'AC':
+                return bolita('Activo', 'green');
+                break;
+            case 'IN':
+                return bolita('Inactivo', 'red');
+                break;
+            default:
+                return bolita('S/E', '');
+                break;
+        }
+    }
+
 }

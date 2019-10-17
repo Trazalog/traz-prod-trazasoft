@@ -252,6 +252,10 @@ function set_pedido() {
         dataType: 'json',
         url: 'index.php/<?php echo ALM ?>Notapedido/setNotaPedido',
         success: function(result) {
+            console.log('setNotaPedido: ');
+            
+            console.log(result);
+            
             $('#pema_id').val(result.pema_id);
             WaitingClose();
             get_detalle();
@@ -312,7 +316,7 @@ function lanzarPedidoModal() {
     año = fecha.getFullYear();
     fecha = dia + '/' + mes + '/' + año;
     document.getElementById('pema_id').value = null;
-    modal = '<?php echo $info->modal;?>';
+    modal = '<?php #echo $info->modal;?>';
     data = {
         id_notaPedido: notaid,
         fecha: fecha,

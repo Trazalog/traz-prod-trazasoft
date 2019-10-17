@@ -116,7 +116,7 @@ define('ASP_115', 'Error al Leer Variable');
 define('ALM', 'traz-comp-almacen/');
 define('BPM_PROCESS_ID_PEDIDOS_NORMALES', '6833268789089291878'); 
 define('BPM_PROCESS_ID_PEDIDOS_EXTRAORDINARIOS', '7321139677245257050');
-define('viewOT', true);
+define('viewOT', false);
 
 #COMPONENTE FORMULARIOS
 define('FRM', 'traz-comp-form/');

@@ -121,6 +121,7 @@
 <!-- ./wrapper -->
 <script>
 var link = '';
+var backLink = '';
 
 linkTo("<?php echo DEFAULT_VIEW ?>");
 
@@ -131,9 +132,14 @@ $('.menu .link').on('click', function() {
 
 function linkTo(uri = '') {
     if (link == '' && uri == '') return;
+    backLink = link;
     link = (uri == '' ? link : uri);
     $('#content').empty();
     $('#content').load('<?php base_url() ?>' + link);
+}
+
+function back() {
+    linkTo(backLink);
 }
 
 function collapse(e) {

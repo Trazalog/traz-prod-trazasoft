@@ -20,9 +20,10 @@ class Notapedidos extends CI_Model
 
     public function notaPedidos_List($ot = null)
     {
-        $this->db->select('T.pema_id as id_notaPedido,T.fecha,T.ortr_id as id_ordTrabajo,orden_trabajo.descripcion,T.justificacion, T.estado');
-        $this->db->from('alm_pedidos_materiales T');
-        $this->db->join('orden_trabajo', 'T.ortr_id = orden_trabajo.id_orden','left');
+        $this->db->select('T.pema_id as id_notaPedido,T.fecha,T.ortr_id as id_ordTrabajo,T.justificacion, T.estado');
+        if($ot) $this->db->select('orden_trabajo.descripcion');
+        $this->db->from('alm_pedidos_materiales as T');
+        if($ot) $this->db->join('orden_trabajo', 'T.ortr_id = orden_trabajo.id_orden','left');
         $this->db->where('T.empr_id', empresa());
         if($ot)  $this->db->where('orden_trabajo.id_orden', $ot);
         $query = $this->db->get();
@@ -89,7 +90,6 @@ class Notapedidos extends CI_Model
                           alm_pedidos_materiales.fecha,
                           alm_pedidos_materiales.ortr_id as id_ordTrabajo,
                           alm_pedidos_materiales.justificacion,
-                          orden_trabajo.descripcion,
                           alm_deta_pedidos_materiales.cantidad,
                           (alm_deta_pedidos_materiales.cantidad - alm_deta_pedidos_materiales.resto) as entregado,
                           alm_deta_pedidos_materiales.fecha_entrega,
@@ -99,8 +99,10 @@ class Notapedidos extends CI_Model
                           alm_articulos.descripcion as artDescription,
                           alm_deta_pedidos_materiales.depe_id'
         );
+
+        if(viewOT)$this->db->select('orden_trabajo.descripcion');
         $this->db->from('alm_pedidos_materiales');
-        $this->db->join('orden_trabajo', 'alm_pedidos_materiales.ortr_id = orden_trabajo.id_orden','left');
+        if(viewOT)$this->db->join('orden_trabajo', 'alm_pedidos_materiales.ortr_id = orden_trabajo.id_orden','left');
         $this->db->join('alm_deta_pedidos_materiales', 'alm_deta_pedidos_materiales.pema_id = alm_pedidos_materiales.pema_id');
         $this->db->join('alm_articulos', 'alm_deta_pedidos_materiales.arti_id = alm_articulos.arti_id');
         $this->db->where('alm_pedidos_materiales.pema_id', $id);
@@ -144,12 +146,13 @@ class Notapedidos extends CI_Model
         $userdata = $this->session->userdata('user_data');
         $empId = empresa();
 
-        $orden = $data['orden_Id'][0];
+        $orden = (int) $data['orden_Id'][0];
         $notaP = array(
             'fecha' => date('Y-m-d H:i:s'),
-            'ortr_id' => $orden,
             'empr_id' => $empId,
         );
+
+        if($orden) $notaP['ortr_id'] =  $orden;
         $this->db->insert('alm_pedidos_materiales', $notaP);
         $idNota = $this->db->insert_id();
 
@@ -204,7 +207,7 @@ class Notapedidos extends CI_Model
     // guarda nota pedido (desde tareas de bpm)
     public function setCabeceraNota($cabecera)
     {
-
+        $cabecera['ortr_id'] = (int)$cabecera['ortr_id'];
         $this->db->insert('alm_pedidos_materiales', $cabecera);
         $idInsert = $this->db->insert_id();
         return $idInsert;
