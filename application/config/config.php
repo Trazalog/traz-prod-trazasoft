@@ -23,7 +23,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://localhost/traz-prod-trazasoft';
+$config['base_url'] = 'https://www.cloudtrazalog.com/traz-prod-trazasoft/';
 
 /*
 |--------------------------------------------------------------------------
@@ -489,6 +489,8 @@ $config['compress_output'] = FALSE;
 |
 */
 $config['time_reference'] = 'local';
+date_default_timezone_set('America/Argentina/San_Juan');
+
 
 /*
 |--------------------------------------------------------------------------
