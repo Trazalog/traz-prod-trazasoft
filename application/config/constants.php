@@ -133,4 +133,4 @@ define('REST', 'http://localhost:8080/');
 
 # >> Proyecto
 # Default View
-define('DEFAULT_VIEW', 'Test');
+define('DEFAULT_VIEW', ALM.'Articulo');
