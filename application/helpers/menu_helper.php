@@ -10,7 +10,7 @@ if(!function_exists('menu')){
         // $resource = 'menu?user='.$user;	 	
         // $url = REST.$resource;
         // $array = file_get_contents($url, false, $param);
-        $array = getJson('menu');//json_decode($array);
+        $array = [];//getJson('menu');//json_decode($array);
        // var_dump($array->menu);die;
         $html = '<ul class="sidebar-menu menu" data-widget="tree">
         <li class="header">'.$lang['navegacion'].'</li>';
