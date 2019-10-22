@@ -177,7 +177,7 @@
       error: function (result) {
         alert("Error en guardado...");
       },
-        finally:function() {
+        complete:function() {
             wc();
         }
     });
@@ -242,7 +242,7 @@
       error: function (result) {
         alert("Error en guardado...");
       },
-        finally:function() {
+        complete:function() {
             wc();
         }
       

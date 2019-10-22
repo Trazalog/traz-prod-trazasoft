@@ -129,7 +129,7 @@ function actualizar_entregas() {
         error: function(error) {
             alert('Error');
         },
-        finally:function() {
+        complete:function() {
             wc();
         }
     });

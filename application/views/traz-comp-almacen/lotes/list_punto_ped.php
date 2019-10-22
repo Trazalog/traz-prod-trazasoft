@@ -133,7 +133,7 @@ $('#btnSave').click(function() {
             wc();
             alert("error");
         },
-        finally: function() {
+        complete: function() {
             wc();
         }
         dataType: 'json'

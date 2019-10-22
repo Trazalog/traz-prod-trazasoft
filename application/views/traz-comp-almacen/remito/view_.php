@@ -167,15 +167,12 @@ function verificarExistenciaLote() {
                 $('#acumular').modal('show');
             } else {
                 agregar();
-                wo();
+                
 
             }
         },
         error: function(result) {
             alert('Error');
-        },
-        finally:function() {
-            wc();
         }
     });
 }
@@ -385,7 +382,7 @@ function guardar() {
         },
         error: function(result) {
             alert('Error');
-        },finally:function() {
+        },complete:function() {
             wc();
         }
     });

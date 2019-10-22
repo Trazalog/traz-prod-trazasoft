@@ -60,6 +60,7 @@ $(".fa-search").click(function (e) {
     console.log("Estoy Consultando"); 
     var idremito = $(this).parent('td').parent('tr').attr('id');
     console.log("id de remito: "+idremito);
+    wo();
     $.ajax({
       data: { idremito: idremito},
       dataType: 'json',
@@ -88,7 +89,9 @@ $(".fa-search").click(function (e) {
       error: function(result){
         alert("Error al traer datos de remito")
         console.table(result);
-      },
+      },complete: function(){
+        wc();
+      }
     });   
 });
 
@@ -141,7 +144,7 @@ var table = $('#tablaconsulta').DataTable( {
 
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title"  id="myModalLabel"><span id="modalAction" class="fa fa-fw fa-search-plus text-light-blue"></span> Consulta de Remito</h4>
+        <h4 class="modal-title"  id="myModalLabel"><span id="modalAction" class="fa fa-fw fa-search-plus text-light-blue"></span> Detalle Recepción de Materiales</h4>
       </div> <!-- /.modal-header  -->
 
       <div class="modal-body" id="modalBodyArticle">

@@ -205,7 +205,7 @@ $('.cant_insumos').prop('disabled',true);
           error: function (result) {
             alert("Error en guardado...");
           },
-          finally:function() {
+          complete:function() {
               wc();
           }
         });

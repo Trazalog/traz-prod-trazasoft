@@ -102,7 +102,7 @@ function edit() {
         error: function(data) {
             alert('Error');
         },
-        finally:function() {
+        complete:function() {
             wc();
         }
     });

@@ -300,7 +300,7 @@
           error: function (result) {
             alert('Error al Guardar');
           },
-          finally:function() {
+          complete:function() {
               wc();
           }
           // dataType: 'json'

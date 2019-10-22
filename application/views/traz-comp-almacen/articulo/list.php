@@ -71,7 +71,7 @@ function guardarArticulo() {
             alert('Error: No se pudo Guardar Artículo');
             console.log(rsp.msj);
         },
-        finally:function() {
+        complete:function() {
             wc();
         }
     });
@@ -99,7 +99,7 @@ function editarArticulo() {
             alert('Error: No se pudo Editar Artículo');
             console.log(rsp.msj);
         },
-        finally:function() {
+        complete:function() {
             wc();
         }
     });
