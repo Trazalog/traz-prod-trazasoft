@@ -50,6 +50,7 @@
 DataTable($('table'));
 
 function guardarArticulo() {
+    wo();
     var formData = new FormData($('#frm-articulo')[0]);
 
     if (!validarForm()) return;
@@ -69,11 +70,15 @@ function guardarArticulo() {
         error: function(rsp) {
             alert('Error: No se pudo Guardar Artículo');
             console.log(rsp.msj);
+        },
+        finally:function() {
+            wc();
         }
     });
 }
 
 function editarArticulo() {
+    wo();
     var formData = new FormData($('#frm-articulo')[0]);
 
     if (!validarForm()) return;
@@ -93,6 +98,9 @@ function editarArticulo() {
         error: function(rsp) {
             alert('Error: No se pudo Editar Artículo');
             console.log(rsp.msj);
+        },
+        finally:function() {
+            wc();
         }
     });
 }

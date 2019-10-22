@@ -66,18 +66,18 @@
   //   //var iort = 
   //   console.log("El id de OT es: " + iort);
 
-  //   WaitingOpen();
+  //   wo();
   //   $('#content').empty();
   //   $("#content").load("<?php echo base_url(); ?>index.php/Notapedido/agregarListInsumos/<?php echo $permission; ?>/" + iort);
-  //   WaitingClose();
+  //   wc();
   // }
 
   // Volver al atras
   $('#cerrar').click(function cargarVista() {
-    WaitingOpen();
+    wo();
     $('#content').empty();
     $("#content").load("<?php echo base_url(); ?>index.php/Tarea/index/<?php echo $permission; ?>");
-    WaitingClose();
+    wc();
   });
 
   /* pedido de insumos */

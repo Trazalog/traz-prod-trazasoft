@@ -153,7 +153,7 @@ function verificarExistenciaLote() {
     if (depo == null || depo == '') return;
     if (arti == null || arti == '') return;
 
-
+    
     $.ajax({
         type: 'POST',
         url: 'index.php/<?php echo ALM ?>Lote/verificarExistencia',
@@ -167,10 +167,15 @@ function verificarExistenciaLote() {
                 $('#acumular').modal('show');
             } else {
                 agregar();
+                wo();
+
             }
         },
         error: function(result) {
             alert('Error');
+        },
+        finally:function() {
+            wc();
         }
     });
 }
@@ -366,7 +371,7 @@ function guardar() {
     if (detalles.lenght == 0) {
         alert('No hay datos cargados');
     }
-
+    wo();
     $.ajax({
         type: 'POST',
         data: {
@@ -380,6 +385,8 @@ function guardar() {
         },
         error: function(result) {
             alert('Error');
+        },finally:function() {
+            wc();
         }
     });
 }

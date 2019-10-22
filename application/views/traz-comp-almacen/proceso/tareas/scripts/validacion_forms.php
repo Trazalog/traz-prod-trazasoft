@@ -39,14 +39,14 @@
 
 	var validado=false;
 	function ValidarCampos(){
-			WaitingOpen('Validando Formulario');
+			wo('Validando Formulario');
 			ValidarObligatorios();
 			GuardarFormulario(true);
 	}
 
 	function CerrarModal(){
 			$('.modal').modal('hide');
-			WaitingOpen('Guardando Cambios');
+			wo('Guardando Cambios');
 			GuardarFormulario(false);
 	}
 	
@@ -68,7 +68,7 @@
 										return true;
 									}	
 					 
-					//WaitingClose();
+					//wc();
 				},
 				error: function(result){
 					// alert("Fallo la Validación del formularios en el Servidor. Por favor vuelva a intentar.");

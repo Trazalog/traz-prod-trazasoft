@@ -118,6 +118,7 @@ function guardar_entrega() {
 }
 
 function actualizar_entregas() {
+    wo();
     $.ajax({
         url: '<?php echo ALM ?>Notapedido/getTablaDetalle/' + $('#pema').val(),
         type: 'POST',
@@ -127,6 +128,9 @@ function actualizar_entregas() {
         },
         error: function(error) {
             alert('Error');
+        },
+        finally:function() {
+            wc();
         }
     });
 }

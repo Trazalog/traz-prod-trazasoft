@@ -52,6 +52,7 @@ $.widget.bridge('uibutton', $.ui.button);
             function conexion() {
                 return true;
             }
+            
        </script>
 
        <?php 

@@ -51,6 +51,7 @@
 
 </head>
 
+<?php $this->load->view('layout/wait') ?>
 
 
 <body class="hold-transition skin-blue sidebar-mini"></body>
@@ -131,11 +132,13 @@ $('.menu .link').on('click', function() {
 });
 
 function linkTo(uri = '') {
+    wo();
     if (link == '' && uri == '') return;
     backLink = link;
     link = (uri == '' ? link : uri);
     $('#content').empty();
     $('#content').load('<?php base_url() ?>' + link);
+    wc();
 }
 
 function back() {
@@ -154,19 +157,6 @@ function collapse(e) {
 }
 
 
-/* Abre cuadro cargando ajax */
-function WaitingOpen(texto) {
-    if (texto == '' || texto == null) {
-        $('#waitingText').html('Cargando ...');
-    } else {
-        $('#waitingText').html(texto);
-    }
-    $('#waiting').fadeIn('slow');
-}
-/* Cierra cuadro cargando ajax */
-function WaitingClose() {
-    $('#waiting').fadeOut('slow');
-}
 </script>
 
 </body>

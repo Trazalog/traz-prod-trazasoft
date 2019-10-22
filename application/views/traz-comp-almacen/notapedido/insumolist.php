@@ -118,10 +118,10 @@ $('.cant_insumos').prop('disabled',true);
 
   //va a listado de nota de pedido
   $("#listado").click(function (e) {
-    WaitingOpen();
+    wo();
     $('#content').empty();
     $("#content").load("<?php echo base_url(); ?>index.php/<?php echo ALM ?>Notapedido/index/<?php echo $permission; ?>");
-    WaitingClose();
+    wc();
   });
 
 
@@ -177,7 +177,7 @@ $('.cant_insumos').prop('disabled',true);
           $('#error').fadeIn('slow');
           return;
         }
-        WaitingOpen("Guardando pedido...");
+        wo("Guardando pedido...");
 
         if(!conexion()){//SI NO HAY CONEXION LO GUARDA EN SESSION STORAGE
           console.log("Sin Conexión");
@@ -198,15 +198,16 @@ $('.cant_insumos').prop('disabled',true);
           dataType: 'json',
           url: 'index.php/<?php echo ALM ?>Notapedido/setNotaPedido',
           success: function (result) {
-            WaitingClose();
             cargarPedidos();
             $('.modal').modal('hide');
             $('input.check').attr('checked',false);
           },
           error: function (result) {
-            WaitingClose();
             alert("Error en guardado...");
           },
+          finally:function() {
+              wc();
+          }
         });
   }
 
