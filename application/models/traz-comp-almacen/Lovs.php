@@ -12,7 +12,7 @@ class Lovs extends CI_Model {
         $this->db->select('*');
         $this->db->from('utl_tablas');
         $this->db->where('tabla', $grupo);
-        $this->db->where('eliminado',0);
+        $this->db->where('eliminado',false);
         return $this->db->get()->result_array();
     }
 
@@ -21,7 +21,7 @@ class Lovs extends CI_Model {
         $this->db->select('*');
         $this->db->from('utl_tablas');
         $this->db->where('tabl_id', $id);
-        $this->db->where('eliminado',0);
+        $this->db->where('eliminado',false);
         return $this->db->get()->result_array();
     }
     public function crear($data)
@@ -38,7 +38,7 @@ class Lovs extends CI_Model {
     public function eliminar($id)
     {
         $this->db->where('tabl_id', $id);
-        $this->db->set('eliminado',1);
+        $this->db->set('eliminado',true);
         return $this->db->update('utl_tablas');
     }
 

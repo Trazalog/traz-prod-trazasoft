@@ -1,5 +1,7 @@
 function armaTabla(idtabla, idrecipiente, json, lenguaje, acciones = "") {
 
+    console.log(lenguaje);
+
 
     $.ajax({
         type: 'POST',

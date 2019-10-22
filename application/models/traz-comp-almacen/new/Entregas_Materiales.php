@@ -33,7 +33,7 @@ class Entregas_Materiales extends CI_Model
         $this->db->from($this->tabla.' T');
         $this->db->join('alm_pedidos_materiales A','A.pema_id = T.pema_id');
         $this->db->order_by('T.fecha','desc');
-        $this->db->where('T.eliminado',0);
+        $this->db->where('T.eliminado',false);
         $this->db->where('T.empr_id',empresa());
         
         $this->db->where('A.pema_id', $pema);

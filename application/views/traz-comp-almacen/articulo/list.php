@@ -67,7 +67,7 @@ function guardarArticulo() {
             linkTo();
         },
         error: function(rsp) {
-            alert('Error: No se pudo Cargar Artículo');
+            alert('Error: No se pudo Guardar Artículo');
             console.log(rsp.msj);
         }
     });
@@ -91,7 +91,7 @@ function editarArticulo() {
             linkTo();
         },
         error: function(rsp) {
-            alert('Error: No se pudo Cargar Artículo');
+            alert('Error: No se pudo Editar Artículo');
             console.log(rsp.msj);
         }
     });
@@ -157,7 +157,6 @@ $("#new_articulo").on("hide.bs.modal", function() {
 
 function validarForm() {
     var ban = ($('#unidmed').val() != 'false' && $('#artBarCode').val() != null && $('#artDescription').val() != null);
-    console.log('Almacen: Validacion Form: ' + ban);
     if (!ban) alert('Complete los Campos Obligatorios (*)');
     return ban;
 }
