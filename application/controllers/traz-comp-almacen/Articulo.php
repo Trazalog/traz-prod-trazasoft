@@ -28,6 +28,13 @@ class Articulo extends CI_Controller {
 		echo json_encode($data);
 	}
 
+	public function editar()
+	{
+		$data = $this->input->post();
+		$data = $this->Articulos->editar($data);
+		echo json_encode($data);
+	}
+
 	public function getdatosart() // Ok
 	{
 		$art = $this->Articulos->getUnidadesMedidas();

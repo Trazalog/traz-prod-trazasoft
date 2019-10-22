@@ -18,7 +18,7 @@ if(!function_exists('armaBusca')){
         {
             $head=array_keys((array)$array[0])[$i];
             array_push($keys,$head);
-            $head2= $lenguaje[$head];
+            $head2= $lenguaje[strtolower($head)];
             $html = $html.'<th>'.$head2.'</th>';
         }
         

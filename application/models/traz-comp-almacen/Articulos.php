@@ -38,6 +38,12 @@ class Articulos extends CI_Model
 		return $this->db->insert_id();
 	}
 
+	public function editar($data)
+	{
+		$this->db->where('arti_id', $data['arti_id']);
+		return $this->db->update('alm_articulos', $data);
+	}
+
 	function get($id)
 	{
 		$this->db->where('arti_id',$id);
