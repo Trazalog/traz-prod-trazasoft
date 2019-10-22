@@ -84,5 +84,6 @@ function getItem(item) {
 
 function clearSelect(){
     $('#inputarti').val(null);
+    selectItem = null;
 }
  </script>
