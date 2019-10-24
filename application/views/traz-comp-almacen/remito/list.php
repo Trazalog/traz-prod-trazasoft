@@ -74,6 +74,7 @@ $(".fa-search").click(function (e) {
 
         tabla = $('#tablaconsulta').DataTable(); 
         tabla.clear().draw();
+        if(data['datosDetaRemitos'] == null) return;
         for (var i = 0; i < data['datosDetaRemitos'].length; i++) { 
           $('#tablaconsulta').DataTable().row.add( [
             data['datosDetaRemitos'][i]['codigo'],

@@ -50,10 +50,11 @@
 DataTable($('table'));
 
 function guardarArticulo() {
-    wo();
+    
     var formData = new FormData($('#frm-articulo')[0]);
 
     if (!validarForm()) return;
+    wo();
 
     $.ajax({
         type: 'POST',
@@ -78,10 +79,11 @@ function guardarArticulo() {
 }
 
 function editarArticulo() {
-    wo();
+    
     var formData = new FormData($('#frm-articulo')[0]);
 
     if (!validarForm()) return;
+    wo();
 
     $.ajax({
         type: 'POST',
