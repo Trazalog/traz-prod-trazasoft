@@ -39,13 +39,13 @@ class Lotes extends CI_Model {
 		  $this->db->group_by('arti_id');
 		  $C = '(' . $this->db->get_compiled_select() . ') as "C"';
 
-		  $this->db->select('ART.arti_id, ART.barcode, ART.descripcion, ART.punto_pedido, COALESCE(sum("LOTE".cantidad), 0) as cantidad_stock, COALESCE(sum("LOTE".cantidad),0)-cant_reservada as cantidad_disponible');
+		  $this->db->select('ART.arti_id, ART.barcode, ART.descripcion, ART.punto_pedido, COALESCE(sum("LOTE".cantidad), 0) as cantidad_stock, COALESCE(sum("LOTE".cantidad),0)-COALESCE(cant_reservada,0) as cantidad_disponible');
 		  $this->db->from('alm_articulos as ART');
 		  $this->db->join('alm_lotes as LOTE','LOTE.arti_id = ART.arti_id');
 		  $this->db->join($C,'C.arti_id = ART.arti_id','left');
 		  $this->db->group_by('ART.arti_id, C.cant_reservada');
+		
 		  $sql = '('.$this->db->get_compiled_select().') as "AUX"';
-
 		  $this->db->where('AUX.cantidad_disponible < AUX.punto_pedido');
 		  $this->db->from($sql);
 		  $data = $this->db->get()->result_array();
