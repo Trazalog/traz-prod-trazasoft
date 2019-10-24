@@ -57,9 +57,9 @@ var edit    = 0;
 var datos   = Array();
 
 $(".fa-search").click(function (e) { 
-    console.log("Estoy Consultando"); 
+   // console.log("Estoy Consultando"); 
     var idremito = $(this).parent('td').parent('tr').attr('id');
-    console.log("id de remito: "+idremito);
+   // console.log("id de remito: "+idremito);
     wo();
     $.ajax({
       data: { idremito: idremito},
