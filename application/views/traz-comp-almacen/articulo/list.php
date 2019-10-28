@@ -65,8 +65,10 @@ function guardarArticulo() {
         contentType: false,
         processData: false,
         success: function(rsp) {
-            $('.modal-backdrop').remove();
-            linkTo();
+            
+          mdlClose('new_articulo');
+
+           linkTo();
         },
         error: function(rsp) {
             alert('Error: No se pudo Guardar Artículo');
@@ -94,8 +96,9 @@ function editarArticulo() {
         contentType: false,
         processData: false,
         success: function(rsp) {
-            $('.modal-backdrop').remove();
-            linkTo();
+          
+             mdlClose('new_articulo');
+             linkTo();
         },
         error: function(rsp) {
             alert('Error: No se pudo Editar Artículo');
@@ -166,7 +169,9 @@ $("#new_articulo").on("hide.bs.modal", function() {
 });
 
 function validarForm() {
-    var ban = ($('#unidmed').val() != 'false' && $('#artBarCode').val() != null && $('#artDescription').val() != null);
+    console.log('Validando');
+    
+    var ban = ($('#unidmed').val() != 'false' &&  $('#unidmed').val() != '' &&  $('#artBarCode').val() != null && $('#artBarCode').val() != '' && $('#artDescription').val() != null &&  $('#artDescription').val() != '');
     if (!ban) alert('Complete los Campos Obligatorios (*)');
     return ban;
 }

@@ -52,6 +52,14 @@ $.widget.bridge('uibutton', $.ui.button);
             function conexion() {
                 return true;
             }
+
+            function mdlClose(id = false) {
+                if(id) $('#'+id).modal('hide');
+                else{
+                    $('.modal').modal('hide');
+                }
+                $('.modal-backdrop').remove();
+            }
             
        </script>
 
