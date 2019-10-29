@@ -1,0 +1,32 @@
+<data enableBatchRequests="true" enableBoxcarring="true" name="ProduccionDataService" transports="http https local">
+   <config enableOData="false" id="produccionDS">
+      <property name="driverClassName">org.postgresql.Driver</property>
+      <property name="url">jdbc:postgresql://pc-pc:5432/tools</property>
+      <property name="username">postgres</property>
+      <property name="password">admin24</property>
+   </config>
+   <query id="getEstablecimiento" useConfig="produccionDS">
+      <sql>SELECT *&#xd; FROM&#xd;prd.establecimientos</sql>
+      <result outputType="json">{&#xd; "establecimientos": {&#xd;      "establecimiento": [&#xd;        {&#xd;          "esta_id": "$esta_id",&#xd;          "nombre": "$nombre",&#xd;          "lng": "$lng",&#xd;          "lat": "$lat",&#xd;          "calle": "$calle",&#xd;          "altura": "$altura",&#xd;          "localidad": "$localidad",&#xd;          "estado": "$estado",&#xd;          "pais": "$pais",&#xd;          "fec_alta": "$fec_alta",&#xd;          "usuario": "$usuario"&#xd;        }&#xd;      ]&#xd; }&#xd;}</result>
+   </query>
+   <query id="getLote" useConfig="produccionDS">
+      <sql>select lote_id, batch_id, estado, num_orden_prod, fec_alta, usuario, etap_id, nombre from prd.lotes where esta_id = CAST(:esta_id AS INTEGER) and eliminado = 0</sql>
+      <result outputType="json">{"recipientes":&#xd;    {"recipiente":&#xd;      [{&#xd;        "lote_id": "$lote_id",&#xd;        "id": "$batch_id",&#xd;        "estado": "$estado",&#xd;        "num_orden_prod": "$num_orden_prod",&#xd;        "fec_alta": "$fec_alta",&#xd;        "usuario": "$usuario",&#xd;        "etap_id": "$etap_id",&#xd;        "titulo": "$nombre"&#xd;      }] &#xd;  }&#xd;}</result>
+      <param name="esta_id" sqlType="STRING"/>
+   </query>
+   <query id="getEtapa" useConfig="produccionDS">
+      <sql>select &#xd;   etap_id, nombre, nom_recipiente, fec_alta, usuario, proc_id &#xd;from &#xd;   prd.etapas &#xd;where eliminado = 0</sql>
+      <result outputType="json">{&#xd;    "etapas":&#xd;      {"etapa":&#xd;        [&#xd;          {&#xd;            "id": "$etap_id",&#xd;            "titulo":"$nombre",&#xd;            "nom_recipiente": "$nom_recipiente",&#xd;            "fec_alta": "$fec_alta",&#xd;            "usuario": "$usuario",&#xd;            "proc_id": "$proc_id"           &#xd;          }&#xd;        ]&#xd;      }&#xd;  }</result>
+   </query>
+   <resource method="GET" path="/establecimiento">
+      <call-query href="getEstablecimiento"/>
+   </resource>
+   <resource method="GET" path="/lote/{esta_id}">
+      <call-query href="getLote">
+         <with-param name="esta_id" query-param="esta_id"/>
+      </call-query>
+   </resource>
+   <resource method="GET" path="/etapa">
+      <call-query href="getEtapa"/>
+   </resource>
+</data>

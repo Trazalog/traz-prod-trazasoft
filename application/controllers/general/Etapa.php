@@ -25,11 +25,11 @@ class Etapa extends CI_Controller {
 		//$data['permission'] = 'Add-Edit-Del-View';
 		$this->load->view('etapa/list', $data);
 		}
-		public function nuevo()
+	 public function nuevo()
 	 {
 		$data['fecha'] = date('Y-m-d');
 		$data['id'] = $this->input->get('op');
-		$data['etapa']= $this->Etapas->nuevo($data['id'])->etapa;
+		$data['etapa'] = $this->Etapas->nuevo($data['id'])->etapas->etapa;
 		$data['idetapa'] = $data['etapa']->id;
 		$data['accion'] = 'Nuevo';
 		$data['op'] = 	$data['etapa']->titulo;
@@ -39,7 +39,7 @@ class Etapa extends CI_Controller {
 		$data['templates'] = $this->Templates->listar()->templates->template; 
 		$data['establecimientos'] = $this->Establecimientos->listar($data['id'])->establecimientos->establecimiento;
 		$data['recursosmateriales'] = $this->Recursos_Materiales->listar()->recursos->recurso;
-		$trabajo =$this->Recursos_Trabajo->listar()->trabajos->trabajo;
+		$trabajo = $this->Recursos_Trabajo->listar()->trabajos->trabajo;
 		$data['recursostrabajo'] = $trabajo;
 		$this->load->view('etapa/abm', $data);
 	 }

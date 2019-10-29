@@ -19,8 +19,7 @@
           <button class="btn btn-primary outline" onclick='muestra(`todas`,`<?php echo json_encode($list);?>`)'> Todas</button>
            </div>
           <div class="col-xs-2">
-            <button type="button" class=" btn btn-primary btn-block
-  glyphicon glyphicon-plus dropdown-toggle"  data-toggle="dropdown"  aria-expanded="false" >Nuevo
+            <button type="button" class=" btn btn-primary btn-block glyphicon glyphicon-plus dropdown-toggle"  data-toggle="dropdown"  aria-expanded="false" >Nuevo
                     <span class="fa fa-caret-down"></span></button>
                     <ul class="dropdown-menu" id="nuevo">
                     <?php
@@ -156,9 +155,9 @@
   }
   var ul = document.getElementById('nuevo');
    ul.onclick = function(event) {
-   target= JSON.parse(event.target.getAttribute('data-json'));
-   console.log(target);
-      linkTo(target.link);
-    }
+                  target= JSON.parse(event.target.getAttribute('data-json'));
+                  console.log(target);
+                      linkTo(target.link);
+                }
   </script>
   

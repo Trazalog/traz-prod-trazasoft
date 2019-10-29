@@ -129,7 +129,7 @@ define('TSK', 'traz-comp-tareas/');
 #REST
 define('TAREAS_ASIGNAR', 'traz-comp-tareasestandar/asignar');
 define('REST', 'http://localhost:8080/');
-
+//define('REST', 'http://PC-PC:8280/services/ProduccionDataService');
 
 # >> Proyecto
 # Default View

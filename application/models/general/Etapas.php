@@ -45,16 +45,21 @@ class Etapas extends CI_Model
     }
     function nuevo($opcion)
     {
-        if($opcion == 3)
-        {
-            $resource = 'fraccionarnuevo';
-        }else{
-            $resource = 'etapasnuevo';
-        }
-        $parametros["http"]["method"] = "GET";		 
+        // if($opcion == 3)
+        // {
+        //     $resource = 'fraccionarnuevo';
+        // }else{
+        //     $resource = 'etapasnuevo';
+        // }
+
+       //TODO: DESHARDCODEAR LA UR DEL RECURSO Y EL NUMERO DE ETAPA
+
+        
+        $parametros["http"]["method"] = "GET";	
+        $parametros["http"]["header"] = "Accept: application/json";	 
         $param = stream_context_create($parametros);
-        	 	
-        $url = REST.$resource;
+        $url = 'http://PC-PC:8280/services/ProduccionDataService/etapas/1';	 	
+        //$url = REST.$resource;
         $array = file_get_contents($url, false, $param);
         return json_decode($array);
     }

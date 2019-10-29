@@ -38,20 +38,22 @@ $this->load->view('etapa/modal_finalizar');}?>
                     <?php
                     foreach($establecimientos as $fila)
                     {
-                      if($accion == 'Editar' && $fila->titulo == $etapa->establecimiento->titulo)
-                      {
-                      echo '<option value="'.$fila->id.'" selected >'.$fila->titulo.'</option>';
-                      }else
-                      {
-                        echo '<option value="'.$fila->id.'" >'.$fila->titulo.'</option>';
-                      }
+                     // if($accion == 'Editar' && $fila->titulo == $etapa->establecimiento->titulo)
+                     // {
+                     // echo '<option value="'.$fila->id.'" selected >'.$fila->nombre.'</option>';
+                    //  }else
+                    //  {
+                        echo '<option value="'.$fila->esta_id.'" >'.$fila->nombre.'</option>';
+                    //  }
                     } 
                     ?>
                 </select>
             </div>
             <div class="col-md-1 col-xs-12">
-                <label for="Recipiente" class="form-label"><?php echo $etapa->titulorecipiente;?>*:</label>
+                <label for="Recipiente" class="form-label"><?php echo $etapa[0]->nom_recipiente;?>*:</label>
+                
             </div>
+           
             <div class="col-md-5 col-xs-12">
                 <?php if($accion == 'Nuevo'){
                     echo '<select class="form-control" id="recipientes" disabled></select>';
@@ -210,7 +212,7 @@ $this->load->view('etapa/modal_finalizar');}?>
     <!-- /.box -->
     </div>
     </div>
-    <script>
+<script>
         accion = '<?php echo $accion?>';
         if (accion == "Editar") {
             var materias = <?php echo json_encode($etapa->materias);?>;
@@ -374,21 +376,21 @@ $this->load->view('etapa/modal_finalizar');}?>
 
         function finalizar() {
             /* idetapa = //php echo $idetapa;?>;
-   $.ajax({
-      type: 'POST',
-      data: {idetapa:idetapa },
-      url: 'general/Etapa/checkFormularios', 
-      success: function(result){
-        if(result)
-        {
-          
-          }else
-          {
-            alert('Faltan formularios');
-          }
-        
-      }
-);*/
+							$.ajax({
+									type: 'POST',
+									data: {idetapa:idetapa },
+									url: 'general/Etapa/checkFormularios', 
+									success: function(result){
+										if(result)
+										{
+											
+											}else
+											{
+												alert('Faltan formularios');
+											}
+										
+									}
+						);*/
             $("#modal_finalizar").modal('show');
         }
         $(document).off('click', '.tablamateriasasignadas_borrar').on('click', '.tablamateriasasignadas_borrar', {
@@ -396,4 +398,4 @@ $this->load->view('etapa/modal_finalizar');}?>
             idrecipiente: 'materiasasignadas',
             idbandera: 'materiasexiste'
         }, remover);
-    </script>
+</script>
