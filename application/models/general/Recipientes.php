@@ -29,7 +29,7 @@ class Recipientes extends CI_Model
         //$url = REST.$resource;
         $array = file_get_contents($url, false, $param);
 
-        var_dump(json_decode($array));
+        //var_dump(json_decode($array));
 
         return json_decode($array);
     }

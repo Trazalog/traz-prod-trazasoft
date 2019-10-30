@@ -13,7 +13,7 @@ class Recipiente extends CI_Controller {
     function listarPorEstablecimiento()
     {
         $establecimiento = $this->input->post('establecimiento');
-        $res = $this->Recipientes->listarPorEstablecimiento($establecimiento)->recipientes->recipiente; 
+        $res = $this->Recipientes->listarPorEstablecimiento($establecimiento)->recipientes; 
         
         
         echo json_encode($res);

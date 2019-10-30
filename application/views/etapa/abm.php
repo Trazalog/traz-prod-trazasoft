@@ -7,7 +7,7 @@ $this->load->view('etapa/modal_finalizar');}?>
 
     <div class="box-header">
         <h3>
-            <?php echo $accion.' '.$etapa->titulo ?>
+            <?php echo $accion.' '.$etapa[0]->titulo ?>
         </h3>
     </div>
     <!-- /.box-header -->
@@ -67,12 +67,12 @@ $this->load->view('etapa/modal_finalizar');}?>
                       echo '<option value="" disabled selected>-Seleccione Recipiente-</option>';
                       foreach($recipientes as $recipiente)
                       {
-                        if($recipiente->titulo == $etapa->recipiente)
-                        {
+                        //if($recipiente->titulo == $etapa->recipiente)
+                        //{
                           echo '<option value="'.$recipiente->id.'" selected>'.$recipiente->titulo.'</option>';
-                        }else{
-                          echo '<option value="'.$recipiente->id.'" >'.$recipiente->titulo.'</option>';
-                        }
+                        //}else{
+                        //  echo '<option value="'.$recipiente->id.'" >'.$recipiente->titulo.'</option>';
+                        //}
                       }
                       echo '</select>';
                     }
@@ -84,8 +84,8 @@ $this->load->view('etapa/modal_finalizar');}?>
                 <label for="op" class="form-label">Orden de Produccion:</label>
             </div>
             <div class="col-md-4 col-xs-12">
-                <input type="text" id="ordenproduccion" class="form-control" <?php if($accion=='Editar' ){echo ( 'value="'.$etapa->op.'"');}?> placeholder="Inserte Orde de Produccion"
-                <?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
+                <input type="text" id="ordenproduccion" class="form-control" <?php if($accion=='Editar' ){echo ( 'value="'.$etapa[0]->op.'"');}?> placeholder="Inserte Orde de Produccion"
+                <?php if($etapa[0]->estado == 'En Curso'){echo 'disabled';}?>>
             </div>
             <div class="col-md-6">
             </div>
@@ -112,7 +112,7 @@ $this->load->view('etapa/modal_finalizar');}?>
             <div class="col-md-4 col-xs-12">
                 <div class="row form-group">
                     <div class="col-md-3 col-xs-12">
-                        <label for="template" class="form-label"><?php echo $lang['materias']?>:</label>
+                        <label for="template" class="form-label"><?php echo $lang['materias']; ?>:</label>
                     </div>
                     <div class="col-md-6 col-xs-12 input-group">
                         <input list="materias" id="inputmaterias" class="form-control" autocomplete="off">
