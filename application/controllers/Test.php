@@ -10,7 +10,7 @@ class Test extends CI_Controller
 
     public function index()
     {
-        $url = REST1.'entradas';
+        $url = REST.'entradas';
         $rsp =  file_get_contents($url, false, http('POST', ['post_entradas'=>$data]));
 
         var_dump(rspCode($http_response_header));

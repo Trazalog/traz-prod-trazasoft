@@ -26,7 +26,7 @@ class Establecimientos extends CI_Model
     public function listarTodo()
     {
         $resource = 'establecimiento'; 	
-        $url = REST1.$resource;
+        $url = REST.$resource;
         $array = file_get_contents($url, false, http('GET'));
         return json_decode($array);
     }
