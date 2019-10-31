@@ -34,12 +34,12 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
                     <?php
                     foreach($establecimientos as $fila)
                     {
-                      if($accion == 'Editar' && $fila->titulo == $etapa->establecimiento->titulo)
+                      if($accion == 'Editar' && $fila->nombre == $etapa->establecimiento->titulo)
                       {
-                      echo '<option value="'.$fila->id.'" selected >'.$fila->titulo.'</option>';
+                      echo '<option value="'.$fila->esta_id.'" selected >'.$fila->nombre.'</option>';
                       }else
                       {
-                        echo '<option value="'.$fila->id.'" >'.$fila->titulo.'</option>';
+                        echo '<option value="'.$fila->esta_id.'" >'.$fila->nombre.'</option>';
                       }
                     } 
                     ?>

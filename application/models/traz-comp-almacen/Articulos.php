@@ -17,7 +17,9 @@ class Articulos extends CI_Model
 		$this->db->where('A.eliminado', false);
 		$this->db->group_by('A.arti_id');
 			
+		
 		$query = $this->db->get();	
+		var_dump($query->result());die;
 		
 		if ($query && $query->num_rows() > 0)
 		{
@@ -70,6 +72,7 @@ class Articulos extends CI_Model
 		$this->db->where('arti_id',$id);
 		$this->db->where('empr_id',$empresaId);
 
+		
 
 	    $query = $this->db->get();
 	    if( $query->num_rows() > 0)

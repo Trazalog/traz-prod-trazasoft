@@ -21,7 +21,7 @@ class Lote extends CI_Controller {
 	{
 		$establecimiento = $this->input->post('establecimiento');
 		$salida = $this->input->post('salida');
-		$res =$this->Lotes->listarPorEstablecimientoConSalida($establecimiento,$salida)->lotes->lote;
+		$res =$this->Lotes->listarPorEstablecimientoConSalida($establecimiento);
 		echo json_encode($res);
 	}
 	public function listarPorCamion()

@@ -90,8 +90,11 @@
         <section class="sidebar">
 
             <!-- sidebar menu: : style can be found in sidebar.less -->
-            <?php $this->load->view('layout/aux_menu_alm'); ?>
-            <?php #echo $menu?>
+            <?php 
+                $this->load->view('layout/aux_menu_alm');
+                $this->load->view('layout/menu');
+            ?>
+           
         </section>
         <!-- /.sidebar -->
     </aside>

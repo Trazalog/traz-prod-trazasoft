@@ -24,29 +24,16 @@ function listarPorMateria($id)
         $array = file_get_contents($url, false, $param);
         return json_decode($array);
     }
-   function listarPorEstablecimientoConSalida($establecimiento,$salida)
+   function listarPorEstablecimientoConSalida($establecimiento,$salida = false)
     {
-        $parametros["http"]["method"] = "GET";		 
-        $param = stream_context_create($parametros);
-        if($establecimiento == 1 || $establecimiento == 3 || $establecimiento == 5)
-        {
-           if($salida == "true"){
-            $resource = 'lotesalida1';
-           }else{
-            $resource = 'lotenosalida1';
-           }
-        }
-        if($establecimiento == 2 || $establecimiento == 4 || $establecimiento == 6)
-        {
-            if($salida =="true"){
-            $resource = 'lotesalida2';
-        }else{
-            $resource = 'lotenosalida2';
-        }
-        }
-        $url = REST.$resource;
-        $array = file_get_contents($url, false, $param);
-        return json_decode($array);
+        $resource = 'lotes_establecimiento/'.$establecimiento;
+        $url = REST2.$resource;
+        $array = file_get_contents($url, false, http('GET'));
+        log_message('DEBUG', '#REST #LOTES > listarPorEstablecimientoConSalida | #RSP-DATA:' . $array);
+        $rsp = rsp($http_response_header);
+        if(!$rsp['status']) return $rsp;
+        $rsp['data'] = json_decode($array)->lotes->lote;
+        return $rsp;
     }
     function listarPorCamion($camion)
     {

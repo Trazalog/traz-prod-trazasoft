@@ -8,36 +8,33 @@ class Camiones extends CI_Model
     }
     public function listarPorEstablecimiento($establecimiento)
     {
-        if($establecimiento == 1 || $establecimiento == 3 || $establecimiento == 5)
-        {
-            $resource = 'camiones1';
-        }
-        if($establecimiento == 2 || $establecimiento == 4 || $establecimiento == 6)
-        {
-            $resource = 'camiones2';
-        }
-        $parametros["http"]["method"] = "GET";		 
-        $param = stream_context_create($parametros);
-        $url = REST.$resource;
-        $array = file_get_contents($url, false, $param);
-        return json_decode($array);
+        $resource = 'camion_establecimiento/'.$establecimiento;
+        $url = REST2.$resource;
+        $array = file_get_contents($url, false, http('GET'));
+        return rsp($http_response_header, false, json_decode($array)->camiones->camion);
     }
     public function listarProveedores()
     {
-        $parametros["http"]["method"] = "GET";		 
-        $param = stream_context_create($parametros);
-        $resource = 'proveedores';
-        $url = REST.$resource;
-        $array = file_get_contents($url, false, $param);
+        $resource = 'proveedores/'.empresa();
+        $url = REST1.$resource;
+        $array = file_get_contents($url, false, http('GET'));
         return json_decode($array);
     }
     public function listarCargados()
     {
-        $parametros["http"]["method"] = "GET";		 
-        $param = stream_context_create($parametros);
         $resource = 'cargados';
         $url = REST.$resource;
-        $array = file_get_contents($url, false, $param);
+        $array = file_get_contents($url, false, http('GET'));
+        return json_decode($array);
+    }
+
+    public function guardarCarga($data)
+    {
+
+        return $data;
+        $resource = 'cargados';
+        $url = REST . $resource;
+        $array = file_get_contents($url, false, http('GET'));
         return json_decode($array);
     }
     

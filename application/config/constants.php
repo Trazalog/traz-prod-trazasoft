@@ -86,7 +86,7 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 
 #BONITA SOFT
 define('BONITA_URL', 'http://localhost:8080/bonita/');  
-define('BPM_ADMIN_USER', 'almacen.tools');
+define('BPM_ADMIN_USER', 'almacen.toolsx');
 define('BPM_ADMIN_PASS', 'bpm');
 define('BPM_USER_PASS', 'bpm');
 
@@ -129,6 +129,9 @@ define('TSK', 'traz-comp-tareas/');
 #REST
 define('TAREAS_ASIGNAR', 'traz-comp-tareasestandar/asignar');
 define('REST', 'http://localhost:8080/');
+
+define('REST1','http://pc-pc:8280/services/ProduccionDataService/');
+define('REST2','http://pc-pc:8280/services/produccionTest/');
 
 
 # >> Proyecto
