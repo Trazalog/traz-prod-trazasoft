@@ -125,7 +125,6 @@ define('FILES', 'files/');
 #COMPONENTE TAREAS
 define('TSK', 'traz-comp-tareas/');
 
-
 #REST
 define('TAREAS_ASIGNAR', 'traz-comp-tareasestandar/asignar');
 define('REST', 'http://dev-trazalog.com.ar:8280/services/ProduccionDataService/');
@@ -133,7 +132,9 @@ define('REST', 'http://dev-trazalog.com.ar:8280/services/ProduccionDataService/'
 // define('REST1','http://pc-pc:8280/services/ProduccionDataService/');
  define('REST2','http://pc-pc:8280/services/produccionTest/');
 
-
 # >> Proyecto
 # Default View
 define('DEFAULT_VIEW', ALM.'Articulo');
+
+#TRAZASOFT
+define('DEPOSITO_TRANSPORTE', 1000);

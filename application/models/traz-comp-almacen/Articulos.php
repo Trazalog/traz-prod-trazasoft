@@ -19,7 +19,7 @@ class Articulos extends CI_Model
 			
 		
 		$query = $this->db->get();	
-		var_dump($query->result());die;
+		
 		
 		if ($query && $query->num_rows() > 0)
 		{
