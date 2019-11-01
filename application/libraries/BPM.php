@@ -100,7 +100,9 @@ class BPM
 
         $url = BONITA_URL . $resource . $processId . '/instantiation';
 
-        $rsp = $this->REST->callAPI('POST', $url, $contract, $this->loggin(userNick(), userPass()));
+				//TODO: DESHARDCODEAR USR 
+        // $rsp = $this->REST->callAPI('POST', $url, $contract, $this->loggin(userNick(), userPass()));
+        $rsp = $this->REST->callAPI('POST', $url, $contract, $this->loggin('almacen1', 'bpm'));
 
         if (!$rsp['status']) {
 

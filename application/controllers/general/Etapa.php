@@ -29,31 +29,82 @@ class Etapa extends CI_Controller {
 	 {
 		$data['fecha'] = date('Y-m-d');
 		$data['id'] = $this->input->get('op');
-		$data['etapa'] = $this->Etapas->nuevo($data['id'])->etapas->etapa;
+		$data['etapa'] = $this->Etapas->nuevo($data['id'])->etapa; // listo llama a etapas/1
 		$data['idetapa'] = $data['etapa']->id;
 		$data['accion'] = 'Nuevo';
 		$data['op'] = 	$data['etapa']->titulo;
-		$data['materias'] = $this->Materias->listar()->materias->materia;
+		$data['materias'] = $this->Materias->listar()->materias->materia; // listo
 		$data['lang'] = lang_get('spanish',5);
 		$data['tareas'] = $this->Tareas->listar()->tareas->tarea; 
 		$data['templates'] = $this->Templates->listar()->templates->template; 
-		$data['establecimientos'] = $this->Establecimientos->listar($data['id'])->establecimientos->establecimiento;
+		$data['establecimientos'] = $this->Establecimientos->listar($data['id'])->establecimientos->establecimiento; // listo
 		$data['recursosmateriales'] = $this->Recursos_Materiales->listar()->recursos->recurso;
 		$trabajo = $this->Recursos_Trabajo->listar()->trabajos->trabajo;
 		$data['recursostrabajo'] = $trabajo;
 		$this->load->view('etapa/abm', $data);
 	 }
+
+
+
+
 	 public function guardar()
 	 {
-		 $data['idetapa'] = $this->input->post('idetapa');
-		 $data['lote'] =$this->input->post('lote');
-		 $data['establecimiento'] =$this->input->post('establecimiento');
-		 $data['recipiente'] =$this->input->post('recipiente');
-		 $data['fecha'] =$this->input->post('fecha');
-		 $data['op'] =$this->input->post('op');
-		 $this->Etapas->guardar($data);
-		 echo("ok");
+		
+		////////////PARA CREAR EL BATCH ///////////////////
+				$datosCab['p_lote_id'] = $this->input->post('lote');
+				$datosCab['p_batch_id_padre'] = (string)0;
+				$datosCab['p_num_orden_prod'] = $this->input->post('op');	
+				$datosCab['p_etap_id'] = $this->input->post('idetapa');
+				$datosCab['p_usuario_app'] = userNick();			
+				$datosCab['p_reci_id'] = $this->input->post('recipiente');
+				$datosCab['p_empr_id'] = (string)empresa();
+				$datosCab['p_forzar_agregar'] = "FALSE";					
+				$data['_post_lote'] = $datosCab;					
+				$batch_id = $this->Etapas->SetNuevoBatch($data)->respuesta->resultado;
+		
+		////////////// INSERTAR CABECERA NOTA PEDIDO   ///		
+
+				$arrayPost['fecha'] = $this->input->post('fecha');		
+				$arrayPost['empr_id'] = (string)empresa();
+				$arrayPost['batch_id'] = $batch_id;		
+				$cab['_post_notapedido'] = $arrayPost;
+				$pema_id = $this->Etapas->setCabeceraNP($cab)->nota_id->pedido_id;
+
+		////////////PARA CREAR EL BATCH ///////////////////
+		
+				$materia = $this->input->post('materia');
+				$i = 0;	
+				foreach($materia as $id => $cantidad)	{
+				
+					if($cantidad !== ""){									
+						$det['pema_id'] = $pema_id;
+						$det['arti_id'] = (string)$id;
+						$det['cantidad'] = $cantidad;
+						$detalle['_post_notapedido_detalle'][$i]=(object) $det;
+						$i++;					
+					}
+				}
+				$arrayDeta['_post_notapedido_detalle_batch_req'] = $detalle;							
+				$idDetaCab = $this->Etapas->setDetaNP($arrayDeta);
+
+		/////// LANZAR EL PROCESO DE BONITA DE PEDIDO 
+					
+				$contract = [
+					'pIdPedidoMaterial' => $pema_id,
+				];
+
+				$rsp = $this->bpm->lanzarProceso(BPM_PROCESS_ID_PEDIDOS_NORMALES,$contract);
+
+				echo("ok");
+		
 	 }
+
+
+
+	 
+
+
+
 	 public function editar()
 	 {
 		$id = $this->input->get('id');

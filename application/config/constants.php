@@ -85,7 +85,7 @@ defined('EXIT__AUTO_MIN')      OR define('EXIT__AUTO_MIN', 9); // lowest automat
 defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
 
 #BONITA SOFT
-define('BONITA_URL', 'http://localhost:8080/bonita/');  
+define('BONITA_URL', 'http://cloudtrazalog.com:8080/bonita/bonita/');  
 define('BPM_ADMIN_USER', 'almacen1');
 define('BPM_ADMIN_PASS', 'bpm');
 define('BPM_USER_PASS', 'bpm');
@@ -129,7 +129,7 @@ define('TSK', 'traz-comp-tareas/');
 #REST
 define('TAREAS_ASIGNAR', 'traz-comp-tareasestandar/asignar');
 define('REST', 'http://localhost:8080/');
-//define('REST', 'http://PC-PC:8280/services/ProduccionDataService');
+define('REST2', 'http://dev-trazalog.com.ar:8280/services/ProduccionDataService');
 
 # >> Proyecto
 # Default View
