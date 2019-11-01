@@ -11,7 +11,7 @@ class Camiones extends CI_Model
     public function listarPorEstablecimiento($establecimiento)
     {
         $resource = 'camion_establecimiento/' . $establecimiento;
-        $url = REST2 . $resource;
+        $url = RESTPT . $resource;
         $array = file_get_contents($url, false, http('GET'));
         return rsp($http_response_header, false, json_decode($array)->camiones->camion);
     }
@@ -36,10 +36,10 @@ class Camiones extends CI_Model
         log_message('DEBUG','#CAMIONES > guardarCarga | #DATA: '.json_encode($data));
 
         #Guardar Carga
-        $resource = 'set_carga';
-        $url = REST2 . $resource;
-        $array = file_get_contents($url, false, http('POST', $data));
-        $rsp = rsp($http_response_header);
+        // $resource = 'set_carga';
+        // $url = RESTPT . $resource;
+        // $array = file_get_contents($url, false, http('POST', $data));
+        // $rsp = rsp($http_response_header);
 
         $this->load->model(ALM . '/Lotes');
 

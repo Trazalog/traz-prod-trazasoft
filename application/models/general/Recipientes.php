@@ -36,7 +36,7 @@ class Recipientes extends CI_Model
 
     public function crear($data)
     {
-        $url = REST2.'recipientes';
+        $url = RESTPT.'recipientes';
         $rsp =  file_get_contents($url, false, http('POST', ['post_recipientes'=>$data]));
         return rsp($http_response_header, false, json_decode($rsp));
     }

@@ -159,7 +159,7 @@ class Lotes extends CI_Model {
 	
 	public function extraerCantidad($data)
 	{
-		$url = REST2 . 'extraer_cantidad_lote';
+		$url = RESTPT . 'extraer_cantidad_lote';
 		$rsp = file_get_contents($url, false, http('POST', ['post_extraer_cantidad_lote' => $data]));
 		$rsp = rsp($http_response_header, false, $rsp);
 		return $rsp;
@@ -167,7 +167,7 @@ class Lotes extends CI_Model {
 
 	public function crear($data)
 	{
-		$url = REST2 . 'lotes/movimiento_stock';
+		$url = RESTPT . 'lotes/movimiento_stock';
 		$rsp = file_get_contents($url, false, http('POST', ['post_lotes_movimiento_stock' => $data]));
 		$rsp =  rsp($http_response_header, false, $rsp);
 		return $rsp;

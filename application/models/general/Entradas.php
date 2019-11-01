@@ -18,9 +18,9 @@ class Entradas extends CI_Model
             'empr_id' => strval(empresa()),
         );
 
-        $reci_id = $this->Recipientes->crear($aux)['data']->resultado->reci_id;
+        #$reci_id = $this->Recipientes->crear($aux)['data']->resultado->reci_id;
 
-        $data['reci_id'] = strval($reci_id);
+        #$data['reci_id'] = strval($reci_id);
 
         $url = RESTPT.'entradas';
         $rsp =  file_get_contents($url, false, http('POST', ['post_entradas'=>$data]));
