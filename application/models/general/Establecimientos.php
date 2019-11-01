@@ -17,17 +17,15 @@ class Establecimientos extends CI_Model
         //     $resource = 'establecimientos2'; 
         // }
      
-        // TODO: VER FILTRADO DE ESTABLECIMIENTOS POR ESTAPAS 
-
-            
-        $resource = '/establecimiento';    
+        // TODO: VER FILTRADO DE ESTABLECIMIENTOS POR ESTAPAS  
 
         $parametros["http"]["method"] = "GET";
         $parametros["http"]["header"] = "Accept: application/json";			 
         $param = stream_context_create($parametros);
         // TODO: DESHARCODEAR EL RESOURCE 
-        //$url = REST.$resource;
-        $url = 'http://PC-PC:8280/services/ProduccionDataService'.$resource;
+        $resource = '/establecimiento';
+        $url = REST2.$resource;
+        //$url = 'http://PC-PC:8280/services/ProduccionDataService'.$resource;
         $array = file_get_contents($url, false, $param);
         return json_decode($array);
     }
