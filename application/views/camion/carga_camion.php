@@ -155,6 +155,7 @@ function Blanquealote() {
 }
 
 function Actualiza(establecimiento) {
+    wo();
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
@@ -164,6 +165,8 @@ function Actualiza(establecimiento) {
         url: 'general/Camion/listarPorEstablecimiento',
         success: function(result) {
            console.table(result);
+           document.getElementById('camiones').innerHTML = "";
+           if(!result) return;
             var html = "";
             html = html + '<option value="" disabled selected>-Seleccione Camion-</option>';
             for (var i = 0; i < result.length; i++) {
@@ -175,6 +178,11 @@ function Actualiza(establecimiento) {
             document.getElementById('camiones').disabled = false;
             document.getElementById('inputlotes').disabled = false;
             document.getElementById('btnlotes').disabled = false;
+        },error:function(){
+            document.getElementById('camiones').innerHTML = "";
+        },
+        complete:function(){
+            wc();
         }
 
     });
