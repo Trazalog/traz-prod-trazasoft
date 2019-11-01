@@ -28,7 +28,7 @@
                             echo '<td>'.$f['artBarCode'].'</td>';
                             echo '<td>'.$f['artDescription'].'</td>';
                             echo '<td class="text-center">'.$f['cantidad'].'</td>';
-                            echo "<td class='text-center'>dd/mm/yy</td>";
+                            echo "<td class='text-center'>".fecha($f['fec_vencimiento'])."</td>";
                             echo '<td>'.$f['depositodescrip'].'</td>';
                             echo '<td class="text-center">'.estado($f['estado']).'</td>';
                             echo '</tr>';

@@ -115,7 +115,7 @@ class Remito extends CI_Controller {
 		if($result)
 		{	
 			$arre['datosRemito'] = $result;
-			$datosDetaRemitos       = $this->Remitos->getDetaRemitos($id);
+			$datosDetaRemitos  = $this->Remitos->getDetaRemitos($id);
 			if($datosDetaRemitos)
 			{
 				$arre['datosDetaRemitos'] = $datosDetaRemitos;

@@ -85,8 +85,8 @@ defined('EXIT__AUTO_MIN')      OR define('EXIT__AUTO_MIN', 9); // lowest automat
 defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
 
 #BONITA SOFT
-define('BONITA_URL', 'http://cloudtrazalog.com:8080/bonita/bonita/');  
-define('BPM_ADMIN_USER', 'almacen1');
+define('BONITA_URL', 'http://localhost:8080/bonita/');  
+define('BPM_ADMIN_USER', 'almacen.toolsx');
 define('BPM_ADMIN_PASS', 'bpm');
 define('BPM_USER_PASS', 'bpm');
 
@@ -114,7 +114,7 @@ define('ASP_115', 'Error al Leer Variable');
 
 #COMPONENTE ALMACENES
 define('ALM', 'traz-comp-almacen/');
-define('BPM_PROCESS_ID_PEDIDOS_NORMALES', '6833268789089291878'); 
+define('BPM_PROCESS_ID_PEDIDOS_NORMALES', '6352939331165329370'); 
 define('BPM_PROCESS_ID_PEDIDOS_EXTRAORDINARIOS', '7321139677245257050');
 define('viewOT', false);
 
@@ -125,12 +125,16 @@ define('FILES', 'files/');
 #COMPONENTE TAREAS
 define('TSK', 'traz-comp-tareas/');
 
-
 #REST
 define('TAREAS_ASIGNAR', 'traz-comp-tareasestandar/asignar');
-define('REST', 'http://localhost:8080/');
+define('REST', 'http://dev-trazalog.com.ar:8280/services/ProduccionDataService');
+define('RESTPT','http://dev-trazalog.com.ar:8280/services/produccionTest');
 define('REST2', 'http://dev-trazalog.com.ar:8280/services/ProduccionDataService');
 
 # >> Proyecto
 # Default View
-define('DEFAULT_VIEW', 'Test');
+define('DEFAULT_VIEW', ALM.'Articulo');
+
+#TRAZASOFT
+define('DEPOSITO_TRANSPORTE', 1000);
+define('ETAPA_TRANSPORTE', 1000);

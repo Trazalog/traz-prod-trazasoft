@@ -26,7 +26,7 @@
 
                     echo '<i class="fa fa-search" style="cursor: pointer;margin: 3px;" title="Ver Detalles" onclick="ver(this)"></i>';
 
-                    echo '<i class="fa fa-fw fa-pencil " style="cursor: pointer; margin: 3px;" title="Editar"></i>';
+                    echo '<i class="fa fa-fw fa-pencil " style="cursor: pointer; margin: 3px;" title="Editar" onclick="editar(this)"></i>';
                    
                     echo '<i class="fa fa-fw fa-times-circle eliminar" style="cursor: pointer;margin: 3px;" title="Eliminar"></i>';
                     
@@ -50,8 +50,12 @@
 DataTable($('table'));
 
 function guardarArticulo() {
+    
     var formData = new FormData($('#frm-articulo')[0]);
-    //  formData = formToJson(formData);
+
+    if (!validarForm()) return;
+    wo();
+
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
@@ -61,12 +65,47 @@ function guardarArticulo() {
         contentType: false,
         processData: false,
         success: function(rsp) {
-            $('.modal-backdrop').remove();
-            linkTo();
+            
+          mdlClose('new_articulo');
+
+           linkTo();
         },
         error: function(rsp) {
-            alert('Error: ' + rsp.msj);
+            alert('Error: No se pudo Guardar Artículo');
             console.log(rsp.msj);
+        },
+        complete:function() {
+            wc();
+        }
+    });
+}
+
+function editarArticulo() {
+    
+    var formData = new FormData($('#frm-articulo')[0]);
+
+    if (!validarForm()) return;
+    wo();
+
+    $.ajax({
+        type: 'POST',
+        dataType: 'JSON',
+        url: 'index.php/<?php echo ALM ?>Articulo/editar',
+        data: formData,
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function(rsp) {
+          
+             mdlClose('new_articulo');
+             linkTo();
+        },
+        error: function(rsp) {
+            alert('Error: No se pudo Editar Artículo');
+            console.log(rsp.msj);
+        },
+        complete:function() {
+            wc();
         }
     });
 }
@@ -76,11 +115,23 @@ function ver(e) {
     Object.keys(json).forEach(function(key, index) {
         $('[name="' + key + '"]').val(json[key]);
     });
-    $('.btn-guardar').hide();
+    $('#btn-accion').hide();
     $('#read-only').prop('disabled', true);
+    $('#mdl-titulo').html('Detalle Artículo');
     $('#new_articulo').modal('show');
 }
 
+function editar(e) {
+     $('#arti_id').prop('disabled',false);
+    var json = JSON.parse(JSON.stringify($(e).closest('tr').data('json')));
+    Object.keys(json).forEach(function(key, index) {
+        $('[name="' + key + '"]').val(json[key]);
+    });
+    $('#mdl-titulo').html('Editar Artículo');
+    $('#btn-accion').attr('onclick', 'editarArticulo()');
+    $('#new_articulo').modal('show');
+    
+}
 
 // Eliminar Articulo
 var selected = null;
@@ -109,9 +160,21 @@ function eliminar_articulo() {
 
 
 $("#new_articulo").on("hide.bs.modal", function() {
+    $('#mdl-titulo').html('Nuevo Artículo');
+    $('#btn-accion').attr('onclick', 'guardarArticulo()');
+    $('#btn-accion').show();
     $('#frm-articulo')[0].reset();
     $('#read-only').prop('disabled', false);
+    $('#arti_id').prop('disabled',true);
 });
+
+function validarForm() {
+    console.log('Validando');
+    
+    var ban = ($('#unidmed').val() != 'false' &&  $('#unidmed').val() != '' &&  $('#artBarCode').val() != null && $('#artBarCode').val() != '' && $('#artDescription').val() != null &&  $('#artDescription').val() != '');
+    if (!ban) alert('Complete los Campos Obligatorios (*)');
+    return ban;
+}
 </script>
 
 <!-- Modal -->
@@ -121,7 +184,7 @@ $("#new_articulo").on("hide.bs.modal", function() {
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel"><span id="modalAction"> </span> Artículo</h4>
+                <h4 class="modal-title" id="mdl-titulo">Nuevo Artículo</h4>
             </div>
 
             <div class="modal-body" id="modalBodyArticle">
@@ -132,6 +195,7 @@ $("#new_articulo").on("hide.bs.modal", function() {
                 </div>
 
                 <form id="frm-articulo">
+                    <input id="arti_id" name="arti_id" type="text" class="hidden" disabled>
                     <fieldset id="read-only">
                         <div class="row">
                             <!-- Código de Articulo -->
@@ -176,7 +240,8 @@ $("#new_articulo").on("hide.bs.modal", function() {
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Punto de pedido:</label>
-                                    <input type="number" name="punto_pedido" id="puntped" class="form-control">
+                                    <input type="number" name="punto_pedido" id="puntped" min="0"
+                                        class="form-control text-center" value="0">
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -191,9 +256,8 @@ $("#new_articulo").on("hide.bs.modal", function() {
 
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal"
-                    onclick="$('.btn-guardar').show()">Cancelar</button>
-                <button type="button" class="btn btn-primary btn-guardar" onclick="guardarArticulo()">Guardar</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btn-accion" class="btn btn-primary btn-guardar" onclick="guardarArticulo()">Guardar</button>
             </div>
         </div>
     </div>

@@ -19,7 +19,7 @@
                     <?php
                     foreach($establecimientos as $fila)
                     {
-                        echo '<option value="'.$fila->id.'" >'.$fila->titulo.'</option>';
+                        echo '<option value="'.$fila->esta_id.'" >'.$fila->nombre.'</option>';
                     } 
                     ?>
                 </select>

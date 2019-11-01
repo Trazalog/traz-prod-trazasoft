@@ -171,7 +171,7 @@ $('#deposito tbody').on('click', 'td.details-control', function () {
                   $('.details-control', table.row( '.shown' ).node()).click();
           }
     // Open this row
-    WaitingOpen();
+    wo();
     // Open this row
     $.ajax({
       data: { id:id },
@@ -186,11 +186,11 @@ $('#deposito tbody').on('click', 'td.details-control', function () {
         tdi.first().addClass('fa-minus-square');
         /**/
         cargaTablasHijas();
-        WaitingClose();
+        wc();
       },
       error: function(result){
         console.error("error al traer denuncia");
-        WaitingClose();
+        wc();
       },
     });
     
@@ -290,12 +290,12 @@ $(".fa-search").click(function (e) {
 
   
 function regresa(){
-  //WaitingOpen();
+  //wo();
   //$('#modaldeposito').empty();
   //$('#modaleditar').empty(); 
   //$('#content').empty();
   $("#content").load("<?php echo base_url(); ?>index.php/Herramienta/index/<?php echo $permission; ?>");
-  WaitingClose();
+  wc();
 }
 
 

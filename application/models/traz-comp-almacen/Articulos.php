@@ -17,7 +17,9 @@ class Articulos extends CI_Model
 		$this->db->where('A.eliminado', false);
 		$this->db->group_by('A.arti_id');
 			
+		
 		$query = $this->db->get();	
+		
 		
 		if ($query && $query->num_rows() > 0)
 		{
@@ -36,6 +38,12 @@ class Articulos extends CI_Model
 		$data['empr_id'] = empresa();
 		$this->db->insert('alm_articulos',$data);
 		return $this->db->insert_id();
+	}
+
+	public function editar($data)
+	{
+		$this->db->where('arti_id', $data['arti_id']);
+		return $this->db->update('alm_articulos', $data);
 	}
 
 	function get($id)
@@ -64,6 +72,7 @@ class Articulos extends CI_Model
 		$this->db->where('arti_id',$id);
 		$this->db->where('empr_id',$empresaId);
 
+		
 
 	    $query = $this->db->get();
 	    if( $query->num_rows() > 0)

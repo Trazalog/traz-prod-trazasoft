@@ -287,7 +287,8 @@
       alert($('#solicitante').val());
 
       if (!(parametros != 0 && idsinsumo != 0 && $('#comprobante').val() != "" && $('#fecha_orden').val() != "" && $('#solicitante').val() != "")) {alert('Campos Obligatorios Incompletos');return;}
-     
+
+        wo();
         $.ajax({
           type: 'POST',
           data: { data: parametros, comp: comp, idslote: idslote, depo: depo, art: art },
@@ -299,6 +300,9 @@
           error: function (result) {
             alert('Error al Guardar');
           },
+          complete:function() {
+              wc();
+          }
           // dataType: 'json'
         });
         limpiar();
@@ -382,10 +386,10 @@
     });
 
     function regresa() {
-      WaitingOpen();
+      wo();
       $('#content').empty();
       $("#content").load("<?php echo base_url(); ?>index.php/<?php echo ALM ?>Ordeninsumo/index/<?php echo $permission; ?>");
-      WaitingClose();
+      wc();
     }
 
     function filtrar() {

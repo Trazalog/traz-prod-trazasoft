@@ -49,6 +49,9 @@ checkTabla("tabla_articulos", "modalarticulos", `<?php echo json_encode($items);
 
 function checkTabla(idtabla, idrecipiente, json, acciones) {
     lenguaje = <?php echo json_encode($lang)?>;
+
+    console.log('ban 1');
+    
     if (document.getElementById(idtabla) == null) {
         armaTabla(idtabla, idrecipiente, json, lenguaje, acciones);
     }
@@ -84,5 +87,6 @@ function getItem(item) {
 
 function clearSelect(){
     $('#inputarti').val(null);
+    selectItem = null;
 }
  </script>

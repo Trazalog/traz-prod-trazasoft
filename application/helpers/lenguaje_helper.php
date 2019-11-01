@@ -2,7 +2,7 @@
 
 if(!function_exists('lang_get')){
 
-    function lang_get($leng, $page)
+    function lang_get($leng = false, $page = false)
     {
         // if($leng == 'spanish')
         // {
@@ -18,7 +18,38 @@ if(!function_exists('lang_get')){
         // $url = 'http://localhost:8080/'.$resource;
         // $lang = file_get_contents($url, false, $param);
         // $lang = json_decode($lang,true);
-        $lang = getJson('lang');
+        $lang = json_decode(
+            '{
+                "labels": {
+                    "label": [
+                        {
+                            "id": "codigo",
+                            "texto": "Codigo"
+                        },
+                        {
+                            "id": "id",
+                            "texto": "id"
+                        },
+                        {
+                            "id": "descripcion",
+                            "texto": "Descripcion"
+                        },
+                        {
+                            "id": "proveedores",
+                            "texto": "Proveedores"
+                        },
+                        {
+                            "id": "cantidad",
+                            "texto": "Cant. Pedida"
+                        },
+                        {
+                            "id": "stock",
+                            "texto": "Stock"
+                        }
+                    ]
+                }
+            }'
+        );
         $lang = $lang->labels->label;
         //var_dump($lang);die;
         $lenguaje =  array();

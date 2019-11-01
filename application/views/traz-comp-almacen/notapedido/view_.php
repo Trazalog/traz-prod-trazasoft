@@ -142,10 +142,10 @@ $("#fechaEnt").datetimepicker({
 
 //va a listado de nota de pedido
 $("#listado").click(function (e) {
-  WaitingOpen();
+  wo();
   $('#content').empty();
   $("#content").load("<?php echo base_url(); ?>index.php/Notapedido/index/<?php echo $permission; ?>");
-  WaitingClose();
+  wc();
 });
 
 // Trae Ordenes en curso
@@ -333,18 +333,18 @@ function enviarOrden(){
   }
 
   var datos = $("#form_order").serializeArray();
-  WaitingOpen('Guardando cambios');
+  wo('Guardando cambios');
   $.ajax({
     data: datos,
     type: 'POST',
     dataType: 'json',
     url: 'index.php/Notapedido/setNotaPedido',
     success: function(result){
-      WaitingClose("Guardado con Exito...");
+      wc("Guardado con Exito...");
       setTimeout("cargarView('Notapedido', 'index', '"+$('#permission').val()+"');",0);
     },
     error: function(result){
-      WaitingClose();
+      wc();
       alert("Error en guardado...");
     },
   });

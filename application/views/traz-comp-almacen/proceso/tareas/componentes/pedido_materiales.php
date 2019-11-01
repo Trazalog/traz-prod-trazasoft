@@ -86,6 +86,7 @@ function edit() {
 
     var id = $(selectRow).closest('tr').data('id');
     var cantidad = $('#set_cantidad #cantidad').val();
+    wo();
     $.ajax({
         type: 'POST',
         data: {
@@ -100,6 +101,9 @@ function edit() {
         },
         error: function(data) {
             alert('Error');
+        },
+        complete:function() {
+            wc();
         }
     });
 
@@ -238,7 +242,7 @@ function set_pedido() {
     var peex_id = $('#peex_id').val();
     var justificacion = $('#just').val();
 
-    WaitingOpen("Guardando pedido...");
+    wo("Guardando pedido...");
 
     $.ajax({
         data: {
@@ -257,7 +261,7 @@ function set_pedido() {
             console.log(result);
             
             $('#pema_id').val(result.pema_id);
-            WaitingClose();
+            wc();
             get_detalle();
             clear();
         },
@@ -274,7 +278,7 @@ function set_pedido() {
                 "<td class='articulo'>" + document.getElementById('inputarti').value + "</td>" +
                 "<td class='cantidad text-center'>" + data.cantidad + "</td></tr>";
             tablaDetalle2.row.add($(tr)).draw();
-            WaitingClose();
+            wc();
 
         },
     });
@@ -296,7 +300,7 @@ function lanzarPedido() {
             }
         },
         error: function(result) {
-            WaitingClose();
+            wc();
             alert("Error al Lanzar Pedido");
         }
     });
@@ -404,7 +408,7 @@ function edit_pedido() {
         return;
     }
 
-    WaitingOpen("Guardando pedido...");
+    wo("Guardando pedido...");
 
     $.ajax({
         data: {
@@ -417,13 +421,13 @@ function edit_pedido() {
         dataType: 'json',
         url: 'index.php/<?php echo ALM ?>Notapedido/editPedido',
         success: function(result) {
-            WaitingClose();
+            wc();
             get_detalle();
             clear();
         },
         error: function(result) {
             alert('editesrt');
-            WaitingClose();
+            wc();
             //  alert("Error en guardado...");
         }
     });
