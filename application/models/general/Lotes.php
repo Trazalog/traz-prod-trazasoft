@@ -27,7 +27,7 @@ function listarPorMateria($id)
    function listarPorEstablecimientoConSalida($establecimiento,$salida = false)
     {
         $resource = 'lotes_establecimiento/'.$establecimiento;
-        $url = REST.$resource;
+        $url = REST2.$resource;
         $array = file_get_contents($url, false, http('GET'));
         log_message('DEBUG', '#REST #LOTES > listarPorEstablecimientoConSalida | #RSP-DATA:' . $array);
         $rsp = rsp($http_response_header);
@@ -53,7 +53,6 @@ function listarPorMateria($id)
     }
     function listar()
     {
-        
         $parametros["http"]["method"] = "GET";		 
         $param = stream_context_create($parametros);
         $resource = 'lotestodo';
@@ -61,4 +60,6 @@ function listarPorMateria($id)
         $array = file_get_contents($url, false, $param);
         return json_decode($array);
     }
+
+   
 }

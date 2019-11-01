@@ -129,8 +129,9 @@ define('TSK', 'traz-comp-tareas/');
 define('TAREAS_ASIGNAR', 'traz-comp-tareasestandar/asignar');
 define('REST', 'http://dev-trazalog.com.ar:8280/services/ProduccionDataService/');
 
-// define('REST1','http://pc-pc:8280/services/ProduccionDataService/');
+ define('REST1','http://pc-pc:8280/services/ProduccionDataService/');
  define('REST2','http://pc-pc:8280/services/produccionTest/');
+ define('TDS','http://pc-pc:8280/services/TrazabilidadDataService/');
 
 # >> Proyecto
 # Default View

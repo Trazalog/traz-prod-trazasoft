@@ -157,4 +157,33 @@ class Lotes extends CI_Model {
 		return $this->db->get('alm_lotes')->num_rows()>0?1:0;
 	}
 	
+	public function extraerCantidad($data)
+	{
+		$url = REST2 . 'extraer_cantidad_lote';
+		$rsp = file_get_contents($url, false, http('POST', ['post_extraer_cantidad_lote' => $data]));
+		return rsp($http_response_header, false, $rsp);
+	}
+
+	public function crear($data)
+	{
+		$url = REST2 . 'crear_lote';
+		$rsp = file_get_contents($url, false, http('POST', ['post_crear_lote' => $data]));
+		return rsp($http_response_header, false, $rsp);
+	}
+
+	public function crearaBatch($data)
+    {
+        $aux["p_lote_id"] = strval($data["lote_id"]);
+		$aux["p_batch_id_padre"] = "0";
+		$aux["p_num_orden_prod"] = "333";
+		$aux["p_etap_id"] = "1";
+		$aux["p_usuario_app"] = "RRUIZ";
+		$aux["p_reci_id"] = strval($data["reci_id"]);
+		$aux["p_empr_id"] = strval(empresa());
+        $aux["p_forzar_agregar"] = "FALSE";
+        
+        $url = TDS.'lote';
+        $rsp =  file_get_contents($url, false, http('POST', ['post_lote'=>$aux]));
+        return rsp($http_response_header, false, json_decode($rsp));
+    }
 }

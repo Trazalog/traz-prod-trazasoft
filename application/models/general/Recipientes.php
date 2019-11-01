@@ -33,5 +33,12 @@ class Recipientes extends CI_Model
         $array = file_get_contents($url, false, $param);
         return json_decode($array);
     }
+
+    public function crear($data)
+    {
+        $url = REST2.'recipientes';
+        $rsp =  file_get_contents($url, false, http('POST', ['post_recipientes'=>$data]));
+        return rsp($http_response_header, false, json_decode($rsp));
+    }
     
 }

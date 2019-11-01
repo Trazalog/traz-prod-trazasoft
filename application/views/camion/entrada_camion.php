@@ -217,7 +217,7 @@ function addCamion() {
     var frmCamion = new FormData($('#frm-camion')[0]);
     var frmInfo = new FormData($('#frm-info')[0]);
     var dataForm = mergeFD(frmInfo, frmCamion);
-
+    wo();
     $.ajax({
         type: 'POST',
         dataType: 'json',
@@ -239,6 +239,9 @@ function addCamion() {
         error: function(rsp) {
             alert('Error: ' + rsp.msj);
             console.log(rsp.msj);
+        },
+        complete:function(){
+            wc();
         }
     });
 }
