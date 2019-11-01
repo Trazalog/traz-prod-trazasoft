@@ -394,12 +394,20 @@ function FinalizarCarga() {
         lotes = JSON.stringify(lotes);
         $.ajax({
             type: 'POST',
+            dataType:'JSON',
             async: false,
             data: {
                 lotes: lotes
             },
             url: 'general/Camion/finalizarCarga',
             success: function(result) {
+
+                console.log(result);
+                
+                alert("Hecho");
+
+                return;
+
                 if (result == "ok") {
                     linkTo('general/Etapa/index');
 
