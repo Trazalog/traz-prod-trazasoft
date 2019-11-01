@@ -3,6 +3,9 @@
 <?php $this->load->view('etapa/modal_producto');?>
 <?php if($etapa->estado == "En Curso"){
 $this->load->view('etapa/modal_finalizar');}?>
+
+<?php //var_dump($etapa); ?>
+
 <div class="box">
 
     <div class="box-header">
@@ -38,24 +41,27 @@ $this->load->view('etapa/modal_finalizar');}?>
                     <?php
                     foreach($establecimientos as $fila)
                     {
-                      if($accion == 'Editar' && $fila->nombre == $etapa->establecimiento->titulo)
-                      {
-                      echo '<option value="'.$fila->esta_id.'" selected >'.$fila->nombre.'</option>';
-                      }else
-                      {
+                     // if($accion == 'Editar' && $fila->titulo == $etapa->establecimiento->titulo)
+                     // {
+                     // echo '<option value="'.$fila->id.'" selected >'.$fila->nombre.'</option>';
+                    //  }else
+                    //  {
                         echo '<option value="'.$fila->esta_id.'" >'.$fila->nombre.'</option>';
-                      }
+                    //  }
                     } 
                     ?>
                 </select>
             </div>
             <div class="col-md-1 col-xs-12">
                 <label for="Recipiente" class="form-label"><?php echo $etapa->titulorecipiente;?>*:</label>
+                
             </div>
+           
             <div class="col-md-5 col-xs-12">
                 <?php if($accion == 'Nuevo'){
                     echo '<select class="form-control" id="recipientes" disabled></select>';
-                    }if($accion == 'Editar'){
+                    }
+                    if($accion == 'Editar'){
                       if($etapa->estado == 'En Curso')
                       {
                         echo '<select class="form-control" id="recipientes" disabled>';
@@ -65,12 +71,12 @@ $this->load->view('etapa/modal_finalizar');}?>
                       echo '<option value="" disabled selected>-Seleccione Recipiente-</option>';
                       foreach($recipientes as $recipiente)
                       {
-                        if($recipiente->titulo == $etapa->recipiente)
-                        {
+                        //if($recipiente->titulo == $etapa->recipiente)
+                        //{
                           echo '<option value="'.$recipiente->id.'" selected>'.$recipiente->titulo.'</option>';
-                        }else{
-                          echo '<option value="'.$recipiente->id.'" >'.$recipiente->titulo.'</option>';
-                        }
+                        //}else{
+                        //  echo '<option value="'.$recipiente->id.'" >'.$recipiente->titulo.'</option>';
+                        //}
                       }
                       echo '</select>';
                     }
@@ -110,7 +116,7 @@ $this->load->view('etapa/modal_finalizar');}?>
             <div class="col-md-4 col-xs-12">
                 <div class="row form-group">
                     <div class="col-md-3 col-xs-12">
-                        <label for="template" class="form-label"><?php echo $lang['materias']?>:</label>
+                        <label for="template" class="form-label"><?php echo $lang['materias']; ?>:</label>
                     </div>
                     <div class="col-md-6 col-xs-12 input-group">
                         <input list="materias" id="inputmaterias" class="form-control" autocomplete="off">
@@ -118,7 +124,7 @@ $this->load->view('etapa/modal_finalizar');}?>
                         <datalist id="materias">
           <?php foreach($materias as $fila)
           {
-            echo  '<option value="'.$fila->nombre.'">';
+            echo  '<option value="'.$fila->titulo.'">';
             }
             ?>
           </datalist>
@@ -209,9 +215,9 @@ $this->load->view('etapa/modal_finalizar');}?>
     </div>
     <!-- /.box -->
     </div>
-    </div>
-    <script>
-        accion = '<?php echo $accion?>';
+</div>
+<script>
+        accion = '<?php echo $accion;?>';
         if (accion == "Editar") {
             var materias = <?php echo json_encode($etapa->materias);?>;
             for (i = 0; i < materias.length; i++) {
@@ -233,7 +239,7 @@ $this->load->view('etapa/modal_finalizar');}?>
                 },
                 url: 'general/Recipiente/listarPorEstablecimiento',
                 success: function(result) {
-                    result = JSON.parse(result);
+                    result = JSON.parse(result);                    
                     var html = "";
                     html = html + '<option value="" disabled selected>-Seleccione Recipiente-</option>';
                     for (var i = 0; i < result.length; i++) {
@@ -241,7 +247,8 @@ $this->load->view('etapa/modal_finalizar');}?>
                     }
                     document.getElementById(recipientes).disabled = false;
                     document.getElementById(recipientes).innerHTML = html;
-                }
+                },
+                //dataType: 'json'
 
             });
 
@@ -257,6 +264,18 @@ $this->load->view('etapa/modal_finalizar');}?>
         }
 
         function guardar() {
+
+            var tabla = $('#tablamateriasasignadas tbody tr');       
+            var materiales = [];
+            var materia = []; 
+            var i = 0;   
+            $.each(tabla, function(index){
+                var cantidad = $(this).find("td").eq(3).html();
+                var id_materia = $(this).attr("id");               
+                if(id_materia != null){
+                    materia[id_materia] = cantidad;
+                }                                 
+            });
             lote = document.getElementById('Lote').value;
             fecha = document.getElementById('fecha').value;
             establecimiento = document.getElementById('establecimientos').value;
@@ -272,7 +291,8 @@ $this->load->view('etapa/modal_finalizar');}?>
                     fecha: fecha,
                     establecimiento: establecimiento,
                     recipiente: recipiente,
-                    op: op
+                    op: op,
+                    materia:materia
                 },
                 url: 'general/Etapa/guardar',
                 success: function(result) {
@@ -282,12 +302,8 @@ $this->load->view('etapa/modal_finalizar');}?>
                     } else {
                         alert('Ups! algo salio mal')
                     }
-
                 }
-
             });
-
-
         }
 
         function valida() {
@@ -313,10 +329,10 @@ $this->load->view('etapa/modal_finalizar');}?>
                 mensaje += "- No ha seleccionado ninguna materia prima <br>";
                 ban = false;
             }
-            if (document.getElementById('existe_tabla').value == "no") {
-                mensaje += "- No ha seleccionado ninguna tarea <br>";
-                ban = false;
-            }
+            // if (document.getElementById('existe_tabla').value == "no") {
+            //     mensaje += "- No ha seleccionado ninguna tarea <br>";
+            //     ban = false;
+            // }
             if (ban) {
                 guardar();
             } else {
@@ -328,9 +344,13 @@ $this->load->view('etapa/modal_finalizar');}?>
 
         }
 
+       
+
+
         $("#inputmaterias").on('change', function() {
             document.getElementById('cantidadmateria').value = "";
-            materias = '<?php echo json_encode($materias)?>';
+            materias = <?php echo json_encode($materias);?>;
+            
             titulo = document.getElementById('inputmaterias').value;
             ban = false;
             i = 0;
@@ -345,7 +365,7 @@ $this->load->view('etapa/modal_finalizar');}?>
                 document.getElementById('stockdisabled').value = materia.stock;
                 materia = JSON.stringify(materia);
 
-                // agregaMateria(materia);
+                 //agregaMateria(materia);
                 $('#idmateria').attr('data-json', materia);
                 //document.getElementById('stockdisabled').value = ma
                 document.getElementById('cantidadmateria').disabled = false;
@@ -374,21 +394,21 @@ $this->load->view('etapa/modal_finalizar');}?>
 
         function finalizar() {
             /* idetapa = //php echo $idetapa;?>;
-   $.ajax({
-      type: 'POST',
-      data: {idetapa:idetapa },
-      url: 'general/Etapa/checkFormularios', 
-      success: function(result){
-        if(result)
-        {
-          
-          }else
-          {
-            alert('Faltan formularios');
-          }
-        
-      }
-);*/
+							$.ajax({
+									type: 'POST',
+									data: {idetapa:idetapa },
+									url: 'general/Etapa/checkFormularios', 
+									success: function(result){
+										if(result)
+										{
+											
+											}else
+											{
+												alert('Faltan formularios');
+											}
+										
+									}
+						);*/
             $("#modal_finalizar").modal('show');
         }
         $(document).off('click', '.tablamateriasasignadas_borrar').on('click', '.tablamateriasasignadas_borrar', {
@@ -396,4 +416,4 @@ $this->load->view('etapa/modal_finalizar');}?>
             idrecipiente: 'materiasasignadas',
             idbandera: 'materiasexiste'
         }, remover);
-    </script>
+</script>

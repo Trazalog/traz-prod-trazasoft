@@ -8,22 +8,31 @@ class Recipientes extends CI_Model
     }
     public function listarPorEstablecimiento($establecimiento)
     {
-        if($establecimiento == 1 || $establecimiento == 3 || $establecimiento == 5)
-        {
-            $resource = 'recipientes1';
-        }
-        if($establecimiento == 2 || $establecimiento == 4 || $establecimiento == 6)
-        {
-            $resource = 'recipientes2';
-        }
+        // if($establecimiento == 1 || $establecimiento == 3 || $establecimiento == 5)
+          // {
+          //     $resource = 'recipientes1';
+          // }
+          // if($establecimiento == 2 || $establecimiento == 4 || $establecimiento == 6)
+          // {
+          //     $resource = 'recipientes2';
+          // }
        
-        $parametros["http"]["method"] = "GET";		 
+				$parametros["http"]["method"] = "GET";		 
+				$parametros["http"]["header"] = "Accept: application/json";
         $param = stream_context_create($parametros);
-        	 	
-        $url = REST.$resource;
+				
+				$resource = '/lote/'.$establecimiento;
+				
+				// TODO: DESHARCODEAR EL RESOURCE 
+				//$url = 'http://PC-PC:8280/services/ProduccionDataService'.$resource;
+
+        $url = REST2.$resource;
         $array = file_get_contents($url, false, $param);
+
         return json_decode($array);
     }
+
+
     public function listarEmpaques()
     {
         $parametros["http"]["method"] = "GET";		 
