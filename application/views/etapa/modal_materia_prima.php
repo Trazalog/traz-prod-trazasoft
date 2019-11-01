@@ -19,7 +19,7 @@
       </div>
     </div>
   </div>
-  </div>
+</div>
   <script>
  $(document).off('click','.tablamaterias_nuevo').on('click', '.tablamaterias_nuevo', function () {
    var materia = $(this).closest('tr').data('json');
@@ -34,11 +34,11 @@
   function agregaMateria(materia)
   {
     estado ='<?php echo $etapa->estado;?>'
-  existe = document.getElementById('materiasexiste').value;
-  var html = '';
-  materia = JSON.stringify(materia);
-  materia =JSON.parse(materia);
-  document.getElementById('inputrecursosmateriales').value = materia[0].titulo;
+    existe = document.getElementById('materiasexiste').value;
+    var html = '';
+    materia = JSON.stringify(materia);
+    materia =JSON.parse(materia);
+    document.getElementById('inputrecursosmateriales').value = materia[0].titulo;
    if(existe == 'no')
    {
    

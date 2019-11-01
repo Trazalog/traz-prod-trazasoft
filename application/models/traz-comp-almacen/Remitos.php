@@ -413,6 +413,8 @@ class Remitos extends CI_Model {
             unset($o['codigo']);unset($o['depo_id']);unset($o['fec_vencimiento']);unset($o['loteado']);
             $this->db->insert('alm_deta_recepcion_materiales', $o);
         };
+
+        return true;
     }
 
     public function verificar_lote($data)

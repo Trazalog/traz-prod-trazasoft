@@ -50,9 +50,11 @@
 DataTable($('table'));
 
 function guardarArticulo() {
+    
     var formData = new FormData($('#frm-articulo')[0]);
 
     if (!validarForm()) return;
+    wo();
 
     $.ajax({
         type: 'POST',
@@ -63,20 +65,27 @@ function guardarArticulo() {
         contentType: false,
         processData: false,
         success: function(rsp) {
-            $('.modal-backdrop').remove();
-            linkTo();
+            
+          mdlClose('new_articulo');
+
+           linkTo();
         },
         error: function(rsp) {
             alert('Error: No se pudo Guardar Artículo');
             console.log(rsp.msj);
+        },
+        complete:function() {
+            wc();
         }
     });
 }
 
 function editarArticulo() {
+    
     var formData = new FormData($('#frm-articulo')[0]);
 
     if (!validarForm()) return;
+    wo();
 
     $.ajax({
         type: 'POST',
@@ -87,12 +96,16 @@ function editarArticulo() {
         contentType: false,
         processData: false,
         success: function(rsp) {
-            $('.modal-backdrop').remove();
-            linkTo();
+          
+             mdlClose('new_articulo');
+             linkTo();
         },
         error: function(rsp) {
             alert('Error: No se pudo Editar Artículo');
             console.log(rsp.msj);
+        },
+        complete:function() {
+            wc();
         }
     });
 }
@@ -156,7 +169,9 @@ $("#new_articulo").on("hide.bs.modal", function() {
 });
 
 function validarForm() {
-    var ban = ($('#unidmed').val() != 'false' && $('#artBarCode').val() != null && $('#artDescription').val() != null);
+    console.log('Validando');
+    
+    var ban = ($('#unidmed').val() != 'false' &&  $('#unidmed').val() != '' &&  $('#artBarCode').val() != null && $('#artBarCode').val() != '' && $('#artDescription').val() != null &&  $('#artDescription').val() != '');
     if (!ban) alert('Complete los Campos Obligatorios (*)');
     return ban;
 }

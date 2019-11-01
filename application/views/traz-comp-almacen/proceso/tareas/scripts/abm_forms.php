@@ -154,11 +154,11 @@
 			processData: false,
 			success: function (data) {
 				console.log(form_actual_id+"...OK");
-				WaitingClose();
+				wc();
 				if(existFunction("after_save_form"))after_save_form();
     		},
 			error: function(error){
-				WaitingClose();
+				wc();
 				alert(error.msj);
 				console.log(error);
 			}
@@ -219,13 +219,13 @@
 			processData: false,
 			success: function (respuesta) {
 				console.log(form_actual_id+"...OK");
-				WaitingClose();
+				wc();
 				if(existFunction("after_save_form"))after_save_form();
 				ValidarObligatorios(validarOn);
 			},
 			error: function(respuesta){
 				
-				WaitingClose();
+				wc();
 				alert('Error Form');
 			}
 		});
@@ -242,7 +242,7 @@
 
   $('.getFormularioTarea').click( function(){
 		
-    WaitingOpen('Abriendo Formulario');
+    wo('Abriendo Formulario');
     form_actual_data = $(this);
 		form_actual_data.attr("data-open","true");
     var form_id = form_actual_data.attr("data-formid");
@@ -274,11 +274,11 @@
 								$('#idformulario').val(form_id);	// id de formulario
 								$('.formgenerico').attr("id", form_id); // agrega id de form al form cargado
 								
-								WaitingClose();
+								wc();
 							
       },
       error: function(result){
-								WaitingClose();
+								wc();
 								alert("Error: No se pudo obtener el Formulario");
       },
     });

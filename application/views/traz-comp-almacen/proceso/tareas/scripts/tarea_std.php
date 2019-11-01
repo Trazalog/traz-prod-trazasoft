@@ -55,10 +55,10 @@ function deshabilitar() {
 }
 // Volver al atras
 $('#cerrar').click(function cargarVista() {
-    WaitingOpen();
+    wo();
     $('#content').empty();
     //	$("#content").load("<?php# echo base_url(); ?>index.php/Tarea/index/");
-    WaitingClose();
+    wc();
 });
 
 /* Funciones BPM */
@@ -96,7 +96,7 @@ $('.btncolor').click(function(e) {
 // 	}
 // 	});
 // 	if(ban==false){alert("Para concluir esta actividad primero debe Validar el Formulario");return;}
-// 	WaitingOpen('Cerrando Tarea');
+// 	wo('Cerrando Tarea');
 // 	var idTarBonita = $('#idTarBonita').val();
 // 	//alert(idTarBonita);
 // 	$.ajax({
@@ -106,7 +106,7 @@ $('.btncolor').click(function(e) {
 // 			},
 // 			url: 'index.php/Tarea/terminarTarea',
 // 			success: function(data) {
-// 								WaitingClose();
+// 								wc();
 // 							// toma a tarea exitosamente
 // 							if(data['reponse_code'] == 204){
 // 									$("#content").load("<?php #echo base_url(); ?>index.php/Tarea/index/<?php #echo $permission; ?>");
@@ -143,7 +143,7 @@ $('.btncolor').click(function(e) {
 // 				data: {formIdOt:formOt},
 // 				url: 'index.php/Tarea/terminarTareaStandarenBPM',
 // 				success: function(data) {
-// 									WaitingClose();
+// 									wc();
 // 								// toma a tarea exitosamente
 // 								// if(data['reponse_code'] == 204){
 // 								// 		$("#content").load("<?php #echo base_url(); ?>index.php/Tarea/index/<?php #echo $permission; ?>");
@@ -162,7 +162,7 @@ $('.btncolor').click(function(e) {
 
 // 	//console.table(formOt);
 // 	//if(ban==false){alert("Para concluir esta actividad primero debe Validar el Formulario");return;}
-// 	//WaitingOpen('Cerrando Tarea');
+// 	//wo('Cerrando Tarea');
 // 	// var idTarBonita = $('#idTarBonita').val();
 // 	// //alert(idTarBonita);
 // 	// 
@@ -171,7 +171,7 @@ $('.btncolor').click(function(e) {
 // cerrar tarea Analisis de urgencia
 function decidirUrgencia() {
 
-    WaitingOpen();
+    wo();
     var opcion = $('input[name="opcion"]:checked').val();
     var idTarBonita = $('#idTarBonita').val();
 
@@ -183,16 +183,16 @@ function decidirUrgencia() {
         },
         url: 'index.php/Tarea/decidirUrgencia',
         success: function(data) {
-            WaitingClose();
+            wc();
             console.table(data);
-            //	WaitingClose();
+            //	wc();
             // toma a tarea exitosamente
             if (data['reponse_code'] == 204) {
                 //$("#content").load("<?php #echo base_url(); ?>index.php/Tarea/index/<?php #echo $permission; ?>");
             }
         },
         error: function(data) {
-            WaitingClose();
+            wc();
             //alert("Noo");
             console.log(data);
         },
@@ -212,7 +212,7 @@ function ejecutarOT() {
         url: 'index.php/Tarea/ejecutarOT',
         success: function(data) {
             console.table(data);
-            //	WaitingClose();
+            //	wc();
             // toma a tarea exitosamente
             sessionStorage.setItem("tareas_cerradas", idTareaBonita + "-");
             if (data['reponse_code'] == 204) {

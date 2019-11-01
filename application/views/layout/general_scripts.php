@@ -49,9 +49,30 @@ $.widget.bridge('uibutton', $.ui.button);
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/js/bootstrapValidator.min.js"></script>-->
 
        <script>
-            function conexion() {
-                return true;
-            }
+function conexion() {
+    return true;
+}
+
+function mdlClose(id = false) {
+    if (id) $('#' + id).modal('hide');
+    else {
+        $('.modal').modal('hide');
+    }
+    $('.modal-backdrop').remove();
+}
+
+function showFD(formData) {
+    for (var pair of formData.entries()) {
+        console.log(pair[0] + ', ' + pair[1]);
+    }
+}
+
+function mergeFD(f1, f2) {
+    for (var pair of f2.entries()) {
+        f1.append(pair[0], pair[1]);
+    }
+    return f1;
+}
        </script>
 
        <?php 

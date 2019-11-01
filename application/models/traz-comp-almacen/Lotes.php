@@ -39,16 +39,18 @@ class Lotes extends CI_Model {
 		  $this->db->group_by('arti_id');
 		  $C = '(' . $this->db->get_compiled_select() . ') as "C"';
 
-		  $this->db->select('ART.arti_id, ART.barcode, ART.descripcion, punto_pedido, COALESCE(sum("LOTE".cantidad), 0) as cantidad_stock, COALESCE(sum("LOTE".cantidad),0)-cant_reservada as cantidad_disponible');
+		  $this->db->select('ART.arti_id, ART.barcode, ART.descripcion, ART.punto_pedido, COALESCE(sum("LOTE".cantidad), 0) as cantidad_stock, COALESCE(sum("LOTE".cantidad),0)-COALESCE(cant_reservada,0) as cantidad_disponible');
 		  $this->db->from('alm_articulos as ART');
 		  $this->db->join('alm_lotes as LOTE','LOTE.arti_id = ART.arti_id');
-		  $this->db->join($C,'C.arti_id = ART.arti_id');
+		  $this->db->join($C,'C.arti_id = ART.arti_id','left');
 		  $this->db->group_by('ART.arti_id, C.cant_reservada');
+		
 		  $sql = '('.$this->db->get_compiled_select().') as "AUX"';
-
 		  $this->db->where('AUX.cantidad_disponible < AUX.punto_pedido');
 		  $this->db->from($sql);
-		  return $this->db->get()->result_array();
+		  $data = $this->db->get()->result_array();
+		 // var_dump($data);die;
+		  return $data;
 	}
 	
 	function getMotion($data = null){
@@ -155,4 +157,36 @@ class Lotes extends CI_Model {
 		return $this->db->get('alm_lotes')->num_rows()>0?1:0;
 	}
 	
+	public function extraerCantidad($data)
+	{
+		$url = RESTPT . 'extraer_cantidad_lote';
+		$rsp = file_get_contents($url, false, http('POST', ['post_extraer_cantidad_lote' => $data]));
+		$rsp = rsp($http_response_header, false, $rsp);
+		return $rsp;
+	}
+
+	public function crear($data)
+	{
+		$url = RESTPT . 'lotes/movimiento_stock';
+		$rsp = file_get_contents($url, false, http('POST', ['post_lotes_movimiento_stock' => $data]));
+		$rsp =  rsp($http_response_header, false, $rsp);
+		return $rsp;
+	}
+
+	public function crearBatch($data)
+    {
+        $aux["p_lote_id"] = strval($data['lote_id']);
+		$aux["p_batch_id_padre"] = strval($data['batch_id']);
+		$aux["p_num_orden_prod"] = "";
+		$aux["p_etap_id"] = strval(ETAPA_TRANSPORTE);
+		$aux["p_usuario_app"] = userNick();
+		$aux["p_reci_id"] = strval($data['reci_id']);
+		$aux["p_empr_id"] = strval(empresa());
+        $aux["p_forzar_agregar"] = "FALSE";
+        
+        $url = TDS.'lote';
+        $rsp =  file_get_contents($url, false, http('POST', ['post_lote'=>$aux]));
+        $rsp =  rsp($http_response_header, false, json_decode($rsp)->respuesta->resultado);
+		return $rsp;
+	}
 }

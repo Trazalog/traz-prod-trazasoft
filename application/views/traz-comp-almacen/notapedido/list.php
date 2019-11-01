@@ -101,11 +101,11 @@ function ver(e) {
 
 }
 function ConsultarEntrega(e)
-{
+{zaqxsq
     var tr = $(e).closest('tr');
     var id = $(tr).data('id');
     var json = JSON.parse(JSON.stringify($(tr).data('json')));
-    rellenarCabecera(json);
+    rellenarCabeceraEntrega(json);
     $.ajax({
         type: 'GET',
         url: 'index.php/<?php echo ALM ?>new/Entrega_Material/detalle?id='+id,
@@ -181,12 +181,22 @@ function getEntregasPedidoOffline(pema) {
     });
 }
 //Ver Orden
-function rellenarCabecera(json) {
+function rellenarCabecera(json) { 
     $('#detalle_pedido .pedido').val(json.id_notaPedido);
     $('#detalle_pedido .descrip').val(json.justificacion);
     $('#detalle_pedido .fecha').val(json.fecha);
     $('#detalle_pedido .estado').val(json.estado);
     $('#detalle_pedido .orden').val(json.id_ordTrabajo);
+}
+
+function rellenarCabeceraEntrega(json){
+    $('#detalle_pedido .enma_id').val(json.enma_id);
+    $('#detalle_pedido .pema_id').val(json.pema_id);
+    $('#detalle_pedido .fecha').val(json.fecha);
+    $('#detalle_pedido .estado').val(json.estado);
+    $('#detalle_pedido .comprobante').val(json.comprobante);
+    $('#detalle_pedido .entregado').val(json.solicitante);
+    $('#detalle_pedido .orden').val(json.ortr_id);
 }
 
 
