@@ -1,7 +1,7 @@
 <?php $this->load->view('camion/modal_productos')?>
 <div class="box">
     <div class="box-header with-border">
-        <h3><?php echo $lang["EntrarCamion"];?></h3>
+        <h3><?php echo $lang["EntrarCamion"]; ?></h3>
         <div class="box-tools pull-right">
             <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title=""
                 data-original-title="Collapse">
@@ -16,13 +16,13 @@
             <input type="hidden" id="accioncamion">
             <div class="col-md-6 col-xs-12">
                 <div id="cargacamion" onclick="cargacamion()">
-                    <img src="<?php echo base_url('icon/truck.png');?>" alt="Smiley face" height="42" width="42">
+                    <img src="<?php echo base_url('icon/truck.png'); ?>" alt="Smiley face" height="42" width="42">
                     <label for="">CARGA</label>
                 </div>
             </div>
             <div class="col-md-6 col-xs-12">
                 <div id="descargacamion" onclick="descargacamion()">
-                    <img src="<?php echo base_url('icon/order.png');?>" alt="Smiley face" height="42" width="42">
+                    <img src="<?php echo base_url('icon/order.png'); ?>" alt="Smiley face" height="42" width="42">
                     <label for="">DESCARGA</label>
                 </div>
             </div>
@@ -47,18 +47,17 @@
                         name="establecimiento">
                         <option value="" disabled selected>-Seleccione Establecimiento-</option>
                         <?php
-                    foreach($establecimientos as $fila)
-                    {
-                        echo '<option value="'.$fila->esta_id.'" >'.$fila->nombre.'</option>';
-                    } 
-                    ?>
+foreach ($establecimientos as $fila) {
+    echo '<option value="' . $fila->esta_id . '" >' . $fila->nombre . '</option>';
+}
+?>
                     </select>
                 </div>
                 <div class="col-md-1 col-xs-12">
                     <label for="fecha" class="form-label">Fecha*:</label>
                 </div>
                 <div class="col-md-3 col-xs-12">
-                    <input type="date" id="fecha" value="<?php echo $fecha;?>" class="form-control" name="fecha">
+                    <input type="date" id="fecha" value="<?php echo $fecha; ?>" class="form-control" name="fecha">
                 </div>
                 <div class="col-md-2"></div>
             </div>
@@ -69,11 +68,10 @@
                 <div class="col-md-6 col-xs-12">
                     <input list="proveedores" class="form-control" id="proveedor" name="proveedor" autocomplete="off">
                     <datalist id="proveedores">
-                        <?php foreach($proveedores as $fila)
-                        {
-                        echo  "<option data-json='".json_encode($fila)."' value='".$fila->id."'>".$fila->titulo."</option>";
-                        }
-                        ?>
+                        <?php foreach ($proveedores as $fila) {
+    echo "<option data-json='" . json_encode($fila) . "' value='" . $fila->id . "'>" . $fila->titulo . "</option>";
+}
+?>
                     </datalist>
                 </div>
                 <div class="col-md-5 col-xs-12"><input type="text" disabled id="nombreproveedor" class="form-control">
@@ -130,15 +128,14 @@
             <div class="col-md-6 col-xs-11 margin input-group">
                 <input list="productos" id="inputproductos" class="form-control" autocomplete="off">
                 <datalist id="productos">
-                    <?php foreach($materias as $fila)
-                      {
-                      echo  "<option data-json='".json_encode($fila)."' value='".$fila->titulo."'></option>";
-                      }
-                      ?>
+                    <?php foreach ($materias as $fila) {
+    echo "<option data-json='" . json_encode($fila) . "' value='" . $fila->titulo . "'></option>";
+}
+?>
                 </datalist>
                 <span class="input-group-btn">
                     <button class='btn btn-primary'
-                        onclick='checkTabla("tabla_productos","modalproductos",`<?php echo json_encode($materias);?>`,"Add")'
+                        onclick='checkTabla("tabla_productos","modalproductos",`<?php echo json_encode($materias); ?>`,"Add")'
                         data-toggle="modal" data-target="#modal_productos">
                         <i class="glyphicon glyphicon-search"></i></button>
                 </span>
@@ -155,11 +152,10 @@
                     onchange="ActualizaEmpaques()">
                     <option value="" disabled selected>-Seleccione Empaque-</option>
                     <?php
-                   foreach($empaques as $fila)
-                   { 
-                       echo "<option data-json='".json_encode($fila)."' value='".$fila->id."'>".$fila->titulo."</option>";
-                   } 
-                ?>
+foreach ($empaques as $fila) {
+    echo "<option data-json='" . json_encode($fila) . "' value='" . $fila->id . "'>" . $fila->titulo . "</option>";
+}
+?>
                 </select>
             </div>
             <div class="col-md-1 col-xs-12">
@@ -211,6 +207,28 @@
 </div>
 
 <script>
+$('#patente').keyup(function(e) {
+    if (e.keyCode === 13) {
+        if(this.value == null || this.value == '') return;
+        wo();
+        $.ajax({
+            type: 'GET',
+            dataType: 'JSON',
+            url: 'index.php/general/Lote/obtenerLotesCamion?patente='+this.value,
+            success: function(rsp) {
+                aler('Hecho');
+            },
+            error: function(rsp) {
+                alert('Error');
+            },
+            complete:function(){
+                wc();
+            }
+        });
+    }
+});
+
+
 function addCamion() {
     console.log('addCamion');
 
@@ -227,12 +245,11 @@ function addCamion() {
         cache: false,
         data: dataForm,
         success: function(rsp) {
-            if(rsp.status) {
+            if (rsp.status) {
                 $('#frm-camion')[0].reset();
                 $('#frm-info')[0].reset();
                 alert('Datos guardados con Éxito');
-            }
-            else{
+            } else {
                 alert('Fallo el Guardado de Datos');
             }
         },
@@ -240,7 +257,7 @@ function addCamion() {
             alert('Error: ' + rsp.msj);
             console.log(rsp.msj);
         },
-        complete:function(){
+        complete: function() {
             wc();
         }
     });
