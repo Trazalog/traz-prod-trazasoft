@@ -179,7 +179,8 @@ function Actualiza(establecimiento) {
 
     });
 }
-var reci_id = "";
+
+var data_camion = "";
 function DatosCamion() {
     camion = JSON.parse($("#camiones option:selected").attr('data-json'));
     document.getElementById('fechacamion').value = camion.fecha;
@@ -188,9 +189,7 @@ function DatosCamion() {
     document.getElementById('idcamion').value = camion.id;
     document.getElementById('existe_tabla').value = 'no';
     document.getElementById('tablacargas').innerHTML = "";
-
-    //FLEIVA
-    reci_id = camion.reci_id;
+    data_camion = camion;
 }
 
 function ActualizaLotes() {
@@ -273,7 +272,8 @@ function Cargar() {
     } else {
         existe = document.getElementById('existe_tabla').value;
         carga.cantidad = document.getElementById('cantidadcarga').value;
-        carga.reci_id = reci_id;
+        carga.patente = document.getElementById('patentecamion').value;
+        carga.motr_id = data_camion.id;
         var html = '';
         if (existe == 'no') {
 

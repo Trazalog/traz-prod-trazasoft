@@ -27,7 +27,7 @@ function listarPorMateria($id)
    function listarPorEstablecimientoConSalida($establecimiento,$salida = false)
     {
         $resource = 'lotes_establecimiento/'.$establecimiento;
-        $url = RESTPT.$resource;
+        $url = REST2.$resource;
         $array = file_get_contents($url, false, http('GET'));
         log_message('DEBUG', '#REST #LOTES > listarPorEstablecimientoConSalida | #RSP-DATA:' . $array);
         $rsp = rsp($http_response_header);

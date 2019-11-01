@@ -33,7 +33,7 @@ class Camiones extends CI_Model
     public function guardarCarga($data)
     {
 
-        log_message('DEBUG','#CAMIONES > guardarCarga | #DATA: '.json_encode($data));
+        log_message('DEBUG', '#CAMIONES > guardarCarga | #DATA: ' . json_encode($data));
 
         #Guardar Carga
         // $resource = 'set_carga';
@@ -42,9 +42,10 @@ class Camiones extends CI_Model
         // $rsp = rsp($http_response_header);
 
         $this->load->model(ALM . '/Lotes');
+        $this->load->model('general/Recipientes');
 
         foreach ($data as $key => $o) {
-           
+
             #Descontar Stock
             $aux = array(
                 'cantidad' => strval($o->cantidad),
@@ -52,26 +53,43 @@ class Camiones extends CI_Model
                 'empr_id' => strval(empresa()),
             );
             $rsp = $this->Lotes->extraerCantidad($aux);
-            if(!$rsp['status']) continue;
+            if (!$rsp['status']) {
+                continue;
+            }
 
+            #CREAR NUEVO RECIPIENTE
+            $aux = array(
+                'tipo' => 'TRANSPORTE',
+                'patente' => $data['patente'],
+                'motr_id' => $data['motr_id'],
+                'depo_id' => strval(DEPOSITO_TRANSPORTE),
+                'empr_id' => strval(empresa()),
+            );
+            $reci_id = $this->Recipientes->crear($aux)['data']->resultado->reci_id;
+            
             #Pedir Nuevo Batch ID
             $aux = array(
                 'lote_id' => strval($o->id),
-                'reci_id' => strval($o->reci_id),
+                'reci_id' => strval($reci_id),
                 'batch_id' => strval($o->batch_id),
-                'empr_id' => strval(empresa())
+                'empr_id' => strval(empresa()),
             );
             $rsp = $this->Lotes->crearBatch($aux);
-            if(!$rsp['status'])  continue;
+            if (!$rsp['status']) {
+                continue;
+            }
 
             #Crear Nuevo Lote
             $aux = array(
                 'batch_id' => $rsp['data'],
                 'old_batch_id' => strval($o->batch_id),
-                'cantidad' => strval($o->cantidad)
-            );       
+                'cantidad' => strval($o->cantidad),
+            );
             $rsp = $this->Lotes->crear($aux);
-            if(!$rsp['status'])  continue;
+            if (!$rsp['status']) {
+                continue;
+            }
+
         }
         return true;
     }
