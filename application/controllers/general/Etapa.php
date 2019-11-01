@@ -24,7 +24,7 @@ class Etapa extends CI_Controller {
 				
 		//$data['permission'] = 'Add-Edit-Del-View';
 		$this->load->view('etapa/list', $data);
-		}
+	}
 	 public function nuevo()
 	 {
 		$data['fecha'] = date('Y-m-d');

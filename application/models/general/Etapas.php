@@ -160,17 +160,62 @@ class Etapas extends CI_Model
 				 ]
 				 }
 				 }';
-				 return $respuesta;
-    }
+
+				 $resource = (object)$respuesta;
+
+				 return $resource;
+		
+		
+				}
     function listarEtapas()
     {
        
-        $parametros["http"]["method"] = "GET";		 
-        $param = stream_context_create($parametros);
-        $resource = 'etapas';	 	
-        $url = REST.$resource;
-        $array = file_get_contents($url, false, $param);
-        return json_decode($array);
+        // $parametros["http"]["method"] = "GET";		 
+        // $param = stream_context_create($parametros);
+        // $resource = 'etapas';	 	
+        // $url = REST.$resource;
+        // $array = file_get_contents($url, false, $param);
+				// return json_decode($array);
+				
+				$respuesta = '{
+					"etapas":
+					{"etapa":
+					[{
+					"id":1,
+					"titulo":"siembra",
+					"icon":"",
+					"link":"general/Etapa/nuevo?op=1"
+					},
+					{
+					"id":2,
+					"titulo":"zaranda",
+					"icon":"",
+					"link":"general/Etapa/nuevo?op=2"
+					},
+					{
+					"id":3,
+					"titulo":"limpieza",
+					"icon":"",
+					"link":"general/Etapa/nuevo?op=3"
+					},
+					{
+					"id":4,
+					"titulo":"estacionamiento",
+					"icon":"",
+					"link":"general/Etapa/nuevo?op=4"
+					},
+					{
+					"id":5,
+					"titulo":"fraccionamiento",
+					"icon":"",
+					"link":"general/Etapa/fraccionar"
+					}
+					]
+					}
+					}';
+
+				$resource = json_decode($respuesta);
+				return $resource;
     }
     function buscar($id)
     {
