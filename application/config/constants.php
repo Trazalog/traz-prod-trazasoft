@@ -127,8 +127,8 @@ define('TSK', 'traz-comp-tareas/');
 
 #REST
 define('TAREAS_ASIGNAR', 'traz-comp-tareasestandar/asignar');
-define('REST', 'http://dev-trazalog.com.ar:8280/services/ProduccionDataService');
-define('RESTPT','http://dev-trazalog.com.ar:8280/services/produccionTest');
+define('REST', 'http://dev-trazalog.com.ar:8280/services/ProduccionDataService/');
+define('RESTPT','http://dev-trazalog.com.ar:8280/services/produccionTest/');
 
 # >> Proyecto
 # Default View
