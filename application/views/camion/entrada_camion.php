@@ -151,14 +151,14 @@ $('#patente').keyup(function(e) {
         console.log('Obtener Lotes Patentes');
 
         if (this.value == null || this.value == '') return;
-        wo();
+        //wo();
         $.ajax({
             type: 'GET',
             dataType: 'JSON',
             url: 'index.php/general/Lote/obtenerLotesCamion?patente=' + this.value,
             success: function(rsp) {
 
-                if(!rsp.status) return;
+                if(rsp.data == null) return;
                 rsp.data.forEach(function(e) {
                     $("#lotes-camion").append(
                         `<tr data-json='${JSON.stringify(e)}'>
