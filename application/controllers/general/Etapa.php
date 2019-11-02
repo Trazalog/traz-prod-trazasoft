@@ -108,11 +108,13 @@ class Etapa extends CI_Controller {
 	 public function editar()
 	 {
 		$id = $this->input->get('id');
+	
 		$data['accion'] = 'Editar';
 		$data['etapa'] = $this->Etapas->buscar($id)->etapa;
-		//var_dump($data['etapa']);die;
+	//	var_dump($data['etapa']);die;
 		$data['idetapa'] = $data['etapa']->id;
-		$data['recipientes'] = $this->Recipientes->listarPorEstablecimiento($data['etapa']->establecimiento->id)->recipientes->recipiente;
+		// $data['recipientes'] = $this->Recipientes->listarPorEstablecimiento($data['etapa']->establecimiento->id)->recipientes->recipiente;
+		$data['recipientes'] = $this->Recipientes->listarTodosDeposito()->recipientes->recipiente;// trae todos los recipientes de Tipo Deposito
 		$data['op'] = 	$data['etapa']->titulo;
 		$data['lang'] = lang_get('spanish',4);
 		$data['establecimientos'] = $this->Establecimientos->listar(2)->establecimientos->establecimiento;
@@ -129,6 +131,7 @@ class Etapa extends CI_Controller {
 		$data['recursosmateriales'] = $this->Recursos_Materiales->listar()->recursos->recurso;
 		$trabajo =$this->Recursos_Trabajo->listar()->trabajos->trabajo;
 		$data['recursostrabajo'] = $trabajo;
+		//var_dump($data);
 		$this->load->view('etapa/abm', $data);
 		}
 	 }
@@ -146,7 +149,30 @@ class Etapa extends CI_Controller {
 	 public function Finalizar()
 	 {
 		 $productos = json_decode($this->input->post('productos'));
-		 echo "";
+
+		 foreach ($productos as $value) {			
+
+			$arrayPost["arti_id"] = $value->id;
+			$arrayPost["cantidad"] = $value->cantidad;
+			$arrayPost["batch_id_origen"] = $value->loteorigen;
+			$arrayPost["lote"] = $value->lotedestino;
+			$arrayPost["reci_id"] = $value->destino;
+			$arrayPost["empre_id"] = (string)empresa();
+			$arrayPost["etap_id_deposito"] = (string)DEPOSITO_TRANSPORTE;
+			$arrayPost["usuario_app"] = userNick();
+			$arrayPost["forzar_agregar"] = "false";
+		 
+			$arrayDatos['_post_lote_deposito_ingresar'] = $arrayPost;			
+			
+			$response = $this->Etapas->finalizarEtapa($arrayDatos);
+			
+		}
+		 
+		 
+		 
+		 var_dump($data);
+
+		 echo("ok");
 	 }
 	 public function fraccionar()
 	 {
