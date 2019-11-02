@@ -169,7 +169,7 @@ $('#patente').keyup(function(e) {
                     </tr>`
                     );
                 });
-
+                if(recipientes == null) return;
                 recipientes.forEach(e => { 
                    $('select.recipiente').append(`<option value="${e.id}">${e.titulo}</option>`);
                 });
