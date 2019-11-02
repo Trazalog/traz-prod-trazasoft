@@ -24,8 +24,9 @@ class Materias extends CI_Model
 				$parametros["http"]["method"] = "GET";		 
 				$parametros["http"]["header"] = "Accept: application/json";	
         $param = stream_context_create($parametros);
-        $resource = '/articulos';	 	
-        $url = 'http://PC-PC:8280/services/ProduccionDataService/articulos';
+        $resource = '/articulos';	
+        $url = REST2.$resource;    	
+        //$url = 'http://PC-PC:8280/services/ProduccionDataService/articulos';
         $array = file_get_contents($url, false, $param);
 				return json_decode($array);
 

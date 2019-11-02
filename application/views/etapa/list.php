@@ -27,8 +27,16 @@
                     foreach($etapas as $fila)
                     {
                       echo "<li  data-value='".$fila->id."'><a data-json='".json_encode($fila)."'>".$fila->titulo."</a></li>";
+                      
+                      //var_dump($etapas);
                     }
-                    ?>
+                ?>
+
+                      <!-- <li  data-value="1"><a data-json="">"siembra"</a></li> -->
+
+
+
+
               </ul>
             </div>
           </div>
