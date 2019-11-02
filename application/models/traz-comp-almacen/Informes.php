@@ -12,6 +12,6 @@ class Informes extends CI_Model
         $this->db->select('codigo, arti_id, sum(cantidad) as stock');
         $this->db->group_by('codigo, arti_id');
         $this->db->where('empr_id', empresa());
-        return $this->db->get('alm_lotes')->result();
+        return $this->db->get('alm.alm_lotes')->result();
     }
 }

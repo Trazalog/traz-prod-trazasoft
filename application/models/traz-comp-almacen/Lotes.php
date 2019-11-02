@@ -8,11 +8,11 @@ class Lotes extends CI_Model {
 	
 	function getList() // Ok
 	{
-		$this->db->select('alm_lotes.*, alm_articulos.descripcion as artDescription, alm_articulos.barcode as artBarCode,alm_lotes.cantidad,alm_depositos.descripcion as depositodescrip');
-		$this->db->from('alm_lotes');
-		$this->db->join('alm_articulos', 'alm_lotes.arti_id = alm_articulos.arti_id');
-		$this->db->join('alm_depositos', ' alm_lotes.depo_id = alm_depositos.depo_id');
-		//$this->db->join('utl_tablas C','alm_lotes.estado_id = C.tabl_id');
+		$this->db->select('alm.alm_lotes.*, alm.alm_articulos.descripcion as artDescription, alm.alm_articulos.barcode as artBarCode,alm.alm_lotes.cantidad,alm.alm_depositos.descripcion as depositodescrip');
+		$this->db->from('alm.alm_lotes');
+		$this->db->join('alm.alm_articulos', 'alm.alm_lotes.arti_id = alm.alm_articulos.arti_id');
+		$this->db->join('alm.alm_depositos', ' alm.alm_lotes.depo_id = alm.alm_depositos.depo_id');
+		//$this->db->join('alm.alm.utl_tablas C','alm.alm_lotes.estado_id = C.tabl_id');
 
 		$query = $this->db->get();
 		if ($query->num_rows()!=0)
@@ -30,18 +30,18 @@ class Lotes extends CI_Model {
 	{
 		  // OBTENER CANTIDADES RESERVADAS
 		  $this->db->select('arti_id, COALESCE(sum(resto),0) as cant_reservada');
-		  $this->db->from('alm_deta_pedidos_materiales');
-		  $this->db->join('alm_pedidos_materiales', 'alm_deta_pedidos_materiales.pema_id = alm_pedidos_materiales.pema_id');
+		  $this->db->from('alm.alm_deta_pedidos_materiales');
+		  $this->db->join('alm.alm_pedidos_materiales', 'alm.alm_deta_pedidos_materiales.pema_id = alm.alm_pedidos_materiales.pema_id');
 		  $this->db->where('estado!=','Entregado');
 		  $this->db->where('estado!=','Rechazado');
 		  $this->db->where('estado!=','Cancelado');
-		  $this->db->where('alm_pedidos_materiales.empr_id', empresa());
+		  $this->db->where('alm.alm_pedidos_materiales.empr_id', empresa());
 		  $this->db->group_by('arti_id');
 		  $C = '(' . $this->db->get_compiled_select() . ') as "C"';
 
 		  $this->db->select('ART.arti_id, ART.barcode, ART.descripcion, ART.punto_pedido, COALESCE(sum("LOTE".cantidad), 0) as cantidad_stock, COALESCE(sum("LOTE".cantidad),0)-COALESCE(cant_reservada,0) as cantidad_disponible');
-		  $this->db->from('alm_articulos as ART');
-		  $this->db->join('alm_lotes as LOTE','LOTE.arti_id = ART.arti_id');
+		  $this->db->from('alm.alm_articulos as ART');
+		  $this->db->join('alm.alm_lotes as LOTE','LOTE.arti_id = ART.arti_id');
 		  $this->db->join($C,'C.arti_id = ART.arti_id','left');
 		  $this->db->group_by('ART.arti_id, C.cant_reservada');
 		
@@ -145,7 +145,7 @@ class Lotes extends CI_Model {
 			'estado_id'=>1,
 			'empr_id'=>empresa()
 		);
-		return $this->db->insert('alm_lotes',$aux);
+		return $this->db->insert('alm.alm_lotes',$aux);
 	}
 
 	public function verificarExistencia($arti, $lote, $depo)
@@ -154,7 +154,7 @@ class Lotes extends CI_Model {
 		$this->db->where('depo_id',$depo);
 		$this->db->where('arti_id',$arti);
 		$this->db->where('empr_id', empresa());
-		return $this->db->get('alm_lotes')->num_rows()>0?1:0;
+		return $this->db->get('alm.alm_lotes')->num_rows()>0?1:0;
 	}
 	
 	public function extraerCantidad($data)

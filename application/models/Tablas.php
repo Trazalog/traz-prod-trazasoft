@@ -15,6 +15,6 @@ class Tablas extends CI_Model
             $this->db->where('tabla', $id);
         }
         $this->db->where('eliminado',false);
-        return $this->db->get('utl_tablas')->result();
+        return $this->db->get('alm.utl_tablas')->result();
     }
 }

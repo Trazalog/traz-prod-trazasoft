@@ -12,7 +12,7 @@ class Proveedores extends CI_Model {
     {
         if($id) $this->db->where('prov_id', $id);
         $this->db->where('empr_id', empresa());
-        return $this->db->get('alm_proveedores')->result();
+        return $this->db->get('alm.alm_proveedores')->result();
     }
 }
 ?>

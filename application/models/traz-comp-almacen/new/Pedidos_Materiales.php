@@ -4,7 +4,7 @@
 
 class Pedidos_Materiales extends CI_Model
 {
-    private $tabla = 'alm_pedidos_materiales';
+    private $tabla = 'alm.alm_pedidos_materiales';
     private $key = 'pema_id';
     private $columnas = '*';
 
@@ -17,7 +17,7 @@ class Pedidos_Materiales extends CI_Model
     {
         $this->db->select('T.pema_id as id_notaPedido,T.fecha,T.ortr_id as id_ordTrabajo,T.justificacion, T.estado');
         if($ot) $this->db->select('orden_trabajo.descripcion');
-        $this->db->from('alm_pedidos_materiales T');
+        $this->db->from('alm.alm_pedidos_materiales T');
         if($ot)$this->db->join('orden_trabajo', 'T.ortr_id = orden_trabajo.id_orden','left');
         $this->db->where('T.empr_id', empresa());
         if($ot)  $this->db->where('orden_trabajo.id_orden', $ot);
@@ -60,8 +60,8 @@ class Pedidos_Materiales extends CI_Model
     public function obtener($id)
     {
         $this->db->select('*');
-        $this->db->from('alm_deta_pedidos_materiales T');
-        $this->db->join('alm_articulos A', 'A.arti_id = T.arti_id');
+        $this->db->from('alm.alm_deta_pedidos_materiales T');
+        $this->db->join('alm.alm_articulos A', 'A.arti_id = T.arti_id');
         $this->db->where($this->key, $id);
         $this->db->where('T.eliminado', false);
         return $this->db->get()->result_array();
@@ -70,10 +70,10 @@ class Pedidos_Materiales extends CI_Model
     public function eliminar($id)
     {
         $this->db->where('pema_id', $id);
-        $this->db->delete('alm_deta_pedidos_materiales');
+        $this->db->delete('alm.alm_deta_pedidos_materiales');
 
         $this->db->where('pema_id', $id);
-        return $this->db->delete('alm_pedidos_materiales');
+        return $this->db->delete('alm.alm_pedidos_materiales');
 
     }
 
@@ -107,7 +107,7 @@ class Pedidos_Materiales extends CI_Model
     {
         $this->db->set('case_id', $case);
         $this->db->where('pema_id', $id);
-        $this->db->update('alm_pedidos_materiales');
+        $this->db->update('alm.alm_pedidos_materiales');
     }
 
     public function getInsumosOT($ot)
@@ -135,7 +135,7 @@ class Pedidos_Materiales extends CI_Model
                 'cantidad' => $o->cantidad,
                 'resto' => $o->cantidad
             );
-            $this->db->insert('alm_deta_pedidos_materiales', $detalle);
+            $this->db->insert('alm.alm_deta_pedidos_materiales', $detalle);
         }
 
         return $pema_id;

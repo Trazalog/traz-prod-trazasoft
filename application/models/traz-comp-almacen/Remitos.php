@@ -13,8 +13,8 @@ class Remitos extends CI_Model {
         $empresaId = empresa();
 
         $this->db->select('T.rema_id as remitoId, T.fecha, T.comprobante, A.prov_id as provid,  A.nombre as provnombre');
-        $this->db->from('alm_recepcion_materiales as T');
-        $this->db->join('alm_proveedores A','T.prov_id = A.prov_id');
+        $this->db->from('alm.alm_recepcion_materiales as T');
+        $this->db->join('alm.alm_proveedores A','T.prov_id = A.prov_id');
         $this->db->where('T.empr_id', $empresaId);
         $query = $this->db->get();
         if( $query->num_rows() > 0)
@@ -30,7 +30,7 @@ class Remitos extends CI_Model {
     function getcodigo()
     {
         $this->db->select('T.arti_id as artId, T.barcode as artBarCode, T.descripcion as artDescription,T.es_loteado, T.es_caja, T.cantidad_caja');
-        $this->db->from('alm_articulos as T');
+        $this->db->from('alm.alm_articulos as T');
         $this->db->where('empr_id', empresa());
         $this->db->where('T.eliminado',false);
      
@@ -51,7 +51,7 @@ class Remitos extends CI_Model {
         $userdata  = $this->session->userdata('user_data');
         $empresaId = empresa();
      
-        $query = $this->db->get_where('alm_depositos', array('empr_id' => $empresaId));
+        $query = $this->db->get_where('alm.alm_depositos', array('empr_id' => $empresaId));
             if($query->num_rows()>0){
             return $query->result();
         }
@@ -64,7 +64,7 @@ class Remitos extends CI_Model {
     {
         $userdata  = $this->session->userdata('user_data');
         $empresaId = empresa();
-		$query     = $this->db->get_where('alm_proveedores', array('empr_id' => $empresaId));
+		$query     = $this->db->get_where('alm.alm_proveedores', array('empr_id' => $empresaId));
 			if($query->num_rows()>0){
 	   	 	return $query->result();
 	    }
@@ -83,7 +83,7 @@ class Remitos extends CI_Model {
 		{
 			$id = $data['artId'];
 			//Datos del usuario
-			$query = $this->db->get_where('alm_articulos', array('arti_id' => $id));
+			$query = $this->db->get_where('alm.alm_articulos', array('arti_id' => $id));
 			if($query->num_rows()>0){
                 return $query->result();
             }
@@ -95,10 +95,10 @@ class Remitos extends CI_Model {
 
     function getConsulta($id) 
     {
-        $this->db->select('alm_recepcion_materiales.comprobante, alm_recepcion_materiales.fecha, alm_proveedores.nombre as provnombre');
-        $this->db->from('alm_recepcion_materiales');
-        $this->db->join('alm_proveedores', 'alm_proveedores.prov_id = alm_recepcion_materiales.prov_id'); 
-        $this->db->where('alm_recepcion_materiales.rema_id', $id);
+        $this->db->select('alm.alm_recepcion_materiales.comprobante, alm.alm_recepcion_materiales.fecha, alm.alm_proveedores.nombre as provnombre');
+        $this->db->from('alm.alm_recepcion_materiales');
+        $this->db->join('alm.alm_proveedores', 'alm.alm_proveedores.prov_id = alm.alm_recepcion_materiales.prov_id'); 
+        $this->db->where('alm.alm_recepcion_materiales.rema_id', $id);
         $query= $this->db->get();   
 
         if ($query->num_rows()!=0)
@@ -116,13 +116,13 @@ class Remitos extends CI_Model {
         $empresaId = empresa();
         
         $sql = "SELECT T.dere_id as detaremitoid, T.rema_id as id_remito, T.lote_id as loteid, T.cantidad, 
-            art.barcode as codigo, alm_lotes.depo_id as depositoid, 
+            art.barcode as codigo, alm.alm_lotes.depo_id as depositoid, 
             art.arti_id as artId, art.barcode as artBarCode, art.descripcion as artDescription, 
-            alm_depositos.descripcion as depositodescrip
-            FROM alm_deta_recepcion_materiales as T
-            JOIN alm_lotes ON alm_lotes.lote_id = T.lote_id
-            JOIN alm_articulos art ON art.arti_id = alm_lotes.arti_id
-            JOIN alm_depositos ON alm_depositos.depo_id = alm_lotes.depo_id
+            alm.alm_depositos.descripcion as depositodescrip
+            FROM alm.alm_deta_recepcion_materiales as T
+            JOIN alm.alm_lotes ON alm.alm_lotes.lote_id = T.lote_id
+            JOIN alm.alm_articulos art ON art.arti_id = alm.alm_lotes.arti_id
+            JOIN alm.alm_depositos ON alm.alm_depositos.depo_id = alm.alm_lotes.depo_id
             WHERE T.rema_id = $idRemito
             AND art.empr_id = $empresaId
             ";
@@ -143,12 +143,12 @@ class Remitos extends CI_Model {
         $userdata  = $this->session->userdata('user_data');
         $empresaId = empresa();
 
-        $sql       = "SELECT  alm_lotes.cantidad
-            FROM alm_lotes
-            WHERE alm_lotes.id_empresa = $empresaId
-            AND alm_lotes.artId        = $codigo 
-            AND alm_lotes.depositoid   = $de 
-            AND alm_lotes.lotestado    = 'AC'
+        $sql       = "SELECT  alm.alm_lotes.cantidad
+            FROM alm.alm_lotes
+            WHERE alm.alm_lotes.id_empresa = $empresaId
+            AND alm.alm_lotes.artId        = $codigo 
+            AND alm.alm_lotes.depositoid   = $de 
+            AND alm.alm_lotes.lotestado    = 'AC'
         ";
         $query = $this->db->query($sql);
         foreach($query->result() as $row)
@@ -163,11 +163,11 @@ class Remitos extends CI_Model {
 		$userdata  = $this->session->userdata('user_data');
         $empresaId = empresa();
 
-        $sql       = "SELECT alm_lotes.lote_id as loteid
-    		FROM alm_lotes
-            WHERE alm_lotes.id_empresa = $empresaId
-            AND alm_lotes.artId        = $idHerramienta 
-            AND alm_lotes.depositoid   = $idDeposito";
+        $sql       = "SELECT alm.alm_lotes.lote_id as loteid
+    		FROM alm.alm_lotes
+            WHERE alm.alm_lotes.id_empresa = $empresaId
+            AND alm.alm_lotes.artId        = $idHerramienta 
+            AND alm.alm_lotes.depositoid   = $idDeposito";
 		$query = $this->db->query($sql);
 		if($query->num_rows()>0)
         {
@@ -184,7 +184,7 @@ class Remitos extends CI_Model {
         $data['empr_id'] =empresa();
         $data['prov_id']  = $data['provid'];unset($data['provid']);
 
-        $this->db->insert("alm_recepcion_materiales", $data);
+        $this->db->insert("alm.alm_recepcion_materiales", $data);
 
         return $this->db->insert_id();
     }
@@ -253,11 +253,11 @@ class Remitos extends CI_Model {
         $userdata  = $this->session->userdata('user_data');
         $empresaId = empresa();
 
-        $sql       = "SELECT alm_lotes.lote_id as loteid
-            FROM alm_lotes
-            WHERE alm_lotes.empr_id = $empresaId
-            AND alm_lotes.arti_id        = $idArticulo 
-            AND alm_lotes.depo_id   = $idDeposito
+        $sql       = "SELECT alm.alm_lotes.lote_id as loteid
+            FROM alm.alm_lotes
+            WHERE alm.alm_lotes.empr_id = $empresaId
+            AND alm.alm_lotes.arti_id        = $idArticulo 
+            AND alm.alm_lotes.depo_id   = $idDeposito
             ";
         $query = $this->db->query($sql);
         if($query->result()){
@@ -277,15 +277,15 @@ class Remitos extends CI_Model {
         $userdata          = $this->session->userdata('user_data');
         $data2['empr_id'] = empresa();
 
-        $query = $this->db->insert("alm_deta_recepcion_materiales", $data2);
+        $query = $this->db->insert("alm.alm_deta_recepcion_materiales", $data2);
         return $query;
     }
 
     function sumarlote($res,$co)
     {
-        $sql = "SELECT alm_lotes.cantidad
-            FROM alm_lotes
-            WHERE alm_lotes.lote_id = $res";
+        $sql = "SELECT alm.alm_lotes.cantidad
+            FROM alm.alm_lotes
+            WHERE alm.alm_lotes.lote_id = $res";
         $query = $this->db->query($sql); //aca esta la canidad
         foreach ($query->result() as $row)
         {         
@@ -299,9 +299,9 @@ class Remitos extends CI_Model {
 
     function updatelote($re,$res)
     {
-        $sql = "UPDATE alm_lotes 
-            SET alm_lotes.cantidad = $re 
-            WHERE alm_lotes.lote_id = $res
+        $sql = "UPDATE alm.alm_lotes 
+            SET alm.alm_lotes.cantidad = $re 
+            WHERE alm.alm_lotes.lote_id = $res
             ";
         $query = $this->db->query($sql);
          return $query;
@@ -311,8 +311,8 @@ class Remitos extends CI_Model {
     {
         //artId
         $sql = "SELECT barcode as artBarCode
-            FROM  alm_articulos
-            WHERE alm_articulos.arti_id = $d
+            FROM  alm.alm_articulos
+            WHERE alm.alm_articulos.arti_id = $d
         ";
         $query = $this->db->query($sql);
         if($query->result() ){
@@ -331,7 +331,7 @@ class Remitos extends CI_Model {
     {
         $userdata  = $this->session->userdata('user_data');
         $data3['empr_id'] = empresa();
-        $query   = $this->db->insert("alm_lotes",$data3);
+        $query   = $this->db->insert("alm.alm_lotes",$data3);
         return $query;
     }
 
@@ -347,9 +347,9 @@ class Remitos extends CI_Model {
     }
 
     function getlotecant($id){
-    	$sql="SELECT  alm_lotes.cantidad
-    	FROM alm_lotes
-    	WHERE alm_lotes.depositoid=$id AND alm_lotes.lotestado='AC'
+    	$sql="SELECT  alm.alm_lotes.cantidad
+    	FROM alm.alm_lotes
+    	WHERE alm.alm_lotes.depositoid=$id AND alm.alm_lotes.lotestado='AC'
     	";
     	$query= $this->db->query($sql);
     	/*if($query->num_rows()>0){
@@ -388,9 +388,9 @@ class Remitos extends CI_Model {
     }
 
     function lotecantidad($v){
-    	$sql="SELECT  alm_lotes.cantidad
-    			FROM alm_lotes
-    			WHERE alm_lotes.lote_id as loteid=$v";
+    	$sql="SELECT  alm.alm_lotes.cantidad
+    			FROM alm.alm_lotes
+    			WHERE alm.alm_lotes.lote_id as loteid=$v";
     	$query= $this->db->query($sql);
       	foreach ($query->result() as $row){     
             $datos= $row->cantidad;   
@@ -400,7 +400,7 @@ class Remitos extends CI_Model {
 
     function update_tbllote($id,$data3){
         $this->db->where('loteid', $id);
-        $query = $this->db->update("alm_lotes",$data3);
+        $query = $this->db->update("alm.alm_lotes",$data3);
         return $query;
     }
 
@@ -411,7 +411,7 @@ class Remitos extends CI_Model {
             $o['lote_id'] = $this->verificar_lote($o);
             $o['rema_id'] = $id;
             unset($o['codigo']);unset($o['depo_id']);unset($o['fec_vencimiento']);unset($o['loteado']);
-            $this->db->insert('alm_deta_recepcion_materiales', $o);
+            $this->db->insert('alm.alm_deta_recepcion_materiales', $o);
         };
 
         return true;
@@ -433,7 +433,7 @@ class Remitos extends CI_Model {
             $data['codigo'] = 1;
         }
         
-        $res =  $this->db->get('alm_lotes')->row();
+        $res =  $this->db->get('alm.alm_lotes')->row();
 
         //? SI EXISTE LOTE LO ACTUALIZA
         if($res){ $this->actualizar_lote($res->lote_id, $data); return $res->lote_id;}
@@ -450,7 +450,7 @@ class Remitos extends CI_Model {
     {
         $this->db->where('lote_id', $id);
         $this->db->set('cantidad','cantidad +'.$data['cantidad'], false);
-        return $this->db->update('alm_lotes');
+        return $this->db->update('alm.alm_lotes');
     }
 
 }

@@ -4,7 +4,7 @@
 
 class Entregas_Materiales extends CI_Model
 {
-    private $tabla = 'alm_entrega_materiales';
+    private $tabla = 'alm.alm_entrega_materiales';
     private $key = 'enma_id';
     private $columnas = '*';
 
@@ -17,7 +17,7 @@ class Entregas_Materiales extends CI_Model
         $this->db->select('T.enma_id, T.fecha, T.comprobante, T.solicitante');
         $this->db->select('A.pema_id, A.estado, A.ortr_id');
         $this->db->from($this->tabla.' T');
-        $this->db->join('alm_pedidos_materiales A','A.pema_id = T.pema_id');
+        $this->db->join('alm.alm_pedidos_materiales A','A.pema_id = T.pema_id');
         $this->db->order_by('T.fecha','desc');
         $this->db->where('T.eliminado', false);
         $this->db->where('T.empr_id',empresa());
@@ -31,7 +31,7 @@ class Entregas_Materiales extends CI_Model
         $this->db->select('T.enma_id, T.fecha, T.comprobante, T.solicitante');
         $this->db->select('A.pema_id, A.estado, A.ortr_id');
         $this->db->from($this->tabla.' T');
-        $this->db->join('alm_pedidos_materiales A','A.pema_id = T.pema_id');
+        $this->db->join('alm.alm_pedidos_materiales A','A.pema_id = T.pema_id');
         $this->db->order_by('T.fecha','desc');
         $this->db->where('T.eliminado',false);
         $this->db->where('T.empr_id',empresa());
@@ -46,10 +46,10 @@ class Entregas_Materiales extends CI_Model
     public function obtenerDetalles($id)
     {
         $this->db->select('A.barcode, A.descripcion, B.descripcion as deposito, C.codigo as lote, T.cantidad');
-        $this->db->from('alm_deta_entrega_materiales T');
-        $this->db->join('alm_articulos A','A.arti_id=T.arti_id');
-        $this->db->join('alm_depositos B','B.depo_id=T.depo_id');
-        $this->db->join('alm_lotes C','C.lote_id=T.lote_id');
+        $this->db->from('alm.alm_deta_entrega_materiales T');
+        $this->db->join('alm.alm_articulos A','A.arti_id=T.arti_id');
+        $this->db->join('alm.alm_depositos B','B.depo_id=T.depo_id');
+        $this->db->join('alm.alm_lotes C','C.lote_id=T.lote_id');
         $this->db->order_by('barcode');
         $this->db->where($this->key, $id);
         $this->db->where('T.eliminado',false);

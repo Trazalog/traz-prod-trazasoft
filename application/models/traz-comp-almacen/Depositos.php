@@ -10,6 +10,6 @@ class Depositos extends CI_Model
     public function obtener($id = false)
     {
         if($id) $this->db->where('depo_id', $id);
-        return $this->db->get('alm_depositos')->result();
+        return $this->db->get('alm.alm_depositos')->result();
     }
 }

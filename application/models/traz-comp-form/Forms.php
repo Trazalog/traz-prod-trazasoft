@@ -56,7 +56,7 @@ class Forms extends CI_Model
     {
         $this->db->select('name, label, requerido, tida_id, valo_id, orden, A.form_id, A.valor, B.valor as tipo, C.nombre');
         $this->db->from('frm_instancias_formularios as A');
-        $this->db->join('utl_tablas as B', 'B.tabl_id = A.tida_id');
+        $this->db->join('alm.utl_tablas as B', 'B.tabl_id = A.tida_id');
         $this->db->join('frm_formularios as C', 'C.form_id = A.form_id');
         $this->db->where('A.info_id', $info_id);
         $this->db->where('A.eliminado', false);
@@ -86,7 +86,7 @@ class Forms extends CI_Model
     {
         $this->db->select('name, label, requerido, tida_id, valo_id, orden, A.form_id, B.valor as tipo, C.nombre');
         $this->db->from('frm_items as A');
-        $this->db->join('utl_tablas as B', 'B.tabl_id = A.tida_id');
+        $this->db->join('alm.utl_tablas as B', 'B.tabl_id = A.tida_id');
         $this->db->join('frm_formularios as C', 'C.form_id = A.form_id');
         $this->db->where('A.form_id', $id);
         $this->db->where('A.eliminado', false);
@@ -118,7 +118,7 @@ class Forms extends CI_Model
     public function obtenerValores($id)
     {
         $this->db->select('valor as value, valor as label');
-        return $this->db->get_where('utl_tablas', array('tabla' => $id))->result();
+        return $this->db->get_where('alm.utl_tablas', array('tabla' => $id))->result();
     }
 
     public function listado()
