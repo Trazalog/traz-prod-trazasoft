@@ -158,10 +158,10 @@ $('#patente').keyup(function(e) {
             dataType: 'JSON',
             url: 'index.php/general/Lote/obtenerLotesCamion?patente=' + this.value,
             success: function(rsp) {
-
-               if(rsp.data == null) {alert('No existen Lotes Asociados'); return;}
+            console.table(rsp);
+                if(rsp.data == null) {alert('No existen Lotes Asociados'); return;}
+                $("#lotes-camion").empty();
                 rsp.data.forEach(function(e) {
-                    $("#lotes-camion").empty();
                     $("#lotes-camion").append(
                         `<tr data-json='${JSON.stringify(e)}'>
                         <td class="lote">${e.lote_id}</td>
@@ -190,8 +190,7 @@ $('#establecimientos').on('change', function(){
 
 var recipientes = null;
 function obtenerRecipientes() {
-    console.log('Obtener Recipientes');
-    
+    console.log('Obtener Recipientes');   
     var establecimiento = $('#establecimientos').val();
     $.ajax({
         type: 'POST',

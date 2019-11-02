@@ -20,9 +20,10 @@ class Recipientes extends CI_Model
 				$resource = '/lote/'.$establecimiento;
 				
 				// TODO: DESHARCODEAR EL RESOURCE 
-				$url = 'http://PC-PC:8280/services/ProduccionDataService'.$resource;
+		//		$url = 'http://PC-PC:8280/services/ProduccionDataService'.$resource;
 
-       // $url = REST.$resource;
+        $url = 'http://dev-trazalog.com.ar:8280/services/ProduccionDataService'.$resource;
+       
         $array = file_get_contents($url, false, http('GET'));
 
         return json_decode($array);
