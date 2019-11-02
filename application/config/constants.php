@@ -136,5 +136,9 @@ define('RESTPT','http://dev-trazalog.com.ar:8280/services/produccionTest/');
 define('DEFAULT_VIEW', ALM.'Articulo');
 
 #TRAZASOFT
+#Deposito que contienen todos los reci_id que estan en transporte
 define('DEPOSITO_TRANSPORTE', 1000);
+
+#ID DE ETAPA
 define('ETAPA_TRANSPORTE', 1000);
+define('ETAPA_DEPOSITO', 2000);

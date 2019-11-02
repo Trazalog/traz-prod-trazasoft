@@ -9,19 +9,10 @@ class Articulos extends CI_Model
 	}
 	
 	function getList()  
-	{	
-		$res = $this->db->query(
-			'SELECT A.*, coalesce(sum(cantidad),0) as stock FROM alm.alm_articulos A
-			 LEFT JOIN alm.alm_lotes C ON C.arti_id = A.arti_id
-			 GROUP BY A.arti_id
-			 '
-		);
-
-		return $res->result();
-
+	{
 		$this->db->select('A.*, coalesce(sum(cantidad),0) as stock');
-		$this->db->from('alm.alm_articulos A');
-		$this->db->join('alm.alm_lotes C', 'C.arti_id = A.arti_id','left');
+		$this->db->from('alm_articulos A');
+		$this->db->join('alm_lotes C', 'C.arti_id = A.arti_id','left');
 		$this->db->where('A.empr_id', empresa());
 		$this->db->where('A.eliminado', false);
 		$this->db->group_by('A.arti_id');

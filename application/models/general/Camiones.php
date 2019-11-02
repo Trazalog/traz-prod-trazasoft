@@ -97,11 +97,23 @@ class Camiones extends CI_Model
     public function guardarDescarga($data)
     {
         log_message('DEBUG','#CAMION > guardarDescarga | #DATA: '.json_encode($data));
-        $recurso = 'camion/guardar_descarga';
-        $url = REST.$recurso;
-        $data = file_get_contents($url, false, http('POST', $data));
-        $rsp = rsp($http_response_header, false, json_decode($data));
 
+        foreach ($data as $key => $o) {
+            $aux = array(
+                "cantidad"=> $o->cantidad,
+                "batch_id_origen"=> $o->batch_id,
+                "empre_id"=>strval(empresa()),
+                "etap_id_deposito"=>strval(ETAPA_DEPOSITO),
+                "usuario_app"=>strval(userNick()),
+                "reci_id"=> strval($o->reci_id),
+                "forzar_agregar"=>"false"
+            );
+            $recurso = 'lote/deposito/cambiar';
+            $url = REST.$recurso;
+            $data = file_get_contents($url, false, http('POST',[ 'post_lote_deposito_cambiar' => $data]));
+            $rsp = rsp($http_response_header, false, json_decode($data));
+        }
+            
         // foreach ($data as $key => $o) {
         //     #Obtener Nuevo Batch ID
         //     $aux = array(
