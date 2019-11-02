@@ -108,7 +108,7 @@ class Camiones extends CI_Model
                 "forzar_agregar"=>"false"
             );
             $recurso = 'lote/deposito/cambiar';
-            $url = REST_TDS_TEST.$recurso;
+            $url = REST_TDS.$recurso;
             $data = file_get_contents($url, false, http('POST',[ 'post_lote_deposito_cambiar' => $aux]));
             $rsp = rsp($http_response_header);
         }

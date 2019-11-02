@@ -221,18 +221,22 @@ function guardarDecarga() {
 
     array = JSON.stringify(array);
     console.log(array);
-    
+    wo();
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
         url: 'index.php/general/Camion/guardarDescarga',
         data: {array},
         success: function(rsp) {
-            alert('Descarga Guardada')
+            alert('Descarga Guardada');
+            $("#lotes-camion").empty();
         },
         error: function(rsp) {
-            alert('Error: ' + rsp.msj);
+            alert('Error al Guardar Descarga);
             console.log(rsp.msj);
+        },
+        complete:function(){
+            wc();
         }
     });
 }
