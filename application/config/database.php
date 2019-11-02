@@ -74,10 +74,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
 $active_group = 'default';
 $query_builder = true;
 $db['default'] = array(
-    'hostname' => 'localhost',
-    'username' => 'postgres',
-    'password' => 'admin',
-    'database' => 'postgres',
+    'hostname' => 'dev-trazalog.com.ar',
+    'username' => 'arbolado',
+    'password' => 'password',
+    'database' => 'tools',
     'dbdriver' => 'postgre', //mysqli
     'dbprefix' => '',
     'pconnect' => false,
@@ -94,27 +94,3 @@ $db['default'] = array(
     'save_queries' => true,
     'port' => '5432',
 );
-// $active_group = 'default';
-// $query_builder = TRUE;
-
-// $db['default'] = array(
-//     'dsn'    => '',
-//     'hostname' => 'localhost',
-//     'username' => 'root',
-//     'password' => '',
-//     'database' => 'traz-prod-trazasoft',
-//     'dbdriver' => 'mysqli',
-//     'dbprefix' => '',
-//     'pconnect' => FALSE,
-//     'db_debug' => (ENVIRONMENT !== 'production'),
-//     'cache_on' => FALSE,
-//     'cachedir' => '',
-//     'char_set' => 'utf8',
-//     'dbcollat' => 'utf8_general_ci',
-//     'swap_pre' => '',
-//     'encrypt' => FALSE,
-//     'compress' => FALSE,
-//     'stricton' => FALSE,
-//     'failover' => array(),
-//     'save_queries' => TRUE
-// );

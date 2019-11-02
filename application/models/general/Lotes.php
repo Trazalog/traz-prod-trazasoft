@@ -67,9 +67,11 @@ class Lotes extends CI_Model
         $url = RESTPT . $resource;
         $array = file_get_contents($url, false, http('GET'));
         $rsp = rsp($http_response_header);
+        
         if (!$rsp['status']) {
             return $rsp;
         }
+
         $rsp['data'] = json_decode($array)->lotes->lote;
         return $rsp;
     }

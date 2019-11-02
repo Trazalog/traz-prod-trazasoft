@@ -94,4 +94,32 @@ class Camiones extends CI_Model
         return true;
     }
 
+    public function guardarDescarga($data)
+    {
+        log_message('DEBUG','#CAMION > guardarDescarga | #DATA: '.json_encode($data));
+        $recurso = 'camion/guardar_descarga';
+        $url = REST.$recurso;
+        $data = file_get_contents($url, false, http('POST', $data));
+        $rsp = rsp($http_response_header, false, json_decode($data));
+
+        // foreach ($data as $key => $o) {
+        //     #Obtener Nuevo Batch ID
+        //     $aux = array(
+        //         'lote_id' => strval($o->id),
+        //         'reci_id' => strval($reci_id),
+        //         'batch_id' => strval($o->batch_id),n *-
+        //         'empr_id' => strval(empresa()),  
+        //     );
+        //     $rsp = $this->Lotes->crearBatch($aux);
+        //     if (!$rsp['status']) {
+        //         continue;
+        //     }
+        // }
+
+        #Descontar Stock del Lote Transporte
+
+        #Crear Nuevo Lote
+
+        return $rsp;
+    }
 }

@@ -24,9 +24,9 @@ class Recipientes extends CI_Model
 				$resource = '/lote/'.$establecimiento;
 				
 				// TODO: DESHARCODEAR EL RESOURCE 
-				//$url = 'http://PC-PC:8280/services/ProduccionDataService'.$resource;
+				$url = 'http://PC-PC:8280/services/ProduccionDataService'.$resource;
 
-        $url = REST2.$resource;
+        //$url = REST.$resource;
         $array = file_get_contents($url, false, $param);
 
         return json_decode($array);

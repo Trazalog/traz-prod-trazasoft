@@ -40,6 +40,7 @@ class Lote extends CI_Controller
     public function obtenerLotesCamion()
     {
         $patente = $this->input->get('patente');
-        $this->Lotes->obtenerLotesCamion($patente);
+		$rsp = $this->Lotes->obtenerLotesCamion($patente);
+		echo json_encode($rsp);
     }
 }

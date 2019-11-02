@@ -22,7 +22,7 @@ class Entradas extends CI_Model
 
         #$data['reci_id'] = strval($reci_id);
 
-        $url = RESTPT.'entradas';
+        $url = REST.'entradas';
         $rsp =  file_get_contents($url, false, http('POST', ['post_entradas'=>$data]));
         return rsp($http_response_header, false, $rsp);
     }

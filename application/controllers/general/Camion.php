@@ -71,5 +71,12 @@ class Camion extends CI_Controller
 		$data = $this->input->post();
         $rsp = $this->Entradas->guardar($data);
         echo json_encode($rsp);
-	}
+    }
+    
+    public function guardarDescarga()
+    {
+        $data = json_decode($this->input->post('array'));
+        $rsp = $this->Camiones->guardarDescarga($data);
+        return json_encode($rsp);
+    }
 }

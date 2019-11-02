@@ -121,76 +121,15 @@ foreach ($establecimientos as $fila) {
         <h4>Datos Productos entrantes</h4>
     </div>
     <div class="box-body">
-        <div class="row" style="margin-top: 40px">
-            <div class="col-md-1 col-xs-12">
-                <label class="form-label">Producto*:</label>
-            </div>
-            <div class="col-md-6 col-xs-11 margin input-group">
-                <input list="productos" id="inputproductos" class="form-control" autocomplete="off">
-                <datalist id="productos">
-                    <?php foreach ($materias as $fila) {
-    echo "<option data-json='" . json_encode($fila) . "' value='" . $fila->titulo . "'></option>";
-}
-?>
-                </datalist>
-                <span class="input-group-btn">
-                    <button class='btn btn-primary'
-                        onclick='checkTabla("tabla_productos","modalproductos",`<?php echo json_encode($materias); ?>`,"Add")'
-                        data-toggle="modal" data-target="#modal_productos">
-                        <i class="glyphicon glyphicon-search"></i></button>
-                </span>
-            </div>
+        <table class="table table-striped">
+            <thead>
+                <th>Codigo de Lote</th>
+                <th>Recipiente</th>
+            </thead>
+            <tbody id="lotes-camion">
 
-            <div class="col-md-5 col-xs-12"></div>
-        </div>
-        <div class="row" style="margin-top: 50px">
-            <div class="col-md-1 col-xs-12">
-                <label class="form-label">Empaque*:</label>
-            </div>
-            <div class="col-md-5 col-xs-12">
-                <select class="form-control select2 select2-hidden-accesible" id="empaques"
-                    onchange="ActualizaEmpaques()">
-                    <option value="" disabled selected>-Seleccione Empaque-</option>
-                    <?php
-foreach ($empaques as $fila) {
-    echo "<option data-json='" . json_encode($fila) . "' value='" . $fila->id . "'>" . $fila->titulo . "</option>";
-}
-?>
-                </select>
-            </div>
-            <div class="col-md-1 col-xs-12">
-                <label class="form-label">Cantidad*:</label>
-            </div>
-            <div class="col-md-5 col-xs-12">
-                <input type="text" id="cantidad" class="form-control" onchange="ActualizaPesoEstimado()" disabled>
-            </div>
-        </div>
-        <div class="row" style="margin-top: 50px">
-            <div class="col-md-2 col-xs-12">
-                <label class="form-label">Peso estimado:</label>
-            </div>
-            <div class="col-md-4 col-xs-12">
-                <input type="text" class="form-control" id="pesoestimado" disabled>
-            </div>
-            <div class="col-md-2 col-xs-12">
-                <label class="form-label">Peso Real*:</label>
-            </div>
-            <div class="col-md-4 col-xs-12">
-                <input type="text" class="form-control" id="pesoreal">
-            </div>
-        </div>
-        <div class="row" style="margin-top:10px">
-            <div class="col-md-4 "></div>
-            <div class="col-md-4 col-xs-12">
-                <button class="btn btn-success btn-block" onclick="AgregarProducto()">Agregar Producto</button>
-            </div>
-            <div class="col-md-4 "></div>
-        </div>
-        <hr>
-        <div class="row">
-            <input type="hidden" value="no" id="productos_existe">
-            <div class="col-xs-12 table-responsive" id="productosasignados"> </div>
-        </div>
+            </tbody>
+        </table>
     </div>
 
     <!-- /.box-body -->
@@ -198,7 +137,7 @@ foreach ($empaques as $fila) {
         <div class="row">
             <div class="col-md-10 col-xs-6"></div>
             <div class="col-md-2 col-xs-6">
-                <button class="btn btn-success btn-block" onclick="Guardar()">Guardar</button>
+                <button class="btn btn-success btn-block" onclick="guardarDecarga()">Guardar</button>
             </div>
         </div>
 
@@ -209,25 +148,93 @@ foreach ($empaques as $fila) {
 <script>
 $('#patente').keyup(function(e) {
     if (e.keyCode === 13) {
-        if(this.value == null || this.value == '') return;
+        console.log('Obtener Lotes Patentes');
+
+        if (this.value == null || this.value == '') return;
         wo();
         $.ajax({
             type: 'GET',
             dataType: 'JSON',
-            url: 'index.php/general/Lote/obtenerLotesCamion?patente='+this.value,
+            url: 'index.php/general/Lote/obtenerLotesCamion?patente=' + this.value,
             success: function(rsp) {
-                aler('Hecho');
+
+                if(!rsp.status) return;
+                rsp.data.forEach(function(e) {
+                    $("#lotes-camion").append(
+                        `<tr data-json='${JSON.stringify(e)}'>
+                        <td class="lote">${e.lote_id}</td>
+                        <td><select class="recipiente"><option value="false"> - Seleccionar - </option></select></td>
+                    </tr>`
+                    );
+                });
+
+                recipientes.forEach(e => { 
+                   $('select.recipiente').append(`<option value="${e.id}">${e.titulo}</option>`);
+                });
             },
             error: function(rsp) {
-                alert('Error');
+                alert('No hay Lotes Asociados');
             },
-            complete:function(){
+            complete: function() {
                 wc();
             }
         });
     }
 });
 
+$('#establecimientos').on('change', function(){
+    obtenerRecipientes();
+});
+
+var recipientes = null;
+function obtenerRecipientes() {
+    console.log('Obtener Recipientes');
+    
+    var establecimiento = $('#establecimientos').val();
+    $.ajax({
+        type: 'POST',
+        dataType: 'JSON',
+        url: 'index.php/general/Recipiente/listarPorEstablecimiento',
+        data:{establecimiento},
+        success: function(rsp) {
+            console.table(rsp);
+            recipientes = rsp;
+        },
+        error: function(rsp) {
+            alert('Error: ' + rsp.msj);
+            console.log(rsp.msj);
+        }
+    });
+}
+
+
+function guardarDecarga() {
+    console.log('Guardar Descarga');
+    var array = [];
+    var item = null;
+    $('.recipiente').each(function(e) {
+        item = JSON.parse($(this).closest('tr').attr('data-json'));
+        item.reci_id = this.value;
+        array.push(item);
+    });
+
+    array = JSON.stringify(array);
+
+    $.ajax({
+        type: 'POST',
+        dataType: 'JSON',
+        url: 'index.php/general/Camion/guardarDescarga',
+        data: 
+            array,
+        success: function(rsp) {
+            alert('Descarga Guardada')
+        },
+        error: function(rsp) {
+            alert('Error: ' + rsp.msj);
+            console.log(rsp.msj);
+        }
+    });
+}
 
 function addCamion() {
     console.log('addCamion');
@@ -254,7 +261,6 @@ function addCamion() {
             }
         },
         error: function(rsp) {
-            alert('Error: ' + rsp.msj);
             console.log(rsp.msj);
         },
         complete: function() {
