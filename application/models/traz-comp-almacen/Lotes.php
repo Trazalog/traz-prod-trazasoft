@@ -184,7 +184,7 @@ class Lotes extends CI_Model {
 		$aux["p_empr_id"] = strval(empresa());
         $aux["p_forzar_agregar"] = "FALSE";
         
-        $url = TDS.'lote';
+        $url = REST_TDS.'lote';
         $rsp =  file_get_contents($url, false, http('POST', ['post_lote'=>$aux]));
         $rsp =  rsp($http_response_header, false, json_decode($rsp)->respuesta->resultado);
 		return $rsp;

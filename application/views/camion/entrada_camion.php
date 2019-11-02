@@ -147,19 +147,21 @@ foreach ($establecimientos as $fila) {
 
 <script>
 $('#patente').keyup(function(e) {
+     $("#lotes-camion").empty();
     if (e.keyCode === 13) {
         console.log('Obtener Lotes Patentes');
 
         if (this.value == null || this.value == '') return;
-        //wo();
+        wo();
         $.ajax({
             type: 'GET',
             dataType: 'JSON',
             url: 'index.php/general/Lote/obtenerLotesCamion?patente=' + this.value,
             success: function(rsp) {
 
-                if(rsp.data == null) return;
+               if(rsp.data == null) {alert('No existen Lotes Asociados'); return;}
                 rsp.data.forEach(function(e) {
+                    $("#lotes-camion").empty();
                     $("#lotes-camion").append(
                         `<tr data-json='${JSON.stringify(e)}'>
                         <td class="lote">${e.lote_id}</td>
@@ -219,13 +221,13 @@ function guardarDecarga() {
     });
 
     array = JSON.stringify(array);
-
+    console.log(array);
+    
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
         url: 'index.php/general/Camion/guardarDescarga',
-        data: 
-            array,
+        data: {array},
         success: function(rsp) {
             alert('Descarga Guardada')
         },
