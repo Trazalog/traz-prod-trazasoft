@@ -66,7 +66,7 @@ foreach ($establecimientos as $fila) {
 ?>
                     </datalist>
                 </div>
-                <div class="col-md-5 col-xs-12"><input type="text" disabled id="nombreproveedor" class="form-control">
+                <div class="col-md-5 col-xs-12"><input type="text" disabled id="nombreproveedor" class="form-control btn-cargar">
                 </div>
             </div>
         </form>
