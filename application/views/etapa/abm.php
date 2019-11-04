@@ -298,10 +298,14 @@ $this->load->view('etapa/modal_finalizar');}?>
                 success: function(result) {
                     if (result == "ok") {
                         linkTo('general/Etapa/index');
-
-                    } else {
-                        alert('Ups! algo salio mal')
-                    }
+                    }else{
+											alert("Hubo un error en BD");
+										} 
+                    if(result == 'Error al Inciar Proceso'){
+                        alert("Hubo un error al iniciar Proceso BPM");
+                    }else{
+											linkTo('general/Etapa/index');
+										}
                 }
             });
         }

@@ -288,55 +288,36 @@ class Etapas extends CI_Model
 		function SetNuevoBatch($data)
 		{
 				$arrayBatch = json_encode($data);
-
-				$parametros["http"]["method"] = "POST";
-        $parametros["http"]["header"] = "Accept: application/json";	 
-        $parametros["http"]["header"] = "Content-Type: application/json";
-        $parametros["http"]["content"] = $arrayBatch;	 		 
-        $param = stream_context_create($parametros);	
+				log_message('DEBUG', 'Etapas/SetNuevoBatch(datos)-> '.$arrayBatch);
 
 				$resource = '/lote';	 	
-        $url = REST2.$resource;
+        $url = REST4.$resource;
         //$url = 'http://dev-trazalog.com.ar:8280/services/TrazabilidadDataService/lote';
-        $array = file_get_contents($url, false, $param); 				
-
+        $array = file_get_contents($url, false, http("POST", $data)); 				
+		
        	return json_decode($array);
 		}
 
-    function setCabeceraNP($cab)
+    function setCabeceraNP($data)
     {
-        $cab = json_encode($cab);
-
-        $parametros["http"]["method"] = "POST";
-        $parametros["http"]["header"] = "Accept: application/json";	 
-        $parametros["http"]["header"] = "Content-Type: application/json";
-        $parametros["http"]["content"] = $cab;	 		 
-        $param = stream_context_create($parametros);
+				log_message('DEBUG', 'Etapas/setCabeceraNP(datos)-> '.json_encode($data));        
         $resource = '/notapedido';	 	
         $url = REST2.$resource;
-        //$url = 'http://PC-PC:8280/services/ProduccionDataService/notapedido';
-        $array = file_get_contents($url, false, $param); 
-
-       	return json_decode($array);
+       
+				$array = $this->rest->callAPI("POST", $url, $data);				
+				return $array;
     }
 
 
     function setDetaNP($arrayDeta){
-
-				$arrayDeta = json_encode($arrayDeta);	
-
-				$parametros["http"]["method"] = "POST";
-				$parametros["http"]["header"] = "Accept: application/json";	 
-				$parametros["http"]["header"] = "Content-Type: application/json";
-				$parametros["http"]["content"] = $arrayDeta;	
-
-				$param = stream_context_create($parametros);
-				$resource = '/_post_notapedido_detalle_batch_req';	 	
-				$url = REST2.$resource;
+			
 				//$url = 'http://PC-PC:8280/services/ProduccionDataService/_post_notapedido_detalle_batch_req';
-				$array = file_get_contents($url, false, $param); 	
-
-				return json_decode($array);	
+			
+				log_message('DEBUG', 'Etapas/setDetaNP(datos)-> '.json_encode($arrayDeta)); 
+				$resource = '/_post_notapedido_detalle_batch_req';	 	
+				$url = REST2.$resource;				 
+				$array = $this->rest->callAPI("POST", $url, $arrayDeta);	
+				return $array;
     }
 
 
@@ -355,7 +336,7 @@ class Etapas extends CI_Model
 			
 			$array = file_get_contents($url, false, $param); 		
 			
-			var_dump($http_response_header);
+			//var_dump($http_response_header);
 
 			return json_decode($array);	
 
