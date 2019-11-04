@@ -1,15 +1,7 @@
 <?php $this->load->view('camion/modal_productos')?>
 <div class="box">
     <div class="box-header with-border">
-        <h3><?php echo $lang["EntrarCamion"]; ?></h3>
-        <div class="box-tools pull-right">
-            <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title=""
-                data-original-title="Collapse">
-                <i class="fa fa-minus"></i></button>
-            <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title=""
-                data-original-title="Remove">
-                <i class="fa fa-times"></i></button>
-        </div>
+        <h3 class="box-title">Carga | Recepción</h3>
     </div>
     <div class="box-body">
         <div class="row">
@@ -23,7 +15,7 @@
             <div class="col-md-6 col-xs-12">
                 <div id="descargacamion" onclick="descargacamion()">
                     <img src="<?php echo base_url('icon/order.png'); ?>" alt="Smiley face" height="42" width="42">
-                    <label for="">DESCARGA</label>
+                    <label for="">RECEPCIÓN</label>
                 </div>
             </div>
         </div>
@@ -63,10 +55,10 @@ foreach ($establecimientos as $fila) {
             </div>
             <div class="row" style="margin-top:40px">
                 <div class="col-md-1 col-xs-12">
-                    <label class="form-label">Proveedor*:</label>
+                    <label class="form-label btn-cargar">Proveedor*:</label>
                 </div>
                 <div class="col-md-6 col-xs-12">
-                    <input list="proveedores" class="form-control" id="proveedor" name="proveedor" autocomplete="off">
+                    <input list="proveedores" class="form-control btn-cargar" id="proveedor" name="proveedor" autocomplete="off">
                     <datalist id="proveedores">
                         <?php foreach ($proveedores as $fila) {
     echo "<option data-json='" . json_encode($fila) . "' value='" . $fila->id . "'>" . $fila->titulo . "</option>";
@@ -74,7 +66,7 @@ foreach ($establecimientos as $fila) {
 ?>
                     </datalist>
                 </div>
-                <div class="col-md-5 col-xs-12"><input type="text" disabled id="nombreproveedor" class="form-control">
+                <div class="col-md-5 col-xs-12"><input type="text" disabled id="nombreproveedor" class="form-control btn-cargar">
                 </div>
             </div>
         </form>
@@ -498,6 +490,7 @@ function cargacamion() {
     document.getElementById('accioncamion').value = "carga";
     document.getElementById('boxproductos').hidden = true;
     $('#add-camion').show();
+    $('.btn-cargar').hide();
 }
 
 function descargacamion() {
@@ -507,6 +500,7 @@ function descargacamion() {
     document.getElementById('accioncamion').value = "descarga";
     document.getElementById('boxproductos').hidden = false;
     $('#add-camion').hide();
+    $('.btn-cargar').show();
 }
 
 function actualizaNeto() {
