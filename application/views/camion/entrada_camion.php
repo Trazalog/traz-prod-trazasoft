@@ -232,7 +232,7 @@ function guardarDecarga() {
             $("#lotes-camion").empty();
         },
         error: function(rsp) {
-            alert('Error al Guardar Descarga);
+            alert('Error al Guardar Descarga');
             console.log(rsp.msj);
         },
         complete:function(){

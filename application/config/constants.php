@@ -86,7 +86,7 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 
 #BONITA SOFT
 define('BONITA_URL', 'http://localhost:8080/bonita/');  
-define('BPM_ADMIN_USER', 'almacen.toolsx');
+define('BPM_ADMIN_USER', 'almacen.tools');
 define('BPM_ADMIN_PASS', 'bpm');
 define('BPM_USER_PASS', 'bpm');
 

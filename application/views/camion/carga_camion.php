@@ -412,7 +412,10 @@ function FinalizarCarga() {
 
                 console.log(result);
                 
-                alert("Hecho");
+                if(result.status == true) alert("Hecho");
+                else{
+                    alert('No se puedo Registrar Carga');
+                }
 
                 return;
 

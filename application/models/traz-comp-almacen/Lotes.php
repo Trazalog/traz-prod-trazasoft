@@ -185,8 +185,12 @@ class Lotes extends CI_Model {
         $aux["p_forzar_agregar"] = "FALSE";
         
         $url = REST_TDS.'lote';
-        $rsp =  file_get_contents($url, false, http('POST', ['post_lote'=>$aux]));
-        $rsp =  rsp($http_response_header, false, json_decode($rsp)->respuesta->resultado);
+		$rsp = file_get_contents($url, false, http('POST', ['post_lote'=>$aux]));
+		$bath_id = json_decode($rsp)->respuesta->resultado;
+		$rsp = rsp($http_response_header, false, $bath_id);
+		if(!is_numeric($bath_id)){
+			$rsp['status'] = false;
+		}
 		return $rsp;
 	}
 }
