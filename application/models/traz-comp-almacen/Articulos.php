@@ -85,7 +85,6 @@ class Articulos extends CI_Model
 	}
 
 	function eliminar($id){
-		//$estado_id = $this->db->get_where('alm.alm.utl_tablas',['valor'=>'IN'])->row()->tabl_id;
 		$this->db->where('arti_id',$id);
 		$this->db->set('eliminado',true);
 		return $this->db->update('alm.alm_articulos');
