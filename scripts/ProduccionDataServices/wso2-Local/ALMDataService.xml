@@ -1,0 +1,35 @@
+<data disableLegacyBoxcarringMode="true" enableBatchRequests="true" enableBoxcarring="true" name="ALMDataService" serviceNamespace="Modulo ALM, dataservice" transports="http https local">
+   <config enableOData="false" id="ToolsDataService">
+      <property name="carbon_datasource_name">ToolsDataService</property>
+   </config>
+   <query id="extraerCantidadLote" useConfig="ToolsDataService">
+      <sql>update alm.alm_lotes&#xd;set cantidad = cantidad - CAST(:cantidad as FLOAT8)&#xd;where codigo = CAST(:batch_id as VARCHAR)&#xd;and empr_id = CAST(:empr_id as INTEGER)</sql>
+      <param name="cantidad" sqlType="STRING"/>
+      <param name="empr_id" sqlType="STRING"/>
+      <param name="batch_id" sqlType="STRING"/>
+   </query>
+   <query id="crearLote" useConfig="ToolsDataService">
+      <sql>insert&#xd;	into&#xd;	alm.alm_lotes (prov_id,&#xd;	arti_id,&#xd;	depo_id,&#xd;	codigo,&#xd;	fec_vencimiento,&#xd;	cantidad,&#xd;	empr_id,&#xd;	user_id,&#xd;	estado)&#xd;values(cast(:prov_id as integer),&#xd;cast(:arti_id as integer),&#xd;cast(:depo_id as integer),&#xd;:codigo,&#xd;to_date(:fec_ven, 'YYYY-MM-DD')',&#xd;cast(:cantidad as float8),&#xd;cast(:empr_id as integer),&#xd;cast(:user_id as integer),&#xd;:estado)</sql>
+      <param name="prov_id" sqlType="STRING"/>
+      <param name="arti_id" sqlType="STRING"/>
+      <param name="depo_id" sqlType="STRING"/>
+      <param name="codigo" sqlType="STRING"/>
+      <param name="fec_ven" sqlType="STRING"/>
+   </query>
+   <resource method="POST" path="/lote/extraer">
+      <call-query href="extraerCantidadLote">
+         <with-param name="cantidad" query-param="cantidad"/>
+         <with-param name="empr_id" query-param="empr_id"/>
+         <with-param name="batch_id" query-param="batch_id"/>
+      </call-query>
+   </resource>
+   <resource method="POST" path="/lote/crear">
+      <call-query href="crearLote">
+         <with-param name="prov_id" query-param="prov_id"/>
+         <with-param name="arti_id" query-param="arti_id"/>
+         <with-param name="depo_id" query-param="depo_id"/>
+         <with-param name="codigo" query-param="codigo"/>
+         <with-param name="fec_ven" query-param="fec_ven"/>
+      </call-query>
+   </resource>
+</data>

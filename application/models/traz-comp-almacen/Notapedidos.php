@@ -14,7 +14,7 @@ class Notapedidos extends CI_Model
 
         $this->db->where('pema_id', $pema);
         $this->db->set('motivo_rechazo', $motivo);
-        return $this->db->update('alm_pedidos_materiales');
+        return $this->db->update('alm.alm_pedidos_materiales');
 
     }
 
@@ -22,7 +22,7 @@ class Notapedidos extends CI_Model
     {
         $this->db->select('T.pema_id as id_notaPedido,T.fecha,T.ortr_id as id_ordTrabajo,T.justificacion, T.estado');
         if($ot) $this->db->select('orden_trabajo.descripcion');
-        $this->db->from('alm_pedidos_materiales as T');
+        $this->db->from('alm.alm_pedidos_materiales as T');
         if($ot) $this->db->join('orden_trabajo', 'T.ortr_id = orden_trabajo.id_orden','left');
         $this->db->where('T.empr_id', empresa());
         if($ot)  $this->db->where('orden_trabajo.id_orden', $ot);
@@ -38,13 +38,13 @@ class Notapedidos extends CI_Model
     public function get($id)
     {
         $this->db->where('pema_id', $id);
-        return $this->db->get('alm_pedidos_materiales')->row_array();
+        return $this->db->get('alm.alm_pedidos_materiales')->row_array();
     }
 
     public function getXCaseId($case)
     {
         $this->db->where('case_id', $case);
-        return $this->db->get('alm_pedidos_materiales')->row_array();
+        return $this->db->get('alm.alm_pedidos_materiales')->row_array();
     }
 
     public function setCaseId($id, $case)
@@ -52,7 +52,7 @@ class Notapedidos extends CI_Model
         $this->db->set('case_id', $case);
         $this->db->set('estado', $case?'Solicitado':'Reintentar');
         $this->db->where('pema_id', $id);
-        $this->db->update('alm_pedidos_materiales');
+        $this->db->update('alm.alm_pedidos_materiales');
     }
 
     //
@@ -61,16 +61,16 @@ class Notapedidos extends CI_Model
         $userdata = $this->session->userdata('user_data');
         $empId = empresa();
         $this->db->select('
-            alm_pedidos_materiales.pema_id as id_notaPedido,
-            alm_pedidos_materiales.fecha,
-            alm_pedidos_materiales.ortr_id as id_ordTrabajo,
+            alm.alm_pedidos_materiales.pema_id as id_notaPedido,
+            alm.alm_pedidos_materiales.fecha,
+            alm.alm_pedidos_materiales.ortr_id as id_ordTrabajo,
             solicitud_reparacion.solicitante,
             orden_trabajo.descripcion
         ');
-        $this->db->from('alm_pedidos_materiales');
-        $this->db->join('orden_trabajo', 'alm_pedidos_materiales.ortr_id = orden_trabajo.id_orden');
+        $this->db->from('alm.alm_pedidos_materiales');
+        $this->db->join('orden_trabajo', 'alm.alm_pedidos_materiales.ortr_id = orden_trabajo.id_orden');
         $this->db->join('solicitud_reparacion', 'orden_trabajo.id_solicitud = solicitud_reparacion.id_solicitud', 'left');
-        $this->db->where('alm_pedidos_materiales.empr_id', $empId);
+        $this->db->where('alm.alm_pedidos_materiales.empr_id', $empId);
         $this->db->where('orden_trabajo.id_orden', $id);
 
         $query = $this->db->get();
@@ -86,26 +86,26 @@ class Notapedidos extends CI_Model
     public function getNotaPedidoIds($id)
     {
 
-        $this->db->select('alm_pedidos_materiales.pema_id as id_notaPedido,
-                          alm_pedidos_materiales.fecha,
-                          alm_pedidos_materiales.ortr_id as id_ordTrabajo,
-                          alm_pedidos_materiales.justificacion,
-                          alm_deta_pedidos_materiales.cantidad,
-                          (alm_deta_pedidos_materiales.cantidad - alm_deta_pedidos_materiales.resto) as entregado,
-                          alm_deta_pedidos_materiales.fecha_entrega,
-                          alm_deta_pedidos_materiales.fecha_entregado,
-                          alm_articulos.barcode,
-                          alm_articulos.arti_id,
-                          alm_articulos.descripcion as artDescription,
-                          alm_deta_pedidos_materiales.depe_id'
+        $this->db->select('alm.alm_pedidos_materiales.pema_id as id_notaPedido,
+                          alm.alm_pedidos_materiales.fecha,
+                          alm.alm_pedidos_materiales.ortr_id as id_ordTrabajo,
+                          alm.alm_pedidos_materiales.justificacion,
+                          alm.alm_deta_pedidos_materiales.cantidad,
+                          (alm.alm_deta_pedidos_materiales.cantidad - alm.alm_deta_pedidos_materiales.resto) as entregado,
+                          alm.alm_deta_pedidos_materiales.fecha_entrega,
+                          alm.alm_deta_pedidos_materiales.fecha_entregado,
+                          alm.alm_articulos.barcode,
+                          alm.alm_articulos.arti_id,
+                          alm.alm_articulos.descripcion as artDescription,
+                          alm.alm_deta_pedidos_materiales.depe_id'
         );
 
         if(viewOT)$this->db->select('orden_trabajo.descripcion');
-        $this->db->from('alm_pedidos_materiales');
-        if(viewOT)$this->db->join('orden_trabajo', 'alm_pedidos_materiales.ortr_id = orden_trabajo.id_orden','left');
-        $this->db->join('alm_deta_pedidos_materiales', 'alm_deta_pedidos_materiales.pema_id = alm_pedidos_materiales.pema_id');
-        $this->db->join('alm_articulos', 'alm_deta_pedidos_materiales.arti_id = alm_articulos.arti_id');
-        $this->db->where('alm_pedidos_materiales.pema_id', $id);
+        $this->db->from('alm.alm_pedidos_materiales');
+        if(viewOT)$this->db->join('orden_trabajo', 'alm.alm_pedidos_materiales.ortr_id = orden_trabajo.id_orden','left');
+        $this->db->join('alm.alm_deta_pedidos_materiales', 'alm.alm_deta_pedidos_materiales.pema_id = alm.alm_pedidos_materiales.pema_id');
+        $this->db->join('alm.alm_articulos', 'alm.alm_deta_pedidos_materiales.arti_id = alm.alm_articulos.arti_id');
+        $this->db->where('alm.alm_pedidos_materiales.pema_id', $id);
         $query = $this->db->get();
 
         if ($query->num_rows() != 0) {
@@ -117,7 +117,7 @@ class Notapedidos extends CI_Model
 
     public function getArticulos()
     {
-        $query = $this->db->query("SELECT alm_articulos;.artId, alm_articulos;.artBarCode,alm_articulos;.artDescription FROM alm_articulos;");
+        $query = $this->db->query("SELECT alm.alm_articulos;.artId, alm.alm_articulos;.artBarCode,alm.alm_articulos;.artDescription FROM alm.alm_articulos;");
         $i = 0;
         foreach ($query->result() as $row) {
 
@@ -132,8 +132,8 @@ class Notapedidos extends CI_Model
     public function getProveedores()
     {
 
-        $this->db->select('alm_proveedores.provid, alm_proveedores.provnombre');
-        $this->db->from('alm_proveedores');
+        $this->db->select('alm.alm_proveedores.provid, alm.alm_proveedores.provnombre');
+        $this->db->from('alm.alm_proveedores');
         $query = $this->db->get();
         if ($query->num_rows() != 0) {
 
@@ -153,7 +153,7 @@ class Notapedidos extends CI_Model
         );
 
         if($orden) $notaP['ortr_id'] =  $orden;
-        $this->db->insert('alm_pedidos_materiales', $notaP);
+        $this->db->insert('alm.alm_pedidos_materiales', $notaP);
         $idNota = $this->db->insert_id();
 
         for ($i = 0; $i < count($data['insum_Id']); $i++) {
@@ -173,7 +173,7 @@ class Notapedidos extends CI_Model
                 'fechaEntrega' => $newDate,
                 'fechaEntregado' => $newDate,
             );
-            $this->db->insert('alm_deta_pedidos_materiales', $nota);
+            $this->db->insert('alm.alm_deta_pedidos_materiales', $nota);
         }
 
         if ($this->db->trans_status() === false) {
@@ -190,11 +190,11 @@ class Notapedidos extends CI_Model
         //FIXME: DESHARDCODEAR ESTE CLIENTE!!!!
         $idcliente = 21;
         $this->db->select('asp_detaplantillainsumos.artId,
-												alm_articulos;.artDescription,
+												alm.alm_articulos;.artDescription,
 												asp_plantillainsumos.plant_id');
         $this->db->from('asp_detaplantillainsumos');
         $this->db->join('asp_plantillainsumos', 'asp_detaplantillainsumos.plant_id = asp_plantillainsumos.plant_id');
-        $this->db->join('alm_articulos;', 'alm_articulos;.artId = asp_detaplantillainsumos.artId');
+        $this->db->join('alm.alm_articulos;', 'alm.alm_articulos;.artId = asp_detaplantillainsumos.artId');
         $this->db->join('admcustomers', 'asp_plantillainsumos.plant_id = admcustomers.plant_id');
         $this->db->where('admcustomers.plant_id', '(SELECT admcustomers.plant_id WHERE admcustomers.cliId = ' . $idcliente . ')', false);
         $query = $this->db->get();
@@ -208,7 +208,7 @@ class Notapedidos extends CI_Model
     public function setCabeceraNota($cabecera)
     {
         $cabecera['ortr_id'] = (int)$cabecera['ortr_id'];
-        $this->db->insert('alm_pedidos_materiales', $cabecera);
+        $this->db->insert('alm.alm_pedidos_materiales', $cabecera);
         $idInsert = $this->db->insert_id();
         return $idInsert;
     }
@@ -217,13 +217,13 @@ class Notapedidos extends CI_Model
     {
         foreach ($deta as $o) {
             $o['resto'] = $o['cantidad'];
-            if($this->db->get_where('alm_deta_pedidos_materiales',array('pema_id'=>$o['pema_id'],'arti_id'=>$o['arti_id']))->num_rows()==1){
+            if($this->db->get_where('alm.alm_deta_pedidos_materiales',array('pema_id'=>$o['pema_id'],'arti_id'=>$o['arti_id']))->num_rows()==1){
                 
                 $this->db->where(array('pema_id'=>$o['pema_id'],'arti_id'=>$o['arti_id']));
-                $this->db->update('alm_deta_pedidos_materiales', $o);
+                $this->db->update('alm.alm_deta_pedidos_materiales', $o);
                 
             }else{
-                $this->db->insert('alm_deta_pedidos_materiales', $o);
+                $this->db->insert('alm.alm_deta_pedidos_materiales', $o);
             }
         }
         return true;
@@ -233,13 +233,13 @@ class Notapedidos extends CI_Model
     {
         $this->db->where('depe_id', $id);
         $data['resto'] = $data['cantidad'];
-        return $this->db->update('alm_deta_pedidos_materiales',$data);
+        return $this->db->update('alm.alm_deta_pedidos_materiales',$data);
     }
 
     public function eliminarDetalle($id)
     {
         $this->db->where('depe_id', $id);
-        return $this->db->delete('alm_deta_pedidos_materiales');
+        return $this->db->delete('alm.alm_deta_pedidos_materiales');
     }
 
 }

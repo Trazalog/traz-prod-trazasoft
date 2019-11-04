@@ -9,16 +9,7 @@ class Articulos extends CI_Model
 	}
 	
 	function getList()  
-	{	
-		$res = $this->db->query(
-			'SELECT A.*, coalesce(sum(cantidad),0) as stock FROM alm.alm_articulos A
-			 LEFT JOIN alm.alm_lotes C ON C.arti_id = A.arti_id
-			 GROUP BY A.arti_id
-			 '
-		);
-
-		return $res->result();
-
+	{
 		$this->db->select('A.*, coalesce(sum(cantidad),0) as stock');
 		$this->db->from('alm.alm_articulos A');
 		$this->db->join('alm.alm_lotes C', 'C.arti_id = A.arti_id','left');
@@ -45,28 +36,28 @@ class Articulos extends CI_Model
 		$data['es_caja'] = isset($data['cantidad_caja']);
 		$data['es_loteado'] = isset($data['es_loteado']);
 		$data['empr_id'] = empresa();
-		$this->db->insert('alm_articulos',$data);
+		$this->db->insert('alm.alm_articulos',$data);
 		return $this->db->insert_id();
 	}
 
 	public function editar($data)
 	{
 		$this->db->where('arti_id', $data['arti_id']);
-		return $this->db->update('alm_articulos', $data);
+		return $this->db->update('alm.alm_articulos', $data);
 	}
 
 	function get($id)
 	{
 		$this->db->where('arti_id',$id);
-		return $this->db->get('alm_articulos')->row_array();
+		return $this->db->get('alm.alm_articulos')->row_array();
 	}
 
 	function getLotes($id)
 	{
 		$this->db->where('arti_id',$id);
 		$this->db->select('*');
-		$this->db->from('alm_lotes T');
-		$this->db->join('alm_depositos A','T.depo_id = A.depo_id');
+		$this->db->from('alm.alm_lotes T');
+		$this->db->join('alm.alm_depositos A','T.depo_id = A.depo_id');
 		return $this->db->get()->result_array();
 	}
 	
@@ -76,8 +67,8 @@ class Articulos extends CI_Model
 		$empresaId = empresa();
 
 		$this->db->select('A.*, B.tabl_id as unidadmedida,B.descripcion as unidad_descripcion');
-		$this->db->from('alm_articulos A');
-		$this->db->join('utl_tablas B','A.unidad_id = B.tabl_id','left');
+		$this->db->from('alm.alm_articulos A');
+		$this->db->join('alm.alm.utl_tablas B','A.unidad_id = B.tabl_id','left');
 		$this->db->where('arti_id',$id);
 		$this->db->where('empr_id',$empresaId);
 
@@ -94,17 +85,16 @@ class Articulos extends CI_Model
 	}
 
 	function eliminar($id){
-		//$estado_id = $this->db->get_where('utl_tablas',['valor'=>'IN'])->row()->tabl_id;
 		$this->db->where('arti_id',$id);
 		$this->db->set('eliminado',true);
-		return $this->db->update('alm_articulos');
+		return $this->db->update('alm.alm_articulos');
 	}
 
 	function getUnidadesMedidas()
 	{
 		$this->db->select('A.tabl_id as id_unidadmedida,A.descripcion');
 		$this->db->where('tabla','unidad');
-		$query  = $this->db->get('utl_tablas A');
+		$query  = $this->db->get('alm.alm.utl_tablas A');
 		if($query->num_rows()>0)
 		{
 		    return $query->result_array();
@@ -132,9 +122,9 @@ class Articulos extends CI_Model
 			$data      = array();
 			
 			$this->db->select('A.*,B.valor as unidad');
-			$this->db->from('alm_articulos A');
-			$this->db->join('utl_tablas B','A.unidad_id = B.tabl_id');
-			$this->db->join('utl_tablas C','A.estado_id = C.tabl_id');
+			$this->db->from('alm.alm_articulos A');
+			$this->db->join('alm.alm.utl_tablas B','A.unidad_id = B.tabl_id');
+			$this->db->join('alm.alm.utl_tablas C','A.estado_id = C.tabl_id');
 			$this->db->where('C.valor','AC');
 		
 		    $query = $this->db->get();
@@ -210,21 +200,21 @@ class Articulos extends CI_Model
 
 			switch($act){
 				case 'Add':
-					if($this->db->get_where('alm_articulos',['barcode'=>$code, 'empr_id'=>$empresaId])->num_rows()>0)return false;
+					if($this->db->get_where('alm.alm_articulos',['barcode'=>$code, 'empr_id'=>$empresaId])->num_rows()>0)return false;
 				
-					if($this->db->insert('alm_articulos', $data)) {
+					if($this->db->insert('alm.alm_articulos', $data)) {
 						return $this->db->insert_id();
 					} 
 					break;
 				case 'Edit':
 				 	//Actualizar Artículo
-				 	if($this->db->update('alm_articulos', $data, array('artId'=>$id)) == false) {
+				 	if($this->db->update('alm.alm_articulos', $data, array('artId'=>$id)) == false) {
 				 		return false;
 				 	}
 				 	break;
 				case 'Del':
 				 	//Eliminar Artículo
-				 	if($this->db->delete('alm_articulos', array('artId'=>$id)) == false) {
+				 	if($this->db->delete('alm.alm_articulos', array('artId'=>$id)) == false) {
 				 		return false;
 				 	}
 				 	break;
@@ -264,7 +254,7 @@ class Articulos extends CI_Model
 	function update_editar($data, $id)
 	{
         $this->db->where('arti_id', $id);
-        $query = $this->db->update("alm_articulos",$data);
+        $query = $this->db->update("alm.alm_articulos",$data);
         return $query;
     }
 

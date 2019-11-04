@@ -126,7 +126,7 @@
 <script>
 function eventSelect() {
 
-    if (selectItem.es_loteado == 'f') {
+    if (selectItem.es_loteado == 'false') {
         $('#lote').prop('disabled', true);
         $('#lote').val('S/L');
     } else {
@@ -141,7 +141,7 @@ function verificarExistenciaLote() {
         alert('Campos Obligatorios(*) Incompletos');
         return;
     }
-    if (selectItem.es_loteado == 'f') {
+    if (selectItem.es_loteado == 'false') {
         agregar();
         return;
     }

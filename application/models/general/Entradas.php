@@ -10,19 +10,9 @@ class Entradas extends CI_Model
 
     public function guardar($data)
     {
-        #Crear Recipiente
-        $aux = array(
-            'tipo' => 'TRANSPORTE',
-            'patente' => $data['patente'],
-            'depo_id' => strval(DEPOSITO_TRANSPORTE),
-            'empr_id' => strval(empresa()),
-        );
+       log_message('DEBUG','#ENTRADAS > guardar | #DATA-POST: '.json_encode($data));
 
-        #$reci_id = $this->Recipientes->crear($aux)['data']->resultado->reci_id;
-
-        #$data['reci_id'] = strval($reci_id);
-
-        $url = REST.'entradas';
+        $url = RESTPT.'entradas';
         $rsp =  file_get_contents($url, false, http('POST', ['post_entradas'=>$data]));
         return rsp($http_response_header, false, $rsp);
     }

@@ -91,7 +91,7 @@
                </div>
                <div class="col-md-3"></div>
             </div>
-     <div class="row" style="margin-top:20px">
+    <div class="row" style="margin-top:20px">
           <div class="col-md-3 col-xs-12"><label class="form-label">Requiere Fraccionada:</label></div>
           <div class="col-md-1 col-xs-12"><input  type="checkbox" id="fraccionado" value=""></div>
           <div class="col-md-8"></div>
@@ -201,8 +201,8 @@
   }
   function agregaProducto(producto)
   {
-  existe = document.getElementById('productos_existe').value;
-  var html = '';
+    existe = document.getElementById('productos_existe').value;
+    var html = '';
    if(existe == 'no')
    {
    
@@ -260,11 +260,12 @@
   {
     document.getElementById('lotedestino').value =  document.getElementById('loteorigen').value;
   }
+
   $("#inputproducto").on('change', function () {
-    materias = <?php echo json_encode($materias)?>;
- titulo = document.getElementById('inputproducto').value;
- ban = false;
-i=0;
+    materias = <?php echo json_encode($materias);?>;
+    titulo = document.getElementById('inputproducto').value;
+    ban = false;
+    i=0;
       while(!ban && i<materias.length)
       {
         if(titulo == materias[i].titulo)
@@ -275,15 +276,16 @@ i=0;
         i++;
       }
       if(ban)
-     {
-       console.log(materia);
-      document.getElementById('idproducto').value = materia.id;
-     } else{
-       alert('No existe esa Producto');
-       
-     }
+      {
+        console.log(materia);
+        document.getElementById('idproducto').value = materia.id;
+      } else{
+        alert('No existe esa Producto');
+        
+      }
  
   });
+
   function FinalizarEtapa()
   {
     existe = document.getElementById('productos_existe').value;
@@ -294,7 +296,7 @@ i=0;
       var productos =[];
       $('#tabla_productos_asignados tbody').find('tr').each(function(){
         json="";
-        json = $(this).attr('data-json');
+        json = JSON.parse($(this).attr('data-json'));
         productos.push(json);
       });
       productos = JSON.stringify(productos);
@@ -311,6 +313,6 @@ i=0;
     });
     }
   }
-  $(document).off('click', '.tabla_productos_asignados_borrar').on('click', '.tabla_productos_asignados_borrar',{ idtabla:'tabla_productos_asignados', idrecipiente:'productosasignados', idbandera:'productos_existe' }, remover);
+  // $(document).off('click', '.tabla_productos_asignados_borrar').on('click', '.tabla_productos_asignados_borrar',{ idtabla:'tabla_productos_asignados', idrecipiente:'productosasignados', idbandera:'productos_existe' }, remover);
 </script>
   

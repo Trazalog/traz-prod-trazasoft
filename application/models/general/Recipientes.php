@@ -16,22 +16,35 @@ class Recipientes extends CI_Model
           // {
           //     $resource = 'recipientes2';
           // }
-       
-				$parametros["http"]["method"] = "GET";		 
-				$parametros["http"]["header"] = "Accept: application/json";
-        $param = stream_context_create($parametros);
 				
 				$resource = '/lote/'.$establecimiento;
 				
 				// TODO: DESHARCODEAR EL RESOURCE 
-				$url = 'http://PC-PC:8280/services/ProduccionDataService'.$resource;
+		//		$url = 'http://PC-PC:8280/services/ProduccionDataService'.$resource;
 
-        //$url = REST.$resource;
-        $array = file_get_contents($url, false, $param);
+        $url = 'http://dev-trazalog.com.ar:8280/services/ProduccionDataService'.$resource;
+       
+        $array = file_get_contents($url, false, http('GET'));
 
         return json_decode($array);
     }
 
+
+    public function listarTodosDeposito(){
+
+      $parametros["http"]["method"] = "GET";		 
+      $parametros["http"]["header"] = "Accept: application/json";
+      $param = stream_context_create($parametros);
+      
+      $resource = '/lote/todos/deposito';
+      
+      // TODO: DESHARCODEAR EL RESOURCE 
+    
+      $url = REST2.$resource;
+
+      $array = file_get_contents($url, false, $param);
+      return json_decode($array);
+    }
 
     public function listarEmpaques()
     {

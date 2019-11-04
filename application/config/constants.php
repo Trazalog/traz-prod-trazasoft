@@ -86,7 +86,7 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 
 #BONITA SOFT
 define('BONITA_URL', 'http://localhost:8080/bonita/');  
-define('BPM_ADMIN_USER', 'almacen.toolsx');
+define('BPM_ADMIN_USER', 'almacen.tools');
 define('BPM_ADMIN_PASS', 'bpm');
 define('BPM_USER_PASS', 'bpm');
 
@@ -114,7 +114,7 @@ define('ASP_115', 'Error al Leer Variable');
 
 #COMPONENTE ALMACENES
 define('ALM', 'traz-comp-almacen/');
-define('BPM_PROCESS_ID_PEDIDOS_NORMALES', '6352939331165329370'); 
+define('BPM_PROCESS_ID_PEDIDOS_NORMALES', '6833268789089291878'); 
 define('BPM_PROCESS_ID_PEDIDOS_EXTRAORDINARIOS', '7321139677245257050');
 define('viewOT', false);
 
@@ -127,14 +127,26 @@ define('TSK', 'traz-comp-tareas/');
 
 #REST
 define('TAREAS_ASIGNAR', 'traz-comp-tareasestandar/asignar');
-define('REST2', 'http://dev-trazalog.com.ar:8280/services/ProduccionDataService');
+
 define('REST', 'http://dev-trazalog.com.ar:8280/services/ProduccionDataService/');
+define('REST_TDS', 'http://dev-trazalog.com.ar:8280/services/TrazabilidadDataService/');
+define('REST_TDS_TEST', 'http://pc-pc:8280/services/TrazabilidadDataService/');
 define('RESTPT','http://dev-trazalog.com.ar:8280/services/produccionTest/');
+define('REST2', 'http://dev-trazalog.com.ar:8280/services/ProduccionDataService');
+define('REST3', 'http://dev-trazalog.com.ar:8280/services/produccionTest');
+define('REST4', 'http://dev-trazalog.com.ar:8280/services/TrazabilidadDataService');
+define('REST3', 'http://pc-pc:8280/services/produccionTest');
+define('REST4', 'http://pc-pc:8280/services/TrazabilidadDataService');
 
 # >> Proyecto
 # Default View
 define('DEFAULT_VIEW', ALM.'Articulo');
 
 #TRAZASOFT
+#Deposito que contienen todos los reci_id que estan en transporte
 define('DEPOSITO_TRANSPORTE', 1000);
+define('ESTABLECIMIENTO_TRANSPORTE', 1000);
+
+#ID DE ETAPA
 define('ETAPA_TRANSPORTE', 1000);
+define('ETAPA_DEPOSITO', 2000);

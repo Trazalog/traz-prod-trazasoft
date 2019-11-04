@@ -147,18 +147,20 @@ foreach ($establecimientos as $fila) {
 
 <script>
 $('#patente').keyup(function(e) {
+     $("#lotes-camion").empty();
     if (e.keyCode === 13) {
         console.log('Obtener Lotes Patentes');
 
         if (this.value == null || this.value == '') return;
-        //wo();
+        wo();
         $.ajax({
             type: 'GET',
             dataType: 'JSON',
             url: 'index.php/general/Lote/obtenerLotesCamion?patente=' + this.value,
             success: function(rsp) {
-
-                if(rsp.data == null) return;
+            console.table(rsp);
+                if(rsp.data == null) {alert('No existen Lotes Asociados'); return;}
+                $("#lotes-camion").empty();
                 rsp.data.forEach(function(e) {
                     $("#lotes-camion").append(
                         `<tr data-json='${JSON.stringify(e)}'>
@@ -167,7 +169,7 @@ $('#patente').keyup(function(e) {
                     </tr>`
                     );
                 });
-
+                if(recipientes == null) return;
                 recipientes.forEach(e => { 
                    $('select.recipiente').append(`<option value="${e.id}">${e.titulo}</option>`);
                 });
@@ -188,8 +190,7 @@ $('#establecimientos').on('change', function(){
 
 var recipientes = null;
 function obtenerRecipientes() {
-    console.log('Obtener Recipientes');
-    
+    console.log('Obtener Recipientes');   
     var establecimiento = $('#establecimientos').val();
     $.ajax({
         type: 'POST',
@@ -219,19 +220,23 @@ function guardarDecarga() {
     });
 
     array = JSON.stringify(array);
-
+    console.log(array);
+    wo();
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
         url: 'index.php/general/Camion/guardarDescarga',
-        data: 
-            array,
+        data: {array},
         success: function(rsp) {
-            alert('Descarga Guardada')
+            alert('Descarga Guardada');
+            $("#lotes-camion").empty();
         },
         error: function(rsp) {
-            alert('Error: ' + rsp.msj);
+            alert('Error al Guardar Descarga');
             console.log(rsp.msj);
+        },
+        complete:function(){
+            wc();
         }
     });
 }
