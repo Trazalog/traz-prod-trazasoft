@@ -126,7 +126,7 @@
 <script>
 function eventSelect() {
 
-    if (selectItem.es_loteado == 'false') {
+    if (!selectItem.es_loteado ) {
         $('#lote').prop('disabled', true);
         $('#lote').val('S/L');
     } else {
@@ -141,7 +141,7 @@ function verificarExistenciaLote() {
         alert('Campos Obligatorios(*) Incompletos');
         return;
     }
-    if (selectItem.es_loteado == 'false') {
+    if (!selectItem.es_loteado ) {
         agregar();
         return;
     }
@@ -298,8 +298,8 @@ function agregar() {
         // lote_id: (selectItem.es_loteado == 0 ? 1 : lote),
         fec_vencimiento: vencimiento,
         arti_id: id_her,
-        loteado: (selectItem.es_loteado == 't'?1:0),
-        codigo: selectItem.es_loteado == 0 ? 1 : lote,
+        loteado: (selectItem.es_loteado?1:0),
+        codigo: (!selectItem.es_loteado ? 1 : lote),
         cantidad: (cantidad * (selectItem.es_caja == 1 ? selectItem.cantidad_caja : 1)),
         depo_id: id_deposito,
         prov_id: $('#proveedor').val()
@@ -415,7 +415,7 @@ function selectItemiculo(e) {
     selectItem = JSON.parse(JSON.stringify($(e).data('json')));
     $('#art_select').val($(e).find('a').html());
     $('#articulos').modal('hide');
-    if (selectItem.es_loteado == 't') {
+    if (!selectItem.es_loteado) {
         $('#lote').prop('disabled', true);
         $('#lote').val('S/L');
     } else {
