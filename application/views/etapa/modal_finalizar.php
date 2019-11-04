@@ -306,10 +306,15 @@
       data: { productos: productos },
       url: 'general/Etapa/Finalizar', 
       success: function(result){
-      document.getElementById('btnfinalizar').style.display = "none";
-      $("#modal_finalizar").modal('hide');
-      }
-     
+          document.getElementById('btnfinalizar').style.display = "none";
+          $("#modal_finalizar").modal('hide');
+
+          if (result == "ok") {
+                        linkTo('general/Etapa/index');
+          }else{
+            alert("Hubo un error en Dataservice");
+            linkTo('general/Etapa/index');
+          }     
     });
     }
   }
