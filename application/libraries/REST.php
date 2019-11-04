@@ -2,7 +2,7 @@
 
 class REST
 {
-    public function callAPI($method, $url, $data = null, $token = false)
+    public function callAPI($method, $url, $data = null, $token = array())
     {
         log_message('DEBUG', '#TRAZA | #REST | #CURL | #URL >> ' . $url);
 
@@ -14,6 +14,7 @@ class REST
                     curl_setopt($curl, CURLOPT_POST, true);
                     if ($data) {
                         curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
+                        array_push($token, 'Content-Type: application/json');
                         log_message('DEBUG', '#TRAZA | #REST | #CURL | #PAYLOAD >> ' . json_encode($data));
                     } else {
                         curl_setopt($curl, CURLOPT_POSTFIELDS, null);
@@ -52,6 +53,7 @@ class REST
             if ($token) {
 
                 curl_setopt($curl, CURLOPT_HTTPHEADER, $token);
+
 
             }
 
