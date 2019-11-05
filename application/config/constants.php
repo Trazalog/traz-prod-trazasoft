@@ -135,8 +135,6 @@ define('RESTPT','http://dev-trazalog.com.ar:8280/services/produccionTest/');
 define('REST2', 'http://dev-trazalog.com.ar:8280/services/ProduccionDataService');
 define('REST3', 'http://dev-trazalog.com.ar:8280/services/produccionTest');
 define('REST4', 'http://dev-trazalog.com.ar:8280/services/TrazabilidadDataService');
-define('REST3', 'http://pc-pc:8280/services/produccionTest');
-define('REST4', 'http://pc-pc:8280/services/TrazabilidadDataService');
 
 # >> Proyecto
 # Default View
