@@ -143,7 +143,7 @@ class Etapa extends CI_Controller {
 	
 		$data['accion'] = 'Editar';
 		$data['etapa'] = $this->Etapas->buscar($id)->etapa;
-	//	var_dump($data['etapa']);die;
+		//	var_dump($data['etapa']);die;
 		$data['idetapa'] = $data['etapa']->id;
 		// $data['recipientes'] = $this->Recipientes->listarPorEstablecimiento($data['etapa']->establecimiento->id)->recipientes->recipiente;
 		$data['recipientes'] = $this->Recipientes->listarTodosDeposito()->recipientes->recipiente;// trae todos los recipientes de Tipo Deposito
@@ -184,25 +184,26 @@ class Etapa extends CI_Controller {
 
 		 foreach ($productos as $value) {			
 
-			$arrayPost["arti_id"] = $value->id;
-			$arrayPost["cantidad"] = $value->cantidad;
-			$arrayPost["batch_id_origen"] = $value->loteorigen;
-			$arrayPost["lote"] = $value->lotedestino;
-			$arrayPost["reci_id"] = $value->destino;
-			$arrayPost["empre_id"] = (string)empresa();
-			$arrayPost["etap_id_deposito"] = (string)DEPOSITO_TRANSPORTE;
-			$arrayPost["usuario_app"] = userNick();
-			$arrayPost["forzar_agregar"] = "false";
-		 
-			$arrayDatos['_post_lote_deposito_ingresar'] = $arrayPost;			
+				$arrayPost["arti_id"] = $value->id;
+				$arrayPost["cantidad"] = $value->cantidad;
+				$arrayPost["batch_id_origen"] = $value->loteorigen;
+				$arrayPost["lote"] = $value->lotedestino;
+				$arrayPost["reci_id"] = $value->destino;
+				$arrayPost["empre_id"] = (string)empresa();
+				$arrayPost["etap_id_deposito"] = (string)DEPOSITO_TRANSPORTE;
+				$arrayPost["usuario_app"] = userNick();
+				$arrayPost["forzar_agregar"] = "false";
 			
-			$response = $this->Etapas->finalizarEtapa($arrayDatos);
+				$arrayDatos['_post_lote_deposito_ingresar'] = $arrayPost;			
 			
+				$resp = $this->Etapas->finalizarEtapa($arrayDatos);
+				if ($resp > 300) {
+					echo("Error");
+					return;
+				}
+				$response = json_decode($resp['code']);
 		}
 		 
-		 
-		 
-		 var_dump($data);
 
 		 echo("ok");
 	 }

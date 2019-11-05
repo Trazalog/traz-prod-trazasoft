@@ -1,0 +1,88 @@
+<data enableBatchRequests="true" enableBoxcarring="true" name="TrazabilidadDataService" transports="http https local">
+   <config enableOData="false" id="ToolsDataSource">
+      <property name="driverClassName">org.postgresql.Driver</property>
+      <property name="url">jdbc:postgresql://10.142.0.2:5432/tools</property>
+      <property name="username">arbolado</property>
+      <property name="password">password</property>
+   </config>
+   <query id="loteSet" useConfig="ToolsDataSource">
+      <sql>select prd.crear_lote(&#xd; :p_lote_id &#xd;,cast(:p_batch_id_padre as bigint)&#xd;,:p_num_orden_prod&#xd;,cast(:p_etap_id as integer)&#xd;,:p_usuario_app&#xd;,cast(:p_reci_id as integer)&#xd;,cast(:p_empr_id as integer)&#xd;,:p_forzar_agregar)&#xd;resultado;</sql>
+      <result outputType="json">{&#xd;   "respuesta":{&#xd;           "resultado": "$resultado"&#xd;             }&#xd;}</result>
+      <param name="p_lote_id" sqlType="STRING"/>
+      <param name="p_batch_id_padre" sqlType="STRING"/>
+      <param name="p_num_orden_prod" sqlType="STRING"/>
+      <param name="p_etap_id" sqlType="STRING"/>
+      <param name="p_usuario_app" sqlType="STRING"/>
+      <param name="p_reci_id" sqlType="STRING"/>
+      <param name="p_empr_id" sqlType="STRING"/>
+      <param name="p_forzar_agregar" sqlType="STRING"/>
+   </query>
+   <query id="getBatchidPorRecipiente" useConfig="ToolsDataSource">
+      <sql>SELECT lotes.batch_id&#xd;from prd.lotes lotes&#xd;where lotes.reci_id = cast(:reci_id as integer)</sql>
+      <result outputType="json">{&#xd;  "lote": {&#xd;      "batch_id" : "$batch_id"&#xd;         }&#xd;}{</result>
+      <param name="reci_id" sqlType="STRING"/>
+   </query>
+   <resource method="POST" path="/lote">
+      <call-query href="loteSet">
+         <with-param name="p_lote_id" query-param="p_lote_id"/>
+         <with-param name="p_batch_id_padre" query-param="p_batch_id_padre"/>
+         <with-param name="p_num_orden_prod" query-param="p_num_orden_prod"/>
+         <with-param name="p_etap_id" query-param="p_etap_id"/>
+         <with-param name="p_usuario_app" query-param="p_usuario_app"/>
+         <with-param name="p_reci_id" query-param="p_reci_id"/>
+         <with-param name="p_empr_id" query-param="p_empr_id"/>
+         <with-param name="p_forzar_agregar" query-param="p_forzar_agregar"/>
+      </call-query>
+   </resource>
+   <resource method="GET" path="/batch/porrecipiente/{reci_id}">
+      <call-query href="getBatchidPorRecipiente">
+         <with-param name="reci_id" query-param="reci_id"/>
+      </call-query>
+   </resource>
+   <query id="cambiarLote" useConfig="ToolsDataSource">
+      <sql>select prd.cambiar_deposito(&#xd;cast ( :batch_id_origen as int8)&#xd;,cast (:reci_id as int4)&#xd;,cast (:empre_id as int4)&#xd;,cast (:etap_id_deposito as int4)&#xd;,cast (:usuario_app as varchar)&#xd;,cast(:forzar_agregar as varchar)) resultado;</sql>
+      <result outputType="json">{&#xd;   "respuesta":{&#xd;           "resultado": "$resultado"&#xd;             }&#xd;}</result>
+      <param name="batch_id_origen" sqlType="STRING"/>
+      <param name="reci_id" sqlType="STRING"/>
+      <param name="empre_id" sqlType="STRING"/>
+      <param name="etap_id_deposito" sqlType="STRING"/>
+      <param name="usuario_app" sqlType="STRING"/>
+      <param name="forzar_agregar" sqlType="STRING"/>
+   </query>
+   <resource method="POST" path="/lote/deposito/cambiar/">
+      <call-query href="cambiarLote">
+         <with-param name="batch_id_origen" query-param="batch_id_origen"/>
+         <with-param name="reci_id" query-param="reci_id"/>
+         <with-param name="empre_id" query-param="empre_id"/>
+         <with-param name="etap_id_deposito" query-param="etap_id_deposito"/>
+         <with-param name="usuario_app" query-param="usuario_app"/>
+         <with-param name="forzar_agregar" query-param="forzar_agregar"/>
+      </call-query>
+   </resource>
+   <resource method="POST" path="/lote/deposito/ingresar/">
+      <call-query href="ingresarLote">
+         <with-param name="cantidad" query-param="cantidad"/>
+         <with-param name="batch_id_origen" query-param="batch_id_origen"/>
+         <with-param name="reci_id" query-param="reci_id"/>
+         <with-param name="empre_id" query-param="empre_id"/>
+         <with-param name="etap_id_deposito" query-param="etap_id_deposito"/>
+         <with-param name="usuario_app" query-param="usuario_app"/>
+         <with-param name="forzar_agregar" query-param="forzar_agregar"/>
+         <with-param name="arti_id" query-param="arti_id"/>
+         <with-param name="lote" query-param="lote"/>
+      </call-query>
+   </resource>
+   <query id="ingresarLote" useConfig="ToolsDataSource">
+      <sql>select prd.ingresar_deposito(&#xd;cast (:arti_id as int4)&#xd;,cast (:cantidad as float8)&#xd;,cast ( :batch_id_origen as int8)&#xd;,:lote&#xd;,cast (:reci_id as int4)&#xd;,cast (:empre_id as int4)&#xd;,cast (:etap_id_deposito as int4)&#xd;,cast (:usuario_app as varchar)&#xd;,cast(:forzar_agregar as varchar)) resultado;</sql>
+      <result outputType="json">{&#xd;   "respuesta":{&#xd;           "resultado": "$resultado"&#xd;             }&#xd;}</result>
+      <param name="cantidad" sqlType="STRING"/>
+      <param name="batch_id_origen" sqlType="STRING"/>
+      <param name="reci_id" sqlType="STRING"/>
+      <param name="empre_id" sqlType="STRING"/>
+      <param name="etap_id_deposito" sqlType="STRING"/>
+      <param name="usuario_app" sqlType="STRING"/>
+      <param name="forzar_agregar" sqlType="STRING"/>
+      <param name="arti_id" sqlType="STRING"/>
+      <param name="lote" sqlType="STRING"/>
+   </query>
+</data>
