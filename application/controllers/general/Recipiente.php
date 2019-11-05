@@ -16,6 +16,15 @@ class Recipiente extends CI_Controller {
         $res = $this->Recipientes->listarPorEstablecimiento($establecimiento)->recipientes->recipiente; 
         echo json_encode($res);
     }
+
+    public function obtener()
+    {
+        $tipo = $this->input->get('tipo');
+        $estado = $this->input->get('estado');
+
+        $rsp = $this->Recipientes->obtener($tipo, $estado);
+        echo json_encode($rsp);
+    }
     
   
 }

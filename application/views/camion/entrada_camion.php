@@ -58,7 +58,8 @@ foreach ($establecimientos as $fila) {
                     <label class="form-label btn-cargar">Proveedor*:</label>
                 </div>
                 <div class="col-md-6 col-xs-12">
-                    <input list="proveedores" class="form-control btn-cargar" id="proveedor" name="proveedor" autocomplete="off">
+                    <input list="proveedores" class="form-control btn-cargar" id="proveedor" name="proveedor"
+                        autocomplete="off">
                     <datalist id="proveedores">
                         <?php foreach ($proveedores as $fila) {
     echo "<option data-json='" . json_encode($fila) . "' value='" . $fila->id . "'>" . $fila->titulo . "</option>";
@@ -66,7 +67,8 @@ foreach ($establecimientos as $fila) {
 ?>
                     </datalist>
                 </div>
-                <div class="col-md-5 col-xs-12"><input type="text" disabled id="nombreproveedor" class="form-control btn-cargar">
+                <div class="col-md-5 col-xs-12"><input type="text" disabled id="nombreproveedor"
+                        class="form-control btn-cargar">
                 </div>
             </div>
         </form>
@@ -138,8 +140,9 @@ foreach ($establecimientos as $fila) {
 </div>
 
 <script>
+var recipienteSelect = null;
 $('#patente').keyup(function(e) {
-     $("#lotes-camion").empty();
+    $("#lotes-camion").empty();
     if (e.keyCode === 13) {
         console.log('Obtener Lotes Patentes');
 
@@ -150,20 +153,55 @@ $('#patente').keyup(function(e) {
             dataType: 'JSON',
             url: 'index.php/general/Lote/obtenerLotesCamion?patente=' + this.value,
             success: function(rsp) {
-            console.table(rsp);
-                if(rsp.data == null) {alert('No existen Lotes Asociados'); return;}
+                if (rsp.data == null) {
+                    alert('No existen Lotes Asociados');
+                    return;
+                }
+
                 $("#lotes-camion").empty();
                 rsp.data.forEach(function(e) {
                     $("#lotes-camion").append(
                         `<tr data-json='${JSON.stringify(e)}'>
-                        <td class="lote">${e.lote_id}</td>
-                        <td><select class="recipiente"><option value="false"> - Seleccionar - </option></select></td>
-                    </tr>`
+                            <td class="lote">${e.lote_id}</td>
+                            <td><select id="${e.batch_id}" class="recipiente" data-unificar="false"><option value="false"> - Seleccionar - </option></select></td>
+                        </tr>`
                     );
                 });
-                if(recipientes == null) return;
-                recipientes.forEach(e => { 
-                   $('select.recipiente').append(`<option value="${e.id}">${e.titulo}</option>`);
+                if (recipientes == null) return;
+                
+                //Comparar si el recipiente ya fue elegido para otro Lote || Si esta en estado NO_VACIO
+                $('.recipiente').on('change', function(){
+
+                    recipienteSelect = this;
+
+                    var json = JSON.parse($(this).find('option:selected').attr('data-json'));
+                    
+                    if(json.estado != 'VACIO'){
+                        $('#unificar_lotes').modal('show');
+                        return;
+                    }
+
+                    const select  = this.id;
+                    const e = this.value;
+                    var duplicado = false;
+
+                    $('.recipiente').find('option:selected').each(function(){
+                      
+                        if(select != $(this).parent().attr('id')){
+                           if(e == this.value){
+                               duplicado = true;    
+                           }
+                        }
+                    });
+
+                    if(duplicado){
+                        $('#unificar_lotes').modal('show');
+                    }
+                });
+
+                // Rellenar Select Recipientes
+                recipientes.forEach(e => {
+                    $('select.recipiente').append(`<option value="${e.reci_id}" data-json='${JSON.stringify(e)}'>${e.nombre}</option>`);
                 });
             },
             error: function(rsp) {
@@ -176,28 +214,42 @@ $('#patente').keyup(function(e) {
     }
 });
 
-$('#establecimientos').on('change', function(){
+
+
+$('#establecimientos').on('change', function() {
     obtenerRecipientes();
 });
 
 var recipientes = null;
+
 function obtenerRecipientes() {
-    console.log('Obtener Recipientes');   
+    console.log('Obtener Recipientes');
     var establecimiento = $('#establecimientos').val();
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
-        url: 'index.php/general/Recipiente/listarPorEstablecimiento',
-        data:{establecimiento},
+        url: 'index.php/general/Recipiente/obtener?tipo=DEPOSITO&estado=TODOS',
+        data: {
+            establecimiento
+        },
         success: function(rsp) {
-            console.table(rsp);
-            recipientes = rsp;
+        
+            recipientes = rsp.data;
         },
         error: function(rsp) {
             alert('Error: ' + rsp.msj);
             console.log(rsp.msj);
         }
     });
+}
+
+function unificarLote() {
+    
+    var rese = $(recipienteSelect).val();
+    $('.recipiente').each(function() {
+        if(this.value == rese) this.dataset.unificar = true; 
+    });
+
 }
 
 
@@ -208,17 +260,20 @@ function guardarDecarga() {
     $('.recipiente').each(function(e) {
         item = JSON.parse($(this).closest('tr').attr('data-json'));
         item.reci_id = this.value;
+        item.unificar = this.dataset.unificar;
         array.push(item);
     });
 
     array = JSON.stringify(array);
-    console.log(array);
+    
     wo();
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
         url: 'index.php/general/Camion/guardarDescarga',
-        data: {array},
+        data: {
+            array
+        },
         success: function(rsp) {
             alert('Descarga Guardada');
             $("#lotes-camion").empty();
@@ -227,7 +282,7 @@ function guardarDecarga() {
             alert('Error al Guardar Descarga');
             console.log(rsp.msj);
         },
-        complete:function(){
+        complete: function() {
             wc();
         }
     });
@@ -524,3 +579,17 @@ $(document).off('click', '.tabla_productos_asignados_borrar').on('click', '.tabl
     idbandera: 'productos_existe'
 }, remover);
 </script>
+
+<div class="modal" id="unificar_lotes" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h3 class="text-center">¿Desea Unificar Lotes?</h3>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="unificarLote()">Si</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>

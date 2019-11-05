@@ -136,6 +136,8 @@ define('REST2', 'http://dev-trazalog.com.ar:8280/services/ProduccionDataService'
 define('REST3', 'http://dev-trazalog.com.ar:8280/services/produccionTest');
 define('REST4', 'http://dev-trazalog.com.ar:8280/services/TrazabilidadDataService');
 
+
+
 # >> Proyecto
 # Default View
 define('DEFAULT_VIEW', ALM.'Articulo');

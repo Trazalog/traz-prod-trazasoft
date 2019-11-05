@@ -100,7 +100,7 @@ class Camiones extends CI_Model
                 "etap_id_deposito"=>strval(ETAPA_DEPOSITO),
                 "usuario_app"=>strval(userNick()),
                 "reci_id"=> strval($o->reci_id),
-                "forzar_agregar"=>"false"
+                "forzar_agregar"=> strval($o->unificar)
             );
             $recurso = 'lote/deposito/cambiar';
             $url = REST_TDS.$recurso;
