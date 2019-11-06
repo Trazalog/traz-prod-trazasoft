@@ -91,7 +91,7 @@ class REST
 
             }
 
-            return ['status' => ($response_code < 300), 'header' => $headers, 'data' =>json_decode($body), 'code' => $response_code];
+            return ['status' => ($response_code < 300), 'header' => $headers, 'data' =>$body, 'code' => $response_code];
 
         } catch (Exception $e) {
 
