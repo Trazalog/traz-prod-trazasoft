@@ -105,6 +105,60 @@ $this->load->view('etapa/modal_finalizar');}?>
     </div>
 </div>
 
+
+<!-- producto -->
+
+<div class="box">
+    <div class="box-header">
+        <h4 class="box-title">Producto</h4>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <?php if($etapa->estado != 'En Curso'){?>
+        <div class="row" style="margin-top: 40px">
+            <div class="col-md-6 col-xs-12">
+                <div class="row form-group">
+                    <div class="col-md-3 col-xs-12">
+                        <label for="template" class="form-label"><?php echo $lang['materias']; ?>:</label>
+                    </div>
+                    <div class="col-md-6 col-xs-12 input-group">
+                        <input list="productos" id="inputproductos" class="form-control" autocomplete="off">
+                        <input type="hidden" id="idproducto" value="" data-json="">
+                        <datalist id="productos">
+													<?php foreach($materias as $fila)
+													{
+														echo  '<option value="'.$fila->titulo.'">';
+														}
+														?>
+													</datalist>
+                        <span class="input-group-btn">
+													<button class='btn btn-primary' 
+														onclick='checkTabla("tablamaterias","modalmaterias",`<?php echo json_encode($materias);?>`,"Add")' data-toggle="modal" data-target="#modal_materia_prima">
+														<i class="glyphicon glyphicon-search"></i></button>
+												</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-1 col-xs-12">
+                <label for="template" class="form-label">Cantidad:</label>
+            </div>
+            <div class="col-md-3 col-xs-12 input-group">
+                <input type="number" class="form-control" placeholder="Inserte Cantidad" id="cantidadproducto">
+            </div>
+        </div>
+        <?php } ?>
+				<!-- <div class="row" style="margin-top: 40px ">
+						<input type="hidden" id="materiasexiste" value="no">
+						<div class="col-xs-12 table-responsive" id="materiasasignadas">
+						</div>
+				</div> -->
+    </div>
+</div>
+
+<!-- . /producto -->
+
+<!-- Origen -->
 <div class="box">
     <div class="box-header">
         <h4 class="box-title">Origen</h4>
@@ -161,6 +215,8 @@ $this->load->view('etapa/modal_finalizar');}?>
             </div>
     </div>
 </div>
+<!-- ./ Origen -->
+
 <div class="box">
     <div class="box-header">
         <h4 class="box-title">Tareas</h4>
@@ -176,10 +232,12 @@ $this->load->view('etapa/modal_finalizar');}?>
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab_1">
-                            <p>Aca iria el Calendario</p>
+                            <!-- <p>Aca iria el Calendario</p> -->
                         </div>
                         <div class="tab-pane" id="tab_2">
-                            <?php $this->load->view(TAREAS_ASIGNAR.'/tareas')?>
+														<?php 		
+														//TODO: NO COMETAR, TIENEUN INPUT Q NO SE LLENA  Y ROPE JAVASCRIPT											
+														$this->load->view(TAREAS_ASIGNAR.'/tareas')?>
                         </div>
                         <div class="row" hidden id="incompleto">
                             <div class="col-xs-12">
@@ -197,13 +255,13 @@ $this->load->view('etapa/modal_finalizar');}?>
                         <div class="col-md-8"></div>
                         <div class="col-md-2 col-xs-6">
                             <?php if($etapa->estado == 'planificado')
-             {
-            echo '<button class="btn btn-primary btn-block" onclick="valida()">Iniciar Etapa</button>';
-             }else if($etapa->estado == 'En Curso')
-             {
-              echo '<button class="btn btn-primary btn-block" id="btnfinalizar" onclick="finalizar()">Finalizar Etapa</button>';
-             }
-             ?>
+															{
+															echo '<button class="btn btn-primary btn-block" onclick="valida()">Iniciar Etapa</button>';
+															}else if($etapa->estado == 'En Curso')
+															{
+																echo '<button class="btn btn-primary btn-block" id="btnfinalizar" onclick="finalizar()">Finalizar Etapa</button>';
+															}
+															?>
                         </div>
                         <div class="col-md-2 col-xs-6">
                             <button class="btn btn-primary btn-block" onclick="guardar()">Guardar</button>
@@ -225,7 +283,7 @@ $this->load->view('etapa/modal_finalizar');}?>
                 materia = JSON.stringify(materia);
                 materia = '[' + materia + ']';
                 materia = JSON.parse(materia);
-                agregaMateria(materia);
+                //agregaMateria(materia);
             }
         }
 
@@ -261,8 +319,9 @@ $this->load->view('etapa/modal_finalizar');}?>
             } else {
                 document.getElementById('desplegable').hidden = true;
             }
-        }
-
+				}
+				
+				// envia datos para iniciar etapa y acer orden de pedido a almacenes
         function guardar() {
 
             var tabla = $('#tablamateriasasignadas tbody tr');       
@@ -281,7 +340,9 @@ $this->load->view('etapa/modal_finalizar');}?>
             establecimiento = document.getElementById('establecimientos').value;
             recipiente = document.getElementById('recipientes').value;
             op = document.getElementById('ordenproduccion').value;
-            idetapa = <?php echo $idetapa;?>;
+						idetapa = <?php echo $idetapa;?>;
+						cantidad = $('#cantidadproducto').val();
+						idprod = $('#idproducto').val();
 
             $.ajax({
                 type: 'POST',
@@ -292,7 +353,9 @@ $this->load->view('etapa/modal_finalizar');}?>
                     establecimiento: establecimiento,
                     recipiente: recipiente,
                     op: op,
-                    materia:materia
+										materia:materia,
+										cantidad:cantidad,
+										idprod:idprod
                 },
                 url: 'general/Etapa/guardar',
                 success: function(result) {
@@ -348,9 +411,29 @@ $this->load->view('etapa/modal_finalizar');}?>
 
         }
 
-       
+				// selecciona id de producto y guarda en input hidden
+        $("#inputproductos").on('change', function(){
+					
+						band = false;
+						i = 0;
+						$('#idproducto').val("");
+						articulos = <?php echo json_encode($materias);?>;
+						producto = document.getElementById('inputproductos').value;
+						
+						while (!band && i < articulos.length) {
+							
+							if (producto == articulos[i].titulo) {
+									band = true;
+									$('#idproducto').val(articulos[i].id);
+									console.log('materia id: ' + articulos[i].id);
+							}
+							i++;
+						}
+						
+						prod = $('#idproducto').val();
+				});
 
-
+				// al seleccionar desde el input de Origen muestra stock y habilita input para cantidad y btn aceptar
         $("#inputmaterias").on('change', function() {
             document.getElementById('cantidadmateria').value = "";
             materias = <?php echo json_encode($materias);?>;
@@ -368,7 +451,7 @@ $this->load->view('etapa/modal_finalizar');}?>
             if (ban) {
                 document.getElementById('stockdisabled').value = materia.stock;
                 materia = JSON.stringify(materia);
-
+									// TODO: SI SE SACA SIN QUE ANDE EL MODALCITO DE MATERIAS SE ROMPE TODO
                  //agregaMateria(materia);
                 $('#idmateria').attr('data-json', materia);
                 //document.getElementById('stockdisabled').value = ma

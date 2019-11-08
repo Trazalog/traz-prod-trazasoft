@@ -7,26 +7,16 @@ class Recipientes extends CI_Model
 		parent::__construct();
     }
     public function listarPorEstablecimiento($establecimiento)
-    {
-        // if($establecimiento == 1 || $establecimiento == 3 || $establecimiento == 5)
-          // {
-          //     $resource = 'recipientes1';
-          // }
-          // if($establecimiento == 2 || $establecimiento == 4 || $establecimiento == 6)
-          // {
-          //     $resource = 'recipientes2';
-          // }
-				
-				$resource = '/lote/'.$establecimiento;
-				
-				// TODO: DESHARCODEAR EL RESOURCE 
-		//		$url = 'http://PC-PC:8280/services/ProduccionDataService'.$resource;
-
-        $url = 'http://dev-trazalog.com.ar:8280/services/ProduccionDataService'.$resource;
-       
-        $array = file_get_contents($url, false, http('GET'));
-
-        return json_decode($array);
+    {       
+				// TODO: DESHARCODEAR EL RESOURCE		
+        log_message('DEBUG', 'Recipientes/listarPorEstablecimiento (idEstablecimiento)-> '.$establecimiento);
+              
+        $resource = '/lote/'.$establecimiento;	 	
+        $url = REST2.$resource;
+        //$url = 'http://dev-trazalog.com.ar:8280/services/TrazabilidadDataService/lote';
+        $array = $this->rest->callAPI("GET",$url); 		           
+        
+        return $array['data'];    
     }
 
 
