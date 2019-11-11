@@ -67,7 +67,7 @@ class Recipientes extends CI_Model
     {
         $url  = RESTPT . "recipientes/tipo/$tipo/estado/$estado";
         $rsp = $this->rest->callAPI('GET' , $url);
-        $rsp['data'] = $rsp['data']->recipientes->recipiente;
+        $rsp['data'] = json_decode($rsp['data'])->recipientes->recipiente;
         return $rsp;
     }
     

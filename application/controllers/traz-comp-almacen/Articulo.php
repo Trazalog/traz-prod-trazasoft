@@ -20,7 +20,14 @@ class Articulo extends CI_Controller {
 		$data['unidades_medida'] = $this->Tablas->obtener('unidades_medida');
 		$this->load->view(ALM.'articulo/list', $data);
 	}
-		
+
+	public function obtener(){
+		$url =  REST . 'articulos';
+		$data = $this->rest->callApi('GET',$url);
+		if($data['status']) $data['data'] = json_decode($data['data'])->materias->materia;
+		echo json_encode($data);
+	}
+
 	public function guardar()
 	{
 		$data = $this->input->post();
