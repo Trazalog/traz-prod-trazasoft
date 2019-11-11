@@ -39,74 +39,51 @@ class Camiones extends CI_Model
         $this->load->model('general/Recipientes');
 
         foreach ($data as $key => $o) {
-    
-            #CREAR NUEVO RECIPIENTE
-            $aux = array(
-                'tipo' => 'TRANSPORTE',
-                'patente' => $o->patente,
-                'motr_id' => $o->motr_id,
-                'depo_id' => strval(DEPOSITO_TRANSPORTE),
-                'empr_id' => strval(empresa()),
-            );
-            $reci_id = $this->Recipientes->crear($aux)['data']->resultado->reci_id;
-            
-            #Pedir Nuevo Batch ID
-            $aux = array(
-                'lote_id' => strval($o->id),
-                'reci_id' => strval($reci_id),
-                'batch_id' => strval($o->batch_id),
-                'empr_id' => strval(empresa()),
-            );
-            $rsp = $this->Lotes->crearBatch($aux);
-            if (!$rsp['status']) {
-                break;
-            }
-            $newBatch = $rsp['data']; 
-            
-            #Descontar Stock
-            $aux = array(
-                'cantidad' => strval($o->cantidad),
-                'batch_id' => strval($o->batch_id),
-                'empr_id' => strval(empresa()),
-            );
-            $rsp = $this->Lotes->extraerCantidad($aux);
-            if (!$rsp['status']) {
-                break;
-            }
 
-            #Crear Nuevo Lote
-            $aux = array(
-                'batch_id' => $newBatch,
-                'old_batch_id' => strval($o->batch_id),
-                'cantidad' => strval($o->cantidad),
-            );
-            $rsp = $this->Lotes->crear($aux);
+            #CREAR NUEVO RECIPIENTE
+            $rsp = $this->Recipientes->crear($o);
+             if (!$rsp['status']) {
+                break;
+            }
+            $newReci = $rsp['data'];
+
+            #PEDIR NUEVO BATCH ID
+            $o->reci_id = $newReci;
+            $rsp = $this->Lotes->crearBatch($o);
             if (!$rsp['status']) {
                 break;
             }
+            $newBatch = $rsp['data'];
+
+           #GUARDA CARGA MIONCA CON NUEVO BATCH ID 
+           $o->new_batch_id = $newBatch; 
+           $rsp = $this->Lotes->guardarCargaCamion($o);
 
         }
+
         return $rsp;
     }
 
     public function guardarDescarga($data)
     {
-        log_message('DEBUG','#CAMION > guardarDescarga | #DATA: '.json_encode($data));
+        log_message('DEBUG', '#CAMION > guardarDescarga | #DATA: ' . json_encode($data));
 
         foreach ($data as $key => $o) {
             $aux = array(
-                "batch_id_origen"=> strval($o['destino']['batch_id']),
-                "empre_id"=>strval(empresa()),
-                "etap_id_deposito"=>strval(ETAPA_DEPOSITO),
-                "usuario_app"=>strval(userNick()),
-                "reci_id"=> strval($o['destino']['reci_id']),
-                "forzar_agregar"=> strval($o['destino']['unificar'])
+                "batch_id_origen" => strval($o['destino']['batch_id']),
+                "empre_id" => strval(empresa()),
+                "etap_id_deposito" => strval(ETAPA_DEPOSITO),
+                "usuario_app" => strval(userNick()),
+                "reci_id" => strval($o['destino']['reci_id']),
+                "forzar_agregar" => strval($o['destino']['unificar']),
             );
+
+           
             $recurso = 'lote/deposito/cambiar';
-            $url = REST_TDS.$recurso;
-            $data = file_get_contents($url, false, http('POST',[ 'post_lote_deposito_cambiar' => $aux]));
+            $url = REST_TDS . $recurso;
+            $data = file_get_contents($url, false, http('POST', ['post_lote_deposito_cambiar' => $aux]));
             $rsp = rsp($http_response_header, false, json_decode($data)->respuesta->resultado);
-            if(!$rsp['data'] == 'CORRECTO'){
+            if (!$rsp['data'] == 'CORRECTO') {
                 $rsp['status'] = false;
             }
         }

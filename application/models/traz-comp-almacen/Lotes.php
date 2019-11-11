@@ -175,22 +175,54 @@ class Lotes extends CI_Model {
 
 	public function crearBatch($data)
     {
-        $aux["p_lote_id"] = strval($data['lote_id']);
-		$aux["p_batch_id_padre"] = strval($data['batch_id']);
-		$aux["p_num_orden_prod"] = "";
-		$aux["p_etap_id"] = strval(ETAPA_TRANSPORTE);
-		$aux["p_usuario_app"] = userNick();
-		$aux["p_reci_id"] = strval($data['reci_id']);
-		$aux["p_empr_id"] = strval(empresa());
-        $aux["p_forzar_agregar"] = "FALSE";
+        // $aux["p_lote_id"] = strval($data['lote_id']);
+		// $aux["p_batch_id_padre"] = strval($data['batch_id']);
+		// $aux["p_num_orden_prod"] = "";
+		// $aux["p_etap_id"] = strval(ETAPA_TRANSPORTE);
+		// $aux["p_usuario_app"] = userNick();
+		// $aux["p_reci_id"] = strval($data['reci_id']);
+		// $aux["p_empr_id"] = strval(empresa());
+		// $aux["p_forzar_agregar"] = "FALSE";
+		
+		$aux["lote_id"] =strval( $data->id);
+		$aux["arti_id"] = strval($data->producto);
+		$aux["prov_id"] = strval(PROVEEDOR_INTERNO);
+		$aux["batch_id_padre"] = strval($data->batch_id);
+		$aux["cantidad"] = strval($data->cantidad);
+		$aux["cantidad_padre"] = strval($data->stock);
+		$aux["num_orden_prod"] = "";
+		$aux["reci_id"] = strval($data->reci_id);
+		$aux["etap_id"] = strval(ETAPA_DEPOSITO);
+		$aux["usuario_app"] = "CHUCK";
+		$aux["empr_id"] = strval(empresa());
+		$aux["forzar_agregar"] = "FALSE";
+		$aux["fec_vencimiento"] = date('d-m-Y');
         
         $url = REST_TDS.'lote';
-		$rsp = file_get_contents($url, false, http('POST', ['post_lote'=>$aux]));
-		$bath_id = json_decode($rsp)->respuesta->resultado;
-		$rsp = rsp($http_response_header, false, $bath_id);
-		if(!is_numeric($bath_id)){
+		$rsp = $this->rest->callApi('POST', $url,['post_lote'=>$aux]);
+		if($rsp['status']) $rsp['data'] = json_decode($rsp['data'])->respuesta->resultado;
+		if(!is_numeric($rsp['data'])){
 			$rsp['status'] = false;
 		}
 		return $rsp;
+	}
+
+	public function guardarCargaCamion($data)
+	{
+		$aux["batch_id_origen"] = strval($data->batch_id);
+		$aux["reci_id"] = strval($data->reci_id);
+		$aux["etap_id_deposito"]= strval(ETAPA_DEPOSITO);
+		$aux["empre_id"]= strval(empresa());
+		$aux["usuario_app"]= "chuck";
+		$aux["forzar_agregar"]= "false";
+
+		$url = REST_TDS.'lote/recipiente/cambiar';
+		$rsp = $this->rest->callApi('POST',$url, ['post_lote_recipiente_cambiar'=>$aux]);
+		if(!$rsp['status']) return $rsp;
+		$rsp['data'] = json_decode($rsp['data']->respuesta->resultado);
+		$rsp['status'] = ($rsp['data'] == 'CORRECTO');  
+
+		return $rsp;
+
 	}
 }

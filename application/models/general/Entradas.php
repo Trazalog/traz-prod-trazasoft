@@ -10,11 +10,12 @@ class Entradas extends CI_Model
 
     public function guardar($data)
     {
-       log_message('DEBUG','#ENTRADAS > guardar | #DATA-POST: '.json_encode($data));
+        $data['proveedor'] = strval(PROVEEDOR_INTERNO);
+        log_message('DEBUG', '#ENTRADAS > guardar | #DATA-POST: ' . json_encode($data));
 
-        $url = RESTPT.'entradas';
-        $rsp =  file_get_contents($url, false, http('POST', ['post_entradas'=>$data]));
-        return rsp($http_response_header, false, $rsp);
+        $url = RESTPT . 'entradas';
+        $rsp = $this->rest->callApi('POST', $url, ['post_entradas' => $data]);
+        return $rsp;
     }
-    
+
 }

@@ -7,7 +7,7 @@
         <div class="row">
             <input type="hidden" id="accioncamion">
             <div class="col-md-6 col-xs-12">
-                <div id="cargacamion" onclick="cargacamion()">
+                <div id="cargacamion" onclick="cargacamion();">
                     <img src="<?php echo base_url('icon/truck.png'); ?>" alt="Smiley face" height="42" width="42">
                     <label for="">CARGA</label>
                 </div>
@@ -80,7 +80,15 @@ foreach ($establecimientos as $fila) {
     </div>
     <div class="box-body">
         <form id="frm-camion">
-            <div class="row" style="margin-top:40px">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Transportista: </label>
+                        <input type="text" class="form-control" id="transportista" name="transportista">
+                    </div>
+                </div>
+            </div>
+            <div class="row" >
                 <div class="col-md-1 col-xs-12"><label class="form-label">Patente*:</label></div>
                 <div class="col-md-2 col-xs-12"><input type="text" class="form-control" id="patente" name="patente">
                 </div>
@@ -138,6 +146,7 @@ function reset() {
 }
 var recipienteSelect = null;
 $('#patente').keyup(function(e) {
+    if($('#accioncamion').val() != 'descarga') return;
     reset();
     if (e.keyCode === 13) {
         console.log('Obtener Lotes Patentes');
