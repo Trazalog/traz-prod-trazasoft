@@ -107,42 +107,38 @@ foreach ($establecimientos as $fila) {
         </form>
 
         <hr>
-        <button id="add-camion" class="btn btn-primary" style="float:right" onclick="addCamion()">Agregar</button>
+        <button id="add-camion" class="btn btn-primary btn-sm" style="float:right" onclick="addCamion()"><i
+                class="fa fa-plus"></i> Agregar</button>
     </div>
 </div>
-<div class="box" id="boxproductos">
-    <div class="box-header">
-        <h4>Datos Productos entrantes</h4>
-    </div>
-    <div class="box-body">
-        <table class="table table-striped">
-            <thead>
-                <th>Codigo de Lote</th>
-                <th>Recipiente</th>
-            </thead>
-            <tbody id="lotes-camion">
 
-            </tbody>
-        </table>
+<div class="row">
+    <div class="col-md-6">
+        <?php 
+            $this->load->view('entrada_movilidad/comp/origen');
+        ?>
     </div>
-
-    <!-- /.box-body -->
-    <div class="box-footer">
-        <div class="row">
-            <div class="col-md-10 col-xs-6"></div>
-            <div class="col-md-2 col-xs-6">
-                <button class="btn btn-success btn-block" onclick="guardarDecarga()">Guardar</button>
-            </div>
-        </div>
-
+    <div class="col-md-6">
+        <?php
+        $this->load->view('entrada_movilidad/comp/destino');
+        ?>
     </div>
-    <!-- /.box-footer-->
 </div>
+
+<?php 
+    $this->load->view('entrada_movilidad/comp/tabla_descarga');
+?>
 
 <script>
+function reset() {
+    $('#frm-origen')[0].reset();
+    $('#frm-destino')[0].reset();
+    $('.inp-descarga').attr('readonly', false);
+    $('#lotes').empty();
+}
 var recipienteSelect = null;
 $('#patente').keyup(function(e) {
-    $("#lotes-camion").empty();
+    reset();
     if (e.keyCode === 13) {
         console.log('Obtener Lotes Patentes');
 
@@ -157,52 +153,15 @@ $('#patente').keyup(function(e) {
                     alert('No existen Lotes Asociados');
                     return;
                 }
+                console.log(rsp);
 
-                $("#lotes-camion").empty();
+                $("#codigos").empty();
                 rsp.data.forEach(function(e) {
-                    $("#lotes-camion").append(
-                        `<tr data-json='${JSON.stringify(e)}'>
-                            <td class="lote">${e.lote_id}</td>
-                            <td><select id="${e.batch_id}" class="recipiente" data-unificar="false"><option value="false"> - Seleccionar - </option></select></td>
-                        </tr>`
+                    $("#codigos").append(
+                        `<option data-json='${JSON.stringify(e)}' value="${e.lote_id}">${e.establecimiento}</option>`
                     );
                 });
-                if (recipientes == null) return;
-                
-                //Comparar si el recipiente ya fue elegido para otro Lote || Si esta en estado NO_VACIO
-                $('.recipiente').on('change', function(){
 
-                    recipienteSelect = this;
-
-                    var json = JSON.parse($(this).find('option:selected').attr('data-json'));
-                    
-                    if(json.estado != 'VACIO'){
-                        $('#unificar_lotes').modal('show');
-                        return;
-                    }
-
-                    const select  = this.id;
-                    const e = this.value;
-                    var duplicado = false;
-
-                    $('.recipiente').find('option:selected').each(function(){
-                      
-                        if(select != $(this).parent().attr('id')){
-                           if(e == this.value){
-                               duplicado = true;    
-                           }
-                        }
-                    });
-
-                    if(duplicado){
-                        $('#unificar_lotes').modal('show');
-                    }
-                });
-
-                // Rellenar Select Recipientes
-                recipientes.forEach(e => {
-                    $('select.recipiente').append(`<option value="${e.reci_id}" data-json='${JSON.stringify(e)}'>${e.nombre}</option>`);
-                });
             },
             error: function(rsp) {
                 alert('No hay Lotes Asociados');
@@ -215,39 +174,17 @@ $('#patente').keyup(function(e) {
 });
 
 
+// $('#establecimientos').on('change', function() {
+//     obtenerRecipientes();
+// });
 
-$('#establecimientos').on('change', function() {
-    obtenerRecipientes();
-});
 
-var recipientes = null;
-
-function obtenerRecipientes() {
-    console.log('Obtener Recipientes');
-    var establecimiento = $('#establecimientos').val();
-    $.ajax({
-        type: 'POST',
-        dataType: 'JSON',
-        url: 'index.php/general/Recipiente/obtener?tipo=DEPOSITO&estado=TODOS',
-        data: {
-            establecimiento
-        },
-        success: function(rsp) {
-        
-            recipientes = rsp.data;
-        },
-        error: function(rsp) {
-            alert('Error: ' + rsp.msj);
-            console.log(rsp.msj);
-        }
-    });
-}
 
 function unificarLote() {
-    
+
     var rese = $(recipienteSelect).val();
     $('.recipiente').each(function() {
-        if(this.value == rese) this.dataset.unificar = true; 
+        if (this.value == rese) this.dataset.unificar = true;
     });
 
 }
@@ -265,7 +202,7 @@ function guardarDecarga() {
     });
 
     array = JSON.stringify(array);
-    
+
     wo();
     $.ajax({
         type: 'POST',

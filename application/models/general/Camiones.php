@@ -95,12 +95,12 @@ class Camiones extends CI_Model
 
         foreach ($data as $key => $o) {
             $aux = array(
-                "batch_id_origen"=> strval($o->batch_id),
+                "batch_id_origen"=> strval($o['destino']['batch_id']),
                 "empre_id"=>strval(empresa()),
                 "etap_id_deposito"=>strval(ETAPA_DEPOSITO),
                 "usuario_app"=>strval(userNick()),
-                "reci_id"=> strval($o->reci_id),
-                "forzar_agregar"=> strval($o->unificar)
+                "reci_id"=> strval($o['destino']['reci_id']),
+                "forzar_agregar"=> strval($o['destino']['unificar'])
             );
             $recurso = 'lote/deposito/cambiar';
             $url = REST_TDS.$recurso;

@@ -1,0 +1,153 @@
+<data enableBatchRequests="true" enableBoxcarring="true" name="produccionTest" transports="http https local">
+   <config enableOData="false" id="produccionTest">
+      <property name="driverClassName">org.postgresql.Driver</property>
+      <property name="url">jdbc:postgresql://10.142.0.2:5432/tools</property>
+      <property name="username">arbolado</property>
+      <property name="password">password</property>
+   </config>
+   <query id="getCamionEstablecimiento" useConfig="produccionTest">
+      <sql>SELECT motr_id as id ,patente,conductor, fecha_entrada as fecha, reci_id&#xd;FROM prd.movimientos_trasportes&#xd;WHERE esta_id = CAST(:esta_id as INTEGER)&#xd;AND estado = 'INICIADO'&#xd;AND eliminado = FALSE</sql>
+      <result outputType="json">{&#xd;    "camiones":{&#xd;        "camion":[&#xd;            {&#xd;                "id":"$id",&#xd;                "patente":"$patente",&#xd;                "conductor":"$conductor",&#xd;                "fecha":"$fecha",&#xd;                "reci_id":"$reci_id"&#xd;            }&#xd;        ]&#xd;    }&#xd;}</result>
+      <param name="esta_id" sqlType="STRING"/>
+   </query>
+   <query id="getLotesEstablecimiento" useConfig="produccionTest">
+      <sql>select lote.lote_id as id, lote.lote_id as titulo, lote.batch_id, arti.arti_id as producto, arti.descripcion as tituloproducto,lotealm.cantidad as stock, lote.fec_alta as fecha, '0' as envase,'-' as tituloenvase &#xd;from prd.lotes lote&#xd;,prd.recipientes as reci&#xd;,alm.alm_depositos as depo&#xd;,prd.establecimientos as esta&#xd;,alm.alm_lotes as lotealm&#xd;,alm.alm_articulos as arti&#xd;where lote.reci_id = reci.reci_id&#xd;and reci.depo_id = depo.depo_id&#xd;and lote.batch_id = cast(lotealm.batch_id as INTEGER)&#xd;and lotealm.arti_id = arti.arti_id&#xd;and depo.esta_id = cast(:esta_id as INTEGER)</sql>
+      <result outputType="json">{&#xd;    "lotes":{&#xd;        "lote":[&#xd;            {&#xd;                "id":"$id",&#xd;                "batch_id":"$batch_id",&#xd;                "titulo":"$titulo",&#xd;                "producto":"$producto",&#xd;                "tituloproducto":"$tituloproducto",&#xd;                "fecha":"$fecha",&#xd;                "stock":"$stock",&#xd;                "envase":"$envase",&#xd;                "tituloenvase":"$tituloenvase"&#xd;&#xd;            }&#xd;        ]&#xd;    }&#xd;}</result>
+      <param name="esta_id" sqlType="STRING"/>
+   </query>
+   <query id="setRecipiente" keyColumns="reci_id" returnGeneratedKeys="true" useConfig="produccionTest">
+      <sql>INSERT INTO prd.recipientes (tipo,nombre,empr_id,depo_id, motr_id) &#xd;VALUES &#xd;(:tipo,:patente, CAST(:empr_id as INTEGER), CAST(:depo_id as INTEGER), CAST(:motr_id as INTEGER))</sql>
+      <result outputType="json">{&#xd; "resultado":{"reci_id":"$reci_id"}&#xd;}</result>
+      <param name="tipo" sqlType="STRING"/>
+      <param name="patente" sqlType="STRING"/>
+      <param name="empr_id" sqlType="STRING"/>
+      <param name="depo_id" sqlType="STRING"/>
+      <param name="motr_id" sqlType="STRING"/>
+   </query>
+   <query id="extraerCantidadLote" useConfig="produccionTest">
+      <sql>update alm.alm_lotes&#xd;set cantidad = cantidad - CAST(:cantidad as FLOAT8)&#xd;where batch_id = CAST(:batch_id as VARCHAR)&#xd;and empr_id = CAST(:empr_id as INTEGER)</sql>
+      <param name="cantidad" sqlType="STRING"/>
+      <param name="empr_id" sqlType="STRING"/>
+      <param name="batch_id" sqlType="STRING"/>
+   </query>
+   <query id="movimientoStock" useConfig="produccionTest">
+      <sql>insert&#xd;	into&#xd;	alm.alm_lotes (prov_id,&#xd;	arti_id,&#xd;	depo_id,&#xd;	codigo,&#xd;	fec_vencimiento,&#xd;	cantidad,&#xd;	empr_id,&#xd;	user_id,&#xd;	estado,batch_id)&#xd;select prov_id,&#xd;	arti_id,&#xd;	depo_id,&#xd;	codigo,&#xd;	fec_vencimiento,&#xd;	cast(:cantidad as float8),&#xd;	empr_id,&#xd;	user_id,&#xd;	estado&#xd; ,cast(:batch_id as VARCHAR) from alm.alm_lotes&#xd;where batch_id = CAST(:old_batch_id as VARCHAR)</sql>
+      <param name="batch_id" sqlType="STRING"/>
+      <param name="cantidad" sqlType="STRING"/>
+      <param name="old_batch_id" sqlType="STRING"/>
+   </query>
+   <query id="getLotesCamion" useConfig="produccionTest">
+      <sql>select lo.*&#xd;from &#xd;prd.movimientos_trasportes as mt&#xd;,prd.recipientes as re&#xd;,prd.lotes as lo&#xd;where mt.motr_id = re.motr_id &#xd;and re.reci_id = lo.reci_id&#xd;and mt.patente = :patente</sql>
+      <result outputType="json">{&#xd;    "lotes":{&#xd;        "lote":[&#xd;            {&#xd;                "lote_id":"$lote_id",&#xd;                "batch_id":"$batch_id",&#xd;                "estado":"$estado",&#xd;                "estap_id":"$etap_id",&#xd;                "reci_id":"$reci_id"&#xd;            }&#xd;        ]&#xd;    }&#xd;}</result>
+      <param name="patente" sqlType="STRING"/>
+   </query>
+   <query id="setEntrada" useConfig="produccionTest">
+      <sql>INSERT INTO prd.movimientos_trasportes&#xd;(boleta, fecha_entrada, patente, acoplado, conductor, tipo, bruto, tara, neto, prov_id, esta_id)&#xd;VALUES&#xd;(:boleta, TO_DATE(:fecha,'YYYY-MM-DD'), :patente, :acoplado, :conductor, :tipo, CAST(:bruto as float8), CAST(:tara as float8), CAST(:neto as float8), CAST(:proveedor as INTEGER), CAST(:establecimiento as INTEGER))</sql>
+      <param name="boleta" sqlType="STRING"/>
+      <param name="patente" sqlType="STRING"/>
+      <param name="acoplado" sqlType="STRING"/>
+      <param name="conductor" sqlType="STRING"/>
+      <param name="tipo" sqlType="STRING"/>
+      <param name="bruto" sqlType="STRING"/>
+      <param name="tara" sqlType="STRING"/>
+      <param name="neto" sqlType="STRING"/>
+      <param name="fecha" sqlType="STRING"/>
+      <param name="proveedor" sqlType="STRING"/>
+      <param name="establecimiento" sqlType="STRING"/>
+   </query>
+   <query id="getLotes" useConfig="produccionTest">
+      <sql>select &#xd;lote.batch_id&#xd;,lote.lote_id&#xd;,etap.nombre as titulo&#xd;,'' as producto&#xd;,0 as cantidad&#xd;,'n/a' as unidad&#xd;,esta.nombre as establecimiento&#xd;,reci.nombre as recipiente&#xd;,lote.num_orden_prod as orden&#xd;,lote.estado as estado&#xd;from &#xd;prd.etapas etap&#xd;,prd.establecimientos esta &#xd;,prd.recipientes reci &#xd;,prd.lotes lote &#xd;,alm.alm_depositos depo&#xd;where&#xd;lote.etap_id = etap.etap_id&#xd;and lote.reci_id = reci.reci_id&#xd;and reci.depo_id = depo.depo_id&#xd;and depo.esta_id = esta.esta_id</sql>
+      <result outputType="json">{&#xd; "etapas": {&#xd; "etapa": [&#xd; {&#xd; "id": "$batch_id",&#xd; "lote": "$lote_id",&#xd; "titulo" : "$titulo",&#xd; "producto" : "$producto",&#xd; "cantidad" : "$cantidad",&#xd; "unidad" : "$unidad" &#xd; ,"establecimiento" : "$establecimiento",&#xd; "recipiente" : "$recipiente",&#xd; "orden" : "$orden",&#xd; "estado" : "$estado"&#xd; }&#xd; ]&#xd; }&#xd;}</result>
+   </query>
+   <query id="getLote" useConfig="produccionTest">
+      <sql>select &#xd;lote.batch_id&#xd;,lote.lote_id&#xd;,etap.nombre as titulo&#xd;,'' as producto&#xd;,0 as cantidad&#xd;,'n/a' as unidad&#xd;,esta.nombre as establecimiento&#xd;,reci.nombre as recipiente&#xd;,lote.num_orden_prod as orden&#xd;,lote.estado as estado&#xd;from &#xd;prd.etapas etap&#xd;,prd.establecimientos esta &#xd;,prd.recipientes reci &#xd;,prd.lotes lote &#xd;,alm.alm_depositos depo&#xd;where&#xd;lote.etap_id = etap.etap_id&#xd;and lote.reci_id = reci.reci_id&#xd;and reci.depo_id = depo.depo_id&#xd;and depo.esta_id = esta.esta_id&#xd;and lote.batch_id = cast(:batch_id as integer)</sql>
+      <result outputType="json">{ &#xd; "etapa": &#xd; {&#xd;   "id": "$batch_id",&#xd;   "lote": "$lote_id",&#xd;   "titulo" : "$titulo",&#xd;   "producto" : "$producto",&#xd;   "cantidad" : "$cantidad",&#xd;   "unidad" : "$unidad", &#xd;   "establecimiento" : "$establecimiento",&#xd;   "recipiente" : "$recipiente",&#xd;   "orden" : "$orden",&#xd;   "estado" : "$estado"&#xd; } &#xd;}</result>
+      <param name="batch_id" sqlType="STRING"/>
+   </query>
+   <query id="getRecipientes" useConfig="produccionTest">
+      <sql>select A.*, lo.lote_id, al.arti_id&#xd;from&#xd;(select r.reci_id&#xd;      ,r.nombre&#xd;      ,r.tipo&#xd;      ,r.estado&#xd;      ,r.depo_id&#xd;from prd.recipientes as r&#xd;     ,(select :tipo as tipo) as t&#xd;     ,(select :estado as estado) as e&#xd;where r.tipo = case when t.tipo = 'TODOS' then r.tipo else t.tipo end&#xd;and r.estado = case when e.estado = 'TODOS' then r.estado else e.estado end) A&#xd;left join prd.lotes as lo on A.reci_id = lo.reci_id&#xd;left join alm.alm_lotes as al on al.batch_id = lo.batch_id</sql>
+      <result outputType="json">{&#xd;    "recipientes": {&#xd;        "recipiente": [&#xd;            {&#xd;                "reci_id": "$reci_id",&#xd;                "nombre": "$nombre",&#xd;                "tipo": "$tipo",&#xd;                "estado": "$estado",&#xd;                "depo_id": "$depo_id",&#xd;                "arti_id":"$arti_id",&#xd;                "lote_id":"$lote_id"&#xd;            }&#xd;        ]&#xd;    }&#xd;}</result>
+      <param name="tipo" sqlType="STRING"/>
+      <param name="estado" sqlType="STRING"/>
+   </query>
+   <operation name="getreci">
+      <call-query href="getRecipientes">
+         <with-param name="tipo" query-param="tipo"/>
+         <with-param name="estado" query-param="estado"/>
+      </call-query>
+   </operation>
+   <resource method="GET" path="/camion_establecimiento/{esta_id}">
+      <call-query href="getCamionEstablecimiento">
+         <with-param name="esta_id" query-param="esta_id"/>
+      </call-query>
+   </resource>
+   <resource method="GET" path="/lotes_establecimiento/{esta_id}">
+      <call-query href="getLotesEstablecimiento">
+         <with-param name="esta_id" query-param="esta_id"/>
+      </call-query>
+   </resource>
+   <resource method="POST" path="/recipientes">
+      <call-query href="setRecipiente">
+         <with-param name="tipo" query-param="tipo"/>
+         <with-param name="patente" query-param="patente"/>
+         <with-param name="empr_id" query-param="empr_id"/>
+         <with-param name="depo_id" query-param="depo_id"/>
+         <with-param name="motr_id" query-param="motr_id"/>
+      </call-query>
+   </resource>
+   <resource method="POST" path="/extraer_cantidad_lote">
+      <call-query href="extraerCantidadLote">
+         <with-param name="cantidad" query-param="cantidad"/>
+         <with-param name="empr_id" query-param="empr_id"/>
+         <with-param name="batch_id" query-param="batch_id"/>
+      </call-query>
+   </resource>
+   <resource method="POST" path="/lotes/movimiento_stock">
+      <call-query href="movimientoStock">
+         <with-param name="batch_id" query-param="batch_id"/>
+         <with-param name="cantidad" query-param="cantidad"/>
+         <with-param name="old_batch_id" query-param="old_batch_id"/>
+      </call-query>
+   </resource>
+   <resource method="GET" path="/camion/lotes/{patente}">
+      <call-query href="getLotesCamion">
+         <with-param name="patente" query-param="patente"/>
+      </call-query>
+   </resource>
+   <resource method="POST" path="/entradas">
+      <call-query href="setEntrada">
+         <with-param name="boleta" query-param="boleta"/>
+         <with-param name="patente" query-param="patente"/>
+         <with-param name="acoplado" query-param="acoplado"/>
+         <with-param name="conductor" query-param="conductor"/>
+         <with-param name="tipo" query-param="tipo"/>
+         <with-param name="bruto" query-param="bruto"/>
+         <with-param name="tara" query-param="tara"/>
+         <with-param name="neto" query-param="neto"/>
+         <with-param name="fecha" query-param="fecha"/>
+         <with-param name="proveedor" query-param="proveedor"/>
+         <with-param name="establecimiento" query-param="establecimiento"/>
+      </call-query>
+   </resource>
+   <resource method="POST" path="/lotes/movimiento_stock">
+      <call-query href="movimientoStock">
+         <with-param name="batch_id" query-param="batch_id"/>
+         <with-param name="cantidad" query-param="cantidad"/>
+         <with-param name="old_batch_id" query-param="old_batch_id"/>
+      </call-query>
+   </resource>
+   <resource method="GET" path="/lotes">
+      <call-query href="getLotes"/>
+   </resource>
+   <resource method="GET" path="/lote/{batch_id}">
+      <call-query href="getLote">
+         <with-param name="batch_id" query-param="batch_id"/>
+      </call-query>
+   </resource>
+   <resource method="GET" path="/recipientes/tipo/{tipo}/estado/{estado}">
+      <call-query href="getRecipientes">
+         <with-param name="tipo" query-param="tipo"/>
+         <with-param name="estado" query-param="estado"/>
+      </call-query>
+   </resource>
+</data>
