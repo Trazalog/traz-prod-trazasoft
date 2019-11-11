@@ -1,4 +1,4 @@
-<div class="box box-primary">
+<div class="box box-primary tag-descarga">
     <div class="box-body">
         <table class="table table-striped table-hover">
             <thead>

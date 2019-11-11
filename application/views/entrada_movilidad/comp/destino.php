@@ -1,4 +1,4 @@
-<div class="box box-primary">
+<div class="box box-primary tag-descarga">
     <div class="box-header">
         <i class="fa fa-pencil"></i>
         <h3 class="box-title"> Destino</h3>

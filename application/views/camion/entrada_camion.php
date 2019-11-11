@@ -55,10 +55,10 @@ foreach ($establecimientos as $fila) {
             </div>
             <div class="row" style="margin-top:40px">
                 <div class="col-md-1 col-xs-12">
-                    <label class="form-label btn-cargar">Proveedor*:</label>
+                    <label class="form-label tag-descarga">Proveedor*:</label>
                 </div>
                 <div class="col-md-6 col-xs-12">
-                    <input list="proveedores" class="form-control btn-cargar" id="proveedor" name="proveedor"
+                    <input list="proveedores" class="form-control tag-descarga" id="proveedor" name="proveedor"
                         autocomplete="off">
                     <datalist id="proveedores">
                         <?php foreach ($proveedores as $fila) {
@@ -68,7 +68,7 @@ foreach ($establecimientos as $fila) {
                     </datalist>
                 </div>
                 <div class="col-md-5 col-xs-12"><input type="text" disabled id="nombreproveedor"
-                        class="form-control btn-cargar">
+                        class="form-control tag-descarga">
                 </div>
             </div>
         </form>
@@ -480,9 +480,10 @@ function cargacamion() {
     document.getElementById('cargacamion').style.borderColor = "blue";
     document.getElementById('descargacamion').style.borderColor = "white";
     document.getElementById('accioncamion').value = "carga";
-    document.getElementById('boxproductos').hidden = true;
-    $('#add-camion').show();
-    $('.btn-cargar').hide();
+    //document.getElementById('boxproductos').hidden = true;
+     $('#add-camion').show();
+     //$('.btn-cargar').hide();
+    $('.tag-descarga').hide();
 }
 
 function descargacamion() {
@@ -490,9 +491,10 @@ function descargacamion() {
     document.getElementById('cargacamion').style.borderColor = "white";
     document.getElementById('descargacamion').style.borderColor = "blue";
     document.getElementById('accioncamion').value = "descarga";
-    document.getElementById('boxproductos').hidden = false;
-    $('#add-camion').hide();
-    $('.btn-cargar').show();
+   // document.getElementById('boxproductos').hidden = false;
+     $('#add-camion').hide();
+    //$('.btn-cargar').show();
+    $('.tag-descarga').show();
 }
 
 function actualizaNeto() {
