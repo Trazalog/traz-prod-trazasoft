@@ -7,7 +7,7 @@
         <div class="row">
             <input type="hidden" id="accioncamion">
             <div class="col-md-6 col-xs-12">
-                <div id="cargacamion" onclick="cargacamion()">
+                <div id="cargacamion" onclick="cargacamion();">
                     <img src="<?php echo base_url('icon/truck.png'); ?>" alt="Smiley face" height="42" width="42">
                     <label for="">CARGA</label>
                 </div>
@@ -55,10 +55,10 @@ foreach ($establecimientos as $fila) {
             </div>
             <div class="row" style="margin-top:40px">
                 <div class="col-md-1 col-xs-12">
-                    <label class="form-label btn-cargar">Proveedor*:</label>
+                    <label class="form-label tag-descarga">Proveedor*:</label>
                 </div>
                 <div class="col-md-6 col-xs-12">
-                    <input list="proveedores" class="form-control btn-cargar" id="proveedor" name="proveedor"
+                    <input list="proveedores" class="form-control tag-descarga" id="proveedor" name="proveedor"
                         autocomplete="off">
                     <datalist id="proveedores">
                         <?php foreach ($proveedores as $fila) {
@@ -68,7 +68,7 @@ foreach ($establecimientos as $fila) {
                     </datalist>
                 </div>
                 <div class="col-md-5 col-xs-12"><input type="text" disabled id="nombreproveedor"
-                        class="form-control btn-cargar">
+                        class="form-control tag-descarga">
                 </div>
             </div>
         </form>
@@ -80,7 +80,15 @@ foreach ($establecimientos as $fila) {
     </div>
     <div class="box-body">
         <form id="frm-camion">
-            <div class="row" style="margin-top:40px">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Transportista: </label>
+                        <input type="text" class="form-control" id="transportista" name="transportista">
+                    </div>
+                </div>
+            </div>
+            <div class="row" >
                 <div class="col-md-1 col-xs-12"><label class="form-label">Patente*:</label></div>
                 <div class="col-md-2 col-xs-12"><input type="text" class="form-control" id="patente" name="patente">
                 </div>
@@ -138,6 +146,7 @@ function reset() {
 }
 var recipienteSelect = null;
 $('#patente').keyup(function(e) {
+    if($('#accioncamion').val() != 'descarga') return;
     reset();
     if (e.keyCode === 13) {
         console.log('Obtener Lotes Patentes');
@@ -480,9 +489,10 @@ function cargacamion() {
     document.getElementById('cargacamion').style.borderColor = "blue";
     document.getElementById('descargacamion').style.borderColor = "white";
     document.getElementById('accioncamion').value = "carga";
-    document.getElementById('boxproductos').hidden = true;
-    $('#add-camion').show();
-    $('.btn-cargar').hide();
+    //document.getElementById('boxproductos').hidden = true;
+     $('#add-camion').show();
+     //$('.btn-cargar').hide();
+    $('.tag-descarga').hide();
 }
 
 function descargacamion() {
@@ -490,9 +500,10 @@ function descargacamion() {
     document.getElementById('cargacamion').style.borderColor = "white";
     document.getElementById('descargacamion').style.borderColor = "blue";
     document.getElementById('accioncamion').value = "descarga";
-    document.getElementById('boxproductos').hidden = false;
-    $('#add-camion').hide();
-    $('.btn-cargar').show();
+   // document.getElementById('boxproductos').hidden = false;
+     $('#add-camion').hide();
+    //$('.btn-cargar').show();
+    $('.tag-descarga').show();
 }
 
 function actualizaNeto() {

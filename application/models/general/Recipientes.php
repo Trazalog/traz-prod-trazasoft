@@ -58,9 +58,19 @@ class Recipientes extends CI_Model
 
     public function crear($data)
     {
+        $aux = array(
+            'tipo' => 'TRANSPORTE',
+            'patente' => $data->patente,
+            'motr_id' => $data->motr_id,
+            'depo_id' => strval(DEPOSITO_TRANSPORTE),
+            'empr_id' => strval(empresa()),
+        );
+
         $url = RESTPT.'recipientes';
-        $rsp =  file_get_contents($url, false, http('POST', ['post_recipientes'=>$data]));
-        return rsp($http_response_header, false, json_decode($rsp));
+        $rsp =  $this->rest->callApi('POST', $url, ['post_recipientes'=>$aux]);
+        if(!$rsp['status']) return $rsp;
+        $rsp['data'] = json_decode($rsp['data'])->resultado->reci_id;
+        return $rsp;
     }
 
     public function obtener($tipo = 'TODOS', $estado = 'TODOS')

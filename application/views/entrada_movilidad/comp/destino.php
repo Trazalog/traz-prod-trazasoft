@@ -1,4 +1,4 @@
-<div class="box box-primary">
+<div class="box box-primary tag-descarga">
     <div class="box-header">
         <i class="fa fa-pencil"></i>
         <h3 class="box-title"> Destino</h3>
@@ -84,6 +84,8 @@ function agregarRegistro() {
 
     origen = formToObject(fo);
     destino = formToObject(fd);
+
+    origen.prov_id = $('#proveedor').val();
 
     if (parseFloat(origen.cantidad) <= 0 || parseFloat(destino.cantidad) > parseFloat(origen.cantidad)) {
         alert('La Cantidad Supera la Cantidad del Lote Origen');

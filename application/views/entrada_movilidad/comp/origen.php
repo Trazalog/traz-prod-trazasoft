@@ -1,4 +1,4 @@
-<div class="box box-primary">
+<div class="box box-primary tag-descarga">
     <div class="box-header">
         <h3 class="box-title"> Ingreso <span id="origen"> - </span></h3>
     </div>

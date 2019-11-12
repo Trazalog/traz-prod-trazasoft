@@ -149,6 +149,8 @@ define('REST4', 'http://dev-trazalog.com.ar:8280/services/TrazabilidadDataServic
 define('DEFAULT_VIEW', ALM.'Articulo');
 
 #TRAZASOFT
+define('PROVEEDOR_INTERNO', 1000);
+
 #Deposito que contienen todos los reci_id que estan en transporte
 define('DEPOSITO_TRANSPORTE', 1000);
 define('ESTABLECIMIENTO_TRANSPORTE', 1000);
@@ -156,3 +158,5 @@ define('ESTABLECIMIENTO_TRANSPORTE', 1000);
 #ID DE ETAPA
 define('ETAPA_TRANSPORTE', 1000);
 define('ETAPA_DEPOSITO', 2000);
+
+
