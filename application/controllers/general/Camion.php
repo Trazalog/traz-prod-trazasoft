@@ -68,6 +68,7 @@ class Camion extends CI_Controller
 	public function setEntrada()
 	{
         $this->load->model('general/Entradas');
+        
 		$data = $this->input->post();
         $rsp = $this->Entradas->guardar($data);
         echo json_encode($rsp);

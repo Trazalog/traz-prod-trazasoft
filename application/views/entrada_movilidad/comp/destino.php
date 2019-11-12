@@ -86,6 +86,7 @@ function agregarRegistro() {
     destino = formToObject(fd);
 
     origen.prov_id = $('#proveedor').val();
+    origen.batch_id = batch;
 
     if (parseFloat(origen.cantidad) <= 0 || parseFloat(destino.cantidad) > parseFloat(origen.cantidad)) {
         alert('La Cantidad Supera la Cantidad del Lote Origen');

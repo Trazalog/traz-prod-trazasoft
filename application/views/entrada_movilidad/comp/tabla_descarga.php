@@ -51,7 +51,12 @@ function guardarDescargaOrigen() {
             array
         },
         success: function(rsp) {
-            alert('Hecho');
+            if(rsp.status == true){
+              alert('Hecho');
+              linkTo();
+            }else{
+                alert('Error al Guardar Descarga');
+            }
         },
         error: function(rsp) {
             alert('Error: ' + rsp.msj);
