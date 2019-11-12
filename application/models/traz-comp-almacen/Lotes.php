@@ -186,16 +186,16 @@ class Lotes extends CI_Model {
 		
 		$aux["lote_id"] =strval( $data->id);
 		$aux["arti_id"] = strval($data->producto);
-		$aux["prov_id"] = strval(PROVEEDOR_INTERNO);
+		$aux["prov_id"] = strval($data->prov_id);
 		$aux["batch_id_padre"] = strval($data->batch_id);
 		$aux["cantidad"] = strval($data->cantidad);
 		$aux["cantidad_padre"] = strval($data->stock);
 		$aux["num_orden_prod"] = "";
 		$aux["reci_id"] = strval($data->reci_id);
 		$aux["etap_id"] = strval(ETAPA_DEPOSITO);
-		$aux["usuario_app"] = "CHUCK";
+		$aux["usuario_app"] =  userNick();
 		$aux["empr_id"] = strval(empresa());
-		$aux["forzar_agregar"] = "FALSE";
+		$aux["forzar_agregar"] =  isset($data->forzar_agregar)?$data->forzar_agregar:"FALSE";
 		$aux["fec_vencimiento"] = date('d-m-Y');
         
         $url = REST_TDS.'lote';
