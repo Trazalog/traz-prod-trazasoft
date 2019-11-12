@@ -57,7 +57,7 @@ foreach ($establecimientos as $fila) {
                 <div class="col-md-1 col-xs-12">
                     <label class="form-label tag-descarga">Proveedor*:</label>
                 </div>
-                <div class="col-md-6 col-xs-12">
+                <div class="col-md-3 col-xs-12">
                     <input list="proveedores" class="form-control tag-descarga" id="proveedor" name="proveedor"
                         autocomplete="off">
                     <datalist id="proveedores">

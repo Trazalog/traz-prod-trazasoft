@@ -4,6 +4,7 @@
     </div>
     <div class="box-body">
         <form id="frm-origen" class="frm-origen">
+            <input type="text" name="batch_id" id="batch_id" >
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
@@ -56,6 +57,7 @@
 <!-- box -->
 
 <script>
+var batch = null;
 $('.frm-origen #codigo').on('change', function() {
     var json = getJson($('#codigos [value="' + this.value + '"]'));
     if (!json) return;
@@ -64,6 +66,7 @@ $('.frm-origen #codigo').on('change', function() {
     $('.frm-destino #articulo').val(json.arti_id);
     $('.frm-origen #um').val(json.um);
     $('.frm-origen #cantidad').val(json.cantidad);
+    batch = json.batch_id;
     $('.inp-descarga').attr('readonly', true);
 
     //Rellenar Inputs Informacion

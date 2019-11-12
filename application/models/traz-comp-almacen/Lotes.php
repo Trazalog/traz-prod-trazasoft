@@ -219,7 +219,8 @@ class Lotes extends CI_Model {
 		$url = REST_TDS.'lote/recipiente/cambiar';
 		$rsp = $this->rest->callApi('POST',$url, ['post_lote_recipiente_cambiar'=>$aux]);
 		if(!$rsp['status']) return $rsp;
-		$rsp['data'] = json_decode($rsp['data']->respuesta->resultado);
+		$rsp['data'] = json_decode($rsp['data'])->respuesta->resultado;
+	##	log_message('DEBUG', '#MODEL > guardaCargaCamion | RSP: '.json_encode($rsp));
 		$rsp['status'] = ($rsp['data'] == 'CORRECTO');  
 
 		return $rsp;
