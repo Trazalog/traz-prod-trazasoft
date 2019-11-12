@@ -44,7 +44,7 @@ foreach ($establecimientos as $fila) {
 }
 ?>
                     </select>
-                </div>G
+                </div>
                 <div class="col-md-1 col-xs-12">
                     <label for="fecha" class="form-label">Fecha*:</label>
                 </div>
