@@ -114,7 +114,7 @@ define('ASP_115', 'Error al Leer Variable');
 
 #COMPONENTE ALMACENES
 define('ALM', 'traz-comp-almacen/');
-define('BPM_PROCESS_ID_PEDIDOS_NORMALES', '6833268789089291878'); 
+define('BPM_PROCESS_ID_PEDIDOS_NORMALES', '6352939331165329370'); 
 define('BPM_PROCESS_ID_PEDIDOS_EXTRAORDINARIOS', '7321139677245257050');
 define('viewOT', false);
 
@@ -132,6 +132,7 @@ define('REST', 'http://dev-trazalog.com.ar:8280/services/ProduccionDataService/'
 define('REST_TDS', 'http://dev-trazalog.com.ar:8280/services/TrazabilidadDataService/');
 define('REST_TDS_TEST', 'http://pc-pc:8280/services/TrazabilidadDataService/');
 define('RESTPT','http://dev-trazalog.com.ar:8280/services/produccionTest/');
+define('PROVEEDOR_INTERNO', 1000);
 // define('REST2', 'http://dev-trazalog.com.ar:8280/services/ProduccionDataService');
 // define('REST3', 'http://dev-trazalog.com.ar:8280/services/produccionTest');
 // define('REST4', 'http://dev-trazalog.com.ar:8280/services/TrazabilidadDataService');

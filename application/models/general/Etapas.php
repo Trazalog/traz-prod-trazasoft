@@ -134,9 +134,8 @@ class Etapas extends CI_Model
 				log_message('DEBUG', 'Etapas/SetNuevoBatch(datos)-> '.$arrayBatch);
 				$resource = '/lote';	 	
         $url = REST4.$resource;
-        //$url = 'http://dev-trazalog.com.ar:8280/services/TrazabilidadDataService/lote';
-        $array = $this->rest->callAPI("POST",$url,  $data); 		
-       	return $array;
+        $array = $this->rest->callAPI("POST",$url,  $data); 
+				return $array['data'];
 		}
 
     function setCabeceraNP($data)
@@ -145,8 +144,10 @@ class Etapas extends CI_Model
         $resource = '/notapedido';	 	
         $url = REST2.$resource;
        
-				$array = $this->rest->callAPI("POST", $url, $data);				
-				return $array;
+				$array = $this->rest->callAPI("POST", $url, $data);			
+				echo("resp set cabecera: ");
+				var_dump($array);	
+				return $array['data'];
     }
 
 

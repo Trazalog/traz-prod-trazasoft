@@ -52,6 +52,8 @@ class Etapa extends CI_Controller {
 		
 			//////////// PARA CREAR EL NUNEVO BATCH ///////////////////
 				$datosCab['lote_id'] = $this->input->post('lote');
+				$datosCab['arti_id'] = (string)$this->input->post('idprod');
+				$datosCab['prov_id'] = (string)PROVEEDOR_INTERNO;
 				$datosCab['batch_id_padre'] = (string)0;
 				$datosCab['cantidad'] = (string)$this->input->post('cantidad');
 				$datosCab['cantidad_padre'] = (string)0;
@@ -60,13 +62,18 @@ class Etapa extends CI_Controller {
 				$datosCab['etap_id'] = $this->input->post('idetapa');
 				$datosCab['usuario_app'] = userNick();
 				$datosCab['empr_id'] = (string)empresa();
-				$datosCab['forzar_agregar'] = "FALSE";				
-				$datosCab['arti_id'] = (string)$this->input->post('idprod');
+				$datosCab['forzar_agregar'] = "FALSE";
+				$datosCab['fec_vencimiento'] = "01-01-1899";	
 				
 				$data['_post_lote'] = $datosCab;	
 				
-				$batch_id = $this->Etapas->SetNuevoBatch($data)->respuesta->resultado;
-								
+				$respServ = $this->Etapas->SetNuevoBatch($data);
+				$batch_id	= $respServ->respuesta->resultado;
+				echo("bacth id: ");
+				var_dump($batch_id);
+				
+
+
 				if(($batch_id != "BATCH_NO_CREADO" )  || ($batch_id != "RECI_NO_VACIO")){
 
 					////////////// INSERTAR CABECERA NOTA PEDIDO   ///
@@ -74,11 +81,12 @@ class Etapa extends CI_Controller {
 						$arrayPost['empr_id'] = (string)empresa();
 						$arrayPost['batch_id'] = $batch_id;		
 						$cab['_post_notapedido'] = $arrayPost;					
-						$resp = $this->Etapas->setCabeceraNP($cab);
+						$response = $this->Etapas->setCabeceraNP($cab);
 						
-						$response = json_decode($resp['data']);
+					
 						$pema_id = $response->nota_id->pedido_id;
-						
+						echo("pema id: ");
+						var_dump($pema_id);
 					//////////// PARA CREAR EL BATCH PARA EL BATCH REQUEST //////////
 					
 						if($pema_id){
