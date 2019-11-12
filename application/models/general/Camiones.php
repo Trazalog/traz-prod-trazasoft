@@ -87,8 +87,6 @@ class Camiones extends CI_Model
 
             $this->load->model(ALM.'Lotes');
             $rsp = $this->Lotes->crearBatch($aux);
-            cerraTareaBPM
-
         }
         return $rsp;
     }
