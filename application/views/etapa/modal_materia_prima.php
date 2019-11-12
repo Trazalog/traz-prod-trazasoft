@@ -21,7 +21,7 @@
   </div>
 </div>
   <script>
- $(document).off('click','.tablamaterias_nuevo').on('click', '.tablamaterias_nuevo', function () {
+  $(document).off('click','.tablamaterias_nuevo').on('click', '.tablamaterias_nuevo', function () {
    var materia = $(this).closest('tr').data('json');
    document.getElementById('inputmaterias').value = materia[0].titulo;
    document.getElementById('stockdisabled').value = materia[0].stock;
@@ -37,7 +37,7 @@
     existe = document.getElementById('materiasexiste').value;
     var html = '';
     materia = JSON.stringify(materia);
-    materia =JSON.parse(materia);
+    materia =JSON.parse(materia);   
     document.getElementById('inputrecursosmateriales').value = materia[0].titulo;
    if(existe == 'no')
    {
