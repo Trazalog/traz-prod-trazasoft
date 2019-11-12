@@ -106,17 +106,8 @@ class Etapas extends CI_Model
 
     }
     function nuevo($opcion)
-    {
-        // if($opcion == 3)
-        // {
-        //     $resource = 'fraccionarnuevo';
-        // }else{
-        //     $resource = 'etapasnuevo';
-        // }
-
-       //TODO: DESHARDCODEAR LA UR DEL RECURSO Y EL NUMERO DE ETAPA
-
-        
+    {      
+    
         $parametros["http"]["method"] = "GET";	
         $parametros["http"]["header"] = "Accept: application/json";	 
         $param = stream_context_create($parametros);
@@ -137,7 +128,7 @@ class Etapas extends CI_Model
         $array = $this->rest->callAPI("POST",$url,  $data); 
 				return $array['data'];
 		}
-
+		// Guarda cabecera de Nota de pedido
     function setCabeceraNP($data)
     {
 				log_message('DEBUG', 'Etapas/setCabeceraNP(datos)-> '.json_encode($data));        
@@ -149,32 +140,38 @@ class Etapas extends CI_Model
 				var_dump($array);	
 				return $array['data'];
     }
-
-
-    function setDetaNP($arrayDeta){
-			
-				//$url = 'http://PC-PC:8280/services/ProduccionDataService/_post_notapedido_detalle_batch_req';
-			
+		// Guarda detalle de Nota de pedido
+    function setDetaNP($arrayDeta){			
 				log_message('DEBUG', 'Etapas/setDetaNP(datos)-> '.json_encode($arrayDeta)); 
 				$resource = '/_post_notapedido_detalle_batch_req';	 	
 				$url = REST2.$resource;				 
 				$array = $this->rest->callAPI("POST", $url, $arrayDeta);	
 				return $array;
-    }
+		}
+		
+		function getCantProducto($id){
+			
+			$idBatch = json_encode($id);
+			log_message('DEBUG', 'Etapas/getCantProducto(batch_id)-> '.$idBatch);
+			$resource = '/lote/existencia/';	 	
+			$url = REST4.$resource.$id;
+			$array = $this->rest->callAPI("GET",$url,  $data); 		
+			return json_decode($array['data']);
+		}
+
+		function getNomProducto($id){
+
+			$idBatch = json_encode($id);
+			log_message('DEBUG', 'Etapas/getNomProducto(batch_id)-> '.$idBatch);
+			$resource = '/articulo/nombre/';	 	
+			$url = REST2.$resource.$id;
+			$array = $this->rest->callAPI("GET",$url,  $data); 		
+			return json_decode($array['data']);
+		}
+
 
 		// Informe de Etapa (modal_finaizar)
 		function finalizarEtapa($arrayDatos){
-
-			// $data = json_encode($arrayDatos);
-			// $parametros["http"]["method"] = "POST";
-			// $parametros["http"]["header"] = "Accept: application/json";	 
-			// $parametros["http"]["header"] = "Content-Type: application/json";
-			// $parametros["http"]["content"] = $data;	 		 
-			// $param = stream_context_create($parametros);	
-			// $resource = '/lote/deposito/ingresar';	 	
-			// $url = REST4.$resource;			
-			// $array = file_get_contents($url, false, $param); 
-			// return $array;	
 
 			log_message('DEBUG', 'Etapas/finalizarEtapa(datos)-> '.json_encode($arrayDatos)); 
 

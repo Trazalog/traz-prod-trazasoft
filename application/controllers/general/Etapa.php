@@ -46,7 +46,7 @@ class Etapa extends CI_Controller {
 
 
 
-
+	 // guarda el Inicio de una nueva etapa mas orden pedido y lanza pedido almac
 	 public function guardar()
 	 {
 		
@@ -69,10 +69,6 @@ class Etapa extends CI_Controller {
 				
 				$respServ = $this->Etapas->SetNuevoBatch($data);
 				$batch_id	= $respServ->respuesta->resultado;
-				echo("bacth id: ");
-				var_dump($batch_id);
-				
-
 
 				if(($batch_id != "BATCH_NO_CREADO" )  || ($batch_id != "RECI_NO_VACIO")){
 
@@ -82,11 +78,8 @@ class Etapa extends CI_Controller {
 						$arrayPost['batch_id'] = $batch_id;		
 						$cab['_post_notapedido'] = $arrayPost;					
 						$response = $this->Etapas->setCabeceraNP($cab);
-						
-					
 						$pema_id = $response->nota_id->pedido_id;
-						echo("pema id: ");
-						var_dump($pema_id);
+					
 					//////////// PARA CREAR EL BATCH PARA EL BATCH REQUEST //////////
 					
 						if($pema_id){
@@ -140,21 +133,24 @@ class Etapa extends CI_Controller {
 				}		
 	 }
 
-
-
-	 
-
-
-
 	 public function editar()
 	 {
-		$id = $this->input->get('id');
+		 
+		$id = $this->input->get('id');// batch_id
 	
 		$data['accion'] = 'Editar';
 		$data['etapa'] = $this->Etapas->buscar($id)->etapa;
 		//	var_dump($data['etapa']);die;
 		$data['idetapa'] = $data['etapa']->id;
 		// $data['recipientes'] = $this->Recipientes->listarPorEstablecimiento($data['etapa']->establecimiento->id)->recipientes->recipiente;
+
+		$prodCant = $this->Etapas->getCantProducto($id);
+		$data['prodCant'] = $prodCant->existencia->cantidad;
+	
+		$prodNombre = $this->Etapas->getNomProducto($id);
+		$data['prodNomb'] =$prodNombre->producto->nombre;
+	
+		
 		$data['recipientes'] = $this->Recipientes->listarTodosDeposito()->recipientes->recipiente;// trae todos los recipientes de Tipo Deposito
 		$data['op'] = 	$data['etapa']->titulo;
 		$data['lang'] = lang_get('spanish',4);
@@ -193,15 +189,20 @@ class Etapa extends CI_Controller {
 
 		 foreach ($productos as $value) {			
 
+				$arrayPost["lote_id"] = $value->lotedestino;
 				$arrayPost["arti_id"] = $value->id;
-				$arrayPost["cantidad"] = $value->cantidad;
-				$arrayPost["batch_id_origen"] = $value->loteorigen;
-				$arrayPost["lote"] = $value->lotedestino;
-				$arrayPost["reci_id"] = $value->destino;
-				$arrayPost["empre_id"] = (string)empresa();
-				$arrayPost["etap_id_deposito"] = (string)DEPOSITO_TRANSPORTE;
+				$arrayPost["prov_id"] = (string)PROVEEDOR_INTERNO;
+				$arrayPost["batch_id_padre"] = $value->lote_id;// bacth actual
+
+				$arrayPost["cantidad"] = $value->cantidad;// art seleccionado en lista
+				$arrayPost["cantidad_padre"] =			//cantida padre esl lo que descuenta del batch actula
+				$$arrayPost["num_orden_prod"] =				
+				$arrayPost["reci_id"] = $value->destino;//reci:id destino del nuevo batch
+				$arrayPost["etap_id"] = (string)DEPOSITO_TRANSPORTE;
 				$arrayPost["usuario_app"] = userNick();
+				$arrayPost["empr_id"] = (string)empresa();	
 				$arrayPost["forzar_agregar"] = "false";
+				$arrayPost["fec_vencimiento"] = "01-01-1988";
 			
 				//$arrayDatos['_post_lote_deposito_ingresar'] = $arrayPost;			
 				$arrayDatos['_post_lote'] = $arrayPost;	

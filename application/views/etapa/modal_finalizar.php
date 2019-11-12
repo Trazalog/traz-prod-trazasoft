@@ -15,13 +15,18 @@
       </div>
 
       <div class="row">
-        <div class="col-md-3 col-xs-12"><label class="form-label">Producto Lote Origen:</label></div>
-        <div class="col-md-4 col-xs-12"><input class="form-control" type="text" id="prod_origen" value="<?php echo $etapa->lote;?>" disabled></div>
+        <div class="col-md-3 col-xs-12"><label class="form-label">Producto:</label></div>
+        <div class="col-md-4 col-xs-12"><input class="form-control" type="text" id="prod_origen" value="<?php echo $prodNomb;?>" disabled></div>
         <div class="col-md-5"></div>
       </div>
       <div class="row">
-        <div class="col-md-3 col-xs-12"><label class="form-label">Cantidad Lote Origen:</label></div>
-        <div class="col-md-4 col-xs-12"><input class="form-control" type="text" id="cant_origen" value="<?php echo $etapa->lote;?>" disabled></div>
+        <div class="col-md-3 col-xs-12"><label class="form-label">Cantidad:</label></div>
+        <div class="col-md-4 col-xs-12"><input class="form-control" type="text" id="cant_origen" value="<?php echo $prodCant;?>" disabled></div>
+        <div class="col-md-5"></div>
+      </div>
+      <div class="row">
+        <div class="col-md-3 col-xs-12"><label class="form-label">Cantidad a Extraer:</label></div>
+        <div class="col-md-4 col-xs-12"><input class="form-control" type="text" id="cant_descontar" value="" placeholder="Inserte cantidad a Extraer"></div>
         <div class="col-md-5"></div>
       </div>
 
@@ -300,8 +305,13 @@
  
   });
 
+ 
+
   function FinalizarEtapa()
   {
+
+    
+
     existe = document.getElementById('productos_existe').value;
     if(existe == "no")
     {
@@ -314,10 +324,24 @@
         productos.push(json);
       });
       productos = JSON.stringify(productos);
+      
+      lote_id = $('#loteorigen').val();
+      cantidad_padre = $('#cant_origen').val();
+      cantidad = $('#cant_descontar').val();
+     
+     //TODO: REVISAR ESTE SELECT Y RESTO DE DATOS
+      select = document.getElementById("productodestino");
+        value = select.value;
+        alert(value);
+
       $.ajax({
       type: 'POST',
       async: false,
-      data: { productos: productos },
+      data: { productos: productos,
+              lote_id:lote_id,
+              cantidad_padre:cantidad_padre,
+              cantidad:cantidad
+            },
       url: 'general/Etapa/Finalizar', 
       success: function(result){
           document.getElementById('btnfinalizar').style.display = "none";

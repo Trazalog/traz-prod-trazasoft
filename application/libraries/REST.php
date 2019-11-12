@@ -81,17 +81,22 @@ class REST
 
             log_message('DEBUG', '#TRAZA | #REST | #CURL | #HEADER SALIDA >> ' . $headerSent);
 
-            if ($response_code >= 300) {
+ 	    log_message('DEBUG', '#TRAZA | #REST | #CURL | #HTTP_CODE >> ' . $response_code);
 
+            log_message('DEBUG', '#TRAZA | #REST | #CURL | #HEADER RESPUESTA>> ' . $headers);
+
+            log_message('DEBUG', '#TRAZA | #REST | #CURL | #BODY >> ' . json_encode($body));
+            
+             if ($response_code >= 300) {
+                    
                 log_message('ERROR', '#TRAZA | #REST | #CURL | #HTTP_CODE >> ' . $response_code);
 
-                log_message('ERROR', '#TRAZA | #REST | #CURL | #HEADER >> ' . $headers);
+                log_message('ERROR', '#TRAZA | #REST | #CURL | #HEADER RESPUESTA>> ' . $headers);
 
                 log_message('ERROR', '#TRAZA | #REST | #CURL | #BODY >> ' . json_encode($body));
-
             }
 
-            return ['status' => ($response_code < 300), 'header' => $headers, 'data' =>json_decode($body), 'code' => $response_code];
+            return ['status' => ($response_code < 300), 'header' => $headers, 'data' =>$body, 'code' => $response_code];
 
         } catch (Exception $e) {
 
