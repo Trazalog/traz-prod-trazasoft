@@ -79,9 +79,8 @@ class Etapa extends CI_Controller {
 						$cab['_post_notapedido'] = $arrayPost;					
 						$response = $this->Etapas->setCabeceraNP($cab);
 						$pema_id = $response->nota_id->pedido_id;
-					
-					//////////// PARA CREAR EL BATCH PARA EL BATCH REQUEST //////////
-					
+
+					//////////// PARA CREAR EL BATCH PARA EL BATCH REQUEST //////////					
 						if($pema_id){
 
 								$materia = $this->input->post('materia');
@@ -99,11 +98,10 @@ class Etapa extends CI_Controller {
 								$arrayDeta['_post_notapedido_detalle_batch_req'] = $detalle;							
 								$respDetalle = $this->Etapas->setDetaNP($arrayDeta);
 								
-								$response = json_decode($respDetalle['code']);
+								//$response = json_decode($respDetalle['code']);
 								
-								if($response < 300){
-									/////// LANZAR EL PROCESO DE BONITA DE PEDIDO 
-					
+								if($respDetalle < 300){
+									/////// LANZAR EL PROCESO DE BONITA DE PEDIDO 								
 									$contract = [
 										'pIdPedidoMaterial' => $pema_id,
 									];

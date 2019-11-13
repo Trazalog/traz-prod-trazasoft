@@ -126,27 +126,24 @@ class Etapas extends CI_Model
 				$resource = '/lote';	 	
         $url = REST4.$resource;
         $array = $this->rest->callAPI("POST",$url,  $data); 
-				return $array['data'];
+				return json_decode($array['data']);
 		}
 		// Guarda cabecera de Nota de pedido
     function setCabeceraNP($data)
     {
 				log_message('DEBUG', 'Etapas/setCabeceraNP(datos)-> '.json_encode($data));        
         $resource = '/notapedido';	 	
-        $url = REST2.$resource;
-       
-				$array = $this->rest->callAPI("POST", $url, $data);			
-				echo("resp set cabecera: ");
-				var_dump($array);	
-				return $array['data'];
+        $url = REST2.$resource;       
+				$array = $this->rest->callAPI("POST", $url, $data);	
+				return json_decode($array['data']);
     }
 		// Guarda detalle de Nota de pedido
     function setDetaNP($arrayDeta){			
 				log_message('DEBUG', 'Etapas/setDetaNP(datos)-> '.json_encode($arrayDeta)); 
 				$resource = '/_post_notapedido_detalle_batch_req';	 	
 				$url = REST2.$resource;				 
-				$array = $this->rest->callAPI("POST", $url, $arrayDeta);	
-				return $array;
+				$array = $this->rest->callAPI("POST", $url, $arrayDeta);
+				return json_decode($array['code']);
 		}
 		
 		function getCantProducto($id){
