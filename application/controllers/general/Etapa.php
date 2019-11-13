@@ -185,38 +185,42 @@ class Etapa extends CI_Controller {
 	 }
 	 public function Finalizar()
 	 {
-		 $productos = json_decode($this->input->post('productos'));
-
+		 	$productos = json_decode($this->input->post('productos'));
+		 	$cantidad_padre = $this->input->post('cantidad_padre');
+			$num_orden_prod = $this->input->post('num_orden_prod');	
+			$lote_id = $this->input->post('lote_id');
+			$batch_id_padre = $this->input->post('batch_id_padre');
 		 foreach ($productos as $value) {			
 
-				$arrayPost["lote_id"] = $value->lotedestino;
-				$arrayPost["arti_id"] = $value->id;
+				$arrayPost["lote_id"] = $lote_id; // lote origen
+				$arrayPost["arti_id"] = $value->id;	// art seleccionado en lista
 				$arrayPost["prov_id"] = (string)PROVEEDOR_INTERNO;
-				$arrayPost["batch_id_padre"] = $value->lote_id;// bacth actual
-
+				$arrayPost["batch_id_padre"] = $batch_id_padre;// bacth actual
 				$arrayPost["cantidad"] = $value->cantidad;// art seleccionado en lista
-				$arrayPost["cantidad_padre"] =			//cantida padre esl lo que descuenta del batch actula
-				$$arrayPost["num_orden_prod"] =				
-				$arrayPost["reci_id"] = $value->destino;//reci:id destino del nuevo batch
+				$arrayPost["cantidad_padre"] =	$cantidad_padre;		//cantida padre esl lo que descuenta del batch actula
+				$arrayPost["num_orden_prod"] =	$num_orden_prod;			
+				$arrayPost["reci_id"] = $value->destino;  //reci_id destino del nuevo batch
 				$arrayPost["etap_id"] = (string)DEPOSITO_TRANSPORTE;
 				$arrayPost["usuario_app"] = userNick();
 				$arrayPost["empr_id"] = (string)empresa();	
 				$arrayPost["forzar_agregar"] = "false";
 				$arrayPost["fec_vencimiento"] = "01-01-1988";
-			
-				//$arrayDatos['_post_lote_deposito_ingresar'] = $arrayPost;			
+
 				$arrayDatos['_post_lote'] = $arrayPost;	
 				
 				$resp = $this->Etapas->finalizarEtapa($arrayDatos);
+				
 				if ($resp > 300) {
-					echo("Error");
+					echo("Error en dataservice");
 					return;
+				}else{
+					echo("ok");
 				}
-				$response = json_decode($resp['code']);
+				
 		}
 		 
 
-		 echo("ok");
+		
 	 }
 	 public function fraccionar()
 	 {

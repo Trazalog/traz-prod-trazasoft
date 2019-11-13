@@ -175,12 +175,12 @@ class Etapas extends CI_Model
 
 			log_message('DEBUG', 'Etapas/finalizarEtapa(datos)-> '.json_encode($arrayDatos)); 
 
-			//TODO: PREGUNTAR SI SE PUEDE HACER UN BATCH_REQUEST O MANDAR DE AUNO CADA VEZ
 			$resource = '/lote';	 	
 			$url = REST4.$resource;				 
 			$array = $this->rest->callAPI("POST", $url, $arrayDatos);	
-			return $array;
-
+			// echo("result guardar");	
+			// var_dump($array['status']);
+			return json_decode($array['status']);
 		}
 
 

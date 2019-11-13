@@ -6,7 +6,8 @@
             aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="myModalLabel"><span id="modalAction"> </span> Informe de Etapa</h4>
       </div>
-
+      <input class="hidden" type="text" id="num_orden_prod" value="<?php echo $etapa->orden;?>">
+      <input class="hidden" type="text" id="batch_id_padre" value="<?php echo $etapa->id;?>">
       <div class="modal-body" id="modalBodyArticle">
       <div class="row">
           <div class="col-md-3 col-xs-12"><label class="form-label">Codigo Lote Origen:</label></div>
@@ -306,12 +307,9 @@
   });
 
  
-
+  // Genera Informe de Etapa
   function FinalizarEtapa()
-  {
-
-    
-
+  {  
     existe = document.getElementById('productos_existe').value;
     if(existe == "no")
     {
@@ -323,24 +321,25 @@
         json = JSON.parse($(this).attr('data-json'));
         productos.push(json);
       });
-      productos = JSON.stringify(productos);
-      
-      lote_id = $('#loteorigen').val();
-      cantidad_padre = $('#cant_origen').val();
-      cantidad = $('#cant_descontar').val();
-     
-     //TODO: REVISAR ESTE SELECT Y RESTO DE DATOS
+
+      productos = JSON.stringify(productos);      
+      lote_id = $('#loteorigen').val();     
+      cantidad_padre = $('#cant_descontar').val();
+      num_orden_prod = $('#num_orden_prod').val();
+      cantidad = $('#cant_origen').val();
       select = document.getElementById("productodestino");
-        value = select.value;
-        alert(value);
+      batch_id_padre = $('#batch_id_padre').val();
+      destino = select.value;  
 
       $.ajax({
       type: 'POST',
       async: false,
-      data: { productos: productos,
-              lote_id:lote_id,
-              cantidad_padre:cantidad_padre,
-              cantidad:cantidad
+      data: { lote_id: lote_id,
+              productos: productos,              
+              cantidad_padre: cantidad_padre,
+              num_orden_prod: num_orden_prod,
+              destino: destino,
+              batch_id_padre: batch_id_padre              
             },
       url: 'general/Etapa/Finalizar', 
       success: function(result){
@@ -348,7 +347,7 @@
           $("#modal_finalizar").modal('hide');
 
           if (result == "ok") {
-                        linkTo('general/Etapa/index');
+            linkTo('general/Etapa/index');
           }else{
             alert("Hubo un error en Dataservice");
             linkTo('general/Etapa/index');
