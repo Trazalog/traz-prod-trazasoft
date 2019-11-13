@@ -6,7 +6,8 @@
             aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="myModalLabel"><span id="modalAction"> </span> Informe de Etapa</h4>
       </div>
-
+      <input class="hidden" type="text" id="num_orden_prod" value="<?php echo $etapa->orden;?>">
+      <input class="hidden" type="text" id="batch_id_padre" value="<?php echo $etapa->id;?>">
       <div class="modal-body" id="modalBodyArticle">
       <div class="row">
           <div class="col-md-3 col-xs-12"><label class="form-label">Codigo Lote Origen:</label></div>
@@ -15,13 +16,18 @@
       </div>
 
       <div class="row">
-        <div class="col-md-3 col-xs-12"><label class="form-label">Producto Lote Origen:</label></div>
-        <div class="col-md-4 col-xs-12"><input class="form-control" type="text" id="prod_origen" value="<?php echo $etapa->lote;?>" disabled></div>
+        <div class="col-md-3 col-xs-12"><label class="form-label">Producto:</label></div>
+        <div class="col-md-4 col-xs-12"><input class="form-control" type="text" id="prod_origen" value="<?php echo $prodNomb;?>" disabled></div>
         <div class="col-md-5"></div>
       </div>
       <div class="row">
-        <div class="col-md-3 col-xs-12"><label class="form-label">Cantidad Lote Origen:</label></div>
-        <div class="col-md-4 col-xs-12"><input class="form-control" type="text" id="cant_origen" value="<?php echo $etapa->lote;?>" disabled></div>
+        <div class="col-md-3 col-xs-12"><label class="form-label">Cantidad:</label></div>
+        <div class="col-md-4 col-xs-12"><input class="form-control" type="text" id="cant_origen" value="<?php echo $prodCant;?>" disabled></div>
+        <div class="col-md-5"></div>
+      </div>
+      <div class="row">
+        <div class="col-md-3 col-xs-12"><label class="form-label">Cantidad a Extraer:</label></div>
+        <div class="col-md-4 col-xs-12"><input class="form-control" type="text" id="cant_descontar" value="" placeholder="Inserte cantidad a Extraer"></div>
         <div class="col-md-5"></div>
       </div>
 
@@ -300,8 +306,10 @@
  
   });
 
+ 
+  // Genera Informe de Etapa
   function FinalizarEtapa()
-  {
+  {  
     existe = document.getElementById('productos_existe').value;
     if(existe == "no")
     {
@@ -313,18 +321,33 @@
         json = JSON.parse($(this).attr('data-json'));
         productos.push(json);
       });
-      productos = JSON.stringify(productos);
+
+      productos = JSON.stringify(productos);      
+      lote_id = $('#loteorigen').val();     
+      cantidad_padre = $('#cant_descontar').val();
+      num_orden_prod = $('#num_orden_prod').val();
+      cantidad = $('#cant_origen').val();
+      select = document.getElementById("productodestino");
+      batch_id_padre = $('#batch_id_padre').val();
+      destino = select.value;  
+
       $.ajax({
       type: 'POST',
       async: false,
-      data: { productos: productos },
+      data: { lote_id: lote_id,
+              productos: productos,              
+              cantidad_padre: cantidad_padre,
+              num_orden_prod: num_orden_prod,
+              destino: destino,
+              batch_id_padre: batch_id_padre              
+            },
       url: 'general/Etapa/Finalizar', 
       success: function(result){
           document.getElementById('btnfinalizar').style.display = "none";
           $("#modal_finalizar").modal('hide');
 
           if (result == "ok") {
-                        linkTo('general/Etapa/index');
+            linkTo('general/Etapa/index');
           }else{
             alert("Hubo un error en Dataservice");
             linkTo('general/Etapa/index');
