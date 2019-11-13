@@ -40,7 +40,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Unidad Medida:</label>
-                        <input list="unidades" name="unidad_medida" class="form-control req" type="text">
+                        <input list="unidades" name="unidad_medida" class="form-control req" type="text" placeholder="< Seleccionar >">
                         <datalist id="unidades" class="unidades">
 
                         </datalist>
@@ -55,14 +55,14 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Destino:</label>
-                        <input list="recipientes" name="reci_id" class="form-control req" type="text" id="recipiente">
+                        <input list="recipientes" name="reci_id" class="form-control req" type="text" id="recipiente" placeholder="< Seleccionar >">
                         <datalist id="recipientes">
 
                         </datalist>
                     </div>
                 </div>
             </div>
-            <input type="text" name="unificar" value="false" class="hidden" id="unificar">
+            <input type="text" name="unificar" value="false" class="hidden" id="unificar" placeholder="< Seleccionar >">
         </form>
         <button class="btn btn-primary btn-sm" style="float:right;" onclick="agregarRegistro();"><i
                 class="fa fa-plus"></i> Agregar</button>

@@ -4,7 +4,6 @@
     </div>
     <div class="box-body">
         <form id="frm-origen" class="frm-origen">
-            <input type="text" name="batch_id" id="batch_id" >
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
@@ -19,7 +18,7 @@
                     <div class="form-group">
                         <label>Producto:</label>
                         <input list="articulos" name="arti_id" class="form-control inp-descarga" type="text"
-                            id="articulo">
+                            id="articulo" placeholder="< Seleccionar >">
                         <datalist id="articulos">
 
                         </datalist>
@@ -37,7 +36,7 @@
                     <div class="form-group">
                         <label>Unidad Medida:</label>
                         <input list="unidades" name="unidad_medida" class="form-control inp-descarga" type="text"
-                            id="um">
+                            id="um" placeholder="< Seleccionar >">
                         <datalist id="unidades" class="unidades">
 
                         </datalist>
