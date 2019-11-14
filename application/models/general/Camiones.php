@@ -38,33 +38,26 @@ class Camiones extends CI_Model
         $this->load->model(ALM . '/Lotes');
         $this->load->model('general/Recipientes');
 
+        $array = [];
+
         foreach ($data as $key => $o) {
 
             #CREAR NUEVO RECIPIENTE
             $rsp = $this->Recipientes->crear($o);
-            log_message('DEBUG', '#CAMIONES > guardarCarga | #NEW RECIPIENTE: '. json_encode($rsp));
-             if (!$rsp['status']) {
+            log_message('DEBUG', '#CAMIONES > guardarCarga | #NEW RECIPIENTE: ' . json_encode($rsp));
+            if (!$rsp['status']) {
                 break;
             }
             $newReci = $rsp['data'];
-           
 
-      
-             $o->reci_id = $newReci;
-             $o->prov_id = PROVEEDOR_INTERNO;
-            // $rsp = $this->Lotes->crearBatch($o);
-            // log_message('DEBUG', '#CAMIONES > guardarCarga | #NEW BATCH: ' . json_encode($rsp));
-            // if (!$rsp['status']) {
-            //     break;
-            // }
-         //   $newBatch = $rsp['data'];
-            
+            $o->reci_id = $newReci;
+            $o->prov_id = PROVEEDOR_INTERNO;
 
-           #GUARDA CARGA MIONCA CON NUEVO BATCH ID 
-        //   $o->new_batch_id = $newBatch; 
-           $rsp = $this->Lotes->guardarCargaCamion($o);
+            $array[] = $o;
 
         }
+
+        $rsp = $this->Lotes->guardarCargaCamion($array);
 
         return $rsp;
     }
@@ -73,23 +66,22 @@ class Camiones extends CI_Model
     {
         log_message('DEBUG', '#CAMION > guardarDescarga | #DATA: ' . json_encode($data));
 
+        $array = [];
         foreach ($data as $key => $o) {
-            $aux = array(
-                "id"=> $o['destino']['lote_id'],
+            $array[] = array(
+                "id" => $o['destino']['lote_id'],
                 "producto" => $o['destino']['arti_id'],
                 "prov_id" => $o['origen']['prov_id'],
-                "batch_id" => $o['origen']['batch_id'],
-                "cantidad"=> $o['destino']['cantidad'],
+                "batch_id" => $o['origen']['batch_id']?$o['origen']['batch_id']:0,
+                "cantidad" => $o['destino']['cantidad'],
                 "stock" => $o['origen']['cantidad'],
                 "reci_id" => $o['destino']['reci_id'],
-                "forzar_agregar" => $o['destino']['unificar'],
+                "forzar_agregar" => $o['destino']['unificar']
             );
-
-            $aux =  json_decode(json_encode($aux));
-
-            $this->load->model(ALM.'Lotes');
-            $rsp = $this->Lotes->crearBatch($aux);
         }
+        $array = json_decode(json_encode($array));
+        $this->load->model(ALM . 'Lotes');
+        $rsp = $this->Lotes->crearBatch($array);
         return $rsp;
     }
 }
