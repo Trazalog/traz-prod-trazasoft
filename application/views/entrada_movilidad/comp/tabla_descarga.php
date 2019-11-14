@@ -46,7 +46,7 @@ function guardarDescargaOrigen() {
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
-        url: 'index.php/general/Camion/descargaOrigen',
+        url: 'index.php/general/Camion/guardarDescarga',
         data: {
             array
         },
