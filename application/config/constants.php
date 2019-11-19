@@ -124,6 +124,7 @@ define('FILES', 'files/');
 
 #COMPONENTE TAREAS
 define('TSK', 'traz-comp-tareas/');
+define('BPM', 'traz-comp-bpm/');
 
 #REST
 define('TAREAS_ASIGNAR', 'traz-comp-tareasestandar/asignar');
@@ -146,7 +147,7 @@ define('REST4', 'http://dev-trazalog.com.ar:8280/services/TrazabilidadDataServic
 
 # >> Proyecto
 # Default View
-define('DEFAULT_VIEW', ALM.'Articulo');
+define('DEFAULT_VIEW', BPM.'Tarea');
 
 #TRAZASOFT
 define('PROVEEDOR_INTERNO', 1000);

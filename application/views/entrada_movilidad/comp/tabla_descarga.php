@@ -36,6 +36,10 @@ function agregarFila(data) {
 }
 
 function guardarDescargaOrigen() {
+
+     //Guardar Datos de Camión parametro = FALSE es para NO mostrar el MSJ de Datos Guardados
+    addCamion(false);
+
     var array = [];
     $('#lotes tr').each(function() {
         array.push(JSON.parse(this.dataset.json));

@@ -17,5 +17,4 @@ class Entradas extends CI_Model
         $rsp = $this->rest->callApi('POST', $url, ['post_entradas' => $data]);
         return $rsp;
     }
-
 }
