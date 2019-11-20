@@ -169,12 +169,11 @@ class Etapa extends CI_Controller {
 
 			// trae recipientes de Tipo Deposito
 			$data['recipientes'] = $this->Recipientes->listarTodosDeposito()->recipientes->recipiente;
-			$data['op'] = 	$data['etapa']->titulo;
+			$data['op'] = 	$data['etapa']->orden;
 			$data['lang'] = lang_get('spanish',4);
-			$data['establecimientos'] = $this->Establecimientos->listar(2)->establecimientos->establecimiento;
+			// $data['establecimientos'] = $this->Establecimientos->listar(2)->establecimientos->establecimiento;
+			$data['establecimientos'] = $this->Establecimientos->listar()->establecimientos->establecimiento;
 			$data['materias'] = $this->Materias->listar()->materias->materia;
-			// echo("materias: ");
-			// var_dump($data['materias']);
 		
 			$data['fecha'] = $data['etapa']->fecha;
 			if($data['op'] == 'fraccionamiento')

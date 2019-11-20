@@ -27,8 +27,24 @@ $this->load->view('etapa/modal_finalizar');}?>
 									<label for="fecha" class="form-label">Fecha:</label>
 							</div>
 							<div class="col-md-5 col-xs-12">
-									<input type="date" id="fecha" class="form-control" <?php if($accion=='Editar' ){echo  'value="'.$etapa->fecha.'"';}else if($accion == 'Nuevo'){echo 'value="' .$fecha.'"';}?>
-									<?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
+									<!-- <input type="date" id="fecha" class="form-control" <?php //if($accion=='Editar' ){echo  'value="'.$etapa->fecha.'"';}else if($accion == 'Nuevo'){echo 'value="' .$fecha.'"';}?> -->
+									
+									<!-- <input type="date" id="fecha" class="form-control" 
+											<?php 
+											// Comentado para que muestre la fecha en edicion
+														//if($accion == 'Editar' ){
+															//echo  'value="'.$fecha.'"';
+														//}else if($accion == 'Nuevo'){
+														//	echo 'value="' .$fecha.'"';
+														//}
+											?> -->
+											<?php
+													if($accion == 'Editar' || $accion == 'Nuevo'){ 
+														echo '<input type="" id="fecha" class="form-control" value="'.$fecha.'" disabled >' ;	
+													}
+											?>		
+
+									<?php //if($etapa->estado == 'En Curso'){echo 'disabled';}?>
 							</div>
 					</div>
 					<div class="row" style="margin-top: 50px">
@@ -39,13 +55,13 @@ $this->load->view('etapa/modal_finalizar');}?>
 									<select class="form-control select2 select2-hidden-accesible" onchange="actualizaRecipiente(this.value,'recipientes')" id="establecimientos" <?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
 											<option value="" disabled selected>-Seleccione Establecimiento-</option>
 											<?php
-											foreach($establecimientos as $fila)
-											{
-											if($accion == 'Editar' && $fila->titulo == $etapa->establecimiento->titulo)
-											{
-											echo '<option value="'.$fila->id.'" selected >'.$fila->nombre.'</option>';
-											}else
-											{
+											foreach($establecimientos as $fila){
+
+											if($accion == 'Editar' && $fila->titulo == $etapa->establecimiento->titulo){
+
+													echo '<option value="'.$fila->id.'" selected >'.$fila->nombre.'</option>';
+											}else{
+
 													echo '<option value="'.$fila->esta_id.'" >'.$fila->nombre.'</option>';
 											}
 											} 
@@ -66,7 +82,7 @@ $this->load->view('etapa/modal_finalizar');}?>
 												{
 													echo '<select class="form-control" id="recipientes" disabled>';
 												}else{
-												echo '<select class="form-control" id="recipientes">';
+													echo '<select class="form-control" id="recipientes">';
 												}
 												echo '<option value="" disabled selected>-Seleccione Recipiente-</option>';
 												foreach($recipientes as $recipiente)
@@ -75,7 +91,7 @@ $this->load->view('etapa/modal_finalizar');}?>
 													{
 														echo '<option value="'.$recipiente->id.'" selected>'.$recipiente->titulo.'</option>';
 													}else{
-													echo '<option value="'.$recipiente->id.'" >'.$recipiente->titulo.'</option>';
+														echo '<option value="'.$recipiente->id.'" >'.$recipiente->titulo.'</option>';
 													}
 												}
 												echo '</select>';
@@ -88,8 +104,11 @@ $this->load->view('etapa/modal_finalizar');}?>
 									<label for="op" class="form-label">Orden de Produccion:</label>
 							</div>
 							<div class="col-md-4 col-xs-12">
-									<input type="text" id="ordenproduccion" class="form-control" <?php if($accion=='Editar' ){echo ( 'value="'.$etapa->op.'"');}?> placeholder="Inserte Orde de Produccion"
-									<?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
+									<!-- <input type="text" id="ordenproduccion" class="form-control" <?php //if($accion=='Editar' ){echo ( 'value="'.$etapa->op.'"');}?> placeholder="Inserte Orde de Produccion"
+									<?php //if($etapa->estado == 'En Curso'){echo 'disabled';}?>> -->
+
+									<input type="text" id="ordenproduccion" class="form-control" <?php if($accion=='Editar' ){echo ( 'value="'.$op.'"');}?> placeholder="Inserte Orde de Produccion"
+									<?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>		
 							</div>
 							<div class="col-md-6">
 							</div>
@@ -124,7 +143,7 @@ $this->load->view('etapa/modal_finalizar');}?>
 														<!-- <label for="template" class="form-label">Materias:</label> -->
 												</div>
 												<div class="col-md-6 col-xs-12 input-group">
-														<input list="productos" id="inputproductos" class="form-control" autocomplete="off">
+														<input list="productos" id="inputproductos" class="form-control" placeholder="Ingrese articulo a buscar" autocomplete="off">
 														<input type="hidden" id="idproducto" value="" data-json="">
 														<datalist id="productos">
 															<?php foreach($materias as $fila)
@@ -133,11 +152,11 @@ $this->load->view('etapa/modal_finalizar');}?>
 																}
 																?>
 															</datalist>
-														<span class="input-group-btn">
+														<!-- <span class="input-group-btn">
 															<button class='btn btn-primary' 
-																onclick='checkTabla("tablamaterias","modalmaterias",`<?php echo json_encode($materias);?>`,"Add")' data-toggle="modal" data-target="#modal_materia_prima">
+																onclick='checkTabla("tablamaterias","modalmaterias",`<?php //echo json_encode($materias);?>`,"Add")' data-toggle="modal" data-target="#modal_materia_prima">
 																<i class="glyphicon glyphicon-search"></i></button>
-														</span>
+														</span> -->
 												</div>
 										</div>
 								</div>
@@ -176,7 +195,7 @@ $this->load->view('etapa/modal_finalizar');}?>
 														<label for="template" class="form-label">Cantidad:</label>
 												</div>	
 												<div class="col-md-6 col-xs-12 input-group">
-													<input type="text" class="form-control" value="<?php echo $producto[0]->cantidad; ?>" id="" disabled>
+													<input type="text" class="form-control" value="<?php echo $producto[0]->cantidad.' ('.$producto[0]->uni_med.')'  ; ?>" id="" disabled>
 												</div>
 										</div>
 								</div>	
@@ -295,7 +314,7 @@ $this->load->view('etapa/modal_finalizar');}?>
 																{
 																		echo '<tr  id="" data-json:>';
 																		echo '<td>' .$fila->descripcion. '</td>';
-																		echo	'<td>' .$fila->cantidad. '</td>';														
+																		echo	'<td>' .$fila->cantidad.' ('.$fila->uni_med.')'.'</td>';														
 																		echo	'</tr>'; 																
 																}		
 														?>			
@@ -473,7 +492,7 @@ $this->load->view('etapa/modal_finalizar');}?>
                 }
             });
         }
-
+				// valida campos vacios
         function valida() {
             mensaje = "No se ha podido completar la operacion debido a que algunos datos no han sido completados: <br>";
             ban = true;
@@ -553,9 +572,9 @@ $this->load->view('etapa/modal_finalizar');}?>
                 document.getElementById('stockdisabled').value = materia.stock;
                 materia = JSON.stringify(materia);
 									// TODO: SI SE SACA SIN QUE ANDE EL MODALCITO DE MATERIAS SE ROMPE TODO
-                 //agregaMateria(materia);
+                 agregaMateria(materia);
                 $('#idmateria').attr('data-json', materia);
-                //document.getElementById('stockdisabled').value = ma
+                document.getElementById('stockdisabled').value = ma
                 document.getElementById('cantidadmateria').disabled = false;
                 document.getElementById('botonmateria').disabled = false;
             } else {

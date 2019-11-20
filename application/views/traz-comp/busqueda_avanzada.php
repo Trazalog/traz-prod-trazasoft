@@ -48,8 +48,9 @@
 checkTabla("tabla_articulos", "modalarticulos", `<?php echo json_encode($items);?>`, "Add");
 
 function checkTabla(idtabla, idrecipiente, json, acciones) {
+
+	 alert('Tabla');
     lenguaje = <?php echo json_encode($lang)?>;		
-    
     if (document.getElementById(idtabla) == null) {
         armaTabla(idtabla, idrecipiente, json, lenguaje, acciones);
     }

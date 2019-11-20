@@ -25,7 +25,7 @@
    var producto = $(this).closest('tr').data('json');
    console.table(producto[0]);
 
-   document.getElementById('inputproducto').value = producto[0].titulo;
+   document.getElementById('inputproducto').value = producto[0].Descripcion;
    document.getElementById('idproducto').value = producto[0].id;
   
    $("#modal_producto").modal('hide');

@@ -89,21 +89,30 @@ class Etapas extends CI_Model
         // $url = REST.$resource;
         // $array = file_get_contents($url, false, $param);
 				// return json_decode($array);
-				$parametros["http"]["method"] = "GET";
-				$parametros["http"]["header"] = "Accept: application/json";			 
-        $param = stream_context_create($parametros);
-        //if ($id == 1)
-        //{
-            $resource = '/lote/';	
-        //}
-        // if ($id == 3)
-        // {
-        //     $resource = 'fraccioneditar';	
-				// }			
-        $url = REST3.$resource.$id;
-				$array = file_get_contents($url, false, $param);
+				// $parametros["http"]["method"] = "GET";
+				// $parametros["http"]["header"] = "Accept: application/json";			 
+        // $param = stream_context_create($parametros);
+        // //if ($id == 1)
+        // //{
+        //     $resource = '/lote/';	
+        // //}
+        // // if ($id == 3)
+        // // {
+        // //     $resource = 'fraccioneditar';	
+				// // }			
+        // $url = REST3.$resource.$id;
+				// $array = file_get_contents($url, false, $param);
 
-        return json_decode($array);
+				//return json_decode($array);
+				log_message('DEBUG', 'Etapas/buscar(batch_id)-> '.$id);
+				$resource = '/lote/';	 	
+				$url = REST3.$resource.$id;
+				$array = $this->rest->callAPI("GET",$url,  $data); 
+				$resp =  json_decode($array['data']);					
+				// echo("info de etapa: ");
+				// var_dump($resp);
+				return $resp;			
+
 
 
     }
