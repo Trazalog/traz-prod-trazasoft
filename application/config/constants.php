@@ -84,16 +84,26 @@ defined('EXIT_DATABASE')       OR define('EXIT_DATABASE', 8); // database error
 defined('EXIT__AUTO_MIN')      OR define('EXIT__AUTO_MIN', 9); // lowest automatically-assigned error code
 defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
 
-#BONITA SOFT
-define('BONITA_URL', 'http://cloudtrazalog.com:8080/bonita/');  
+#TRAZ-COMP-BPM
+define('BPM', 'traz-comp-bpm/');
+
+define('BONITA_URL', 'http://localhost:8080/bonita/');
+
+define('BPM_PROCESS_ID_PEDIDOS_NORMALES', '6833268789089291878');
+
+define('BPM_PROCESS_ID_PEDIDOS_EXTRAORDINARIOS', '6013058915384903051');
+
+define('BPM_PROCESS', array(
+    '6833268789089291878' => ['nombre' => 'Ped. Materiales', 'color' => '#F39C12'],
+    '6013058915384903051' => ['nombre' => 'Ped. Materiales Ext', 'color' => '#F39C12'],
+    '7503443566840192735' => ['nombre' => 'Proc. Mantenimiento', 'color' => '#00A65A'],
+));
+
 define('BPM_ADMIN_USER', 'almacen.tools');
 define('BPM_ADMIN_PASS', 'bpm');
 define('BPM_USER_PASS', 'bpm');
 
-#COMPONENTE BPM
-define('BPM', 'traz-comp-bpm/');
-
-// ERRORES DE BONITA
+#ERRORES DE BONITA
 define('ASP_100', 'Fallo Conexión BPM');
 define('ASP_101', 'Error al Inciar Proceso');
 define('ASP_102', 'Error al Tomar Tarea');
@@ -114,8 +124,6 @@ define('ASP_115', 'Error al Leer Variable');
 
 #COMPONENTE ALMACENES
 define('ALM', 'traz-comp-almacen/');
-define('BPM_PROCESS_ID_PEDIDOS_NORMALES', '6352939331165329370'); 
-define('BPM_PROCESS_ID_PEDIDOS_EXTRAORDINARIOS', '7321139677245257050');
 define('viewOT', false);
 
 #COMPONENTE FORMULARIOS
@@ -124,7 +132,6 @@ define('FILES', 'files/');
 
 #COMPONENTE TAREAS
 define('TSK', 'traz-comp-tareas/');
-define('BPM', 'traz-comp-bpm/');
 
 #REST
 define('TAREAS_ASIGNAR', 'traz-comp-tareasestandar/asignar');
