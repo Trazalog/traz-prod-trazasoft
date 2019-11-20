@@ -4,7 +4,7 @@ if(!function_exists('armaBusca')){
 
     function armaBusca($json, $id, $acciones,$lenguaje = false)
     {
-        $array =  json_decode($json);
+				$array =  json_decode($json);				
         
         $html = '<table id="'.$id.'" class="table table-bordered table-hover">
         <thead class="thead-dark">
@@ -28,14 +28,13 @@ if(!function_exists('armaBusca')){
         {
             $json =json_encode(array($fila));
             $html = $html."<tr  id='".$fila->id."' data-json='".$json."'>";
-            if($acciones !== '')
-            
-        {
-           $acc = agregaAcciones($id, $acciones);
-           $html = $html.$acc;
-        }
+            if($acciones !== '')            
+        		{
+							$acc = agregaAcciones($id, $acciones);
+							$html = $html.$acc;
+						}
             for($i = 0;$i<count($keys);$i++)
-                {
+            {
                 $key = $keys[$i];
                 if(is_array($fila->$key))
                     {
@@ -48,7 +47,8 @@ if(!function_exists('armaBusca')){
                        $title = $title.'"';
                         $html= $html.$title.'></i></button></td>';
                     }else{
-                $html= $html.'<td>'.$fila->$key.'</td>';
+								$html= $html.'<td>'.$fila->$key.'</td>';
+						
                     }
             }
             $html = $html.'</tr>';

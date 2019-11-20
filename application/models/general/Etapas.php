@@ -6,7 +6,8 @@ class Etapas extends CI_Model
 		function __construct()
 		{
 				parent::__construct();
-    }
+		}
+		// trae listado de etapas con sus datos (Tabla)
     function listar()
     {
 			//TODO: DESHARDCODEAR SERVICIO
@@ -21,6 +22,7 @@ class Etapas extends CI_Model
 			return json_decode($array);		
 		
 		}
+		// Listado de etapas estandar para seleccionar
     function listarEtapas()
     {
        
@@ -117,20 +119,64 @@ class Etapas extends CI_Model
         $array = file_get_contents($url, false, $param);
         return json_decode($array);
 		}
+		// devuelve id recurso por id articulo
+		function getRecursoId($arti_id){
+			
+			$resource = '/recurso/';	 	
+			$url = REST2.$resource.$arti_id;
+			$array = $this->rest->callAPI("GET",$url,  $data); 
+			$resp =  json_decode($array['data']);					
+			$recu_id = $resp->recurso->recu_id;
+			return $recu_id;		
+		}
+
+		// guarda prod en recursos lotes (productos)		
+		function setRecursosLotesProd($batch_id, $recu_id, $cantidad)	{
+				
+				log_message('DEBUG', 'Etapas/setRecursos(batch_id)-> '.$batch_id);
+				log_message('DEBUG', 'Etapas/setRecursos(tipoRecurso)-> '.PRODUCTO);				
+				log_message('DEBUG', 'Etapas/setRecursos(recu_id)-> '.$recu_id);
+				log_message('DEBUG', 'Etapas/setRecursos(cantidad)-> '.$cantidad);	
+				$arrayDatos['batch_id'] = (string)$batch_id;
+				$arrayDatos['recu_id'] = (string)$recu_id;		
+				$arrayDatos['usuario'] = userNick();
+				$arrayDatos['empr_id'] = (string)empresa();
+				$arrayDatos['cantidad'] = (string)$cantidad;
+				$arrayDatos['tipo'] = PRODUCTO;					
+				$data['_post_recurso'] = $arrayDatos;
+				// mens en log
+				$datos = json_encode($data);
+				log_message('DEBUG', 'Etapas/setRecursosLotes(recursos a grabar)-> '.$datos);					
 		
+				$resource = '/recurso/lote';	 	
+				$url = REST2.$resource;			
+				$array = $this->rest->callAPI("POST",$url, $data); 				
+				wso2Msj($array);
+				return json_decode($array['status']);
+		}	
+		// guarda prod en recursos lotes (articulos)
+		function setRecursosLotesMat($data)	{
+					
+				log_message('DEBUG', 'Etapas/setRecursos(materias a grabar)-> '.$data);	
+
+				$resource = '/recurso/lote_batch_req';	 	
+				$url = REST2.$resource;	
+				$array = $this->rest->callAPI("POST", $url, $data); 				
+				wso2Msj($array);
+				return json_decode($array['status']);	
+		}
 		// Inicia nueva Etapa (ej siembra)
-		function SetNuevoBatch($data)
-		{
+		function SetNuevoBatch($data){
 				$arrayBatch = json_encode($data);
 				log_message('DEBUG', 'Etapas/SetNuevoBatch(datos)-> '.$arrayBatch);
 				$resource = '/lote';	 	
         $url = REST4.$resource;
-        $array = $this->rest->callAPI("POST",$url,  $data); 
+				$array = $this->rest->callAPI("POST",$url,  $data); 
+				wso2Msj($array);
 				return json_decode($array['data']);
 		}
 		// Guarda cabecera de Nota de pedido
-    function setCabeceraNP($data)
-    {
+    function setCabeceraNP($data){
 				log_message('DEBUG', 'Etapas/setCabeceraNP(datos)-> '.json_encode($data));        
         $resource = '/notapedido';	 	
         $url = REST2.$resource;       
@@ -139,32 +185,50 @@ class Etapas extends CI_Model
     }
 		// Guarda detalle de Nota de pedido
     function setDetaNP($arrayDeta){			
+
 				log_message('DEBUG', 'Etapas/setDetaNP(datos)-> '.json_encode($arrayDeta)); 
 				$resource = '/_post_notapedido_detalle_batch_req';	 	
 				$url = REST2.$resource;				 
 				$array = $this->rest->callAPI("POST", $url, $arrayDeta);
 				return json_decode($array['code']);
 		}
-		
+		// devuelve cantidad de prod por batch_id
+		//TODO: REVISAR CREO ESTA DEPRECADA POR GETRECURSOSORIGEN
 		function getCantProducto($id){
 			
 			$idBatch = json_encode($id);
 			log_message('DEBUG', 'Etapas/getCantProducto(batch_id)-> '.$idBatch);
 			$resource = '/lote/existencia/';	 	
 			$url = REST4.$resource.$id;
-			$array = $this->rest->callAPI("GET",$url,  $data); 		
+			$array = $this->rest->callAPI("GET",$url,  $id); 		
 			return json_decode($array['data']);
 		}
-
+		// devuelve nombre de prod por batch_id
+		//TODO: REVISAR CREO ESTA DEPRECADA POR GETRECURSOSORIGEN
 		function getNomProducto($id){
 
 			$idBatch = json_encode($id);
 			log_message('DEBUG', 'Etapas/getNomProducto(batch_id)-> '.$idBatch);
 			$resource = '/articulo/nombre/';	 	
 			$url = REST2.$resource.$id;
-			$array = $this->rest->callAPI("GET",$url,  $data); 		
+			$array = $this->rest->callAPI("GET",$url,  $id); 		
 			return json_decode($array['data']);
 		}
+		// devuelve de recursos_lotes materia prima y producto segun id batch y tipo  
+		function getRecursosOrigen($id, $recursoTipo){
+			
+			$idBatch = json_encode($id);
+			log_message('DEBUG', 'Etapas/getRecursosOrigen(batch_id)-> '.$idBatch);
+			log_message('DEBUG', 'Etapas/getRecursosOrigen(tipo de recurso)-> '.$recursoTipo);
+			
+			$resource = '/recurso/lote/'.$id.'/tiporec/'.$recursoTipo;	 	
+			$url = REST2.$resource;
+			//var_dump($url);
+			$array = $this->rest->callAPI("GET",$url,  $id); 		
+			
+			return json_decode($array['data']);
+		}
+	
 
 
 		// Informe de Etapa (modal_finaizar)
@@ -174,9 +238,7 @@ class Etapas extends CI_Model
 
 			$resource = '/lote';	 	
 			$url = REST4.$resource;				 
-			$array = $this->rest->callAPI("POST", $url, $arrayDatos);	
-			// echo("result guardar");	
-			// var_dump($array['status']);
+			$array = $this->rest->callAPI("POST", $url, $arrayDatos);			
 			return json_decode($array['status']);
 		}
 

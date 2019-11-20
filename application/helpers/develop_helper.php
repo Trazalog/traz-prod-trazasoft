@@ -47,4 +47,12 @@ if (!function_exists('getJson')) {
         $aux = explode(" ", $header[0]);
         return $aux[1];
     }
+
+    function wso2Msj($rsp)
+    {
+        $rsp['data'] = json_decode( $rsp['data']);
+        $msj = $rsp['data']->Fault->faultstring;
+        preg_match('~>>([^{]*)<<~i', $msj, $match);
+        log_message('DEBUG', '#WSO2 #RESPONCE: ' . $match[1]);
+    }
 }

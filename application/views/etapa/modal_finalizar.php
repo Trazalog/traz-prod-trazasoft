@@ -9,23 +9,23 @@
       <input class="hidden" type="text" id="num_orden_prod" value="<?php echo $etapa->orden;?>">
       <input class="hidden" type="text" id="batch_id_padre" value="<?php echo $etapa->id;?>">
       <div class="modal-body" id="modalBodyArticle">
-      <div class="row">
+      <div class="row form-group" style="margin-top:20px">
           <div class="col-md-3 col-xs-12"><label class="form-label">Codigo Lote Origen:</label></div>
           <div class="col-md-4 col-xs-12"><input class="form-control" type="text" id="loteorigen" value="<?php echo $etapa->lote;?>" disabled></div>
           <div class="col-md-5"></div>
       </div>
 
-      <div class="row">
+      <div class="row form-group" style="margin-top:20px">
         <div class="col-md-3 col-xs-12"><label class="form-label">Producto:</label></div>
-        <div class="col-md-4 col-xs-12"><input class="form-control" type="text" id="prod_origen" value="<?php echo $prodNomb;?>" disabled></div>
+        <div class="col-md-8 col-xs-12"><input class="form-control" type="text" id="prod_origen" value="<?php echo $producto[0]->descripcion;?>" disabled></div>
         <div class="col-md-5"></div>
       </div>
-      <div class="row">
+      <div class="row form-group" style="margin-top:20px">
         <div class="col-md-3 col-xs-12"><label class="form-label">Cantidad:</label></div>
-        <div class="col-md-4 col-xs-12"><input class="form-control" type="text" id="cant_origen" value="<?php echo $prodCant;?>" disabled></div>
+        <div class="col-md-4 col-xs-12"><input class="form-control" type="text" id="cant_origen" value="<?php echo $producto[0]->cantidad;?>" disabled></div>
         <div class="col-md-5"></div>
       </div>
-      <div class="row">
+      <div class="row form-group" style="margin-top:20px">
         <div class="col-md-3 col-xs-12"><label class="form-label">Cantidad a Extraer:</label></div>
         <div class="col-md-4 col-xs-12"><input class="form-control" type="text" id="cant_descontar" value="" placeholder="Inserte cantidad a Extraer"></div>
         <div class="col-md-5"></div>
@@ -34,26 +34,28 @@
 
 
       <div class="row form-group" style="margin-top:20px">
-   <div class="col-md-3 col-xs-12">
-     <label for="Producto" class="form-label">Producto*:</label>
-  </div>
-   <div class="col-md-6 col-xs-12 input-group">
-      <input list="Productos" id="inputproducto" class="form-control" autocomplete="off">
-      <input type="hidden" id="idproducto" value="" data-json="">
-       <datalist id="Productos">
-        <?php foreach($materias as $fila)
-         {
-           echo  '<option value="'.$fila->titulo.'">';
-          }
-          ?>
-        </datalist>
-        <span class="input-group-btn">
-          <button class='btn btn-sm btn-primary' 
-            onclick='checkTabla("tablaproductos","modalproductos",`<?php echo json_encode($materias);?>`,"Add")' data-toggle="modal" data-target="#modal_producto">
-            <i class="glyphicon glyphicon-search"></i></button>
-           </span> 
-      </div>
-      <div class="col-md-3"></div>
+        <div class="col-md-3 col-xs-12">
+          <label for="Producto" class="form-label">Producto*:</label>
+        </div>
+        <div class="col-md-7 col-xs-12 input-group">
+          <input list="Productos" id="inputproducto" class="form-control" autocomplete="off" style="margin-left: 14px;">
+          <input type="hidden" id="idproducto" value="" data-json="">
+          <datalist id="Productos">
+            <?php foreach($materias as $fila)
+              {
+              echo  '<option value="'.$fila->titulo.'">';
+              }
+              echo("materias en modal finalizar");
+            ?>
+          </datalist>
+          <span class="input-group-btn">
+            <button class='btn btn-sm btn-primary' 
+              onclick='checkTabla("tablaproductos","modalproductos",`<?php echo json_encode($materias);?>`,"Add")' data-toggle="modal" data-target="#modal_producto">
+              <i class="glyphicon glyphicon-search"></i>
+            </button>
+          </span> 
+        </div>
+        <div class="col-md-3"></div>
       </div>
       <div class="row" style="margin-top:20px">
           <div class="col-md-3 col-xs-12"><label class="form-label">Cantidad*:</label></div>
@@ -69,7 +71,7 @@
       <div class="row" style="margin-top:20px">
           <div class="col-md-3 col-xs-12"><label class="form-label">Destino*:</label></div>
           <div class="col-md-6 col-xs-12">
-          <?php if($accion == 'Editar'){
+              <?php if($accion == 'Editar'){
                       echo '<select class="form-control" id="productodestino">';
                       echo '<option value="" disabled selected>-Seleccione Destino-</option>';
                       foreach($recipientes as $recipiente)
@@ -77,10 +79,9 @@
                           echo '<option value="'.$recipiente->id.'" >'.$recipiente->titulo.'</option>';
                       }
                       echo '</select>';
-                    }
-                    ?>
+              }?>
           </div>
-          <div class="col-md-3"></div>
+        <div class="col-md-3"></div>
       </div>
       <div class="row" style="margin-top: 20px">
                <div class="col-md-3 col-xs-12">
@@ -356,6 +357,6 @@
       });
     }
   }
-  // $(document).off('click', '.tabla_productos_asignados_borrar').on('click', '.tabla_productos_asignados_borrar',{ idtabla:'tabla_productos_asignados', idrecipiente:'productosasignados', idbandera:'productos_existe' }, remover);
+   $(document).off('click', '.tabla_productos_asignados_borrar').on('click', '.tabla_productos_asignados_borrar',{ idtabla:'tabla_productos_asignados', idrecipiente:'productosasignados', idbandera:'productos_existe' }, remover);
 </script>
   
