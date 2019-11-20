@@ -5,109 +5,108 @@
 $this->load->view('etapa/modal_finalizar');}?>
 
 <?php //var_dump($etapa); ?>
+<!-- Cabecera -->
+	<div class="box">
 
-<div class="box">
-
-    <div class="box-header">
-        <h3>
-            <?php echo $accion.' '.$etapa->titulo ?>
-        </h3>
-    </div>
-    <!-- /.box-header -->
-    <div class="box-body">
-        <div class="row">
-            <div class="col-md-1 col-xs-12">
-                <label for="Lote" class="form-label">Codigo Lote:*</label>
-            </div>
-            <div class="col-md-5 col-xs-12">
-                <input type="text" id="Lote" <?php if($accion=='Editar' ){echo 'value="'.$etapa->lote.'"';}?> class="form-control" placeholder="Inserte Lote"
-                <?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
-            </div>
-            <div class="col-md-1 col-xs-12">
-                <label for="fecha" class="form-label">Fecha:</label>
-            </div>
-            <div class="col-md-5 col-xs-12">
-                <input type="date" id="fecha" class="form-control" <?php if($accion=='Editar' ){echo  'value="'.$etapa->fecha.'"';}else if($accion == 'Nuevo'){echo 'value="' .$fecha.'"';}?>
-                <?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
-            </div>
-        </div>
-        <div class="row" style="margin-top: 50px">
-            <div class="col-md-2 col-xs-12">
-                <label for="establecimientos" class="form-label">Establecimiento*:</label>
-            </div>
-            <div class="col-md-4 col-xs-12">
-                <select class="form-control select2 select2-hidden-accesible" onchange="actualizaRecipiente(this.value,'recipientes')" id="establecimientos" <?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
-                    <option value="" disabled selected>-Seleccione Establecimiento-</option>
-                    <?php
-                    foreach($establecimientos as $fila)
-                    {
-                     if($accion == 'Editar' && $fila->titulo == $etapa->establecimiento->titulo)
-                     {
-                     echo '<option value="'.$fila->id.'" selected >'.$fila->nombre.'</option>';
-                     }else
-                     {
-                        echo '<option value="'.$fila->esta_id.'" >'.$fila->nombre.'</option>';
-                     }
-                    } 
-                    ?>
-                </select>
-            </div>
-            <div class="col-md-1 col-xs-12">
-                <label for="Recipiente" class="form-label"><?php echo $etapa->titulorecipiente;?>*:</label>
-                
-            </div>
-           
-            <div class="col-md-5 col-xs-12">
-                <?php if($accion == 'Nuevo'){
-                    echo '<select class="form-control" id="recipientes" disabled></select>';
-                    }
-                    if($accion == 'Editar'){
-                      if($etapa->estado == 'En Curso')
-                      {
-                        echo '<select class="form-control" id="recipientes" disabled>';
-                      }else{
-                      echo '<select class="form-control" id="recipientes">';
-                      }
-                      echo '<option value="" disabled selected>-Seleccione Recipiente-</option>';
-                      foreach($recipientes as $recipiente)
-                      {
-                        if($recipiente->titulo == $etapa->recipiente)
-                        {
-                          echo '<option value="'.$recipiente->id.'" selected>'.$recipiente->titulo.'</option>';
-                        }else{
-                         echo '<option value="'.$recipiente->id.'" >'.$recipiente->titulo.'</option>';
-                        }
-                      }
-                      echo '</select>';
-                    }
-                    ?>
-            </div>
-        </div>
-        <div class="row" style="margin-top: 50px">
-            <div class="col-md-2 col-xs-12">
-                <label for="op" class="form-label">Orden de Produccion:</label>
-            </div>
-            <div class="col-md-4 col-xs-12">
-                <input type="text" id="ordenproduccion" class="form-control" <?php if($accion=='Editar' ){echo ( 'value="'.$etapa->op.'"');}?> placeholder="Inserte Orde de Produccion"
-                <?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
-            </div>
-            <div class="col-md-6">
-            </div>
-        </div>
-        <div class="row" style="margin-top: 40px">
-            <div class="col-xs-12">
-                <i class="glyphicon glyphicon-plus"></i><a onclick="despliega()" class="">Datos Adicionales</a>
-                <div id="desplegable" hidden>
-                    <h3>Lo que vaya aca</h3>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
+			<div class="box-header">
+					<h3>
+							<?php echo $accion.' '.$etapa->titulo ?>
+					</h3>
+			</div>
+			<!-- /.box-header -->
+			<div class="box-body">
+					<div class="row">
+							<div class="col-md-1 col-xs-12">
+									<label for="Lote" class="form-label">Codigo Lote:*</label>
+							</div>
+							<div class="col-md-5 col-xs-12">
+									<input type="text" id="Lote" <?php if($accion=='Editar' ){echo 'value="'.$etapa->lote.'"';}?> class="form-control" placeholder="Inserte Lote"
+									<?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
+							</div>
+							<div class="col-md-1 col-xs-12">
+									<label for="fecha" class="form-label">Fecha:</label>
+							</div>
+							<div class="col-md-5 col-xs-12">
+									<input type="date" id="fecha" class="form-control" <?php if($accion=='Editar' ){echo  'value="'.$etapa->fecha.'"';}else if($accion == 'Nuevo'){echo 'value="' .$fecha.'"';}?>
+									<?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
+							</div>
+					</div>
+					<div class="row" style="margin-top: 50px">
+							<div class="col-md-2 col-xs-12">
+									<label for="establecimientos" class="form-label">Establecimiento*:</label>
+							</div>
+							<div class="col-md-4 col-xs-12">
+									<select class="form-control select2 select2-hidden-accesible" onchange="actualizaRecipiente(this.value,'recipientes')" id="establecimientos" <?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
+											<option value="" disabled selected>-Seleccione Establecimiento-</option>
+											<?php
+											foreach($establecimientos as $fila)
+											{
+											if($accion == 'Editar' && $fila->titulo == $etapa->establecimiento->titulo)
+											{
+											echo '<option value="'.$fila->id.'" selected >'.$fila->nombre.'</option>';
+											}else
+											{
+													echo '<option value="'.$fila->esta_id.'" >'.$fila->nombre.'</option>';
+											}
+											} 
+											?>
+									</select>
+							</div>
+							<div class="col-md-1 col-xs-12">
+									<label for="Recipiente" class="form-label"><?php echo $etapa->titulorecipiente;?>*:</label>
+									
+							</div>
+						
+							<div class="col-md-5 col-xs-12">
+									<?php if($accion == 'Nuevo'){
+											echo '<select class="form-control" id="recipientes" disabled></select>';
+											}
+											if($accion == 'Editar'){
+												if($etapa->estado == 'En Curso')
+												{
+													echo '<select class="form-control" id="recipientes" disabled>';
+												}else{
+												echo '<select class="form-control" id="recipientes">';
+												}
+												echo '<option value="" disabled selected>-Seleccione Recipiente-</option>';
+												foreach($recipientes as $recipiente)
+												{
+													if($recipiente->titulo == $etapa->recipiente)
+													{
+														echo '<option value="'.$recipiente->id.'" selected>'.$recipiente->titulo.'</option>';
+													}else{
+													echo '<option value="'.$recipiente->id.'" >'.$recipiente->titulo.'</option>';
+													}
+												}
+												echo '</select>';
+											}
+											?>
+							</div>
+					</div>
+					<div class="row" style="margin-top: 50px">
+							<div class="col-md-2 col-xs-12">
+									<label for="op" class="form-label">Orden de Produccion:</label>
+							</div>
+							<div class="col-md-4 col-xs-12">
+									<input type="text" id="ordenproduccion" class="form-control" <?php if($accion=='Editar' ){echo ( 'value="'.$etapa->op.'"');}?> placeholder="Inserte Orde de Produccion"
+									<?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
+							</div>
+							<div class="col-md-6">
+							</div>
+					</div>
+					<div class="row" style="margin-top: 40px">
+							<div class="col-xs-12">
+									<i class="glyphicon glyphicon-plus"></i><a onclick="despliega()" class="">Datos Adicionales</a>
+									<div id="desplegable" hidden>
+											<h3>Lo que vaya aca</h3>
+									</div>
+							</div>
+					</div>
+			</div>
+	</div>
+<!-- ./ Cabecera -->
 
 <!-- producto -->
-
 	<div class="box">
 			<div class="box-header">
 					<h4 class="box-title">Producto</h4>
@@ -116,64 +115,73 @@ $this->load->view('etapa/modal_finalizar');}?>
 			<div class="box-body">
 					
 					<!-- PRODUCTO Y CANTIDAD INICIO -->
-						<?php if($etapa->estado != 'En Curso'){?>
-							<div class="row" style="margin-top: 40px">
-									<div class="col-md-6 col-xs-12">
-											<div class="row form-group">
-													<div class="col-md-3 col-xs-12">
-															<label for="template" class="form-label"><?php echo $lang['materias']; ?>:</label>
-													</div>
-													<div class="col-md-6 col-xs-12 input-group">
-															<input list="productos" id="inputproductos" class="form-control" autocomplete="off">
-															<input type="hidden" id="idproducto" value="" data-json="">
-															<datalist id="productos">
-																<?php foreach($materias as $fila)
-																{
-																	echo  '<option value="'.$fila->titulo.'">';
-																	}
-																	?>
-																</datalist>
-															<span class="input-group-btn">
-																<button class='btn btn-primary' 
-																	onclick='checkTabla("tablamaterias","modalmaterias",`<?php echo json_encode($materias);?>`,"Add")' data-toggle="modal" data-target="#modal_materia_prima">
-																	<i class="glyphicon glyphicon-search"></i></button>
-															</span>
-													</div>
-											</div>
-									</div>
-									
-									<div class="col-md-1 col-xs-12">
-											<label for="template" class="form-label">Cantidad:</label>
-									</div>
-									<div class="col-md-3 col-xs-12 input-group">
-											<input type="number" class="form-control" placeholder="Inserte Cantidad" id="cantidadproducto">
-									</div>
-							</div>
-						<?php } ?>
+					<?php if($etapa->estado != 'En Curso'){?>
+						<div class="row" style="margin-top: 40px">
+								<div class="col-xs-12">
+										<div class="row form-group">
+												<div class="col-md-3 col-xs-6">
+														<label for="template" class="form-label">Materia:</label>
+														<!-- <label for="template" class="form-label">Materias:</label> -->
+												</div>
+												<div class="col-md-6 col-xs-12 input-group">
+														<input list="productos" id="inputproductos" class="form-control" autocomplete="off">
+														<input type="hidden" id="idproducto" value="" data-json="">
+														<datalist id="productos">
+															<?php foreach($materias as $fila)
+															{
+																echo  '<option value="'.$fila->titulo.'">';
+																}
+																?>
+															</datalist>
+														<span class="input-group-btn">
+															<button class='btn btn-primary' 
+																onclick='checkTabla("tablamaterias","modalmaterias",`<?php echo json_encode($materias);?>`,"Add")' data-toggle="modal" data-target="#modal_materia_prima">
+																<i class="glyphicon glyphicon-search"></i></button>
+														</span>
+												</div>
+										</div>
+								</div>
+								
+								<div class="col-xs-12">
+										<div class="row form-group">
+												<div class="col-md-3 col-xs-6">
+														<label for="template" class="form-label">Cantidad:</label>
+												</div>	
+												<div class="col-md-6 col-xs-12 input-group">
+													<input type="number" class="form-control" placeholder="Inserte Cantidad" id="cantidadproducto">
+												</div>
+										</div>
+								</div>			
+						</div>
+					<?php } ?>
 					<!-- PRODUCTO Y CANTIDAD INICIO -->	
 														
 					<!-- PRODUCTO Y CANTIDAD EDITAR -->										
-						<?php if($accion == 'Editar'){?>
-							<div class="row" style="margin-top: 40px">
-									<div class="col-md-6 col-xs-12">
-											<div class="row form-group">
-													<div class="col-md-3 col-xs-12">
-															<label for="template" class="form-label"><?php echo $lang['materias']; ?>:</label>
-													</div>
-													<div class="col-md-6 col-xs-12 input-group">
-															<input list="productos" id="" class="form-control" value="<?php echo $producto[0]->descripcion; ?>" disabled>
-													</div>
-											</div>
-									</div>
-									
-									<div class="col-md-1 col-xs-12">
-											<label for="template" class="form-label">Cantidad:</label>
-									</div>
-									<div class="col-md-3 col-xs-12 input-group">
-											<input type="text" class="form-control" value="<?php echo $producto[0]->cantidad; ?>" id="" disabled>
-									</div>
-							</div>
-						<?php  } ?>	
+					<?php if($accion == 'Editar'){?>
+						<div class="row" style="margin-top: 40px">
+								<div class="col-xs-12">
+										<div class="row form-group">
+												<div class="col-md-3 col-xs-6">
+														<label for="template" class="form-label">Materia:</label>
+												</div>
+												<div class="col-md-6 col-xs-12 input-group">
+														<input list="productos" id="" class="form-control" value="<?php echo $producto[0]->descripcion; ?>" disabled>
+												</div>
+										</div>
+								</div>
+	
+								<div class="col-xs-12">
+										<div class="row form-group">
+												<div class="col-md-3 col-xs-6">
+														<label for="template" class="form-label">Cantidad:</label>
+												</div>	
+												<div class="col-md-6 col-xs-12 input-group">
+													<input type="text" class="form-control" value="<?php echo $producto[0]->cantidad; ?>" id="" disabled>
+												</div>
+										</div>
+								</div>	
+						</div>
+					<?php  } ?>		
 					<!-- PRODUCTO Y CANTIDAD EDITAR -->										
 
 
@@ -184,8 +192,12 @@ $this->load->view('etapa/modal_finalizar');}?>
 							</div>
 					</div> -->
 			</div>
-	</div>
 
+
+		
+
+
+	</div>
 <!-- . /producto -->
 
 <!-- Origen -->
@@ -194,150 +206,175 @@ $this->load->view('etapa/modal_finalizar');}?>
 					<h4 class="box-title">Origen</h4>
 			</div>
 			<!-- /.box-header -->
-			<!-- ORIGEN INICIO ETAPA -->
-				<div class="box-body">
-						<?php if($etapa->estado != 'En Curso'){?>
-						<div class="row" style="margin-top: 40px">
-								<div class="col-md-4 col-xs-12">
-										<div class="row form-group">
-												<div class="col-md-3 col-xs-12">
-														<label for="template" class="form-label"><?php echo $lang['materias']; ?>:</label>
-												</div>
-												<div class="col-md-6 col-xs-12 input-group">
-														<input list="materias" id="inputmaterias" class="form-control" autocomplete="off">
-														<input type="hidden" id="idmateria" value="" data-json="">
-														<datalist id="materias">
-							<?php foreach($materias as $fila)
-							{
-								echo  '<option value="'.$fila->titulo.'">';
-								}
-								?>
-							</datalist>
-														<span class="input-group-btn">
-								<button class='btn btn-primary' 
-									onclick='checkTabla("tablamaterias","modalmaterias",`<?php echo json_encode($materias);?>`,"Add")' data-toggle="modal" data-target="#modal_materia_prima">
-									<i class="glyphicon glyphicon-search"></i></button>
-								</span>
-												</div>
-										</div>
-								</div>
-								<div class="col-md-2 col-xs-12">
-										<label for="" class="form-label">Stock Actual:</label>
-								</div>
-								<div class="col-md-2 col-xs-12">
-										<input type="number" class="form-control" disabled id="stockdisabled">
-								</div>
-								<div class="col-md-1 col-xs-12">
-										<label for="template" class="form-label">Cantidad:</label>
-								</div>
-								<div class="col-md-3 col-xs-12 input-group">
-										<input type="number" class="form-control" placeholder="Inserte Cantidad" id="cantidadmateria" disabled>
-										<span class="input-group-btn">
-								<button class='btn btn-success' id="botonmateria"disabled onclick="aceptarMateria()">Aceptar
-								</button>
-								</span>
-								</div>
-						</div>
-						<?php } ?>
-								<!-- <div class="row" style="margin-top: 40px ">
-										<input type="hidden" id="materiasexiste" value="no">
-										<div class="col-xs-12 table-responsive" id="materiasasignadas">
-										</div>
-								</div> -->
-				</div>
-			<!-- ORIGEN INICIO ETAPA -->
+			
 
+				 <!-- ORIGEN INICIO ETAPA -->	
+				 <?php if($etapa->estado != 'En Curso'){?>
+					<div class="box-body">
+							
+								<div class="row" style="margin-top: 40px">
+										<div class="col-xs-12">
+												<div class="row form-group">
+														<div class="col-md-3 col-xs-6">
+															<label for="template" class="form-label">Materia:</label>	
+															<!-- <label for="template" class="form-label"><?php echo $lang['materias']; ?>:</label> -->
+														</div>	
+														<div class="col-md-6 col-xs-12 input-group">
+															<input list="materias" id="inputmaterias" class="form-control" autocomplete="off">
+															<input type="hidden" id="idmateria" value="" data-json="">
+															<datalist id="materias">
+																	<?php foreach($materias as $fila)
+																	{
+																			echo  '<option value="'.$fila->titulo.'">';
+																	}
+																	?>
+															</datalist>
+															<span class="input-group-btn">
+																<button class='btn btn-primary' 
+																	onclick='checkTabla("tablamaterias","modalmaterias",`<?php echo json_encode($materias);?>`,"Add")' data-toggle="modal" data-target="#modal_materia_prima">
+																	<i class="glyphicon glyphicon-search"></i></button>
+															</span>
+														</div>
+												</div>
+										</div>
+				
+										<div class="col-xs-12">
+												<div class="row form-group">
+														<div class="col-md-3 col-xs-6">
+																<label for="" class="form-label">Stock Actual:</label>
+														</div>	
+														<div class="col-md-6 col-xs-12 input-group">
+																<input type="number" class="form-control" disabled id="stockdisabled">
+														</div>
+												</div>
+										</div>	
+				
+										<div class="col-xs-12">
+												<div class="row form-group">
+														<div class="col-md-3 col-xs-6">
+																<label for="template" class="form-label">Cantidad:</label>
+														</div>	
+														<div class="col-md-6 col-xs-12 input-group">
+															<input type="number" class="form-control" placeholder="Inserte Cantidad" id="cantidadmateria" disabled>
+															<span class="input-group-btn">
+																<button class='btn btn-success' id="botonmateria"disabled onclick="aceptarMateria()">Aceptar
+																</button>
+															</span>
+														</div>
+												</div>
+										</div>
+								</div>			
+							
+									<div class="row" style="margin-top: 40px ">
+											<input type="hidden" id="materiasexiste" value="no">
+											<div class="col-xs-12 table-responsive" id="materiasasignadas">
+											</div>
+									</div>
+					</div>	
+					<?php } ?>
+
+				<!-- ORIGEN INICIO ETAPA -->	
 
 				<!-- ORIGEN EDICION ETAPA -->
 				<?php if($accion == 'Editar'){?>	
-					<div class="row" style="margin-top: 40px ">
-									<input type="hidden" id="materiasexiste" value="no">
-									<div class="col-xs-12 table-responsive" id="materiasasignadas">
-									<table id="etapas" class="table table-bordered table-hover">
-											<thead class="thead-dark">
-													<tr>  
-														<th>Producto</th>
-														<th>Cantidad</th>
-													</tr>
-												</thead>
-												<tbody> 
+					<div class="box-body">
+						<div class="row" style="margin-top: 40px ">
+										<input type="hidden" id="materiasexiste" value="no">
+										<div class="col-xs-12 table-responsive" id="materiasasignadas">
+											<table id="etapas" class="table table-bordered table-hover">
+													<thead class="thead-dark">
+															<tr>  
+																<th>Producto</th>
+																<th>Cantidad</th>
+															</tr>
+														</thead>
+														<tbody> 
+															
+														<?php											
+																foreach($matPrimas as $fila)
+																{
+																		echo '<tr  id="" data-json:>';
+																		echo '<td>' .$fila->descripcion. '</td>';
+																		echo	'<td>' .$fila->cantidad. '</td>';														
+																		echo	'</tr>'; 																
+																}		
+														?>			
+														</tbody> 
+											</table> 
 													
-												<?php											
-														foreach($matPrimas as $fila)
-														{
-																echo '<tr  id="" data-json:>';
-																echo '<td>' .$fila->descripcion. '</td>';
-																echo	'<td>' .$fila->cantidad. '</td>';														
-																echo	'</tr>'; 																
-														}		
-												?>			
-												</tbody> 
-									</table> 
-												
-					</div>
-				<?php }?>										
-				<!-- ORIGEN EDICION ETAPA -->	
+										</div>
+					<?php }?>										
+					<!-- ORIGEN EDICION ETAPA -->	
 
-	</div>
+		
+		
+						</div>
+					</div>
+	</div>				
 <!-- ./ Origen -->
 
-<div class="box">
-    <div class="box-header">
-        <h4 class="box-title">Tareas</h4>
-    </div>
-    <!-- /.box-header -->
-    <div class="box-body">
-        <div class="row" style="margin-top: 40px ">
-            <div class="col-xs-12">
-                <div class="nav-tabs-custom">
-                    <ul class="nav nav-tabs">
-                        <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">Calendario</a></li>
-                        <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">Tareas</a></li>
-                    </ul>
-                    <div class="tab-content">
-                        <div class="tab-pane active" id="tab_1">
-                            <!-- <p>Aca iria el Calendario</p> -->
-                        </div>
-                        <div class="tab-pane" id="tab_2">
-														<?php 		
-														//TODO: NO COMETAR, TIENEUN INPUT Q NO SE LLENA  Y ROPE JAVASCRIPT											
-														$this->load->view(TAREAS_ASIGNAR.'/tareas')?>
-                        </div>
-                        <div class="row" hidden id="incompleto">
-                            <div class="col-xs-12">
-                                <div class="alert alert-danger alert-dismissible">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                                    <h4><i class="icon fa fa-ban"></i> Datos incompletos</h4>
-                                    <p id="mensajeincompleto"></p>
-                                </div>
-                            </div>
-                        </div>
+<!-- Tareas -->
+	<div class="box">
+			<div class="box-header">
+					<h4 class="box-title">Tareas</h4>
+			</div>
+			<!-- /.box-header -->
+			<div class="box-body">
+					<div class="row" style="margin-top: 40px ">
+							<div class="col-xs-12">
+									<div class="nav-tabs-custom">
+											<ul class="nav nav-tabs">
+													<li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">Calendario</a></li>
+													<li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">Tareas</a></li>
+											</ul>
+											<div class="tab-content">
+													<div class="tab-pane active" id="tab_1">
+															<!-- <p>Aca iria el Calendario</p> -->
+													</div>
+													<div class="tab-pane" id="tab_2">
+															<?php 		
+															//TODO: NO COMETAR, TIENEUN INPUT Q NO SE LLENA  Y ROPE JAVASCRIPT											
+															$this->load->view(TAREAS_ASIGNAR.'/tareas')?>
+													</div>
+													<div class="row" hidden id="incompleto">
+															<div class="col-xs-12">
+																	<div class="alert alert-danger alert-dismissible">
+																			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+																			<h4><i class="icon fa fa-ban"></i> Datos incompletos</h4>
+																			<p id="mensajeincompleto"></p>
+																	</div>
+															</div>
+													</div>
 
-                    </div>
-                    <!-- /.box-body -->
-                    <div class="row">
-                        <div class="col-md-8"></div>
-                        <div class="col-md-2 col-xs-6">
-                            <?php if($etapa->estado == 'planificado')
-															{
-															echo '<button class="btn btn-primary btn-block" onclick="valida()">Iniciar Etapa</button>';
-															}else if($etapa->estado == 'En Curso')
-															{
-																echo '<button class="btn btn-primary btn-block" id="btnfinalizar" onclick="finalizar()">Finalizar Etapa</button>';
-															}
-															?>
-                        </div>
-                        <div class="col-md-2 col-xs-6">
-                            <button class="btn btn-primary btn-block" onclick="guardar()">Guardar</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- /.box -->
-    </div>
-</div>
+											</div>
+											<!-- /.box-body -->
+											<div class="row">
+													<div class="col-md-8"></div>
+													<div class="col-md-2 col-xs-6">
+															<?php if($etapa->estado == 'planificado')
+																{
+																echo '<button class="btn btn-primary btn-block" onclick="valida()">Iniciar Etapa</button>';
+																}else if($etapa->estado == 'En Curso')
+																{
+																	echo '<button class="btn btn-primary btn-block" id="btnfinalizar" onclick="finalizar()">Finalizar Etapa</button>';
+																}
+																?>
+													</div>
+													<div class="col-md-2 col-xs-6">
+															<button class="btn btn-primary btn-block" onclick="guardar()">Guardar</button>
+													</div>
+											</div>
+									</div>
+							</div>
+					</div>
+			</div>
+			<!-- /.box -->
+			</div>
+	</div>
+<!-- ./ Tareas-->
+
+
+
 <script>
         accion = '<?php echo $accion;?>';
         if (accion == "Editar") {
