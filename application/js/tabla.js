@@ -1,8 +1,6 @@
 function armaTabla(idtabla, idrecipiente, json, lenguaje, acciones = "") {
 
-    console.log(lenguaje);
-
-
+    console.log(lenguaje);	
     $.ajax({
         type: 'POST',
         data: { json: json, idtabla: idtabla, acciones: acciones, lenguaje: lenguaje },
@@ -11,7 +9,9 @@ function armaTabla(idtabla, idrecipiente, json, lenguaje, acciones = "") {
         success: function(result) {
             document.getElementById(idrecipiente).innerHTML = "";
             document.getElementById(idrecipiente).innerHTML = result;
-            $('#' + idtabla).DataTable({});
+						$('#' + idtabla).DataTable({});
+						console.log('tabla');
+						console.log(result);
         }
 
     });
