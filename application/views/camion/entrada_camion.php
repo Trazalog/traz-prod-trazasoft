@@ -234,12 +234,13 @@ function guardarDecarga() {
     });
 }
 
-function addCamion() {
+function addCamion(msj = true) {
     console.log('addCamion');
 
     var frmCamion = new FormData($('#frm-camion')[0]);
     var frmInfo = new FormData($('#frm-info')[0]);
     var dataForm = mergeFD(frmInfo, frmCamion);
+    dataForm.append('estado','EN CURSO');
     wo();
     $.ajax({
         type: 'POST',
@@ -253,7 +254,7 @@ function addCamion() {
             if (rsp.status) {
                 $('#frm-camion')[0].reset();
                 $('#frm-info')[0].reset();
-                alert('Datos guardados con Éxito');
+                if(msj) alert('Datos guardados con Éxito');
             } else {
                 alert('Fallo el Guardado de Datos');
             }

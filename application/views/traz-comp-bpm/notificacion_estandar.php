@@ -2,14 +2,14 @@
 <?php #info_header('Cabecera Informacion 2',''); ?>
 <?php #info_header('Cabecera Informacion 3',''); ?>
 <input id="tarea" data-info="" class="hidden">
-<input type="text" class="form-control hidden" id="asignado" value="<?php echo $tarea['idUsuarioAsignado']?>">
-<input type="text" class="form-control hidden" id="taskId" value="<?php echo $tarea['taskId']?>">
+<input type="text" class="form-control hidden" id="asignado" value="<?php echo $tarea->idUsuarioAsignado?>">
+<input type="text" class="form-control hidden" id="taskId" value="<?php echo $tarea->taskId?>">
 
 <div class="nav-tabs-custom ">
     <ul class="nav nav-tabs">
         <li class="active"><a href="#tab_4" data-toggle="tab" aria-expanded="false">Acciones</a></li>
         <li class="privado"><a href="#tab_2" data-toggle="tab" aria-expanded="false">Comentarios</a></li>
-        <li class="privado"><a href="#tab_3" data-toggle="tab" aria-expanded="false">Vista Global</a></li>
+        <li class="privado"><a href="#tab_3" data-toggle="tab" aria-expanded="false">Trazabilidad</a></li>
         <li class="privado"><a href="#tab_1" data-toggle="tab" aria-expanded="true">Información</a></li>
 
         <!-- <li class="dropdown">
@@ -29,17 +29,15 @@
     </ul>
     <div class="tab-content">
         <div class="tab-pane" id="tab_1">
-
             <?php echo $info ?>
         </div>
         <!-- /.tab-pane -->
         <div class="tab-pane" id="tab_2">
-
-            <?php echo $comentarios?>
+            <?php echo $comentarios ?>
         </div>
         <!-- /.tab-pane -->
         <div class="tab-pane" id="tab_3">
-            <?php echo  timeline($timeline) ?>
+            <?php echo $timeline ?>
         </div>
 
         <div class="tab-pane active" id="tab_4">
@@ -57,8 +55,8 @@
             </div>
             <hr>
             <div class="text-right">
-                <button class="btn btn-primary" onclick="linkTo('Tarea')">Cerrar</button>
-                <button class="btn btn-success" id="hecho" onclick="cerrarTarea()" disabled>Hecho</button>
+                <button class="btn btn-primary" onclick="cerrar()">Cerrar</button>
+                <button class="btn btn-success" onclick="existFunction('cerrarTarea')">Hecho</button>
             </div>
 
         </div>
@@ -67,4 +65,5 @@
     <!-- /.tab-content -->
 </div>
 
-<?php $this->load->view('bpm/scripts/tarea_std'); ?>
+
+<?php $this->load->view(BPM.'scripts/tarea_std'); ?>

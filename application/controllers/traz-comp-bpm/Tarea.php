@@ -7,7 +7,7 @@ class Tarea extends CI_Controller
 
         parent::__construct();
 
-        $this->load->model('bpm/Tareas');
+        $this->load->model(BPM.'Tareas');
       
 
         // SUPERVISOR1 => 102 => Aprueba pedido de Recursos Materiales
@@ -20,7 +20,7 @@ class Tarea extends CI_Controller
 
         $data['device'] = "";
         $data['list'] = $this->Tareas->listar();
-        $this->load->view('bpm/bandeja_entrada', $data);
+        $this->load->view(BPM.'bandeja_entrada', $data);
 
     }
 
@@ -38,18 +38,20 @@ class Tarea extends CI_Controller
 
         //INFORMACION DE TAREA
         $data['tarea'] = $tarea;
-        $data['info'] = $this->load->view('bpm/componentes/informacion',null,true);
+        $data['info'] = $this->load->view(BPM.'componentes/informacion',null,true);
 
         //LINEA DE TIEMPO
-        $data['timeline'] =$this->bpm->ObtenerLineaTiempo($tarea['processId'],$tarea['caseId']);
+        $aux = $this->bpm->ObtenerLineaTiempo($tarea->processId, $tarea->caseId);
+        $aux = json_decode(json_encode($aux));
+        $data['timeline'] = $this->load->view(BPM . 'componentes/timeline', $aux, true);
 
         //COMENTARIOS
-        $data_aux = ['case_id' => $tarea['caseId'], 'comentarios' => $this->bpm->ObtenerComentarios($tarea['caseId'])];
-        $data['comentarios'] = $this->load->view('bpm/componentes/comentarios', $data_aux, true);
+        $aux = ['case_id' => $tarea->caseId, 'comentarios' => $this->bpm->ObtenerComentarios($tarea->caseId)['data']];
+        $data['comentarios'] = $this->load->view(BPM .'componentes/comentarios', $aux, true);
 
         //DESPLEGAR VISTA
         $data['view'] = $this->deplegarVista($tarea);
-        $this->load->view('bpm/notificacion_estandar', $data);
+        $this->load->view(BPM.'notificacion_estandar', $data);
     }
 
     public function tomarTarea()
@@ -160,11 +162,13 @@ class Tarea extends CI_Controller
 
     public function deplegarVista($tarea)
     {
-        switch ($tarea['nombreTarea']) {   
+        $data['tarea'] = $tarea;
+
+        switch ($tarea->nombreTarea) {   
 
             default:
 
-                return $this->load->view('bpm/view_proceso/test',null, true);
+                return $this->load->view(BPM.'view_proceso/test', $data, true);
 
                 break;
 

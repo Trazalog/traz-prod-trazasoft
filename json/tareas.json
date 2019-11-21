@@ -2,7 +2,7 @@
     "tareas": [
         {
             "id": "1",
-            "nombre": "Tarea 1",
+            "nombre": "Tarea 1 | Lorem Ipsum is simply dummy text of the printing and typesetting industry. ",
             "descripcion": "Descripcion 1",
             "duracion": "1 horas",
             "subtareas": [
@@ -13,7 +13,7 @@
         },
         {
             "id": "2",
-            "nombre": "Tarea 2",
+            "nombre": "Tarea 2 | Lorem Ipsum is simply dummy text of the printing and typesetting industry. ",
             "descripcion": "Descripcion 2",
             "duracion": "2 horas",
             "subtareas": [
@@ -23,7 +23,7 @@
         },
         {
             "id": "3",
-            "nombre": "Tarea 3",
+            "nombre": "Tarea 3 | Lorem Ipsum is simply dummy text of the printing and typesetting industry. ",
             "descripcion": "Descripcion 3",
             "duracion": "3 horas",
             "subtareas": [
@@ -32,31 +32,31 @@
             ]
         }
     ],
-    "subtareas": [
-        {
+    "subtareas": {
+        "1":{
             "id": "1",
-            "nombre": "Subtarea 1",
+            "nombre": "Subtarea 1 | Lorem Ipsum is simply dummy text of the printing and typesetting industry. ",
             "descripcion": "Descripcion 1",
             "duracion": "1 horas"
         },
-        {
+        "2":{
             "id": "2",
-            "nombre": "Subtarea 2",
+            "nombre": "Subtarea 2 | Lorem Ipsum is simply dummy text of the printing and typesetting industry. ",
             "descripcion": "Descripcion 2",
             "duracion": "2 horas"
         },
-        {
+        "3":{
             "id": "3",
-            "nombre": "Subtarea 3",
+            "nombre": "Subtarea 3 | Lorem Ipsum is simply dummy text of the printing and typesetting industry. ",
             "descripcion": "Descripcion 3",
             "duracion": "3 horas"
         }
-    ],
+    },
     "plantillas": [
         {
             "id": "1",
             "nombre": "Plantilla 1",
-            "descripcion": "Descripcion 1",
+            "descripcion": "Descripcion 1 | Lorem Ipsum is simply dummy text of the printing and typesetting industry. ",
             "tareas": [
                 1,
                 2,
@@ -66,7 +66,7 @@
         {
             "id": "2",
             "nombre": "Plantilla 2",
-            "descripcion": "Descripcion 2",
+            "descripcion": "Descripcion 2 | Lorem Ipsum is simply dummy text of the printing and typesetting industry. ",
             "tareas": [
                 1,
                 3

@@ -12,6 +12,7 @@ if(!function_exists('menu')){
        // $array = file_get_contents($url, false, $param);
         $array = [];//json_decode($array);
        // var_dump($array->menu);die;
+        if(!$array) return;
         $html = '<ul class="sidebar-menu menu" data-widget="tree">
         <li class="header">'.$lang['navegacion'].'</li>';
         foreach ($array->menus->menu as $i) {
