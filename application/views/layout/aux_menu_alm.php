@@ -22,6 +22,8 @@
                         class="fa fa-fw fa-cart-plus"></i>Pedido Materiales</a></li>
             <li><a href="#" class="link" data-link="traz-comp-almacen/Proceso"><i class="fa fa-cogs"></i>Mis Tareas</a>
             </li>
+            <li><a href="#" class="link" data-link="traz-comp-almacen/Ajustestock"><i class="fa fa-wrench"></i>Ajuste de Stock</a>
+            </li>
         </ul>
     </li>
 </ul>
