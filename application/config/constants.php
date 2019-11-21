@@ -99,7 +99,7 @@ define('BPM_PROCESS', array(
     '7503443566840192735' => ['nombre' => 'Proc. Mantenimiento', 'color' => '#00A65A'],
 ));
 
-define('BPM_ADMIN_USER', 'almacen.tools');
+define('BPM_ADMIN_USER', 'supervisor1');
 define('BPM_ADMIN_PASS', 'bpm');
 define('BPM_USER_PASS', 'bpm');
 
@@ -154,7 +154,7 @@ define('REST4', 'http://dev-trazalog.com.ar:8280/services/TrazabilidadDataServic
 
 # >> Proyecto
 # Default View
-define('DEFAULT_VIEW', BPM.'Tarea');
+define('DEFAULT_VIEW', 'Test');
 
 #TRAZASOFT
 define('PROVEEDOR_INTERNO', 1000);

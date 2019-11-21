@@ -1,6 +1,6 @@
 <ul class="sidebar-menu menu tree" data-widget="tree">
     <li class="header"></li>
-    <li><a class="link" href="#" data-link="general/Tarea"><i class="fa fa-circle-o"></i>mistareas</a></li>
+    <li><a class="link" href="#" data-link="traz-comp-bpm/Tarea"><i class="fa fa-list-alt"></i>Mis Tareas</a></li>
     <li><a class="link" href="#" data-link="general/Etapa"><i class="fa fa-sitemap"></i>Etapas</a></li>
     <li><a class="link" href="#" data-link="general/Etapa/fraccionar"><i class="fa fa-circle-o"></i>Fraccionar</a></li>
     <li><a class="link" href="#" data-link="general/Camion/salidaCamion"><i class="fa fa-circle-o"></i>SalidaCamion</a>

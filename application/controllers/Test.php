@@ -20,7 +20,7 @@ class Test extends CI_Controller
         }
     }
 
-    public function index()
+    public function index2()
     {
         $url = REST.'entradas';
         $rsp =  file_get_contents($url, false, http('POST', ['post_entradas'=>$data]));
@@ -34,7 +34,7 @@ class Test extends CI_Controller
         var_dump($this->Tablas->obtener('unidad_medida'));
     }
 
-    public function index2()
+    public function index()
     {
         $data['tareas'] = getJson('tareas')->tareas;
         $data['subtareas'] = getJson('tareas')->subtareas;
