@@ -5,15 +5,12 @@ class Ajustestock extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        //$this->load->model(ALM . 'Articulos');
+        $this->load->model('general/Establecimientos');
     }
     public function index()
     {
-        echo 'Componente Almacen<br>';  
-    }
-
-    public function install()
-    {
-        #$this->Ala
+        $data['establecimientos'] = $this->Establecimientos->listar()->establecimientos->establecimiento;
+        //var_dump($data);
+        $this->load->view(ALM.'ajustestock/ajuste_stock',$data);
     }
 }
