@@ -136,13 +136,13 @@ define('TSK', 'traz-comp-tareas/');
 #REST
 define('TAREAS_ASIGNAR', 'traz-comp-tareasestandar/asignar');
 
-//define('REST', 'http://dev-trazalog.com.ar:8280/services/ProduccionDataService/');
-//define('RESTPT','http://dev-trazalog.com.ar:8280/services/produccionTest/');
-//define('REST_TDS', 'http://dev-trazalog.com.ar:8280/services/TrazabilidadDataService/');
+define('REST', 'http://dev-trazalog.com.ar:8280/services/ProduccionDataService/');
+define('RESTPT','http://dev-trazalog.com.ar:8280/services/produccionTest/');
+define('REST_TDS', 'http://dev-trazalog.com.ar:8280/services/TrazabilidadDataService/');
 
-define('REST', 'http://pc-pc:8280/services/ProduccionDataService/');
-define('RESTPT','http://pc-pc:8280/services/produccionTest/');
-define('REST_TDS', 'http://pc-pc:8280/services/TrazabilidadDataService/');
+//define('REST', 'http://pc-pc:8280/services/ProduccionDataService/');
+//define('RESTPT','http://pc-pc:8280/services/produccionTest/');
+//define('REST_TDS', 'http://pc-pc:8280/services/TrazabilidadDataService/');
 
 
 
@@ -167,4 +167,9 @@ define('ESTABLECIMIENTO_TRANSPORTE', 1000);
 define('ETAPA_TRANSPORTE', 1000);
 define('ETAPA_DEPOSITO', 2000);
 
-
+#RECURSOS_LOTES
+define('MATERIA_PRIMA', 'MATERIA_PRIMA');
+define('PRODUCTO', 'PRODUCTO');
+define('EQUIPO', 'EQUIPO');
+define('RECURSO_HUMANO', 'HUMANO');
+define('RECURSO_CONSUMO', 'CONSUMO');

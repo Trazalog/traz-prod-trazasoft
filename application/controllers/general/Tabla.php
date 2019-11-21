@@ -10,7 +10,7 @@ class Tabla extends CI_Controller {
     }
     function armaTabla()
     {   
-        $json = $this->input->post('json');
+        $json = $this->input->post('json');  
         $id = $this->input->post('idtabla');
         $acciones = $this->input->post('acciones');
         $lenguaje = $this->input->post('lenguaje');

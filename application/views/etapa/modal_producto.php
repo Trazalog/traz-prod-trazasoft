@@ -1,4 +1,4 @@
-<div class="modal" id="modal_producto" tabindex="1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal bs-example-modal-lg" id="modal_producto" tabindex="1" role="dialog" aria-labelledby="myModalLabel" style="z-index:5000;">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -23,7 +23,9 @@
   <script>
  $(document).off('click','.tablaproductos_nuevo').on('click', '.tablaproductos_nuevo', function () {
    var producto = $(this).closest('tr').data('json');
-   document.getElementById('inputproducto').value = producto[0].titulo;
+   console.table(producto[0]);
+
+   document.getElementById('inputproducto').value = producto[0].Descripcion;
    document.getElementById('idproducto').value = producto[0].id;
   
    $("#modal_producto").modal('hide');

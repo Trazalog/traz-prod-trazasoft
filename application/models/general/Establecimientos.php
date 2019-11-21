@@ -7,27 +7,14 @@ class Establecimientos extends CI_Model
 	{
 		parent::__construct();
     }
-    public function listar($etapa)
+    public function listar()
     {
-        // if($etapa == 1|| $etapa == 4)
-        // {
-        // $resource = 'establecimientos1';
-        // }	elseif ($etapa == 2 || $etapa == 3 || $etapa == 5)
-        // { 
-        //     $resource = 'establecimientos2'; 
-        // }
-     
-        // TODO: VER FILTRADO DE ESTABLECIMIENTOS POR ESTAPAS  
-
-        $parametros["http"]["method"] = "GET";
-        $parametros["http"]["header"] = "Accept: application/json";			 
-        $param = stream_context_create($parametros);
-        // TODO: DESHARCODEAR EL RESOURCE 
-        $resource = '/establecimiento';
+				log_message('DEBUG', 'Establecimientos/listar (id etapa)-> '.$etapa);
+				$resource = '/establecimiento';
         $url = REST2.$resource;
-        //$url = 'http://PC-PC:8280/services/ProduccionDataService'.$resource;
-        $array = file_get_contents($url, false, $param);
-        return json_decode($array);
+				$array = $this->rest->callAPI("GET",$url); 
+				$resp =  json_decode($array['data']);		
+				return $resp;	
     }
     public function listarTodo()
     {
