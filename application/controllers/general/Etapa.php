@@ -154,7 +154,7 @@ class Etapa extends CI_Controller {
 			$data['etapa'] = $this->Etapas->buscar($id)->etapa;
 			//	var_dump($data['etapa']);die;
 			$data['idetapa'] = $data['etapa']->id;
-			// $data['recipientes'] = $this->Recipientes->listarPorEstablecimiento($data['etapa']->establecimiento->id)->recipientes->recipiente;
+			$data['recipientes'] = $this->Recipientes->listarPorEstablecimiento($data['etapa']->establecimiento->id)->recipientes->recipiente;
 
 			// Cantidad producto origen
 			// $prodCant = $this->Etapas->getCantProducto($id);
@@ -169,6 +169,8 @@ class Etapa extends CI_Controller {
 
 			// trae recipientes de Tipo Deposito
 			$data['recipientes'] = $this->Recipientes->listarTodosDeposito()->recipientes->recipiente;
+			
+			
 			$data['op'] = 	$data['etapa']->orden;
 			$data['lang'] = lang_get('spanish',4);
 			// $data['establecimientos'] = $this->Establecimientos->listar(2)->establecimientos->establecimiento;

@@ -107,7 +107,7 @@ class Etapas extends CI_Model
 				log_message('DEBUG', 'Etapas/buscar(batch_id)-> '.$id);
 				$resource = '/lote/';	 	
 				$url = REST3.$resource.$id;
-				$array = $this->rest->callAPI("GET",$url,  $data); 
+				$array = $this->rest->callAPI("GET",$url); 
 				$resp =  json_decode($array['data']);					
 				// echo("info de etapa: ");
 				// var_dump($resp);

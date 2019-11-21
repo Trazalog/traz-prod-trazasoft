@@ -4,7 +4,7 @@
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
             aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel"><span id="modalAction"> </span> Informe de Etapa</h4>
+        <h4 class="modal-title" id="myModalLabel"><span id="modalAction"> </span>Reporte de Producción</h4>
       </div>
       <input class="hidden" type="text" id="num_orden_prod" value="<?php echo $etapa->orden;?>">
       <input class="hidden" type="text" id="batch_id_padre" value="<?php echo $etapa->id;?>">

@@ -68,9 +68,13 @@ $this->load->view('etapa/modal_finalizar');}?>
 											?>
 									</select>
 							</div>
-							<div class="col-md-1 col-xs-12">
-									<label for="Recipiente" class="form-label"><?php echo $etapa->titulorecipiente;?>*:</label>
-									
+							<div class="col-md-1 col-xs-12">								
+									<?php if($accion == 'Nuevo'){
+										echo '<label for="Recipiente" class="form-label">'.$etapa->titulorecipiente.'*:</label>'; 
+									}?>		
+									<?php if($accion == 'Editar'){ 
+										echo	'<label for="Recipiente" class="form-label"> '.$etapa->reci_estab_nom.' *:</label>';
+									}?>
 							</div>
 						
 							<div class="col-md-5 col-xs-12">
@@ -84,16 +88,17 @@ $this->load->view('etapa/modal_finalizar');}?>
 												}else{
 													echo '<select class="form-control" id="recipientes">';
 												}
-												echo '<option value="" disabled selected>-Seleccione Recipiente-</option>';
-												foreach($recipientes as $recipiente)
-												{
-													if($recipiente->titulo == $etapa->recipiente)
-													{
-														echo '<option value="'.$recipiente->id.'" selected>'.$recipiente->titulo.'</option>';
-													}else{
-														echo '<option value="'.$recipiente->id.'" >'.$recipiente->titulo.'</option>';
-													}
-												}
+												//echo '<option value="" disabled selected>-Seleccione Recipiente-</option>';
+												// foreach($recipientes as $recipiente)
+												// {
+												// 	if($recipiente->titulo == $etapa->recipiente)
+												// 	{
+												// 		echo '<option value="'.$recipiente->id.'" selected>'.$recipiente->titulo.'</option>';
+												// 	}else{
+												// 		echo '<option value="'.$recipiente->id.'" >'.$recipiente->titulo.'</option>';
+												// 	}
+												// }
+												echo '<option value="'.$recipiente->id.'" selected>'.$etapa->recipiente.'</option>';
 												echo '</select>';
 											}
 											?>
@@ -248,11 +253,11 @@ $this->load->view('etapa/modal_finalizar');}?>
 																	}
 																	?>
 															</datalist>
-															<span class="input-group-btn">
+															<!-- <span class="input-group-btn">
 																<button class='btn btn-primary' 
-																	onclick='checkTabla("tablamaterias","modalmaterias",`<?php echo json_encode($materias);?>`,"Add")' data-toggle="modal" data-target="#modal_materia_prima">
+																	onclick='checkTabla("tablamaterias","modalmaterias",`<?php //echo json_encode($materias);?>`,"Add")' data-toggle="modal" data-target="#modal_materia_prima">
 																	<i class="glyphicon glyphicon-search"></i></button>
-															</span>
+															</span> -->
 														</div>
 												</div>
 										</div>
@@ -571,10 +576,11 @@ $this->load->view('etapa/modal_finalizar');}?>
             if (ban) {
                 document.getElementById('stockdisabled').value = materia.stock;
                 materia = JSON.stringify(materia);
-									// TODO: SI SE SACA SIN QUE ANDE EL MODALCITO DE MATERIAS SE ROMPE TODO
-                 agregaMateria(materia);
+								// FIXME: SI SE SACA SIN QUE ANDE EL MODALCITO DE MATERIAS SE ROMPE LA CARGA EN TABLITA
+                // agregaMateria(materia);
                 $('#idmateria').attr('data-json', materia);
-                document.getElementById('stockdisabled').value = ma
+								// FIXME: SI SE SACA SIN QUE ANDE EL MODALCITO DE MATERIAS SE ROMPE LA CARGA EN TABLITA
+                //document.getElementById('stockdisabled').value = ma
                 document.getElementById('cantidadmateria').disabled = false;
                 document.getElementById('botonmateria').disabled = false;
             } else {
@@ -598,7 +604,7 @@ $this->load->view('etapa/modal_finalizar');}?>
 
 
         }
-
+				// levanta modal para finalizar la etapa solamente
         function finalizar() {
             /* idetapa = //php echo $idetapa;?>;
 							$.ajax({

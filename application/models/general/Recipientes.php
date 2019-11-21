@@ -11,13 +11,10 @@ class Recipientes extends CI_Model
 				// TODO: DESHARCODEAR EL RESOURCE		
         log_message('DEBUG', 'Recipientes/listarPorEstablecimiento (idEstablecimiento)-> '.$establecimiento);              
         $resource = '/lote/'.$establecimiento;	 	
-        $url = REST2.$resource;
-        //$url = 'http://dev-trazalog.com.ar:8280/services/TrazabilidadDataService/lote';
+        $url = REST2.$resource;      
         $array = $this->rest->callAPI("GET",$url); 		           
-        log_message('DEBUG', 'Recipientes/listarPorEstablecimiento (resp del servicio)-> '.json_encode($array['data']));
-//echo("vuelta de serv: ");
-//var_dump($array);        
-return json_decode($array['data']);    
+        log_message('DEBUG', 'Recipientes/listarPorEstablecimiento (resp del servicio)-> '.json_encode($array['data']));				       
+				return json_decode($array['data']);    
     }
 
 
