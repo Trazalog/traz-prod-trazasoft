@@ -15,7 +15,7 @@ class Etapa extends CI_Controller {
 		$this->load->model(TAREAS_ASIGNAR.'/Recursos_Trabajo');
 	}
 
-	// Muestra listado de articulos
+	// Muestra listado de etapas
 	public function index()
 	{
 			$data['list'] =$this->Etapas->listar()->etapas->etapa;
@@ -242,9 +242,9 @@ class Etapa extends CI_Controller {
 	public function fraccionar()
 	{
 			$data['accion'] = 'Nuevo';
-			$data['etapa']= $this->Etapas->nuevo(3)->etapa;
+			$data['etapa']= $this->Etapas->nuevo(5)->etapa; // igual que en contrato pedido
 			$data['fecha'] = date('Y-m-d');
-			$data['lang'] = lang_get('spanish',5);
+		//	$data['lang'] = lang_get('spanish',5);
 			$data['establecimientos'] = $this->Establecimientos->listarTodo()->establecimientos->establecimiento;
 			$data['empaques'] = $this->Recipientes->listarEmpaques()->empaques->empaque;
 			$data['materias'] = $this->Materias->listar()->materias->materia;

@@ -2,9 +2,9 @@
 
 class Recipientes extends CI_Model
 {
-	function __construct()
-	{
-		parent::__construct();
+    function __construct()
+    {
+		  parent::__construct();
     }
     public function listarPorEstablecimiento($establecimiento)
     {       
@@ -17,31 +17,43 @@ class Recipientes extends CI_Model
 				return json_decode($array['data']);    
     }
 
+   
+
 
     public function listarTodosDeposito(){
 
-      $parametros["http"]["method"] = "GET";		 
-      $parametros["http"]["header"] = "Accept: application/json";
-      $param = stream_context_create($parametros);
-      
-      $resource = '/lote/todos/deposito';
-      
-      // TODO: DESHARCODEAR EL RESOURCE 
-    
-      $url = REST2.$resource;
+      // $parametros["http"]["method"] = "GET";		 
+      // $parametros["http"]["header"] = "Accept: application/json";
+      // $param = stream_context_create($parametros);      
+      // $resource = '/lote/todos/deposito';      
+      // // TODO: DESHARCODEAR EL RESOURCE     
+      // $url = REST2.$resource;
+      // $array = file_get_contents($url, false, $param);
+      // return json_decode($array);
 
-      $array = file_get_contents($url, false, $param);
-      return json_decode($array);
+      log_message('DEBUG', 'Recipientes/listarTodosDeposito');
+      $resource = '/lote/todos/deposito';
+      $url = REST2.$resource;
+      $array = $this->rest->callAPI("GET",$url); 	
+      wso2Msj($array);
+      return json_decode($array['data']);
     }
 
     public function listarEmpaques()
     {
-        $parametros["http"]["method"] = "GET";		 
-        $param = stream_context_create($parametros);
-        $resource="empaques";
-        $url = REST.$resource;
-        $array = file_get_contents($url, false, $param);
-        return json_decode($array);
+        // $parametros["http"]["method"] = "GET";		 
+        // $param = stream_context_create($parametros);
+        // $resource="empaques";
+        // $url = REST.$resource;
+        // $array = file_get_contents($url, false, $param);
+        // return json_decode($array);
+
+        log_message('DEBUG', 'Recipientes/listarEmpaques');
+        $resource = '/empaques';
+        $url = REST2.$resource;
+        $array = $this->rest->callAPI("GET",$url); 	
+        wso2Msj($array);
+        return json_decode($array['data']);
     }
 
     public function crear($data)

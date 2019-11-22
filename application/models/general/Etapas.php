@@ -38,19 +38,19 @@ class Etapas extends CI_Model
 					{"etapa":
 					[{
 					"id":1,
-					"titulo":"siembra",
+					"titulo":"finca",
 					"icon":"",
 					"link":"general/Etapa/nuevo?op=1"
 					},
 					{
 					"id":2,
-					"titulo":"zaranda",
+					"titulo":"seleccion",
 					"icon":"",
 					"link":"general/Etapa/nuevo?op=2"
 					},
 					{
 					"id":3,
-					"titulo":"limpieza",
+					"titulo":"pelado",
 					"icon":"",
 					"link":"general/Etapa/nuevo?op=3"
 					},
@@ -117,16 +117,28 @@ class Etapas extends CI_Model
 
     }
     function nuevo($opcion)
-    {      
-    
-        $parametros["http"]["method"] = "GET";	
-        $parametros["http"]["header"] = "Accept: application/json";	 
-        $param = stream_context_create($parametros);
-				//$url = 'http://PC-PC:8280/services/ProduccionDataService/etapas/1';
-				$resource = '/etapas/';
-				$url = REST2.$resource.$opcion;   
-        $array = file_get_contents($url, false, $param);
-        return json_decode($array);
+    {    
+        // $parametros["http"]["method"] = "GET";	
+        // $parametros["http"]["header"] = "Accept: application/json";	 
+        // $param = stream_context_create($parametros);		
+				// $resource = '/etapas/';
+				// $url = REST2.$resource.$opcion;   
+        // $array = file_get_contents($url, false, $param);
+				// return json_decode($array);
+				
+				log_message('DEBUG', 'Etapas/nuevo($opcion)-> '.$opcion);					
+		
+				$resource = '/etapas/'; 	
+				$url = REST2.$resource.$opcion;		
+				$array = $this->rest->callAPI("GET",$url); 				
+				wso2Msj($array);
+				return json_decode($array['data']);
+
+
+
+
+
+
 		}
 		// devuelve id recurso por id articulo
 		function getRecursoId($arti_id){
@@ -138,7 +150,6 @@ class Etapas extends CI_Model
 			$recu_id = $resp->recurso->recu_id;
 			return $recu_id;		
 		}
-
 		// guarda prod en recursos lotes (productos)		
 		function setRecursosLotesProd($batch_id, $recu_id, $cantidad)	{
 				
@@ -237,9 +248,6 @@ class Etapas extends CI_Model
 			
 			return json_decode($array['data']);
 		}
-	
-
-
 		// Informe de Etapa (modal_finaizar)
 		function finalizarEtapa($arrayDatos){
 
