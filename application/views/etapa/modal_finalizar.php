@@ -81,9 +81,9 @@
               <?php if($accion == 'Editar'){
                       echo '<select class="form-control" id="productodestino">';
                       echo '<option value="" disabled selected>-Seleccione Destino-</option>';
-                      foreach($recipientes as $recipiente)
+                      foreach($recipientes as $o)
                       {
-                          echo '<option value="'.$recipiente->id.'" >'.$recipiente->titulo.'</option>';
+                          echo "<option value='$o->reci_id'>$o->nombre</option>";
                       }
                       echo '</select>';
               }?>

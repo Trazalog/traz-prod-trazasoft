@@ -154,7 +154,7 @@ class Etapa extends CI_Controller {
 			//	var_dump($data['etapa']);die;
 			$data['idetapa'] = $data['etapa']->id;
 			//$data['recipientes'] = $this->Recipientes->listarPorEstablecimiento($data['etapa']->establecimiento->id)->recipientes->recipiente;
-			$data['recipientes'] = $this->Recipientes->obtener('DEPOSITO','TODOS',$data['etapa']->establecimiento->id);
+			$data['recipientes'] = $this->Recipientes->obtener('DEPOSITO','TODOS',$data['etapa']->establecimiento->id)['data'];
 
 			// Cantidad producto origen
 			// $prodCant = $this->Etapas->getCantProducto($id);
