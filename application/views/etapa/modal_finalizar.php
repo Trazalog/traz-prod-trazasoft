@@ -83,7 +83,7 @@
                       echo '<option value="" disabled selected>-Seleccione Destino-</option>';
                       foreach($recipientes as $o)
                       {
-                          echo "<option value='$o->reci_id'>$o->nombre</option>";
+                          echo "<option value='$o->reci_id' data-json=".json_encode($o).">$o->nombre</option>";
                       }
                       echo '</select>';
               }?>
@@ -375,5 +375,34 @@
     }
   }
    $(document).off('click', '.tabla_productos_asignados_borrar').on('click', '.tabla_productos_asignados_borrar',{ idtabla:'tabla_productos_asignados', idrecipiente:'productosasignados', idbandera:'productos_existe' }, remover);
+  
+  $('#productodestino').on('change', function(){
+
+      var json =  JSON.parse($(this).find('option:selected').attr('data-json'));
+      if (!json) return;
+      validarRecipiente(json);
+  });
+
+  function validarRecipiente(json) {
+
+    if (json.estado == 'VACIO') return;
+
+    var arti_id = $('#inputproducto').val();
+    var lote_id = $('#lotedestino').val();
+
+    if (json.arti_id != arti_id || json.lote_id != lote_id) {
+        alert('No se pueden mezclar Distintos Articulos y Distintos Lotes en un mismo Recipiente');
+        $('#recipiente').val('');
+        return;
+    }
+
+    if (confirm('¿Desea mezclar los Artículos en el Recipiente?') != true) {
+        $('#recipiente').val('');
+        return;
+    }
+
+    $('#unificar').val(true);
+
+}
 </script>
   
