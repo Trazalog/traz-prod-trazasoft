@@ -85,6 +85,7 @@ foreach ($establecimientos as $fila) {
                     <div class="form-group">
                         <label>Transportista: </label>
                         <select class="form-control select select2" id="transportista" name="cuit">
+                            <option disabled selected>Seleccionar</option>
                             <?php 
                             
                                 foreach ($transportistas as $o) {
