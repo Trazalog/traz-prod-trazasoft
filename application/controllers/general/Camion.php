@@ -11,6 +11,7 @@ class Camion extends CI_Controller
         $this->load->model('general/Camiones');
         $this->load->model('general/Materias');
         $this->load->model('general/Recipientes');
+        $this->load->model('general/Transportistas');
     }
 
     public function cargarCamion()
@@ -55,6 +56,7 @@ class Camion extends CI_Controller
         $data['proveedores'] = $this->Camiones->listarProveedores()->proveedores->proveedor;
         $data['materias'] = $this->Materias->listar()->materias->materia;
         $data['empaques'] = $this->Recipientes->listarEmpaques()->empaques->empaque;
+        $data['transportistas'] = $this->Transportistas->obtener()['data'];
         $this->load->view('camion/entrada_camion', $data);
     }
     public function GuardarEntrada()

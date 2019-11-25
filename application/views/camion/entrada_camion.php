@@ -62,9 +62,9 @@ foreach ($establecimientos as $fila) {
                         autocomplete="off">
                     <datalist id="proveedores">
                         <?php foreach ($proveedores as $fila) {
-    echo "<option data-json='" . json_encode($fila) . "' value='" . $fila->id . "'>" . $fila->titulo . "</option>";
-}
-?>
+                        echo "<option data-json='" . json_encode($fila) . "' value='" . $fila->id . "'>" . $fila->titulo . "</option>";
+                    }
+                    ?>
                     </datalist>
                 </div>
                 <div class="col-md-5 col-xs-12"><input type="text" disabled id="nombreproveedor"
@@ -84,7 +84,17 @@ foreach ($establecimientos as $fila) {
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Transportista: </label>
-                        <input type="text" class="form-control" id="transportista" name="transportista">
+                        <select class="form-control select select2" id="transportista" name="cuit">
+                            <?php 
+                            
+                                foreach ($transportistas as $o) {
+                                    
+                                    echo "<option value='$o->cuit'>$o->razon_social</option>";
+
+                                }
+                            
+                            ?>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -138,6 +148,9 @@ foreach ($establecimientos as $fila) {
 ?>
 
 <script>
+
+$('.select').select2();
+
 function reset() {
     $('#frm-origen')[0].reset();
     $('#frm-destino')[0].reset();

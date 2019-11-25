@@ -30,7 +30,7 @@ class REST
 
                     break;
                 default:
-                    //array_push($token, 'Accept: application/json');
+                    array_push($token, 'Accept: application/json');
                     if ($data) {
                         $url = sprintf("%s?%s", $url, http_build_query($data));
                     }

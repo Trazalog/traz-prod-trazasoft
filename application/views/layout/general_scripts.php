@@ -36,8 +36,11 @@ $.widget.bridge('uibutton', $.ui.button);
        <script type="text/javascript"
            src="//cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/js/bootstrapValidator.min.js"></script>
 
-       <script src="<?php base_url();?>lib/plugins/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
 
+       <script src="<?php base_url();?>lib/plugins/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+      
+       <!-- Select 2 -->
+       <script src="<?php base_url();?>lib/plugins/select2/select2.min.js"></script>
        <!-- <script src="https://code.jquery.com/jquery-migrate-3.0.0.min.js"></script> -->
        <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
        <!-- <script src="<?php base_url()?>lib/dist/js/pages/dashboard.js"></script> -->
