@@ -191,7 +191,7 @@ class Lotes extends CI_Model
 
         log_message('DEBUG', '#MODEL > crearBatch | BATCH_REQ: ' . json_encode($rsp));
 
-        $url = REST_TDS . 'lote_batch_req';
+        $url = REST_TDS . 'lote/list_batch_req';
         $rsp = $this->rest->callApi('POST', $url, $batch_req);
         wso2Msj($rsp);
         if ($rsp['status']) {

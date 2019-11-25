@@ -151,6 +151,10 @@ foreach ($establecimientos as $fila) {
 <script>
 
 $('.select').select2();
+$('#frm-camion').on('reset',function(){
+    $(this).find('.select').val(null).trigger('change');
+
+});
 
 function reset() {
     $('#frm-origen')[0].reset();
@@ -255,6 +259,7 @@ function addCamion(msj = true) {
     var frmInfo = new FormData($('#frm-info')[0]);
     var dataForm = mergeFD(frmInfo, frmCamion);
     dataForm.append('estado','EN CURSO');
+    showFD(dataForm);
     wo();
     $.ajax({
         type: 'POST',
@@ -268,13 +273,13 @@ function addCamion(msj = true) {
             if (rsp.status) {
                 $('#frm-camion')[0].reset();
                 $('#frm-info')[0].reset();
-                if(msj) alert('Datos guardados con Éxito');
+                if(msj) alert('Datos Guardados con Éxito');
             } else {
-                alert('Fallo el Guardado de Datos');
+                alert('Fallo al Guardar Datos del Camión');
             }
         },
         error: function(rsp) {
-            console.log(rsp.msj);
+              alert('Error al Guardar Datos del Camion');
         },
         complete: function() {
             wc();
