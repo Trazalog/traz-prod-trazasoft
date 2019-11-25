@@ -194,13 +194,10 @@ class Lotes extends CI_Model
         $url = REST_TDS . 'lote/list_batch_req';
         $rsp = $this->rest->callApi('POST', $url, $batch_req);
         wso2Msj($rsp);
-        if ($rsp['status']) {
-            $rsp['data'] = json_decode($rsp['data'])->respuesta->resultado;
-        }
+        if (!$rsp['status']) return $rsp;
+        
+        $rsp['data'] = json_decode($rsp['data'])->respuesta->resultado;
 
-        if (!is_numeric($rsp['data'])) {
-            $rsp['status'] = false;
-        }
         return $rsp;
     }
 
@@ -229,7 +226,7 @@ class Lotes extends CI_Model
         }
 
         $rsp['data'] = json_decode($rsp['data'])->respuesta->resultado;
-        $rsp['status'] = ($rsp['data'] == 'CORRECTO');
+        //$rsp['status'] = ($rsp['data'] == 'CORRECTO');
 
         return $rsp;
 
