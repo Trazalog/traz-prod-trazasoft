@@ -59,7 +59,7 @@ function guardarDescargaOrigen() {
               alert('Hecho');
               linkTo();
             }else{
-                alert('Error al Guardar Descarga');
+                alert('Falla al Guardar Descarga');
             }
         },
         error: function(rsp) {
