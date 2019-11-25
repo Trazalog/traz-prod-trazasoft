@@ -12,7 +12,7 @@ class Etapa extends CI_Controller {
 		$this->load->model(TAREAS_ASIGNAR.'/Tareas');
 		$this->load->model(TAREAS_ASIGNAR.'/Templates');
 		$this->load->model(TAREAS_ASIGNAR.'/Recursos_Materiales');
-		$this->load->model(TAREAS_ASIGNAR.'/Recursos_Trabajo');
+		$this->load->model('general/Recursos');
 	}
 
 	// Muestra listado de articulos
@@ -37,8 +37,7 @@ class Etapa extends CI_Controller {
 			$data['templates'] = $this->Templates->listar()->templates->template; 
 			$data['establecimientos'] = $this->Establecimientos->listar($data['id'])->establecimientos->establecimiento; // listo
 			$data['recursosmateriales'] = $this->Recursos_Materiales->listar()->recursos->recurso;
-			$trabajo = $this->Recursos_Trabajo->listar()->trabajos->trabajo;
-			$data['recursostrabajo'] = $trabajo;
+			$data['rec_trabajo'] = $this->Recursos->obtenerXTipo('TRABAJO')['data'];
 			$this->load->view('etapa/abm', $data);
 	}
 	// guarda el Inicio de una nueva etapa mas orden pedido y lanza pedido almac
@@ -154,7 +153,8 @@ class Etapa extends CI_Controller {
 			$data['etapa'] = $this->Etapas->buscar($id)->etapa;
 			//	var_dump($data['etapa']);die;
 			$data['idetapa'] = $data['etapa']->id;
-			$data['recipientes'] = $this->Recipientes->listarPorEstablecimiento($data['etapa']->establecimiento->id)->recipientes->recipiente;
+			//$data['recipientes'] = $this->Recipientes->listarPorEstablecimiento($data['etapa']->establecimiento->id)->recipientes->recipiente;
+			$data['recipientes'] = $this->Recipientes->obtener('DEPOSITO','TODOS',$data['etapa']->establecimiento->id);
 
 			// Cantidad producto origen
 			// $prodCant = $this->Etapas->getCantProducto($id);
@@ -168,7 +168,7 @@ class Etapa extends CI_Controller {
 			$data['producto'] = $this->Etapas->getRecursosOrigen($id, PRODUCTO)->recursos->recurso;			
 
 			// trae recipientes de Tipo Deposito
-			$data['recipientes'] = $this->Recipientes->listarTodosDeposito()->recipientes->recipiente;
+			//$data['recipientes'] = $this->Recipientes->listarTodosDeposito()->recipientes->recipiente;
 			
 			
 			$data['op'] = 	$data['etapa']->orden;
@@ -187,8 +187,7 @@ class Etapa extends CI_Controller {
 				$data['tareas'] = $this->Tareas->listar()->tareas->tarea; 
 				$data['templates'] = $this->Templates->listar()->templates->template; 
 				$data['recursosmateriales'] = $this->Recursos_Materiales->listar()->recursos->recurso;
-				$trabajo =$this->Recursos_Trabajo->listar()->trabajos->trabajo;
-				$data['recursostrabajo'] = $trabajo;
+				$data['rec_trabajo'] = $this->Recursos->obtenerXTipo('TRABAJO')['data'];
 				$this->load->view('etapa/abm', $data);
 			}
 	}

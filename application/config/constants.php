@@ -181,8 +181,8 @@ define('ETAPA_TRANSPORTE', 1000);
 define('ETAPA_DEPOSITO', 2000);
 
 #RECURSOS_LOTES
-define('MATERIA_PRIMA', 'MATERIA_PRIMA');
-define('PRODUCTO', 'PRODUCTO');
-define('EQUIPO', 'EQUIPO');
-define('RECURSO_HUMANO', 'HUMANO');
-define('RECURSO_CONSUMO', 'CONSUMO');
+// define('MATERIA_PRIMA', 'MATERIA_PRIMA');
+// define('PRODUCTO', 'PRODUCTO');
+// define('EQUIPO', 'EQUIPO');
+// define('RECURSO_HUMANO', 'HUMANO');
+// define('RECURSO_CONSUMO', 'CONSUMO');

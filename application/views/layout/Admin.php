@@ -34,7 +34,7 @@
     <link rel="stylesheet" href="<?php echo base_url()?>application/css/etapa/list.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/css/bootstrapValidator.min.css" />
 
-    <link href="<?php echo base_url()?>lib/plugins/select2/select2.min.css" rel="stylesheet" />
+    <link href="<?php echo base_url()?>lib\plugins\select2\select2.min.css" rel="stylesheet"/>
 
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->

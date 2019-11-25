@@ -20,6 +20,7 @@
         <div class="col-md-8 col-xs-12"><input class="form-control" type="text" id="prod_origen" value="<?php echo $producto[0]->descripcion;?>" disabled></div>
         <div class="col-md-5"></div>
       </div>
+    
       <div class="row form-group" style="margin-top:20px">
         <div class="col-md-3 col-xs-12"><label class="form-label">Cantidad:</label></div>
         <div class="col-md-4 col-xs-12"><input class="form-control" type="text" id="cant_origen" value="<?php echo $producto[0]->cantidad.' ('.$producto[0]->uni_med.')';?>" disabled></div>
@@ -31,7 +32,13 @@
         <div class="col-md-5"></div>
       </div>
 
-
+         <!-- Recursos de Trabajo -->
+       <div class="row form-group" style="margin-top:20px">
+        <div class="col-md-3 col-xs-12"><label class="form-label">Operario:</label></div>
+        <div class="col-md-8 col-xs-12"><input class="form-control datalist" list="operarios" id="operario"><datalist id="operarios"><?php foreach($rec_trabajo as $o) {echo "<option value='$o->descripcion' data-json='".json_encode($o)."'></option>";} ?></datalist></div>
+        <div class="col-md-5"></div>
+      </div>
+      <!-- Fin | Recursos de Trabajo -->
 
       <div class="row form-group" style="margin-top:20px">
         <div class="col-md-3 col-xs-12">
@@ -88,12 +95,12 @@
                 <label for="establecimientos" class="form-label">Establecimiento Final:</label>
                </div>
                <div class="col-md-6 col-xs-12">
-                <select class="form-control select2 select2-hidden-accesible" onchange="actualizaRecipiente(this.value, 'productorecipientes')" id="productoestablecimientos">
-                    <option value="" disabled selected>-Seleccione Establecimiento-</option>
+                <select class="form-control select2" onchange="actualizaRecipiente(this.value, 'productorecipientes')" id="productoestablecimientos">
+                    <option disabled selected>-Seleccione Establecimiento-</option>
                     <?php
                     foreach($establecimientos as $fila)
                     {
-                        //echo '<option value="'.$fila->esta_id.'" >'.$fila->nombre.'</option>';
+                        echo '<option value="'.$fila->esta_id.'" >'.$fila->nombre.'</option>';
                     } 
                     ?>
                 </select>
@@ -143,6 +150,11 @@
   </div>
   </div>
   <script>
+
+  $('.datalist').on('change', function(){
+    this.dataset.json = $('#' + this.getAttribute('list')).find('[value="'+this.value+'"]').attr('data-json');
+  });
+
   function AgregarProducto()
   {
      ban = true;
@@ -311,6 +323,11 @@
   // Genera Informe de Etapa
   function FinalizarEtapa()
   {  
+
+    alert('Finalizar Etapa');
+
+    return;
+    
     existe = document.getElementById('productos_existe').value;
     if(existe == "no")
     {
