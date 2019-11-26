@@ -17,3 +17,17 @@ if (!function_exists('info_header')) {
             </div>';
     }
 }
+
+if(!function_exists('mapSelect')){
+    function mapSelect($value, $label, $data){
+
+        $data = json_decode(json_encode($data), true);
+
+        foreach ($data as $key => $value) {
+            if($key == $value) $data[$key]['value'] = $o[$value];
+            if($key == $label) $data[$key]['label'] = $o[$label];
+        }
+
+        return json_decode(json_encode($data));
+    }
+}

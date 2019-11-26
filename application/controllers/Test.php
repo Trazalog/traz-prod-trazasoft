@@ -8,6 +8,13 @@ class Test extends CI_Controller
         parent::__construct();
     }
 
+    public function index(){
+
+        $this->load->model(ALM.'Articulos');
+        $data['list'] = mapSelect('arti_id', 'descripcion', $this->Articulos->getList());
+        $this->load->view('traz-comp/list', $data);
+    }
+
     public function test()
     {
         $dbconn = pg_connect("host=localhost port=5432 dbname=postgres user=postgres password=12345");
@@ -34,7 +41,7 @@ class Test extends CI_Controller
         var_dump($this->Tablas->obtener('unidad_medida'));
     }
 
-    public function index()
+    public function index3()
     {
         $data['tareas'] = getJson('tareas')->tareas;
         $data['subtareas'] = getJson('tareas')->subtareas;

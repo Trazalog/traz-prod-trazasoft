@@ -19,17 +19,17 @@
        folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="lib/dist/css/skins/_all-skins.min.css">
 
-    <link rel="stylesheet" href="<?php base_url();?>lib/plugins/datetimepicker/css/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" href="<?php echo base_url()?>lib/plugins/datetimepicker/css/bootstrap-datetimepicker.min.css">
 
     <link rel="stylesheet"
-        href="<?php base_url() ?>lib/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+        href="<?php echo base_url() ?>lib/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
 
     <link rel="stylesheet" href="<?php base_url() ?>lib/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
 
     <link rel="stylesheet" href="<?php base_url() ?>lib/bower_components/bootstrap-daterangepicker/daterangepicker.css">
 
     <!-- Bootstrap datetimepicker -->
-    <link rel="stylesheet" href="<?php base_url();?>lib/plugins/datetimepicker/css/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" href="<?php echo base_url()?>lib/plugins/datetimepicker/css/bootstrap-datetimepicker.min.css">
 
     <!-- Select 2 -->
     <link rel="stylesheet" href="<?php base_url();?>lib/plugins/select2/select2.min.css">
@@ -37,6 +37,8 @@
     <link rel="stylesheet" href="<?php base_url();?>application/css/etapa/list.css">
     <link rel="stylesheet"
         href="//cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/css/bootstrapValidator.min.css" />
+
+    <link href="<?php echo base_url()?>lib\plugins\select2\select2.min.css" rel="stylesheet"/>
 
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->

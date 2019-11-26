@@ -20,6 +20,7 @@
         <div class="col-md-8 col-xs-12"><input class="form-control" type="text" id="prod_origen" value="<?php echo $producto[0]->descripcion;?>" disabled></div>
         <div class="col-md-5"></div>
       </div>
+    
       <div class="row form-group" style="margin-top:20px">
         <div class="col-md-3 col-xs-12"><label class="form-label">Cantidad:</label></div>
         <div class="col-md-4 col-xs-12"><input class="form-control" type="text" id="cant_origen" value="<?php echo $producto[0]->cantidad.' ('.$producto[0]->uni_med.')';?>" disabled></div>
@@ -31,7 +32,13 @@
         <div class="col-md-5"></div>
       </div>
 
-
+         <!-- Recursos de Trabajo -->
+       <div class="row form-group" style="margin-top:20px">
+        <div class="col-md-3 col-xs-12"><label class="form-label">Operario:</label></div>
+        <div class="col-md-8 col-xs-12"><input class="form-control datalist" list="operarios" id="operario"><datalist id="operarios"><?php foreach($rec_trabajo as $o) {echo "<option value='$o->descripcion' data-json='".json_encode($o)."'></option>";} ?></datalist></div>
+        <div class="col-md-5"></div>
+      </div>
+      <!-- Fin | Recursos de Trabajo -->
 
       <div class="row form-group" style="margin-top:20px">
         <div class="col-md-3 col-xs-12">
@@ -74,9 +81,9 @@
               <?php if($accion == 'Editar'){
                       echo '<select class="form-control" id="productodestino">';
                       echo '<option value="" disabled selected>-Seleccione Destino-</option>';
-                      foreach($recipientes as $recipiente)
+                      foreach($recipientes as $o)
                       {
-                          echo '<option value="'.$recipiente->id.'" >'.$recipiente->titulo.'</option>';
+                          echo "<option value='$o->reci_id' data-json=".json_encode($o).">$o->nombre</option>";
                       }
                       echo '</select>';
               }?>
@@ -88,12 +95,12 @@
                 <label for="establecimientos" class="form-label">Establecimiento Final:</label>
                </div>
                <div class="col-md-6 col-xs-12">
-                <select class="form-control select2 select2-hidden-accesible" onchange="actualizaRecipiente(this.value, 'productorecipientes')" id="productoestablecimientos">
-                    <option value="" disabled selected>-Seleccione Establecimiento-</option>
+                <select class="form-control select2" onchange="actualizaRecipiente(this.value, 'productorecipientes')" id="productoestablecimientos">
+                    <option disabled selected>-Seleccione Establecimiento-</option>
                     <?php
                     foreach($establecimientos as $fila)
                     {
-                        //echo '<option value="'.$fila->esta_id.'" >'.$fila->nombre.'</option>';
+                        echo '<option value="'.$fila->esta_id.'" >'.$fila->nombre.'</option>';
                     } 
                     ?>
                 </select>
@@ -143,6 +150,11 @@
   </div>
   </div>
   <script>
+
+  $('.datalist').on('change', function(){
+    this.dataset.json = $('#' + this.getAttribute('list')).find('[value="'+this.value+'"]').attr('data-json');
+  });
+
   function AgregarProducto()
   {
      ban = true;
@@ -311,6 +323,11 @@
   // Genera Informe de Etapa
   function FinalizarEtapa()
   {  
+
+    alert('Finalizar Etapa');
+
+    return;
+    
     existe = document.getElementById('productos_existe').value;
     if(existe == "no")
     {
@@ -358,5 +375,34 @@
     }
   }
    $(document).off('click', '.tabla_productos_asignados_borrar').on('click', '.tabla_productos_asignados_borrar',{ idtabla:'tabla_productos_asignados', idrecipiente:'productosasignados', idbandera:'productos_existe' }, remover);
+  
+  $('#productodestino').on('change', function(){
+
+      var json =  JSON.parse($(this).find('option:selected').attr('data-json'));
+      if (!json) return;
+      validarRecipiente(json);
+  });
+
+  function validarRecipiente(json) {
+
+    if (json.estado == 'VACIO') return;
+
+    var arti_id = $('#inputproducto').val();
+    var lote_id = $('#lotedestino').val();
+
+    if (json.arti_id != arti_id || json.lote_id != lote_id) {
+        alert('No se pueden mezclar Distintos Articulos y Distintos Lotes en un mismo Recipiente');
+        $('#recipiente').val('');
+        return;
+    }
+
+    if (confirm('¿Desea mezclar los Artículos en el Recipiente?') != true) {
+        $('#recipiente').val('');
+        return;
+    }
+
+    $('#unificar').val(true);
+
+}
 </script>
   

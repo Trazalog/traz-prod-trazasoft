@@ -85,7 +85,7 @@ class Notapedidos extends CI_Model
     // Trae lista de articulos por id de nota de pedido
     public function getNotaPedidoIds($id)
     {
-
+        if(!$id) return false;
         $this->db->select('alm.alm_pedidos_materiales.pema_id as id_notaPedido,
                           alm.alm_pedidos_materiales.fecha,
                           alm.alm_pedidos_materiales.ortr_id as id_ordTrabajo,
