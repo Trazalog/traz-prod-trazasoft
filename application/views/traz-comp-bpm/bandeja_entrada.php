@@ -67,7 +67,7 @@
     </div>
     <!-- /. box -->
     <div id="miniView" class="view col-xs-8">
-
+            
     </div>
 </div>
 
@@ -79,15 +79,16 @@
 <script>
 DataTable('#tareas');
 
-
 $('.item').single_double_click(function() {
-    $('body').addClass('sidebar-collapse');
-    $('.oculto').hide();
-    $('#bandeja').removeClass().addClass('col-xs-4');
-    $('#miniView').empty();
-    $('#miniView').load('<?php echo base_url() .BPM ?>Tarea/detalleTarea/' + $(this).attr('id'));
+    // $('body').addClass('sidebar-collapse');
+    // $('.oculto').hide();
+    // $('#bandeja').removeClass().addClass('col-xs-4');
+    // $('#miniView').empty();
+    // $('#miniView').load('<?php #echo base_url(BPM) ?>Tarea/detalleTarea/' + $(this).attr('id'));
+    linkTo('<?php echo base_url(ALM) ?>Proceso/detalleTarea/' + $(this).attr('id'));
 }, function() {
-    linkTo('<?php echo base_url() .BPM ?>Tarea/detalleTarea/' + $(this).attr('id'));
+    linkTo('<?php echo base_url(ALM) ?>Proceso/detalleTarea/' + $(this).attr('id'));
+
 });
 
 function closeView() { 

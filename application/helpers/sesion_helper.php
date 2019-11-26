@@ -4,7 +4,7 @@ if(!function_exists('userId')){
 
     function userId()
     {
-        return 102;//!HARDCODE
+        return 5;//!HARDCODE
 
         $ci =& get_instance();			
         $userdata  = $ci->session->userdata('user_data');
@@ -16,7 +16,7 @@ if(!function_exists('userNick')){
     
     function userNick()
     {
-        return 'supervisor1'; //!HARDCODE
+        return 'almacen1'; //!HARDCODE
         $ci =& get_instance();			
         $userdata  = $ci->session->userdata('user_data');
 		return  $userdata[0]['usrNick'];
