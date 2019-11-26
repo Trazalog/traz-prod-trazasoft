@@ -210,6 +210,8 @@ class Etapa extends CI_Controller {
 		$num_orden_prod = $this->input->post('num_orden_prod');	
 		$lote_id = $this->input->post('lote_id');
 		$batch_id_padre = $this->input->post('batch_id_padre');
+	
+
 		foreach ($productos as $value) {			
 
 			$arrayPost["lote_id"] = $lote_id; // lote origen
@@ -223,20 +225,22 @@ class Etapa extends CI_Controller {
 			$arrayPost["etap_id"] = (string)DEPOSITO_TRANSPORTE;
 			$arrayPost["usuario_app"] = userNick();
 			$arrayPost["empr_id"] = (string)empresa();	
-			$arrayPost["forzar_agregar"] = "false";
+			$arrayPost["forzar_agregar"] = $value->unificar;
 			$arrayPost["fec_vencimiento"] = "01-01-1988";
+			$arrayPost["recu_id"] = $value->recu_id;
+			$arrayPost["tipo_recurso"] = $value->tipo_recurso;
 
-			$arrayDatos['_post_lote'] = $arrayPost;	
-			
-			$resp = $this->Etapas->finalizarEtapa($arrayDatos);
-			
-			if ($resp > 300) {
-				echo("Error en dataservice");
-				return;
-			}else{
-				echo("ok");
-			}				
-	}		
+			$arrayDatos['_post_lote_list_batch_req']['_post_lote_lis'][] = $arrayPost;	
+		}	
+
+		$resp = $this->Etapas->finalizarEtapa($arrayDatos);
+		
+		if ($resp > 300) {
+			echo("Error en dataservice");
+			return;
+		}else{
+			echo("ok");
+		}				
 	}
 	public function fraccionar()
 	{
