@@ -245,7 +245,7 @@ class Etapas extends CI_Model
 
 			log_message('DEBUG', 'Etapas/finalizarEtapa(datos)-> '.json_encode($arrayDatos)); 
 
-			$resource = '/lote';	 	
+			$resource = '/lote/list_batch_req';	 	
 			$url = REST4.$resource;				 
 			$array = $this->rest->callAPI("POST", $url, $arrayDatos);			
 			return json_decode($array['status']);

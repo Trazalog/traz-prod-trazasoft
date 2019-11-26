@@ -32,6 +32,8 @@
         <div class="col-md-5"></div>
       </div>
 
+      <input type="text" id="unificar">
+
          <!-- Recursos de Trabajo -->
        <div class="row form-group" style="margin-top:20px">
         <div class="col-md-3 col-xs-12"><label class="form-label">Operario:</label></div>
@@ -114,7 +116,7 @@
                </div>
                <div class="col-md-6 col-xs-12">
                 <select class="form-control select2 select2-hidden-accesible"  id="productorecipientes" disabled>
-                <option value="" disabled selected>-Seleccione Establecimiento-</option>
+                <option value="false" disabled selected>-Seleccione Establecimiento-</option>
                 </select>
                </div>
                <div class="col-md-3"></div>
@@ -150,7 +152,6 @@
   </div>
   </div>
   <script>
-
   $('.datalist').on('change', function(){
     this.dataset.json = $('#' + this.getAttribute('list')).find('[value="'+this.value+'"]').attr('data-json');
   });
@@ -184,13 +185,13 @@
         establecimiento = "";
         var producto = {};   
         producto.establecimientofinal = "";
-        if(document.getElementById('productoestablecimientos').value != "")
+        if(document.getElementById('productoestablecimientos').value != "-Seleccione Establecimiento-")
         {
         establecimientos = '<?php echo json_encode($establecimientos);?>';
         establecimientos = JSON.parse(establecimientos);
         idestablecimiento = document.getElementById('productoestablecimientos').value;
-        index = establecimientos.findIndex(x => x.id == idestablecimiento);
-        establecimiento = establecimientos[index].titulo;
+        index = establecimientos.findIndex(x => x.esta_id == idestablecimiento);
+        establecimiento = establecimientos[index].nombre;
         producto.establecimientofinal = document.getElementById('productoestablecimientos').value;
         }
         recipientefinal ="";
@@ -204,7 +205,7 @@
         recipientes = '<?php echo json_encode($recipientes);?>';
         recipientes = JSON.parse(recipientes);
         idrecipiente= document.getElementById('productodestino').value;
-        indexrec = recipientes.findIndex(y => y.id == idrecipiente);    
+        indexrec = recipientes.findIndex(y => y.reci_id == idrecipiente);    
         producto.id = productoid;
         producto.titulo = document.getElementById('inputproducto').value;
         producto.cantidad = cantidad;
@@ -213,6 +214,9 @@
         producto.destino = destino;
         producto.titulodestino = recipientes[indexrec].titulo;
         producto.destinofinal = establecimiento +" "+ recipientefinal;
+        producto.recu_id  =  JSON.parse($('#operarios').find('[value="'+ $('#operario').val()+'"]').attr('data-json')).recu_id;
+        producto.tipo_recurso = 'HUMANO';
+        producto.unificar = $('#unificar').val();
         fraccionado = document.getElementById('fraccionado').checked;
         if(fraccionado)
         {
@@ -323,11 +327,6 @@
   // Genera Informe de Etapa
   function FinalizarEtapa()
   {  
-
-    alert('Finalizar Etapa');
-
-    return;
-    
     existe = document.getElementById('productos_existe').value;
     if(existe == "no")
     {
@@ -348,16 +347,17 @@
       select = document.getElementById("productodestino");
       batch_id_padre = $('#batch_id_padre').val();
       destino = select.value;  
+    
 
       $.ajax({
       type: 'POST',
       async: false,
-      data: { lote_id: lote_id,
-              productos: productos,              
-              cantidad_padre: cantidad_padre,
-              num_orden_prod: num_orden_prod,
-              destino: destino,
-              batch_id_padre: batch_id_padre              
+      data: { lote_id,
+              productos,              
+              cantidad_padre,
+              num_orden_prod,
+              destino,
+              batch_id_padre
             },
       url: 'general/Etapa/Finalizar', 
       success: function(result){
@@ -385,7 +385,10 @@
 
   function validarRecipiente(json) {
 
-    if (json.estado == 'VACIO') return;
+    if (json.estado == 'VACIO'){
+      $('#unificar').val(false);
+      return;
+    }
 
     var arti_id = $('#inputproducto').val();
     var lote_id = $('#lotedestino').val();
@@ -393,11 +396,13 @@
     if (json.arti_id != arti_id || json.lote_id != lote_id) {
         alert('No se pueden mezclar Distintos Articulos y Distintos Lotes en un mismo Recipiente');
         $('#recipiente').val('');
+        $('#unificar').val(false);
         return;
     }
 
     if (confirm('¿Desea mezclar los Artículos en el Recipiente?') != true) {
         $('#recipiente').val('');
+        $('#unificar').val(false);
         return;
     }
 
