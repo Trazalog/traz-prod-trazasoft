@@ -33,10 +33,10 @@ class Etapa extends CI_Controller {
 			$data['op'] = 	$data['etapa']->titulo;
 			$data['materias'] = $this->Materias->listar()->materias->materia; // listo
 			$data['lang'] = lang_get('spanish',5);
-			$data['tareas'] = $this->Tareas->listar()->tareas->tarea; 
-			$data['templates'] = $this->Templates->listar()->templates->template; 
+			$data['tareas'] = [];//$this->Tareas->listar()->tareas->tarea; 
+			$data['templates'] = [];//$this->Templates->listar()->templates->template; 
 			$data['establecimientos'] = $this->Establecimientos->listar($data['id'])->establecimientos->establecimiento; // listo
-			$data['recursosmateriales'] = $this->Recursos_Materiales->listar()->recursos->recurso;
+			$data['recursosmateriales'] = [];//;$this->Recursos_Materiales->listar()->recursos->recurso;
 			$data['rec_trabajo'] = $this->Recursos->obtenerXTipo('TRABAJO')['data'];
 			$this->load->view('etapa/abm', $data);
 	}
@@ -184,9 +184,9 @@ class Etapa extends CI_Controller {
 				$this->load->view('etapa/fraccionar/fraccionar', $data);
 			}else{
 
-				$data['tareas'] = $this->Tareas->listar()->tareas->tarea; 
-				$data['templates'] = $this->Templates->listar()->templates->template; 
-				$data['recursosmateriales'] = $this->Recursos_Materiales->listar()->recursos->recurso;
+				$data['tareas'] = [];//$this->Tareas->listar()->tareas->tarea; 
+				$data['templates'] = [];//$this->Templates->listar()->templates->template; 
+				$data['recursosmateriales'] = [];//$this->Recursos_Materiales->listar()->recursos->recurso;
 				$data['rec_trabajo'] = $this->Recursos->obtenerXTipo('TRABAJO')['data'];
 				$this->load->view('etapa/abm', $data);
 			}
