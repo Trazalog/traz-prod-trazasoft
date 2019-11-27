@@ -39,15 +39,15 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
           <option value="" disabled selected>-Seleccione Establecimiento-</option>
           <?php
                   foreach($establecimientos as $fila)
+                  {
+                    if($accion == 'Editar' && $fila->nombre == $etapa->establecimiento->titulo)
                     {
-                      if($accion == 'Editar' && $fila->nombre == $etapa->establecimiento->titulo)
-                      {
-                      echo '<option value="'.$fila->esta_id.'" selected >'.$fila->nombre.'</option>';
-                      }else
-                      {
-                        echo '<option value="'.$fila->esta_id.'" >'.$fila->nombre.'</option>';
-                      }
+                    echo '<option value="'.$fila->esta_id.'" selected >'.$fila->nombre.'</option>';
+                    }else
+                    {
+                      echo '<option value="'.$fila->esta_id.'" >'.$fila->nombre.'</option>';
                     }
+                  }
           ?>
         </select>
       </div>
@@ -55,28 +55,30 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
         <label for="Recipiente" class="form-label"><?php echo $etapa->titulorecipiente;?>*:</label>
       </div>
       <div class="col-md-5 col-xs-12">
-        <?php if($accion == 'Nuevo'){
-                    echo '<select class="form-control" id="recipientes" disabled></select>';
-                    }if($accion == 'Editar'){
-                      if($etapa->estado == 'En Curso'){
-                        echo '<select class="form-control" id="recipientes" disabled>';
-                      }else
-                      {
-                        echo '<select class="form-control" id="recipientes">';
-                      }
-                      echo '<option value="" disabled selected>-Seleccione Recipiente-</option>';
-                      foreach($recipientes as $recipiente)
-                      {
-                        if($recipiente->titulo == $etapa->recipiente)
-                        {
-                          echo '<option value="'.$recipiente->id.'" selected>'.$recipiente->titulo.'</option>';
-                        }else{
-                          echo '<option value="'.$recipiente->id.'" >'.$recipiente->titulo.'</option>';
-                        }
-                      }
-                      echo '</select>';
-                    }
-                    ?>
+        <?php 
+          if($accion == 'Nuevo'){
+              echo '<select class="form-control" id="recipientes" disabled></select>';
+          }
+          if($accion == 'Editar'){
+              if($etapa->estado == 'En Curso'){
+                echo '<select class="form-control" id="recipientes" disabled>';
+              }else
+              {
+                echo '<select class="form-control" id="recipientes">';
+              }
+              echo '<option value="" disabled selected>-Seleccione Recipiente-</option>';
+              foreach($recipientes as $recipiente)
+              {
+                if($recipiente->titulo == $etapa->recipiente)
+                {
+                  echo '<option value="'.$recipiente->id.'" selected>'.$recipiente->titulo.'</option>';
+                }else{
+                  echo '<option value="'.$recipiente->id.'" >'.$recipiente->titulo.'</option>';
+                }
+              }
+              echo '</select>';
+          }
+        ?>
       </div>
     </div>
     <div class="row" style="margin-top: 40px">
@@ -110,9 +112,9 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
             <input list="productos" id="inputproductos" class="form-control" autocomplete="off">
             <datalist id="productos">
               <?php foreach($materias as $fila)
-                  {
-                  echo  "<option data-json='".json_encode($fila)."' value='".$fila->titulo."'>";
-                  }
+                    {
+                      echo  "<option data-json='".json_encode($fila)."' value='".$fila->titulo."'>";
+                    }
               ?>
             </datalist>
             <span class="input-group-btn">
@@ -209,12 +211,12 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
       </div>
       <div class="col-md-2 col-xs-6">
         <?php if($etapa->estado == 'planificado')
-                {
-                  echo '<button class="btn btn-primary btn-block" onclick="valida()">Iniciar Etapa</button>';
-                }else if($etapa->estado == 'En Curso')
-                {
-                  echo '<button class="btn btn-primary btn-block" id="btnfinalizar" onclick="finalizar()">Finalizar Etapa</button>';
-                }
+              {
+                echo '<button class="btn btn-primary btn-block" onclick="valida()">Iniciar Etapa</button>';
+              }else if($etapa->estado == 'En Curso')
+              {
+                echo '<button class="btn btn-primary btn-block" id="btnfinalizar" onclick="finalizar()">Finalizar Etapa</button>';
+              }
         ?>
       </div>
     </div>
@@ -230,9 +232,9 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
 
 
 <script>
-  accion = '<?php echo $accion;?>';
+   accion = '<?php echo $accion;?>';
   if (accion == "Editar") {
-    var productos = <? php echo json_encode($etapa -> productos);?>;
+    var productos = <?php echo json_encode($etapa -> productos);?>;
 
     for (i = 0; i < productos.length; i++) {
       producto = JSON.stringify(productos[i]);
@@ -285,13 +287,8 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
       }
     }
   });
-
-  function ActualizaProducto(producto) {
-
-    document.getElementById('inputproductos').value = producto.titulo;
-    document.getElementById('stock').value = producto.stock;
-  }
   function ActualizaEmpaques() {
+    
     empaque = $("#empaques option:selected").attr('data-json');
     empaque = JSON.parse(empaque);
     document.getElementById('unidad').value = empaque.unidad;
@@ -303,7 +300,7 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
     document.getElementById('calculo').value = stock;
   }
   function checkTabla(idtabla, idrecipiente, json, acciones) {
-    lenguaje = <? php echo json_encode($lang) ?>;
+    lenguaje = <?php echo json_encode($lang) ?>;
     if (document.getElementById(idtabla) == null) {
       armaTabla(idtabla, idrecipiente, json, lenguaje, acciones);
     }
@@ -333,6 +330,7 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
       producto.empaque = empaque.id;
       producto.empaquetitulo = empaque.titulo;
       producto.cantidad = document.getElementById('cantidad').value;
+      producto.cant_descontar = document.getElementById('calculo').value;
       producto = JSON.stringify(producto);
       AgregaProducto(producto);
       document.getElementById('inputproductos').value = "";
@@ -359,6 +357,7 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
         html += "<th>Lote</th>";
       }
       html += "<th>Titulo</th>";
+      html += "<th>Cant a Descontar</th>";
       html += "<th>Empaque</th>";
       html += "<th>Cantidad</th>";
       html += '</tr></thead><tbody>';
@@ -370,6 +369,7 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
         html += "<td>" + producto.lote + "</td>";
       }
       html += '<td>' + producto.titulo + '</td>';
+      html += '<td>' + producto.cant_descontar + '</td>';
       html += '<td>' + producto.empaquetitulo + '</td>';
       html += '<td>' + producto.cantidad + '</td>';
       html += '</tr>';
@@ -391,6 +391,7 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
           html += "<td>" + producto.lote + "</td>";
         }
         html += '<td>' + producto.titulo + '</td>';
+        html += '<td>' + producto.cant_descontar + '</td>';
         html += '<td>' + producto.empaquetitulo + '</td>';
         html += '<td>' + producto.cantidad + '</td>';
         html += '</tr>';
@@ -403,26 +404,75 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
         $('#tablaproductos').DataTable({});
     }
   }
+  // valida campos vacios
+  function valida() {
+      mensaje = "No se ha podido completar la operacion debido a que algunos datos no han sido completados: <br>";
+      ban = true;
+      if (document.getElementById('Lote').value == "") {
+          mensaje += "- No ha ingresado Lote <br>";
+          ban = false;
+      }
+      if (document.getElementById('fecha').value == "") {
+          mensaje += "- No ha ingresado Fecha <br>";
+          ban = false;
+      }
+      if (document.getElementById('establecimientos').value == "") {
+          mensaje += "- No ha seleccionado establecimiento <br>";
+          ban = false;
+      }
+      if (document.getElementById('recipientes').value == "") {
+          mensaje += "- No ha seleccionado recipiente <br>";
+          ban = false;
+      }
+      if (document.getElementById('materiasexiste').value == "no") {
+          mensaje += "- No ha seleccionado ninguna materia prima <br>";
+          ban = false;
+      }
+      // if (document.getElementById('existe_tabla').value == "no") {
+      //     mensaje += "- No ha seleccionado ninguna tarea <br>";
+      //     ban = false;
+      // }
+      if (ban) {
+          guardar();
+      } else {
+          document.getElementById('mensajeincompleto').innerHTML = "";
+          document.getElementById('mensajeincompleto').innerHTML = mensaje;
+          document.getElementById('incompleto').hidden = false;
+      }
 
+
+  }
   function guardar() {
     fecha = document.getElementById('fecha').value;
     establecimiento = document.getElementById('establecimientos').value;
     recipiente = document.getElementById('recipientes').value;
-    idetapa = <? php echo $etapa -> id;?>;
+    idetapa = <?php echo $etapa -> id;?>;
     existe = document.getElementById('productoexiste').value;
     var productos = [];
+    var acum_cant = 0;
     if (existe == "si") {
       $('#tablaproductos tbody').find('tr').each(function () {
         json = "";
-        json = $(this).attr('data-json');
+        json = $(this).attr('data-json');        
+        temp = JSON.parse(json);
+        acum_cant += parseFloat(temp.cant_descontar);
         productos.push(json);
       });
-      productos = JSON.stringify(productos);
+      alert("cant total a descontar: " + acum_cant);
+     // productos = JSON.stringify(productos);
     }
+
+
     $.ajax({
       type: 'POST',
-      data: { idetapa: idetapa, fecha: fecha, establecimiento: establecimiento, recipiente: recipiente,            productos: productos },
+      data: { idetapa: idetapa, 
+              fecha: fecha, 
+              establecimiento: establecimiento, 
+              recipiente: recipiente, 
+              productos: productos,
+              cant_total_desc: acum_cant },
       url: 'general/Etapa/guardarFraccionar',
+      //url: 'general/Etapa/guardar',
       success: function (result) {
                 if (result == "ok") {
                   linkTo('general/Etapa/index');
@@ -449,4 +499,6 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
     $("#modal_finalizar").modal('show');
   }
   $(document).off('click', '.tablaproductos_borrar').on('click', '.tablaproductos_borrar', { idtabla: 'tablaproductos', idrecipiente: 'productosasignados', idbandera: 'productoexiste' }, remover);
+ 
+  
 </script>

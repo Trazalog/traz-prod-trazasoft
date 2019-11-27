@@ -3,7 +3,9 @@
 if(!function_exists('armaBusca')){
 
     function armaBusca($json, $id, $acciones,$lenguaje = false)
-    {
+    {   
+        echo("json en helper tabla: ");
+        var_dump();
 				$array =  json_decode($json);				
         
         $html = '<table id="'.$id.'" class="table table-bordered table-hover">

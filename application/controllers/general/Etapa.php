@@ -44,6 +44,8 @@ class Etapa extends CI_Controller {
 	// guarda el Inicio de una nueva etapa mas orden pedido y lanza pedido almac
 	public function guardar(){
 		
+		$inp= $this->input->post();
+
 		//////////// PARA CREAR EL NUEVO BATCH ///////////////////
 			$datosCab['lote_id'] = $this->input->post('lote');
 			$datosCab['arti_id'] = (string)$this->input->post('idprod');
@@ -62,7 +64,8 @@ class Etapa extends CI_Controller {
 
 			// guardo recursos materiales (origen)
 			$materia = $this->input->post('materia');
-			
+			$productos = $this->input->post('productos');
+
 			//guarda batch nuevo (tabla lotes)
 			$respServ = $this->Etapas->SetNuevoBatch($data);
 			$batch_id	= $respServ->respuesta->resultado;
@@ -70,9 +73,9 @@ class Etapa extends CI_Controller {
 			// busca id recurso por id articulo
 			$recu_id = $this->Etapas->getRecursoId($datosCab['arti_id']);			
 			// guarda producto en tabla recurso_lotes			
-			$respRecurso = $this->Etapas->setRecursosLotesProd($batch_id, $recu_id, $datosCab['cantidad']);									
-
-			// guarda articulos(id de recurso en tabala recursos) origen en tabla recursos_lotes
+			$respRecurso = $this->Etapas->setRecursosLotesProd($batch_id, $recu_id, $datosCab['cantidad']);	
+				
+			// guarda articulos(id de recurso en tabla recursos) origen en tabla recursos_lotes
 			$x = 0;
 			foreach($materia as $id => $cantidad)	{
 							
@@ -88,6 +91,7 @@ class Etapa extends CI_Controller {
 							$x++;					
 					}
 			}
+					
 			// array para guardar
 			$arrayRecursos['_post_recurso_lote_batch_req'] = $detaArtPos;		
 			$respArtic = $this->Etapas->setRecursosLotesMat($arrayRecursos);
@@ -192,16 +196,107 @@ class Etapa extends CI_Controller {
 				$this->load->view('etapa/abm', $data);
 			}
 	}
-	public function guardarFraccionar()
-	{
-		$data['idetapa'] = $this->input->post('idetapa');
-		$data['establecimiento'] =$this->input->post('establecimiento');
-		$data['recipiente'] =$this->input->post('recipiente');
-		$data['fecha'] =$this->input->post('fecha');
-		$data['productos'] = $this->input->post('productos');
+	// guarda fraccionamiento y lanza pedido de materiales 
+	public function guardarFraccionar(){
 		
-		$this->Etapas->guardar($data);
-		echo("ok");
+			//////////// PARA CREAR EL NUEVO BATCH ///////////////////
+				$datosCab['lote_id'] = 'FRACCIONAMIENTO';
+				$datosCab['arti_id'] = (string)0;
+				$datosCab['prov_id'] = (string)PROVEEDOR_INTERNO;
+				$datosCab['batch_id_padre'] = (string)0;
+				$datosCab['cantidad'] = (string)$this->input->post('cant_total_desc');
+				$datosCab['cantidad_padre'] = (string)0;
+				$datosCab['num_orden_prod'] = (string)0;
+				$datosCab['reci_id'] = $this->input->post('recipiente');
+				$datosCab['etap_id'] = $this->input->post('idetapa');
+				$datosCab['usuario_app'] = userNick();
+				$datosCab['empr_id'] = (string)empresa();
+				$datosCab['forzar_agregar'] = "FALSE";
+				$datosCab['fec_vencimiento'] = "01-01-1899";		
+				$datosCab['recu_id'] = (string)0;
+				$datosCab['tipo_recurso'] = "";
+						
+				$data['_post_lote'] = $datosCab;
+
+				// guardo recursos materiales (origen)
+				$productos = $this->input->post('productos');
+				
+			//guarda batch nuevo (tabla lotes)
+			 $respServ = $this->Etapas->SetNuevoBatch($data);
+			 $batch_id	= $respServ->respuesta->resultado;			
+			//////////// PARA GUARDAR EN RECURSOS LOTES /////////////////// 
+					$i = 0;
+					foreach ($productos as $key => $prod) {
+							$p = json_decode($prod);
+							$recurso_id = $this->Etapas->getRecursoId($p->id);
+							$arrRec['batch_id'] = (string)$batch_id;
+							$arrRec['recu_id'] = (string)$recurso_id;
+							$arrRec['usuario'] = userNick();
+							$arrRec['empa_id'] = (string)$p->empaque;
+							$arrRec['empa_cantidad'] = (string)$p->cantidad; // cantidad del empaque
+							$arrRec['cantidad'] = (string)$p->cant_descontar; // cantidad a descontar en stock
+							$arrRec['tipo'] = PRODUCTO;
+							$arrRec['empr_id'] = (string)empresa();
+							$recu['_post_recurso'][$i] = (object)$arrRec;
+							$i++;
+					}							
+					// array para guardar
+					$arrayRecursos['_post_recurso_lote_batch_req'] = $recu;					
+					$respArtic = $this->Etapas->setRecursosLotesMat($arrayRecursos);	
+
+			
+					
+			///////////////////////  PEDIDO DE MATERIALES //////////////////////////	
+					if(($batch_id != "BATCH_NO_CREADO" )  || ($batch_id != "RECI_NO_VACIO")){
+
+						////////////// INSERTAR CABECERA NOTA PEDIDO   ///
+							$arrayPost['fecha'] = $this->input->post('fecha');		
+							$arrayPost['empr_id'] = (string)empresa();
+							$arrayPost['batch_id'] = (string)$batch_id;		
+							$cab['_post_notapedido'] = $arrayPost;					
+							$response = $this->Etapas->setCabeceraNP($cab);
+							$pema_id = $response->nota_id->pedido_id;		
+
+						//////////// PARA CREAR EL BATCH PARA EL BATCH REQUEST //////////					
+							if($pema_id){										
+									$x=0;
+									foreach ($productos as $key => $prod) {								
+											$p = json_decode($prod);				
+											$det['pema_id'] = (string)$pema_id;
+											$det['arti_id'] = (string)$p->id;
+											$det['cantidad'] = (string)$p->cant_descontar;
+											$detalle['_post_notapedido_detalle'][$x]=(object) $det;
+											$x++;					
+									}	
+
+									$arrayDeta['_post_notapedido_detalle_batch_req'] = $detalle;							
+									$respDetalle = $this->Etapas->setDetaNP($arrayDeta);
+									
+									if($respDetalle < 300){
+											/////// LANZAR EL PROCESO DE BONITA DE PEDIDO 								
+											$contract = [
+												'pIdPedidoMaterial' => $pema_id,
+											];
+
+											$rsp = $this->bpm->lanzarProceso(BPM_PROCESS_ID_PEDIDOS_NORMALES,$contract);
+											
+											if($rsp['status']){
+													echo("ok");
+											}else{
+													echo ($rsp['msj']);
+											}								
+
+									}else{
+
+											echo ("Error en generacion de Detalle Pedido Materiales");
+									}
+							}else{
+
+									echo("Error en generacion de Cabecera Pedido Materiales");
+							}	
+					}	
+			
+
 	}
 	// Elabora informe de Etapa hasta que se saque el total del contenido de batch origen
 	public function Finalizar()
@@ -237,14 +332,16 @@ class Etapa extends CI_Controller {
 			}else{
 				echo("ok");
 			}				
-	}		
+		}		
 	}
 	public function fraccionar()
 	{
 			$data['accion'] = 'Nuevo';
 			$data['etapa']= $this->Etapas->nuevo(5)->etapa; // igual que en contrato pedido
 			$data['fecha'] = date('Y-m-d');
-		//	$data['lang'] = lang_get('spanish',5);
+			//TODO: VER SI TRAER PRODUCTO POR ID BATCH CON ESTA FUNCION
+			//$data['producto'] = $this->Etapas->getRecursosOrigen($id, PRODUCTO)->recursos->recurso;
+			//	$data['lang'] = lang_get('spanish',5);
 			$data['establecimientos'] = $this->Establecimientos->listarTodo()->establecimientos->establecimiento;
 			$data['empaques'] = $this->Recipientes->listarEmpaques()->empaques->empaque;
 			$data['materias'] = $this->Materias->listar()->materias->materia;

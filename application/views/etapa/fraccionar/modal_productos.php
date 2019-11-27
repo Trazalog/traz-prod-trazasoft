@@ -23,7 +23,9 @@
   $(document).off('click', '.tabla_productos_nuevo').on('click', '.tabla_productos_nuevo',function(){
     estado = '<?php echo $etapa->estado;?>';
     producto = $(this).closest('tr').data('json');
-    document.getElementById('inputproductos').value = producto[0].titulo;
+    document.getElementById('inputproductos').value = producto[0].Descripcion;
+    
+    console.table(producto[0]);
     if(estado != 'En Curso')
     {
       ActualizaProducto(producto[0]);

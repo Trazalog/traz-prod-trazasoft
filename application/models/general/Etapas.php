@@ -258,7 +258,21 @@ class Etapas extends CI_Model
 			$array = $this->rest->callAPI("POST", $url, $arrayDatos);			
 			return json_decode($array['status']);
 		}
+		//TODO: BOORAR DEPRECADA
+		// Guarda fraccionamiento temp Etapa Fraccionamiento
+    function setFraccionamTemp($fraccionam){			
 
+			log_message('DEBUG', 'Etapas/setFraccionamTemp(fraccionam)-> '.json_encode($fraccionam)); 
+			$resource = '/_post_fraccionamiento_batch_req';	 	
+			$url = REST2.$resource;				 
+			$array = $this->rest->callAPI("POST", $url, $fraccionam);
+			return json_decode($array['code']);
+		}
+		// guarda Inicia etapa fraccionamiento
+		function guardarFraccionar($data){
+			echo("datos en model de iniciar fraccionado: ");
+			var_dump($data);
+		}
 
 
 }
