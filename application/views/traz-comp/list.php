@@ -1,16 +1,11 @@
-<div class="form-group">
-    <select class="select" name="item" class="form-control">
-        <?php 
-            foreach ($list as $key => $o) {
-                echo "<option value='$o->value' data-json='".json_encode($o)."'>$o->label</option>";
-            }
-        ?>
-    </select>
-</div>
+<div class="box box-primary">
+    <div class="box-body">
+        <div class="form-group">
+            <label for="">Selecionar:</label>
+            <?php 
+            echo select2('articulos', $listArt, 'barcode', 'arti_id');
+            ?>
 
-<script>
-$('.select').select2();
-$('.select').on('change', function() {
-    alert(this.value);
-});
-</script>
+        </div>
+    </div>
+</div>

@@ -29,9 +29,7 @@ $.widget.bridge('uibutton', $.ui.button);
 
        <script src="<?php echo base_url()?>lib/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
 
-       <script src="<?php echo base_url()?>lib/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-
-       <script src="<?php echo base_url()?>lib\plugins\select2\select2.min.js"></script>
+       <script src="<?php echo base_url()?>lib/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script> 
        <!-- AdminLTE App -->
        <script src="<?php echo base_url()?>lib/dist/js/adminlte.min.js"></script>
        <script type="text/javascript"
@@ -40,8 +38,9 @@ $.widget.bridge('uibutton', $.ui.button);
 
        <script src="<?php base_url();?>lib/plugins/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
       
-       <!-- Select 2 -->
-       <script src="<?php base_url();?>lib/plugins/select2/select2.min.js"></script>
+ 
+       <!-- Select2 -->
+       <script src="<?php echo base_url()?>lib/bower_components/select2/dist/js/select2.full.min.js"></script>
        <!-- <script src="https://code.jquery.com/jquery-migrate-3.0.0.min.js"></script> -->
        <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
        <!-- <script src="<?php echo base_url()?>lib/dist/js/pages/dashboard.js"></script> -->
