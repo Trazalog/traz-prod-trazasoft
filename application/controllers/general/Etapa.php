@@ -42,7 +42,7 @@ class Etapa extends CI_Controller {
 	}
 	// guarda el Inicio de una nueva etapa mas orden pedido y lanza pedido almac
 	public function guardar(){
-		
+		    log_message('DEBUG','C#ETAPA > guardar | #DATA-POST: '.json_encode($this->input->post()));
 		//////////// PARA CREAR EL NUEVO BATCH ///////////////////
 			$datosCab['lote_id'] = $this->input->post('lote');
 			$datosCab['arti_id'] = (string)$this->input->post('idprod');
