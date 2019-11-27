@@ -33,16 +33,16 @@ class Etapa extends CI_Controller {
 			$data['op'] = 	$data['etapa']->titulo;
 			$data['materias'] = $this->Materias->listar()->materias->materia; // listo
 			$data['lang'] = lang_get('spanish',5);
-			$data['tareas'] = $this->Tareas->listar()->tareas->tarea; 
-			$data['templates'] = $this->Templates->listar()->templates->template; 
+			$data['tareas'] = [];//$this->Tareas->listar()->tareas->tarea; 
+			$data['templates'] = [];//$this->Templates->listar()->templates->template; 
 			$data['establecimientos'] = $this->Establecimientos->listar($data['id'])->establecimientos->establecimiento; // listo
-			$data['recursosmateriales'] = $this->Recursos_Materiales->listar()->recursos->recurso;
+			$data['recursosmateriales'] = [];//;$this->Recursos_Materiales->listar()->recursos->recurso;
 			$data['rec_trabajo'] = $this->Recursos->obtenerXTipo('TRABAJO')['data'];
 			$this->load->view('etapa/abm', $data);
 	}
 	// guarda el Inicio de una nueva etapa mas orden pedido y lanza pedido almac
 	public function guardar(){
-		
+		    log_message('DEBUG','C#ETAPA > guardar | #DATA-POST: '.json_encode($this->input->post()));
 		//////////// PARA CREAR EL NUEVO BATCH ///////////////////
 			$datosCab['lote_id'] = $this->input->post('lote');
 			$datosCab['arti_id'] = (string)$this->input->post('idprod');
@@ -56,7 +56,10 @@ class Etapa extends CI_Controller {
 			$datosCab['usuario_app'] = userNick();
 			$datosCab['empr_id'] = (string)empresa();
 			$datosCab['forzar_agregar'] = "FALSE";
-			$datosCab['fec_vencimiento'] = "01-01-1899";				
+			$datosCab['fec_vencimiento'] = date('Y-m-d');		
+			$datosCab['recu_id'] = "0";		
+			$datosCab['tipo_recurso'] = "";		
+
 			$data['_post_lote'] = $datosCab;
 
 			// guardo recursos materiales (origen)
@@ -65,7 +68,12 @@ class Etapa extends CI_Controller {
 			//guarda batch nuevo (tabla lotes)
 			$respServ = $this->Etapas->SetNuevoBatch($data);
 			$batch_id	= $respServ->respuesta->resultado;
-		
+
+			if(!$batch_id){
+				log_message('DEBUG','Etapa/guardar #ERROR BATCH_ID NULO');
+				echo ("Error en creacion Batch");
+
+			}
 			// busca id recurso por id articulo
 			$recu_id = $this->Etapas->getRecursoId($datosCab['arti_id']);			
 			// guarda producto en tabla recurso_lotes			
@@ -184,9 +192,9 @@ class Etapa extends CI_Controller {
 				$this->load->view('etapa/fraccionar/fraccionar', $data);
 			}else{
 
-				$data['tareas'] = $this->Tareas->listar()->tareas->tarea; 
-				$data['templates'] = $this->Templates->listar()->templates->template; 
-				$data['recursosmateriales'] = $this->Recursos_Materiales->listar()->recursos->recurso;
+				$data['tareas'] = [];//$this->Tareas->listar()->tareas->tarea; 
+				$data['templates'] = [];//$this->Templates->listar()->templates->template; 
+				$data['recursosmateriales'] = [];//$this->Recursos_Materiales->listar()->recursos->recurso;
 				$data['rec_trabajo'] = $this->Recursos->obtenerXTipo('TRABAJO')['data'];
 				$this->load->view('etapa/abm', $data);
 			}

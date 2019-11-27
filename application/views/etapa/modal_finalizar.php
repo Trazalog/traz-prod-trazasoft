@@ -32,7 +32,7 @@
         <div class="col-md-5"></div>
       </div>
 
-      <input type="text" id="unificar">
+      <input class="hidden" type="text" id="unificar">
 
          <!-- Recursos de Trabajo -->
        <div class="row form-group" style="margin-top:20px">

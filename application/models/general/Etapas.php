@@ -75,46 +75,15 @@ class Etapas extends CI_Model
     }
     function buscar($id)
     {
-			
-        // $parametros["http"]["method"] = "GET";		 
-        // $param = stream_context_create($parametros);
-        // if ($id == 1)
-        // {
-        //     $resource = 'etapaeditar';	
-        // }
-        // if ($id == 3)
-        // {
-        //     $resource = 'fraccioneditar';	
-        // }
-        // $url = REST.$resource;
-        // $array = file_get_contents($url, false, $param);
-				// return json_decode($array);
-				// $parametros["http"]["method"] = "GET";
-				// $parametros["http"]["header"] = "Accept: application/json";			 
-        // $param = stream_context_create($parametros);
-        // //if ($id == 1)
-        // //{
-        //     $resource = '/lote/';	
-        // //}
-        // // if ($id == 3)
-        // // {
-        // //     $resource = 'fraccioneditar';	
-				// // }			
-        // $url = REST3.$resource.$id;
-				// $array = file_get_contents($url, false, $param);
+		if(!$id){  log_message('DEBUG','Etapas/buscar #ERROR | BATCH_ID NULO'); return;}
 
-				//return json_decode($array);
-				log_message('DEBUG', 'Etapas/buscar(batch_id)-> '.$id);
-				$resource = '/lote/';	 	
-				$url = REST3.$resource.$id;
-				$array = $this->rest->callAPI("GET",$url); 
-				$resp =  json_decode($array['data']);					
-				// echo("info de etapa: ");
-				// var_dump($resp);
-				return $resp;			
-
-
-
+		log_message('DEBUG', 'Etapas/buscar(batch_id)-> '.$id);
+		$resource = '/lote/';	 	
+		$url = REST3.$resource.$id;
+		$array = $this->rest->callAPI("GET",$url); 
+		$resp =  json_decode($array['data']);					
+		
+		return $resp;			
     }
     function nuevo($opcion)
     {      
@@ -179,9 +148,10 @@ class Etapas extends CI_Model
 				$arrayBatch = json_encode($data);
 				log_message('DEBUG', 'Etapas/SetNuevoBatch(datos)-> '.$arrayBatch);
 				$resource = '/lote';	 	
-        $url = REST4.$resource;
+                $url = REST4.$resource;
 				$array = $this->rest->callAPI("POST",$url,  $data); 
 				wso2Msj($array);
+			
 				return json_decode($array['data']);
 		}
 		// Guarda cabecera de Nota de pedido
@@ -247,7 +217,8 @@ class Etapas extends CI_Model
 
 			$resource = '/lote/list_batch_req';	 	
 			$url = REST4.$resource;				 
-			$array = $this->rest->callAPI("POST", $url, $arrayDatos);			
+			$array = $this->rest->callAPI("POST", $url, $arrayDatos);	
+			wso2Msj($array);		
 			return json_decode($array['status']);
 		}
 
