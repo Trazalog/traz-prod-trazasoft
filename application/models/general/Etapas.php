@@ -217,7 +217,8 @@ class Etapas extends CI_Model
 
 			$resource = '/lote/list_batch_req';	 	
 			$url = REST4.$resource;				 
-			$array = $this->rest->callAPI("POST", $url, $arrayDatos);			
+			$array = $this->rest->callAPI("POST", $url, $arrayDatos);	
+			wso2Msj($array);		
 			return json_decode($array['status']);
 		}
 
