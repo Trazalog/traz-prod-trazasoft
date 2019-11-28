@@ -21,8 +21,8 @@ class Tareas extends CI_Model
             $aux->caseId = $o['caseId'];
             $aux->processId = $o['processId'];
             $aux->nombreTarea = $o['name'];
-            $aux->nombreProceso =  BPM_PROCESS[$o['processId']]['nombre'];
-            $aux->color =  BPM_PROCESS[$o['processId']]['color'];
+            $aux->nombreProceso =  json_decode(BPM_PROCESS,true)[$o['processId']]['nombre'];
+            $aux->color =  json_decode(BPM_PROCESS,true)[$o['processId']]['color'];
             $aux->descripcion = 'Esto es una Descripcion de la Tarea...<p>Esto es un texto de la solcitud de servicio que puede ser muy larga</p><span class="label label-danger">Urgente</span> <span class="label label-primary">#PonganseLasPilas</span>';
             $aux->fec_vencimiento = 'dd/mm/aaaa';
             $aux->usuarioAsignado = 'Nombre Apellido';
