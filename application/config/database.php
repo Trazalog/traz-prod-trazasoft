@@ -77,7 +77,7 @@ $db['default'] = array(
     'hostname' => 'dev-trazalog.com.ar',
     'username' => 'arbolado',
     'password' => 'password',
-    'database' => 'tools',
+    'database' => 'tools_test',
     'dbdriver' => 'pdo', //mysqli
     'dbprefix' => '',
     'pconnect' => false,
@@ -93,5 +93,5 @@ $db['default'] = array(
     'failover' => array(),
     'save_queries' => true,
     'port' => '5432',
-    'dsn' => 'pgsql:host=dev-trazalog.com.ar;port=5432;dbname=tools'
+    'dsn' => 'pgsql:host=dev-trazalog.com.ar;port=5432;dbname=tools_test'
 );
