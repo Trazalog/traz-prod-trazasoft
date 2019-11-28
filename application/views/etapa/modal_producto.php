@@ -23,7 +23,7 @@
   <script>
  $(document).off('click','.tablaproductos_nuevo').on('click', '.tablaproductos_nuevo', function () {
    var producto = $(this).closest('tr').data('json');
-   console.table(producto[0]);
+   
 
    document.getElementById('inputproducto').value = producto[0].Descripcion;
    document.getElementById('idproducto').value = producto[0].id;
