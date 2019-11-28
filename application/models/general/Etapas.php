@@ -133,12 +133,6 @@ class Etapas extends CI_Model
 				$array = $this->rest->callAPI("GET",$url); 				
 				wso2Msj($array);
 				return json_decode($array['data']);
-
-
-
-
-
-
 		}
 		// devuelve id recurso por id articulo
 		function getRecursoId($arti_id){
@@ -268,6 +262,7 @@ class Etapas extends CI_Model
 			$array = $this->rest->callAPI("POST", $url, $fraccionam);
 			return json_decode($array['code']);
 		}
+		//TODO: FUNCION DEPRECADA ORIGINAL DE JUDAS
 		// guarda Inicia etapa fraccionamiento
 		function guardarFraccionar($data){
 			echo("datos en model de iniciar fraccionado: ");

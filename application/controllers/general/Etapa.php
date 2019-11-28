@@ -43,111 +43,115 @@ class Etapa extends CI_Controller {
 	}
 	// guarda el Inicio de una nueva etapa mas orden pedido y lanza pedido almac
 	public function guardar(){
-		
-		$inp= $this->input->post();
-
+		log_message('DEBUG','C#ETAPA > guardar | #DATA-POST: '.json_encode($this->input->post()));
 		//////////// PARA CREAR EL NUEVO BATCH ///////////////////
-			$datosCab['lote_id'] = $this->input->post('lote');
-			$datosCab['arti_id'] = (string)$this->input->post('idprod');
-			$datosCab['prov_id'] = (string)PROVEEDOR_INTERNO;
-			$datosCab['batch_id_padre'] = (string)0;
-			$datosCab['cantidad'] = (string)$this->input->post('cantidad');
-			$datosCab['cantidad_padre'] = (string)0;
-			$datosCab['num_orden_prod'] = $this->input->post('op');
-			$datosCab['reci_id'] = $this->input->post('recipiente');
-			$datosCab['etap_id'] = $this->input->post('idetapa');
-			$datosCab['usuario_app'] = userNick();
-			$datosCab['empr_id'] = (string)empresa();
-			$datosCab['forzar_agregar'] = "FALSE";
-			$datosCab['fec_vencimiento'] = "01-01-1899";				
-			$data['_post_lote'] = $datosCab;
+		$datosCab['lote_id'] = $this->input->post('lote');
+		$datosCab['arti_id'] = (string)$this->input->post('idprod');
+		$datosCab['prov_id'] = (string)PROVEEDOR_INTERNO;
+		$datosCab['batch_id_padre'] = (string)0;
+		$datosCab['cantidad'] = (string)$this->input->post('cantidad');
+		$datosCab['cantidad_padre'] = (string)0;
+		$datosCab['num_orden_prod'] = $this->input->post('op');
+		$datosCab['reci_id'] = $this->input->post('recipiente');
+		$datosCab['etap_id'] = $this->input->post('idetapa');
+		$datosCab['usuario_app'] = userNick();
+		$datosCab['empr_id'] = (string)empresa();
+		$datosCab['forzar_agregar'] = "FALSE";
+		$datosCab['fec_vencimiento'] = date('Y-m-d');		
+		$datosCab['recu_id'] = "0";		
+		$datosCab['tipo_recurso'] = "";		
 
-			// guardo recursos materiales (origen)
-			$materia = $this->input->post('materia');
-			$productos = $this->input->post('productos');
+		$data['_post_lote'] = $datosCab;
 
-			//guarda batch nuevo (tabla lotes)
-			$respServ = $this->Etapas->SetNuevoBatch($data);
-			$batch_id	= $respServ->respuesta->resultado;
+		// guardo recursos materiales (origen)
+		$materia = $this->input->post('materia');
 		
-			// busca id recurso por id articulo
-			$recu_id = $this->Etapas->getRecursoId($datosCab['arti_id']);			
-			// guarda producto en tabla recurso_lotes			
-			$respRecurso = $this->Etapas->setRecursosLotesProd($batch_id, $recu_id, $datosCab['cantidad']);	
-				
-			// guarda articulos(id de recurso en tabla recursos) origen en tabla recursos_lotes
-			$x = 0;
-			foreach($materia as $id => $cantidad)	{
-							
-					if($cantidad !== ""){	
-							$recurso_id = $this->Etapas->getRecursoId($id);
-							$detArt['batch_id'] = (string)$batch_id;
-							$detArt['recu_id'] = (string)$recurso_id;
-							$detArt['usuario'] = userNick();
-							$detArt['empr_id'] = (string)empresa();
-							$detArt['cantidad'] = $cantidad;
-							$detArt['tipo'] = MATERIA_PRIMA;
-							$detaArtPos['_post_recurso'][$x]=(object) $detArt;
-							$x++;					
-					}
-			}
-					
-			// array para guardar
-			$arrayRecursos['_post_recurso_lote_batch_req'] = $detaArtPos;		
-			$respArtic = $this->Etapas->setRecursosLotesMat($arrayRecursos);
-			
+		//guarda batch nuevo (tabla lotes)
+		$respServ = $this->Etapas->SetNuevoBatch($data);
+		$batch_id	= $respServ->respuesta->resultado;
 
-			if(($batch_id != "BATCH_NO_CREADO" )  || ($batch_id != "RECI_NO_VACIO")){
+		if(!$batch_id){
+			log_message('DEBUG','Etapa/guardar #ERROR BATCH_ID NULO');
+			echo ("Error en creacion Batch");
 
-				////////////// INSERTAR CABECERA NOTA PEDIDO   ///
-					$arrayPost['fecha'] = $this->input->post('fecha');		
-					$arrayPost['empr_id'] = (string)empresa();
-					$arrayPost['batch_id'] = $batch_id;		
-					$cab['_post_notapedido'] = $arrayPost;					
-					$response = $this->Etapas->setCabeceraNP($cab);
-					$pema_id = $response->nota_id->pedido_id;
+		}
+		// busca id recurso por id articulo
+		$recu_id = $this->Etapas->getRecursoId($datosCab['arti_id']);			
+		// guarda producto en tabla recurso_lotes			
+		$respRecurso = $this->Etapas->setRecursosLotesProd($batch_id, $recu_id, $datosCab['cantidad']);									
 
-				//////////// PARA CREAR EL BATCH PARA EL BATCH REQUEST //////////					
-					if($pema_id){				
-							$i = 0;	
-							foreach($materia as $id => $cantidad)	{
-							
-								if($cantidad !== ""){									
-									$det['pema_id'] = $pema_id;
-									$det['arti_id'] = (string)$id;
-									$det['cantidad'] = $cantidad;
-									$detalle['_post_notapedido_detalle'][$i]=(object) $det;
-									$i++;					
-								}
+		// guarda articulos(id de recurso en tabala recursos) origen en tabla recursos_lotes
+		$x = 0;
+		foreach($materia as $id => $cantidad)	{
+						
+				if($cantidad !== ""){	
+						$recurso_id = $this->Etapas->getRecursoId($id);
+						$detArt['batch_id'] = (string)$batch_id;
+						$detArt['recu_id'] = (string)$recurso_id;
+						$detArt['usuario'] = userNick();
+						$detArt['empr_id'] = (string)empresa();
+						$detArt['cantidad'] = $cantidad;
+						$detArt['tipo'] = MATERIA_PRIMA;
+						$detaArtPos['_post_recurso'][$x]=(object) $detArt;
+						$x++;					
+				}
+		}
+		// array para guardar
+		$arrayRecursos['_post_recurso_lote_batch_req'] = $detaArtPos;		
+		$respArtic = $this->Etapas->setRecursosLotesMat($arrayRecursos);
+		
+
+		if(($batch_id != "BATCH_NO_CREADO" )  || ($batch_id != "RECI_NO_VACIO")){
+
+			////////////// INSERTAR CABECERA NOTA PEDIDO   ///
+				$arrayPost['fecha'] = $this->input->post('fecha');		
+				$arrayPost['empr_id'] = (string)empresa();
+				$arrayPost['batch_id'] = $batch_id;		
+				$cab['_post_notapedido'] = $arrayPost;					
+				$response = $this->Etapas->setCabeceraNP($cab);
+				$pema_id = $response->nota_id->pedido_id;
+
+			//////////// PARA CREAR EL BATCH PARA EL BATCH REQUEST //////////					
+				if($pema_id){				
+						$i = 0;	
+						foreach($materia as $id => $cantidad)	{
+						
+							if($cantidad !== ""){									
+								$det['pema_id'] = $pema_id;
+								$det['arti_id'] = (string)$id;
+								$det['cantidad'] = $cantidad;
+								$detalle['_post_notapedido_detalle'][$i]=(object) $det;
+								$i++;					
 							}
-							$arrayDeta['_post_notapedido_detalle_batch_req'] = $detalle;							
-							$respDetalle = $this->Etapas->setDetaNP($arrayDeta);
-							
-							if($respDetalle < 300){
-									/////// LANZAR EL PROCESO DE BONITA DE PEDIDO 								
-									$contract = [
-										'pIdPedidoMaterial' => $pema_id,
-									];
+						}
+						$arrayDeta['_post_notapedido_detalle_batch_req'] = $detalle;							
+						$respDetalle = $this->Etapas->setDetaNP($arrayDeta);
+						
+						if($respDetalle < 300){
+								/////// LANZAR EL PROCESO DE BONITA DE PEDIDO 								
+								$contract = [
+									'pIdPedidoMaterial' => $pema_id,
+								];
 
-									$rsp = $this->bpm->lanzarProceso(BPM_PROCESS_ID_PEDIDOS_NORMALES,$contract);
-									
-									if($rsp['status']){
-											echo("ok");
-									}else{
-											echo ($rsp['msj']);
-									}								
+								$rsp = $this->bpm->lanzarProceso(BPM_PROCESS_ID_PEDIDOS_NORMALES,$contract);
+								
+								if($rsp['status']){
+										echo("ok");
+								}else{
+										echo ($rsp['msj']);
+								}								
 
-							}else{
+						}else{
 
-									echo ("Error en generacion de Detalle Pedido Materiales");
-							}
-					}else{
+								echo ("Error en generacion de Detalle Pedido Materiales");
+						}
+				}else{
 
-							echo("Error en generacion de Cabecera Pedido Materiales");
-					}	
-			}else{
-				echo ("Error en creacion Batch");
-			}		
+						echo("Error en generacion de Cabecera Pedido Materiales");
+				}	
+		}else{
+			echo ("Error en creacion Batch");
+		}		
 	}
 	// trae info para informe de Etapa
 	public function editar()
@@ -334,6 +338,7 @@ class Etapa extends CI_Controller {
 			}				
 		}		
 	}
+	//TODO: FUNCION DEPRECADA ORIGINAL DE JUDAS
 	public function fraccionar()
 	{
 			$data['accion'] = 'Nuevo';
