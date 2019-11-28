@@ -205,18 +205,19 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
       <div class="col-md-2 col-xs-6">
         <?php if($etapa->estado != 'En Curso')
               {
-                echo '<button class="btn btn-primary btn-block" onclick="guardar()">Guardar</button>';
+                // echo '<button class="btn btn-primary btn-block" onclick="guardar()">Guardar</button>';
+                echo '<button class="btn btn-primary btn-block" onclick="guardar()">Iniciar</button>';
               }
         ?>
       </div>
       <div class="col-md-2 col-xs-6">
-        <?php if($etapa->estado == 'planificado')
-              {
-                echo '<button class="btn btn-primary btn-block" onclick="valida()">Iniciar Etapa</button>';
-              }else if($etapa->estado == 'En Curso')
-              {
-                echo '<button class="btn btn-primary btn-block" id="btnfinalizar" onclick="finalizar()">Finalizar Etapa</button>';
-              }
+        <?php //if($etapa->estado == 'planificado')
+              //{
+              //  echo '<button class="btn btn-primary btn-block" onclick="valida()">Iniciar Etapa</button>';
+              //}else if($etapa->estado == 'En Curso')
+              //{
+              //  echo '<button class="btn btn-primary btn-block" id="btnfinalizar" onclick="finalizar()">Finalizar Etapa</button>';
+              //}
         ?>
       </div>
     </div>
