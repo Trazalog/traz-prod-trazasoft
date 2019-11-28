@@ -146,9 +146,11 @@ class Etapa extends CI_Controller {
 								];
 
 								$rsp = $this->bpm->lanzarProceso(BPM_PROCESS_ID_PEDIDOS_NORMALES,$contract);
-								
+							
+								$this->load->model(ALM.'Notapedidos');
 								if($rsp['status']){
-										echo("ok");
+									echo("ok");
+									$this->Notapedidos->setCaseId($pema_id, $rsp['data']['caseId']);
 								}else{
 										echo ($rsp['msj']);
 								}								
