@@ -7,7 +7,7 @@
         <div class="row">
             <input type="hidden" id="accioncamion">
             <div class="col-md-6 col-xs-12">
-                <div id="cargacamion" onclick="cargacamion()">
+                <div id="cargacamion" onclick="cargacamion();">
                     <img src="<?php echo base_url('icon/truck.png'); ?>" alt="Smiley face" height="42" width="42">
                     <label for="">CARGA</label>
                 </div>
@@ -55,20 +55,20 @@ foreach ($establecimientos as $fila) {
             </div>
             <div class="row" style="margin-top:40px">
                 <div class="col-md-1 col-xs-12">
-                    <label class="form-label btn-cargar">Proveedor*:</label>
+                    <label class="form-label tag-descarga">Proveedor*:</label>
                 </div>
-                <div class="col-md-6 col-xs-12">
-                    <input list="proveedores" class="form-control btn-cargar" id="proveedor" name="proveedor"
+                <div class="col-md-3 col-xs-12">
+                    <input list="proveedores" class="form-control tag-descarga" id="proveedor" name="proveedor"
                         autocomplete="off">
                     <datalist id="proveedores">
                         <?php foreach ($proveedores as $fila) {
-    echo "<option data-json='" . json_encode($fila) . "' value='" . $fila->id . "'>" . $fila->titulo . "</option>";
-}
-?>
+                        echo "<option data-json='" . json_encode($fila) . "' value='" . $fila->id . "'>" . $fila->titulo . "</option>";
+                    }
+                    ?>
                     </datalist>
                 </div>
                 <div class="col-md-5 col-xs-12"><input type="text" disabled id="nombreproveedor"
-                        class="form-control btn-cargar">
+                        class="form-control tag-descarga">
                 </div>
             </div>
         </form>
@@ -80,7 +80,26 @@ foreach ($establecimientos as $fila) {
     </div>
     <div class="box-body">
         <form id="frm-camion">
-            <div class="row" style="margin-top:40px">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Transportista: </label>
+                        <select class="form-control select select2" id="transportista" name="cuit">
+                            <option disabled selected>Seleccionar</option>
+                            <?php 
+                            
+                                foreach ($transportistas as $o) {
+                                    
+                                    echo "<option value='$o->cuit'>$o->razon_social</option>";
+
+                                }
+                            
+                            ?>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row" >
                 <div class="col-md-1 col-xs-12"><label class="form-label">Patente*:</label></div>
                 <div class="col-md-2 col-xs-12"><input type="text" class="form-control" id="patente" name="patente">
                 </div>
@@ -107,42 +126,46 @@ foreach ($establecimientos as $fila) {
         </form>
 
         <hr>
-        <button id="add-camion" class="btn btn-primary" style="float:right" onclick="addCamion()">Agregar</button>
+        <button id="add-camion" class="btn btn-primary btn-sm" style="float:right" onclick="addCamion()"><i
+                class="fa fa-plus"></i> Agregar</button>
     </div>
 </div>
-<div class="box" id="boxproductos">
-    <div class="box-header">
-        <h4>Datos Productos entrantes</h4>
-    </div>
-    <div class="box-body">
-        <table class="table table-striped">
-            <thead>
-                <th>Codigo de Lote</th>
-                <th>Recipiente</th>
-            </thead>
-            <tbody id="lotes-camion">
 
-            </tbody>
-        </table>
+<div class="row">
+    <div class="col-md-6">
+        <?php 
+            $this->load->view('entrada_movilidad/comp/origen');
+        ?>
     </div>
-
-    <!-- /.box-body -->
-    <div class="box-footer">
-        <div class="row">
-            <div class="col-md-10 col-xs-6"></div>
-            <div class="col-md-2 col-xs-6">
-                <button class="btn btn-success btn-block" onclick="guardarDecarga()">Guardar</button>
-            </div>
-        </div>
-
+    <div class="col-md-6">
+        <?php
+        $this->load->view('entrada_movilidad/comp/destino');
+        ?>
     </div>
-    <!-- /.box-footer-->
 </div>
+
+<?php 
+    $this->load->view('entrada_movilidad/comp/tabla_descarga');
+?>
 
 <script>
+
+$('.select').select2();
+$('#frm-camion').on('reset',function(){
+    $(this).find('.select').val(null).trigger('change');
+
+});
+
+function reset() {
+    $('#frm-origen')[0].reset();
+    $('#frm-destino')[0].reset();
+    $('.inp-descarga').attr('readonly', false);
+    $('#lotes').empty();
+}
 var recipienteSelect = null;
 $('#patente').keyup(function(e) {
-    $("#lotes-camion").empty();
+    if($('#accioncamion').val() != 'descarga') return;
+    reset();
     if (e.keyCode === 13) {
         console.log('Obtener Lotes Patentes');
 
@@ -157,52 +180,15 @@ $('#patente').keyup(function(e) {
                     alert('No existen Lotes Asociados');
                     return;
                 }
+                console.log(rsp);
 
-                $("#lotes-camion").empty();
+                $("#codigos").empty();
                 rsp.data.forEach(function(e) {
-                    $("#lotes-camion").append(
-                        `<tr data-json='${JSON.stringify(e)}'>
-                            <td class="lote">${e.lote_id}</td>
-                            <td><select id="${e.batch_id}" class="recipiente" data-unificar="false"><option value="false"> - Seleccionar - </option></select></td>
-                        </tr>`
+                    $("#codigos").append(
+                        `<option data-json='${JSON.stringify(e)}' value="${e.lote_id}">${e.establecimiento}</option>`
                     );
                 });
-                if (recipientes == null) return;
-                
-                //Comparar si el recipiente ya fue elegido para otro Lote || Si esta en estado NO_VACIO
-                $('.recipiente').on('change', function(){
 
-                    recipienteSelect = this;
-
-                    var json = JSON.parse($(this).find('option:selected').attr('data-json'));
-                    
-                    if(json.estado != 'VACIO'){
-                        $('#unificar_lotes').modal('show');
-                        return;
-                    }
-
-                    const select  = this.id;
-                    const e = this.value;
-                    var duplicado = false;
-
-                    $('.recipiente').find('option:selected').each(function(){
-                      
-                        if(select != $(this).parent().attr('id')){
-                           if(e == this.value){
-                               duplicado = true;    
-                           }
-                        }
-                    });
-
-                    if(duplicado){
-                        $('#unificar_lotes').modal('show');
-                    }
-                });
-
-                // Rellenar Select Recipientes
-                recipientes.forEach(e => {
-                    $('select.recipiente').append(`<option value="${e.reci_id}" data-json='${JSON.stringify(e)}'>${e.nombre}</option>`);
-                });
             },
             error: function(rsp) {
                 alert('No hay Lotes Asociados');
@@ -215,39 +201,17 @@ $('#patente').keyup(function(e) {
 });
 
 
+// $('#establecimientos').on('change', function() {
+//     obtenerRecipientes();
+// });
 
-$('#establecimientos').on('change', function() {
-    obtenerRecipientes();
-});
 
-var recipientes = null;
-
-function obtenerRecipientes() {
-    console.log('Obtener Recipientes');
-    var establecimiento = $('#establecimientos').val();
-    $.ajax({
-        type: 'POST',
-        dataType: 'JSON',
-        url: 'index.php/general/Recipiente/obtener?tipo=DEPOSITO&estado=TODOS',
-        data: {
-            establecimiento
-        },
-        success: function(rsp) {
-        
-            recipientes = rsp.data;
-        },
-        error: function(rsp) {
-            alert('Error: ' + rsp.msj);
-            console.log(rsp.msj);
-        }
-    });
-}
 
 function unificarLote() {
-    
+
     var rese = $(recipienteSelect).val();
     $('.recipiente').each(function() {
-        if(this.value == rese) this.dataset.unificar = true; 
+        if (this.value == rese) this.dataset.unificar = true;
     });
 
 }
@@ -265,7 +229,7 @@ function guardarDecarga() {
     });
 
     array = JSON.stringify(array);
-    
+
     wo();
     $.ajax({
         type: 'POST',
@@ -288,12 +252,14 @@ function guardarDecarga() {
     });
 }
 
-function addCamion() {
+function addCamion(msj = true) {
     console.log('addCamion');
 
     var frmCamion = new FormData($('#frm-camion')[0]);
     var frmInfo = new FormData($('#frm-info')[0]);
     var dataForm = mergeFD(frmInfo, frmCamion);
+    dataForm.append('estado','EN CURSO');
+    showFD(dataForm);
     wo();
     $.ajax({
         type: 'POST',
@@ -307,13 +273,13 @@ function addCamion() {
             if (rsp.status) {
                 $('#frm-camion')[0].reset();
                 $('#frm-info')[0].reset();
-                alert('Datos guardados con Éxito');
+                if(msj) alert('Datos Guardados con Éxito');
             } else {
-                alert('Fallo el Guardado de Datos');
+                alert('Fallo al Guardar Datos del Camión');
             }
         },
         error: function(rsp) {
-            console.log(rsp.msj);
+              alert('Error al Guardar Datos del Camion');
         },
         complete: function() {
             wc();
@@ -543,9 +509,10 @@ function cargacamion() {
     document.getElementById('cargacamion').style.borderColor = "blue";
     document.getElementById('descargacamion').style.borderColor = "white";
     document.getElementById('accioncamion').value = "carga";
-    document.getElementById('boxproductos').hidden = true;
-    $('#add-camion').show();
-    $('.btn-cargar').hide();
+    //document.getElementById('boxproductos').hidden = true;
+     $('#add-camion').show();
+     //$('.btn-cargar').hide();
+    $('.tag-descarga').hide();
 }
 
 function descargacamion() {
@@ -553,9 +520,10 @@ function descargacamion() {
     document.getElementById('cargacamion').style.borderColor = "white";
     document.getElementById('descargacamion').style.borderColor = "blue";
     document.getElementById('accioncamion').value = "descarga";
-    document.getElementById('boxproductos').hidden = false;
-    $('#add-camion').hide();
-    $('.btn-cargar').show();
+   // document.getElementById('boxproductos').hidden = false;
+     $('#add-camion').hide();
+    //$('.btn-cargar').show();
+    $('.tag-descarga').show();
 }
 
 function actualizaNeto() {

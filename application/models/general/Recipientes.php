@@ -73,9 +73,9 @@ class Recipientes extends CI_Model
         return $rsp;
     }
 
-    public function obtener($tipo = 'TODOS', $estado = 'TODOS')
+    public function obtener($tipo = 'TODOS', $estado = 'TODOS', $establecimiento = 0)
     {
-        $url  = RESTPT . "recipientes/tipo/$tipo/estado/$estado";
+        $url  = RESTPT . "recipientes/tipo/$tipo/estado/$estado/establecimiento/0";
         $rsp = $this->rest->callAPI('GET' , $url);
         $rsp['data'] = json_decode($rsp['data'])->recipientes->recipiente;
         return $rsp;

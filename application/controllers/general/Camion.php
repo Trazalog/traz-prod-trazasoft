@@ -11,6 +11,7 @@ class Camion extends CI_Controller
         $this->load->model('general/Camiones');
         $this->load->model('general/Materias');
         $this->load->model('general/Recipientes');
+        $this->load->model('general/Transportistas');
     }
 
     public function cargarCamion()
@@ -55,6 +56,7 @@ class Camion extends CI_Controller
         $data['proveedores'] = $this->Camiones->listarProveedores()->proveedores->proveedor;
         $data['materias'] = $this->Materias->listar()->materias->materia;
         $data['empaques'] = $this->Recipientes->listarEmpaques()->empaques->empaque;
+        $data['transportistas'] = $this->Transportistas->obtener()['data'];
         $this->load->view('camion/entrada_camion', $data);
     }
     public function GuardarEntrada()
@@ -68,6 +70,7 @@ class Camion extends CI_Controller
 	public function setEntrada()
 	{
         $this->load->model('general/Entradas');
+        
 		$data = $this->input->post();
         $rsp = $this->Entradas->guardar($data);
         echo json_encode($rsp);
@@ -75,8 +78,9 @@ class Camion extends CI_Controller
     
     public function guardarDescarga()
     {
-        $data = json_decode($this->input->post('array'));
+         $data = $this->input->post('array');
         $rsp = $this->Camiones->guardarDescarga($data);
         echo json_encode($rsp);
     }
+    
 }

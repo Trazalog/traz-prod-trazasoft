@@ -84,16 +84,26 @@ defined('EXIT_DATABASE')       OR define('EXIT_DATABASE', 8); // database error
 defined('EXIT__AUTO_MIN')      OR define('EXIT__AUTO_MIN', 9); // lowest automatically-assigned error code
 defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
 
-#BONITA SOFT
-define('BONITA_URL', 'http://cloudtrazalog.com:8080/bonita/');  
-define('BPM_ADMIN_USER', 'almacen.tools');
-define('BPM_ADMIN_PASS', 'bpm');
-define('BPM_USER_PASS', 'bpm');
-
-#COMPONENTE BPM
+#TRAZ-COMP-BPM
 define('BPM', 'traz-comp-bpm/');
 
-// ERRORES DE BONITA
+define('BONITA_URL', 'http://www.trazalog.com.ar:8080/bonita/');
+
+define('BPM_PROCESS_ID_PEDIDOS_NORMALES', '6833268789089291878');
+
+define('BPM_PROCESS_ID_PEDIDOS_EXTRAORDINARIOS', '6013058915384903051');
+
+define('BPM_PROCESS', json_encode(array(
+    '8803232493891311406' => ['nombre' => 'Ped. Materiales', 'color' => '#F39C12'],
+    '6013058915384903051' => ['nombre' => 'Ped. Materiales Ext', 'color' => '#F39C12'],
+    '7503443566840192735' => ['nombre' => 'Proc. Mantenimiento', 'color' => '#00A65A'],
+)));
+
+define('BPM_ADMIN_USER', 'supervisor1');
+define('BPM_ADMIN_PASS', 'bpm');
+define('BPM_USER_PASS', '123');
+
+#ERRORES DE BONITA
 define('ASP_100', 'Fallo Conexión BPM');
 define('ASP_101', 'Error al Inciar Proceso');
 define('ASP_102', 'Error al Tomar Tarea');
@@ -114,8 +124,6 @@ define('ASP_115', 'Error al Leer Variable');
 
 #COMPONENTE ALMACENES
 define('ALM', 'traz-comp-almacen/');
-define('BPM_PROCESS_ID_PEDIDOS_NORMALES', '6352939331165329370'); 
-define('BPM_PROCESS_ID_PEDIDOS_EXTRAORDINARIOS', '7321139677245257050');
 define('viewOT', false);
 
 #COMPONENTE FORMULARIOS
@@ -128,11 +136,10 @@ define('TSK', 'traz-comp-tareas/');
 #REST
 define('TAREAS_ASIGNAR', 'traz-comp-tareasestandar/asignar');
 
-//define('REST', 'http://dev-trazalog.com.ar:8280/services/ProduccionDataService/');
-define('REST_TDS', 'http://dev-trazalog.com.ar:8280/services/TrazabilidadDataService/');
-define('REST_TDS_TEST', 'http://pc-pc:8280/services/TrazabilidadDataService/');
-define('RESTPT','http://dev-trazalog.com.ar:8280/services/produccionTest/');
-define('PROVEEDOR_INTERNO', 1000);
+// define('REST', 'http://dev-trazalog.com.ar:8280/services/ProduccionDataService/');
+// define('RESTPT','http://dev-trazalog.com.ar:8280/services/produccionTest/');
+// define('REST_TDS', 'http://dev-trazalog.com.ar:8280/services/TrazabilidadDataService/');
+
 // define('REST2', 'http://dev-trazalog.com.ar:8280/services/ProduccionDataService');
 // define('REST3', 'http://dev-trazalog.com.ar:8280/services/produccionTest');
 // define('REST4', 'http://dev-trazalog.com.ar:8280/services/TrazabilidadDataService');
@@ -143,20 +150,6 @@ define('REST3', 'http://pc-pc:8280/services/produccionTest');
 define('REST4', 'http://pc-pc:8280/services/TrazabilidadDataService');
 
 
-
-# >> Proyecto
-# Default View
-define('DEFAULT_VIEW', ALM.'Articulo');
-
-#TRAZASOFT
-#Deposito que contienen todos los reci_id que estan en transporte
-define('DEPOSITO_TRANSPORTE', 1000);
-define('ESTABLECIMIENTO_TRANSPORTE', 1000);
-
-#ID DE ETAPA
-define('ETAPA_TRANSPORTE', 1000);
-define('ETAPA_DEPOSITO', 2000);
-
 //TODO:AGREGAR AL CONSTANT ORIGINAL
 #RECURSOS_LOTES
 define('MATERIA_PRIMA', 'MATERIA_PRIMA');
@@ -166,3 +159,25 @@ define('RECURSO_HUMANO', 'HUMANO');
 define('RECURSO_CONSUMO', 'CONSUMO');
 
 
+
+# >> Proyecto
+# Default View
+define('DEFAULT_VIEW', 'Test');
+
+#TRAZASOFT
+define('PROVEEDOR_INTERNO', 1000);
+
+#Deposito que contienen todos los reci_id que estan en transporte
+define('DEPOSITO_TRANSPORTE', 1000);
+define('ESTABLECIMIENTO_TRANSPORTE', 1000);
+
+#ID DE ETAPA
+define('ETAPA_TRANSPORTE', 1000);
+define('ETAPA_DEPOSITO', 2000);
+
+#RECURSOS_LOTES
+// define('MATERIA_PRIMA', 'MATERIA_PRIMA');
+// define('PRODUCTO', 'PRODUCTO');
+// define('EQUIPO', 'EQUIPO');
+// define('RECURSO_HUMANO', 'HUMANO');
+// define('RECURSO_CONSUMO', 'CONSUMO');

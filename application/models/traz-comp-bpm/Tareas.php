@@ -16,21 +16,23 @@ class Tareas extends CI_Model
         $array = [];
 
         foreach ($data as $o) {
-            $aux = [
-                'taskId'=>$o['id'],
-                'caseId'=>$o['caseId'],
-                'processId'=>$o['processId'],
-                'nombreTarea'=>$o['name'],
-                'nombreProceso'=>'Nombre de Proceso',
-                'descripcion'=>'Esto es una Descripcion de la Tarea...<p>Esto es un texto de la solcitud de servicio que puede ser muy larga</p><span class="label label-danger">Urgente</span> <span class="label label-primary">#PonganseLasPilas</span>',
-                'fec_vencimiento'=>'dd/mm/aaaa',
-                'usuarioAsignado'=>'Nombre Apellido',
-                'idUsuarioAsignado'=>$o['assigned_id'],
-                'fec_asignacion'=>$o['assigned_date'],
-                'prioridad'=>$o['priority']
-            ];
+            $aux = new StdClass();
+            $aux->taskId = $o['id'];
+            $aux->caseId = $o['caseId'];
+            $aux->processId = $o['processId'];
+            $aux->nombreTarea = $o['name'];
+            $aux->nombreProceso =  json_decode(BPM_PROCESS,true)[$o['processId']]['nombre'];
+            $aux->color =  json_decode(BPM_PROCESS,true)[$o['processId']]['color'];
+            $aux->descripcion = 'Esto es una Descripcion de la Tarea...<p>Esto es un texto de la solcitud de servicio que puede ser muy larga</p><span class="label label-danger">Urgente</span> <span class="label label-primary">#PonganseLasPilas</span>';
+            $aux->fec_vencimiento = 'dd/mm/aaaa';
+            $aux->usuarioAsignado = 'Nombre Apellido';
+            $aux->idUsuarioAsignado = $o['assigned_id'];
+            $aux->fec_asignacion = $o['assigned_date'];
+            $aux->prioridad = $o['priority'];
+           
             array_push($array, $aux);
         }
+        
         return $array;
         
     }
@@ -38,11 +40,11 @@ class Tareas extends CI_Model
     public function listar()
     {
        
-        $res =  $this->bpm->getToDoList()['data'];
+        $rsp =  $this->bpm->getToDoList();
 
-      //  echo var_dump($res);die;
+        if(!$rsp['status']) return $rsp;
 
-        return $this->mapeo($res);
+        return $this->mapeo($rsp['data']);
     
     }
 

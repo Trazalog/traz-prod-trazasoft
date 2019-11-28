@@ -1,27 +1,21 @@
-<div class="box box-primary">
-    <div class="box-header">
-        <i class="fa fa-plus"></i>
-        <h3 class="box-title">Nueva Tarea</h3>
+<form id="frm-new-task" autocomplete="off">
+    <input autocomplete="false" name="hidden" type="text" style="display:none;">
+    <div class="form-group">
+        <label for="">Nueva Tarea:</label>
+        <input id="nombre" class="form-control" type="text" placeholder="Ingrese Texto...">
     </div>
-    <div class="box-body">
-        <form id="frm-new-task" autocomplete="off">
-            <input autocomplete="false" name="hidden" type="text" style="display:none;">
-            <div class="form-group">
-                <label for="">Nueva Tarea:</label>
-                <input id="nombre" class="form-control" type="text" placeholder="Ingrese Texto...">
-            </div>
-            <div class="form-group">
-                <label for="">Descripción:</label>
-                <input id="descripcion" class="form-control" type="text" placeholder="Ingrese Texto...">
-            </div>
-            <div class="form-group">
-                <label for="">Duración:</label>
-                <input id="duracion" class="form-control" type="text" placeholder="Ingrese Valor...">
-            </div>
-        </form>
-        <button id="tsk-new" class="btn btn-primary" style="float:right;">Agregar</button>
+    <div class="form-group">
+        <label for="">Descripción:</label>
+        <input id="descripcion" class="form-control" type="text" placeholder="Ingrese Texto...">
     </div>
-</div>
+    <div class="form-group">
+        <label for="">Duración:</label>
+        <input id="duracion" class="form-control" type="text" placeholder="Ingrese Valor...">
+    </div>
+</form>
+
+<button class="btn btn-primary pull-right" id="tsk-new"> Guardar</button>
+
 
 <script>
 function agregarTarea(e) {
@@ -50,6 +44,6 @@ $('#tsk-new').click(function() {
         duracion: $('#duracion').val()
     });
     $('#frm-new-task')[0].reset();
-    $('#add-panel').hide();
+    $(this).closest('.colapse').addClass('collapsed-box');
 });
 </script>

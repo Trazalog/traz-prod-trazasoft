@@ -8,19 +8,14 @@ class Test extends CI_Controller
         parent::__construct();
     }
 
-    public function test()
-    {
-        $dbconn = pg_connect("host=localhost port=5432 dbname=postgres user=postgres password=12345");
+    public function index(){
 
-        if (!$dbconn) {
-        echo "An error occurred.\n";
-        exit;
-        }else{
-            echo "Connected";die;
-        }
+        $this->load->model(ALM.'Articulos');
+        $data['listArt'] = $this->Articulos->getList();
+        $this->load->view('traz-comp/list', $data);
     }
 
-    public function index()
+    public function index2()
     {
         $url = REST.'entradas';
         $rsp =  file_get_contents($url, false, http('POST', ['post_entradas'=>$data]));
@@ -34,7 +29,7 @@ class Test extends CI_Controller
         var_dump($this->Tablas->obtener('unidad_medida'));
     }
 
-    public function index2()
+    public function index3()
     {
         $data['tareas'] = getJson('tareas')->tareas;
         $data['subtareas'] = getJson('tareas')->subtareas;

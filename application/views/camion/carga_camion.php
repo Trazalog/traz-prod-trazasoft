@@ -412,7 +412,10 @@ function FinalizarCarga() {
 
                 console.log(result);
                 
-                if(result.status == true) alert("Hecho");
+                if(result.status == true) {
+                    alert("Hecho");
+                    $('#tabla_carga tbody').empty();
+                }
                 else{
                     alert('No se puedo Registrar Carga');
                 }

@@ -19,18 +19,21 @@
        folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="lib/dist/css/skins/_all-skins.min.css">
 
-    <link rel="stylesheet" href="<?php base_url();?>lib/plugins/datetimepicker/css/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" href="<?php echo base_url()?>lib/plugins/datetimepicker/css/bootstrap-datetimepicker.min.css">
 
     <link rel="stylesheet"
-        href="<?php base_url() ?>lib/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+        href="<?php echo base_url() ?>lib/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
 
     <link rel="stylesheet" href="<?php base_url() ?>lib/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
 
     <link rel="stylesheet" href="<?php base_url() ?>lib/bower_components/bootstrap-daterangepicker/daterangepicker.css">
 
     <!-- Bootstrap datetimepicker -->
-    <link rel="stylesheet" href="<?php base_url();?>lib/plugins/datetimepicker/css/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" href="<?php echo base_url()?>lib/plugins/datetimepicker/css/bootstrap-datetimepicker.min.css">
 
+      <!-- Select2 -->
+     <link rel="stylesheet" href="<?php echo base_url() ?>lib/bower_components/select2/dist/css/select2.min.css">
+   
     <link rel="stylesheet" href="<?php base_url();?>application/css/etapa/list.css">
     <link rel="stylesheet"
         href="//cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/css/bootstrapValidator.min.css" />
@@ -160,7 +163,25 @@ function collapse(e) {
 
 }
 
-
+jQuery.fn.single_double_click = function(single_click_callback, double_click_callback, timeout) {
+    return this.each(function() {
+        var clicks = 0,
+            self = this;
+        jQuery(this).click(function(event) {
+            clicks++;
+            if (clicks == 1) {
+                setTimeout(function() {
+                    if (clicks == 1) {
+                        single_click_callback.call(self, event);
+                    } else {
+                        double_click_callback.call(self, event);
+                    }
+                    clicks = 0;
+                }, timeout || 300);
+            }
+        });
+    });
+}
 </script>
 
 </body>
