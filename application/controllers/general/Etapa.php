@@ -101,6 +101,8 @@ class Etapa extends CI_Controller {
 						$detArt['usuario'] = userNick();
 						$detArt['empr_id'] = (string)empresa();
 						$detArt['cantidad'] = $cantidad;
+						$detArt['empa_id'] = (string)0;
+						$detArt['empa_cantidad'] = (string)0;
 						$detArt['tipo'] = MATERIA_PRIMA;
 						$detaArtPos['_post_recurso'][$x]=(object) $detArt;
 						$x++;					
