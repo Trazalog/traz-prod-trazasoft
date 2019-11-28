@@ -158,13 +158,16 @@ class Etapa extends CI_Controller {
 						}else{
 
 								echo ("Error en generacion de Detalle Pedido Materiales");
+								log_message('ERROR','Error en generacion de Detalle Pedido Materiales');
 						}
 				}else{
 
 						echo("Error en generacion de Cabecera Pedido Materiales");
+						log_message('ERROR','Error en generacion de Cabecera Pedido Materiales');
 				}	
 		}else{
 			echo ("Error en creacion Batch");
+			log_message('ERROR','Error en creacion Batch');
 		}		
 	}
 	// trae info para informe de Etapa
