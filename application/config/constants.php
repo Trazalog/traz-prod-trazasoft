@@ -93,11 +93,11 @@ define('BPM_PROCESS_ID_PEDIDOS_NORMALES', '6833268789089291878');
 
 define('BPM_PROCESS_ID_PEDIDOS_EXTRAORDINARIOS', '6013058915384903051');
 
-define('BPM_PROCESS', array(
+define('BPM_PROCESS', json_encode(array(
     '8803232493891311406' => ['nombre' => 'Ped. Materiales', 'color' => '#F39C12'],
     '6013058915384903051' => ['nombre' => 'Ped. Materiales Ext', 'color' => '#F39C12'],
     '7503443566840192735' => ['nombre' => 'Proc. Mantenimiento', 'color' => '#00A65A'],
-));
+)));
 
 define('BPM_ADMIN_USER', 'supervisor1');
 define('BPM_ADMIN_PASS', 'bpm');

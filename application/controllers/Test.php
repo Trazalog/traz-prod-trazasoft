@@ -11,20 +11,8 @@ class Test extends CI_Controller
     public function index(){
 
         $this->load->model(ALM.'Articulos');
-        $data['list'] = mapSelect('arti_id', 'descripcion', $this->Articulos->getList());
+        $data['listArt'] = $this->Articulos->getList();
         $this->load->view('traz-comp/list', $data);
-    }
-
-    public function test()
-    {
-        $dbconn = pg_connect("host=localhost port=5432 dbname=postgres user=postgres password=12345");
-
-        if (!$dbconn) {
-        echo "An error occurred.\n";
-        exit;
-        }else{
-            echo "Connected";die;
-        }
     }
 
     public function index2()
