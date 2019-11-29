@@ -129,6 +129,11 @@ class Etapas extends CI_Model
         $arrayDatos['empr_id'] = (string) empresa();
         $arrayDatos['cantidad'] = (string) $cantidad;
         $arrayDatos['tipo'] = PRODUCTO;
+        // FLEIVA
+        $arrayDatos['empa_id'] = "0";
+        $arrayDatos['empa_cantidad'] = "0";
+        // FLEIVA 
+        // $arrayDatos['tipo_recurso'] = "";
         $data['_post_recurso'] = $arrayDatos;
         // mens en log
         $datos = json_encode($data);
