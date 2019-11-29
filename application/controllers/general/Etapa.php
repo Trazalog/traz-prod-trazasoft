@@ -115,6 +115,8 @@ class Etapa extends CI_Controller {
 						$detArt['empa_id'] = (string)0;
 						$detArt['empa_cantidad'] = (string)0;
 						$detArt['tipo'] = MATERIA_PRIMA;
+						// $detArt['recu_id'] = "0";
+						// $detArt['tipo_recurso'] = "";
 						$detaArtPos['_post_recurso'][$x]=(object) $detArt;
 						$x++;					
 				}
@@ -269,6 +271,9 @@ class Etapa extends CI_Controller {
 							$arrRec['cantidad'] = (string)$p->cant_descontar; // cantidad a descontar en stock
 							$arrRec['tipo'] = PRODUCTO;
 							$arrRec['empr_id'] = (string)empresa();
+							$arrRec['recu_id'] = "0";
+							$arrRec['tipo_recurso'] = "";
+
 							$recu['_post_recurso'][$i] = (object)$arrRec;
 							$i++;
 					}							
