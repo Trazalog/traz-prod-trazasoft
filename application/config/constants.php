@@ -143,6 +143,7 @@ define('TAREAS_ASIGNAR', 'traz-comp-tareasestandar/asignar');
 define('REST', 'http://pc-pc:8280/services/ProduccionDataService/');
 define('RESTPT','http://pc-pc:8280/services/produccionTest/');
 define('REST_TDS', 'http://pc-pc:8280/services/TrazabilidadDataService/');
+define('REST0', 'http://pc-pc:8280/services/ALMDataService/');
 
 
 

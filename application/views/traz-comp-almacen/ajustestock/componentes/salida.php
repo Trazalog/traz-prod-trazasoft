@@ -1,10 +1,10 @@
-<div class="box box-primary tag-descarga">
+<div class="box box-default tag-descarga" id="boxSalida">
     <div class="box-header">
         <i class="fa fa-sign-out"></i>
         <h3 class="box-title"> SALIDA</h3>
     </div>
     <div class="box-body">
-        <form id="frm-destino" class="frm-destino">
+        <form id="frm-salida" class="frm-destino">
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
