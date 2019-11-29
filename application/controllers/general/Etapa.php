@@ -16,10 +16,21 @@ class Etapa extends CI_Controller {
 	}
 
 	// Muestra listado de etapas
-	public function index()
-	{
-			$data['list'] =$this->Etapas->listar()->etapas->etapa;
-			$data['etapas'] = $this->Etapas->listarEtapas()->etapas->etapa;	
+	public function index(){
+
+			$data['list'] =$this->Etapas->listar()->etapas->etapa;	
+			$temp = $this->Etapas->listarEtapas()->etapas->etapa;
+			//reforma las url segun id
+			foreach($temp as $value){				
+				if ($value->id == 5) {
+					$urlComp = $value->link.'fraccionar';	
+					$value->link = $urlComp;				
+				}else{
+					$urlComp = $value->link.'nuevo?op='.$value->id;	
+					$value->link = $urlComp;
+				}
+			}
+			$data['etapas'] = $temp;
 			$this->load->view('etapa/list', $data);
 	}
 	// Llama a etapas para una nueva Etapa

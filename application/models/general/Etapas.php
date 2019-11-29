@@ -27,52 +27,12 @@ class Etapas extends CI_Model
     public function listarEtapas()
     {
 
-        // $parametros["http"]["method"] = "GET";
-        // $param = stream_context_create($parametros);
-        // $resource = 'etapas';
-        // $url = REST.$resource;
-        // $array = file_get_contents($url, false, $param);
-        // return json_decode($array);
-
-        $respuesta = '{
-					"etapas":
-					{"etapa":
-					[{
-					"id":1,
-					"titulo":"finca",
-					"icon":"",
-					"link":"general/Etapa/nuevo?op=1"
-					},
-					{
-					"id":2,
-					"titulo":"seleccion",
-					"icon":"",
-					"link":"general/Etapa/nuevo?op=2"
-					},
-					{
-					"id":3,
-					"titulo":"pelado",
-					"icon":"",
-					"link":"general/Etapa/nuevo?op=3"
-					},
-					{
-					"id":4,
-					"titulo":"estacionamiento",
-					"icon":"",
-					"link":"general/Etapa/nuevo?op=4"
-					},
-					{
-					"id":5,
-					"titulo":"fraccionamiento",
-					"icon":"",
-					"link":"general/Etapa/fraccionar"
-					}
-					]
-					}
-					}';
-
-        $resource = json_decode($respuesta);
-        return $resource;
+				log_message('DEBUG', 'Etapas/listarEtapas');
+        $resource = '/etapas';
+        $url = REST2 . $resource;
+        $array = $this->rest->callAPI("GET", $url);
+        $resp = json_decode($array['data']);			
+        return $resp;	
     }
     public function buscar($id)
     {
