@@ -205,7 +205,8 @@ class Etapa extends CI_Controller {
 			//$data['recipientes'] = $this->Recipientes->listarTodosDeposito()->recipientes->recipiente;
 			
 			
-			$data['op'] = 	$data['etapa']->orden;
+			// $data['op'] = 	$data['etapa']->orden;
+			$data['op'] = 	$data['etapa']->titulo;
 			$data['lang'] = lang_get('spanish',4);
 			// $data['establecimientos'] = $this->Establecimientos->listar(2)->establecimientos->establecimiento;
 			$data['establecimientos'] = $this->Establecimientos->listar()->establecimientos->establecimiento;
@@ -215,6 +216,10 @@ class Etapa extends CI_Controller {
 			if($data['op'] == 'fraccionamiento')
 			{
 				$data['empaques'] = $this->Recipientes->listarEmpaques()->empaques->empaque;
+				
+				// echo("datos en controller");
+				// var_dump($data);
+				
 				$this->load->view('etapa/fraccionar/fraccionar', $data);
 			}else{
 

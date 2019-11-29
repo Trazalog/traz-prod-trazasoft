@@ -2,6 +2,7 @@
 <?php $this->load->view('etapa/fraccionar/modal_productos')?>
 <?php if($etapa->estado == "En Curso"){
 $this->load->view('etapa/fraccionar/modal_finalizar');
+
 }?>
 <div class="box">
   <div class="box-header with-border">
@@ -21,8 +22,9 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
       <div class="col-md-1 col-xs-12">
         <label class="form-label">Fecha*:</label>
       </div>
+
       <div class="col-md-5 col-xs-12">
-        <input type="date" id="fecha" value="<?php echo $fecha;?>" class="form-control"
+        <input type="<?php if($accion != 'Editar'){echo 'date';} ?>" id="fecha" value="<?php echo $fecha;?>" class="form-control"
           <?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
       </div>
       <div class="col-md-6 col-xs-12">
@@ -35,12 +37,13 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
       <div class="col-md-4 col-xs-12">
         <select class="form-control select2 select2-hidden-accesible"
           onchange="actualizaRecipiente(this.value,'recipientes')" id="establecimientos"
-          <?php //if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
+          <?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
           <option value="" disabled selected>-Seleccione Establecimiento-</option>
           <?php
                   foreach($establecimientos as $fila)
                   {
-                    if($accion == 'Editar' && $fila->nombre == $etapa->establecimiento->titulo)
+                    // if($accion == 'Editar' && $fila->nombre == $etapa->establecimiento->titulo)
+                    if($accion == 'Editar' && $fila->nombre == $etapa->establecimiento)
                     {
                     echo '<option value="'.$fila->esta_id.'" selected >'.$fila->nombre.'</option>';
                     }else
@@ -52,7 +55,7 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
         </select>
       </div>
       <div class="col-md-1 col-xs-12">
-        <label for="Recipiente" class="form-label"><?php echo $etapa->titulorecipiente;?>*:</label>
+        <label for="Recipiente" class="form-label"><?php echo $etapa->reci_estab_nom;?>*:</label>
       </div>
       <div class="col-md-5 col-xs-12">
         <?php 
@@ -69,9 +72,9 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
               echo '<option value="" disabled selected>-Seleccione Recipiente-</option>';
               foreach($recipientes as $recipiente)
               {
-                if($recipiente->titulo == $etapa->recipiente)
+                if($recipiente->nombre == $etapa->recipiente)
                 {
-                  echo '<option value="'.$recipiente->id.'" selected>'.$recipiente->titulo.'</option>';
+                  echo '<option value="'.$recipiente->id.'" selected>'.$recipiente->nombre.'</option>';
                 }else{
                   echo '<option value="'.$recipiente->id.'" >'.$recipiente->titulo.'</option>';
                 }
@@ -93,15 +96,48 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
   </div>
 </div>
 
-
-
-
 <div class="box">
   <div class="box-header">
     <h4>Productos a Fraccionar</h4>
-  </div>
+  </div>  
+<!-- Producto fraccionado -->
+  <?php if($accion == 'Editar'){?>	
+    <div class="box-body">
+      <div class="row" style="margin-top: 40px ">
+              <input type="hidden" id="materiasexiste" value="no">
+              <div class="col-xs-12 table-responsive" id="materiasasignadas">
+                <table id="etapas" class="table table-bordered table-hover">
+                    <thead class="thead-dark">
+                        <tr>  
+                          <th>Titulo</th>
+                          <th>Cant a Descontar</th>
+                          <th>Empaque</th>
+                          <th>Cantidad</th>
+                        </tr>
+                      </thead>
+                      <tbody>                       
+                      <?php											
+                          foreach($producto as $fila)
+                          {
+                              echo '<tr  id="" data-json:>';
+                              echo '<td>' .$fila->descripcion. '</td>';
+                              echo '<td>' .$fila->cantidad.' ('.$fila->uni_med.')'.'</td>';
+                              echo '<td>' .$fila->empa_nombre. '</td>';
+                              echo '<td>' .$fila->empa_cantidad. '</td>';         
+                              echo '</tr>'; 																
+                          }		
+                      ?>			
+                      </tbody> 
+                </table> 
+                    
+              </div>
+        </div>
+    </div>          
+  <?php }?>	
+<!-- Producto fraccionado -->
+
   <div class="box-body">
-    <?php if($etapa->estado != 'En Curso'){?>
+    <?php  if($etapa->estado != 'En Curso'){?>
     <div class="row" style="margin-top: 40px">
       <div class="col-md-6 col-xs-12">
         <div class="row">
@@ -143,17 +179,17 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
         <select class="form-control select2 select2-hidden-accesible" id="empaques" onchange="ActualizaEmpaques()">
           <option value="" disabled selected>-Seleccione Empaque-</option>
           <?php
-                      foreach($empaques as $fila)
-                      { 
-                        if($accion == 'Editar' && $etapa->empaque->titulo == $fila->titulo)
-                        {
-                          echo "<option data-json='".json_encode($fila)."' selected value='".$fila->id."'>".$fila->titulo."</option>";
-                        }
-                          else{
-                          echo "<option data-json='".json_encode($fila)."' value='".$fila->id."'>".$fila->titulo."</option>";
-                          }
-                      } 
-                    ?>
+            foreach($empaques as $fila)
+            { 
+              if($accion == 'Editar' && $etapa->empaque->titulo == $fila->titulo)
+              {
+                echo "<option data-json='".json_encode($fila)."' selected value='".$fila->id."'>".$fila->titulo."</option>";
+              }
+                else{
+                echo "<option data-json='".json_encode($fila)."' value='".$fila->id."'>".$fila->titulo."</option>";
+                }
+            } 
+          ?>
         </select>
       </div>
       <div class="col-md-1 col-xs-12">
@@ -191,7 +227,7 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
         <button class="btn btn-block btn-success" onclick=ControlaProducto()>Agregar</button>
       </div>
     </div>
-    <?php }?>
+    <?php  }?>
     <div class="row" style="margin-top: 40px">
       <input type="hidden" value="no" id="productoexiste">
       <div class="col-xs-12 table-responsive" id="productosasignados"></div>
@@ -208,6 +244,7 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
                 // echo '<button class="btn btn-primary btn-block" onclick="guardar()">Guardar</button>';
                 echo '<button class="btn btn-primary btn-block" onclick="guardar()">Iniciar</button>';
               }
+              echo '<button class="btn btn-primary btn-block" onclick="guardar()">Iniciar</button>';
         ?>
       </div>
       <div class="col-md-2 col-xs-6">
@@ -216,7 +253,7 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
               //  echo '<button class="btn btn-primary btn-block" onclick="valida()">Iniciar Etapa</button>';
               //}else if($etapa->estado == 'En Curso')
               //{
-              //  echo '<button class="btn btn-primary btn-block" id="btnfinalizar" onclick="finalizar()">Finalizar Etapa</button>';
+                echo '<button class="btn btn-primary btn-block" id="btnfinalizar" onclick="finalizar()">Finalizar Etapa</button>';
               //}
         ?>
       </div>
