@@ -12,6 +12,7 @@ class Tipoajuste extends CI_Controller {
     function obtenerAjuste()
     {
         $datos = $this->Tipoajustes->obtenerAjustes();
+        
         echo json_encode($datos);
     }
 }
