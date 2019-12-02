@@ -128,7 +128,7 @@
       </div>
       <div class="row" style="margin-top:20px">
           <div class="col-md-3 col-xs-12"></div>
-          <div class="col-md-3 col-xs-12"><button class="btn btn-success btn-block" onclick="AgregarProducto()">Agregar</button></div>
+          <div class="col-md-3 col-xs-12"><button class="btn btn-success btn-block" onclick="AgregarProducto()">Guardar</button></div>
           <div class="col-md-6"></div>
       </div>
       <div class="row">

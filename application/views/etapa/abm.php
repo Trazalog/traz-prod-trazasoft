@@ -188,7 +188,7 @@ $this->load->view('etapa/modal_finalizar');}?>
 								echo '<button class="btn btn-primary btn-block" onclick="valida()">Iniciar Etapa</button>';
 								}else if($etapa->estado == 'En Curso')
 								{
-									echo '<button class="btn btn-primary btn-block" id="btnfinalizar" onclick="finalizar()">Finalizar Etapa</button>';
+									echo '<button class="btn btn-primary btn-block" id="btnfinalizar" onclick="finalizar()">Reporte de Producción</button>';
 								}
 							?>
                         </div>
