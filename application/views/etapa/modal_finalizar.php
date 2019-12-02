@@ -323,10 +323,25 @@
  
   });
 
+  function validarCantidad(){
+     if($('#cant_descontar').val() == null || $('#cant_descontar').val() == ''){
+      alert('Cantidad a Extraer debe ser mayor a Cero');
+      return false;
+    } 
+    if($('#cant_descontar').val() > $('#cant_origen').val()){
+      alert('Cantidad a Extraer supera cantidad existente');
+      return false;
+    }
+
+    return true;
+  }
  
   // Genera Informe de Etapa
   function FinalizarEtapa()
   {  
+    
+    if(!validarCantidad()) return;
+  
     existe = document.getElementById('productos_existe').value;
     if(existe == "no")
     {

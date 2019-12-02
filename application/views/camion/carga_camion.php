@@ -11,7 +11,8 @@
                 <label for="establecimientos" class="form-label">Establecimiento*:</label>
             </div>
             <div class="col-md-4 col-xs-12">
-                <select class="form-control select2 select2-hidden-accesible" onchange="Actualiza(this.value)"
+                <select class="form-control select2 select2-hidden-accesible" onchange="Actualiza(this.value); ActualizaLotes();
+"
                     id="establecimientos">
                     <option value="" disabled selected>-Seleccione Establecimiento-</option>
                     <?php
@@ -172,7 +173,7 @@ function Actualiza(establecimiento) {
             for (var i = 0; i < result.length; i++) {
                 html = html + "<option data-json= '" + JSON.stringify(result[i]) + "'value='" + result[i].id + "'>" + result[i].patente + "</option>";
             }
-            ActualizaLotes();
+           
             document.getElementById('camiones').innerHTML = "";
             document.getElementById('camiones').innerHTML = html;
             document.getElementById('camiones').disabled = false;
@@ -201,6 +202,9 @@ function DatosCamion() {
 }
 
 function ActualizaLotes() {
+    //Limpiar Lotes
+    $('#divlotes').empty();
+
     establecimiento = document.getElementById('establecimientos').value;
     salida = document.getElementById('checklote').checked;
     $.ajax({
@@ -415,6 +419,7 @@ function FinalizarCarga() {
                 if(result.status == true) {
                     alert("Hecho");
                     $('#tabla_carga tbody').empty();
+                    ActualizaLotes();
                 }
                 else{
                     alert('No se puedo Registrar Carga');

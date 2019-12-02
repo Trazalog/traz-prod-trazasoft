@@ -214,7 +214,7 @@ class Lotes extends CI_Model
             $batch_req['_post_lote_recipiente_cambiar_batch_req']['_post_lote_recipiente_cambiar'][] = $aux;
         }
 
-        log_message('DEBUG', '#MODEL > guardaCargaCamion | BATCH_REQ: ' . json_encode($rsp));
+      //  log_message('DEBUG', '#MODEL > guardaCargaCamion | BATCH_REQ: ' . json_encode($rsp));
         $url = REST_TDS . 'lote/recipiente/cambiar_batch_req';
         $rsp = $this->rest->callApi('POST', $url, $batch_req);
         wso2Msj($rsp);
@@ -223,8 +223,6 @@ class Lotes extends CI_Model
         }
 
         $rsp['data'] = json_decode($rsp['data'])->respuesta->resultado;
-        //$rsp['status'] = ($rsp['data'] == 'CORRECTO');
-
         return $rsp;
 
     }
