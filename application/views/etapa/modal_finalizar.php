@@ -324,11 +324,17 @@
   });
 
   function validarCantidad(){
+
+    var NUMERIC_REGEXP = /[-]{0,1}[\d]*[.]{0,1}[\d]+/g;
+
+    var cantOrigen = parseFloat($('#cant_origen').val().match(NUMERIC_REGEXP));
+
      if($('#cant_descontar').val() == null || $('#cant_descontar').val() == ''){
       alert('Cantidad a Extraer debe ser mayor a Cero');
       return false;
     } 
-    if($('#cant_descontar').val() > $('#cant_origen').val()){
+
+    if(parseFloat($('#cant_descontar').val()) > cantOrigen){
       alert('Cantidad a Extraer supera cantidad existente');
       return false;
     }

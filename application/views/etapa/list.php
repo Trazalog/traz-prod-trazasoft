@@ -103,9 +103,10 @@
      html= '<thead class="thead-dark">'+
               '<tr>'+
                 '<th>Acciones</th>'+
-               ' <th>Etapa</th>'+
+                '<th>Etapa</th>'+
+                '<th>Lote</th>'+
                 '<th>Producto Origen</th>'+
-               ' <th>Cantidad</th>'+
+                '<th>Cantidad</th>'+
                 '<th>Establecimiento</th>'+
                 '<th>Recipiente</th>'+
                 '<th>OP</th>'+
@@ -123,6 +124,7 @@
               '<i class="fa fa-fw fa-times-circle text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Eliminar" onclick="seleccionar(this)"></i>'+
               '</td>'+
               '<td>'+etapas[i].titulo+'</td>'+
+              '<td>'+etapas[i].lote+' </td>'+
               '<td>'+etapas[i].producto+'</td>'+
               '<td>'+etapas[i].cantidad+' '+etapas[i].unidad+'</td>'+  
               '<td>'+etapas[i].establecimiento+'</td>'+
@@ -141,6 +143,7 @@
                          '<i class="fa fa-fw fa-times-circle text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Eliminar" onclick="seleccionar(this)"></i>'+
                          '</td>'+
                          '<td>'+etapas[i].titulo+'</td>'+
+                          '<td>'+etapas[i].lote+' </td>'+
       	                 '<td>'+etapas[i].producto+'</td>'+
                          '<td>'+etapas[i].cantidad+' '+etapas[i].unidad+'</td>'+  
                          '<td>'+etapas[i].establecimiento+'</td>'+
