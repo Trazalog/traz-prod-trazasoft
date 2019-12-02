@@ -206,6 +206,7 @@ class Lotes extends CI_Model
 
             $aux["batch_id_origen"] = strval($o->batch_id);
             $aux["reci_id"] = strval($o->reci_id);
+            $aux["cantidad"] = strval($o->cantidad);
             $aux["etap_id_deposito"] = strval(ETAPA_DEPOSITO);
             $aux["empre_id"] = strval(empresa());
             $aux["usuario_app"] = "chuck";
@@ -214,7 +215,6 @@ class Lotes extends CI_Model
             $batch_req['_post_lote_recipiente_cambiar_batch_req']['_post_lote_recipiente_cambiar'][] = $aux;
         }
 
-      //  log_message('DEBUG', '#MODEL > guardaCargaCamion | BATCH_REQ: ' . json_encode($rsp));
         $url = REST_TDS . 'lote/recipiente/cambiar_batch_req';
         $rsp = $this->rest->callApi('POST', $url, $batch_req);
         wso2Msj($rsp);

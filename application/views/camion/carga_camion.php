@@ -404,6 +404,7 @@ function FinalizarCarga() {
             lotes.push(json);
         });
         lotes = JSON.stringify(lotes);
+        wo();
         $.ajax({
             type: 'POST',
             dataType:'JSON',
@@ -419,7 +420,7 @@ function FinalizarCarga() {
                 if(result.status == true) {
                     alert("Hecho");
                     $('#tabla_carga tbody').empty();
-                    ActualizaLotes();
+                    Actualiza($('#establecimientos').val());
                 }
                 else{
                     alert('No se puedo Registrar Carga');
@@ -434,6 +435,10 @@ function FinalizarCarga() {
                     alert('Ups! algo salio mal');
                 }
 
+            },error: function(rsp){
+                alert('Error al Guardar Cargar');
+            },complete: function(){
+                wc();
             }
 
         });
