@@ -56,6 +56,11 @@
     if (accion == "Editar")
 {
   tareas = <?php echo json_encode($etapa->tareas);?>;
+
+  if(!tareas){
+    alert('Sin Tareas Asociadas');
+  } 
+
   for(i=0;i<tareas.length;i++)
   { 
     tarea = tareas[i];
