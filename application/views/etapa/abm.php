@@ -4,7 +4,6 @@
 <?php if($etapa->estado == "En Curso"){
 $this->load->view('etapa/modal_finalizar');}?>
 
-<?php //var_dump($etapa); ?>
 <!-- Cabecera -->
 <div class="box">
 
@@ -22,30 +21,19 @@ $this->load->view('etapa/modal_finalizar');}?>
             <div class="col-md-5 col-xs-12">
                 <input type="text" id="Lote" <?php if($accion=='Editar' ){echo 'value="'.$etapa->lote.'"';}?>
                     class="form-control" placeholder="Inserte Lote"
-                    <?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
+                    <?php if($etapa->estado == 'En Curso' || $etapa->estado =='FINALIZADO') {echo 'disabled';}?>>
             </div>
             <div class="col-md-1 col-xs-12">
                 <label for="fecha" class="form-label">Fecha:</label>
             </div>
             <div class="col-md-5 col-xs-12">
-                <!-- <input type="date" id="fecha" class="form-control" <?php //if($accion=='Editar' ){echo  'value="'.$etapa->fecha.'"';}else if($accion == 'Nuevo'){echo 'value="' .$fecha.'"';}?> -->
+         
+                    <?php
+                            if($accion == 'Editar' || $accion == 'Nuevo'){ 
+                                echo '<input type="" id="fecha" class="form-control" value="'.$fecha.'" disabled >' ;	
+                            }
+                    ?>
 
-                <!-- <input type="date" id="fecha" class="form-control" 
-										<?php 
-										// Comentado para que muestre la fecha en edicion
-													//if($accion == 'Editar' ){
-														//echo  'value="'.$fecha.'"';
-													//}else if($accion == 'Nuevo'){
-													//	echo 'value="' .$fecha.'"';
-													//}
-										?> -->
-			<?php
-												if($accion == 'Editar' || $accion == 'Nuevo'){ 
-													echo '<input type="" id="fecha" class="form-control" value="'.$fecha.'" disabled >' ;	
-												}
-										?>
-
-                <?php //if($etapa->estado == 'En Curso'){echo 'disabled';}?>
             </div>
         </div>
         <div class="row" style="margin-top: 50px">
@@ -55,7 +43,7 @@ $this->load->view('etapa/modal_finalizar');}?>
             <div class="col-md-4 col-xs-12">
                 <select class="form-control select2 select2-hidden-accesible"
                     onchange="actualizaRecipiente(this.value,'recipientes')" id="establecimientos"
-                    <?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
+                    <?php if($etapa->estado == 'En Curso' || $etapa->estado =='FINALIZADO'){echo 'disabled';}?>>
                     <option value="" disabled selected>-Seleccione Establecimiento-</option>
                     <?php
 						foreach($establecimientos as $fila){
@@ -85,22 +73,13 @@ $this->load->view('etapa/modal_finalizar');}?>
 				echo '<select class="form-control" id="recipientes" disabled></select>';
 				}
 				if($accion == 'Editar'){
-					if($etapa->estado == 'En Curso')
+					if($etapa->estado == 'En Curso' || $etapa->estado =='FINALIZADO')
 					{
 						echo '<select class="form-control" id="recipientes" disabled>';
 					}else{
 						echo '<select class="form-control" id="recipientes">';
 					}
-					//echo '<option value="" disabled selected>-Seleccione Recipiente-</option>';
-					// foreach($recipientes as $recipiente)
-					// {
-					// 	if($recipiente->titulo == $etapa->recipiente)
-					// 	{
-					// 		echo '<option value="'.$recipiente->id.'" selected>'.$recipiente->titulo.'</option>';
-					// 	}else{
-					// 		echo '<option value="'.$recipiente->id.'" >'.$recipiente->titulo.'</option>';
-					// 	}
-					// }
+				
 					echo '<option value="'.$recipiente->id.'" selected>'.$etapa->recipiente.'</option>';
 					echo '</select>';
 				}
@@ -112,12 +91,11 @@ $this->load->view('etapa/modal_finalizar');}?>
                 <label for="op" class="form-label">Orden de Produccion:</label>
             </div>
             <div class="col-md-4 col-xs-12">
-                <!-- <input type="text" id="ordenproduccion" class="form-control" <?php //if($accion=='Editar' ){echo ( 'value="'.$etapa->op.'"');}?> placeholder="Inserte Orde de Produccion"
-									<?php //if($etapa->estado == 'En Curso'){echo 'disabled';}?>> -->
+              
 
                 <input type="text" id="ordenproduccion" class="form-control"
                     <?php if($accion=='Editar' ){echo ( 'value="'.$op.'"');}?> placeholder="Inserte Orde de Produccion"
-                    <?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
+                    <?php if($etapa->estado == 'En Curso' || $etapa->estado =='FINALIZADO'){echo 'disabled';}?>>
             </div>
             <div class="col-md-6">
             </div>

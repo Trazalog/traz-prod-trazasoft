@@ -19,14 +19,14 @@ if (!function_exists('info_header')) {
 }
 
 if(!function_exists('select2')){
-    function select2($id, $list, $label, $value){
+    function select2($id, $list, $label, $value, $descripcion = false){
 
         $list = json_decode(json_encode($list), true);
         $html = "<select class='form-control select2' style='width: 100%;' id='$id'><option selected disabled> Seleccionar </option>";
         foreach ($list as $o) {
-            $html .= "<option value='".$o[$value]."' data-json='".json_encode($o)."'>".$o[$label]."</option>"; 
-        }
-        $html .= "</select><script>$('#$id').select2()</script>";
+            $html .= "<option value='".$o[$value]."' data-json='".json_encode($o)."'>".$o[$label]."<br>";
+            $html .= "</select><script>$('#$id').select2()</script>";
         return $html;
     }
+}
 }
