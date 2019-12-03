@@ -144,10 +144,6 @@ define('REST2', 'http://dev-trazalog.com.ar:8280/services/ProduccionDataService'
 define('REST3', 'http://dev-trazalog.com.ar:8280/services/produccionTest');
 define('REST4', 'http://dev-trazalog.com.ar:8280/services/TrazabilidadDataService');
 
-// define('REST', 'http://pc-pc:8280/services/ProduccionDataService/');
-// define('REST2', 'http://pc-pc:8280/services/ProduccionDataService');
-// define('REST3', 'http://pc-pc:8280/services/produccionTest');
-// define('REST4', 'http://pc-pc:8280/services/TrazabilidadDataService');
 
 
 //TODO:AGREGAR AL CONSTANT ORIGINAL
@@ -174,10 +170,3 @@ define('ESTABLECIMIENTO_TRANSPORTE', 1000);
 #ID DE ETAPA
 define('ETAPA_TRANSPORTE', 1000);
 define('ETAPA_DEPOSITO', 2000);
-
-#RECURSOS_LOTES
-// define('MATERIA_PRIMA', 'MATERIA_PRIMA');
-// define('PRODUCTO', 'PRODUCTO');
-// define('EQUIPO', 'EQUIPO');
-// define('RECURSO_HUMANO', 'HUMANO');
-// define('RECURSO_CONSUMO', 'CONSUMO');

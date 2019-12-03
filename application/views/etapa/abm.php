@@ -188,7 +188,7 @@ $this->load->view('etapa/modal_finalizar');}?>
 								echo '<button class="btn btn-primary btn-block" onclick="valida()">Iniciar Etapa</button>';
 								}else if($etapa->estado == 'En Curso')
 								{
-									echo '<button class="btn btn-primary btn-block" id="btnfinalizar" onclick="finalizar()">Finalizar Etapa</button>';
+									echo '<button class="btn btn-primary btn-block" id="btnfinalizar" onclick="finalizar()">Reporte de Producción</button>';
 								}
 							?>
                         </div>
@@ -276,7 +276,7 @@ function guardar() {
     idetapa = <?php echo $idetapa; ?> ;
     cantidad = $('#cantidadproducto').val();
     idprod = $('#idproducto').val();
-
+    wo();
     $.ajax({
         type: 'POST',
         data: {
@@ -302,6 +302,12 @@ function guardar() {
             } else {
                 linkTo('general/Etapa/index');
             }
+        },
+        error: function(rsp){
+            alert('Error al Iniciar Etapas');
+        },
+        complete: function(){
+            wc();
         }
     });
 }
@@ -340,8 +346,6 @@ function valida() {
         document.getElementById('mensajeincompleto').innerHTML = mensaje;
         document.getElementById('incompleto').hidden = false;
     }
-
-
 }
 
 // selecciona id de producto y guarda en input hidden
@@ -382,15 +386,18 @@ $("#inputmaterias").on('change', function() {
         i++;
     }
     if (ban) {
-        document.getElementById('stockdisabled').value = materia.stock;
+        var stock = materia.stock;
+        document.getElementById('stockdisabled').value = stock;
         materia = JSON.stringify(materia);
         // FIXME: SI SE SACA SIN QUE ANDE EL MODALCITO DE MATERIAS SE ROMPE LA CARGA EN TABLITA
         // agregaMateria(materia);
         $('#idmateria').attr('data-json', materia);
         // FIXME: SI SE SACA SIN QUE ANDE EL MODALCITO DE MATERIAS SE ROMPE LA CARGA EN TABLITA
         //document.getElementById('stockdisabled').value = ma
-        document.getElementById('cantidadmateria').disabled = false;
-        document.getElementById('botonmateria').disabled = false;
+        
+        document.getElementById('cantidadmateria').disabled = (stock == 0.0);
+        document.getElementById('botonmateria').disabled = (stock == 0.0);
+
     } else {
         alert('No existe esa Materia');
         document.getElementById('cantidadmateria').disabled = true;

@@ -11,13 +11,11 @@
                 <label for="establecimientos" class="form-label">Establecimiento*:</label>
             </div>
             <div class="col-md-4 col-xs-12">
-                <select class="form-control select2 select2-hidden-accesible" onchange="Actualiza(this.value); ActualizaLotes();
-"
-                    id="establecimientos">
+                <select class="form-control select2 select2-hidden-accesible" onchange="Actualiza(this.value); ActualizaLotes();" id="establecimientos">
                     <option value="" disabled selected>-Seleccione Establecimiento-</option>
                     <?php
                      foreach($establecimientos as $fila)
-                     {
+                     {  
                            echo '<option value="'.$fila->esta_id.'" >'.$fila->nombre.'</option>';
                      } 
                      ?>
@@ -421,6 +419,8 @@ function FinalizarCarga() {
                     alert("Hecho");
                     $('#tabla_carga tbody').empty();
                     Actualiza($('#establecimientos').val());
+                    ActualizaLotes();
+
                 }
                 else{
                     alert('No se puedo Registrar Carga');
