@@ -68,7 +68,7 @@ class Etapa extends CI_Controller {
 			$datosCab['usuario_app'] = userNick();
 			$datosCab['empr_id'] = (string)empresa();
 			$datosCab['forzar_agregar'] = "FALSE";
-			$datosCab['fec_vencimiento'] = date('Y-m-d');		
+			$datosCab['fec_vencimiento'] = date('d-m-Y');		
 			$datosCab['recu_id'] = "0";		
 			$datosCab['tipo_recurso'] = "";		
 

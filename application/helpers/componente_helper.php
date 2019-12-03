@@ -26,7 +26,7 @@ if(!function_exists('select2')){
         foreach ($list as $o) {
             $html .= "<option value='".$o[$value]."' data-json='".json_encode($o)."'>".$o[$label]."</option>"; 
         }
-        $html .= "</select><script>$('#$id').select2({theme: 'bootstrap4'})</script>";
+        $html .= "</select><script>$('#$id').select2()</script>";
         return $html;
     }
 }

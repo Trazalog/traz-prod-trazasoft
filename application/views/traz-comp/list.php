@@ -3,9 +3,12 @@
         <div class="form-group">
             <label for="">Selecionar:</label>
             <?php 
-            echo select2('articulos', $listArt, 'barcode', 'arti_id');
+              echo select2('articulos', $listArt, 'barcode', 'arti_id');
             ?>
 
         </div>
     </div>
 </div>
+<script>
+$('.select2').select2()
+</script>
