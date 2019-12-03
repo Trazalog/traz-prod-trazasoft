@@ -7,7 +7,7 @@
     <div class="box-body">
 
         <!-- PRODUCTO Y CANTIDAD INICIO -->
-        <?php if($etapa->estado != 'En Curso'){?>
+        <?php if($etapa->estado != 'En Curso' && $etapa->estado !='FINALIZADO'){?>
         <div class="row" style="margin-top: 40px">
             <div class="col-xs-12">
                 <div class="row form-group">
@@ -44,7 +44,7 @@
         <!-- PRODUCTO Y CANTIDAD INICIO -->
 
         <!-- PRODUCTO Y CANTIDAD EDITAR -->
-        <?php if($accion == 'Editar'){?>
+        <?php if($accion == 'Editar' || $etapa->estado == "FINALIZADO"){?>
         <div class="row" style="margin-top: 40px">
             <div class="col-xs-12">
                 <div class="row form-group">

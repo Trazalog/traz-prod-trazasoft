@@ -7,7 +7,7 @@
 
 
     <!-- ORIGEN INICIO ETAPA -->
-    <?php if($etapa->estado != 'En Curso'){?>
+    <?php if($etapa->estado != 'En Curso' && $etapa->estado !='FINALIZADO'){?>
     <div class="box-body">
         
         <div class="row" style="margin-top: 40px">
@@ -72,7 +72,7 @@
     <!-- ORIGEN INICIO ETAPA -->
 
     <!-- ORIGEN EDICION ETAPA -->
-    <?php if($accion == 'Editar'){?>
+    <?php if($accion == 'Editar' || $etapa->estado =='FINALIZADO'){?>
     <div class="box-body">
         <div class="row" style="margin-top: 40px ">
             <input type="hidden" id="materiasexiste" value="no">
