@@ -74,7 +74,7 @@ class Camiones extends CI_Model
     public function actualizarEstado($data)
     {
         $aux['post_camion_estado']['data'] = $data;
-        $url = REST_PT . "camion/estado_batch_req";
+        $url = RESTPT . "camion/estado_batch_req";
         $rsp = $this->rest->callApi('PUT', $url, $aux);
         return $rsp;
     }
