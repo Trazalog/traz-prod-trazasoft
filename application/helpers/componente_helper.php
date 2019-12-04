@@ -25,7 +25,7 @@ if(!function_exists('select2')){
 
         $button = '<div class="input-group">%s<span class="input-group-btn"><button class="btn btn-primary" data-toggle="modal" data-target="#modal_articulos"><i class="glyphicon glyphicon-search"></i></button></span></div>';
         $html .= "<select class='form-control select2' style='width: 100%;' id='$id' data-json=''>";
-        $html .= "<option selected disabled> -  Seleccionar  - </option>";
+        $html .= "<option data-foo='' selected disabled> -  Seleccionar  - </option>";
         foreach ($list as $o) {
             $html .= "<option value='$o[$value]' data-json='".json_encode($o)."'";
 
@@ -46,6 +46,7 @@ if(!function_exists('select2')){
         $html .= "</select>";
         $html = sprintf($button, $html);
         $html .= "<cite id='detalle' class='text-blue'></cite>";
+        $html .= "<script>$('#$id').select2({matcher: matchCustom,templateResult: formatCustom}).on('change', function() { selectEvent(this);})</script>";
         return $html;
 }
 }

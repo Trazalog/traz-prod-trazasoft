@@ -13,22 +13,15 @@
         </div>
     </div>
 </div>
-<button onclick="test()">Holas</button>
 <script>
-function test() {
-    alert(getJson($('#articulos'));
-}
-
-$('.select2').select2({
-    matcher: matchCustom,
-    templateResult: formatCustom
-}).on('change', function() {
-    $(this).closest('.form-group').find('#detalle').html('* ' + $(this).find('option:selected').attr(
+function selectEvent(e) {
+    //Mostrar Detalle debajo del Select
+    $(e).closest('.form-group').find('#detalle').html('* ' + $(e).find('option:selected').attr(
         'data-foo'));
-    $(this).attr('data-json', $(this).find('option:selected').attr('data-json'));
-});
 
-
+    //Asignar data-json del Option al Select
+    $(e).attr('data-json', $(e).find('option:selected').attr('data-json'));
+}
 
 function stringMatch(term, candidate) {
     return candidate && candidate.toLowerCase().indexOf(term.toLowerCase()) >= 0;
