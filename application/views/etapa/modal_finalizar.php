@@ -185,7 +185,7 @@
         establecimiento = "";
         var producto = {};   
         producto.establecimientofinal = "";
-        if(document.getElementById('productoestablecimientos').value != "-Seleccione Establecimiento-")
+        if(document.getElementById('productoestablecimientos').value != '' && document.getElementById('productoestablecimientos').value != "-Seleccione Establecimiento-")
         {
         establecimientos = '<?php echo json_encode($establecimientos);?>';
         establecimientos = JSON.parse(establecimientos);
@@ -211,8 +211,8 @@
         producto.cantidad = cantidad;
         producto.loteorigen = document.getElementById('loteorigen').value;
         producto.lotedestino = lotedestino;
-        producto.destino = destino;
-        producto.titulodestino = recipientes[indexrec].titulo;
+        producto.destino = destino
+        producto.titulodestino = recipientes[indexrec].titulo?recipientes[indexrec].titulo:' - ';
         producto.destinofinal = establecimiento +" "+ recipientefinal;
         producto.recu_id  =  JSON.parse($('#operarios').find('[value="'+ $('#operario').val()+'"]').attr('data-json')).recu_id;
         producto.tipo_recurso = 'HUMANO';

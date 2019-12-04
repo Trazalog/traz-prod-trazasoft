@@ -35,8 +35,10 @@
     <link rel="stylesheet" href="<?php echo base_url() ?>lib/bower_components/select2/dist/css/select2.min.css">
     
     <link rel="stylesheet" href="<?php base_url();?>application/css/etapa/list.css">
+
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/css/bootstrapValidator.min.css" />
 
+    <link rel="stylesheet" href="<?php echo base_url() ?>lib/bower_components/select2/dist/css/boostrap.css">
     <!-- Google Font -->
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
