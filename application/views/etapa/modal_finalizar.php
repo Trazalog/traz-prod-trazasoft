@@ -1,4 +1,4 @@
-<div class="modal" id="modal_finalizar" tabindex="-1" role="dialog" style="overflow-y: auto !important; " aria-labelledby="myModalLabel">
+<div class="modal" id="modal_finalizar"  role="dialog" style="overflow-y: auto !important; " aria-labelledby="myModalLabel">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -44,26 +44,28 @@
 
       <div class="row form-group" style="margin-top:20px">
         <div class="col-md-3 col-xs-12">
-          <label for="Producto" class="form-label">Producto*:</label>
+          <label for="inputproducto" class="form-label">Producto*:</label>
         </div>
-        <div class="col-md-8 col-xs-12 input-group">
+        <!-- <div class="col-md-8 col-xs-12 input-group">
           <input list="Productos" id="inputproducto" class="form-control" autocomplete="off" style="margin-left: 14px;">
           <input type="hidden" id="idproducto" value="" data-json="">
           <datalist id="Productos">
-            <?php foreach($materias as $fila)
-              {
-              echo  '<option value="'.$fila->titulo.'">';
-              }
-              echo("materias en modal finalizar");
+            <?php #foreach($materias as $fila)
+              // {
+              // #echo  '<option value="'.$fila->titulo.'">';
+              // }
+              echo selectBusquedaAvanzada('inputproducto', $materias, 'id', 'titulo');
+
+              #echo("materias en modal finalizar");
             ?>
           </datalist>
           <span class="input-group-btn">
             <button class='btn btn-sm btn-primary' 
-              onclick='checkTabla("tablaproductos","modalproductos",`<?php echo json_encode($materias);?>`,"Add")' data-toggle="modal" data-target="#modal_producto">
+              onclick='checkTabla("tablaproductos","modalproductos",`<?php #echo json_encode($materias);?>`,"Add")' data-toggle="modal" data-target="#modal_producto">
               <i class="glyphicon glyphicon-search"></i>
             </button>
           </span> 
-        </div>
+        </div> -->
         <div class="col-md-3"></div>
       </div>
       <div class="row" style="margin-top:20px">
@@ -81,14 +83,12 @@
           <div class="col-md-3 col-xs-12"><label class="form-label">Destino*:</label></div>
           <div class="col-md-6 col-xs-12">
               <?php if($accion == 'Editar'){
-                      echo '<select class="form-control" id="productodestino">';
-                      echo '<option value="" disabled selected>-Seleccione Destino-</option>';
-                      foreach($recipientes as $o)
-                      {
-                          echo "<option value='$o->reci_id' data-json='".json_encode($o)."'>$o->nombre</option>";
-                      }
-                      echo '</select>';
-              }?>
+        
+
+                      echo selectBusquedaAvanzada('productodestino', $recipientes, 'reci_id', 'nombre', array('Estado: %s'=>'estado','Lote: %s'=>'lote_id'));
+
+              }
+              ?>
           </div>
         <div class="col-md-3"></div>
       </div>
