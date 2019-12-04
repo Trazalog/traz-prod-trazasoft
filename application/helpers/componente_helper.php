@@ -22,11 +22,29 @@ if(!function_exists('select2')){
     function select2($id, $list, $label, $value, $descripcion = false){
 
         $list = json_decode(json_encode($list), true);
-        $html = "<select class='form-control select2' style='width: 100%;' id='$id'><option selected disabled> Seleccionar </option>";
+
+        $button = '<div class="input-group">%s<span class="input-group-btn"><button class="btn btn-primary" data-toggle="modal" data-target="#modal_articulos"><i class="glyphicon glyphicon-search"></i></button></span></div>';
+        $html .= "<select class='form-control select2' style='width: 100%;' id='$id' data-json=''";
         foreach ($list as $o) {
-            $html .= "<option value='".$o[$value]."' data-json='".json_encode($o)."'>".$o[$label]."<br>";
-            $html .= "</select><script>$('#$id').select2()</script>";
+            $html .= "<option value='$o[$value]' data-json='".json_encode($o)."'";
+
+            if($descripcion){
+                $aux = '';
+                if(is_array($descripcion)){
+
+                    foreach ($descripcion as $key =>$e) {
+                        $aux .= (is_numeric($key)?$o[$e] : sprintf($key, $o[$e])) . ' || ' ;
+                    }
+
+                }else{
+                    $aux = $o[$descripcion];
+                }
+            }
+            $html .= " data-foo='$aux'>$o[$label]</option>";
+        }
+        $html .= "</select>";
+        $html = sprintf($button, $html);
+        $html .= "<cite id='detalle' class='text-blue'></cite>";
         return $html;
-    }
 }
 }
