@@ -24,7 +24,8 @@ if(!function_exists('select2')){
         $list = json_decode(json_encode($list), true);
 
         $button = '<div class="input-group">%s<span class="input-group-btn"><button class="btn btn-primary" data-toggle="modal" data-target="#modal_articulos"><i class="glyphicon glyphicon-search"></i></button></span></div>';
-        $html .= "<select class='form-control select2' style='width: 100%;' id='$id' data-json=''";
+        $html .= "<select class='form-control select2' style='width: 100%;' id='$id' data-json=''>";
+        $html .= "<option selected disabled> -  Seleccionar  - </option>";
         foreach ($list as $o) {
             $html .= "<option value='$o[$value]' data-json='".json_encode($o)."'";
 

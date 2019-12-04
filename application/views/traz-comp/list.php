@@ -15,9 +15,8 @@
 </div>
 <button onclick="test()">Holas</button>
 <script>
-
-function test(){
-    alert(getJson('#articulos'));
+function test() {
+    alert(getJson($('#articulos'));
 }
 
 $('.select2').select2({
