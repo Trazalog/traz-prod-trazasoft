@@ -25,6 +25,8 @@ class REST
                     curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PUT");
                     if ($data) {
                         curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
+                        array_push($token, 'Content-Type: application/json');
+
                         log_message('DEBUG', '#TRAZA | #REST | #CURL | #PAYLOAD >> ' . json_encode($data));
                     }
 
