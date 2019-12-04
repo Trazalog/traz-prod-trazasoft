@@ -19,6 +19,16 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
   </div>
   <div class="box-body">
     <div class="row" style="margin-top: 50px;">
+      
+      <div class="col-md-1 col-xs-12">
+          <label for="Lote" class="form-label">Codigo Lote:*</label>
+      </div>
+      <div class="col-md-5 col-xs-12">
+          <input type="text" id="Lote" <?php if($accion=='Editar' ){echo 'value="'.$etapa->lote.'"';}?> class="form-control" placeholder="Inserte Lote"
+          <?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
+      </div>
+
+
       <div class="col-md-1 col-xs-12">
         <label class="form-label">Fecha*:</label>
       </div>
@@ -83,7 +93,22 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
           }
         ?>
       </div>
+
     </div>
+    
+    <div class="row" style="margin-top: 50px">
+      <div class="col-md-2 col-xs-12">
+        <label for="op" class="form-label">Orden de Produccion:</label>
+      </div>
+      <div class="col-md-4 col-xs-12">
+          <!-- <input type="text" id="ordenproduccion" class="form-control" <?php //if($accion=='Editar' ){echo ( 'value="'.$etapa->op.'"');}?> placeholder="Inserte Orde de Produccion"
+          <?php //if($etapa->estado == 'En Curso'){echo 'disabled';}?>> -->
+
+          <input type="text" id="ordenproduccion" class="form-control" <?php if($accion=='Editar' ){echo ( 'value="'.$op.'"');}?> placeholder="Inserte Orde de Produccion"
+          <?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>		
+      </div>
+    </div>  
+
     <div class="row" style="margin-top: 40px">
       <div class="col-xs-12">
         <i class="glyphicon glyphicon-plus" onclick="despliega()"></i><a onclick="despliega()" class="">Datos
@@ -106,7 +131,7 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
       <div class="row" style="margin-top: 40px ">
               <input type="hidden" id="materiasexiste" value="no">
               <div class="col-xs-12 table-responsive" id="materiasasignadas">
-                <table id="etapas" class="table table-bordered table-hover">
+                <table id="prodFracc" class="table table-bordered table-hover">
                     <thead class="thead-dark">
                         <tr>  
                           <th>Titulo</th>
@@ -155,8 +180,7 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
             </datalist>
             <span class="input-group-btn">
               <button class='btn btn-sm btn-primary'
-                onclick='checkTabla("tabla_productos","modalproductos",`<?php echo json_encode($materias);?>`,"Add")'
-                data-toggle="modal" data-target="#modal_productos">
+                onclick='checkTabla("tabla_productos","modalproductos",`<?php echo json_encode($materias);?>`,"Add")' data-toggle="modal" data-target="#modal_productos">
                 <i class="glyphicon glyphicon-search"></i></button>
             </span>
           </div>
@@ -270,9 +294,12 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
 
 
 <script>
-   accion = '<?php echo $accion;?>';
+
+  $('#prodFracc').DataTable({ });
+
+  accion = '<?php echo $accion;?>';
   if (accion == "Editar") {
-    var productos = <?php echo json_encode($etapa -> productos);?>;
+    var productos = <?php echo json_encode($etapa->productos);?>;
 
     for (i = 0; i < productos.length; i++) {
       producto = JSON.stringify(productos[i]);
@@ -484,7 +511,7 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
     fecha = document.getElementById('fecha').value;
     establecimiento = document.getElementById('establecimientos').value;
     recipiente = document.getElementById('recipientes').value;
-    idetapa = <?php echo $etapa -> id;?>;
+    idetapa = <?php echo $etapa->id;?>;
     existe = document.getElementById('productoexiste').value;
     var productos = [];
     var acum_cant = 0;
@@ -524,16 +551,18 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
     }
     );
   }
+  // finalizar solo llena select y levanta modal 
   function finalizar() {
-    html = '<select class="form-control" id="loteorigen">';
-    html += '<option value="" disabled selected>-Seleccione Lote-</option>';
-    cont = 0;
-    $('#tablaproductos tbody').find('tr').each(function () {
-      lote = JSON.parse($(this).attr('data-json'));
-      html += "<option data-json='" + JSON.stringify(lote) + "' value='" + lote.lote + "'>" + lote.titulo + " " + lote.lote + "</option>";
-    });
-    html += '</select>';
-    document.getElementById('divloteorigen').innerHTML = html;
+    // html = '<select class="form-control" id="loteorigen">';
+    // html += '<option value="" disabled selected>-Seleccione Lote-</option>';
+    // cont = 0;
+    // $('#tablaproductos tbody').find('tr').each(function () {
+    //   lote = JSON.parse($(this).attr('data-json'));
+    //   html += "<option data-json='" + JSON.stringify(lote) + "' value='" + lote.lote + "'>" + lote.titulo + " " + lote.lote + "</option>";
+    // });
+    // html += '</select>';
+    // //TODO: COMENTADO PARA LLENAR SELECT
+    // document.getElementById('divloteorigen').innerHTML = html;
     $("#modal_finalizar").modal('show');
   }
   $(document).off('click', '.tablaproductos_borrar').on('click', '.tablaproductos_borrar', { idtabla: 'tablaproductos', idrecipiente: 'productosasignados', idbandera: 'productoexiste' }, remover);

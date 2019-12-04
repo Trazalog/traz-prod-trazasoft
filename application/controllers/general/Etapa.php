@@ -215,11 +215,10 @@ class Etapa extends CI_Controller {
 			$data['fecha'] = $data['etapa']->fecha;
 			if($data['op'] == 'fraccionamiento')
 			{
-				$data['empaques'] = $this->Recipientes->listarEmpaques()->empaques->empaque;
-				
-				// echo("datos en controller");
-				// var_dump($data);
-				
+				// trae lotes segun entrega de materiales de almacen.(81)
+				$data['lotesFracc'] = $this->Etapas->getLotesaFraccionar($id)->lotes->lote;
+				//$data['lotesFracc'] = $this->Etapas->getLotesaFraccionar(81)->lotes->lote;
+				//$data['empaques'] = $this->Recipientes->listarEmpaques()->empaques->empaque;
 				$this->load->view('etapa/fraccionar/fraccionar', $data);
 			}else{
 
@@ -335,6 +334,7 @@ class Etapa extends CI_Controller {
 	// Elabora informe de Etapa hasta que se saque el total del contenido de batch origen
 	public function Finalizar()
 	{
+
 		$productos = json_decode($this->input->post('productos'));
 		$cantidad_padre = $this->input->post('cantidad_padre');
 		$num_orden_prod = $this->input->post('num_orden_prod');	
@@ -349,7 +349,7 @@ class Etapa extends CI_Controller {
 			$arrayPost["prov_id"] = (string)PROVEEDOR_INTERNO;
 			$arrayPost["batch_id_padre"] = $batch_id_padre;// bacth actual
 			$arrayPost["cantidad"] = $value->cantidad;// art seleccionado en lista
-			$arrayPost["cantidad_padre"] =	$cantidad_padre;		//cantida padre esl lo que descuenta del batch actula
+			$arrayPost["cantidad_padre"] =	$cantidad_padre;		//cantida padre esl lo que descuenta del batch actual
 			$arrayPost["num_orden_prod"] =	$num_orden_prod;			
 			$arrayPost["reci_id"] = $value->destino;  //reci_id destino del nuevo batch
 			$arrayPost["etap_id"] = (string)DEPOSITO_TRANSPORTE;
@@ -372,7 +372,47 @@ class Etapa extends CI_Controller {
 			echo("ok");
 		}				
 	}
-	//TODO: FUNCION DEPRECADA ORIGINAL DE JUDAS
+	// Informe de etata fracccionamiento. 
+	public function finalizaFraccionar(){
+
+		$productos = json_decode($this->input->post('productos'));
+		$cantidad_padre = $this->input->post('cantidad_padre');
+		$num_orden_prod = $this->input->post('num_orden_prod');	
+		$lote_id = $this->input->post('lote_id');
+		$batch_id_padre = $this->input->post('batch_id');
+		$cantidad = $this->input->post('cant_total_desc');
+
+		foreach ($productos as $value) {
+
+			$info = json_decode($value);
+			$arrayPost["lote_id"] = $info->loteorigen; // lote origen
+			$arrayPost["arti_id"] = $info->id;	// art seleccionado en lista
+			$arrayPost["prov_id"] = (string)PROVEEDOR_INTERNO;
+			$arrayPost["batch_id_padre"] = $batch_id_padre;// bacth actual
+			$arrayPost["cantidad"] = $info->cantidad;// art seleccionado en lista
+			$arrayPost["cantidad_padre"] =	$cantidad_padre;		//cantida padre esl lo que descuenta del batch actual
+			$arrayPost["num_orden_prod"] =	$num_orden_prod;			
+			$arrayPost["reci_id"] = $info->destino;  //reci_id destino del nuevo batch
+			$arrayPost["etap_id"] = (string)ETAPA_DEPOSITO;
+			$arrayPost["usuario_app"] = userNick();
+			$arrayPost["empr_id"] = (string)empresa();	
+			$arrayPost["forzar_agregar"] = false;
+			$arrayPost["fec_vencimiento"] = "01-01-1988";
+			$arrayPost["recu_id"] = (string)0;
+			$arrayPost["tipo_recurso"] = "";
+			$arrayDatos['_post_lote_list_batch_req']['_post_lote_lis'][] = $arrayPost;	
+		}	
+
+		$resp = $this->Etapas->finalizarEtapa($arrayDatos);
+		
+		if ($resp > 300) {
+			echo("Error en dataservice");
+			return;
+		}else{
+			echo("ok");
+		}		
+	}
+	//TODO: FUNCION DEPRECADA ORIGINAL DE JUDAS(CREO jeje)
 	public function fraccionar()
 	{
 			$data['accion'] = 'Nuevo';

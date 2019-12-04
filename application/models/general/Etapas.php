@@ -184,16 +184,14 @@ class Etapas extends CI_Model
     // Informe de Etapa (modal_finaizar)
     public function finalizarEtapa($arrayDatos)
     {
-
         log_message('DEBUG', 'Etapas/finalizarEtapa(datos)-> ' . json_encode($arrayDatos));
-
         $resource = '/lote/list_batch_req';
         $url = REST4 . $resource;
         $array = $this->rest->callAPI("POST", $url, $arrayDatos);
         wso2Msj($array);
         return json_decode($array['status']);
     }
-    //TODO: BOORAR DEPRECADA
+    //TODO: BORAR DEPRECADA
     // Guarda fraccionamiento temp Etapa Fraccionamiento
     public function setFraccionamTemp($fraccionam)
     {
@@ -210,6 +208,18 @@ class Etapas extends CI_Model
     {
         echo ("datos en model de iniciar fraccionado: ");
         var_dump($data);
-    }
+		}
+		
+		public function getLotesaFraccionar($id){
+
+				$idBatch = json_encode($id);
+        log_message('DEBUG', 'Etapas/getLotesaFraccionar(batch_id)-> ' . $idBatch);      
+			
+        $resource = '/lote/fraccionar/batch/' . $id;
+        $url = REST2 . $resource;
+        $array = $this->rest->callAPI("GET", $url, $id);
+
+        return json_decode($array['data']);
+		}
 
 }
