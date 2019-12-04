@@ -6,16 +6,20 @@ class Ajustestock extends CI_Controller
     {
         parent::__construct();
         $this->load->model('general/Establecimientos');
-        // $this->load->model(ALM.'Articulos');
-		// $this->load->model(ALM.'Lotes');
-		// $this->load->model('Tablas');
+        $this->load->model(ALM.'Ajustestocks');
     }
     public function index()
     {
         $data['establecimientos'] = $this->Establecimientos->listar()->establecimientos->establecimiento;
         
-
-        //var_dump($data);
         $this->load->view(ALM.'ajustestock/ajuste_stock',$data);
     }
+
+    public function guardarAjuste()
+    {
+        $data = $this->input->post('data');
+        echo $this->Ajustestocks->guardarAjuste($data);
+    }
+
+
 }

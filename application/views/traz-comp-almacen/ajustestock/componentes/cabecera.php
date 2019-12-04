@@ -120,8 +120,7 @@ $("#tipoajuste").on('change', function() {
         $("#boxEntrada :input").prop("disabled", true);
         $("#boxEntrada").removeClass("box-primary");
         $('#boxSalida').css('opacity', '');
-        $('#boxEntrada').css('opacity', '0.5');
-        
+        $('#boxEntrada').css('opacity', '0.5');   
     }
     if($("#tipoajuste>option:selected").attr("data") == "E/S"){
         //console.log("entro a entrada/salida");

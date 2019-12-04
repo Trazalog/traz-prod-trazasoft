@@ -2,8 +2,8 @@
     <div class="box-body">
         <div class="form-group">
             <label for="">Justificacion:</label>
-            <textarea style="resize: none;" type="text" class="form-control input-sm" rows="5" id="descripcion"
-                name="descripcion" required></textarea>
+            <textarea style="resize: none;" type="text" class="form-control input-sm" rows="5" id="justificacion"
+                name="justificacion" required></textarea>
         </div>
         <div>
             <div class="text-right">

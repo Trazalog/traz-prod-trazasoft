@@ -22,7 +22,6 @@
 </form>
 
 <script>
-
 obtenerArticulos();
 
 function obtenerArticulos() {
@@ -62,32 +61,21 @@ $("#articulosal").on('change', function() {
 
 function guardar() {
 
-        
-        var formdata = new FormData($("#formTotal")[0]);
-        // var formdata2 = FormData($("#frm-salida")[0]);
-        var formobj1 = formToObject(formdata);
-        // var formobj2 = formToObject(formdata2);
-        // var formobjmerge = mergeFD(formobj1, formobj2);
-        console.log(formobj1);
-        // showFD(formobj1);
-
-        // $.ajax({
-        //     type: 'POST',
-        //     data: formobjmerge,
-        //     dataType: 'JSON',
-        //     url: '',
-        //     success: function(rsp) {
-        //         console.log(rsp);
-
-        //     },
-        //     error: function(rsp) {
-        //         alert('Error: ' + rsp.msj);
-        //         console.log(rsp.msj);
-        //     },
-        //     complete: function() {
-        //         me.data('requestRunning', false);
-        //     }
-        // });
-    // });
+    var formdata = new FormData($("#formTotal")[0]);
+    var formobj = formToObject(formdata);
+    console.log(formobj);
+    $.ajax({
+        type: 'POST',
+        data: {data:formobj},
+        url: '<?php echo ALM ?>Ajustestock/guardarAjuste',
+        success: function(rsp) {
+            console.log(rsp);
+        },
+        error: function(rsp) {
+            alert('Error: ' + rsp.msj);
+            console.log(rsp.msj);
+        },
+        complete: function() {}
+    });
 }
 </script>
