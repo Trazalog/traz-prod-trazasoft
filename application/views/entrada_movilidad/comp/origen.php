@@ -1,6 +1,7 @@
 <div class="box box-primary tag-descarga">
     <div class="box-header">
-        <h3 class="box-title"> Ingreso <span id="origen"> - </span></h3>
+        <i class="fa fa-sign-in"></i>
+        <h3 class="box-title"> Ingreso <span id="origen"></span></h3>
     </div>
     <div class="box-body">
         <form id="frm-origen" class="frm-origen">
@@ -64,6 +65,7 @@ $('.frm-origen #codigo').on('change', function() {
     $('.frm-origen #articulo').val(json.arti_id);
     $('.frm-destino #articulo').val(json.arti_id);
     $('.frm-origen #um').val(json.um);
+    $('.frm-destino #unidad_medida').val(json.um);
     $('.frm-origen #cantidad').val(json.cantidad);
     batch = json.batch_id;
     $('.inp-descarga').attr('readonly', true);
@@ -135,4 +137,8 @@ function obtenerArticulos() {
         }
     });
 }
+
+$('.frm-origen #um').on('change', function(){
+    $('.frm-destino #unidad_medida').val(this.value );
+});
 </script>

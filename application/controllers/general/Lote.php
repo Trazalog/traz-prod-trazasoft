@@ -23,6 +23,7 @@ class Lote extends CI_Controller
         $establecimiento = $this->input->post('establecimiento');
         $salida = $this->input->post('salida');
         $res = $this->Lotes->listarPorEstablecimientoConSalida($establecimiento);
+        $res['data'] = selectBusquedaAvanzada(false, $res['data'], 'batch_id', 'id', array('tituloproducto', 'Stock:'=>'stock'));
         echo json_encode($res);
     }
     public function listarPorCamion()
