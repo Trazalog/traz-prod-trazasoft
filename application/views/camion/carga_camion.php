@@ -244,6 +244,8 @@ $("#inputlotes").on('change', function() {
 });
 
 function ActualizaLote(lote) {
+    console.log(lote);
+    
     document.getElementById('fechalote').value = lote.fecha;
     document.getElementById('envaselote').value = lote.tituloenvase;
     document.getElementById('productolote').value = lote.tituloproducto;

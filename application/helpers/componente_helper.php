@@ -18,23 +18,25 @@ if (!function_exists('info_header')) {
     }
 }
 
-if(!function_exists('select2')){
-    function select2($id, $list, $label, $value, $descripcion = false){
+if(!function_exists('selectBusquedaAvanzada')){
+    function selectBusquedaAvanzada($id, $list, $value, $label, $descripcion = false , $button = false){
 
         $list = json_decode(json_encode($list), true);
 
-        $button = '<div class="input-group">%s<span class="input-group-btn"><button class="btn btn-primary" data-toggle="modal" data-target="#modal_articulos"><i class="glyphicon glyphicon-search"></i></button></span></div>';
+        if($button) $button = '<div class="input-group">%s<span class="input-group-btn"><button class="btn btn-primary" data-toggle="modal" data-target="#modal_articulos"><i class="glyphicon glyphicon-search"></i></button></span></div>';
+
         $html .= "<select class='form-control select2' style='width: 100%;' id='$id' data-json=''>";
-        $html .= "<option data-foo='' selected disabled> -  Seleccionar  - </option>";
+        $html .= "<option value='' data-foo='' selected disabled> -  Seleccionar  - </option>";
         foreach ($list as $o) {
-            $html .= "<option value='$o[$value]' data-json='".json_encode($o)."'";
+            $html .= "<option value='$o[$value]' data-json='".json_encode($o)."' ";
 
             if($descripcion){
                 $aux = '';
                 if(is_array($descripcion)){
 
-                    foreach ($descripcion as $key =>$e) {
-                        $aux .= (is_numeric($key)?$o[$e] : sprintf($key, $o[$e])) . ' || ' ;
+                    foreach ($descripcion as $i => $e) {
+                        $o[$e] = $o[$e]?"\"$o[$e]\"":' - '; 
+                        $aux .= '<small class"text-blue"><cite>'.(is_numeric($i) ? $o[$e] : sprintf($i, $o[$e])).'</cite></small>  <label class="text-black">♥  </label>   ';
                     }
 
                 }else{
@@ -44,8 +46,8 @@ if(!function_exists('select2')){
             $html .= " data-foo='$aux'>$o[$label]</option>";
         }
         $html .= "</select>";
-        $html = sprintf($button, $html);
-        $html .= "<cite id='detalle' class='text-blue'></cite>";
+        if($button) $html = sprintf($button, $html);
+        $html .= "<label id='detalle' class='text-blue'></label>";
         $html .= "<script>$('#$id').select2({matcher: matchCustom,templateResult: formatCustom}).on('change', function() { selectEvent(this);})</script>";
         return $html;
 }
