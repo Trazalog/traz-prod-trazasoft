@@ -9,5 +9,6 @@
     </li>
     <li><a class="link" href="#" data-link="general/Camion/salidaCamion"><i class="fa fa-circle-o"></i>Descarga Camión</a></li>
     <li><a class="link" href="#" data-link="general/Camion/entradaCamion"><i class="fa fa-exchange"></i>Carga | Recepción</a>
+    <li><a class="link" href="#" data-link="general/Camion/listado_carga_camion"><i class="fa fa-circle-o"></i>Listado Carga Camion</a>
     </li>
 </ul>
