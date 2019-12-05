@@ -145,7 +145,6 @@ define('REST3', 'http://dev-trazalog.com.ar:8280/services/produccionTest');
 define('REST4', 'http://dev-trazalog.com.ar:8280/services/TrazabilidadDataService');
 
 
-
 //TODO:AGREGAR AL CONSTANT ORIGINAL
 #RECURSOS_LOTES
 define('MATERIA_PRIMA', 'MATERIA_PRIMA');
