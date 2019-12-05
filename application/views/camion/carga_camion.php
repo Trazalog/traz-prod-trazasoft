@@ -197,7 +197,7 @@ function ActualizaLotes() {
 
     establecimiento = document.getElementById('establecimientos').value;
     salida = false;//document.getElementById('checklote').checked;
-
+    resetSelect('#inputlotes');
     wo();
     $.ajax({
         type: 'POST',
@@ -208,6 +208,7 @@ function ActualizaLotes() {
         },
         url: 'general/Lote/listarPorEstablecimientoConSalida',
         success: function(result) {
+       
 
            if(!result.status){
                alert('Fallo la Obtencion de Lotes Asociados');
