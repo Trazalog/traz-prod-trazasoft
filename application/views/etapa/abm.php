@@ -1,9 +1,12 @@
 <?php $this->load->view('etapa/modal_materia_prima');?>
 <?php $this->load->view('etapa/modal_lotes');?>
 <?php $this->load->view('etapa/modal_producto');?>
-<?php if($etapa->estado == "En Curso"){
-$this->load->view('etapa/modal_finalizar');}?>
+<?php #if($etapa->estado == "En Curso"){
+$this->load->view('etapa/modal_finalizar');#}?>
+<script>
 
+$('#modal_finalizar').modal('show');
+</script>
 <!-- Cabecera -->
 <div class="box">
 

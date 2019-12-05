@@ -35,7 +35,8 @@ if(!function_exists('selectBusquedaAvanzada')){
                 if(is_array($descripcion)){
 
                     foreach ($descripcion as $i => $e) {
-                        $aux .= '<small class"text-blue"><cite>'.(is_numeric($i)?$o[$e] : sprintf($i, $o[$e])).'</cite></small>   ♥   ';
+                        $o[$e] = $o[$e]?"\"$o[$e]\"":' - '; 
+                        $aux .= '<small class"text-blue"><cite>'.(is_numeric($i) ? $o[$e] : sprintf($i, $o[$e])).'</cite></small>  <label class="text-black">♥  </label>   ';
                     }
 
                 }else{
