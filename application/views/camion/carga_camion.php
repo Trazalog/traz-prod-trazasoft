@@ -74,17 +74,10 @@
     <div class="box-body">
         <div class="row" style="margin-top:40px;">
             <div class="col-md-6 col-xs-12">
-                <label class="form-label" for="">Codigos Lotes*: &nbsp;&nbsp;</label><input class="hidden" onchange="ActualizaLotes()"
-                    type="checkbox" id="checklote"><small class="hidden">&nbsp;&nbsp;&nbsp;&nbsp;Solo los que salen</small>
+               <label class="form-label" for="">Codigos Lotes*: &nbsp;&nbsp;</label>  
                 <div class="row">
-                    <div class="col-xs-11 input-group margin">
-                        <input list="lotes" id="inputlotes" class="form-control" autocomplete="off" disabled>
-                        <input type="hidden" id="idlote" value="" data-json="">
-                        <div id="divlotes"></div>
-                        <span class="input-group-btn">
-                            <button class='btn btn-primary' onclick=ModalLotes(); disabled id="btnlotes">
-                                <i class="glyphicon glyphicon-search"></i></button>
-                        </span>
+                    <div class="col-xs-11 margin form-group">
+                        <?php echo selectBusquedaAvanzada('inputlotes'); ?>
                     </div>
                 </div>
             </div>
@@ -200,11 +193,12 @@ function DatosCamion() {
 }
 
 function ActualizaLotes() {
-    //Limpiar Lotes
-    $('#divlotes').empty();
+
 
     establecimiento = document.getElementById('establecimientos').value;
-    salida = document.getElementById('checklote').checked;
+    salida = false;//document.getElementById('checklote').checked;
+
+    wo();
     $.ajax({
         type: 'POST',
         dataType:'JSON',
@@ -214,33 +208,28 @@ function ActualizaLotes() {
         },
         url: 'general/Lote/listarPorEstablecimientoConSalida',
         success: function(result) {
-           console.table(result);
+
            if(!result.status){
-               alert('No se pudo obtener los Lotes Asociados');
+               alert('Fallo la Obtencion de Lotes Asociados');
                return;
            }
-           result = result.data;
-            var html = " <datalist id='lotes'>";
-            for (var i = 0; i < result.length; i++) {
-                html = html + "<option data-json= '" + JSON.stringify(result[i]) + "'value='" + result[i].titulo + "'>" + result[i].tituloproducto + "</option>";
-            }
 
-            html += '</datalist>';
-            document.getElementById('divlotes').innerHTML = "";
-            document.getElementById('divlotes').innerHTML = html;
+           $('#inputlotes').html(result.data);
+ 
+        },
+        error:function(){
+            alert('Error al Obtener Lotes Asociados al Establecimiento');
+        },
+        complete: function(){
+            wc();
         }
 
     });
 }
 $("#inputlotes").on('change', function() {
-    ban = $("#lotes option[value='" + $('#inputlotes').val() + "']").length;
-    if (ban == 0) {
-        alert('Lote Inexistente');
-        document.getElementById('inputlotes').value = "";
-    } else {
-        lote = JSON.parse($("#lotes option[value='" + $('#inputlotes').val() + "']").attr('data-json'));
-        ActualizaLote(lote);
-    }
+   
+    var lote = JSON.parse(this.dataset.json);
+    ActualizaLote(lote);
 });
 
 function ActualizaLote(lote) {
@@ -269,7 +258,7 @@ function Cargar() {
         ban = false;
         msj += "- No Ha Seleccionado lote \n";
     } else {
-        carga = JSON.parse($("#lotes option[value='" + $('#inputlotes').val() + "']").attr('data-json'));
+        carga = JSON.parse($('#inputlotes').attr('data-json'));
         console.log(carga);
         var cantidad = parseFloat(document.getElementById('cantidadcarga').value);
         console.log("Cantidad: " + cantidad);

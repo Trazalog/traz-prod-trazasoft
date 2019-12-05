@@ -1,6 +1,6 @@
 <div class="box box-primary tag-descarga">
     <div class="box-header">
-        <i class="fa fa-pencil"></i>
+        <i class="fa fa-sign-in"></i>
         <h3 class="box-title"> Destino</h3>
     </div>
     <div class="box-body">
@@ -40,7 +40,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Unidad Medida:</label>
-                        <input list="unidades" name="unidad_medida" class="form-control req" type="text" placeholder="< Seleccionar >">
+                        <input disabled id="unidad_medida" list="unidades" name="unidad_medida" class="form-control req" type="text">
                         <datalist id="unidades" class="unidades">
 
                         </datalist>
