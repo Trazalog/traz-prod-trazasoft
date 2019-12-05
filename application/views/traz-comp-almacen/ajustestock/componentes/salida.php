@@ -19,7 +19,10 @@
             <div class="col-md-12">
                 <div class="form-group">
                     <label>Lote:</label>
-                    <input list="articulos" name="lotesal" class="form-control inp-descarga" type="text" id="lotesal">
+                    <select class="form-control select2 select2-hidden-accesible" id="lotesal"
+                        name="lotesal" required>
+                        <option value="" disabled selected>-Seleccione opcion-</option>
+                    </select>
                 </div>
             </div>
         </div>

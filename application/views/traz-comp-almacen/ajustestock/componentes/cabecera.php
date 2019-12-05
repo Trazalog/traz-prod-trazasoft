@@ -76,10 +76,10 @@ $("#establecimiento").on('change', function() {
         url: 'general/Establecimiento/obtenerDepositos?esta_id=' + idestablecimiento,
         success: function(result) {
             if (result != null) {
-                //console.log(result[0].descripcion);
+                //console.log(result);
                 var option_depo = '<option value="" disabled selected>-Seleccione opcion-</option>';
                 for (let index = 0; index < result.length; index++) {
-                    option_depo += '<option value="' + result[index].descripcion + '">' + result[index].descripcion +
+                    option_depo += '<option value="' + result[index].depo_id + '">' + result[index].descripcion +
                         '</option>'
                 }
                 $('#deposito').html(option_depo);
@@ -94,6 +94,7 @@ $("#establecimiento").on('change', function() {
         }
     });
 });
+
 
 $("#boxEntrada :input").prop("disabled", true);
 $("#boxSalida :input").prop("disabled", true);
@@ -113,6 +114,7 @@ $("#tipoajuste").on('change', function() {
     }
     if($("#tipoajuste>option:selected").attr("data") == "SALIDA"){
         //console.log("entro a salida");
+        //codigo referido a la vista
         $("#boxSalida :input").prop("disabled", false);
         $("#boxSalida").removeClass("box-default");
         $("#boxSalida").addClass("box-primary");
@@ -120,7 +122,8 @@ $("#tipoajuste").on('change', function() {
         $("#boxEntrada :input").prop("disabled", true);
         $("#boxEntrada").removeClass("box-primary");
         $('#boxSalida').css('opacity', '');
-        $('#boxEntrada').css('opacity', '0.5');   
+        $('#boxEntrada').css('opacity', '0.5'); 
+        //------------------------------------------------
     }
     if($("#tipoajuste>option:selected").attr("data") == "E/S"){
         //console.log("entro a entrada/salida");

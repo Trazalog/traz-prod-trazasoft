@@ -228,4 +228,13 @@ class Lotes extends CI_Model
         return $rsp;
 
     }
+
+    public function listarPorArticulos($idarticulo,$iddeposito){
+
+        log_message('DEBUG', '#MODEL > listarPorArticulos | ID_ARTICULO: ' .$idarticulo);
+        $resource = 'deposito/'.$iddeposito.'/articulo/'.$idarticulo.'/lote/list'; 	
+        $url = REST0.$resource;
+        $array = file_get_contents($url, false, http('GET'));
+        return json_decode($array);                
+    }
 }
