@@ -3,8 +3,32 @@
         <h3 class="box-title">Listado Recepción Camión</h3>
     </div>
     <div class="box-body">
-        
-        
+    <!--________________________________________________________________________-->    
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="exampleInputEmail1"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Establecimiento</font></font></label>
+                <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Ingresar Establecimiento">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Transportista</font></font></label>
+                <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Ingresar Transportista">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Proveedor</font></font></label>
+                <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Ingresar Proveedor">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="exampleInputEmail1"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Rango Fecha</font></font></label>
+                <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Ingresar Establecimiento">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Articulo</font></font></label>
+                <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Ingresar Establecimiento">
+            </div>
+        </div>
+    <!--________________________________________________________________________-->    
     <div class="box-body">
               <table class="table table-bordered">
                 <tbody><tr>
