@@ -4,7 +4,7 @@
     </div>
     <div class="box-body">
         
-<div class="col-md-12">     
+        
     <div class="box-body">
               <table class="table table-bordered">
                 <tbody><tr>
@@ -55,8 +55,7 @@
                 </tr>
               </tbody></table>
             </div>
-            </div>   
-    </div>
 
-    
+
+    </div>
 </div>
