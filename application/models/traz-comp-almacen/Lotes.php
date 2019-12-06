@@ -185,7 +185,7 @@ class Lotes extends CI_Model
             $aux["empr_id"] = strval(empresa());
             $aux["forzar_agregar"] = isset($o->forzar_agregar) ? $o->forzar_agregar : "FALSE";
             $aux["fec_vencimiento"] = date('d-m-Y');
-            $aux["recu_id"] = 0;
+            $aux["recu_id"] = "0";
             $aux["tipo_recurso"] = "";
 
 
