@@ -157,7 +157,8 @@ $('.datalist').on('change', function() {
 
 function AgregarProducto() {
     ban = true;
-    productoid = document.getElementById('idproducto').value;
+
+    productoid = $("#inputproducto").val();
     if (productoid == "") {
         ban = false;
     }
@@ -219,7 +220,7 @@ function AgregarProducto() {
             producto.fraccionado = 'No';
         }
         agregaProducto(producto);
-        document.getElementById('idproducto').value = "";
+        $("#inputproducto").val("");
         document.getElementById('cantidadproducto').value = "";
         document.getElementById('lotedestino').value = "";
         document.getElementById('productodestino').value = "";
@@ -292,11 +293,9 @@ function copiaOrigen() {
     document.getElementById('lotedestino').value = document.getElementById('loteorigen').value;
 }
 
-$("#inputproducto").on('change', function() {
-   
-  document.getElementById('idproducto').value = this.value;
-   
-});
+// $("#inputproducto").on('change', function() {
+//  document.getElementById('idproducto').value = $(this).val();   
+// });
 
 function validarCantidad() {
 

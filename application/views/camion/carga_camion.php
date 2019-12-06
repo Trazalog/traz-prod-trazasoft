@@ -76,7 +76,7 @@
             <div class="col-md-6 col-xs-12">
                <label class="form-label" for="">Codigos Lotes*: &nbsp;&nbsp;</label>  
                 <div class="row">
-                    <div class="col-xs-11 margin form-group">
+                    <div class="col-xs-11 margin form-group ba">
                         <?php echo selectBusquedaAvanzada('inputlotes'); ?>
                     </div>
                 </div>

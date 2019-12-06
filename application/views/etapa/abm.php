@@ -48,9 +48,9 @@ $this->load->view('etapa/modal_finalizar');}?>
                     <?php
 						foreach($establecimientos as $fila){
 
-								if($accion == 'Editar' && $fila->titulo == $etapa->establecimiento->titulo){
+								if(($accion == 'Editar' || $etapa->estado =='FINALIZADO' ) && $fila->titulo == $etapa->establecimiento->titulo){
 
-										echo '<option value="'.$fila->id.'" selected >'.$fila->nombre.'</option>';
+										echo '<option value="'.$fila->id.'" selected>'.$fila->nombre.'</option>';
 								}else{
 
 										echo '<option value="'.$fila->esta_id.'" >'.$fila->nombre.'</option>';
