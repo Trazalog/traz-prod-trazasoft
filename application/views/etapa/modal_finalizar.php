@@ -10,6 +10,15 @@
             <input class="hidden" type="text" id="num_orden_prod" value="<?php echo $etapa->orden;?>">
             <input class="hidden" type="text" id="batch_id_padre" value="<?php echo $etapa->id;?>">
             <div class="modal-body" id="modalBodyArticle">
+
+                <div class="row form-group" style="margin-top:20px">
+                    <div class="col-md-3 col-xs-12"><label class="form-label">Establecimiento:</label></div>
+                    <div class="col-md-4 col-xs-12"><input class="form-control" type="text"
+                            value="<?php echo $etapa->establecimiento ?>" disabled></div>
+                    <div class="col-md-5"></div>
+                </div>
+
+
                 <div class="row form-group" style="margin-top:20px">
                     <div class="col-md-3 col-xs-12"><label class="form-label">Codigo Lote Origen:</label></div>
                     <div class="col-md-4 col-xs-12"><input class="form-control" type="text" id="loteorigen"
@@ -55,7 +64,7 @@
                         <label for="inputproducto" class="form-label">Producto*:</label>
                     </div>
                     <div class="col-md-8 col-xs-12">
-                      <?php  echo selectBusquedaAvanzada('inputproducto', $materias, 'id', 'titulo'); ?>
+                        <?php  echo selectBusquedaAvanzada('inputproducto', $materias, 'id', 'titulo'); ?>
                     </div>
                     <div class="col-md-3"></div>
                 </div>
