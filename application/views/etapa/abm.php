@@ -48,7 +48,7 @@ $this->load->view('etapa/modal_finalizar');}?>
                     <?php
 						foreach($establecimientos as $fila){
 
-								if(($accion == 'Editar' || $etapa->estado =='FINALIZADO' ) && $fila->titulo == $etapa->establecimiento->titulo){
+								if(($accion == 'Editar' || $etapa->estado =='FINALIZADO' ) && $fila->nombre == $etapa->establecimiento){
 
 										echo '<option value="'.$fila->id.'" selected>'.$fila->nombre.'</option>';
 								}else{
@@ -63,7 +63,7 @@ $this->load->view('etapa/modal_finalizar');}?>
                 <?php if($accion == 'Nuevo'){
 										echo '<label for="Recipiente" class="form-label">'.$etapa->titulorecipiente.'*:</label>'; 
 									}?>
-                <?php if($accion == 'Editar'){ 
+                <?php if($accion == 'Editar' || $etapa->estado =='FINALIZADO'){ 
 										echo	'<label for="Recipiente" class="form-label"> '.$etapa->reci_estab_nom.' *:</label>';
 									}?>
             </div>
@@ -94,7 +94,7 @@ $this->load->view('etapa/modal_finalizar');}?>
               
 
                 <input type="text" id="ordenproduccion" class="form-control"
-                    <?php if($accion=='Editar' ){echo ( 'value="'.$op.'"');}?> placeholder="Inserte Orde de Produccion"
+                    <?php if($accion=='Editar' || $etapa->estado =='FINALIZADO'){echo ( 'value="'.$etapa->orden.'"');}?> placeholder="Inserte Orde de Produccion"
                     <?php if($etapa->estado == 'En Curso' || $etapa->estado =='FINALIZADO'){echo 'disabled';}?>>
             </div>
             <div class="col-md-6">
