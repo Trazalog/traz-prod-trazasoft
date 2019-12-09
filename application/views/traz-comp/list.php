@@ -5,7 +5,7 @@
                 <div class="form-group">
                     <label for="">Artículos:</label>
                     <?php 
-                        echo selectBusquedaAvanzada('articulos', $listArt, 'arti_id', 'barcode',  array('descripcion','Stock:' => 'stock', 'Unidad Medida:'=>'unidad_medida'), true);
+                        echo selectBusquedaAvanzada('articulos', 'articulo', $listArt, 'arti_id', 'barcode',  array('descripcion','Stock:' => 'stock', 'Unidad Medida:'=>'unidad_medida'), true);
                         ?>
                 </div>
             </div>

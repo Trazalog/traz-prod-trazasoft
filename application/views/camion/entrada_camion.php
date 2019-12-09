@@ -1,3 +1,4 @@
+
 <?php $this->load->view('camion/modal_productos')?>
 <div class="box">
     <div class="box-header with-border">
@@ -153,10 +154,11 @@ foreach ($establecimientos as $fila) {
 $('.select').select2();
 $('#frm-camion').on('reset',function(){
     $(this).find('.select').val(null).trigger('change');
-
 });
 
 function reset() {
+    $('#new_codigo').removeClass('hidden').attr('disabled',false);
+    $('#frm-origen #codigo').attr('disabled',true).next(".select2-container").hide();
     $('#frm-origen')[0].reset();
     $('#frm-destino')[0].reset();
     $('.inp-descarga').attr('readonly', false);
@@ -170,24 +172,25 @@ $('#patente').keyup(function(e) {
         console.log('Obtener Lotes Patentes');
 
         if (this.value == null || this.value == '') return;
+
         wo();
         $.ajax({
             type: 'GET',
             dataType: 'JSON',
             url: 'index.php/general/Lote/obtenerLotesCamion?patente=' + this.value,
             success: function(rsp) {
+
+                console.log(rsp);
+                
                 if (rsp.data == null) {
                     alert('No existen Lotes Asociados');
                     return;
                 }
-                console.log(rsp);
 
-                $("#codigos").empty();
-                rsp.data.forEach(function(e) {
-                    $("#codigos").append(
-                        `<option data-json='${JSON.stringify(e)}' value="${e.lote_id}">${e.establecimiento}</option>`
-                    );
-                });
+                $('#codigo').attr('disabled',false).next(".select2-container").show();
+                $('#new_codigo').addClass('hidden').attr('disabled',true);
+            
+                fillSelect("#codigo", rsp.data);
 
             },
             error: function(rsp) {

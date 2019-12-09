@@ -4,7 +4,7 @@ if (!function_exists('info_header')) {
     function info_header($titulo, $body)
     {
         echo
-            '<div class="box box-primary collapsed-box asd">
+            '<div class="box box-primary collapsed-box">
                 <div class="box-header with-border">
                 <h3 class="box-title">' . $titulo . '</h3>
                 <div class="box-tools pull-right">
@@ -20,12 +20,12 @@ if (!function_exists('info_header')) {
 }
 
 if (!function_exists('selectBusquedaAvanzada')) {
-    function selectBusquedaAvanzada($id, $list = false, $value = false, $label = false, $descripcion = false, $button = false)
+    function selectBusquedaAvanzada($id, $name = false, $list = false, $value = false, $label = false, $descripcion = false, $button = false)
     {
         #Convertir Datos a Arreglo
         $list = json_decode(json_encode($list), true);
 
-        $opt = "<option value='' data-foo='' selected disabled> -  Seleccionar  - </option>";
+        $opt = $list?"<option value='' data-foo='' selected disabled> -  Seleccionar  - </option>":null;
         
         # Si Trae Datos Construir Opciones
         if($list) {
@@ -52,7 +52,7 @@ if (!function_exists('selectBusquedaAvanzada')) {
         # Si solo pide las opciones retorna $OPT
         if(!$id) return $opt;
 
-        $html .= "<select class='form-control select2' style='width: 100%;' id='$id' data-json=''>$opt</select>";
+        $html .= "<select class='form-control select2' style='width: 100%;' id='$id' name='$name' data-json=''>$opt</select>";
 
         # Boton de Busqueda avanzada
         if ($button) {

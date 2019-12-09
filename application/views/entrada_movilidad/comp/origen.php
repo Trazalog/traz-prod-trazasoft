@@ -6,23 +6,23 @@
     <div class="box-body">
         <form id="frm-origen" class="frm-origen">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <div class="form-group">
                         <label>Código Lote:</label>
-                        <input list="codigos" name="lote_id" class="form-control" type="text" id="codigo">
-                        <datalist id="codigos">
-                            <!-- LOTES POR CAMION -->
-                        </datalist>
+                        <input type="text" id="new_codigo" name="lote_id" class="form-control hidden" disabled style="margin-botton:-500px">
+                        <?php
+                            echo selectBusquedaAvanzada('codigo', 'lote_id');
+                        ?>
+                        <!-- <small class="help-block"></small> -->
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <div class="form-group">
                         <label>Producto:</label>
-                        <input list="articulos" name="arti_id" class="form-control inp-descarga" type="text"
-                            id="articulo" placeholder="< Seleccionar >">
-                        <datalist id="articulos">
-
-                        </datalist>
+                        <?php
+                            echo selectBusquedaAvanzada('articulos', 'arti_id');
+                            ?>
+                        <!-- <small class="help-block"></small> -->
                     </div>
                 </div>
                 <div class="col-md-12" style="margin-top:7px">
@@ -31,7 +31,7 @@
                         <textarea type="text" class="form-control" id="art-detalle" disabled></textarea>
                     </div>
                 </div>
-            </div><br>
+            </div>
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
@@ -57,13 +57,19 @@
 <!-- box -->
 
 <script>
+$('#new_codigo').removeClass('hidden').attr('disabled', false);
+$('#frm-origen #codigo').attr('disabled', true).next(".select2-container").hide();
+
 var batch = null;
 $('.frm-origen #codigo').on('change', function() {
-    var json = getJson($('#codigos [value="' + this.value + '"]'));
+    var json = getJson(this);
     if (!json) return;
 
-    $('.frm-origen #articulo').val(json.arti_id);
-    $('.frm-destino #articulo').val(json.arti_id);
+    alert(json.arti_id);
+    $('.frm-origen #articulos').val(json.arti_id).trigger('change');
+    $('.frm-destino #articulos').val(json.arti_id).trigger('change');
+
+
     $('.frm-origen #um').val(json.um);
     $('.frm-destino #unidad_medida').val(json.um);
     $('.frm-origen #cantidad').val(json.cantidad);
@@ -71,17 +77,18 @@ $('.frm-origen #codigo').on('change', function() {
     $('.inp-descarga').attr('readonly', true);
 
     //Rellenar Inputs Informacion
-    var desc = $('.frm-origen #articulos [value="' + json.arti_id + '"]').html()
-    $('.frm-origen #art-detalle').val(desc);
-    $('.frm-destino #art-detalle').val(desc);
+    var art = getJson($('.frm-origen #articulos'));
+
+    $('.frm-origen #art-detalle').val(art.descripcion);
+    $('.frm-destino #art-detalle').val(art.descripcion);
 
 });
 
-$('.frm-origen #articulo').on('change', function() {
-   var desc = $('.frm-origen #articulos [value="' + this.value + '"]').html()
-    $('.frm-origen #art-detalle').val(desc);
-    $('.frm-destino #art-detalle').val(desc);
-    $('.frm-destino #articulo').val(this.value);
+$('.frm-origen #articulos').on('change', function() {
+    var art = getJson(this);
+    $('.frm-origen #art-detalle').val(art.descripcion);
+    $('.frm-destino #art-detalle').val(art.descripcion);
+    $('.frm-destino #articulo').val($(this).find('option:selected').text());
 });
 
 
@@ -113,11 +120,12 @@ function obtenerUM() {
 }
 
 obtenerArticulos();
+
 function obtenerArticulos() {
     $.ajax({
         type: 'GET',
         dataType: 'JSON',
-        url: 'index.php/<?php echo ALM ?>Articulo/obtener',
+        url: 'index.php/<?php echo ALM ?>Articulo/obtener/true',
         success: function(rsp) {
             console.log(rsp);
 
@@ -125,11 +133,9 @@ function obtenerArticulos() {
                 alert('No hay Articulos Disponibles');
                 return;
             }
-            rsp.data.forEach(function(e, i) {
-                $('.frm-origen #articulos').append(
-                    `<option value="${e.id}">${e.barcode} | ${e.titulo}</option>`
-                );
-            });
+
+            var obj = $('.frm-origen #articulos');
+            fillSelect(obj, rsp.data);
         },
         error: function(rsp) {
             alert('Error: ' + rsp.msj);
@@ -138,7 +144,8 @@ function obtenerArticulos() {
     });
 }
 
-$('.frm-origen #um').on('change', function(){
-    $('.frm-destino #unidad_medida').val(this.value );
+
+$('.frm-origen #um').on('change', function() {
+    $('.frm-destino #unidad_medida').val(this.value);
 });
 </script>

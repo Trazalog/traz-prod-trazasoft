@@ -64,7 +64,7 @@
                         <label for="inputproducto" class="form-label">Producto*:</label>
                     </div>
                     <div class="col-md-8 col-xs-12">
-                        <?php  echo selectBusquedaAvanzada('inputproducto', $materias, 'id', 'titulo'); ?>
+                        <?php  echo selectBusquedaAvanzada('inputproducto', false, $materias, 'id', 'titulo'); ?>
                     </div>
                     <div class="col-md-3"></div>
                 </div>
@@ -88,7 +88,7 @@
                         <?php if($accion == 'Editar'){
         
 
-                      echo selectBusquedaAvanzada('productodestino', $recipientes, 'reci_id', 'nombre', array('Estado:'=>'estado','Lote:'=>'lote_id'));
+                      echo selectBusquedaAvanzada('productodestino', false, $recipientes, 'reci_id', 'nombre', array('Estado:'=>'estado','Lote:'=>'lote_id'));
 
                         }
                         ?>

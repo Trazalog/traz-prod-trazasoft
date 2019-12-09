@@ -21,10 +21,11 @@ class Articulo extends CI_Controller {
 		$this->load->view(ALM.'articulo/list', $data);
 	}
 
-	public function obtener(){
+	public function obtener($opt = false){
 		$url =  REST . 'articulos';
 		$data = $this->rest->callApi('GET',$url);
 		if($data['status']) $data['data'] = json_decode($data['data'])->materias->materia;
+		if($opt) $data['data'] = selectBusquedaAvanzada(false, false, $data['data'], 'id', 'barcode',array('descripcion'));
 		echo json_encode($data);
 	}
 
