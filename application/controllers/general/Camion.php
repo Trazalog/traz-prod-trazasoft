@@ -12,6 +12,8 @@ class Camion extends CI_Controller
         $this->load->model('general/Materias');
         $this->load->model('general/Recipientes');
         $this->load->model('general/Transportistas');
+        $this->load->model('general/Listado_carga_camion');
+        $this->load->model('general/Listado_recepcion_camion');
     }
 
     public function cargarCamion()
@@ -21,6 +23,7 @@ class Camion extends CI_Controller
         $data['establecimientos'] = $this->Establecimientos->listarTodo()->establecimientos->establecimiento;
         $this->load->view('camion/carga_camion', $data);
     }
+
     public function descargarCamion()
     {
         $data['fecha'] = date('Y-m-d');
@@ -28,6 +31,7 @@ class Camion extends CI_Controller
         $data['establecimientos'] = $this->Establecimientos->listarTodo()->establecimientos->establecimiento;
         $this->load->view('camion/descarga_camion', $data);
     }
+
     public function salidaCamion()
     {
         $data['fecha'] = date('Y-m-d');
@@ -36,18 +40,37 @@ class Camion extends CI_Controller
         $data['establecimientos'] = $this->Establecimientos->listarTodo()->establecimientos->establecimiento;
         $this->load->view('camion/salida_camion', $data);
     }
+
     public function listarPorEstablecimiento()
     {
         $establecimiento = $this->input->post('establecimiento');
         $res = $this->Camiones->listarPorEstablecimiento($establecimiento);
         echo json_encode($res['data']);
     }
+    
+    public function recepcionCamion()
+    {
+        $data['fecha'] = date('Y-m-d');
+        $data['lang'] = lang_get('spanish', 4);
+        $data['establecimientos'] = $this->Establecimientos->listarTodo()->establecimientos->establecimiento;
+        $this->load->view('camion/listado_recepcion_camion', $data);
+    }
+
+    public function cargadeCamion()
+    {
+        $data['fecha'] = date('Y-m-d');
+        $data['lang'] = lang_get('spanish', 4);
+        $data['establecimientos'] = $this->Establecimientos->listarTodo()->establecimientos->establecimiento;
+        $this->load->view('camion/listado_carga_camion', $data);
+    }
+
     public function finalizarCarga()
     {
         $lotes = json_decode($this->input->post('lotes'));
         $rsp = $this->Camiones->guardarCarga($lotes);
         echo json_encode($rsp);
     }
+
     public function entradaCamion()
     {
         $data['fecha'] = date('Y-m-d');
@@ -59,6 +82,7 @@ class Camion extends CI_Controller
         $data['transportistas'] = $this->Transportistas->obtener()['data'];
         $this->load->view('camion/entrada_camion', $data);
     }
+    
     public function GuardarEntrada()
     {
         $entrada = json_decode($this->input->post('entrada'));
