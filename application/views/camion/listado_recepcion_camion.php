@@ -1,38 +1,50 @@
+<!--Pantalla "LISTADO RECEPCION DE CAMION"-->
 <div class="box">
     <div class="box-header with-border">
         <h3 class="box-title">Listado Recepción Camión</h3>
     </div>
     <div class="box-body">
     <!--________________________________________________________________________-->    
+    <!--Campos de Filtrado de //LISTADO RECEPCION CAMION//-->
         <div class="col-md-6">
+            <!--Establecimiento-->
             <div class="form-group">
                 <label for="exampleInputEmail1"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Establecimiento</font></font></label>
                 <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Ingresar Establecimiento">
             </div>
+            <!--________________________________________________________________________-->   
+            <!--Transportista-->
             <div class="form-group">
                 <label for="exampleInputEmail1"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Transportista</font></font></label>
                 <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Ingresar Transportista">
             </div>
+            <!--________________________________________________________________________-->   
+            <!--Proveedor-->
             <div class="form-group">
                 <label for="exampleInputEmail1"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Proveedor</font></font></label>
                 <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Ingresar Proveedor">
             </div>
+            <!--________________________________________________________________________-->   
         </div>
         <div class="col-md-6">
+            <!--Rango Fecha-->
             <div class="form-group">
                 <label for="exampleInputEmail1"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Rango Fecha</font></font></label>
                 <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Ingresar Establecimiento">
             </div>
+            <!--________________________________________________________________________-->   
+            <!--Articulo-->
             <div class="form-group">
                 <label for="exampleInputEmail1"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Articulo</font></font></label>
                 <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Ingresar Establecimiento">
             </div>
         </div>
-    <!--________________________________________________________________________-->    
+    <!--________________________________________________________________________-->
+    <!--Tabla de datos que recibe informacion carga de la //Recepcion de Camion\\-->
     <div class="box-body">
-              <table class="table table-bordered">
+              <table class="table table-bordered"> 
                 <tbody><tr>
-                  <th style="width: 10px"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"># #</font></font></th>
+                  <th style="width: 10px"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"></font></font></th>
                   <th><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Tarea</font></font></th>
                   <th><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Progreso</font></font></th>
                   <th style="width: 40px"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Etiqueta</font></font></th>
@@ -79,7 +91,6 @@
                 </tr>
               </tbody></table>
             </div>
-
-
+    <!--________________________________________________________________________-->    
     </div>
 </div>
