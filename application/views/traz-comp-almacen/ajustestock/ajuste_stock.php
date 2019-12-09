@@ -58,30 +58,6 @@ $("#articulosal").on('change', function() {
     $("#unidadsal").val($("#articulosal>option:selected").attr("data"));
 });
 
-
-function guardar() {
-
-    var formdata = new FormData($("#formTotal")[0]);
-    var formobj = formToObject(formdata);
-    // console.log(formobj);
-    $.ajax({
-        type: 'POST',
-        data: {
-            data: formobj
-        },
-        url: '<?php echo ALM ?>Ajustestock/guardarAjuste',
-        success: function(rsp) {
-            console.log(rsp);
-        },
-        error: function(rsp) {
-            alert('Error: ' + rsp.msj);
-            console.log(rsp.msj);
-        },
-        complete: function() {}
-    });
-
-}
-
 $("#articulosal").on('change', function() {
     $idarticulo = $("#articulosal>option:selected").val();
     $iddeposito = $("#deposito>option:selected").val();
@@ -96,10 +72,10 @@ $("#articulosal").on('change', function() {
                 var option_lote = '<option value="" disabled selected>Sin lotes</option>';
                 // $('#deposito').html(option_depo);
                 console.log("Sin lotes");
-            } else{
+            } else {
                 var option_lote = '<option value="" disabled selected>-Seleccione opcion-</option>';
                 for (let index = 0; index < result.length; index++) {
-                    option_lote += '<option value="' + result[index].codigo + '">' + result[index]
+                    option_lote += '<option value="' + result[index].lote_id + '">' + result[index]
                         .codigo +
                         '</option>';
                 }
@@ -126,10 +102,10 @@ $("#articuloent").on('change', function() {
                 var option_lote = '<option value="" disabled selected>Sin lotes</option>';
                 // $('#deposito').html(option_depo);
                 console.log("Sin lotes");
-            } else{
+            } else {
                 var option_lote = '<option value="" disabled selected>-Seleccione opcion-</option>';
                 for (let index = 0; index < result.length; index++) {
-                    option_lote += '<option value="' + result[index].codigo + '">' + result[index]
+                    option_lote += '<option value="' + result[index].lote_id + '">' + result[index]
                         .codigo +
                         '</option>';
                 }
@@ -141,4 +117,60 @@ $("#articuloent").on('change', function() {
         }
     });
 });
+
+function guardar(){
+    //esta funcion guarda el ajuste y espera un id_ajuste para luego llamar a otra funcion con este id que va a ser la encargada de guardar los datos especificos del lote (dependiendo si es entrada o salida) 
+    var formdata = new FormData($("#formTotal")[0]);
+    var formobj = formToObject(formdata);
+    // console.log(formobj);
+    $.ajax({
+        type: 'POST',
+        data: {
+            data: formobj
+        },
+        url: '<?php echo ALM ?>Ajustestock/guardarAjuste',
+        success: function(rsp) {
+            if(!rsp){
+                alert("error");
+                return;
+            }else{
+                rsp = JSON.parse(rsp);
+                //console.log(rsp);
+                guardaAjusteDetalle(rsp,formobj);
+            }
+        },
+        error: function(rsp) {
+            alert('Error: ' + rsp.msj);
+            console.log(rsp.msj);
+        },
+        complete: function() {}
+    });
+}
+
+function guardaAjusteDetalle($rsp, $formobj){
+    $formobj['ajus_id'] = $rsp.respuesta.ajus_id;
+    $formobj['tipo_ent_sal'] = $("#tipoajuste>option:selected").attr("data");
+    console.log($formobj);
+    $.ajax({
+        type: 'POST',
+        data: {
+            data: $formobj
+        },
+        url: '<?php echo ALM ?>Ajustestock/guardarDetalleAjuste',
+        success: function(rsp) {
+            if(!rsp){
+                alert("error");
+                return;
+            }else{
+                alert("Accion realizada con exito");
+                setTimeout("linkTo()",1700);
+            }
+        },
+        error: function(rsp) {
+            alert('Error: ' + rsp.msj);
+            console.log(rsp.msj);
+        },
+        complete: function() {}
+    });
+}
 </script>

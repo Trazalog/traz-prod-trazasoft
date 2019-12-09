@@ -18,7 +18,15 @@ class Ajustestock extends CI_Controller
     public function guardarAjuste()
     {
         $data = $this->input->post('data');
-        echo $this->Ajustestocks->guardarAjuste($data);
+        $rsp = $this->Ajustestocks->guardarAjustes($data);
+        echo json_encode($rsp);
+    }
+
+    public function guardarDetalleAjuste()
+    {
+        $data = $this->input->post('data');
+        $rsp = $this->Ajustestocks->guardarDetalleAjustes($data);
+        echo json_encode($rsp);
     }
 
 
