@@ -89,6 +89,7 @@ $('.frm-origen #articulos').on('change', function() {
     $('.frm-origen #art-detalle').val(art.descripcion);
     $('.frm-destino #art-detalle').val(art.descripcion);
     $('.frm-destino #articulo').val($(this).find('option:selected').text());
+    $('.frm-destino #articulo').attr('data-id', $(this).find('option:selected').val());
 });
 
 

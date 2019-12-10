@@ -33,6 +33,7 @@ class Recipiente extends CI_Controller {
         $estado = $this->input->get('estado');
 
         $rsp = $this->Recipientes->obtener($tipo, $estado);
+        if($rsp['status']) $rsp['data'] = selectBusquedaAvanzada(false, false, $rsp['data'],'reci_id','nombre', array('Tipo:'=>'tipo', 'Estado:'=>'estado','Lote:'=>'lote_id', 'ID ART:'=>'arti_id'));
         echo json_encode($rsp);
     }
     
