@@ -47,9 +47,6 @@ class Ajustestocks extends CI_Model {
               )
          );
       }else if(($data['tipo_ent_sal'] == "E/S")){
-         // $data = array(
-         //    'ajuste_detalles' => array()
-         // );
          $dato['ajuste_detalles']['ajuste_detalle'][] = array(
             'ajus_id' => $data['ajus_id'],
             'lote_id' => $data['loteent'],
