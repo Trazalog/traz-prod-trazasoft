@@ -47,6 +47,12 @@
                         "icono": "fa fa-cogs",
                         "titulo": "Mis Tareas",
                         "nivel": "1"
+                    },
+                    {
+                        "link": "traz-comp-almacen/Ajustestock",
+                        "icono": "fa fa-cogs",
+                        "titulo": "Ajuste de Stock",
+                        "nivel": "1"
                     }
                 ]
             }
