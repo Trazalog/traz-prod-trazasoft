@@ -21,6 +21,8 @@
             <li><a href="#" class="link" data-link="traz-comp-almacen/Notapedido"><i
                         class="fa fa-fw fa-cart-plus"></i>Pedido Materiales</a></li>
             </li>
+            <li><a href="#" class="link" data-link="traz-comp-almacen/Ajustestock"><i class="fa fa-wrench"></i>Ajuste de Stock</a>
+            </li>
         </ul>
     </li>
 </ul>

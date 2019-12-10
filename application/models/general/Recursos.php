@@ -15,5 +15,4 @@ class Recursos extends CI_Model
         $rsp['data'] = json_decode($rsp['data'])->recursos->recurso;
         return $rsp;
     }
-
 }

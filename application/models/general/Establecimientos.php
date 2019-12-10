@@ -23,5 +23,12 @@ class Establecimientos extends CI_Model
         $array = file_get_contents($url, false, http('GET'));
         return json_decode($array);
     }
+    public function obtenerDepositos($idestablecimiento)
+    {
+      $resource = 'establecimiento/'.$idestablecimiento.'/deposito/list'; 	
+      $url = REST0.$resource;
+      $array = file_get_contents($url, false, http('GET'));
+      return json_decode($array);
+    }
     
 }
