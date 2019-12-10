@@ -1,4 +1,5 @@
 <!--RBASAÑES-->
+
 <!--Pantalla "LISTADO CARGA DE CAMION"-->
 <div class="box">
     <div class="box-header with-border">
@@ -6,6 +7,7 @@
     </div>
     <div class="box-body">
 <!--________________________________________________________________________-->    
+
 <!--Campos de Filtrado de //LISTADO RECEPCION CAMION//-->
 <div class="col-md-12">
 <!--Tabla de datos que recibe informacion carga de la //Carga de Camion\\-->     
@@ -18,6 +20,7 @@
 <!--________________________________________________________________________-->
   <div class="box-body table-scroll">
     <table id="example2" class="table table-bordered table-hover">
+      
       <!--Cabecera del datatable--> 
         <thead>
           <tr>
@@ -32,6 +35,7 @@
           </tr>
         </thead>
       <!--________________________________________________________________________-->
+      
       <!--Cuerpo del Datatable-->
         <tbody>
           <tr>
@@ -69,27 +73,32 @@
     </div>
 </div>
 <!--________________________________________________________________________-->  
+
 <!--Script Data Table-->
 <script>
 $(function() {
+//True = Activado
+//False = Desactivado
 
-    $('#example2').DataTable({
-        'paging': true,
-        'lengthChange': true,
-        'searching': true,
-        'ordering': true,
-        'info': true,
-        'autoWidth': true,
-        'autoFill': true,
-        'buttons': true,
-        'fixedHeader': true,
-        dom: 'Bfrtip',
-        buttons: [
-            'excel', 'pdf', 'print'
-        ]
-    })
+//example 2 -Script Datatable-
+$('#example2').DataTable({
+    'paging': true,
+    'lengthChange': true,
+    'searching': true,
+    'ordering': true,
+    'info': true,
+    'autoWidth': true,
+    'autoFill': true,
+    'buttons': true,
+    'fixedHeader': true,
+    dom: 'Bfrtip',
+    buttons: [
+    'excel', 'pdf', 'print'
+    ]
+  })
 })
 
+//example 1 -Script Datatable-
 $('#example1').DataTable({
     'paging': true,
     'lengthChange': true,
