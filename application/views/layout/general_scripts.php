@@ -38,6 +38,17 @@ $.widget.bridge('uibutton', $.ui.button);
 
        <script src="<?php base_url();?>lib/plugins/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
       
+
+
+      <!--Datatables-->
+
+
+      <script src="<?php base_url() ?>lib/bower_components/datatables1/datatables.js"></script>
+       
+       
+       <script src="<?php base_url() ?>lib/bower_components/datatables1/dataTables.bootstrap.min.js"></script>
+
+
  
        <!-- Select2 -->
        <script src="<?php echo base_url()?>lib/bower_components/select2/dist/js/select2.full.min.js"></script>
