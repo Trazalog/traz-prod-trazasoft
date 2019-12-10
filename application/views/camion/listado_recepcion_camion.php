@@ -47,96 +47,100 @@
 <!---////////////////////////////////////////---DATA TABLES 1---/////////////////////////////////////////////////////----->
     <div class="box-header with-border">
         <div class="box-tittle">
-            <h3>Listado de datos</h3>
+            <h3>Filtrado de Recepcion</h3>
         </div>
     </div>
 <!--________________________________________________________________________-->
-    <div class="box-body table-scroll">
-        <table id="example2" class="table table-bordered table-hover">
-            <thead>
-                <tr>
-                    <th>N° Boleta</th>
-                    <th>Proveedor</th>
-                    <th>Transportista</th>
-                    <th>Fecha</th>
-                    <th>Patente - Acoplado</th>
-                    <th>Neto</th>
-                    <th>Cod. Lote</th>
-                    <th>Articulo</th>
-                    <th>Cantidad</th>
-                    <th>UM</th>
-                    <th>Estado</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1111</td>
-                    <td>Guevara </td>
-                    <td>aaa</td>
-                    <td>aaa</td>
-                    <td>aaa</td>
-                    <td>aaa</td>
-                    <td>aaa</td>
-                    <td>aaa</td>
-                    <td>aaa</td>
-                    <td>aaa</td>
-                    <td>aaa</td>
-                </tr>
-                <tr>
-                    <td>1111</td>
-                    <td>Guevara </td>
-                    <td>aaa</td>
-                    <td>aaa</td>
-                    <td>aaa</td>
-                    <td>aaa</td>
-                    <td>aaa</td>
-                    <td>aaa</td>
-                    <td>aaa</td>
-                    <td>aaa</td>
-                    <td>aaa</td>
-                </tr>
-                <tr>
-                    <td>1111</td>
-                    <td>Guevara </td>
-                    <td>aaa</td>
-                    <td>aaa</td>
-                    <td>aaa</td>
-                    <td>aaa</td>
-                    <td>aaa</td>
-                    <td>aaa</td>
-                    <td>aaa</td>
-                    <td>aaa</td>
-                    <td>aaa</td>
-                </tr>
-                <tr>
-                    <td>1111</td>
-                    <td>Guevara </td>
-                    <td>aaa</td>
-                    <td>aaa</td>
-                    <td>aaa</td>
-                    <td>aaa</td>
-                    <td>aaa</td>
-                    <td>aaa</td>
-                    <td>aaa</td>
-                    <td>aaa</td>
-                    <td>aaa</td>
-                </tr>
-                <tr>
-                    <td>1111</td>
-                    <td>Guevara </td>
-                    <td>aaa</td>
-                    <td>aaa</td>
-                    <td>aaa</td>
-                    <td>aaa</td>
-                    <td>aaa</td>
-                    <td>aaa</td>
-                    <td>aaa</td>
-                    <td>aaa</td>
-                    <td>aaa</td>
-                </tr>
-                </tfoot>
-        </table>
-    </div>
+  <div class="box-body table-scroll">
+    <table id="example2" class="table table-bordered table-hover">
+        <!--Cabecera del datatable-->  
+          <thead>
+              <tr>
+                  <th>N° Boleta</th>
+                  <th>Proveedor</th>
+                  <th>Transportista</th>
+                  <th>Fecha</th>
+                  <th>Patente - Acoplado</th>
+                  <th>Neto</th>
+                  <th>Cod. Lote</th>
+                  <th>Articulo</th>
+                  <th>Cantidad</th>
+                  <th>UM</th>
+                  <th>Estado</th>
+              </tr>
+          </thead>
+        <!--________________________________________________________________________-->
+        <!--Cuerpo del Datatable-->
+          <tbody>
+              <tr>
+                  <td>1111</td>
+                  <td>Guevara </td>
+                  <td>aaa</td>
+                  <td>aaa</td>
+                  <td>aaa</td>
+                  <td>aaa</td>
+                  <td>aaa</td>
+                  <td>aaa</td>
+                  <td>aaa</td>
+                  <td>aaa</td>
+                  <td>aaa</td>
+              </tr>
+              <tr>
+                  <td>1111</td>
+                  <td>Guevara </td>
+                  <td>aaa</td>
+                  <td>aaa</td>
+                  <td>aaa</td>
+                  <td>aaa</td>
+                  <td>aaa</td>
+                  <td>aaa</td>
+                  <td>aaa</td>
+                  <td>aaa</td>
+                  <td>aaa</td>
+              </tr>
+              <tr>
+                  <td>1111</td>
+                  <td>Guevara </td>
+                  <td>aaa</td>
+                  <td>aaa</td>
+                  <td>aaa</td>
+                  <td>aaa</td>
+                  <td>aaa</td>
+                  <td>aaa</td>
+                  <td>aaa</td>
+                  <td>aaa</td>
+                  <td>aaa</td>
+              </tr>
+              <tr>
+                  <td>1111</td>
+                  <td>Guevara </td>
+                  <td>aaa</td>
+                  <td>aaa</td>
+                  <td>aaa</td>
+                  <td>aaa</td>
+                  <td>aaa</td>
+                  <td>aaa</td>
+                  <td>aaa</td>
+                  <td>aaa</td>
+                  <td>aaa</td>
+              </tr>
+              <tr>
+                  <td>1111</td>
+                  <td>Guevara </td>
+                  <td>aaa</td>
+                  <td>aaa</td>
+                  <td>aaa</td>
+                  <td>aaa</td>
+                  <td>aaa</td>
+                  <td>aaa</td>
+                  <td>aaa</td>
+                  <td>aaa</td>
+                  <td>aaa</td>
+              </tr>
+            </tbody>
+          <!--________________________________________________________________________-->
+    </table>
+  </div>
 </div>
 <!--________________________________________________________________________-->
 <!--Script Data Table-->
