@@ -8,7 +8,7 @@
                 <h4 class="modal-title" id="myModalLabel"><span id="modalAction"> </span>Reporte de Producción</h4>
             </div>
             <input class="hidden" type="text" id="num_orden_prod" value="<?php echo $etapa->orden;?>">
-            <input class="hidden" type="text" id="batch_id_padre" value="<?php echo $etapa->id;?>">
+            <input class="" type="text" id="batch_id_padre" value="<?php echo $etapa->id;?>">
             <div class="modal-body" id="modalBodyArticle">
 
                 <div class="row form-group" style="margin-top:20px">
@@ -233,8 +233,9 @@ function AgregarProducto() {
         document.getElementById('cantidadproducto').value = "";
         document.getElementById('lotedestino').value = "";
         document.getElementById('productodestino').value = "";
+        $('#productodestino').trigger('change');
         document.getElementById('productoestablecimientos').value = "";
-        document.getElementById('inputproducto').value = "";
+        $('#inputproducto').val("").trigger('change');
         document.getElementById('fraccionado').checked = false;
         document.getElementById('productorecipientes').value = "";
         document.getElementById('productorecipientes').disabled = true;
@@ -242,6 +243,11 @@ function AgregarProducto() {
 }
 
 function agregaProducto(producto) {
+
+    console.log('Agrega Producto');
+    console.log(producto);
+
+
     existe = document.getElementById('productos_existe').value;
     var html = '';
     if (existe == 'no') {
@@ -258,7 +264,8 @@ function agregaProducto(producto) {
         html += "<th>Destino Final</th>";
         html += "<th>Fracc</th>";
         html += '</tr></thead><tbody>';
-        html += "<tr data-json='" + JSON.stringify(producto) + "' id='" + producto.id + "'>";
+        html += "<tr class='res-" + producto.destino + " " + producto.id + producto.lotedestino + "' data-json='" + JSON
+            .stringify(producto) + "' id='" + producto.id + "'>";
         html +=
             '<td><i class="fa fa-fw fa-minus text-light-blue tabla_productos_asignados_borrar" style="cursor: pointer; margin-left: 15px;" title="Eliminar"></i></td>';
         html += '<td>' + producto.loteorigen + '</td>';
@@ -392,31 +399,69 @@ $('#productodestino').on('change', function() {
 
 function validarRecipiente(json) {
     console.log('function validarRecipiente...');
-    console.log(json);
-
-    if (json.estado == 'VACIO') {
-        $('#unificar').val(false);
-        return true;
-    }
 
     var arti_id = $('#inputproducto').val();
     var lote_id = $('#lotedestino').val();
 
-    if (json.arti_id != arti_id || json.lote_id != lote_id) {
-        alert('No se pueden mezclar Distintos Articulos y Distintos Lotes en un mismo Recipiente');
-        $('#recipiente').val('');
-        $('#unificar').val(false);
-        return false;
+    if (json.estado == 'VACIO') {
+
+        if ($('#tabla_productos_asignados').length != 0) {
+
+            // Validar si el recipiente ha sido elegido en la tabla Anteriormente
+            var ban = true;
+            $('#tabla_productos_asignados').find('.res-' + json.reci_id).each(function() {
+
+                ban = ban && $(this).hasClass(arti_id + lote_id);
+
+            });
+
+            if (ban) {
+                // Pregunta si quiere Unificar los Lotes
+                if (confirm('¿Desea mezclar los Artículos en el Recipiente?') != true) {
+                    // Respuesta Negativa
+                    $('#recipiente').val('');
+                    $('#unificar').val(false);
+                    return false;
+                }
+                $('#unificar').val(true);
+                return true;
+
+            } else {
+                alert('- No se pueden mezclar Distintos Articulos y Distintos Lotes en un mismo Recipiente');
+                $('#recipiente').val('');
+                $('#lotedestino').val('').trigger('change');
+                $('#unificar').val(false);
+                return false;
+            }
+
+        } else {
+            $('#unificar').val(false);
+            return true;
+        }
+
+        // Si el recipiente es NO VACIO valido Si tiene el mismo Lote y Articulo
+
+        if (json.arti_id != arti_id || json.lote_id != lote_id) {
+            alert('No se pueden mezclar Distintos Articulos y Distintos Lotes en un mismo Recipiente');
+            $('#recipiente').val('');
+            $('#lotedestino').val('').trigger('change');
+            $('#unificar').val(false);
+            return false;
+        }
+
+
+
+        // Pregunta si quiere Unificar los Lotes
+        if (confirm('¿Desea mezclar los Artículos en el Recipiente?') != true) {
+            // Respuesta Negativa
+            $('#recipiente').val('');
+            $('#unificar').val(false);
+            return false;
+        }
+
+        //Respuesta Positiva
+        $('#unificar').val(true);
+        return true;
     }
-
-    if (confirm('¿Desea mezclar los Artículos en el Recipiente?') != true) {
-        $('#recipiente').val('');
-        $('#unificar').val(false);
-        return false;
-    }
-
-    $('#unificar').val(true);
-    return true;
-
 }
 </script>
