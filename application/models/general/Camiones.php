@@ -87,7 +87,7 @@ class Camiones extends CI_Model
         foreach ($data as $key => $o) {
             $array[] = array(
                 "id" => $o['destino']['lote_id'],
-                "producto" => $o['destino']['arti_id'],
+                "producto" => $o['origen']['arti_id'],
                 "prov_id" => $o['origen']['prov_id'],
                 "batch_id" => $o['origen']['batch_id']?$o['origen']['batch_id']:0,
                 "cantidad" => $o['destino']['cantidad'],

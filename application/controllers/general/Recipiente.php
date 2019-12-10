@@ -21,8 +21,19 @@ class Recipiente extends CI_Controller {
     {
         $tipo = $this->input->get('tipo');
         $estado = $this->input->get('estado');
+        $opc = $this->input->get('opciones');
 
         $rsp = $this->Recipientes->obtener($tipo, $estado);
+        echo json_encode($rsp);
+    }
+
+     public function obtenerOpciones()
+    {
+        $tipo = $this->input->get('tipo');
+        $estado = $this->input->get('estado');
+
+        $rsp = $this->Recipientes->obtener($tipo, $estado);
+        if($rsp['status']) $rsp['data'] = selectBusquedaAvanzada(false, false, $rsp['data'],'reci_id','nombre', array('Tipo:'=>'tipo', 'Estado:'=>'estado','Lote:'=>'lote_id', 'ID ART:'=>'arti_id'));
         echo json_encode($rsp);
     }
     
