@@ -1,3 +1,4 @@
+<!--RBASAÑES-->
 <!--Pantalla "LISTADO RECEPCION DE CAMION"-->
 <div class="box">
     <div class="box-header with-border">
@@ -40,57 +41,85 @@
             </div>
         </div>
     <!--________________________________________________________________________-->
+    <br>
     <!--Tabla de datos que recibe informacion carga de la //Recepcion de Camion\\-->
     <div class="box-body">
-              <table class="table table-bordered"> 
-                <tbody><tr>
-                  <th style="width: 10px"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"></font></font></th>
-                  <th><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Tarea</font></font></th>
-                  <th><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Progreso</font></font></th>
-                  <th style="width: 40px"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Etiqueta</font></font></th>
+              <table id="example2" class="table table-bordered table-hover dataTable" role="grid" aria-describedby="example2_info"> 
+                <thead>
+                <!--Cabecera de la tabla-->
+                <tr role="row">
+                  <th rowspan="1" colspan="1" aria-controls="example2" aria-label="Plataforma (s): activar para ordenar la columna ascendente" class="sorting"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">N° Boleta</font></font></th>
+                  <th rowspan="1" colspan="1" aria-controls="example2" aria-label="Plataforma (s): activar para ordenar la columna ascendente" class="sorting"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Proveedor</font></font></th>
+                  <th rowspan="1" colspan="1" aria-controls="example2" aria-label="Plataforma (s): activar para ordenar la columna ascendente" class="sorting"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Transportista</font></font></th>
+                  <th rowspan="1" colspan="1" aria-controls="example2" aria-label="Plataforma (s): activar para ordenar la columna ascendente" class="sorting"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Fecha</font></font></th>
+                  <th rowspan="1" colspan="1" aria-controls="example2" aria-label="Plataforma (s): activar para ordenar la columna ascendente" class="sorting"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Patente-Acoplado</font></font></th>
+                  <th rowspan="1" colspan="1" aria-controls="example2" aria-label="Plataforma (s): activar para ordenar la columna ascendente" class="sorting"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Neto</font></font></th>
+                  <th rowspan="1" colspan="1" aria-controls="example2" aria-label="Plataforma (s): activar para ordenar la columna ascendente" class="sorting"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Cod. Lote</font></font></th>
+                  <th rowspan="1" colspan="1" aria-controls="example2" aria-label="Plataforma (s): activar para ordenar la columna ascendente" class="sorting"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Articulo</font></font></th>
+                  <th rowspan="1" colspan="1" aria-controls="example2" aria-label="Plataforma (s): activar para ordenar la columna ascendente" class="sorting"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Cantidad</font></font></th>
+                  <th rowspan="1" colspan="1" aria-controls="example2" aria-label="Plataforma (s): activar para ordenar la columna ascendente" class="sorting"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">UM</font></font></th>
+                  <th rowspan="1" colspan="1" aria-controls="example2" aria-label="Plataforma (s): activar para ordenar la columna ascendente" class="sorting"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Estado</font></font></th>
                 </tr>
-                <tr>
-                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">1)</font></font></td>
-                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Actualiza el software</font></font></td>
-                  <td>
-                    <div class="progress progress-xs">
-                      <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
-                    </div>
-                  </td>
-                  <td><span class="badge bg-red"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">55%</font></font></span></td>
+                <!--________________________________________________________________________-->
+                </thead>
+                <tbody>
+                <!--Campos de datos-->
+                <tr role="row">
+                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">1</font></font></td>
+                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Dato 1</font></font></td>
+                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Dato 1</font></font></td>
+                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Dato 1</font></font></td>
+                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Dato 1</font></font></td>
+                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Dato 1</font></font></td>
+                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Dato 1</font></font></td>
+                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Dato 1</font></font></td>
+                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Dato 1</font></font></td>
+                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Dato 1</font></font></td>
+                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Dato 1</font></font></td>
                 </tr>
-                <tr>
-                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">2)</font></font></td>
-                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Base de datos limpia</font></font></td>
-                  <td>
-                    <div class="progress progress-xs">
-                      <div class="progress-bar progress-bar-yellow" style="width: 70%"></div>
-                    </div>
-                  </td>
-                  <td><span class="badge bg-yellow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">70%</font></font></span></td>
+                <tr role="row">
+                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">2</font></font></td>
+                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Dato 2</font></font></td>
+                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Dato 2</font></font></td>
+                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Dato 2</font></font></td>
+                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Dato 2</font></font></td>
+                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Dato 2</font></font></td>
+                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Dato 2</font></font></td>
+                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Dato 2</font></font></td>
+                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Dato 2</font></font></td>
+                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Dato 2</font></font></td>
+                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Dato 2</font></font></td>
                 </tr>
-                <tr>
-                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">3)</font></font></td>
-                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Cron trabajo en ejecución</font></font></td>
-                  <td>
-                    <div class="progress progress-xs progress-striped active">
-                      <div class="progress-bar progress-bar-primary" style="width: 30%"></div>
-                    </div>
-                  </td>
-                  <td><span class="badge bg-light-blue"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">30%</font></font></span></td>
+                <tr role="row">
+                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">3</font></font></td>
+                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Dato 3</font></font></td>
+                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Dato 3</font></font></td>
+                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Dato 3</font></font></td>
+                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Dato 3</font></font></td>
+                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Dato 3</font></font></td>
+                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Dato 3</font></font></td>
+                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Dato 3</font></font></td>
+                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Dato 3</font></font></td>
+                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Dato 3</font></font></td>
+                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Dato 3</font></font></td>
                 </tr>
-                <tr>
-                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">4)</font></font></td>
-                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Arreglar y eliminar errores</font></font></td>
-                  <td>
-                    <div class="progress progress-xs progress-striped active">
-                      <div class="progress-bar progress-bar-success" style="width: 90%"></div>
-                    </div>
-                  </td>
-                  <td><span class="badge bg-green"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">90%</font></font></span></td>
+                <tr role="row">
+                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">4</font></font></td>
+                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Dato 4</font></font></td>
+                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Dato 4</font></font></td>
+                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Dato 4</font></font></td>
+                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Dato 4</font></font></td>
+                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Dato 4</font></font></td>
+                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Dato 4</font></font></td>
+                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Dato 4</font></font></td>
+                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Dato 4</font></font></td>
+                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Dato 4</font></font></td>
+                  <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Dato 4</font></font></td>
                 </tr>
-              </tbody></table>
+                <!--________________________________________________________________________-->  
+              </tbody>
+              </table>  
             </div>
-    <!--________________________________________________________________________-->    
     </div>
+<!--________________________________________________________________________-->
 </div>

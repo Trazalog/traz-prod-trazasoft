@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) {exit('No direct script access allowed');}
 
-class Recepcioncamion extends CI_Model
+class Listado_recepcion_camion extends CI_Model
 {
     public function __construct()
     {
