@@ -89,17 +89,7 @@ class Etapa extends CI_Controller {
 			// busca id recurso por id articulo
 			$recu_id = $this->Etapas->getRecursoId($datosCab['arti_id']);			
 			// guarda producto en tabla recurso_lotes			
-			$respRecurso = $this->Etapas->setRecursosLotesProd($batch_id, $recu_id, $datosCab['cantidad']);									
-
-		if(!$batch_id){
-			log_message('DEBUG','Etapa/guardar #ERROR BATCH_ID NULO');
-			echo ("Error en creacion Batch");
-
-		}
-		// busca id recurso por id articulo
-		$recu_id = $this->Etapas->getRecursoId($datosCab['arti_id']);			
-		// guarda producto en tabla recurso_lotes			
-		$respRecurso = $this->Etapas->setRecursosLotesProd($batch_id, $recu_id, $datosCab['cantidad']);									
+			$respRecurso = $this->Etapas->setRecursosLotesProd($batch_id, $recu_id, $datosCab['cantidad']);													
 
 		// guarda articulos(id de recurso en tabala recursos) origen en tabla recursos_lotes
 		$x = 0;
