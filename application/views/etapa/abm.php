@@ -373,8 +373,8 @@ $("#inputmaterias").on('change', function() {
         // FIXME: SI SE SACA SIN QUE ANDE EL MODALCITO DE MATERIAS SE ROMPE LA CARGA EN TABLITA
         //document.getElementById('stockdisabled').value = ma
         
-        document.getElementById('cantidadmateria').disabled = (stock == 0.0);
-        document.getElementById('botonmateria').disabled = (stock == 0.0);
+        // document.getElementById('cantidadmateria').disabled = (stock == 0.0);
+        // document.getElementById('botonmateria').disabled = (stock == 0.0);
 
     } else {
         alert('No existe esa Materia');
