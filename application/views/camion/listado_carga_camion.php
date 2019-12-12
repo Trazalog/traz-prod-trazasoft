@@ -18,7 +18,7 @@
         </div>
     </div>
 <!--________________________________________________________________________-->
-  <div class="box-body table-scroll">
+  <div class="box-body table-scroll table-responsive">
     <table id="example2" class="table table-bordered table-hover">
       
       <!--Cabecera del datatable--> 

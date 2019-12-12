@@ -61,7 +61,7 @@
         </div>
     </div>
 <!--________________________________________________________________________-->
-  <div class="box-body table-scroll">
+  <div class="box-body table-scroll table-responsive">
     <table id="example2" class="table table-bordered table-hover">
 
       <!--Cabecera del datatable-->  
@@ -85,65 +85,65 @@
       <!--Cuerpo del Datatable-->
         <tbody>
           <tr>
-            <td>1111</td>
+            <td>111111111111</td>
             <td>Guevara </td>
             <td>aaa</td>
             <td>aaa</td>
+            <td>aaaaaaaaaaaaaaaaaaaaa</td>
             <td>aaa</td>
-            <td>aaa</td>
-            <td>aaa</td>
+            <td>aaaaaaaaaaaaaaa</td>
             <td>aaa</td>
             <td>aaa</td>
             <td>aaa</td>
             <td>aaa</td>
           </tr>
           <tr>
-            <td>1111</td>
+            <td>111111111111</td>
             <td>Guevara </td>
             <td>aaa</td>
             <td>aaa</td>
+            <td>aaaaaaaaaaaaaaaaaaaaa</td>
             <td>aaa</td>
-            <td>aaa</td>
-            <td>aaa</td>
+            <td>aaaaaaaaaaaaaaa</td>
             <td>aaa</td>
             <td>aaa</td>
             <td>aaa</td>
             <td>aaa</td>
           </tr>
           <tr>
-            <td>1111</td>
+            <td>111111111111</td>
             <td>Guevara </td>
             <td>aaa</td>
             <td>aaa</td>
+            <td>aaaaaaaaaaaaaaaaaaaaa</td>
             <td>aaa</td>
-            <td>aaa</td>
-            <td>aaa</td>
+            <td>aaaaaaaaaaaaaaa</td>
             <td>aaa</td>
             <td>aaa</td>
             <td>aaa</td>
             <td>aaa</td>
           </tr>
           <tr>
-            <td>1111</td>
+            <td>111111111111</td>
             <td>Guevara </td>
             <td>aaa</td>
             <td>aaa</td>
+            <td>aaaaaaaaaaaaaaaaaaaaa</td>
             <td>aaa</td>
-            <td>aaa</td>
-            <td>aaa</td>
+            <td>aaaaaaaaaaaaaaa</td>
             <td>aaa</td>
             <td>aaa</td>
             <td>aaa</td>
             <td>aaa</td>
           </tr>
           <tr>
-            <td>1111</td>
+            <td>111111111111</td>
             <td>Guevara </td>
             <td>aaa</td>
             <td>aaa</td>
+            <td>aaaaaaaaaaaaaaaaaaaaa</td>
             <td>aaa</td>
-            <td>aaa</td>
-            <td>aaa</td>
+            <td>aaaaaaaaaaaaaaa</td>
             <td>aaa</td>
             <td>aaa</td>
             <td>aaa</td>
