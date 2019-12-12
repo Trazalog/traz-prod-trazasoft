@@ -35,7 +35,18 @@
                 </div>
             </div>
             <!--_____________________________________________________________-->
-            
+
         </div>
     </div>
+
+    <!--Script ventana modal de articulos-->
+        <!--<script>-->
+            <!--$(document).off('click', '.tabla_productos_nuevo').on('click', '.tabla_productos_nuevo',function(){
+            producto = $(this).closest('tr').data('json');
+            document.getElementById('inputproductos').value = producto[0].titulo;
+            $("#modal_productos").modal('hide');
+            });-->
+        <!--</script>-->
+    <!--_____________________________________________________________-->
+
 </div>

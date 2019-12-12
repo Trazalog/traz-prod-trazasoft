@@ -8,7 +8,7 @@
     <div class="box-body">
 <!--________________________________________________________________________-->    
 
-<!--Campos de Filtrado de //LISTADO RECEPCION CAMION//-->
+<!--Campos de Filtrado de //LISTADO CARGA CAMION//-->
 <div class="col-md-12">
 <!--Tabla de datos que recibe informacion carga de la //Carga de Camion\\-->     
 <!---////////////////////////////////////////---DATA TABLES 1---/////////////////////////////////////////////////////----->
@@ -77,14 +77,14 @@
 <!--Script Data Table-->
 <script>
 $(function() {
-//True = Activado
-//False = Desactivado
+//true = Activado
+//false = Desactivado
 
 //example 2 -Script Datatable-
 $('#example2').DataTable({
     'paging': true,
     'lengthChange': true,
-    'searching': true,
+    'searching': false,
     'ordering': true,
     'info': true,
     'autoWidth': true,
