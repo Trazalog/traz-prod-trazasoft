@@ -67,7 +67,7 @@
       <!--Cabecera del datatable-->  
         <thead>
           <tr>
-            <th style="width: 100px;">N° Boleta</th> 
+            <th style="width: 200px;">N° Boleta</th> 
             <th style="width: 100px;">Proveedor</th>
             <th style="width: 100px;">Transportista</th>
             <th style="width: 100px;">Fecha</th>
@@ -85,69 +85,69 @@
       <!--Cuerpo del Datatable-->
         <tbody>
           <tr>
-            <td>111111111111</td>
-            <td>Guevara </td>
-            <td>aaa</td>
-            <td>aaa</td>
-            <td>aaaaaaaaaaaaaaaaaaaaa</td>
-            <td>aaa</td>
-            <td>aaaaaaaaaaaaaaa</td>
-            <td>aaa</td>
-            <td>aaa</td>
-            <td>aaa</td>
-            <td>aaa</td>
+            <td style="font-weight: lighter;">111111111111</td>
+            <td style="font-weight: lighter;">Guevara </td>
+            <td style="font-weight: lighter;">aaa</td>
+            <td style="font-weight: lighter;">aaa</td>
+            <td style="font-weight: lighter;">aaaaaaaaaaaaaaaaaaaaa</td>
+            <td style="font-weight: lighter;">aaa</td>
+            <td style="font-weight: lighter;">aaaaaaaaaaaaaaa</td>
+            <td style="font-weight: lighter;">aaa</td>
+            <td style="font-weight: lighter;">aaa</td>
+            <td style="font-weight: lighter;">aaa</td>
+            <td style="font-weight: lighter;">aaa</td>
           </tr>
           <tr>
-            <td>111111111111</td>
-            <td>Guevara </td>
-            <td>aaa</td>
-            <td>aaa</td>
-            <td>aaaaaaaaaaaaaaaaaaaaa</td>
-            <td>aaa</td>
-            <td>aaaaaaaaaaaaaaa</td>
-            <td>aaa</td>
-            <td>aaa</td>
-            <td>aaa</td>
-            <td>aaa</td>
+            <td style="font-weight: lighter;">111111111111</td>
+            <td style="font-weight: lighter;">Guevara </td>
+            <td style="font-weight: lighter;">aaa</td>
+            <td style="font-weight: lighter;">aaa</td>
+            <td style="font-weight: lighter;">aaaaaaaaaaaaaaaaaaaaa</td>
+            <td style="font-weight: lighter;">aaa</td>
+            <td style="font-weight: lighter;">aaaaaaaaaaaaaaa</td>
+            <td style="font-weight: lighter;">aaa</td>
+            <td style="font-weight: lighter;">aaa</td>
+            <td style="font-weight: lighter;">aaa</td>
+            <td style="font-weight: lighter;">aaa</td>
           </tr>
           <tr>
-            <td>111111111111</td>
-            <td>Guevara </td>
-            <td>aaa</td>
-            <td>aaa</td>
-            <td>aaaaaaaaaaaaaaaaaaaaa</td>
-            <td>aaa</td>
-            <td>aaaaaaaaaaaaaaa</td>
-            <td>aaa</td>
-            <td>aaa</td>
-            <td>aaa</td>
-            <td>aaa</td>
+            <td style="font-weight: lighter;">111111111111</td>
+            <td style="font-weight: lighter;">Guevara </td>
+            <td style="font-weight: lighter;">aaa</td>
+            <td style="font-weight: lighter;">aaa</td>
+            <td style="font-weight: lighter;">aaaaaaaaaaaaaaaaaaaaa</td>
+            <td style="font-weight: lighter;">aaa</td>
+            <td style="font-weight: lighter;">aaaaaaaaaaaaaaa</td>
+            <td style="font-weight: lighter;">aaa</td>
+            <td style="font-weight: lighter;">aaa</td>
+            <td style="font-weight: lighter;">aaa</td>
+            <td style="font-weight: lighter;">aaa</td>
           </tr>
           <tr>
-            <td>111111111111</td>
-            <td>Guevara </td>
-            <td>aaa</td>
-            <td>aaa</td>
-            <td>aaaaaaaaaaaaaaaaaaaaa</td>
-            <td>aaa</td>
-            <td>aaaaaaaaaaaaaaa</td>
-            <td>aaa</td>
-            <td>aaa</td>
-            <td>aaa</td>
-            <td>aaa</td>
+            <td style="font-weight: lighter;">111111111111</td>
+            <td style="font-weight: lighter;">Guevara </td>
+            <td style="font-weight: lighter;">aaa</td>
+            <td style="font-weight: lighter;">aaa</td>
+            <td style="font-weight: lighter;">aaaaaaaaaaaaaaaaaaaaa</td>
+            <td style="font-weight: lighter;">aaa</td>
+            <td style="font-weight: lighter;">aaaaaaaaaaaaaaa</td>
+            <td style="font-weight: lighter;">aaa</td>
+            <td style="font-weight: lighter;">aaa</td>
+            <td style="font-weight: lighter;">aaa</td>
+            <td style="font-weight: lighter;">aaa</td>
           </tr>
           <tr>
-            <td>111111111111</td>
-            <td>Guevara </td>
-            <td>aaa</td>
-            <td>aaa</td>
-            <td>aaaaaaaaaaaaaaaaaaaaa</td>
-            <td>aaa</td>
-            <td>aaaaaaaaaaaaaaa</td>
-            <td>aaa</td>
-            <td>aaa</td>
-            <td>aaa</td>
-            <td>aaa</td>
+            <td style="font-weight: lighter;">111111111111</td>
+            <td style="font-weight: lighter;">Guevara </td>
+            <td style="font-weight: lighter;">aaa</td>
+            <td style="font-weight: lighter;">aaa</td>
+            <td style="font-weight: lighter;">aaaaaaaaaaaaaaaaaaaaa</td>
+            <td style="font-weight: lighter;">aaa</td>
+            <td style="font-weight: lighter;">aaaaaaaaaaaaaaa</td>
+            <td style="font-weight: lighter;">aaa</td>
+            <td style="font-weight: lighter;">aaa</td>
+            <td style="font-weight: lighter;">aaa</td>
+            <td style="font-weight: lighter;">aaa</td>
           </tr>
         </tbody>
       </table>

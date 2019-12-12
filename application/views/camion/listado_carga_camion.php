@@ -39,34 +39,34 @@
       <!--Cuerpo del Datatable-->
         <tbody>
           <tr>
-            <td>1</td>
-            <td>Dato 1</td>
-            <td>Dato 1</td>
-            <td>Dato 1</td>
-            <td>Dato 1</td>
-            <td>Dato 1</td>
-            <td>Dato 1</td>
-            <td>Dato 1</td>
+            <td style="font-weight: lighter;">1</td>
+            <td style="font-weight: lighter;">Dato 1</td>
+            <td style="font-weight: lighter;">Dato 1</td>
+            <td style="font-weight: lighter;">Dato 1</td>
+            <td style="font-weight: lighter;">Dato 1</td>
+            <td style="font-weight: lighter;">Dato 1</td>
+            <td style="font-weight: lighter;">Dato 1</td>
+            <td style="font-weight: lighter;">Dato 1</td>
           </tr>
           <tr>
-            <td>2</td>
-            <td>Dato 2</td>
-            <td>Dato 2</td>
-            <td>Dato 2</td>
-            <td>Dato 2</td>
-            <td>Dato 2</td>
-            <td>Dato 2</td>
-            <td>Dato 2</td>
+            <td style="font-weight: lighter;">2</td>
+            <td style="font-weight: lighter;">Dato 2</td>
+            <td style="font-weight: lighter;">Dato 2</td>
+            <td style="font-weight: lighter;">Dato 2</td>
+            <td style="font-weight: lighter;">Dato 2</td>
+            <td style="font-weight: lighter;">Dato 2</td>
+            <td style="font-weight: lighter;">Dato 2</td>
+            <td style="font-weight: lighter;">Dato 2</td>
           </tr>
           <tr>
-            <td>3</td>
-            <td>Dato 3</td>
-            <td>Dato 3</td>
-            <td>Dato 3</td>
-            <td>Dato 3</td>
-            <td>Dato 3</td>
-            <td>Dato 3</td>
-            <td>Dato 3</td>
+            <td style="font-weight: lighter;">3</td>
+            <td style="font-weight: lighter;">Dato 3</td>
+            <td style="font-weight: lighter;">Dato 3</td>
+            <td style="font-weight: lighter;">Dato 3</td>
+            <td style="font-weight: lighter;">Dato 3</td>
+            <td style="font-weight: lighter;">Dato 3</td>
+            <td style="font-weight: lighter;">Dato 3</td>
+            <td style="font-weight: lighter;">Dato 3</td>
           </tr>
         </tbody>
       </table>
