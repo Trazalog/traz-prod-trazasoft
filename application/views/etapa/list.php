@@ -47,8 +47,9 @@
             <table id="etapas" class="table table-bordered table-hover">
             <thead class="thead-dark">
                 <tr>
-                  <th>Acciones</th>
+                  <th width="5%">Acciones</th>
                   <th>Etapa</th>
+                  <th>Lote</th>
                   <th>Producto Origen</th>
                   <th>Cantidad</th>
                   <th>Establecimiento</th>
@@ -65,12 +66,13 @@
                           $id=$fila->id;
                           echo '<tr  id="'.$id.'" data-json:'.json_encode($fila).'>';
 
-                          echo '<td>';
-                          echo '<i class="fa fa-fw fa-pencil text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Editar" onclick=linkTo("general/Etapa/editar?id='.$id.'")></i>';
-                          echo '<i class="fa fa-fw fa-times-circle text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Eliminar" onclick="seleccionar(this)"></i>';
+                          echo '<td width="5%" class="text-center">';
+                          echo '<i class="fa fa-fw fa-pencil text-light-blue ml-1" style="cursor: pointer;" title="Editar" onclick=linkTo("general/Etapa/editar?id='.$id.'")></i>';
+                          echo '<i class="fa fa-fw fa-times-circle text-light-blue ml-1" style="cursor: pointer;" title="Eliminar" onclick="seleccionar(this)"></i>';
                           echo '</td>';
                           
                           echo '<td>'.$fila->titulo.'</td>';
+                          echo "<td>$fila->lote</td>";
                           echo '<td>'.$fila->producto.'</td>';
                           echo '<td>'.$fila->cantidad.' '.$fila->unidad.'</td>';  
                           echo '<td>'.$fila->establecimiento.'</td>';
@@ -92,9 +94,8 @@
   </body>
   <script>
   
-  $('#etapas').DataTable({
-  
-  }); 
+  DataTable('#etapas');
+
   function muestra(op,etapas)
   {
      etapas= JSON.parse(etapas);
@@ -102,9 +103,10 @@
      html= '<thead class="thead-dark">'+
               '<tr>'+
                 '<th>Acciones</th>'+
-               ' <th>Etapa</th>'+
+                '<th>Etapa</th>'+
+                '<th>Lote</th>'+
                 '<th>Producto Origen</th>'+
-               ' <th>Cantidad</th>'+
+                '<th>Cantidad</th>'+
                 '<th>Establecimiento</th>'+
                 '<th>Recipiente</th>'+
                 '<th>OP</th>'+
@@ -122,6 +124,7 @@
               '<i class="fa fa-fw fa-times-circle text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Eliminar" onclick="seleccionar(this)"></i>'+
               '</td>'+
               '<td>'+etapas[i].titulo+'</td>'+
+              '<td>'+etapas[i].lote+' </td>'+
               '<td>'+etapas[i].producto+'</td>'+
               '<td>'+etapas[i].cantidad+' '+etapas[i].unidad+'</td>'+  
               '<td>'+etapas[i].establecimiento+'</td>'+
@@ -140,6 +143,7 @@
                          '<i class="fa fa-fw fa-times-circle text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Eliminar" onclick="seleccionar(this)"></i>'+
                          '</td>'+
                          '<td>'+etapas[i].titulo+'</td>'+
+                          '<td>'+etapas[i].lote+' </td>'+
       	                 '<td>'+etapas[i].producto+'</td>'+
                          '<td>'+etapas[i].cantidad+' '+etapas[i].unidad+'</td>'+  
                          '<td>'+etapas[i].establecimiento+'</td>'+

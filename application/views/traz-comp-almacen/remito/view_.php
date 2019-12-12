@@ -289,7 +289,7 @@ function agregar() {
     var deposito = $("select#deposito option:selected").html();
     var id_deposito = $('#deposito').val();
 
-    if (id_her == '' || lote == '' || cantidad == '' || id_deposito == -1) {
+    if (id_her == '' || lote == '' || cantidad == '' || id_deposito == false) {
         alert('Campos Obligatorios(*) Incompletos');
         return;
     }
@@ -392,7 +392,7 @@ function guardar() {
 
 function get_info_remito() {
 
-    if ($('#fecha').val() == '' || $('#comprobante').val() == '' || $('#proveedor').val() == -1) {
+    if ($('#fecha').val() == '' || $('#comprobante').val() == '' || $('#proveedor').val() == 'false') {
         alert('Campos Obligatorios(*) Incompletos');
         return null;
     }
@@ -405,7 +405,7 @@ function get_info_remito() {
 }
 
 function validar_campos() {
-    return !($('#fecha').val() == '' || $('#comprobante').val() == '' || $('#proveedor').val() == -1)
+    return !($('#fecha').val() == '' || $('#comprobante').val() == '' || $('#proveedor').val() == 'false')
 }
 </script>
 
@@ -427,7 +427,7 @@ function selectItemiculo(e) {
 </script>
 
 <!-- Modal -->
-<div class="modal fade" id="acumular" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal fade" id="acumular" tabindex="false" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">

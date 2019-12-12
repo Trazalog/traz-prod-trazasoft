@@ -184,7 +184,10 @@ class Lotes extends CI_Model
             $aux["usuario_app"] = userNick();
             $aux["empr_id"] = strval(empresa());
             $aux["forzar_agregar"] = isset($o->forzar_agregar) ? $o->forzar_agregar : "FALSE";
-            $aux["fec_vencimiento"] = date('Y-m-d');
+            $aux["fec_vencimiento"] = date('d-m-Y');
+            $aux["recu_id"] = "0";
+            $aux["tipo_recurso"] = "";
+
 
             $batch_req['_post_lote_batch_req']['_post_lote'][] = $aux;
         }
@@ -206,6 +209,7 @@ class Lotes extends CI_Model
 
             $aux["batch_id_origen"] = strval($o->batch_id);
             $aux["reci_id"] = strval($o->reci_id);
+            $aux["cantidad"] = strval($o->cantidad);
             $aux["etap_id_deposito"] = strval(ETAPA_DEPOSITO);
             $aux["empre_id"] = strval(empresa());
             $aux["usuario_app"] = "chuck";
@@ -214,7 +218,6 @@ class Lotes extends CI_Model
             $batch_req['_post_lote_recipiente_cambiar_batch_req']['_post_lote_recipiente_cambiar'][] = $aux;
         }
 
-        log_message('DEBUG', '#MODEL > guardaCargaCamion | BATCH_REQ: ' . json_encode($rsp));
         $url = REST_TDS . 'lote/recipiente/cambiar_batch_req';
         $rsp = $this->rest->callApi('POST', $url, $batch_req);
         wso2Msj($rsp);
@@ -223,9 +226,16 @@ class Lotes extends CI_Model
         }
 
         $rsp['data'] = json_decode($rsp['data'])->respuesta->resultado;
-        //$rsp['status'] = ($rsp['data'] == 'CORRECTO');
-
         return $rsp;
 
+    }
+
+    public function listarPorArticulos($idarticulo,$iddeposito){
+
+        log_message('DEBUG', '#MODEL > listarPorArticulos | ID_ARTICULO: ' .$idarticulo);
+        $resource = 'deposito/'.$iddeposito.'/articulo/'.$idarticulo.'/lote/list'; 	
+        $url = REST0.$resource;
+        $array = file_get_contents($url, false, http('GET'));
+        return json_decode($array);                
     }
 }

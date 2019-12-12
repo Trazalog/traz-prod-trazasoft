@@ -68,7 +68,7 @@ class Etapa extends CI_Controller {
 			$datosCab['usuario_app'] = userNick();
 			$datosCab['empr_id'] = (string)empresa();
 			$datosCab['forzar_agregar'] = "FALSE";
-			$datosCab['fec_vencimiento'] = date('Y-m-d');		
+			$datosCab['fec_vencimiento'] = date('d-m-Y');		
 			$datosCab['recu_id'] = "0";		
 			$datosCab['tipo_recurso'] = "";		
 
@@ -89,17 +89,7 @@ class Etapa extends CI_Controller {
 			// busca id recurso por id articulo
 			$recu_id = $this->Etapas->getRecursoId($datosCab['arti_id']);			
 			// guarda producto en tabla recurso_lotes			
-			$respRecurso = $this->Etapas->setRecursosLotesProd($batch_id, $recu_id, $datosCab['cantidad']);									
-
-		if(!$batch_id){
-			log_message('DEBUG','Etapa/guardar #ERROR BATCH_ID NULO');
-			echo ("Error en creacion Batch");
-
-		}
-		// busca id recurso por id articulo
-		$recu_id = $this->Etapas->getRecursoId($datosCab['arti_id']);			
-		// guarda producto en tabla recurso_lotes			
-		$respRecurso = $this->Etapas->setRecursosLotesProd($batch_id, $recu_id, $datosCab['cantidad']);									
+			$respRecurso = $this->Etapas->setRecursosLotesProd($batch_id, $recu_id, $datosCab['cantidad']);													
 
 		// guarda articulos(id de recurso en tabala recursos) origen en tabla recursos_lotes
 		$x = 0;
@@ -169,13 +159,16 @@ class Etapa extends CI_Controller {
 						}else{
 
 								echo ("Error en generacion de Detalle Pedido Materiales");
+								log_message('ERROR','Error en generacion de Detalle Pedido Materiales');
 						}
 				}else{
 
 						echo("Error en generacion de Cabecera Pedido Materiales");
+						log_message('ERROR','Error en generacion de Cabecera Pedido Materiales');
 				}	
 		}else{
 			echo ("Error en creacion Batch");
+			log_message('ERROR','Error en creacion Batch');
 		}		
 	}
 	// trae info para informe de Etapa
@@ -188,7 +181,7 @@ class Etapa extends CI_Controller {
 			//	var_dump($data['etapa']);die;
 			$data['idetapa'] = $data['etapa']->id;
 			//$data['recipientes'] = $this->Recipientes->listarPorEstablecimiento($data['etapa']->establecimiento->id)->recipientes->recipiente;
-			$data['recipientes'] = $this->Recipientes->obtener('DEPOSITO','TODOS',$data['etapa']->establecimiento->id)['data'];
+			$data['recipientes'] = $this->Recipientes->obtener('DEPOSITO','TODOS',$data['etapa']->esta_id)['data'];
 
 			// Cantidad producto origen
 			// $prodCant = $this->Etapas->getCantProducto($id);
@@ -270,6 +263,9 @@ class Etapa extends CI_Controller {
 							$arrRec['cantidad'] = (string)$p->cant_descontar; // cantidad a descontar en stock
 							$arrRec['tipo'] = PRODUCTO;
 							$arrRec['empr_id'] = (string)empresa();
+							$arrRec['recu_id'] = "0";
+							$arrRec['tipo_recurso'] = "";
+
 							$recu['_post_recurso'][$i] = (object)$arrRec;
 							$i++;
 					}							
@@ -342,14 +338,14 @@ class Etapa extends CI_Controller {
 		$batch_id_padre = $this->input->post('batch_id_padre');
 	
 
-		foreach ($productos as $value) {			
+		foreach ($productos as $key => $value) {			
 
 			$arrayPost["lote_id"] = $lote_id; // lote origen
 			$arrayPost["arti_id"] = $value->id;	// art seleccionado en lista
 			$arrayPost["prov_id"] = (string)PROVEEDOR_INTERNO;
 			$arrayPost["batch_id_padre"] = $batch_id_padre;// bacth actual
 			$arrayPost["cantidad"] = $value->cantidad;// art seleccionado en lista
-			$arrayPost["cantidad_padre"] =	$cantidad_padre;		//cantida padre esl lo que descuenta del batch actual
+			$arrayPost["cantidad_padre"] =	strval($key==(sizeof($productos) -1) ?$cantidad_padre:0);		//cantida padre esl lo que descuenta del batch actual
 			$arrayPost["num_orden_prod"] =	$num_orden_prod;			
 			$arrayPost["reci_id"] = $value->destino;  //reci_id destino del nuevo batch
 			$arrayPost["etap_id"] = (string)DEPOSITO_TRANSPORTE;
@@ -359,6 +355,8 @@ class Etapa extends CI_Controller {
 			$arrayPost["fec_vencimiento"] = "01-01-1988";
 			$arrayPost["recu_id"] = $value->recu_id;
 			$arrayPost["tipo_recurso"] = $value->tipo_recurso;
+
+
 
 			$arrayDatos['_post_lote_list_batch_req']['_post_lote_lis'][] = $arrayPost;	
 		}	

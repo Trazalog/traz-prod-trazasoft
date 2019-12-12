@@ -40,6 +40,8 @@ class Camiones extends CI_Model
 
         $array = [];
 
+        $camiones = [];
+
         foreach ($data as $key => $o) {
 
             #CREAR NUEVO RECIPIENTE
@@ -55,10 +57,25 @@ class Camiones extends CI_Model
 
             $array[] = $o;
 
+            $camiones[] = array('motr_id' => $o->motr_id, 'estado' => 'ASIGNADO');
         }
 
         $rsp = $this->Lotes->guardarCargaCamion($array);
 
+        if($rsp['status']){
+
+            $rsp =  $this->actualizarEstado($camiones);
+        
+        }
+
+        return $rsp;
+    }
+
+    public function actualizarEstado($data)
+    {
+        $aux['post_camion_estado']['data'] = $data;
+        $url = RESTPT . "camion/estado_batch_req";
+        $rsp = $this->rest->callApi('PUT', $url, $aux);
         return $rsp;
     }
 
@@ -70,7 +87,7 @@ class Camiones extends CI_Model
         foreach ($data as $key => $o) {
             $array[] = array(
                 "id" => $o['destino']['lote_id'],
-                "producto" => $o['destino']['arti_id'],
+                "producto" => $o['origen']['arti_id'],
                 "prov_id" => $o['origen']['prov_id'],
                 "batch_id" => $o['origen']['batch_id']?$o['origen']['batch_id']:0,
                 "cantidad" => $o['destino']['cantidad'],

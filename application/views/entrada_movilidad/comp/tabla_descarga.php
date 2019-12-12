@@ -6,7 +6,7 @@
                 <th>Cod. Origen</th>
                 <th>Producto</th>
                 <th>Cantidad</th>
-                <th>Lote Destino</th>
+                <th>Cod. Destino</th>
             </thead>
             <tbody id="lotes">
 

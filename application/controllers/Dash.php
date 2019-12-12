@@ -12,7 +12,6 @@ class Dash extends CI_Controller {
       $page="layout";
       $data['lang'] = lang_get($leng,$page);
       $data['menu'] = menu($data['lang'],$this->session->userdata['id']);
- 
       $this->load->view('layout/Admin',$data);
    }
 }

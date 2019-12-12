@@ -23,6 +23,7 @@ class Lote extends CI_Controller
         $establecimiento = $this->input->post('establecimiento');
         $salida = $this->input->post('salida');
         $res = $this->Lotes->listarPorEstablecimientoConSalida($establecimiento);
+        $res['data'] = selectBusquedaAvanzada(false, false, $res['data'], 'batch_id', 'id', array('tituloproducto', 'Stock:'=>'stock'));
         echo json_encode($res);
     }
     public function listarPorCamion()
@@ -40,7 +41,8 @@ class Lote extends CI_Controller
     public function obtenerLotesCamion()
     {
         $patente = $this->input->get('patente');
-		$rsp = $this->Lotes->obtenerLotesCamion($patente);
+        $rsp = $this->Lotes->obtenerLotesCamion($patente);
+        $rsp['data'] = selectBusquedaAvanzada(false, false, $rsp['data'], 'batch_id', 'lote_id',array('Origen:'=>'establecimiento', 'Cantidad:' =>'cantidad','Unidad Medida:'=>'um'));
 		echo json_encode($rsp);
     }
 }

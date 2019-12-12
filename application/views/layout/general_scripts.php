@@ -48,6 +48,7 @@ $.widget.bridge('uibutton', $.ui.button);
        <!-- <script src="<?php echo base_url()?>lib/dist/js/demo.js"></script> -->
        <!--Arma Tablas -->
        <script src="<?php echo base_url('lib/props/tabla.js'); ?>"></script>
+       <script src="<?php echo base_url(); ?>lib\props\busqueda_avanzada.js"></script>
        <!--Validator
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/js/bootstrapValidator.min.js"></script>-->
 
