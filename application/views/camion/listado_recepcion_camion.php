@@ -67,17 +67,17 @@
       <!--Cabecera del datatable-->  
         <thead>
           <tr>
-            <th>N° Boleta</th> 
-            <th>Proveedor</th>
-            <th>Transportista</th>
-            <th>Fecha</th>
-            <th>Patente - Acoplado</th>
-            <th>Neto</th>
-            <th>Cod. Lote</th>
-            <th>Articulo</th>
-            <th>Cantidad</th>
-            <th>UM</th>
-            <th>Estado</th>
+            <th style="width: 100px;">N° Boleta</th> 
+            <th style="width: 100px;">Proveedor</th>
+            <th style="width: 100px;">Transportista</th>
+            <th style="width: 100px;">Fecha</th>
+            <th style="width: 100px;">Patente - Acoplado</th>
+            <th style="width: 100px;">Neto</th>
+            <th style="width: 100px;">Cod. Lote</th>
+            <th style="width: 100px;">Articulo</th>
+            <th style="width: 100px;">Cantidad</th>
+            <th style="width: 100px;">UM</th>
+            <th style="width: 100px;">Estado</th>
           </tr>
         </thead>
       <!--________________________________________________________________________-->

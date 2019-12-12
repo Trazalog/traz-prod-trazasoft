@@ -21,7 +21,7 @@
                     <!--Articulo-->
                     <div class="form-group">
                         <label for="articulo" class="form-label">Articulo:</label>
-                        <input type="text" id="num" class="form-control input-sm" readonly>
+                        <input type="text" id="articulo" class="form-control input-sm" readonly>
                     </div>
                     <!--_____________________________________________________-->
                 </div>

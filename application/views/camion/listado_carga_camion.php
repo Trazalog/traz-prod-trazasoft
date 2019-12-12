@@ -24,14 +24,14 @@
       <!--Cabecera del datatable--> 
         <thead>
           <tr>
-            <th>N° Boleta</th>
-            <th>Establecimiento</th>
-            <th>Fecha</th>
-            <th>Patente</th>
-            <th>Acoplado</th>
-            <th>Transportista</th>
-            <th>Neto</th>
-            <th>Estado</th>
+            <th style="width: 100px;">N° Boleta</th>
+            <th style="width: 100px;">Establecimiento</th>
+            <th style="width: 100px;">Fecha</th>
+            <th style="width: 100px;">Patente</th>
+            <th style="width: 100px;">Acoplado</th>
+            <th style="width: 100px;">Transportista</th>
+            <th style="width: 100px;">Neto</th>
+            <th style="width: 100px;">Estado</th>
           </tr>
         </thead>
       <!--________________________________________________________________________-->
