@@ -179,8 +179,6 @@ $('#patente').keyup(function(e) {
             dataType: 'JSON',
             url: 'index.php/general/Lote/obtenerLotesCamion?patente=' + this.value,
             success: function(rsp) {
-
-                console.log(rsp);
                 
                 if (rsp.data == null) {
                     alert('No existen Lotes Asociados');
@@ -191,6 +189,8 @@ $('#patente').keyup(function(e) {
                 $('#new_codigo').addClass('hidden').attr('disabled',true);
             
                 fillSelect("#codigo", rsp.data);
+
+                alert('Lotes Encontrados: ' +  (parseInt($('#codigo').find('option').length) - 1));
 
             },
             error: function(rsp) {
@@ -256,8 +256,6 @@ function guardarDecarga() {
 }
 
 function addCamion(msj = true) {
-    console.log('addCamion');
-
     var frmCamion = new FormData($('#frm-camion')[0]);
     var frmInfo = new FormData($('#frm-info')[0]);
     var dataForm = mergeFD(frmInfo, frmCamion);
