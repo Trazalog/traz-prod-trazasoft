@@ -50,7 +50,7 @@
               <button class="btn btn-primary outline" onclick='muestra(`todas`,`<?php echo json_encode($list);?>`)'> Todas</button>
            </div>
             <div class="flotante">
-                <button type="button" class=" btn btn-success dropdown-toggle btn-circle btn-xl"  data-toggle="dropdown"  aria-expanded="false"> <i class="fa fa-plus"></i></button>
+                <button style="background: #5AC594" type="button" class=" btn dropdown-toggle btn-circle btn-xl"  data-toggle="dropdown"  aria-expanded="false"> <b style="color:#ffffff">+</b></button>
                 <ul class="dropdown-menu dropdown-menu-right" id="nuevo">
                   <li><a href="#" class="text-center text-blue"><b>Crear Nueva Etapa</b></a></li>
                 <?php
