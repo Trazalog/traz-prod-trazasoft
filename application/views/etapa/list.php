@@ -1,4 +1,35 @@
 
+          <style>
+.flotante {
+    display: scroll;
+    position: fixed;
+    bottom: 80%;
+    right: 2%;
+    z-index: 9999;
+}
+
+.btn-circle.btn-xl {
+    width: 40px;
+    height: 40px;
+    padding: 4px 10px;
+    border-radius: 35px;
+    font-size: 24px;
+    line-height: 1.33;
+}
+
+.btn-circle {
+    width: 30px;
+    height: 30px;
+    padding: 6px 0px;
+    border-radius: 15px;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.42857;
+}
+
+       </style>
+  
+    
       <div class="box table-responsive"> 
       <div class="box-header">
           <h3 class="box-title">Etapas</h3>
@@ -18,10 +49,10 @@
               ?>
               <button class="btn btn-primary outline" onclick='muestra(`todas`,`<?php echo json_encode($list);?>`)'> Todas</button>
            </div>
-            <div class="col-xs-2">
-                <button type="button" class=" btn btn-primary btn-block glyphicon glyphicon-plus dropdown-toggle"  data-toggle="dropdown"  aria-expanded="false" >Nuevo
-                <span class="fa fa-caret-down"></span></button>
-                <ul class="dropdown-menu" id="nuevo">
+            <div class="flotante">
+                <button type="button" class=" btn btn-success dropdown-toggle btn-circle btn-xl"  data-toggle="dropdown"  aria-expanded="false"> <i class="fa fa-plus"></i></button>
+                <ul class="dropdown-menu dropdown-menu-right" id="nuevo">
+                  <li><a href="#" class="text-center text-blue"><b>Crear Nueva Etapa</b></a></li>
                 <?php
                     
                     foreach($etapas as $fila)
