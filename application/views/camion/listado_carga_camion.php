@@ -1,5 +1,7 @@
 <!--RBASAÑES-->
-
+<?php 
+var_dump($movimientosTransporte)
+?>
 <!--Pantalla "LISTADO CARGA DE CAMION"-->
 <div class="box">
     <div class="box-header with-border">
