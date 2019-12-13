@@ -1,7 +1,11 @@
 <!--RBASAÑES-->
+
+<!--Muestra los datos de los servicios directamente en pantalla-->
 <?php 
 var_dump($movimientosTransporte)
 ?>
+<!--________________________________________________________________________-->
+
 <!--Pantalla "LISTADO RECEPCION DE CAMION"-->
 <div class="box">
     <div class="box-header with-border">
