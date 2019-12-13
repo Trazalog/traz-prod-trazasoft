@@ -9,12 +9,12 @@
 <!--________________________________________________________________________-->    
 
 <!--Campos de Filtrado de //LISTADO CARGA CAMION//-->
-<div class="col-md-12">
+
 <!--Tabla de datos que recibe informacion carga de la //Carga de Camion\\-->     
 <!---////////////////////////////////////////---DATA TABLES 1---/////////////////////////////////////////////////////----->
     <div class="box-header with-border">
         <div class="box-tittle">
-            <h3>Filtrado de Carga</h3>
+            <h4>Filtrado de Carga</h4>
         </div>
     </div>
 <!--________________________________________________________________________-->
@@ -24,54 +24,54 @@
       <!--Cabecera del datatable--> 
         <thead>
           <tr>
-            <th style="width: 100px;">N° Boleta</th>
-            <th style="width: 100px;">Establecimiento</th>
-            <th style="width: 100px;">Fecha</th>
-            <th style="width: 100px;">Patente</th>
-            <th style="width: 100px;">Acoplado</th>
-            <th style="width: 100px;">Transportista</th>
-            <th style="width: 100px;">Neto</th>
-            <th style="width: 100px;">Estado</th>
+            <th style="width: 200px; font-weight: lighter;">N° Boleta</th>
+            <th style="width: 200px; font-weight: lighter;">Establecimiento</th>
+            <th style="width: 200px; font-weight: lighter;">Fecha</th>
+            <th style="width: 200px; font-weight: lighter;">Patente</th>
+            <th style="width: 200px; font-weight: lighter;">Acoplado</th>
+            <th style="width: 200px; font-weight: lighter;">Transportista</th>
+            <th style="width: 200px; font-weight: lighter;">Neto</th>
+            <th style="width: 200px; font-weight: lighter;">Estado</th>
           </tr>
         </thead>
       <!--________________________________________________________________________-->
       
       <!--Cuerpo del Datatable-->
         <tbody>
-          <tr>
-            <td style="font-weight: lighter;">1</td>
-            <td style="font-weight: lighter;">Dato 1</td>
-            <td style="font-weight: lighter;">Dato 1</td>
-            <td style="font-weight: lighter;">Dato 1</td>
-            <td style="font-weight: lighter;">Dato 1</td>
-            <td style="font-weight: lighter;">Dato 1</td>
-            <td style="font-weight: lighter;">Dato 1</td>
-            <td style="font-weight: lighter;">Dato 1</td>
+          <tr style="font-weight: lighter;">
+            <td>1</td>
+            <td>Dato 1</td>
+            <td>Dato 1</td>
+            <td>Dato 1</td>
+            <td>Dato 1</td>
+            <td>Dato 1</td>
+            <td>Dato 1</td>
+            <td>Dato 1</td>
           </tr>
-          <tr>
-            <td style="font-weight: lighter;">2</td>
-            <td style="font-weight: lighter;">Dato 2</td>
-            <td style="font-weight: lighter;">Dato 2</td>
-            <td style="font-weight: lighter;">Dato 2</td>
-            <td style="font-weight: lighter;">Dato 2</td>
-            <td style="font-weight: lighter;">Dato 2</td>
-            <td style="font-weight: lighter;">Dato 2</td>
-            <td style="font-weight: lighter;">Dato 2</td>
+          <tr style="font-weight: lighter;">
+            <td>2</td>
+            <td>Dato 2</td>
+            <td>Dato 2</td>
+            <td>Dato 2</td>
+            <td>Dato 2</td>
+            <td>Dato 2</td>
+            <td>Dato 2</td>
+            <td>Dato 2</td>
           </tr>
-          <tr>
-            <td style="font-weight: lighter;">3</td>
-            <td style="font-weight: lighter;">Dato 3</td>
-            <td style="font-weight: lighter;">Dato 3</td>
-            <td style="font-weight: lighter;">Dato 3</td>
-            <td style="font-weight: lighter;">Dato 3</td>
-            <td style="font-weight: lighter;">Dato 3</td>
-            <td style="font-weight: lighter;">Dato 3</td>
-            <td style="font-weight: lighter;">Dato 3</td>
+          <tr style="font-weight: lighter;">
+            <td>3</td>
+            <td>Dato 3</td>
+            <td>Dato 3</td>
+            <td>Dato 3</td>
+            <td>Dato 3</td>
+            <td>Dato 3</td>
+            <td>Dato 3</td>
+            <td>Dato 3</td>
           </tr>
         </tbody>
       </table>
     </div>
-</div>
+
 <!--________________________________________________________________________-->  
 
 <!--Script Data Table-->

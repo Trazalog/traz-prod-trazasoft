@@ -53,15 +53,17 @@ class Camion extends CI_Controller
     {
         //$data['fecha'] = date('Y-m-d');
         //$data['lang'] = lang_get('spanish', 4);
-        //$data['establecimientos'] = $this->Establecimientos->listarTodo()->establecimientos->establecimiento;
-        $this->load->view('camion/listado_recepcion_camion');
+        $data['movimientosTransporte'] = $this->Camiones->listaTransporte()['data'];
+        
+        $this->load->view('camion/listado_recepcion_camion', $data);
     }
     
     public function cargadeCamion()
     {
         //$data['fecha'] = date('Y-m-d');
         //$data['lang'] = lang_get('spanish', 4);
-        //$data['establecimientos'] = $this->Establecimientos->listarTodo()->establecimientos->establecimiento;
+        //$data['movimientosTransporte'] = $this->Camiones->listaTransporte()['data'];
+
         $this->load->view('camion/listado_carga_camion');
     }
     #________________________________________________
