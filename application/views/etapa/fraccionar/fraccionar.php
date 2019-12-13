@@ -2,7 +2,6 @@
 <?php $this->load->view('etapa/fraccionar/modal_productos')?>
 <?php if($etapa->estado == "En Curso"){
 $this->load->view('etapa/fraccionar/modal_finalizar');
-
 }?>
 <div class="box">
   <div class="box-header with-border">
@@ -178,11 +177,11 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
                     }
               ?>
             </datalist>
-            <span class="input-group-btn">
+            <!-- <span class="input-group-btn">
               <button class='btn btn-sm btn-primary'
-                onclick='checkTabla("tabla_productos","modalproductos",`<?php echo json_encode($materias);?>`,"Add")' data-toggle="modal" data-target="#modal_productos">
+                onclick='checkTabla("tabla_productos","modalproductos",`<?php //echo json_encode($materias);?>`,"Add")' data-toggle="modal" data-target="#modal_productos">
                 <i class="glyphicon glyphicon-search"></i></button>
-            </span>
+            </span> -->
           </div>
         </div>
       </div>
@@ -268,17 +267,18 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
                 // echo '<button class="btn btn-primary btn-block" onclick="guardar()">Guardar</button>';
                 echo '<button class="btn btn-primary btn-block" onclick="guardar()">Iniciar</button>';
               }
-              echo '<button class="btn btn-primary btn-block" onclick="guardar()">Iniciar</button>';
+              //echo '<button class="btn btn-primary btn-block" onclick="guardar()">Iniciar</button>';
         ?>
       </div>
       <div class="col-md-2 col-xs-6">
         <?php //if($etapa->estado == 'planificado')
               //{
-              //  echo '<button class="btn btn-primary btn-block" onclick="valida()">Iniciar Etapa</button>';
-              //}else if($etapa->estado == 'En Curso')
-              //{
+                //echo '<button class="btn btn-primary btn-block" onclick="valida()">Iniciar Etapa</button>';
+              //}else 
+              if($etapa->estado == 'En Curso')
+              {
                 echo '<button class="btn btn-primary btn-block" id="btnfinalizar" onclick="finalizar()">Finalizar Etapa</button>';
-              //}
+              }
         ?>
       </div>
     </div>
@@ -334,23 +334,42 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
       document.getElementById('desplegable').hidden = true;
     }
   }
-  $("#inputproductos").on('change', function () {
-    ban = $("#productos option[value='" + $('#inputproductos').val() + "']").length;
-    estado = '<?php echo $etapa->estado;?>';
-    if (ban == 0) {
-      alert('Producto Inexistente');
-      document.getElementById('inputproductos').value = "";
-      if (estado != 'En Curso') {
-        document.getElementById('stock').value = "";
-      }
-    } else {
-      if (estado == 'En Curso') {
 
+  // elige producto y muestra el stock en
+  $("#inputproductos").on('change', function () {
+      ban = $("#productos option[value='" + $('#inputproductos').val() + "']").length;
+      estado = '<?php echo $etapa->estado;?>';
+      if (ban == 0) {
+        alert('Producto Inexistente');
+        document.getElementById('inputproductos').value = "";
+        if (estado != 'En Curso') {
+          document.getElementById('stock').value = "";
+        }
       } else {
-        producto = JSON.parse($("#productos option[value='" + $('#inputproductos').val() + "']").attr('data-json'));
-        ActualizaProducto(producto);
+        if (estado == 'En Curso') {
+
+        } else {
+          producto = JSON.parse($("#productos option[value='" + $('#inputproductos').val() + "']").attr('data-json'));
+          //ActualizaProducto(producto);
+        }
       }
-    }
+      //  agrega stock al input 
+        materias = <?php echo json_encode($materias); ?> ;
+        titulo = document.getElementById('inputproductos').value; 
+        banStock = false;
+        i = 0;
+        while (!banStock && i < materias.length) {
+            if (titulo == materias[i].titulo) {
+                banStock = true;
+                materia = materias[i];
+            }
+            i++;
+        }
+        if (banStock) {
+            var stock = materia.stock; 
+            document.getElementById('stock').value = stock;         
+        }
+      //// stock
   });
   function ActualizaEmpaques() {
     
@@ -403,6 +422,7 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
       document.getElementById('cantidad').value = "";
       document.getElementById('unidad').value = "";
       document.getElementById('volumen').value = "";
+      document.getElementById('stock').value = "";
       document.getElementById('cantidad').disabled = true;
     }
   }
