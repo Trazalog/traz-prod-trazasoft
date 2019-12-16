@@ -1,5 +1,5 @@
 <!-- producto -->
-<div class="box">
+<div class="box box-primary">
     <div class="box-header">
         <h4 class="box-title">Producto</h4>
     </div>
@@ -14,17 +14,11 @@
                     <div class="col-md-3 col-xs-6">
                         <label for="template" class="form-label">Materia:</label>
                     </div>
-                    <div class="col-md-6 col-xs-12 input-group">
-                        <input list="productos" id="inputproductos" class="form-control"
-                            placeholder="Ingrese articulo a buscar" autocomplete="off">
-                        <input type="hidden" id="idproducto" value="" data-json="">
-                        <datalist id="productos">
-                            <?php foreach($materias as $fila)
-								{
-									echo  "<option value='$fila->titulo'>";
-									}
-							?>
-                        </datalist>
+                    <div class="col-md-6 col-xs-12 input-group ba">
+                     
+                          <?php
+                            echo selectBusquedaAvanzada('inputproductos', false, $materias, 'arti_id', 'barcode', array('descripcion'));
+                        ?>
                     </div>
                 </div>
             </div>
