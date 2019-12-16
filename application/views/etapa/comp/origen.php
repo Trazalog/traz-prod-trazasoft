@@ -20,7 +20,7 @@
                     <div class="col-md-6 col-xs-12 input-group ba">
                   
                         <?php
-                            echo selectBusquedaAvanzada('inputmaterias', false, $materias, 'arti_id', 'barcode', array('descripcion'));
+                            echo selectBusquedaAvanzada('inputmaterias', false, $materias, 'arti_id', 'barcode', array('descripcion', 'Unidad Medida:'=>'unidad_medida'));
                         ?>
                     </div>
                 </div>
