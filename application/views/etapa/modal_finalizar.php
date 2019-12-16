@@ -88,7 +88,7 @@
                         <?php if($accion == 'Editar'){
         
 
-                      echo selectBusquedaAvanzada('productodestino', false, $recipientes, 'reci_id', 'nombre', array('Estado:'=>'estado','Lote:'=>'lote_id'));
+                      echo selectBusquedaAvanzada('productodestino', false, $recipientes, 'reci_id', 'nombre', array('Estado:'=>'estado','Lote:'=>'lote_id', 'barcode', 'descripcion'));
 
                         }
                         ?>

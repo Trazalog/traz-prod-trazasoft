@@ -209,7 +209,10 @@ class Etapa extends CI_Controller {
 			$data['materias'] = $this->Materias->listar()->materias->materia;
 		
 			$data['fecha'] = $data['etapa']->fecha;
-			if($data['op'] == 'fraccionamiento')
+
+	
+
+			if($data['op'] == 'Fraccionamiento')
 			{
 				// trae lotes segun entrega de materiales de almacen.(81)
 				$data['lotesFracc'] = $this->Etapas->getLotesaFraccionar($id)->lotes->lote;
@@ -224,6 +227,7 @@ class Etapa extends CI_Controller {
 				$data['rec_trabajo'] = $this->Recursos->obtenerXTipo('TRABAJO')['data'];
 				$this->load->view('etapa/abm', $data);
 			}
+
 	}
 	// guarda fraccionamiento y lanza pedido de materiales 
 	public function guardarFraccionar(){
