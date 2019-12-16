@@ -5,10 +5,10 @@
 $this->load->view('etapa/modal_finalizar');}?>
 
 <!-- Cabecera -->
-<div class="box">
+<div class="box box-primary">
 
     <div class="box-header">
-        <h3>
+        <h3 class="box-title">
             <?php echo $accion.' '.$etapa->titulo ?>
         </h3>
     </div>
@@ -114,16 +114,16 @@ $this->load->view('etapa/modal_finalizar');}?>
 
 <div class="row">
     <div class="col-md-12">
-            <?php $this->load->view('etapa/comp/producto') ?>
+            <?php $this->load->view('etapa/comp/origen') ?>
     </div>
     <div class="col-md-12">
-            <?php $this->load->view('etapa/comp/origen') ?>
+            <?php $this->load->view('etapa/comp/producto') ?>
     </div>
 </div>
 
 
 <!-- Tareas -->
-<div class="box">
+<div class="box box-primary">
     <div class="box-header">
         <h4 class="box-title">Tareas</h4>
     </div>
@@ -348,55 +348,8 @@ $("#inputproductos").on('change', function() {
     prod = $('#idproducto').val();
 });
 
-// al seleccionar desde el input de Origen muestra stock y habilita input para cantidad y btn aceptar
-$("#inputmaterias").on('change', function() {
-    document.getElementById('cantidadmateria').value = "";
-    materias = <?php echo json_encode($materias); ?> ;
-
-    titulo = document.getElementById('inputmaterias').value;
-    ban = false;
-    i = 0;
-    while (!ban && i < materias.length) {
-        if (titulo == materias[i].titulo) {
-            ban = true;
-            materia = materias[i];
-        }
-        i++;
-    }
-    if (ban) {
-        var stock = materia.stock;
-        document.getElementById('stockdisabled').value = stock;
-        materia = JSON.stringify(materia);
-        // FIXME: SI SE SACA SIN QUE ANDE EL MODALCITO DE MATERIAS SE ROMPE LA CARGA EN TABLITA
-        // agregaMateria(materia);
-        $('#idmateria').attr('data-json', materia);
-        // FIXME: SI SE SACA SIN QUE ANDE EL MODALCITO DE MATERIAS SE ROMPE LA CARGA EN TABLITA
-        //document.getElementById('stockdisabled').value = ma
-        
-        document.getElementById('cantidadmateria').disabled = false;
-        document.getElementById('botonmateria').disabled = false;
-
-    } else {
-        alert('No existe esa Materia');
-        document.getElementById('cantidadmateria').disabled = true;
-        document.getElementById('botonmateria').disabled = true;
-    }
-
-});
-
-function aceptarMateria() {
-    cantidad = document.getElementById('cantidadmateria').value;
-    materia = $('#idmateria').attr('data-json');
-    materia = JSON.parse(materia);
-    materia.cantidad = cantidad;
-    materia = JSON.stringify(materia);
-    materia = '[' + materia + ']';
-    materia = JSON.parse(materia);
-    console.log(materia);
-    agregaMateria(materia);
 
 
-}
 // levanta modal para finalizar la etapa solamente
 function finalizar() {
     /* idetapa = //php echo $idetapa;?>;
