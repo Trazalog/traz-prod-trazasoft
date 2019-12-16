@@ -38,7 +38,7 @@ if (!function_exists('selectBusquedaAvanzada')) {
 
                         foreach ($descripcion as $i => $e) {
                             $o[$e] = $o[$e] ? "\"$o[$e]\"" : ' - ';
-                            $aux .= '<small class"text-blue"><cite>' . (is_numeric($i) ? $o[$e] : sprintf("$i %s", $o[$e])) . '</cite></small>  <label class="text-blue">♥  </label>   ';
+                            $aux .= '<small class"text-blue"><cite>' . (is_numeric($i) ? $o[$e] : sprintf("$i %s", $o[$e])) . '</cite></small>  <label class="text-blue">♦ </label>   ';
                         }
 
                     } else {
