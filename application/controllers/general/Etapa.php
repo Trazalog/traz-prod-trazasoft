@@ -173,7 +173,7 @@ class Etapa extends CI_Controller {
 			log_message('ERROR','Error en creacion Batch');
 		}		
 	}
-	// trae info para informe de Etapa
+	// trae info para informe de Etapa (Todas y Fraccionar)
 	public function editar()
 	{		
 			$id = $this->input->get('id');// batch_id
@@ -194,6 +194,7 @@ class Etapa extends CI_Controller {
 			
 			// trae tablita de materia prima Origen y producto	
 			$data['matPrimas'] = $this->Etapas->getRecursosOrigen($id, MATERIA_PRIMA)->recursos->recurso;
+			
 			$data['producto'] = $this->Etapas->getRecursosOrigen($id, PRODUCTO)->recursos->recurso;			
 
 			// trae recipientes de Tipo Deposito
@@ -332,13 +333,11 @@ class Etapa extends CI_Controller {
 	// Elabora informe de Etapa hasta que se saque el total del contenido de batch origen
 	public function Finalizar()
 	{
-
 		$productos = json_decode($this->input->post('productos'));
 		$cantidad_padre = $this->input->post('cantidad_padre');
 		$num_orden_prod = $this->input->post('num_orden_prod');	
 		$lote_id = $this->input->post('lote_id');
-		$batch_id_padre = $this->input->post('batch_id_padre');
-	
+		$batch_id_padre = $this->input->post('batch_id_padre');	
 
 		foreach ($productos as $key => $value) {			
 
@@ -357,9 +356,6 @@ class Etapa extends CI_Controller {
 			$arrayPost["fec_vencimiento"] = "01-01-1988";
 			$arrayPost["recu_id"] = $value->recu_id;
 			$arrayPost["tipo_recurso"] = $value->tipo_recurso;
-
-
-
 			$arrayDatos['_post_lote_list_batch_req']['_post_lote_lis'][] = $arrayPost;	
 		}	
 
@@ -412,7 +408,7 @@ class Etapa extends CI_Controller {
 			echo("ok");
 		}		
 	}
-	//TODO: FUNCION DEPRECADA ORIGINAL DE JUDAS(CREO jeje)
+	// Levanta pantalla abm fraccionar
 	public function fraccionar()
 	{
 			$data['accion'] = 'Nuevo';
