@@ -17,7 +17,7 @@
                     <div class="col-md-6 col-xs-12 input-group ba">
                      
                           <?php
-                            echo selectBusquedaAvanzada('inputproductos', false, $materias, 'arti_id', 'barcode', array('descripcion'));
+                            echo selectBusquedaAvanzada('idproducto', false, $materias, 'arti_id', 'barcode', array('descripcion'));
                         ?>
                     </div>
                 </div>
