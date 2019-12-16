@@ -1,5 +1,5 @@
 <!-- Origen -->
-<div class="box">
+<div class="box box-primary">
     <div class="box-header">
         <h4 class="box-title">Origen</h4>
     </div>
@@ -17,17 +17,11 @@
                         <label for="template" class="form-label">Materia:</label>
                
                     </div>
-                    <div class="col-md-6 col-xs-12 input-group">
-                        <input list="materias" id="inputmaterias" class="form-control" autocomplete="off">
-                        <input type="hidden" id="idmateria" value="" data-json="">
-                        <datalist id="materias">
-                            <?php foreach($materias as $fila)
-							{
-									echo  "<option value='$fila->titulo'>";
-							}
-							?>
-                        </datalist>
-
+                    <div class="col-md-6 col-xs-12 input-group ba">
+                  
+                        <?php
+                            echo selectBusquedaAvanzada('inputmaterias', false, $materias, 'arti_id', 'barcode', array('descripcion'));
+                        ?>
                     </div>
                 </div>
             </div>
@@ -106,3 +100,37 @@
             <?php }?>
 </div>
 <!-- ./ Origen -->
+
+<script>
+// al seleccionar desde el input de Origen muestra stock y habilita input para cantidad y btn aceptar
+var matSelect = null;
+$("#inputmaterias").on('change', function() {
+
+        var data = getJson(this);
+    
+        var stock = data.stock;
+        document.getElementById('stockdisabled').value = stock;
+        materia = this.dataset.json;
+        // FIXME: SI SE SACA SIN QUE ANDE EL MODALCITO DE MATERIAS SE ROMPE LA CARGA EN TABLITA
+        // agregaMateria(materia);
+        matSelect =  data;
+        // FIXME: SI SE SACA SIN QUE ANDE EL MODALCITO DE MATERIAS SE ROMPE LA CARGA EN TABLITA
+        //document.getElementById('stockdisabled').value = ma
+        
+        document.getElementById('cantidadmateria').disabled = false;
+        document.getElementById('botonmateria').disabled = false;
+});
+
+function aceptarMateria() {
+    cantidad = document.getElementById('cantidadmateria').value;
+    materia = matSelect;
+    materia.cantidad = cantidad;
+    materia = JSON.stringify(materia);
+    materia = '[' + materia + ']';
+    materia = JSON.parse(materia);
+    console.log(materia);
+    agregaMateria(materia);
+}
+
+
+</script>
