@@ -211,11 +211,11 @@ function AgregarProducto() {
         idrecipiente = document.getElementById('productodestino').value;
         indexrec = recipientes.findIndex(y => y.reci_id == idrecipiente);
         producto.id = productoid;
-        producto.titulo = document.getElementById('inputproducto').value;
+        producto.titulo = $('#inputproducto').find('option:selected').text();
         producto.cantidad = cantidad;
         producto.loteorigen = document.getElementById('loteorigen').value;
         producto.lotedestino = lotedestino;
-        producto.destino = destino
+        producto.destino = destino;
         producto.titulodestino = recipientes[indexrec].titulo ? recipientes[indexrec].titulo : ' - ';
         producto.destinofinal = establecimiento + " " + recipientefinal;
         producto.recu_id = JSON.parse($('#operarios').find('[value="' + $('#operario').val() + '"]').attr('data-json'))
