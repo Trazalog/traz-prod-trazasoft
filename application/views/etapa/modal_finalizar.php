@@ -224,7 +224,7 @@ function AgregarProducto() {
         producto.loteorigen = document.getElementById('loteorigen').value;
         producto.lotedestino = lotedestino;
         producto.destino = destino;
-        producto.titulodestino = recipientes[indexrec].titulo ? recipientes[indexrec].titulo : ' - ';
+        producto.titulodestino = $('#productodestino').find('option:selected').text();
         producto.destinofinal = establecimiento + " " + recipientefinal;
         producto.recu_id = JSON.parse($('#operarios').find('[value="' + $('#operario').val() + '"]').attr('data-json'))
             .recu_id;
