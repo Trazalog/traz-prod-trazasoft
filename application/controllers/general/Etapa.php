@@ -180,42 +180,27 @@ class Etapa extends CI_Controller {
 
 			$data['accion'] = 'Editar';
 			$data['etapa'] = $this->Etapas->buscar($id)->etapa;
-			//	var_dump($data['etapa']);die;
 			$data['idetapa'] = $data['etapa']->id;
 			//$data['recipientes'] = $this->Recipientes->listarPorEstablecimiento($data['etapa']->establecimiento->id)->recipientes->recipiente;
-			$data['recipientes'] = $this->Recipientes->obtener('DEPOSITO','TODOS',$data['etapa']->esta_id)['data'];
-
-			// Cantidad producto origen
-			// $prodCant = $this->Etapas->getCantProducto($id);
-			// $data['prodCant'] = $prodCant->existencia->cantidad;
-			// Nombre producto origen
-			// $prodNombre = $this->Etapas->getNomProducto($id);
-			// $data['prodNomb'] =$prodNombre->producto->nombre;	
-			
+			$data['recipientes'] = $this->Recipientes->obtener('DEPOSITO','TODOS',$data['etapa']->esta_id)['data'];			
 			// trae tablita de materia prima Origen y producto	
-			$data['matPrimas'] = $this->Etapas->getRecursosOrigen($id, MATERIA_PRIMA)->recursos->recurso;
-			
-			$data['producto'] = $this->Etapas->getRecursosOrigen($id, PRODUCTO)->recursos->recurso;			
-
+			$data['matPrimas'] = $this->Etapas->getRecursosOrigen($id, MATERIA_PRIMA)->recursos->recurso;			
+			$data['producto'] = $this->Etapas->getRecursosOrigen($id, PRODUCTO)->recursos->recurso;	
 			// trae recipientes de Tipo Deposito
-			//$data['recipientes'] = $this->Recipientes->listarTodosDeposito()->recipientes->recipiente;
-			
-			
+			//$data['recipientes'] = $this->Recipientes->listarTodosDeposito()->recipientes->recipiente;	
 			// $data['op'] = 	$data['etapa']->orden;
 			$data['op'] = 	$data['etapa']->titulo;
 			$data['lang'] = lang_get('spanish',4);
 			// $data['establecimientos'] = $this->Establecimientos->listar(2)->establecimientos->establecimiento;
 			$data['establecimientos'] = $this->Establecimientos->listar()->establecimientos->establecimiento;
-			$data['materias'] = $this->Materias->listar()->materias->materia;
-		
+			$data['materias'] = $this->Materias->listar()->materias->materia;		
 			$data['fecha'] = $data['etapa']->fecha;
-
-	
 
 			if($data['op'] == 'Fraccionamiento')
 			{
 				// trae lotes segun entrega de materiales de almacen.(81)
 				$data['lotesFracc'] = $this->Etapas->getLotesaFraccionar($id)->lotes->lote;
+				$data['ordenProd'] = $data['etapa']->orden;
 				//$data['lotesFracc'] = $this->Etapas->getLotesaFraccionar(81)->lotes->lote;
 				//$data['empaques'] = $this->Recipientes->listarEmpaques()->empaques->empaque;
 				$this->load->view('etapa/fraccionar/fraccionar', $data);
@@ -239,7 +224,7 @@ class Etapa extends CI_Controller {
 				$datosCab['batch_id_padre'] = (string)0;
 				$datosCab['cantidad'] = (string)$this->input->post('cant_total_desc');
 				$datosCab['cantidad_padre'] = (string)0;
-				$datosCab['num_orden_prod'] = (string)0;
+				$datosCab['num_orden_prod'] = (string)$this->input->post('ordProduccion');
 				$datosCab['reci_id'] = $this->input->post('recipiente');
 				$datosCab['etap_id'] = $this->input->post('idetapa');
 				$datosCab['usuario_app'] = userNick();
@@ -247,13 +232,10 @@ class Etapa extends CI_Controller {
 				$datosCab['forzar_agregar'] = "FALSE";
 				$datosCab['fec_vencimiento'] = "01-01-1899";		
 				$datosCab['recu_id'] = (string)0;
-				$datosCab['tipo_recurso'] = "";
-						
+				$datosCab['tipo_recurso'] = "";						
 				$data['_post_lote'] = $datosCab;
-
 				// guardo recursos materiales (origen)
-				$productos = $this->input->post('productos');
-				
+				$productos = $this->input->post('productos');				
 			//guarda batch nuevo (tabla lotes)
 			 $respServ = $this->Etapas->SetNuevoBatch($data);
 			 $batch_id	= $respServ->respuesta->resultado;			
@@ -265,26 +247,20 @@ class Etapa extends CI_Controller {
 							$arrRec['batch_id'] = (string)$batch_id;
 							$arrRec['recu_id'] = (string)$recurso_id;
 							$arrRec['usuario'] = userNick();
+							$arrRec['empr_id'] = (string)empresa();	
+							$arrRec['cantidad'] = (string)$p->cant_descontar; // cantidad a descontar en stock
+							$arrRec['tipo'] = MATERIA_PRIMA;							
 							$arrRec['empa_id'] = (string)$p->empaque;
 							$arrRec['empa_cantidad'] = (string)$p->cantidad; // cantidad del empaque
-							$arrRec['cantidad'] = (string)$p->cant_descontar; // cantidad a descontar en stock
-							$arrRec['tipo'] = PRODUCTO;
-							$arrRec['empr_id'] = (string)empresa();
-							$arrRec['recu_id'] = "0";
-							$arrRec['tipo_recurso'] = "";
-
 							$recu['_post_recurso'][$i] = (object)$arrRec;
 							$i++;
 					}							
-					// array para guardar
+					// batch para guardar
 					$arrayRecursos['_post_recurso_lote_batch_req'] = $recu;					
-					$respArtic = $this->Etapas->setRecursosLotesMat($arrayRecursos);	
-
-			
+					$respArtic = $this->Etapas->setRecursosLotesMat($arrayRecursos);				
 					
 			///////////////////////  PEDIDO DE MATERIALES //////////////////////////	
 					if(($batch_id != "BATCH_NO_CREADO" )  || ($batch_id != "RECI_NO_VACIO")){
-
 						////////////// INSERTAR CABECERA NOTA PEDIDO   ///
 							$arrayPost['fecha'] = $this->input->post('fecha');		
 							$arrayPost['empr_id'] = (string)empresa();
@@ -304,7 +280,6 @@ class Etapa extends CI_Controller {
 											$detalle['_post_notapedido_detalle'][$x]=(object) $det;
 											$x++;					
 									}	
-
 									$arrayDeta['_post_notapedido_detalle_batch_req'] = $detalle;							
 									$respDetalle = $this->Etapas->setDetaNP($arrayDeta);
 									
@@ -313,26 +288,19 @@ class Etapa extends CI_Controller {
 											$contract = [
 												'pIdPedidoMaterial' => $pema_id,
 											];
-
-											$rsp = $this->bpm->lanzarProceso(BPM_PROCESS_ID_PEDIDOS_NORMALES,$contract);
-											
+											$rsp = $this->bpm->lanzarProceso(BPM_PROCESS_ID_PEDIDOS_NORMALES,$contract);											
 											if($rsp['status']){
 													echo("ok");
 											}else{
 													echo ($rsp['msj']);
-											}								
-
+											}				
 									}else{
-
 											echo ("Error en generacion de Detalle Pedido Materiales");
 									}
 							}else{
-
 									echo("Error en generacion de Cabecera Pedido Materiales");
 							}	
-					}	
-			
-
+					}			
 	}
 	// Elabora informe de Etapa hasta que se saque el total del contenido de batch origen
 	public function Finalizar()
