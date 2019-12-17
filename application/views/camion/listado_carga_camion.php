@@ -2,14 +2,14 @@
 
 <!--Muestra los datos de los servicios directamente en pantalla-->
 <?php 
-var_dump($movimientosTransporte)
+//var_dump($movimientosTransporte)
 ?>
 <!--________________________________________________________________________--> 
 
 <!--Pantalla "LISTADO CARGA DE CAMION"-->
 <div class="box">
     <div class="box-header with-border">
-        <h3 class="box-title">Listado Carga Camión</h3>
+        <h4 class="box-title">Listado Carga Camión</h4>
     </div>
     <div class="box-body">
 <!--________________________________________________________________________-->    
@@ -24,56 +24,48 @@ var_dump($movimientosTransporte)
         </div>
     </div>
 <!--________________________________________________________________________-->
+
   <div class="box-body table-scroll table-responsive">
     <table id="example2" class="table table-bordered table-hover">
-      
+
       <!--Cabecera del datatable--> 
         <thead>
           <tr>
-            <th style="width: 200px; font-weight: lighter;">N° Boleta</th>
-            <th style="width: 200px; font-weight: lighter;">Establecimiento</th>
-            <th style="width: 200px; font-weight: lighter;">Fecha</th>
-            <th style="width: 200px; font-weight: lighter;">Patente</th>
-            <th style="width: 200px; font-weight: lighter;">Acoplado</th>
-            <th style="width: 200px; font-weight: lighter;">Transportista</th>
-            <th style="width: 200px; font-weight: lighter;">Neto</th>
-            <th style="width: 200px; font-weight: lighter;">Estado</th>
+            <th></th>
+            <th class="boleta" id="boleta" style="width: 200px; font-weight: lighter;">N° Boleta</th>
+            <th class="establecimiento" id="establecimiento" style="width: 200px; font-weight: lighter;">Establecimiento</th>
+            <th class="fecha_entrada" id="fecha_entrada" style="width: 200px; font-weight: lighter;">Fecha</th>
+            <th class="patente" id="patente" style="width: 400px; font-weight: lighter;">Patente Acoplado</th>
+            <th class="transportista" id="transportista" style="width: 200px; font-weight: lighter;">Transportista</th>
+            <th class="neto" id="neto" style="width: 200px; font-weight: lighter;">Neto</th>
+            <th class="estado" id="estado" style="width: 200px; font-weight: lighter;">Estado</th>
           </tr>
         </thead>
       <!--________________________________________________________________________-->
-      
+
       <!--Cuerpo del Datatable-->
         <tbody>
-          <tr style="font-weight: lighter;">
-            <td>1</td>
-            <td>Dato 1</td>
-            <td>Dato 1</td>
-            <td>Dato 1</td>
-            <td>Dato 1</td>
-            <td>Dato 1</td>
-            <td>Dato 1</td>
-            <td>Dato 1</td>
-          </tr>
-          <tr style="font-weight: lighter;">
-            <td>2</td>
-            <td>Dato 2</td>
-            <td>Dato 2</td>
-            <td>Dato 2</td>
-            <td>Dato 2</td>
-            <td>Dato 2</td>
-            <td>Dato 2</td>
-            <td>Dato 2</td>
-          </tr>
-          <tr style="font-weight: lighter;">
-            <td>3</td>
-            <td>Dato 3</td>
-            <td>Dato 3</td>
-            <td>Dato 3</td>
-            <td>Dato 3</td>
-            <td>Dato 3</td>
-            <td>Dato 3</td>
-            <td>Dato 3</td>
-          </tr>
+          <?php
+            foreach($movimientosTransporte as $fila)
+            {
+              $id=$fila->id;
+              echo'<tr  id="'.$id.'" data-json:'.json_encode($fila).'>';
+
+              echo '<td width="5%" class="text-center">';
+              echo '<i class="fa fa-fw fa-search text-light-blue ml-1" style="cursor: pointer;" title="Editar" onclick=linkTo("general/Etapa/editar?id='.$id.'")></i>';
+              echo '<i class="fa fa-fw fa-times-circle text-light-blue ml-1" style="cursor: pointer;" title="Eliminar" onclick="seleccionar(this)"></i>';
+              echo '</td>';
+
+              echo '<td>'.$fila->boleta.'</td>';
+              echo '<td>'.$fila->establecimiento.'</td>';
+              echo '<td>'.$fila->fecha_entrada.'</td>';
+              echo '<td>'.$fila->patente.'</td>';
+              echo '<td>'.$fila->transportista.'</td>';
+              echo '<td>'.$fila->neto.'</td>';
+              echo '<td>'.$fila->estado.'</td>';
+              echo '</tr>';
+            }
+          ?>
         </tbody>
       </table>
     </div>

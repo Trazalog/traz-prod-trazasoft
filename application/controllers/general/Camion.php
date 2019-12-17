@@ -47,26 +47,28 @@ class Camion extends CI_Controller
         $res = $this->Camiones->listarPorEstablecimiento($establecimiento);
         echo json_encode($res['data']);
     }
-    
+
     #RBASAÑES
     public function recepcionCamion()
     {
-        //$data['fecha'] = date('Y-m-d');
-        //$data['lang'] = lang_get('spanish', 4);
         $data['movimientosTransporte'] = $this->Camiones->listaTransporte()['data'];
-        
+
         $this->load->view('camion/listado_recepcion_camion', $data);
     }
-    
+
     public function cargadeCamion()
     {
-        //$data['fecha'] = date('Y-m-d');
-        //$data['lang'] = lang_get('spanish', 4);
         $data['movimientosTransporte'] = $this->Camiones->listaCargaCTransporte()['data'];
 
         $this->load->view('camion/listado_carga_camion', $data);
     }
-    #________________________________________________
+
+    #Abrir ventana modal Recepcion Camion
+    public function ver()
+    {
+        $this->load->view('camion/modal_recepcioncamion');
+    }
+    #_____________________________________________________________________________________
 
     public function finalizarCarga()
     {
@@ -98,17 +100,18 @@ class Camion extends CI_Controller
 	public function setEntrada()
 	{
         $this->load->model('general/Entradas');
-        
+
 		$data = $this->input->post();
         $rsp = $this->Entradas->guardar($data);
         echo json_encode($rsp);
     }
-    
+
     public function guardarDescarga()
     {
-         $data = $this->input->post('array');
+        $data = $this->input->post('array');
         $rsp = $this->Camiones->guardarDescarga($data);
         echo json_encode($rsp);
     }
-    
+    #_____________________________________________________________________________________
+
 }

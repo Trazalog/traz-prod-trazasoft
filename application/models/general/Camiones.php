@@ -84,6 +84,8 @@ class Camiones extends CI_Model
         $rsp = $this->Lotes->crearBatch($array);
         return $rsp;
     }
+    
+    #RBASAÑES
     public function listaTransporte()
     {
         $url = REST_TDS.'transporte/movimiento/list/tipo_movimiento';
@@ -98,4 +100,5 @@ class Camiones extends CI_Model
         if($rsp['status']) $rsp['data'] = json_decode($rsp['data'])->movimientosTransporte->movimientoTransporte;
         return $rsp;
     }
+    #_____________________________________________________________________________________
 }
