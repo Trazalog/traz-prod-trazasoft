@@ -21,6 +21,7 @@
             </div>
         </div>
         <form id="frm-info">
+            <input type="text" name="accion" id="accion" class="hidden">
             <div class="row" style="margin-top: 40px">
                 <div class="col-md-1 col-xs-12">
                     <label class="form-label">Boleta*:</label>
@@ -509,6 +510,7 @@ function Guardar() {
 }
 
 function cargacamion() {
+    $('#accion').val('carga');
     $('.panel-req').show();
 
     document.getElementById('cargacamion').style.borderStyle = "solid";
@@ -522,6 +524,7 @@ function cargacamion() {
 }
 
 function descargacamion() {
+    $('#accion').val('descarga');
     $('.panel-req').show();
 
     document.getElementById('descargacamion').style.borderStyle = "solid";
