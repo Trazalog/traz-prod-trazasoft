@@ -146,44 +146,16 @@ class Etapas extends CI_Model
         $url = REST2 . $resource;
         $array = $this->rest->callAPI("POST", $url, $arrayDeta);
         return json_decode($array['code']);
-    }
-    // devuelve cantidad de prod por batch_id
-    //TODO: REVISAR CREO ESTA DEPRECADA POR GETRECURSOSORIGEN
-    public function getCantProducto($id)
-    {
-
-        $idBatch = json_encode($id);
-        log_message('DEBUG', 'Etapas/getCantProducto(batch_id)-> ' . $idBatch);
-        $resource = '/lote/existencia/';
-        $url = REST4 . $resource . $id;
-        $array = $this->rest->callAPI("GET", $url, $id);
-        return json_decode($array['data']);
-    }
-    // devuelve nombre de prod por batch_id
-    //TODO: REVISAR CREO ESTA DEPRECADA POR GETRECURSOSORIGEN
-    public function getNomProducto($id)
-    {
-
-        $idBatch = json_encode($id);
-        log_message('DEBUG', 'Etapas/getNomProducto(batch_id)-> ' . $idBatch);
-        $resource = '/articulo/nombre/';
-        $url = REST2 . $resource . $id;
-        $array = $this->rest->callAPI("GET", $url, $id);
-        return json_decode($array['data']);
-    }
+    }    
     // devuelve de recursos_lotes materia prima y producto segun id batch y tipo
-    public function getRecursosOrigen($id, $recursoTipo)
-    {
+    public function getRecursosOrigen($id, $recursoTipo)    {
 
         $idBatch = json_encode($id);
         log_message('DEBUG', 'Etapas/getRecursosOrigen(batch_id)-> ' . $idBatch);
         log_message('DEBUG', 'Etapas/getRecursosOrigen(tipo de recurso)-> ' . $recursoTipo);
-
         $resource = '/recurso/lote/' . $id . '/tiporec/' . $recursoTipo;
         $url = REST2 . $resource;
-        //var_dump($url);
         $array = $this->rest->callAPI("GET", $url, $id);
-
         return json_decode($array['data']);
     }
     // Informe de Etapa (modal_finaizar)
@@ -207,23 +179,14 @@ class Etapas extends CI_Model
         $array = $this->rest->callAPI("POST", $url, $fraccionam);
         return json_decode($array['code']);
     }
-    //TODO: FUNCION DEPRECADA ORIGINAL DE JUDAS
-    // guarda Inicia etapa fraccionamiento
-    public function guardarFraccionar($data)
-    {
-        echo ("datos en model de iniciar fraccionado: ");
-        var_dump($data);
-		}
-		
+    // trae lotes a fraccionar desde entrega materiales por batch_id
 		public function getLotesaFraccionar($id){
 
 				$idBatch = json_encode($id);
-        log_message('DEBUG', 'Etapas/getLotesaFraccionar(batch_id)-> ' . $idBatch);      
-			
+        log_message('DEBUG', 'Etapas/getLotesaFraccionar(batch_id)-> ' . $idBatch);
         $resource = '/lote/fraccionar/batch/' . $id;
         $url = REST2 . $resource;
         $array = $this->rest->callAPI("GET", $url, $id);
-
         return json_decode($array['data']);
 		}
 
