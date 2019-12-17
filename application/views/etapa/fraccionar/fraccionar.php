@@ -19,13 +19,13 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
   <div class="box-body">
     <div class="row" style="margin-top: 50px;">
       
-      <div class="col-md-1 col-xs-12">
+      <!-- <div class="col-md-1 col-xs-12">
           <label for="Lote" class="form-label">Codigo Lote:*</label>
-      </div>
-      <div class="col-md-5 col-xs-12">
-          <input type="text" id="Lote" <?php if($accion=='Editar' ){echo 'value="'.$etapa->lote.'"';}?> class="form-control" placeholder="Inserte Lote"
-          <?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
-      </div>
+      </div> -->
+      <!-- <div class="col-md-5 col-xs-12">
+          <input type="text" id="Lote" <?php //if($accion=='Editar' ){echo 'value="'.$etapa->lote.'"';}?> class="form-control" placeholder="Inserte Lote"
+          <?php //if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
+      </div> -->
 
 
       <div class="col-md-1 col-xs-12">
@@ -103,7 +103,7 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
           <!-- <input type="text" id="ordenproduccion" class="form-control" <?php //if($accion=='Editar' ){echo ( 'value="'.$etapa->op.'"');}?> placeholder="Inserte Orde de Produccion"
           <?php //if($etapa->estado == 'En Curso'){echo 'disabled';}?>> -->
 
-          <input type="text" id="ordenproduccion" class="form-control" <?php if($accion=='Editar' ){echo ( 'value="'.$op.'"');}?> placeholder="Inserte Orde de Produccion"
+          <input type="text" id="ordenproduccion" class="form-control" <?php if($accion=='Editar' ){echo ( 'value="'.$ordenProd.'"');}?> placeholder="Inserte Orde de Produccion"
           <?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>		
       </div>
     </div>  
@@ -141,7 +141,7 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
                       </thead>
                       <tbody>                       
                       <?php											
-                          foreach($producto as $fila)
+                          foreach($matPrimas as $fila)
                           {
                               echo '<tr  id="" data-json:>';
                               echo '<td>' .$fila->descripcion. '</td>';
@@ -533,6 +533,7 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
     recipiente = document.getElementById('recipientes').value;
     idetapa = <?php echo $etapa->id;?>;
     existe = document.getElementById('productoexiste').value;
+    ordProduccion = document.getElementById('ordenproduccion').value;
     var productos = [];
     var acum_cant = 0;
     if (existe == "si") {
@@ -555,7 +556,8 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
               establecimiento: establecimiento, 
               recipiente: recipiente, 
               productos: productos,
-              cant_total_desc: acum_cant },
+              cant_total_desc: acum_cant,
+              ordProduccion:ordProduccion },
       url: 'general/Etapa/guardarFraccionar',
       //url: 'general/Etapa/guardar',
       success: function (result) {
