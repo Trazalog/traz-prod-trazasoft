@@ -32,7 +32,7 @@
                         <input type="number" class="form-control" placeholder="Inserte Cantidad" id="cantidadproducto">
                     </div>
                    <div class="col-md-1 col-xs-1">
-                            <input type="text" class="form-control" value=" - " id="um">
+                            <input type="text" class="form-control" value=" - " id="um" disabled>
                    </div>
                 </div>
             </div>

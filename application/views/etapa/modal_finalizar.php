@@ -72,6 +72,9 @@
                     <div class="col-md-3 col-xs-12"><label class="form-label">Cantidad*:</label></div>
                     <div class="col-md-4 col-xs-12"><input class="form-control" id="cantidadproducto" type="text"
                             value="" placeholder="Inserte Cantidad"></div>
+                    <div class="col-md-1 col-xs-1">
+                            <input type="text" class="form-control" value=" - " id="um" disabled>
+                   </div>
                     <div class="col-md-5"></div>
                 </div>
                 <div class="row" style="margin-top:20px">
@@ -162,6 +165,11 @@
 $('.datalist').on('change', function() {
     this.dataset.json = $('#' + this.getAttribute('list')).find('[value="' + this.value + '"]').attr(
         'data-json');
+});
+
+$('#modal_finalizar').find('#inputproducto').on('change', function(){
+    var data = getJson(this);
+    $('#um').val(data.um);
 });
 
 function AgregarProducto() {
