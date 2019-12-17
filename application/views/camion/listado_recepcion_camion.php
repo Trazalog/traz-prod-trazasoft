@@ -1,6 +1,7 @@
 <!--RBASAÑES-->
 
-<!--Muestra los datos de los servicios directamente en pantalla-->
+<!--Muestra la ventana modal de la pantalla recepcion de camion-->
+<!--/////////////////Articulos, Cantidad, Codigo de Lote y UM/////////////////-->
 <?php 
 $this->load->view('camion/modal_recepcioncamion');
 ?>
@@ -19,22 +20,22 @@ $this->load->view('camion/modal_recepcioncamion');
 
             <!--Establecimiento-->
             <div class="form-group">
-                <label for="exampleInputEmail1">Establecimiento</label>
-                <input type="text" class="form-control" id="establecimiento" placeholder="Ingresar Establecimiento">
+                <label style="font-weight: lighter;" for="exampleInputEmail1">Establecimiento</label>
+                <input style="font-weight: lighter;" type="text" class="form-control" id="establecimiento" placeholder="Ingresar Establecimiento">
             </div>
             <!--________________________________________________________________________-->   
 
             <!--Transportista-->
             <div class="form-group">
-                <label for="exampleInputEmail1">Transportista</label>
-                <input type="text" class="form-control" id="transportista" placeholder="Ingresar Transportista">
+                <label style="font-weight: lighter;" for="exampleInputEmail1">Transportista</label>
+                <input style="font-weight: lighter;" type="text" class="form-control" id="transportista" placeholder="Ingresar Transportista">
             </div>
             <!--________________________________________________________________________-->   
 
             <!--Proveedor-->
             <div class="form-group">
-                <label for="exampleInputEmail1">Proveedor</label>
-                <input type="text" class="form-control" id="proveedor" placeholder="Ingresar Proveedor">
+                <label style="font-weight: lighter;" for="exampleInputEmail1">Proveedor</label>
+                <input style="font-weight: lighter;" type="text" class="form-control" id="proveedor" placeholder="Ingresar Proveedor">
             </div>
             <!--________________________________________________________________________-->   
 
@@ -43,15 +44,15 @@ $this->load->view('camion/modal_recepcioncamion');
 
             <!--Rango Fecha-->
             <div class="form-group">
-                <label for="exampleInputEmail1">Rango Fecha</label>
-                <input type="text" class="form-control" id="rangofecha" placeholder="Ingresar Rango Fecha">
+                <label style="font-weight: lighter;" for="exampleInputEmail1">Rango Fecha</label>
+                <input style="font-weight: lighter;" type="text" class="form-control" id="rangofecha" placeholder="Ingresar Rango Fecha">
             </div>
             <!--________________________________________________________________________-->   
 
             <!--Articulo-->
             <div class="form-group">
-                <label for="exampleInputEmail1">Articulo</label>
-                <input type="text" class="form-control" id="articulo" placeholder="Ingresar Articulo">
+                <label style="font-weight: lighter;" for="exampleInputEmail1">Articulo</label>
+                <input style="font-weight: lighter;" type="text" class="form-control" id="articulo" placeholder="Ingresar Articulo">
             </div>
         </div>
     <!--________________________________________________________________________-->
@@ -80,7 +81,6 @@ $this->load->view('camion/modal_recepcioncamion');
             <th class="fecha_entrada" id="fecha_entrada" style="width: 200px; font-weight: lighter;">Fecha</th>
             <th class="patente" id="patente" style="width: 200px; font-weight: lighter;">Patente - Acoplado</th>
             <th class="neto" id="neto" style="width: 200px; font-weight: lighter;">Neto</th>
-            <th class="codigo_lote" id="codigo_lote" style="width: 200px; font-weight: lighter;">Cod. Lote</th>
             <th class="estado" id="estado" style="width: 200px; font-weight: lighter;">Estado</th>
           </tr>
         </thead>
@@ -88,31 +88,27 @@ $this->load->view('camion/modal_recepcioncamion');
 
       <!--Cuerpo del Datatable-->
         <tbody>
-        
         <?php
         foreach($movimientosTransporte as $fila)
         {
           $id=$fila->id;
           echo'<tr  id="'.$id.'" data-json=\''.json_encode($fila->articulos).'\'>';
 
-          echo '<td width="5%" class="text-center">';
-          echo '<i class="fa fa-fw fa-search text-light-blue ml-1" style="cursor: pointer;" title="Ver" data-toggle="modal" data-target="#modal_recepcioncamion"></i>';
-          echo '<i class="fa fa-fw fa-times-circle text-light-blue ml-1" style="cursor: pointer;" title="Eliminar" onclick="seleccionar(this)"></i>';
+          echo '<td width="5%" class="text-center" style="font-weight: lighter;">';
+          echo '<i class="fa fa-fw fa-truck text-light-blue ml-1" style="cursor: pointer;" title="Ver" data-toggle="modal" data-target="#modal_recepcioncamion" onclick="rellenarDetalles(this)"></i>';
+          //echo '<i class="fa fa-fw fa-times-circle text-light-blue ml-1" style="cursor: pointer;" title="Eliminar" onclick="seleccionar(this)"></i>';
           echo '</td>';
 
-          echo '<td>'.$fila->boleta.'</td>';
-          echo '<td>'.$fila->proveedor.'</td>';
-          echo '<td>'.$fila->transportista.'</td>';
-          echo '<td>'.$fila->fecha_entrada.'</td>';
-          echo '<td>'.$fila->patente.'</td>';
-          echo '<td>'.$fila->neto.'</td>';
-          echo '<td>'.$fila->codigo_lote.'</td>';
-          echo '<td>'.$fila->estado.'</td>';
+          echo '<td style="font-weight: lighter;">'.$fila->boleta.'</td>';
+          echo '<td style="font-weight: lighter;">'.$fila->proveedor.'</td>';
+          echo '<td style="font-weight: lighter;">'.$fila->transportista.'</td>';
+          echo '<td style="font-weight: lighter;">'.$fila->fecha_entrada.'</td>';
+          echo '<td style="font-weight: lighter;">'.$fila->patente.'</td>';
+          echo '<td style="font-weight: lighter;">'.$fila->neto.'</td>';
+          echo '<td style="font-weight: lighter;">'.$fila->estado.'</td>';
           echo '</tr>';
-
         }
         ?>
-
         </tbody>
       </table>
     </div>
@@ -122,8 +118,8 @@ $this->load->view('camion/modal_recepcioncamion');
 <!--Script Data Table-->
 <script>
   $(function() {
-    //True = Activado
-    //False = Desactivado
+    //true = Activado
+    //false = Desactivado
 
     //example 2 -Script Datatable-
 
@@ -156,25 +152,26 @@ $this->load->view('camion/modal_recepcioncamion');
         'buttons': true,
         'fixedHeader': true,
   });
+
+function rellenarDetalles(e){
+
+  var data=$(e).closest('tr').attr('data-json');
+  data=JSON.parse(data);
+  if(!data)return;
+  var tabla= $('#example2').find('tbody');
+  $(tabla).empty();
+  data.articulo.forEach(function(e){
+
+    tabla.append(
+      `<tr>
+        <td>${e.articulo}</td>
+        <td>${e.cantidad}</td>
+        <td>${e.codigo_lote}</td>
+        <td>${e.um}</td>
+      </tr>`
+      );
+  });
+}
 </script>
 <!--________________________________________________________________________-->
 
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>

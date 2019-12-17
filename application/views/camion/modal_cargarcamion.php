@@ -1,6 +1,6 @@
 <!--RBASAÑES-->
 
-<div class="modal fade" id="modal_recepcioncamion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal fade" id="modal_cargacamion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">

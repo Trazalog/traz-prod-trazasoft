@@ -1,10 +1,11 @@
 <!--RBASAÑES-->
 
-<!--Muestra los datos de los servicios directamente en pantalla-->
+<!--Muestra la ventana modal de la pantalla carga de camion-->
+<!--/////////////////Articulos, Cantidad, Codigo de Lote y UM/////////////////-->
 <?php 
-//var_dump($movimientosTransporte)
+$this->load->view('camion/modal_cargarcamion');
 ?>
-<!--________________________________________________________________________--> 
+<!--________________________________________________________________________-->
 
 <!--Pantalla "LISTADO CARGA DE CAMION"-->
 <div class="box">
@@ -52,17 +53,17 @@
               echo'<tr  id="'.$id.'" data-json:'.json_encode($fila).'>';
 
               echo '<td width="5%" class="text-center">';
-              echo '<i class="fa fa-fw fa-search text-light-blue ml-1" style="cursor: pointer;" title="Editar" onclick=linkTo("general/Etapa/editar?id='.$id.'")></i>';
-              echo '<i class="fa fa-fw fa-times-circle text-light-blue ml-1" style="cursor: pointer;" title="Eliminar" onclick="seleccionar(this)"></i>';
+              echo '<i class="fa fa-fw fa-truck text-light-blue ml-1" style="cursor: pointer;" title="Ver" data-toggle="modal" data-target="#modal_cargacamion" onclick="rellenarDetalles(this)"></i>';
+              //echo '<i class="fa fa-fw fa-times-circle text-light-blue ml-1" style="cursor: pointer;" title="Eliminar" onclick="seleccionar(this)"></i>';
               echo '</td>';
 
-              echo '<td>'.$fila->boleta.'</td>';
-              echo '<td>'.$fila->establecimiento.'</td>';
-              echo '<td>'.$fila->fecha_entrada.'</td>';
-              echo '<td>'.$fila->patente.'</td>';
-              echo '<td>'.$fila->transportista.'</td>';
-              echo '<td>'.$fila->neto.'</td>';
-              echo '<td>'.$fila->estado.'</td>';
+              echo '<td style="font-weight: lighter;">'.$fila->boleta.'</td>';
+              echo '<td style="font-weight: lighter;">'.$fila->establecimiento.'</td>';
+              echo '<td style="font-weight: lighter;">'.$fila->fecha_entrada.'</td>';
+              echo '<td style="font-weight: lighter;">'.$fila->patente.'</td>';
+              echo '<td style="font-weight: lighter;">'.$fila->transportista.'</td>';
+              echo '<td style="font-weight: lighter;">'.$fila->neto.'</td>';
+              echo '<td style="font-weight: lighter;">'.$fila->estado.'</td>';
               echo '</tr>';
             }
           ?>
@@ -83,7 +84,7 @@ $('#example2').DataTable({
     'paging': true,
     'lengthChange': true,
     'searching': false,
-    'ordering': true,
+    'ordering': false,
     'info': true,
     'autoWidth': true,
     'autoFill': true,
@@ -109,5 +110,24 @@ $('#example1').DataTable({
     'fixedHeader': true,
 });
 
+function rellenarDetalles(e){
+
+var data=$(e).closest('tr').attr('data-json');
+data=JSON.parse(data);
+if(!data)return;
+var tabla= $('#example2').find('tbody');
+$(tabla).empty();
+data.articulo.forEach(function(e){
+
+  tabla.append(
+    `<tr>
+      <td>${e.articulo}</td>
+      <td>${e.cantidad}</td>
+      <td>${e.codigo_lote}</td>
+      <td>${e.um}</td>
+    </tr>`
+    );
+});
+}
 </script>
 <!--________________________________________________________________________-->

@@ -62,12 +62,6 @@ class Camion extends CI_Controller
 
         $this->load->view('camion/listado_carga_camion', $data);
     }
-
-    #Abrir ventana modal Recepcion Camion
-    public function ver()
-    {
-        $this->load->view('camion/modal_recepcioncamion');
-    }
     #_____________________________________________________________________________________
 
     public function finalizarCarga()
