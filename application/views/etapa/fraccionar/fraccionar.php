@@ -146,8 +146,8 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
                               echo '<tr  id="" data-json:>';
                               echo '<td>' .$fila->descripcion. '</td>';
                               echo '<td>' .$fila->cantidad.' ('.$fila->uni_med.')'.'</td>';
-                              echo '<td>' .$fila->empa_nombre. '</td>';
-                              echo '<td>' .$fila->empa_cantidad. '</td>';         
+                              echo '<td>' .$fila->nombre. '</td>';
+                              echo '<td>' .$fila->cant_emp. '</td>';         
                               echo '</tr>'; 																
                           }		
                       ?>			
