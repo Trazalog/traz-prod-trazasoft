@@ -164,10 +164,10 @@ function rellenarDetalles(e){
 
     tabla.append(
       `<tr>
-        <td>${e.articulo}</td>
-        <td>${e.cantidad}</td>
-        <td>${e.codigo_lote}</td>
-        <td>${e.um}</td>
+        <td style="font-weight: lighter;">${e.articulo}</td>
+        <td style="font-weight: lighter;">${e.cantidad}</td>
+        <td style="font-weight: lighter;">${e.codigo_lote}</td>
+        <td style="font-weight: lighter;">${e.um}</td>
       </tr>`
       );
   });
