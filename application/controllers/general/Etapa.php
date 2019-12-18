@@ -201,6 +201,7 @@ class Etapa extends CI_Controller {
 				// trae lotes segun entrega de materiales de almacen.(81)
 				$data['lotesFracc'] = $this->Etapas->getLotesaFraccionar($id)->lotes->lote;
 				$data['ordenProd'] = $data['etapa']->orden;
+				//$data['matfraccionar'] = $this->Etapas->getRecursosFraccionar($id, MATERIA_PRIMA)->recursos->recurso;	
 				//$data['lotesFracc'] = $this->Etapas->getLotesaFraccionar(81)->lotes->lote;
 				//$data['empaques'] = $this->Recipientes->listarEmpaques()->empaques->empaque;
 				$this->load->view('etapa/fraccionar/fraccionar', $data);
