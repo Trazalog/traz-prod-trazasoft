@@ -419,8 +419,11 @@ function validarRecipiente(json) {
         if ($('#tabla_productos_asignados').length != 0) {
 
             // Validar si el recipiente ha sido elegido en la tabla Anteriormente
+            var recipientes =  $('#tabla_productos_asignados').find('.res-' + json.reci_id);
+          
+            if(recipientes.length == 0){ $('#unificar').val(false); return true;}
             var ban = true;
-            $('#tabla_productos_asignados').find('.res-' + json.reci_id).each(function() {
+            recipientes.each(function() {
 
                 ban = ban && $(this).hasClass(arti_id + lote_id);
 
@@ -428,7 +431,7 @@ function validarRecipiente(json) {
 
             if (ban) {
                 // Pregunta si quiere Unificar los Lotes
-                if (confirm('¿Desea mezclar los Artículos en el Recipiente?') != true) {
+                if (confirm('-¿Desea mezclar los Artículos en el Recipiente?') != true) {
                     // Respuesta Negativa
                     $('#recipiente').val('').trigger('change');
                     $('#unificar').val(false);
@@ -438,7 +441,7 @@ function validarRecipiente(json) {
                 return true;
 
             } else {
-                alert('- No se pueden mezclar Distintos Articulos y Distintos Lotes en un mismo Recipiente');
+                alert('-No se pueden mezclar Distintos Articulos y Distintos Lotes en un mismo Recipiente');
                 $('#recipiente').val('').trigger('change');
                 //$('#lotedestino').val('').trigger('change');
                 $('#unificar').val(false);

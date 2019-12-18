@@ -40,9 +40,7 @@ $.widget.bridge('uibutton', $.ui.button);
        <script src="<?php base_url();?>lib/plugins/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
       
       
-       <!--Datatables-->
-       <script src="<?php base_url() ?>lib/bower_components/datatables1/datatables.js"></script>
-       <script src="<?php base_url() ?>lib/bower_components/datatables1/dataTables.bootstrap.min.js"></script>
+     
 
 
        <!-- Select2 -->
