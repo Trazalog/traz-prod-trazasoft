@@ -55,12 +55,12 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
 " type="button" class=" btn dropdown-toggle btn-circle btn-xl"
                     data-toggle="dropdown" aria-expanded="false"> <b style="color:#ffffff">+</b></button>
                 <ul class="dropdown-menu dropdown-menu-right" id="nuevo">
-                    <li><a href="#" class="text-center text-blue"><b>Crear Nueva Etapa</b></a></li>
+                    <li class="header text-center text-info"><b>Crear Nueva Etapa</b></li>
                     <?php
                     
                     foreach($etapas as $fila)
                     {
-                      echo "<li  data-value='".$fila->id."'><a data-json='".json_encode($fila)."'>".$fila->titulo."</a></li>";
+                      echo "<li  data-value='".$fila->id."'><a data-json='".json_encode($fila)."'><i class='fa fa-chevron-circle-right text-info'></i>".$fila->titulo."</a></li>";
                       
                       //var_dump($etapas);
                     }

@@ -72,6 +72,9 @@
                     <div class="col-md-3 col-xs-12"><label class="form-label">Cantidad*:</label></div>
                     <div class="col-md-4 col-xs-12"><input class="form-control" id="cantidadproducto" type="text"
                             value="" placeholder="Inserte Cantidad"></div>
+                    <div class="col-md-1 col-xs-1">
+                            <input type="text" class="form-control" value=" - " id="um" disabled>
+                   </div>
                     <div class="col-md-5"></div>
                 </div>
                 <div class="row" style="margin-top:20px">
@@ -164,6 +167,11 @@ $('.datalist').on('change', function() {
         'data-json');
 });
 
+$('#modal_finalizar').find('#inputproducto').on('change', function(){
+    var data = getJson(this);
+    $('#um').val(data.um);
+});
+
 function AgregarProducto() {
     ban = true;
 
@@ -211,12 +219,12 @@ function AgregarProducto() {
         idrecipiente = document.getElementById('productodestino').value;
         indexrec = recipientes.findIndex(y => y.reci_id == idrecipiente);
         producto.id = productoid;
-        producto.titulo = document.getElementById('inputproducto').value;
+        producto.titulo = $('#inputproducto').find('option:selected').text();
         producto.cantidad = cantidad;
         producto.loteorigen = document.getElementById('loteorigen').value;
         producto.lotedestino = lotedestino;
-        producto.destino = destino
-        producto.titulodestino = recipientes[indexrec].titulo ? recipientes[indexrec].titulo : ' - ';
+        producto.destino = destino;
+        producto.titulodestino = $('#productodestino').find('option:selected').text();
         producto.destinofinal = establecimiento + " " + recipientefinal;
         producto.recu_id = JSON.parse($('#operarios').find('[value="' + $('#operario').val() + '"]').attr('data-json'))
             .recu_id;

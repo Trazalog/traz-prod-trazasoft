@@ -21,6 +21,7 @@
             </div>
         </div>
         <form id="frm-info">
+            <input type="text" name="accion" id="accion" class="hidden">
             <div class="row" style="margin-top: 40px">
                 <div class="col-md-1 col-xs-12">
                     <label class="form-label">Boleta*:</label>
@@ -75,7 +76,7 @@ foreach ($establecimientos as $fila) {
         </form>
     </div>
 </div>
-<div class="box">
+<div class="box panel-req" style="display:none">
     <div class="box-header">
         <h3 class="box-title">Datos Camión</h3>
     </div>
@@ -133,21 +134,24 @@ foreach ($establecimientos as $fila) {
 </div>
 
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-6 tag-descarga" style="display:none">
         <?php 
             $this->load->view('entrada_movilidad/comp/origen');
         ?>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-6 tag-descarga" style="display:none">
         <?php
         $this->load->view('entrada_movilidad/comp/destino');
         ?>
     </div>
+    <div class="col-md-12 tag-descarga" style="display:none">
+                    <?php 
+    $this->load->view('entrada_movilidad/comp/tabla_descarga');
+            ?>
+    </div>
 </div>
 
-<?php 
-    $this->load->view('entrada_movilidad/comp/tabla_descarga');
-?>
+
 
 <script>
 
@@ -506,6 +510,9 @@ function Guardar() {
 }
 
 function cargacamion() {
+    $('#accion').val('carga');
+    $('.panel-req').show();
+
     document.getElementById('cargacamion').style.borderStyle = "solid";
     document.getElementById('cargacamion').style.borderColor = "blue";
     document.getElementById('descargacamion').style.borderColor = "white";
@@ -517,6 +524,9 @@ function cargacamion() {
 }
 
 function descargacamion() {
+    $('#accion').val('descarga');
+    $('.panel-req').show();
+
     document.getElementById('descargacamion').style.borderStyle = "solid";
     document.getElementById('cargacamion').style.borderColor = "white";
     document.getElementById('descargacamion').style.borderColor = "blue";

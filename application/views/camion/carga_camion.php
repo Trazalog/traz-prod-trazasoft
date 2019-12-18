@@ -1,7 +1,7 @@
 <?php $this->load->view('camion/modal_lotes')?>
-<div class="box">
+<div class="box box-primary">
     <div class="box-header with-border">
-        <h3><?php echo $lang["CargarCamion"];?></h3>
+        <h3 class="box-title">Carga Camión</h3>
         <div class="box-tools pull-right">
         </div>
     </div>
@@ -32,9 +32,9 @@
     </div>
 </div>
 </div>
-<div class="box">
+<div class="box box-primary">
     <div class="box-header">
-        <h4>Datos camion</h4>
+        <h3 class="box-title">Datos Camión</h3>
     </div>
     <div class="box-body">
         <div class="row" style="margin-top:40px;">
@@ -67,9 +67,9 @@
         </div>
     </div>
 </div>
-<div class="box">
+<div class="box box-primary">
     <div class="box-header">
-        <h4>Datos de Carga</h4>
+        <h3 class="box-title">Datos de Carga</h3>
     </div>
     <div class="box-body">
         <div class="row" style="margin-top:40px;">
