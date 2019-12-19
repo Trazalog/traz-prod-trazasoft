@@ -10,7 +10,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="exampleModalLabel">Informacion</h4>
+                <h4 class="modal-title" id="exampleModalLabel">Información</h4>
             </div>
             <!--_____________________________________________________________-->
 
@@ -20,15 +20,15 @@
 
                 <!--DATOS ESPECIFICOS DEL MODAL-->                                
                 <div class="box-body table-scroll table-responsive">
-                    <table id="example2" class="table table-bordered table-hover">
+                    <table id="tbl-articulos" class="table table-bordered table-hover">
                     
                     <!--Cabecera del datatable-->  
                         <thead>
                             <tr>
-                                <th class="articulos" id="articulos" style="width: 1000px; font-weight: lighter;">Articulos</th> 
-                                <th class="cantidad" id="cantidad" style="width: 1000px; font-weight: lighter;">Cantidad</th>
-                                <th class="codigo_lote" id="codigo_lote" style="width: 1000px; font-weight: lighter;">Codigo Lote</th>
-                                <th class="um" id="um" style="width: 1000px; font-weight: lighter;">UM</th>
+                                <th>Artículos</th> 
+                                <th>Cantidad</th>
+                                <th>Código Lote</th>
+                                <th>UM</th>
                            </tr>
                         </thead>
                     <!--________________________________________________________________________-->
@@ -56,43 +56,3 @@
     </div>
 
 </div>
-
-<!--Script Data Table-->
-<script>
-$(function() {
-//true = Activado
-//false = Desactivado
-
-//example 2 -Script Datatable-
-$('#example2').DataTable({
-    'paging': true,
-    'lengthChange': true,
-    'searching': false,
-    'ordering': true,
-    'info': true,
-    'autoWidth': true,
-    'autoFill': true,
-    'buttons': true,
-    'fixedHeader': true,
-    dom: 'Bfrtip',
-    buttons: [
-    'excel', 'pdf', 'print'
-    ]
-  })
-})
-
-//example 1 -Script Datatable-
-$('#example1').DataTable({
-    'paging': true,
-    'lengthChange': true,
-    'searching': true,
-    'ordering': true,
-    'info': true,
-    'autoWidth': true,
-    'autoFill': true,
-    'buttons': true,
-    'fixedHeader': true,
-});
-
-</script>
-<!--________________________________________________________________________-->

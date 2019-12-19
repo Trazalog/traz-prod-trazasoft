@@ -20,7 +20,7 @@
 
                 <!--DATOS ESPECIFICOS DEL MODAL-->                                
                 <div class="box-body table-scroll table-responsive">
-                    <table id="example2" class="table table-bordered table-hover">
+                    <table id="tbl-articulos" class="table table-bordered table-hover">
                     
                     <!--Cabecera del datatable-->  
                         <thead>
@@ -58,41 +58,5 @@
 </div>
 
 <!--Script Data Table-->
-<script>
-$(function() {
-//true = Activado
-//false = Desactivado
 
-//example 2 -Script Datatable-
-$('#example2').DataTable({
-    'paging': true,
-    'lengthChange': true,
-    'searching': false,
-    'ordering': true,
-    'info': true,
-    'autoWidth': true,
-    'autoFill': true,
-    'buttons': true,
-    'fixedHeader': true,
-    dom: 'Bfrtip',
-    buttons: [
-    'excel', 'pdf', 'print'
-    ]
-  })
-})
-
-//example 1 -Script Datatable-
-$('#example1').DataTable({
-    'paging': true,
-    'lengthChange': true,
-    'searching': true,
-    'ordering': true,
-    'info': true,
-    'autoWidth': true,
-    'autoFill': true,
-    'buttons': true,
-    'fixedHeader': true,
-});
-
-</script>
 <!--________________________________________________________________________-->

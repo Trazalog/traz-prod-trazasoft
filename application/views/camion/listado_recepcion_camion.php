@@ -12,6 +12,7 @@ $this->load->view('camion/modal_recepcioncamion');
     <div class="box-header with-border">
         <h4 class="box-title">Listado Recepción Camión</h4>
     </div>
+        <button class="btn btn-primary" onclick="linkTo('general/Camion/entradaCamion')" style="margin-left:5px;"><i class="fa fa-plus"></i>  Nueva Recepción</button>
     <div class="box-body hidden">
         <!--________________________________________________________________________-->
 
@@ -74,19 +75,17 @@ $this->load->view('camion/modal_recepcioncamion');
     </div> -->
     <!--________________________________________________________________________-->
     <div class="box-body table-scroll table-responsive">
-        <table id="example2" class="table table-striped table-hover">
+        <table id="tbl-camiones" class="table table-striped table-hover">
             <!--Cabecera del datatable-->
             <thead>
-
                 <th></th>
-                <th class="boleta" id="boleta" style="width: 200px;">N° Boleta</th>
-                <th class="proveedor" id="proveedor" style="width: 200px;">Proveedor</th>
-                <th class="transportista" id="transportista" style="width: 200px;">
-                    Transportista</th>
-                <th class="fecha_entrada" id="fecha_entrada" style="width: 200px;">Fecha</th>
-                <th class="patente" id="patente" style="width: 200px;">Patente - Acoplado</th>
-                <th class="neto" id="neto" style="width: 200px;">Neto</th>
-                <th class="estado" id="estado" style="width: 200px;">Estado</th>
+                <th>N° Boleta</th>
+                <th>Proveedor</th>
+                <th>Transportista</th>
+                <th>Fecha</th>
+                <th>Patente - Acoplado</th>
+                <th>Neto</th>
+                <th>Estado</th>
 
             </thead>
             <!--________________________________________________________________________-->
@@ -100,7 +99,7 @@ $this->load->view('camion/modal_recepcioncamion');
           echo "<tr  id='$id' data-json='".json_encode($fila->articulos)."'>";
 
           echo '<td width="5%" class="text-center" style="font-weight: lighter;">';
-          echo '<i class="fa fa-fw fa-truck text-light-blue ml-1" style="cursor: pointer;" title="Ver"  onclick="rellenarDetalles(this)"></i>';
+          echo '<i class="fa fa-fw fa-truck text-light-blue" style="cursor: pointer;" title="Ver Lotes"  onclick="rellenarDetalles(this)"></i>';
           echo '</td>';
 
           echo '<td style="font-weight: lighter;">'.$fila->boleta.'</td>';
@@ -111,7 +110,7 @@ $this->load->view('camion/modal_recepcioncamion');
           echo '<td style="font-weight: lighter;">'.$fila->neto.'</td>';
           echo '<td style="font-weight: lighter;">'.estado($fila->estado).'</td>';
           echo '</tr>';
-        }
+         }
         ?>
             </tbody>
         </table>
@@ -121,34 +120,10 @@ $this->load->view('camion/modal_recepcioncamion');
 
 <!--Script Data Table-->
 <script>
-$('#example2').DataTable({
-    'paging': true,
-    'lengthChange': true,
-    'searching': false,
-    'ordering': true,
-    'info': true,
-    'autoWidth': true,
-    'autoFill': true,
-    'buttons': true,
-    'fixedHeader': true,
-    dom: 'Bfrtip',
-    buttons: [
-        'excel', 'pdf', 'print'
-    ]
-});
+DataTable('#tbl-camiones');
 
 //example 1 -Script Datatable-
-$('#example1').DataTable({
-    'paging': true,
-    'lengthChange': true,
-    'searching': true,
-    'ordering': true,
-    'info': true,
-    'autoWidth': true,
-    'autoFill': true,
-    'buttons': true,
-    'fixedHeader': true
-});
+DataTable('#tbl-articulos');
 
 function rellenarDetalles(e) {
 
@@ -158,7 +133,7 @@ function rellenarDetalles(e) {
         alert('Sin Detalles a Mostrar');
         return;
     }
-    var tabla = $('#example2').find('tbody');
+    var tabla = $('#tbl-articulos').find('tbody');
     $(tabla).empty();
     data.articulo.forEach(function(e) {
 
