@@ -18,6 +18,7 @@ class Articulo extends CI_Controller {
 	{
 		$data['list'] = $this->Articulos->getList();
 		$data['unidades_medida'] = $this->Tablas->obtener('unidades_medida');
+		$data['tipoArticulos'] = $this->Tablas->obtenerTabla('tipo_articulo')['data'];
 		$this->load->view(ALM.'articulo/list', $data);
 	}
 

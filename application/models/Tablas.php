@@ -5,8 +5,15 @@ class Tablas extends CI_Model
 
     public function __construct()
     {
-
         parent::__construct();
+    }
+
+    public function obtenerTabla($tabla)
+    {
+        $url = RESTPT . "tablas/$tabla";
+        $rsp = $this->rest->callApi('GET', $url);
+        if($rsp['status']) $rsp['data'] = json_decode($rsp['data'])->tablas->tabla;
+        return $rsp;
     }
 
     public function obtener($id = false)
