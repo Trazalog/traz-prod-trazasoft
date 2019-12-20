@@ -10,10 +10,14 @@ class Recipiente extends CI_Controller {
 		}
 
 
-    function listarPorEstablecimiento()
+    function listarPorEstablecimiento($opciones = false)
     {
         $establecimiento = $this->input->post('establecimiento');
-        $res = $this->Recipientes->listarPorEstablecimiento($establecimiento)->recipientes->recipiente; 
+
+        $res = $this->Recipientes->obtener('PRODUCTIVO', 'VACIO', $establecimiento); 
+
+        if($opciones) $res['data'] = selectBusquedaAvanzada(false, false,$res['data'],'reci_id', 'nombre',array('Estado:'=>'estado'));
+
         echo json_encode($res);
     }
 
