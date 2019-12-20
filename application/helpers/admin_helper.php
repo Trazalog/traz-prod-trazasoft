@@ -49,7 +49,13 @@ if (!function_exists('bolita')) {
                 break;
             //Estado Camiones
             case 'ASIGNADO':
-                return bolita('Asignado','green');
+                return bolita('Asignado','blue');
+            break;
+            case 'EN CURSO':
+                return bolita('En Curso','green');
+            break;
+            case 'FINALIZADO':
+                return bolita('Finalizado','yellow');
             break;
 
             default:

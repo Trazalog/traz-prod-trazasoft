@@ -157,7 +157,29 @@ class Etapas extends CI_Model
         $url = REST2 . $resource;
         $array = $this->rest->callAPI("GET", $url, $id);
         return json_decode($array['data']);
-    }
+		}
+		public function getRecursosFraccionar($id, $recursoTipo){
+
+			// $idBatch = json_encode($id);
+			// log_message('DEBUG', 'Etapas/getRecursosFraccionar(batch_id)-> ' . $idBatch);
+			// log_message('DEBUG', 'Etapas/getRecursosFraccionar(tipo de recurso)-> ' . $recursoTipo);
+			// $resource = '/lote/fraccionar/batch/'. $id .'/tipo/'.$recursoTipo;
+			// $url = REST2 . $resource;
+			// $array = $this->rest->callAPI("GET", $url);
+			// return json_decode($array['data']);
+
+			$parametros["http"]["method"] = "GET";
+			$parametros["http"]["header"] = "Accept: application/json";
+			$param = stream_context_create($parametros);
+			$resource = '/lote/fraccionar/batch/'. $id .'/tipo/'.$recursoTipo;
+			$url = REST2.$resource;
+			$array = file_get_contents($url, false, $param);
+			return json_decode($array);
+
+
+
+
+		}
     // Informe de Etapa (modal_finaizar)
     public function finalizarEtapa($arrayDatos)
     {

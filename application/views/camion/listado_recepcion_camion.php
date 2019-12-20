@@ -10,9 +10,9 @@ $this->load->view('camion/modal_recepcioncamion');
 <!--Pantalla "LISTADO RECEPCION DE CAMION"-->
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h4 class="box-title">Listado Recepción Camión</h4>
+        <h4 class="box-title">Listado Recepción Camión</h4><br>
+        <button class="btn btn-primary" onclick="linkTo('general/Camion/entradaCamion')" style="margin-top:10px;">Nueva Carga | Recepción</button>
     </div>
-        <button class="btn btn-primary" onclick="linkTo('general/Camion/entradaCamion')" style="margin-left:5px;"><i class="fa fa-plus"></i>  Nueva Recepción</button>
     <div class="box-body hidden">
         <!--________________________________________________________________________-->
 
