@@ -16,7 +16,7 @@ class Recipiente extends CI_Controller {
 
         $res = $this->Recipientes->obtener('PRODUCTIVO', 'VACIO', $establecimiento); 
 
-        if($opciones) $res['data'] = selectBusquedaAvanzada(false, false,$res['data'],'reci_id', 'nombre',array('Estado:'=>'estado'));
+        if($opciones) $res['data'] = selectBusquedaAvanzada(false, false,$res['data'],'reci_id', 'nombre',array('Estado:'=>'estado','Tipo:'=>'tipo'));
 
         echo json_encode($res);
     }
