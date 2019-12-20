@@ -70,19 +70,20 @@ $this->load->view('etapa/modal_finalizar');}?>
 
             <div class="col-md-5 col-xs-12">
                 <?php if($accion == 'Nuevo'){
-				echo '<select class="form-control" id="recipientes" disabled></select>';
+                #echo '<select class="form-control" id="recipientes" disabled></select>';
+                   echo selectBusquedaAvanzada('recipientes', false); 
 				}
-				if($accion == 'Editar'){
-					if($etapa->estado == 'En Curso' || $etapa->estado =='FINALIZADO')
-					{
-						echo '<select class="form-control" id="recipientes" disabled>';
-					}else{
-						echo '<select class="form-control" id="recipientes">';
-					}
+				// if($accion == 'Editar'){
+				// 	if($etapa->estado == 'En Curso' || $etapa->estado =='FINALIZADO')
+				// 	{
+				// 		echo '<select class="form-control" id="recipientes" disabled>';
+				// 	}else{
+				// 		echo '<select class="form-control" id="recipientes">';
+				// 	}
 				
-					echo '<option value="'.$recipiente->id.'" selected>'.$etapa->recipiente.'</option>';
-					echo '</select>';
-				}
+				// 	echo '<option value="'.$recipiente->id.'" selected>'.$etapa->recipiente.'</option>';
+				// 	echo '</select>';
+				// }
 				?>
             </div>
         </div>
@@ -199,26 +200,36 @@ if (accion == "Editar") {
 }
 
 function actualizaRecipiente(establecimiento, recipientes) {
+    wo();
     establecimiento = establecimiento;
-
+     $('#recipientes').empty();
     $.ajax({
         type: 'POST',
+        dataType: 'JSON',
         data: {
-            establecimiento: establecimiento
+            establecimiento
         },
-        url: 'general/Recipiente/listarPorEstablecimiento',
+        url: 'general/Recipiente/listarPorEstablecimiento/true',
         success: function(result) {
-            result = JSON.parse(result);
-            var html = "";
-            html = html + '<option value="" disabled selected>-Seleccione Recipiente-</option>';
-            for (var i = 0; i < result.length; i++) {
-                html = html + '<option value="' + result[i].id + '">' + result[i].titulo + '</option>';
-            }
-            document.getElementById(recipientes).disabled = false;
-            document.getElementById(recipientes).innerHTML = html;
-        },
-        //dataType: 'json'
 
+            if(!result.status) {
+                alert('Fallo al Traer Recipientes');
+                return;
+            }
+
+            if(!result.data){
+                alert('No hay Recipientes Asociados');
+                return;
+            }
+            fillSelect('#recipientes', result.data);
+
+        },
+        error: function(){
+            alert('Error al Traer Recipientes');
+        },
+        complete: function(){
+            wc();
+        }
     });
 
 }
