@@ -14,6 +14,8 @@
   <div class="col-xs-12 col-sm-8">
     <input type="text" class="form-control" id="artBarCode" value="<?php echo $data['article']['barcode'];?>" <?php echo ($data['read'] == true ? 'disabled="disabled"' : '');?> >
   </div>
+
+ 
 </div><br>
 
 <!-- Código del Artículo -->
