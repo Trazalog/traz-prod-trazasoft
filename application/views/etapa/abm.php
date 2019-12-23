@@ -70,20 +70,11 @@ $this->load->view('etapa/modal_finalizar');}?>
 
             <div class="col-md-5 col-xs-12">
                 <?php if($accion == 'Nuevo'){
-                #echo '<select class="form-control" id="recipientes" disabled></select>';
                    echo selectBusquedaAvanzada('recipientes', false); 
 				}
-				// if($accion == 'Editar'){
-				// 	if($etapa->estado == 'En Curso' || $etapa->estado =='FINALIZADO')
-				// 	{
-				// 		echo '<select class="form-control" id="recipientes" disabled>';
-				// 	}else{
-				// 		echo '<select class="form-control" id="recipientes">';
-				// 	}
-				
-				// 	echo '<option value="'.$recipiente->id.'" selected>'.$etapa->recipiente.'</option>';
-				// 	echo '</select>';
-				// }
+				if($accion == 'Editar'){
+					echo "<input value='$etapa->recipiente' type='text' class='form-control' disabled>";
+				}
 				?>
             </div>
         </div>
@@ -159,21 +150,20 @@ $this->load->view('etapa/modal_finalizar');}?>
 
                     </div>
                     <!-- /.box-body -->
-                    <div class="row">
-                        <div class="col-md-8"></div>
-                        <div class="col-md-2 col-xs-6">
+                    <div class="modal-footer">
+                    
                             <?php if($etapa->estado == 'planificado')
 								{
-								echo '<button class="btn btn-primary btn-block" onclick="valida()">Iniciar Etapa</button>';
+								echo '<button class="btn btn-primary" onclick="valida()">Iniciar Etapa</button>';
 								}else if($etapa->estado == 'En Curso')
 								{
-									echo '<button class="btn btn-primary btn-block" id="btnfinalizar" onclick="finalizar()">Reporte de Producción</button>';
+									echo '<button class="btn btn-primary" id="btnfinalizar" onclick="finalizar()">Reporte de Producción</button>';
 								}
 							?>
-                        </div>
-                        <div class="col-md-2 col-xs-6">
-                            <button class="btn btn-primary btn-block" onclick="guardar()">Guardar</button>
-                        </div>
+                
+                     
+                            <button class="btn btn-primary" onclick="guardar()">Guardar</button>
+                     
                     </div>
                 </div>
             </div>
