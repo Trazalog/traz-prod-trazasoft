@@ -226,9 +226,15 @@ function AgregarProducto() {
         producto.destino = destino;
         producto.titulodestino = $('#productodestino').find('option:selected').text();
         producto.destinofinal = establecimiento + " " + recipientefinal;
-        producto.recu_id = JSON.parse($('#operarios').find('[value="' + $('#operario').val() + '"]').attr('data-json'))
-            .recu_id;
-        producto.tipo_recurso = 'HUMANO';
+
+        var json = $('#operarios').find('[value="' + $('#operario').val() + '"]').attr('data-json');
+        if(json){
+           producto.recu_id = JSON.parse(json).recu_id;
+           producto.tipo_recurso = 'HUMANO';
+        }else{
+           producto.recu_id  = 0;
+           producto.tipo_recurso = '';
+        }
         producto.unificar = $('#unificar').val();
         fraccionado = document.getElementById('fraccionado').checked;
         if (fraccionado) {
