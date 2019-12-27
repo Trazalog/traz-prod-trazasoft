@@ -115,8 +115,6 @@ class Etapa extends CI_Controller {
 						$detArt['empa_id'] = (string)0;
 						$detArt['empa_cantidad'] = (string)0;
 						$detArt['tipo'] = MATERIA_PRIMA;
-						// $detArt['recu_id'] = "0";
-						// $detArt['tipo_recurso'] = "";
 						$detaArtPos['_post_recurso'][$x]=(object) $detArt;
 						$x++;					
 				}
@@ -193,7 +191,7 @@ class Etapa extends CI_Controller {
 			//	var_dump($data['etapa']);die;
 			$data['idetapa'] = $data['etapa']->id;
 			//$data['recipientes'] = $this->Recipientes->listarPorEstablecimiento($data['etapa']->establecimiento->id)->recipientes->recipiente;
-			$data['recipientes'] = $this->Recipientes->obtener('DEPOSITO','TODOS',$data['etapa']->establecimiento->id)['data'];
+			$data['recipientes'] = $this->Recipientes->obtener('DEPOSITO','TODOS',$data['etapa']->esta_id)['data'];
 
 			// Cantidad producto origen
 			// $prodCant = $this->Etapas->getCantProducto($id);
@@ -350,14 +348,14 @@ class Etapa extends CI_Controller {
 		$batch_id_padre = $this->input->post('batch_id_padre');
 	
 
-		foreach ($productos as $value) {			
+		foreach ($productos as $key => $value) {			
 
 			$arrayPost["lote_id"] = $lote_id; // lote origen
 			$arrayPost["arti_id"] = $value->id;	// art seleccionado en lista
 			$arrayPost["prov_id"] = (string)PROVEEDOR_INTERNO;
 			$arrayPost["batch_id_padre"] = $batch_id_padre;// bacth actual
 			$arrayPost["cantidad"] = $value->cantidad;// art seleccionado en lista
-			$arrayPost["cantidad_padre"] =	$cantidad_padre;		//cantida padre esl lo que descuenta del batch actual
+			$arrayPost["cantidad_padre"] =	strval($key==(sizeof($productos) -1) ?$cantidad_padre:0);		//cantida padre esl lo que descuenta del batch actual
 			$arrayPost["num_orden_prod"] =	$num_orden_prod;			
 			$arrayPost["reci_id"] = $value->destino;  //reci_id destino del nuevo batch
 			$arrayPost["etap_id"] = (string)DEPOSITO_TRANSPORTE;
@@ -367,6 +365,8 @@ class Etapa extends CI_Controller {
 			$arrayPost["fec_vencimiento"] = "01-01-1988";
 			$arrayPost["recu_id"] = $value->recu_id;
 			$arrayPost["tipo_recurso"] = $value->tipo_recurso;
+
+
 
 			$arrayDatos['_post_lote_list_batch_req']['_post_lote_lis'][] = $arrayPost;	
 		}	
