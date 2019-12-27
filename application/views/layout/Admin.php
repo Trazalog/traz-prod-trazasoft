@@ -118,6 +118,9 @@
     reserved. -->
     </footer>
 
+    <?php
+    $this->load->view("layout/Panel_Derecho");
+    ?>
 
 </div>
 <!-- ./wrapper -->

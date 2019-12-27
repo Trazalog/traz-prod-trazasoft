@@ -10,4 +10,18 @@
     <li><a class="link" href="#" data-link="general/Camion/salidaCamion"><i class="fa fa-circle-o"></i>Descarga Camión</a></li>
     <li><a class="link" href="#" data-link="general/Camion/entradaCamion"><i class="fa fa-exchange"></i>Carga | Recepción</a>
     </li>
+    <li class="treeview">
+        <a href="#">
+            <i class="fa fa-fw fa-bar-chart"></i> <span>Reportes</span>
+            <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+            </span>
+        </a>
+        <ul class="treeview-menu" style="display: none;">
+            <li><a href="#" class="link" data-link="Reportes/index"><i class="fa fa-circle-o"></i>Ejemplo</a></li>
+            <li><a href="#" class="link" data-link="Reportes/produccion"><i class="fa fa-circle-o"></i>Producción</a></li>
+            <li><a href="#" class="link" data-link="Reportes/prodResponsable"><i class="fa fa-circle-o"></i>Prod. Responsable</a></li>
+        </ul>
+    </li>
 </ul>
+||
