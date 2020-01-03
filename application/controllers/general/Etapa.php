@@ -35,7 +35,12 @@ class Etapa extends CI_Controller {
 	}
 	// Llama a etapas para una nueva Etapa
 	public function nuevo()
-	{
+	{		
+			#Snapshot
+			$user = 'fernando_leiva';
+			$view = 'etapa/abm';
+			$data['key'] = $view . $user;
+
 			$data['fecha'] = date('Y-m-d');
 			$data['id'] = $this->input->get('op');
 			$data['etapa'] = $this->Etapas->nuevo($data['id'])->etapa; // listo llama a etapas/1
@@ -51,7 +56,7 @@ class Etapa extends CI_Controller {
 			$data['establecimientos'] = $this->Establecimientos->listar($data['id'])->establecimientos->establecimiento; // listo
 			$data['recursosmateriales'] = [];//;$this->Recursos_Materiales->listar()->recursos->recurso;
 			$data['rec_trabajo'] = $this->Recursos->obtenerXTipo('TRABAJO')['data'];
-			$this->load->view('etapa/abm', $data);
+			$this->load->view($view, $data);
 	}
 	// guarda el Inicio de una nueva etapa mas orden pedido y lanza pedido almac
 	public function guardar(){

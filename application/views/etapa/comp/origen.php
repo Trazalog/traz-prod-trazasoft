@@ -20,7 +20,7 @@
                     <div class="col-md-6 col-xs-12 input-group ba">
                   
                         <?php
-                            echo selectBusquedaAvanzada('inputmaterias', false, $materias, 'arti_id', 'barcode', array('descripcion', 'Unidad Medida:'=>'unidad_medida'));
+                            echo selectBusquedaAvanzada('inputmaterias', 'vmateria', $materias, 'arti_id', 'barcode', array('descripcion', 'Unidad Medida:'=>'unidad_medida'));
                         ?>
                     </div>
                 </div>
@@ -32,7 +32,7 @@
                         <label for="" class="form-label">Stock Actual:</label>
                     </div>
                     <div class="col-md-6 col-xs-12 input-group">
-                        <input type="number" class="form-control" disabled id="stockdisabled">
+                        <input type="number" class="form-control" disabled id="stockdisabled" name="vstock">
                     </div>
                 </div>
             </div>
@@ -44,7 +44,7 @@
                     </div>
                     <div class="col-md-6 col-xs-12 input-group">
                         <input type="number" class="form-control" placeholder="Inserte Cantidad" id="cantidadmateria"
-                            disabled>
+                            disabled name="vcantidadmateria">
                         <span class="input-group-btn">
                             <button class='btn btn-success' id="botonmateria" disabled
                                 onclick="aceptarMateria()">Aceptar
