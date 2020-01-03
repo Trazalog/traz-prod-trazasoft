@@ -38,7 +38,7 @@
       var html = '';
       materia = JSON.stringify(materia);
       materia =JSON.parse(materia);   
-      document.getElementById('inputrecursosmateriales').value = materia[0].Descripcion;
+      document.getElementById('inputrecursosmateriales').value = materia[0].descripcion;
       if(existe == 'no')
       {
       
@@ -52,11 +52,11 @@
           html +="<th>Stock Actual</th>";
           html +="<th>Cantidad</th>";
           html +='</tr></thead><tbody>';
-          html += '<tr data-json="'+materia[0]+'" id="'+materia[0].id+'">';
+          html += '<tr data-json="'+materia[0]+'" id="'+materia[0].arti_id+'">';
           if(estado != 'En Curso'){
           html += '<td><i class="fa fa-fw fa-minus text-light-blue tablamateriasasignadas_borrar" style="cursor: pointer; margin-left: 15px;" title="Nuevo"></i></td>';
           }
-          html += '<td>'+materia[0].titulo+'</td>';
+          html += '<td>'+materia[0].barcode+'</td>';
           html += '<td>'+materia[0].stock+'</td>';
           html += '<td>'+materia[0].cantidad+'</td>';
           html += '</tr>';
@@ -68,11 +68,11 @@
             
       } else  if(existe == 'si')
       {
-          html += '<tr data-json="'+materia[0]+'" id="'+materia[0].id+'">';
+          html += '<tr data-json="'+materia[0]+'" id="'+materia[0].arti_id+'">';
           if(estado != 'En Curso'){
           html += '<td><i class="fa fa-fw fa-minus text-light-blue tablamateriasasignadas_borrar" style="cursor: pointer; margin-left: 15px;" title="Nuevo"></i></td>';
           }
-          html += '<td>'+materia[0].titulo+'</td>';
+          html += '<td>'+materia[0].barcode+'</td>';
           html += '<td>'+materia[0].stock+'</td>';
           html += '<td>'+materia[0].cantidad+'</td>';
           html += '</tr>';

@@ -8,7 +8,7 @@
                 <h4 class="modal-title" id="myModalLabel"><span id="modalAction"> </span>Reporte de Producción</h4>
             </div>
             <input class="hidden" type="text" id="num_orden_prod" value="<?php echo $etapa->orden;?>">
-            <input class="" type="text" id="batch_id_padre" value="<?php echo $etapa->id;?>">
+            <input class="hidden" type="text" id="batch_id_padre" value="<?php echo $etapa->id;?>">
             <div class="modal-body" id="modalBodyArticle">
 
                 <div class="row form-group" style="margin-top:20px">
@@ -36,7 +36,7 @@
                 <div class="row form-group" style="margin-top:20px">
                     <div class="col-md-3 col-xs-12"><label class="form-label">Cantidad:</label></div>
                     <div class="col-md-4 col-xs-12"><input class="form-control" type="text" id="cant_origen"
-                            value="<?php echo $producto[0]->cantidad.' ('.$producto[0]->uni_med.')';?>" disabled></div>
+                            value="<?php echo $producto[0]->stock.' ('.$producto[0]->uni_med.')';?>" disabled></div>
                     <div class="col-md-5"></div>
                 </div>
                 <div class="row form-group" style="margin-top:20px">
@@ -72,6 +72,9 @@
                     <div class="col-md-3 col-xs-12"><label class="form-label">Cantidad*:</label></div>
                     <div class="col-md-4 col-xs-12"><input class="form-control" id="cantidadproducto" type="text"
                             value="" placeholder="Inserte Cantidad"></div>
+                    <div class="col-md-1 col-xs-1">
+                            <input type="text" class="form-control" value=" - " id="um" disabled>
+                   </div>
                     <div class="col-md-5"></div>
                 </div>
                 <div class="row" style="margin-top:20px">
@@ -88,7 +91,7 @@
                         <?php if($accion == 'Editar'){
         
 
-                      echo selectBusquedaAvanzada('productodestino', false, $recipientes, 'reci_id', 'nombre', array('Estado:'=>'estado','Lote:'=>'lote_id'));
+                      echo selectBusquedaAvanzada('productodestino', false, $recipientes, 'reci_id', 'nombre', array('Estado:'=>'estado','Lote:'=>'lote_id', 'barcode', 'descripcion'));
 
                         }
                         ?>
@@ -164,6 +167,11 @@ $('.datalist').on('change', function() {
         'data-json');
 });
 
+$('#modal_finalizar').find('#inputproducto').on('change', function(){
+    var data = getJson(this);
+    $('#um').val(data.um);
+});
+
 function AgregarProducto() {
     ban = true;
 
@@ -211,16 +219,22 @@ function AgregarProducto() {
         idrecipiente = document.getElementById('productodestino').value;
         indexrec = recipientes.findIndex(y => y.reci_id == idrecipiente);
         producto.id = productoid;
-        producto.titulo = document.getElementById('inputproducto').value;
+        producto.titulo = $('#inputproducto').find('option:selected').text();
         producto.cantidad = cantidad;
         producto.loteorigen = document.getElementById('loteorigen').value;
         producto.lotedestino = lotedestino;
-        producto.destino = destino
-        producto.titulodestino = recipientes[indexrec].titulo ? recipientes[indexrec].titulo : ' - ';
+        producto.destino = destino;
+        producto.titulodestino = $('#productodestino').find('option:selected').text();
         producto.destinofinal = establecimiento + " " + recipientefinal;
-        producto.recu_id = JSON.parse($('#operarios').find('[value="' + $('#operario').val() + '"]').attr('data-json'))
-            .recu_id;
-        producto.tipo_recurso = 'HUMANO';
+
+        var json = $('#operarios').find('[value="' + $('#operario').val() + '"]').attr('data-json');
+        if(json){
+           producto.recu_id = JSON.parse(json).recu_id;
+           producto.tipo_recurso = 'HUMANO';
+        }else{
+           producto.recu_id  = 0;
+           producto.tipo_recurso = '';
+        }
         producto.unificar = $('#unificar').val();
         fraccionado = document.getElementById('fraccionado').checked;
         if (fraccionado) {
@@ -411,8 +425,11 @@ function validarRecipiente(json) {
         if ($('#tabla_productos_asignados').length != 0) {
 
             // Validar si el recipiente ha sido elegido en la tabla Anteriormente
+            var recipientes =  $('#tabla_productos_asignados').find('.res-' + json.reci_id);
+          
+            if(recipientes.length == 0){ $('#unificar').val(false); return true;}
             var ban = true;
-            $('#tabla_productos_asignados').find('.res-' + json.reci_id).each(function() {
+            recipientes.each(function() {
 
                 ban = ban && $(this).hasClass(arti_id + lote_id);
 
@@ -420,7 +437,7 @@ function validarRecipiente(json) {
 
             if (ban) {
                 // Pregunta si quiere Unificar los Lotes
-                if (confirm('¿Desea mezclar los Artículos en el Recipiente?') != true) {
+                if (confirm('-¿Desea mezclar los Artículos en el Recipiente?') != true) {
                     // Respuesta Negativa
                     $('#recipiente').val('').trigger('change');
                     $('#unificar').val(false);
@@ -430,7 +447,7 @@ function validarRecipiente(json) {
                 return true;
 
             } else {
-                alert('- No se pueden mezclar Distintos Articulos y Distintos Lotes en un mismo Recipiente');
+                alert('-No se pueden mezclar Distintos Articulos y Distintos Lotes en un mismo Recipiente');
                 $('#recipiente').val('').trigger('change');
                 //$('#lotedestino').val('').trigger('change');
                 $('#unificar').val(false);

@@ -17,7 +17,7 @@
                      foreach($establecimientos as $fila)
                      {
                            echo '<option value="'.$fila->esta_id.'" >'.$fila->nombre.'</option>';
-                     } 
+                     }
                      ?>
                   </select>
                   </div>
@@ -155,7 +155,7 @@
        document.getElementById('camiones').innerHTML = "";
         document.getElementById('camiones').innerHTML = html;
         document.getElementById('camiones').disabled= false;
-       
+      
       }
      
     });
@@ -212,7 +212,7 @@ function ActualizaLote(lote)
       document.getElementById('fechalote').value = lote.fecha;
       document.getElementById('envaselote').value = lote.tituloenvase;
       document.getElementById('productolote').value = lote.tituloproducto;
-       document.getElementById('stocklote').value = lote.cantidad;
+      document.getElementById('stocklote').value = lote.cantidad;
  }
       function Cargar()
       {

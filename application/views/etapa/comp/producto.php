@@ -1,5 +1,5 @@
 <!-- producto -->
-<div class="box">
+<div class="box box-primary">
     <div class="box-header">
         <h4 class="box-title">Producto</h4>
     </div>
@@ -12,19 +12,13 @@
             <div class="col-xs-12">
                 <div class="row form-group">
                     <div class="col-md-3 col-xs-6">
-                        <label for="template" class="form-label">Materia:</label>
+                        <label for="template" class="form-label">Descripción:</label>
                     </div>
-                    <div class="col-md-6 col-xs-12 input-group">
-                        <input list="productos" id="inputproductos" class="form-control"
-                            placeholder="Ingrese articulo a buscar" autocomplete="off">
-                        <input type="hidden" id="idproducto" value="" data-json="">
-                        <datalist id="productos">
-                            <?php foreach($materias as $fila)
-								{
-									echo  "<option value='$fila->titulo'>";
-									}
-							?>
-                        </datalist>
+                    <div class="col-md-6 col-xs-12 input-group ba">
+                     
+                          <?php
+                            echo selectBusquedaAvanzada('idproducto', false, $materias, 'arti_id', 'barcode',  array('descripcion', 'Unidad Medida:'=>'unidad_medida'));
+                        ?>
                     </div>
                 </div>
             </div>
@@ -34,9 +28,12 @@
                     <div class="col-md-3 col-xs-6">
                         <label for="template" class="form-label">Cantidad:</label>
                     </div>
-                    <div class="col-md-6 col-xs-12 input-group">
+                    <div class="col-md-5 col-xs-11">
                         <input type="number" class="form-control" placeholder="Inserte Cantidad" id="cantidadproducto">
                     </div>
+                   <div class="col-md-1 col-xs-1">
+                            <input type="text" class="form-control" value=" - " id="um" disabled>
+                   </div>
                 </div>
             </div>
         </div>
@@ -76,3 +73,10 @@
     </div>
 </div>
 <!-- . /producto -->
+
+<script>
+$('#idproducto').on('change', function(){
+    var data = getJson(this);
+    $('#um').val(data.unidad_medida);
+})
+</script>

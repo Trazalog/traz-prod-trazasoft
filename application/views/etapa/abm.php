@@ -5,10 +5,10 @@
 $this->load->view('etapa/modal_finalizar');}?>
 
 <!-- Cabecera -->
-<div class="box">
+<div class="box box-primary">
 
     <div class="box-header">
-        <h3>
+        <h3 class="box-title">
             <?php echo $accion.' '.$etapa->titulo ?>
         </h3>
     </div>
@@ -70,18 +70,10 @@ $this->load->view('etapa/modal_finalizar');}?>
 
             <div class="col-md-5 col-xs-12">
                 <?php if($accion == 'Nuevo'){
-				echo '<select class="form-control" id="recipientes" disabled></select>';
+                   echo selectBusquedaAvanzada('recipientes', false); 
 				}
 				if($accion == 'Editar'){
-					if($etapa->estado == 'En Curso' || $etapa->estado =='FINALIZADO')
-					{
-						echo '<select class="form-control" id="recipientes" disabled>';
-					}else{
-						echo '<select class="form-control" id="recipientes">';
-					}
-				
-					echo '<option value="'.$recipiente->id.'" selected>'.$etapa->recipiente.'</option>';
-					echo '</select>';
+					echo "<input value='$etapa->recipiente' type='text' class='form-control' disabled>";
 				}
 				?>
             </div>
@@ -114,16 +106,16 @@ $this->load->view('etapa/modal_finalizar');}?>
 
 <div class="row">
     <div class="col-md-12">
-            <?php $this->load->view('etapa/comp/producto') ?>
+            <?php $this->load->view('etapa/comp/origen') ?>
     </div>
     <div class="col-md-12">
-            <?php $this->load->view('etapa/comp/origen') ?>
+            <?php $this->load->view('etapa/comp/producto') ?>
     </div>
 </div>
 
 
 <!-- Tareas -->
-<div class="box">
+<div class="box box-primary">
     <div class="box-header">
         <h4 class="box-title">Tareas</h4>
     </div>
@@ -158,21 +150,20 @@ $this->load->view('etapa/modal_finalizar');}?>
 
                     </div>
                     <!-- /.box-body -->
-                    <div class="row">
-                        <div class="col-md-8"></div>
-                        <div class="col-md-2 col-xs-6">
+                    <div class="modal-footer">
+                    
                             <?php if($etapa->estado == 'planificado')
 								{
-								echo '<button class="btn btn-primary btn-block" onclick="valida()">Iniciar Etapa</button>';
+								echo '<button class="btn btn-primary" onclick="valida()">Iniciar Etapa</button>';
 								}else if($etapa->estado == 'En Curso')
 								{
-									echo '<button class="btn btn-primary btn-block" id="btnfinalizar" onclick="finalizar()">Reporte de Producción</button>';
+									echo '<button class="btn btn-primary" id="btnfinalizar" onclick="finalizar()">Reporte de Producción</button>';
 								}
 							?>
-                        </div>
-                        <div class="col-md-2 col-xs-6">
-                            <button class="btn btn-primary btn-block" onclick="guardar()">Guardar</button>
-                        </div>
+                
+                     
+                            <button class="btn btn-primary" onclick="guardar()">Guardar</button>
+                     
                     </div>
                 </div>
             </div>
@@ -199,26 +190,36 @@ if (accion == "Editar") {
 }
 
 function actualizaRecipiente(establecimiento, recipientes) {
+    wo();
     establecimiento = establecimiento;
-
+     $('#recipientes').empty();
     $.ajax({
         type: 'POST',
+        dataType: 'JSON',
         data: {
-            establecimiento: establecimiento
+            establecimiento
         },
-        url: 'general/Recipiente/listarPorEstablecimiento',
+        url: 'general/Recipiente/listarPorEstablecimiento/true',
         success: function(result) {
-            result = JSON.parse(result);
-            var html = "";
-            html = html + '<option value="" disabled selected>-Seleccione Recipiente-</option>';
-            for (var i = 0; i < result.length; i++) {
-                html = html + '<option value="' + result[i].id + '">' + result[i].titulo + '</option>';
-            }
-            document.getElementById(recipientes).disabled = false;
-            document.getElementById(recipientes).innerHTML = html;
-        },
-        //dataType: 'json'
 
+            if(!result.status) {
+                alert('Fallo al Traer Recipientes');
+                return;
+            }
+
+            if(!result.data){
+                alert('No hay Recipientes Asociados');
+                return;
+            }
+            fillSelect('#recipientes', result.data);
+
+        },
+        error: function(){
+            alert('Error al Traer Recipientes');
+        },
+        complete: function(){
+            wc();
+        }
     });
 
 }
@@ -348,55 +349,8 @@ $("#inputproductos").on('change', function() {
     prod = $('#idproducto').val();
 });
 
-// al seleccionar desde el input de Origen muestra stock y habilita input para cantidad y btn aceptar
-$("#inputmaterias").on('change', function() {
-    document.getElementById('cantidadmateria').value = "";
-    materias = <?php echo json_encode($materias); ?> ;
-
-    titulo = document.getElementById('inputmaterias').value;
-    ban = false;
-    i = 0;
-    while (!ban && i < materias.length) {
-        if (titulo == materias[i].titulo) {
-            ban = true;
-            materia = materias[i];
-        }
-        i++;
-    }
-    if (ban) {
-        var stock = materia.stock;
-        document.getElementById('stockdisabled').value = stock;
-        materia = JSON.stringify(materia);
-        // FIXME: SI SE SACA SIN QUE ANDE EL MODALCITO DE MATERIAS SE ROMPE LA CARGA EN TABLITA
-        // agregaMateria(materia);
-        $('#idmateria').attr('data-json', materia);
-        // FIXME: SI SE SACA SIN QUE ANDE EL MODALCITO DE MATERIAS SE ROMPE LA CARGA EN TABLITA
-        //document.getElementById('stockdisabled').value = ma
-        
-        document.getElementById('cantidadmateria').disabled = (stock == 0.0);
-        document.getElementById('botonmateria').disabled = (stock == 0.0);
-
-    } else {
-        alert('No existe esa Materia');
-        document.getElementById('cantidadmateria').disabled = true;
-        document.getElementById('botonmateria').disabled = true;
-    }
-
-});
-
-function aceptarMateria() {
-    cantidad = document.getElementById('cantidadmateria').value;
-    materia = $('#idmateria').attr('data-json');
-    materia = JSON.parse(materia);
-    materia.cantidad = cantidad;
-    materia = JSON.stringify(materia);
-    materia = '[' + materia + ']';
-    materia = JSON.parse(materia);
-    console.log(materia);
-    agregaMateria(materia);
 
 
-}
 // levanta modal para finalizar la etapa solamente
 function finalizar() {
     /* idetapa = //php echo $idetapa;?>;
