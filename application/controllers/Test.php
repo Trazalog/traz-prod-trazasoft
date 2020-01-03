@@ -8,7 +8,15 @@ class Test extends CI_Controller
         parent::__construct();
     }
 
-    public function index(){
+    public function index()
+    {
+        $user = 'fernando_leiva';
+        $view = 'test';
+        $data['key'] = $view . $user;
+        $this->load->view($view, $data);
+    }
+
+    public function index4(){
 
         $this->load->model(ALM.'Articulos');
         $data['listArt'] = $this->Articulos->getList();
