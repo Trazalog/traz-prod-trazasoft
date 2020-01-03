@@ -81,6 +81,17 @@
                         <!-- <input type="text" value="-100,100" class="slider form-control" data-slider-min="-200" data-slider-max="200" data-slider-step="5" data-slider-value="[-100,100]" data-slider-orientation="horizontal" data-slider-selection="before" data-slider-tooltip="show" data-slider-id="green" data-value="-100,100" style="display: none;"> -->
                     <?php } ?>
                     <br>
+                    <div class="form-group">
+                        <label>Rango Fechas:</label>
+                        <div class="input-group">
+                        <button type="button" class="btn btn-default pull-right form-control" id="daterange-btn">
+                            <span>
+                            <i class="fa fa-calendar"></i>&nbsp;&nbsp;&nbsp;Seleccione &emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;
+                            </span>
+                            <i class="fa fa-caret-down"></i>
+                        </button>
+                        </div>
+                    </div>                    
                     <!-- <div class="form-group">
                     <a href='#' class='flt-clear pull-right text-red'><small><i class='fa fa-trash-o'></i> Limpiar Todo</small></a>
                 </div>
@@ -95,8 +106,10 @@
         </div>
     </div>
 </div>
+<!-- bootstrap datepicker -->
 
-<script>
+<script>    
+
     $('.flt-clear').click(function() {
         $('#formulario')[0].reset();
         // $('.report-content')[0].reset();        
@@ -104,6 +117,29 @@
 
     //Initialize Select2 Elements
     // $('.select2').select2()
+
+    //Date range picker
+    $('#reservation').daterangepicker()
+    //Date range picker with time picker
+    $('#reservationtime').daterangepicker({ timePicker: true, timePickerIncrement: 30, locale: { format: 'MM/DD/YYYY hh:mm A' }})
+    //Date range as a button
+    $('#daterange-btn').daterangepicker(
+      {
+        ranges   : {
+          'Hoy'       : [moment(), moment()],
+          'Ayer'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+          'Últimos 7 días' : [moment().subtract(6, 'days'), moment()],
+          'Últimos 30 días': [moment().subtract(29, 'days'), moment()],
+          'Este mes'  : [moment().startOf('month'), moment().endOf('month')],
+          'Último mes'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        },
+        startDate: moment().subtract(29, 'days'),
+        endDate  : moment()
+      },
+      function (start, end) {
+        $('#daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
+      }
+    )
 
     $('.datepicker').datepicker({
         autoclose: true

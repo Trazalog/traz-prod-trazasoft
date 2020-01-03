@@ -225,10 +225,22 @@ use \koolreport\widgets\google\PieChart;
         //     $('#formulario')[0].reset();
         // });
 
+        $('.dataTable').DataTable({
+            'paging': true,
+            'lengthChange': true,
+            'searching': true,
+            'ordering': true,
+            'info': true,
+            'autoWidth': false
+        })
+
         $('tr > td').each(function() {
             if ($(this).text() == 0) {
                 $(this).text('-');
                 $(this).css('text-align', 'center');
+            }
+            if ($(this).text()) {
+
             }
         });
 
