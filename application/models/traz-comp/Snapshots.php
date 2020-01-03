@@ -17,7 +17,7 @@ class Snapshots extends CI_Model
 
     function guardar($data)
     {
-        $aux['post_snapshot']['key'] = $data['key']; unset($data['key']);
+        $aux['post_snapshot']['clave'] = $data['key']; unset($data['key']);
         $aux['post_snapshot']['data'] =  json_encode($data);
         
         $url = RESTPT . 'snapshots';
