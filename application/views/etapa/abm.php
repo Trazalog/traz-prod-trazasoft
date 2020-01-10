@@ -1,51 +1,53 @@
 <?php $this->load->view('etapa/modal_materia_prima');?>
 <?php $this->load->view('etapa/modal_lotes');?>
 <?php $this->load->view('etapa/modal_producto');?>
-<?php if($etapa->estado == "En Curso"){
+
+<div id="snapshot" data-key="<?php echo $key ?>">
+    <?php if($etapa->estado == "En Curso"){
 $this->load->view('etapa/modal_finalizar');}?>
 
-<!-- Cabecera -->
-<div class="box box-primary">
+    <!-- Cabecera -->
+    <div class="box box-primary">
 
-    <div class="box-header">
-        <h3 class="box-title">
-            <?php echo $accion.' '.$etapa->titulo ?>
-        </h3>
-    </div>
-    <!-- /.box-header -->
-    <div class="box-body">
-        <div class="row">
-            <div class="col-md-1 col-xs-12">
-                <label for="Lote" class="form-label">Codigo Lote:*</label>
-            </div>
-            <div class="col-md-5 col-xs-12">
-                <input type="text" id="Lote" <?php if($accion=='Editar' ){echo 'value="'.$etapa->lote.'"';}?>
-                    class="form-control" placeholder="Inserte Lote"
-                    <?php if($etapa->estado == 'En Curso' || $etapa->estado =='FINALIZADO') {echo 'disabled';}?>>
-            </div>
-            <div class="col-md-1 col-xs-12">
-                <label for="fecha" class="form-label">Fecha:</label>
-            </div>
-            <div class="col-md-5 col-xs-12">
-         
+        <div class="box-header">
+            <h3 class="box-title">
+                <?php echo $accion.' '.$etapa->titulo ?>
+            </h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-1 col-xs-12">
+                    <label for="Lote" class="form-label">Codigo Lote:*</label>
+                </div>
+                <div class="col-md-5 col-xs-12">
+                    <input name="vcode" type="text" id="Lote" <?php if($accion=='Editar' ){echo 'value="'.$etapa->lote.'"';}?>
+                        class="form-control" placeholder="Inserte Lote"
+                        <?php if($etapa->estado == 'En Curso' || $etapa->estado =='FINALIZADO') {echo 'disabled';}?>>
+                </div>
+                <div class="col-md-1 col-xs-12">
+                    <label for="fecha" class="form-label">Fecha:</label>
+                </div>
+                <div class="col-md-5 col-xs-12">
+
                     <?php
                             if($accion == 'Editar' || $accion == 'Nuevo'){ 
                                 echo '<input type="" id="fecha" class="form-control" value="'.$fecha.'" disabled >' ;	
                             }
                     ?>
 
+                </div>
             </div>
-        </div>
-        <div class="row" style="margin-top: 50px">
-            <div class="col-md-2 col-xs-12">
-                <label for="establecimientos" class="form-label">Establecimiento*:</label>
-            </div>
-            <div class="col-md-4 col-xs-12">
-                <select class="form-control select2 select2-hidden-accesible"
-                    onchange="actualizaRecipiente(this.value,'recipientes')" id="establecimientos"
-                    <?php if($etapa->estado == 'En Curso' || $etapa->estado =='FINALIZADO'){echo 'disabled';}?>>
-                    <option value="" disabled selected>-Seleccione Establecimiento-</option>
-                    <?php
+            <div class="row" style="margin-top: 50px">
+                <div class="col-md-2 col-xs-12">
+                    <label for="establecimientos" class="form-label">Establecimiento*:</label>
+                </div>
+                <div class="col-md-4 col-xs-12">
+                    <select class="form-control select2 select2-hidden-accesible" name="vestablecimiento"
+                        onchange="actualizaRecipiente(this.value,'recipientes')" id="establecimientos"
+                        <?php if($etapa->estado == 'En Curso' || $etapa->estado =='FINALIZADO'){echo 'disabled';}?>>
+                        <option value="" disabled selected>-Seleccione Establecimiento-</option>
+                        <?php
 						foreach($establecimientos as $fila){
 
 								if(($accion == 'Editar' || $etapa->estado =='FINALIZADO' ) && $fila->nombre == $etapa->establecimiento){
@@ -57,101 +59,103 @@ $this->load->view('etapa/modal_finalizar');}?>
 								}
 						} 
 						?>
-                </select>
-            </div>
-            <div class="col-md-1 col-xs-12">
-                <?php if($accion == 'Nuevo'){
+                    </select>
+                </div>
+                <div class="col-md-1 col-xs-12">
+                    <?php if($accion == 'Nuevo'){
 										echo '<label for="Recipiente" class="form-label">'.$etapa->titulorecipiente.'*:</label>'; 
 									}?>
-                <?php if($accion == 'Editar' || $etapa->estado =='FINALIZADO'){ 
+                    <?php if($accion == 'Editar' || $etapa->estado =='FINALIZADO'){ 
 										echo	'<label for="Recipiente" class="form-label"> '.$etapa->reci_estab_nom.' *:</label>';
 									}?>
-            </div>
+                </div>
 
-            <div class="col-md-5 col-xs-12">
-                <?php if($accion == 'Nuevo'){
-                   echo selectBusquedaAvanzada('recipientes', false); 
+                <div class="col-md-5 col-xs-12">
+                    <?php if($accion == 'Nuevo'){
+                   echo selectBusquedaAvanzada('recipientes', 'vreci'); 
 				}
 				if($accion == 'Editar'){
 					echo "<input value='$etapa->recipiente' type='text' class='form-control' disabled>";
 				}
 				?>
+                </div>
             </div>
-        </div>
-        <div class="row" style="margin-top: 50px">
-            <div class="col-md-2 col-xs-12">
-                <label for="op" class="form-label">Orden de Produccion:</label>
-            </div>
-            <div class="col-md-4 col-xs-12">
-              
+            <div class="row" style="margin-top: 50px">
+                <div class="col-md-2 col-xs-12">
+                    <label for="op" class="form-label">Orden de Produccion:</label>
+                </div>
+                <div class="col-md-4 col-xs-12">
 
-                <input type="text" id="ordenproduccion" class="form-control"
-                    <?php if($accion=='Editar' || $etapa->estado =='FINALIZADO'){echo ( 'value="'.$etapa->orden.'"');}?> placeholder="Inserte Orde de Produccion"
-                    <?php if($etapa->estado == 'En Curso' || $etapa->estado =='FINALIZADO'){echo 'disabled';}?>>
+
+                    <input type="text" id="ordenproduccion" class="form-control" name="vorden"
+                        <?php if($accion=='Editar' || $etapa->estado =='FINALIZADO'){echo ( 'value="'.$etapa->orden.'"');}?>
+                        placeholder="Inserte Orde de Produccion"
+                        <?php if($etapa->estado == 'En Curso' || $etapa->estado =='FINALIZADO'){echo 'disabled';}?>>
+                </div>
+                <div class="col-md-6">
+                </div>
             </div>
-            <div class="col-md-6">
-            </div>
-        </div>
-        <div class="row" style="margin-top: 40px">
-            <div class="col-xs-12">
-                <i class="glyphicon glyphicon-plus"></i><a onclick="despliega()" class="">Datos Adicionales</a>
-                <div id="desplegable" hidden>
-                    <h3>Lo que vaya aca</h3>
+            <div class="row" style="margin-top: 40px">
+                <div class="col-xs-12">
+                    <i class="glyphicon glyphicon-plus"></i><a onclick="despliega()" class="">Datos Adicionales</a>
+                    <div id="desplegable" hidden>
+                        <h3>Lo que vaya aca</h3>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<!-- ./ Cabecera -->
+    <!-- ./ Cabecera -->
 
-<div class="row">
-    <div class="col-md-12">
+    <div class="row">
+        <div class="col-md-12">
             <?php $this->load->view('etapa/comp/origen') ?>
-    </div>
-    <div class="col-md-12">
+        </div>
+        <div class="col-md-12">
             <?php $this->load->view('etapa/comp/producto') ?>
+        </div>
     </div>
-</div>
 
 
-<!-- Tareas -->
-<div class="box box-primary">
-    <div class="box-header">
-        <h4 class="box-title">Tareas</h4>
-    </div>
-    <!-- /.box-header -->
-    <div class="box-body">
-        <div class="row" style="margin-top: 40px ">
-            <div class="col-xs-12">
-                <div class="nav-tabs-custom">
-                    <ul class="nav nav-tabs">
-                        <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">Calendario</a></li>
-                        <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">Tareas</a></li>
-                    </ul>
-                    <div class="tab-content">
-                        <div class="tab-pane active" id="tab_1">
-                            <!-- <p>Aca iria el Calendario</p> -->
-                        </div>
-                        <div class="tab-pane" id="tab_2">
-                            <?php 		
+    <!-- Tareas -->
+    <div class="box box-primary">
+        <div class="box-header">
+            <h4 class="box-title">Tareas</h4>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+            <div class="row" style="margin-top: 40px ">
+                <div class="col-xs-12">
+                    <div class="nav-tabs-custom">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">Calendario</a>
+                            </li>
+                            <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">Tareas</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tab_1">
+                                <!-- <p>Aca iria el Calendario</p> -->
+                            </div>
+                            <div class="tab-pane" id="tab_2">
+                                <?php 		
 															//TODO: NO COMETAR, TIENEUN INPUT Q NO SE LLENA  Y ROPE JAVASCRIPT											
 															$this->load->view(TAREAS_ASIGNAR.'/tareas')?>
-                        </div>
-                        <div class="row" hidden id="incompleto">
-                            <div class="col-xs-12">
-                                <div class="alert alert-danger alert-dismissible">
-                                    <button type="button" class="close" data-dismiss="alert"
-                                        aria-hidden="true">×</button>
-                                    <h4><i class="icon fa fa-ban"></i> Datos incompletos</h4>
-                                    <p id="mensajeincompleto"></p>
+                            </div>
+                            <div class="row" hidden id="incompleto">
+                                <div class="col-xs-12">
+                                    <div class="alert alert-danger alert-dismissible">
+                                        <button type="button" class="close" data-dismiss="alert"
+                                            aria-hidden="true">×</button>
+                                        <h4><i class="icon fa fa-ban"></i> Datos incompletos</h4>
+                                        <p id="mensajeincompleto"></p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                    </div>
-                    <!-- /.box-body -->
-                    <div class="modal-footer">
-                    
+                        </div>
+                        <!-- /.box-body -->
+                        <div class="modal-footer">
+
                             <?php if($etapa->estado == 'planificado')
 								{
 								echo '<button class="btn btn-primary" onclick="valida()">Iniciar Etapa</button>';
@@ -160,23 +164,25 @@ $this->load->view('etapa/modal_finalizar');}?>
 									echo '<button class="btn btn-primary" id="btnfinalizar" onclick="finalizar()">Reporte de Producción</button>';
 								}
 							?>
-                
-                     
-                            <button class="btn btn-primary" onclick="guardar()">Guardar</button>
-                     
+
+
+                            <button class="btn btn-primary" onclick="saveSnapshot()">Guardar</button>
+
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+        <!-- /.box -->
     </div>
-    <!-- /.box -->
-</div>
 </div>
 <!-- ./ Tareas-->
-
+</div>
 
 
 <script>
+getSnapshot();
+
 accion = '<?php echo $accion;?>';
 if (accion == "Editar") {
     var materias = <?php echo json_encode($etapa-> materias); ?> ;
@@ -192,7 +198,7 @@ if (accion == "Editar") {
 function actualizaRecipiente(establecimiento, recipientes) {
     wo();
     establecimiento = establecimiento;
-     $('#recipientes').empty();
+    $('#recipientes').empty();
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
@@ -202,22 +208,22 @@ function actualizaRecipiente(establecimiento, recipientes) {
         url: 'general/Recipiente/listarPorEstablecimiento/true',
         success: function(result) {
 
-            if(!result.status) {
+            if (!result.status) {
                 alert('Fallo al Traer Recipientes');
                 return;
             }
 
-            if(!result.data){
+            if (!result.data) {
                 alert('No hay Recipientes Asociados');
                 return;
             }
             fillSelect('#recipientes', result.data);
 
         },
-        error: function(){
+        error: function() {
             alert('Error al Traer Recipientes');
         },
-        complete: function(){
+        complete: function() {
             wc();
         }
     });
@@ -282,10 +288,10 @@ function guardar() {
                 linkTo('general/Etapa/index');
             }
         },
-        error: function(rsp){
+        error: function(rsp) {
             alert('Error al Iniciar Etapas');
         },
-        complete: function(){
+        complete: function() {
             wc();
         }
     });
