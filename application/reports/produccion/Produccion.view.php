@@ -119,9 +119,9 @@ use \koolreport\widgets\google\PieChart;
 
 
                             <div class="box-header">
-                                <h3 class="box-title">
+                                <h3 class="box-title center">
                                     <i class="fa fa-pie-chart"></i>
-                                    Titulo Chart
+                                    Cantidad de productos
                                 </h3>
                             </div>
 
@@ -131,7 +131,7 @@ use \koolreport\widgets\google\PieChart;
                                     <div style="margin-bottom:50px;">
                                         <?php
                                         PieChart::create(array(
-                                            "title" => "Cantidad de productos",
+                                            // "title" => "Cantidad de productos",
                                             "dataStore" => $this->dataStore('data_produccion_pieChart'),
                                             "columns" => array(
                                                 "producto",
@@ -164,7 +164,7 @@ use \koolreport\widgets\google\PieChart;
                                     <div class="box-header">
                                         <h3 class="box-title">
                                             <i class="fa fa-pie-chart"></i>
-                                            Titulo Chart 2
+                                            Productos con mayor cantidad
                                         </h3>
                                     </div>
 
@@ -174,7 +174,7 @@ use \koolreport\widgets\google\PieChart;
                                     <div style="margin-bottom:50px;">
                                         <?php
                                         ColumnChart::create(array(
-                                            "title" => "Productos con mayor cantidad",
+                                            // "title" => "Productos con mayor cantidad",
                                             "dataStore" => $this->dataStore('data_produccion_pieChart'),
                                             "columns" => array(
                                                 "producto",
