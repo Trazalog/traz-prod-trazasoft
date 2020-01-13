@@ -15,32 +15,32 @@ class Reportes extends CI_Controller
         $this->load->model('koolreport/Opciones_Filtros');
     }
 
-    public function index()
-    {
-        $url = REST . 'articulos';
-        $json = $this->Koolreport->depurarJson($url)->materias->materia;
+    // public function index()
+    // {
+    //     $url = REST . 'articulos';
+    //     $json = $this->Koolreport->depurarJson($url)->materias->materia;
 
-        $primerreporte = new Primer_Reporte($json);
-        $primerreporte->run()->render();
-    }
+    //     $primerreporte = new Primer_Reporte($json);
+    //     $primerreporte->run()->render();
+    // }
 
-    public function panelFiltroEjemplo()
-    {
-        $url['unidades_medida'] = REST . 'parametros/unidades_medida';
-        $url['estados'] = 'http://localhost:3000/estados';
-        $valores['unidades_medida'] = $this->Koolreport->depurarJson($url['unidades_medida'])->parametros->parametro;
-        $valores['estados'] = $this->Koolreport->depurarJson($url['estados'])->estados->estado;
+    // public function panelFiltroEjemplo()
+    // {
+    //     $url['unidades_medida'] = REST . 'parametros/unidades_medida';
+    //     $url['estados'] = 'http://localhost:3000/estados';
+    //     $valores['unidades_medida'] = $this->Koolreport->depurarJson($url['unidades_medida'])->parametros->parametro;
+    //     $valores['estados'] = $this->Koolreport->depurarJson($url['estados'])->estados->estado;
 
-        $data['filtro'] = $this->Opciones_Filtros->ejemplo($valores);
-        $data['numero'] = 'Stock'; //cambiar el campo de valor numerico para filtrado
-        $data['desde'] = true;
-        $data['hasta'] = true;
-        $data['calendarioDesde'] = true;
-        $data['calendarioHasta'] = true;
-        $data['op'] = 'produccion';
+    //     $data['filtro'] = $this->Opciones_Filtros->ejemplo($valores);
+    //     $data['numero'] = 'Stock'; //cambiar el campo de valor numerico para filtrado
+    //     $data['desde'] = true;
+    //     $data['hasta'] = true;
+    //     $data['calendarioDesde'] = true;
+    //     $data['calendarioHasta'] = true;
+    //     $data['op'] = 'produccion';
 
-        $this->load->view('layout/Filtro', $data);
-    }
+    //     $this->load->view('layout/Filtro', $data);
+    // }
 
     public function produccion()
     {
@@ -71,7 +71,7 @@ class Reportes extends CI_Controller
             $desde = ($desde) ? date("d-m-Y", strtotime($desde)) : null;
             $hasta = ($hasta) ? date("d-m-Y", strtotime($hasta)) : null;
             // var_dump('Desde: ' . $desde . '  Hasta: ' . $hasta);
-            log_message('DEBUG', '#TINCHO | ETAPA:' . $etapa . '#TINCHO | DESDE:' . $desde . '#TINCHO | HASTA:' . $hasta);
+            log_message('INFO', '#TRAZA| #REPORTES.PHP|#REPORTES|#PRODUCCION| #ETAPA: >>' . $etapa . '#DESDE: >>' . $desde . '#HASTA: >>' . $hasta);
             $url = REST_TDS . 'productos/etapa/' . $etapa . '/desde/' . $desde . '/hasta/' . $hasta . '/producto/' . $producto;
             $json = $this->Koolreport->depurarJson($url)->productos->producto;
             $reporte = new Produccion($json);
@@ -80,9 +80,10 @@ class Reportes extends CI_Controller
         } else {
             // $reporte->run()->render();
             // echo json_encode($etapa);
+            log_message('INFO', '#TRAZA| #REPORTES.PHP|#REPORTES|#PRODUCCION| #INGRESO');
             $url = REST_TDS . 'productos/etapa//desde//hasta//producto/';
             $json = $this->Koolreport->depurarJson($url)->productos->producto;
-
+            log_message('DEBUG', '#TRAZA| #REPORTES.PHP|#REPORTES|#PRODRESPONSABLE| #JSON: >>' . $json);
             $reporte = new Produccion($json);
             $reporte->run()->render();
             //echo json_encode(["hola"=>$etapa]);
@@ -101,15 +102,16 @@ class Reportes extends CI_Controller
         if ($responsable || $producto || $etapa || $desde || $hasta) {
             $desde = ($desde) ? date("d-m-Y", strtotime($desde)) : null;
             $hasta = ($hasta) ? date("d-m-Y", strtotime($hasta)) : null;
-            log_message('DEBUG', '#TINCHO | ETAPA:' . $etapa . '#TINCHO | DESDE:' . $desde . '#TINCHO | HASTA:' . $hasta);
+            log_message('INFO', '#TRAZA| #REPORTES.PHP|#REPORTES|#PRODRESPONSABLE| #ETAPA: >>' . $etapa . '#DESDE: >>' . $desde . '#HASTA: >>' . $hasta . '#PRODUCTO: >>' . $producto);
             $url = REST_TDS . 'productos/recurso/' . $responsable . '/etapa/' . $etapa . '/desde/' . $desde . '/hasta/' . $hasta . '/producto/' . $producto;
             $json = $this->Koolreport->depurarJson($url)->productos->producto;
             $reporte = new Prod_Responsable($json);
             $reporte->run()->render();
         } else {
+            log_message('INFO', '#TRAZA| #REPORTES.PHP|#REPORTES|#PRODRESPONSABLE| #INGRESO');
             $url = REST_TDS . 'productos/recurso//etapa//desde//hasta//producto/';
             $json = $this->Koolreport->depurarJson($url)->productos->producto;
-
+            log_message('DEBUG', '#TRAZA| #REPORTES.PHP|#REPORTES|#PRODRESPONSABLE| #JSON: >>' . $json);
             $reporte = new Prod_Responsable($json);
             $reporte->run()->render();
         }
@@ -123,6 +125,7 @@ class Reportes extends CI_Controller
 
     public function filtroProduccion()
     {
+        log_message('INFO', '#TRAZA| #REPORTES.PHP|#REPORTES|#FILTROPRODUCCION| #INGRESO');
         // $url['responsables'] = '';
         $url['productos'] = REST_TDS . 'productos/list';
         // $url['unidades_medida'] = '';
@@ -147,6 +150,7 @@ class Reportes extends CI_Controller
 
     public function filtroProdResponsable()
     {
+        log_message('INFO', '#TRAZA| #REPORTES.PHP|#REPORTES|#FILTROPRODRESPONSABLE| #INGRESO');
         $url['responsables'] = REST_TDS . 'recursos/list';
         $url['productos'] = REST_TDS . 'productos/list';
         // $url['unidades_medida'] = '';

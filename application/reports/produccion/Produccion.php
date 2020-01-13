@@ -28,6 +28,7 @@ class Produccion extends \koolreport\KoolReport
 
     protected function settings()
     {
+        log_message('DEBUG', '#TRAZA| #PRODUCCION.PHP|#PRODUCCION|#SETTINGS| #INGRESO');
         $json = $this->params;
         $data = json_encode($json);
 
@@ -44,6 +45,7 @@ class Produccion extends \koolreport\KoolReport
 
     protected function setup()
     {
+        log_message('DEBUG', '#TRAZA| #PRODUCCION.PHP|#PRODUCCION|#SETUP| #INGRESO');
         $this->src("apiarray")
             // ->pipe(new OnlyColumn(array(
             //     "titulo", "stock", "unidad_medida", "estado"
