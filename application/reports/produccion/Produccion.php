@@ -37,7 +37,7 @@ class Produccion extends \koolreport\KoolReport
                 "apiarray" => array(
                     "class" => '\koolreport\datasources\ArrayDataSource',
                     "dataFormat" => "associate",
-                    "data" => json_decode(utf8_encode("$data"), true),
+                    "data" => json_decode($data, true),
                 )
             )
         );
