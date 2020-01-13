@@ -19,7 +19,7 @@
             </span>
         </a>
         <ul class="treeview-menu" style="display: none;">
-            <li><a href="#" class="link" data-link="Reportes/index"><i class="fa fa-circle-o"></i>Ejemplo</a></li>
+            <!-- <li><a href="#" class="link" data-link="Reportes/index"><i class="fa fa-circle-o"></i>Ejemplo</a></li> -->
             <li><a href="#" class="link" data-link="Reportes/produccion"><i class="fa fa-circle-o"></i>Producción</a></li>
             <li><a href="#" class="link" data-link="Reportes/prodResponsable"><i class="fa fa-circle-o"></i>Prod. Responsable</a></li>
         </ul>

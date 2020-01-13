@@ -41,7 +41,7 @@ $.widget.bridge('uibutton', $.ui.button);
            src="//cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/js/bootstrapValidator.min.js"></script>
 
        <script src="<?php base_url();?>lib/plugins/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
-      
+
        <!-- Select2 -->
        <script src="<?php echo base_url()?>lib/bower_components/select2/dist/js/select2.full.min.js"></script>
        <!-- <script src="https://code.jquery.com/jquery-migrate-3.0.0.min.js"></script> -->
@@ -52,8 +52,8 @@ $.widget.bridge('uibutton', $.ui.button);
        <!--Arma Tablas -->
        <script src="<?php echo base_url('lib/props/tabla.js'); ?>"></script>
        <script src="<?php echo base_url(); ?>lib\props\busqueda_avanzada.js"></script>
-       <!--Validator
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/js/bootstrapValidator.min.js"></script>-->
+       <script src="<?php echo base_url(); ?>lib\props\snapshot.js"></script>
+
 
        <script>
 function conexion() {
@@ -94,7 +94,7 @@ window.mobileAndTabletcheck = function() {
        </script>
 
 
- 
+
 
        <?php 
         $this->load->view(FRM . 'scripts');
