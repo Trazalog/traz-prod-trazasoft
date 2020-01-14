@@ -12,7 +12,7 @@ use \koolreport\processes\OnlyColumn;
 //Define the class
 class Prod_Responsable extends \koolreport\KoolReport
 {
-    use \koolreport\clients\Bootstrap;
+    // use \koolreport\clients\Bootstrap;
     use \koolreport\codeigniter\Friendship;
     /*Filtros Avanzados*/
     /*Enlace de datos entre los parámetros del informe y los Controles de entrada */
