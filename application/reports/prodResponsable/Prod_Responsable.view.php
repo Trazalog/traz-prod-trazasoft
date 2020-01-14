@@ -9,32 +9,29 @@ use \koolreport\widgets\google\PieChart;
 ?>
 
 <body>
-    <div class="row">
+    <!--_________________BODY REPORTE___________________________-->
 
-        <div class="col-md-12">
+    <div id="reportContent" class="report-content">
+        <div class="row">
 
-
-            <div class="box box-solid">
-
-                <div class="box box-primary">
-
-                    <div class="box-header">
-                        <h3 class="box-title">
-                            <i class="fa fa-list"></i>
-
-                            Reportes
-                        </h3>
-                    </div>
-
-                    <div class="col-md-12">
-                        <hr>
-                    </div>
+            <div class="col-md-12">
 
 
+                <div class="box box-solid">
 
-                    <!--_________________BODY REPORTE___________________________-->
+                    <div class="box box-primary">
 
-                    <div id="reportContent" class="report-content">
+                        <div class="box-header">
+                            <h3 class="box-title">
+                                <i class="fa fa-list"></i>
+
+                                Reportes
+                            </h3>
+                        </div>
+
+                        <div class="col-md-12">
+                            <hr>
+                        </div>
 
                         <!--_________________FILTRO_________________-->
 
