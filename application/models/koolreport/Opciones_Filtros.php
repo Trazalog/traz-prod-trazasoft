@@ -58,6 +58,7 @@ class Opciones_Filtros extends CI_Model
         $res->etapa = $valores['etapas'];
         // $res->responsable = $valores['responsables'];
 
+        log_message('DEBUG', '#TRAZA| #OPCIONES_FILTROS.PHP|#OPCIONES_FILTROS|#FILTROSPRODUCCION| #PRODUCTOS: >>' . $res->producto . '#ETAPAS: >>' . $res->etapa);
         return $res;
     }
 
@@ -69,6 +70,7 @@ class Opciones_Filtros extends CI_Model
         // $res->unidad = $valores['unidades_medida'];
         $res->etapa = $valores['etapas'];
 
+        log_message('DEBUG', '#TRAZA| #OPCIONES_FILTROS.PHP|#OPCIONES_FILTROS|#FILTROSPRODRESPONSABLE| #REPONSABLES: >>' . $res->responsable . '#PRODUCTOS: >>' . $res->producto . '#ETAPAS: >>' . $res->etapa);
         return $res;
     }
 }

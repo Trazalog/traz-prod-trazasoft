@@ -12,7 +12,7 @@ use \koolreport\processes\OnlyColumn;
 //Define the class
 class Produccion extends \koolreport\KoolReport
 {
-    use \koolreport\clients\Bootstrap;
+    // use \koolreport\clients\Bootstrap;
     use \koolreport\codeigniter\Friendship;
     /*Filtros Avanzados*/
     /*Enlace de datos entre los parámetros del informe y los Controles de entrada */
@@ -28,6 +28,7 @@ class Produccion extends \koolreport\KoolReport
 
     protected function settings()
     {
+        log_message('DEBUG', '#TRAZA| #PRODUCCION.PHP|#PRODUCCION|#SETTINGS| #INGRESO');
         $json = $this->params;
         $data = json_encode($json);
 
@@ -36,7 +37,7 @@ class Produccion extends \koolreport\KoolReport
                 "apiarray" => array(
                     "class" => '\koolreport\datasources\ArrayDataSource',
                     "dataFormat" => "associate",
-                    "data" => json_decode(utf8_encode("$data"), true),
+                    "data" => json_decode($data, true),
                 )
             )
         );
@@ -44,6 +45,7 @@ class Produccion extends \koolreport\KoolReport
 
     protected function setup()
     {
+        log_message('DEBUG', '#TRAZA| #PRODUCCION.PHP|#PRODUCCION|#SETUP| #INGRESO');
         $this->src("apiarray")
             // ->pipe(new OnlyColumn(array(
             //     "titulo", "stock", "unidad_medida", "estado"

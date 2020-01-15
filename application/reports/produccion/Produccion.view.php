@@ -14,36 +14,34 @@ use \koolreport\widgets\google\PieChart;
 
 <body>
 
+    <!--_________________BODY REPORTE___________________________-->
 
-<div class="row">
+    <div id="reportContent" class="report-content">
+        <div class="row">
 
-    <div class="col-md-12">
+            <div class="col-md-12">
 
-        
-        <div class="box box-solid">
 
-        <div class="box box-primary">
+                <div class="box box-solid">
 
-            <div class="box-header">
-                <h3 class="box-title">
-                    <i class="fa fa-list"></i>
+                    <div class="box box-primary">
 
-                    Reportes
-                </h3>
-            </div>
+                        <div class="box-header">
+                            <h3 class="box-title">
+                                <i class="fa fa-list"></i>
 
-            <div class="col-md-12"><hr></div>
+                                Reportes
+                            </h3>
+                        </div>
 
-        
-
-                    <!--_________________BODY REPORTE___________________________-->
-
-                    <div id="reportContent" class="report-content">
+                        <div class="col-md-12">
+                            <hr>
+                        </div>
 
                         <!--_________________FILTRO_________________-->
 
                         <div class="col-md-12">
-                            <a href="#" data-toggle="control-sidebar" title="Filtros">
+                            <a href="#" data-toggle="control-sidebar" title="Filtros" id="panelFiltro">
                                 <i class="fa fa-fw fa-filter fa-lg text-black pull-left"></i>
                             </a>
                         </div>
@@ -55,7 +53,7 @@ use \koolreport\widgets\google\PieChart;
                         <div class="box-body">
 
                             <div class="col-md-12">
-                                
+
                                 <?php
                                 Table::create(array(
                                     "dataStore" => $this->dataStore('data_produccion_table'),
@@ -104,7 +102,7 @@ use \koolreport\widgets\google\PieChart;
 
 
                         <div class="col-md-12">
-                        <br>
+                            <br>
                             <div class="box box-primary">
                             </div>
                         </div>
@@ -112,131 +110,130 @@ use \koolreport\widgets\google\PieChart;
                         <!--_________________ CHARTS_________________-->
 
                         <div class="row">
-                        <div class="col-md-12">
+                            <div class="col-md-12">
 
-                            <!--_________________ CHARTS 1_________________-->
-                            <div class="col-md-6">
+                                <!--_________________ CHARTS 1_________________-->
+                                <div class="col-md-6">
 
 
-                            <div class="box-header">
-                                <h3 class="box-title">
-                                    <i class="fa fa-pie-chart"></i>
-                                    Titulo Chart
-                                </h3>
-                            </div>
+                                    <div class="box-header">
+                                        <h3 class="box-title center">
+                                            <i class="fa fa-pie-chart"></i>
+                                            Cantidad de productos
+                                        </h3>
+                                    </div>
 
-                            <!--_________________ BODY CHART 1_________________-->
+                                    <!--_________________ BODY CHART 1_________________-->
 
-                                <div class="box-body">
-                                    <div style="margin-bottom:50px;">
-                                        <?php
-                                        PieChart::create(array(
-                                            "title" => "Cantidad de productos",
-                                            "dataStore" => $this->dataStore('data_produccion_pieChart'),
-                                            "columns" => array(
-                                                "producto",
-                                                "cantidad" => array(
-                                                    "type" => "number",
+                                    <div class="box-body">
+                                        <div style="margin-bottom:50px;">
+                                            <?php
+                                            PieChart::create(array(
+                                                // "title" => "Cantidad de productos",
+                                                "dataStore" => $this->dataStore('data_produccion_pieChart'),
+                                                "columns" => array(
+                                                    "producto",
+                                                    "cantidad" => array(
+                                                        "type" => "number",
+                                                    )
+                                                ),
+                                                "colorScheme" => array(
+                                                    "#2f4454",
+                                                    "#2e1518",
+                                                    "#da7b93",
+                                                    "#376e6f",
+                                                    "#1c3334"
                                                 )
-                                            ),
-                                            "colorScheme" => array(
-                                                "#2f4454",
-                                                "#2e1518",
-                                                "#da7b93",
-                                                "#376e6f",
-                                                "#1c3334"
-                                            )
-                                        ));
-                                        ?>
+                                            ));
+                                            ?>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
 
 
 
 
-                            <!--_________________ CHARTS 2_________________-->
+                                <!--_________________ CHARTS 2_________________-->
 
 
-                            <div class="col-md-6">
+                                <div class="col-md-6">
 
                                     <div class="box-header">
                                         <h3 class="box-title">
                                             <i class="fa fa-pie-chart"></i>
-                                            Titulo Chart 2
+                                            Productos con mayor cantidad
                                         </h3>
                                     </div>
 
                                     <!--_________________ BODY CHART 2_________________-->
 
-                                <div class="box-body">
-                                    <div style="margin-bottom:50px;">
-                                        <?php
-                                        ColumnChart::create(array(
-                                            "title" => "Productos con mayor cantidad",
-                                            "dataStore" => $this->dataStore('data_produccion_pieChart'),
-                                            "columns" => array(
-                                                "producto",
-                                                "cantidad" => array(
-                                                    "type" => "number",
-                                                    "label" => "Cantidad"
+                                    <div class="box-body">
+                                        <div style="margin-bottom:50px;">
+                                            <?php
+                                            ColumnChart::create(array(
+                                                // "title" => "Productos con mayor cantidad",
+                                                "dataStore" => $this->dataStore('data_produccion_pieChart'),
+                                                "columns" => array(
+                                                    "producto",
+                                                    "cantidad" => array(
+                                                        "type" => "number",
+                                                        "label" => "Cantidad"
+                                                    )
+                                                ),
+                                                "colorScheme" => array(
+                                                    "#2f4454",
+                                                    "#2e1518",
+                                                    "#da7b93",
+                                                    "#376e6f",
+                                                    "#1c3334"
                                                 )
-                                            ),
-                                            "colorScheme" => array(
-                                                "#2f4454",
-                                                "#2e1518",
-                                                "#da7b93",
-                                                "#376e6f",
-                                                "#1c3334"
-                                            )
-                                        ));
-                                        ?>
+                                            ));
+                                            ?>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+
+                            <!--_________________ FIN CHARTS_________________-->
+
+
+
+
+
+
+
                         </div>
 
-                        <!--_________________ FIN CHARTS_________________-->
 
-                        
-
-                            
-
-
+                        <!--_________________ FIN BODY REPORTE ____________________________-->
 
                     </div>
+                </div>
 
+            </div>
 
-                    <!--_________________ FIN BODY REPORTE ____________________________-->
-
-                    </div>
         </div>
-
     </div>
-
-</div>
     <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script> -->
 
     <script>
-        // $('.report-content').click(function() {
-        //     $('#formulario')[0].reset();
-        // });
-
         $('tr > td').each(function() {
             if ($(this).text() == 0) {
                 $(this).text('-');
                 $(this).css('text-align', 'center');
+            }
+            if ($(this).text()) {
+
             }
         });
 
         $('#panel-derecho-body').load('<?php echo base_url() ?>index.php/Reportes/filtroProduccion');
     </script>
 
-<script>
-
-DataTable($('.dataTable'))
-        </script>
+    <script>
+        DataTable($('.dataTable'))
+    </script>
 </body>

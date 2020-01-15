@@ -136,6 +136,7 @@ $('.menu .link').on('click', function() {
 });
 
 function linkTo(uri = '') {
+    $('#panel-derecho').removeClass('control-sidebar-open');
     wo();
     if (link == '' && uri == '') return;
     backLink = link;
@@ -179,6 +180,8 @@ jQuery.fn.single_double_click = function(single_click_callback, double_click_cal
         });
     });
 }
+
+
 </script>
 
 </body>
