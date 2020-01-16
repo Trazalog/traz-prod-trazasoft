@@ -108,4 +108,10 @@ class Camion extends CI_Controller
     }
     #_____________________________________________________________________________________
 
+    public function obtenerInfo($patente){
+
+        $rsp = $this->Camiones->obtenerInfo($patente);
+        echo json_encode($rsp);
+
+    }
 }

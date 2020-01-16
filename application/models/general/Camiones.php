@@ -101,6 +101,14 @@ class Camiones extends CI_Model
         $rsp = $this->Lotes->crearBatch($array);
         return $rsp;
     }
+
+    public function obtenerInfo($patente)
+    {
+        $url = RESTPT . "camiones/$patente";
+        $rsp = $this->rest->callApi('GET', $url);
+        if($rsp['status']) $rsp['data'] = json_decode($rsp['data'])->camiones->camion;
+        return $rsp;
+    }
     
     #RBASAÑES
     public function listaTransporte()
