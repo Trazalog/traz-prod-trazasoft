@@ -168,8 +168,9 @@ function reset() {
 }
 var recipienteSelect = null;
 $('#patente').keyup(function(e) {
+    
     if ($('#accioncamion').val() != 'descarga') return;
-    reset();
+   // reset();
     if (e.keyCode === 13) {
         console.log('Obtener Lotes Patentes');
 
@@ -182,7 +183,7 @@ $('#patente').keyup(function(e) {
             url: 'index.php/general/Lote/obtenerLotesCamion?patente=' + this.value,
             success: function(rsp) {
 
-                if (rsp.data == null) {
+                if (!rsp.data) {
                     alert('No existen Lotes Asociados');
                     return;
                 }
