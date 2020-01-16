@@ -10,6 +10,18 @@ class Test extends CI_Controller
 
     public function index()
     {
+        $this->load->model('general/Recursos');
+        $this->load->model(ALM.'Articulos');
+
+        $data['articulos'] = $this->Articulos->getList();
+        $data['operarios'] = $this->Recursos->obtenerXTipo('TRABAJO')['data'];
+
+        $data['lote_origen'] = 10101010;
+        $this->load->view('reportes/reporte_operario', $data);
+    }
+
+    public function index5()
+    {
         $user = 'fernando_leiva';
         $view = 'test';
         $data['key'] = $view . $user;
@@ -43,5 +55,11 @@ class Test extends CI_Controller
         $data['subtareas'] = getJson('tareas')->subtareas;
         $data['plantillas'] = getJson('tareas')->plantillas;
         $this->load->view(TSK . 'list', $data);
+    }
+
+    public function guardar(){
+
+        $data = $this->input->post('data');
+        echo json_encode($data);
     }
 }

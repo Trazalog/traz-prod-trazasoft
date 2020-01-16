@@ -85,7 +85,7 @@ defined('EXIT__AUTO_MIN')      OR define('EXIT__AUTO_MIN', 9); // lowest automat
 defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
 
 # DNATO
-define('DNATO','http://localhost/Dnato/');
+define('DNATO','http://192.168.0.100/traz-comp-dnato/');
 
 #TRAZ-COMP-BPM
 define('BPM', 'traz-comp-bpm/');
