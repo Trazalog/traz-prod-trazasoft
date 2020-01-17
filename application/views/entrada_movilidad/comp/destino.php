@@ -11,7 +11,7 @@
                         <label>Código Lote:</label>
                         <input name="lote_id" class="form-control req" type="text" id="codigo">
                         <small class="help-block"><a class="pull-right" href="#frm-destino"
-                                onclick="$(this).closest('.form-group').find('input').val($('#new_codigo').hasClass('hidden')?$('#codigo').val():$('#new_codigo').val())">#
+                                onclick="$(this).closest('.form-group').find('input').val($('#new_codigo').hasClass('hidden')?$('#codigo').select2('data')[0].text:$('#new_codigo').val())">#
                                 Copiar Lote
                                 Origen</a></small>
                     </div><br>
@@ -41,7 +41,7 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>Unidad Medida:</label>
-                        <input disabled id="unidad_medida" list="unidades" name="unidad_medida" class="form-control req"
+                        <input readonly id="unidad_medida" list="unidades" name="unidad_medida" class="form-control req"
                             type="text">
                         <datalist id="unidades" class="unidades">
 

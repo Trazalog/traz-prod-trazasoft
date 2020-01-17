@@ -65,7 +65,6 @@ $('.frm-origen #codigo').on('change', function() {
     var json = getJson(this);
     if (!json) return;
 
-    alert(json.arti_id);
     $('.frm-origen #articulos').val(json.arti_id).trigger('change');
     $('.frm-destino #articulos').val(json.arti_id).trigger('change');
 

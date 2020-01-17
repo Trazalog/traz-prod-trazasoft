@@ -332,7 +332,7 @@ class Etapa extends CI_Controller {
 			$arrayPost["empr_id"] = (string)empresa();	
 			$arrayPost["forzar_agregar"] = $value->unificar;
 			$arrayPost["fec_vencimiento"] = "01-01-1988";
-			$arrayPost["recu_id"] = $value->recu_id;
+			$arrayPost["recu_id"] = strval($value->recu_id);
 			$arrayPost["tipo_recurso"] = $value->tipo_recurso;
 			$arrayDatos['_post_lote_list_batch_req']['_post_lote_lis'][] = $arrayPost;	
 		}	
@@ -372,7 +372,7 @@ class Etapa extends CI_Controller {
 			$arrayPost["empr_id"] = (string)empresa();	
 			$arrayPost["forzar_agregar"] = false;
 			$arrayPost["fec_vencimiento"] = "01-01-1988";
-			$arrayPost["recu_id"] = (string)0;
+			$arrayPost["recu_id"] = "0";
 			$arrayPost["tipo_recurso"] = "";
 			$arrayDatos['_post_lote_list_batch_req']['_post_lote_lis'][] = $arrayPost;	
 		}	
