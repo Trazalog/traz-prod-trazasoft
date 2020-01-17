@@ -8,15 +8,21 @@ class Test extends CI_Controller
         parent::__construct();
     }
 
-    public function index()
+    public function index($id = 389)
     {
+
         $this->load->model('general/Recursos');
+        $this->load->model('general/Etapas');
         $this->load->model(ALM.'Articulos');
+        $this->load->model('general/Recipientes');
+
+        $data['etapa'] = $this->Etapas->buscar($id)->etapa;
+        $data['producto'] = $this->Etapas->getRecursosOrigen($id, PRODUCTO)->recursos->recurso;
 
         $data['articulos'] = $this->Articulos->getList();
         $data['operarios'] = $this->Recursos->obtenerXTipo('TRABAJO')['data'];
+        $data['recipientes'] = $this->Recipientes->obtener('DEPOSITO','TODOS',$data['etapa']->esta_id)['data'];	
 
-        $data['lote_origen'] = 10101010;
         $this->load->view('reportes/reporte_operario', $data);
     }
 
