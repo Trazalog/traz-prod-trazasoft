@@ -9,11 +9,7 @@ class Reportes extends CI_Model
 
     public function guardar($data)
     {
-        $url =  . "";
-        $rsp = $this->rest->callApi('', $url);
-        if(!$rsp['status']) return $rsp;
-        $rsp['data'] = json_decode($rsp['data']);
-        return $rsp;   
+        
     }
     
 }

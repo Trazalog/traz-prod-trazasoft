@@ -163,7 +163,8 @@ define('RECURSO_CONSUMO', 'CONSUMO');
 
 # >> Proyecto
 # Default View
-define('DEFAULT_VIEW', 'Test');
+#define('DEFAULT_VIEW', 'general/Reporte/tareasOperario');
+define('DEFAULT_VIEW', 'general/Etapa');
 
 #TRAZASOFT
 define('PROVEEDOR_INTERNO', 1000);

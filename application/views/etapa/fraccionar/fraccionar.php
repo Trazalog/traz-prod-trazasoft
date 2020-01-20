@@ -378,6 +378,7 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
     document.getElementById('unidad').value = empaque.unidad;
     document.getElementById('volumen').value = empaque.volumen;
     document.getElementById('cantidad').disabled = false;
+    CalculaStock();
   }
   function CalculaStock() {
     stock = document.getElementById('volumen').value * document.getElementById('cantidad').value;

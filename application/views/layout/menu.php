@@ -11,6 +11,8 @@
     <li><a class="link" href="#" data-link="general/Camion/recepcionCamion"><i class="fa fa-exchange"></i>Carga | Recepción</a>
     <li><a class="link" href="#" data-link="general/Camion/cargadeCamion"><i class="fa fa-arrow-left"></i>Listado Carga Camion</a>
     </li>
+    <li><a class="link" href="#" data-link="general/Reporte/tareasOperario"><i class="fa fa-arrow-left"></i>Producción</a>
+    </li>
     <li class="treeview">
         <a href="#">
             <i class="fa fa-fw fa-bar-chart"></i> <span>Reportes</span>
