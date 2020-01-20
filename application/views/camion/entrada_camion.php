@@ -1,4 +1,3 @@
-
 <?php $this->load->view('camion/modal_productos')?>
 <div class="box">
     <div class="box-header with-border">
@@ -101,7 +100,7 @@ foreach ($establecimientos as $fila) {
                     </div>
                 </div>
             </div>
-            <div class="row" >
+            <div class="row">
                 <div class="col-md-1 col-xs-12"><label class="form-label">Patente*:</label></div>
                 <div class="col-md-2 col-xs-12"><input type="text" class="form-control" id="patente" name="patente">
                 </div>
@@ -145,7 +144,7 @@ foreach ($establecimientos as $fila) {
         ?>
     </div>
     <div class="col-md-12 tag-descarga" style="display:none">
-                    <?php 
+        <?php 
     $this->load->view('entrada_movilidad/comp/tabla_descarga');
             ?>
     </div>
@@ -154,15 +153,14 @@ foreach ($establecimientos as $fila) {
 
 
 <script>
-
 $('.select').select2();
-$('#frm-camion').on('reset',function(){
+$('#frm-camion').on('reset', function() {
     $(this).find('.select').val(null).trigger('change');
 });
 
 function reset() {
-    $('#new_codigo').removeClass('hidden').attr('disabled',false);
-    $('#frm-origen #codigo').attr('disabled',true).next(".select2-container").hide();
+    $('#new_codigo').removeClass('hidden').attr('disabled', false);
+    $('#frm-origen #codigo').attr('disabled', true).next(".select2-container").hide();
     $('#frm-origen')[0].reset();
     $('#frm-destino')[0].reset();
     $('.inp-descarga').attr('readonly', false);
@@ -170,31 +168,32 @@ function reset() {
 }
 var recipienteSelect = null;
 $('#patente').keyup(function(e) {
-    if($('#accioncamion').val() != 'descarga') return;
-    reset();
+    
+    if ($('#accioncamion').val() != 'descarga') return;
+   // reset();
     if (e.keyCode === 13) {
         console.log('Obtener Lotes Patentes');
 
         if (this.value == null || this.value == '') return;
-
+        obtenerInfoCamion(this.value);
         wo();
         $.ajax({
             type: 'GET',
             dataType: 'JSON',
             url: 'index.php/general/Lote/obtenerLotesCamion?patente=' + this.value,
             success: function(rsp) {
-                
-                if (rsp.data == null) {
+
+                if (!rsp.data) {
                     alert('No existen Lotes Asociados');
                     return;
                 }
 
-                $('#codigo').attr('disabled',false).next(".select2-container").show();
-                $('#new_codigo').addClass('hidden').attr('disabled',true);
-            
+                $('#codigo').attr('disabled', false).next(".select2-container").show();
+                $('#new_codigo').addClass('hidden').attr('disabled', true);
+
                 fillSelect("#codigo", rsp.data);
 
-                alert('Lotes Encontrados: ' +  (parseInt($('#codigo').find('option').length) - 1));
+                alert('Lotes Encontrados: ' + (parseInt($('#codigo').find('option').length) - 1));
 
             },
             error: function(rsp) {
@@ -206,6 +205,20 @@ $('#patente').keyup(function(e) {
         });
     }
 });
+
+function obtenerInfoCamion(patente) {
+    $.ajax({
+        type: 'GET',
+        dataType: 'JSON',
+        url: 'index.php/general/Camion/obtenerInfo/'+patente,
+        success: function(rsp) {
+            fillForm(rsp.data[0]);
+        },
+        error: function(rsp) {
+            alert('Error');
+        }
+    });
+}
 
 
 // $('#establecimientos').on('change', function() {
@@ -263,7 +276,7 @@ function addCamion(msj = true) {
     var frmCamion = new FormData($('#frm-camion')[0]);
     var frmInfo = new FormData($('#frm-info')[0]);
     var dataForm = mergeFD(frmInfo, frmCamion);
-    dataForm.append('estado','EN CURSO');
+    dataForm.append('estado', 'EN CURSO');
     showFD(dataForm);
     wo();
     $.ajax({
@@ -278,13 +291,13 @@ function addCamion(msj = true) {
             if (rsp.status) {
                 $('#frm-camion')[0].reset();
                 $('#frm-info')[0].reset();
-                if(msj) alert('Datos Guardados con Éxito');
+                if (msj) alert('Datos Guardados con Éxito');
             } else {
                 alert('Fallo al Guardar Datos del Camión');
             }
         },
         error: function(rsp) {
-              alert('Error al Guardar Datos del Camion');
+            alert('Error al Guardar Datos del Camion');
         },
         complete: function() {
             wc();
@@ -518,8 +531,8 @@ function cargacamion() {
     document.getElementById('descargacamion').style.borderColor = "white";
     document.getElementById('accioncamion').value = "carga";
     //document.getElementById('boxproductos').hidden = true;
-     $('#add-camion').show();
-     //$('.btn-cargar').hide();
+    $('#add-camion').show();
+    //$('.btn-cargar').hide();
     $('.tag-descarga').hide();
 }
 
@@ -531,8 +544,8 @@ function descargacamion() {
     document.getElementById('cargacamion').style.borderColor = "white";
     document.getElementById('descargacamion').style.borderColor = "blue";
     document.getElementById('accioncamion').value = "descarga";
-   // document.getElementById('boxproductos').hidden = false;
-     $('#add-camion').hide();
+    // document.getElementById('boxproductos').hidden = false;
+    $('#add-camion').hide();
     //$('.btn-cargar').show();
     $('.tag-descarga').show();
 }
