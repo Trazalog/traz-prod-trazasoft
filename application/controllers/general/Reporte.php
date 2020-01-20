@@ -6,6 +6,13 @@ class Reporte extends CI_Controller
     {
         parent::__construct();
         $this->load->model('general/Reportes');
+        $this->load->model('general/Etapas');
+    }
+
+    public function tareasOperario()
+    {
+        $data['list'] =$this->Etapas->listar()->etapas->etapa;
+        $this->load->view('reportes/lista_tareas_operarios', $data);
     }
 
     public function guardar()

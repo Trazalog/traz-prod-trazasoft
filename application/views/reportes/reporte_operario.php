@@ -5,12 +5,21 @@
     <input class="form-control" type="text" id="cant_origen"
         value="<?php echo $producto[0]->stock.' ('.$producto[0]->uni_med.')';?>" disabled>
 </div>
+<style>
+    input, select {
+        font-size: 140% !important;
+        height: 105%;
+        border-radius: 5px !important;
+    }
+    option{
+        font-size: 180% !important;
+    }
 
+</style>
 
-<div class="box box-primary">
+<div class="box box-primary" style="font-size:140%;">
     <div class="box-header">
-        <i class="fa fa-list"></i>
-        <div class="box-title"> Reporte Producción Operario </div>
+        <h2 class="box-title" style="font-size:140%"> Producción </h2>
     </div>
     <div class="box-body">
 
@@ -19,8 +28,8 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <label>Lote Origen:</label>
-                        <input name="" class="form-control " type="text" value="<?php echo $etapa->lote ?>" id="origen"
-                            name="origen" readonly>
+                        <input class="form-control " type="text" value="<?php echo $etapa->lote ?>" id="origen"
+                            name="lote" readonly style="background-color:#ff9900; color:#ffffff">
                     </div>
                 </div>
                 <div class="col-md-12">
@@ -39,17 +48,10 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Cantidad:</label>
-                        <input name="cantidad" class="form-control " type="number">
+                        <input name="cantidad" class="form-control " type="number" data-bv="required" data-bv-msj="El cam" data-bv-range_min="0" , data-bv-msj-errpor-ran ge="tanh">
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Lote:</label>
-                        <input name="lote" class="form-control " type="text" id="lote">
-                        <a href="#" class="pull-right" onclick="$('#lote').val($('#origen').val());">#Copiar Lote
-                            Origen</a>
-                    </div>
-                </div>
+     
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>Destino:</label>
@@ -81,7 +83,7 @@
 
             </tbody>
         </table>
-        <button class="btn btn-primary pull-right" onclick="FinalizarEtapa()"><i class="fa fa-save"></i>
+        <button class="btn btn-lg btn-primary pull-right" onclick="FinalizarEtapa()"><i class="fa fa-save"></i>
             Guardar</button>
     </div>
 </div>
@@ -89,8 +91,22 @@
 <script>
 function agregar() {
     $('#box-tabla').show();
-    var data = new FormData($('#frm-reporte')[0]);
+
+    if(validar($('#frm-reporte')[0])){
+        
     data = formToObject(data);
+
+    var data = new FormData($('#frm-reporte')[0]);
+        ajax
+    }else{
+        FOrmuñario Invalido
+    }
+
+
+
+
+
+    return;
 
     $('#datos tbody').append(
         `<tr data-json='${JSON.stringify(data)}'>
@@ -110,7 +126,7 @@ function agregar() {
 function guardar() {
     var data = [];
     $('#datos tbody tr').each(function() {
-        data.push(JSON.parse(this.dataset.json));
+        data.push(getJson(this));
     });
 
     if (!data.lenght) {
@@ -127,7 +143,7 @@ function guardar() {
             data
         },
         success: function(rsp) {
-            alert('Hecho');
+
         },
         error: function(rsp) {
             alert('Error');
