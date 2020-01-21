@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Trazasoft</title>
+    <title>Trazasoft Tools</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.7 -->
@@ -58,9 +58,9 @@
         <!-- Logo -->
         <a href="#" class="logo" onclick="linkTo()">
             <!-- mini logo for sidebar mini 50x50 pixels -->
-            <span class="logo-mini"><b>TRAZA</span>
+            <span class="logo-mini"><b>TST</span>
             <!-- logo for regular state and mobile devices -->
-            <span class="logo-lg"><b>TrazaSOFT</b></span>
+            <span class="logo-lg"><b>TrazaSoft Tools</b></span>
         </a>
         <!-- Header Navbar: style can be found in header.less -->
         <nav class="navbar navbar-static-top">
@@ -88,7 +88,7 @@
 
             <!-- sidebar menu: : style can be found in sidebar.less -->
             <?php 
-                $this->load->view('layout/aux_menu_alm');
+             
                 $this->load->view('layout/menu');
             ?>
            
