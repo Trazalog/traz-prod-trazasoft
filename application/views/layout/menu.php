@@ -29,7 +29,7 @@
         </a>
         <ul class="treeview-menu">
             <li><a class="link" href="#" data-link="general/Camion/salidaCamion"><i
-                        class="fa  fa-external-link"></i>SalidaCamion</a>
+                        class="fa  fa-external-link"></i>Salida Camion</a>
             </li>
             <li><a class="link" href="#" data-link="general/Camion/cargarCamion"><i class="fa fa-upload"></i>Cargar
                     Camión</a>
