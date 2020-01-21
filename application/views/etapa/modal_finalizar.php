@@ -162,6 +162,13 @@
     </div>
 </div>
 <script>
+// Filtrar Recipientes por Establecimineto
+$('#productodestino').find('option').each(function(){
+    var data  = getJson(this);
+    var esta = $('#establecimientos').val();
+    if(data.esta_id != esta) $(this).remove();
+});
+
 $('.datalist').on('change', function() {
     this.dataset.json = $('#' + this.getAttribute('list')).find('[value="' + this.value + '"]').attr(
         'data-json');
