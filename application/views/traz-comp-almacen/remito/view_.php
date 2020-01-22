@@ -226,14 +226,11 @@ $("#codigo").autocomplete({
     select: function(event, ui) {
         // prevent autocomplete from updating the textbox
         event.preventDefault();
-        // manually update the textbox and hidden field
-        //$(this).val(ui.item.value);//label
+ 
         $("#codigo").val(ui.item.label); //value
         $("#descripcion").val(ui.item.artDescription);
         $("#id_herr").val(ui.item.value);
-        //traer_deposito(ui.item.value);
-        //console.log("id articulo de orden insumo: ")
-        //console.log(ui.item.value);
+    
     },
 });
 
