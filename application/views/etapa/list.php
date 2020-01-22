@@ -103,7 +103,7 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
                           echo '<tr  id="'.$id.'" data-json=\''.json_encode($fila).'\'>';
 
                           echo '<td width="5%" class="text-center">';
-                          echo '<i class="fa fa-fw fa-pencil text-light-blue ml-1" style="cursor: pointer;" title="Editar" onclick=linkTo("general/Etapa/editar?id='.$id.'")></i>';
+                          echo '<i class="fa fa-fw fa-cogs text-light-blue ml-1" style="cursor: pointer;" title="Editar" onclick=linkTo("general/Etapa/editar?id='.$id.'")></i>';
                           echo '<i class="fa fa-fw fa-times-circle text-light-blue ml-1" style="cursor: pointer;" title="Eliminar" onclick="seleccionar(this)"></i>';
                           echo '</td>';
                           

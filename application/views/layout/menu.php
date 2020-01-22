@@ -28,19 +28,17 @@
             </span>
         </a>
         <ul class="treeview-menu">
-            <li><a class="link" href="#" data-link="general/Camion/salidaCamion"><i
-                        class="fa  fa-external-link"></i>Salida Camion</a>
-            </li>
-            <li><a class="link" href="#" data-link="general/Camion/cargarCamion"><i class="fa fa-upload"></i>Cargar
+            <li><a class="link" href="#" data-link="general/Camion/recepcionCamion"><i class="fa fa-exchange"></i> Entrada | Recepción</a></li>
+            <li><a class="link" href="#" data-link="general/Camion/cargarCamion"><i class="fa fa-upload"></i>Carga
                     Camión</a>
             </li>
             <li><a class="link" href="#" data-link="general/Camion/salidaCamion"><i class="fa fa-download"></i>Descarga
                     Camión</a></li>
-            <li><a class="link" href="#" data-link="general/Camion/recepcionCamion"><i class="fa fa-exchange"></i>Carga
-                    |
-                    Recepción</a>
-            <li><a class="link" href="#" data-link="general/Camion/cargadeCamion"><i
-                        class="fa fa-list-ul"></i>Listado Carga
+            <li><a class="link" href="#" data-link="general/Camion/salidaCamion"><i
+                        class="fa  fa-external-link"></i>Salida Camion</a>
+            </li>
+            <li><a class="link" href="#" data-link="general/Camion/cargadeCamion"><i class="fa fa-list-ul"></i>Listado
+                    Carga
                     Camion</a>
             </li>
         </ul>
