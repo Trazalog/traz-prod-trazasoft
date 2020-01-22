@@ -17,7 +17,6 @@ class Etapas extends CI_Model
         $param = stream_context_create($parametros);
         $resource = '/lotes';
         $url = REST3 . $resource;
-        //$url = 'http://pc-pc:8280/services/produccionTest/lotes';
         $array = file_get_contents($url, false, $param);
 
         return json_decode($array);
