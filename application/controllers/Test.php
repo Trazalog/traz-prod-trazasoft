@@ -8,7 +8,12 @@ class Test extends CI_Controller
         parent::__construct();
     }
 
-    public function index($id = 389)
+    public function index()
+    {
+        echo formatFechaPG("2020-01-01+00:00");
+    }
+
+    public function index6($id = 389)
     {
 
         $this->load->model('general/Recursos');

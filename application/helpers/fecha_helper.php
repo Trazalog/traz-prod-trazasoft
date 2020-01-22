@@ -43,5 +43,11 @@ if(!function_exists('formato_fecha')){
             return $result;
         }
     }
+
+    function formatFechaPG($fecha)
+    {
+        $fecha = substr($fecha,0,10);
+        return fecha($fecha);
+    }
 }
 ?>
