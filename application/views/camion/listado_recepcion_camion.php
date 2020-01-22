@@ -108,7 +108,7 @@ $this->load->view('camion/modal_recepcioncamion');
           echo '<td style="font-weight: lighter;">'.$fila->transportista.'</td>';
           echo '<td style="font-weight: lighter;">'.$fila->cuit.'</td>';
           echo '<td style="font-weight: lighter;">'.$fila->fecha_entrada.'</td>';
-          echo '<td style="font-weight: lighter;">'.$fila->patente.'</td>';
+          echo '<td style="font-weight: lighter;">'.$fila->patente .' | '.$fila->acoplado.'</td>';
           echo '<td style="font-weight: lighter;">'.$fila->neto.'</td>';
           echo '<td style="font-weight: lighter;">'.estado($fila->estado).'</td>';
           echo '</tr>';
