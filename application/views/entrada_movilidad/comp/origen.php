@@ -9,7 +9,8 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <label>Código Lote:</label>
-                        <input type="text" id="new_codigo" name="lote_id" class="form-control hidden" disabled style="margin-botton:-500px">
+                        <input type="text" id="new_codigo" name="lote_id" class="form-control hidden" disabled
+                            style="margin-botton:-500px">
                         <?php
                             echo selectBusquedaAvanzada('codigo', 'lote_id');
                         ?>
@@ -148,4 +149,35 @@ function obtenerArticulos() {
 $('.frm-origen #um').on('change', function() {
     $('.frm-destino #unidad_medida').val(this.value);
 });
+
+//Cambios Mauri
+
+$('#new_codigo').keyup(function(e) {
+    if (e.keyCode === 13) {
+
+        buscarLote(this.value);
+
+
+
+    }
+});
+
+function buscarLote(lote) {
+    wo();
+    $.ajax({
+        type: 'GET',
+        dataType: 'JSON',
+        url: 'index.php/general/Lote/obtenerLote/'+lote,
+        success: function(rsp) {
+            alert('Hecho');
+            console.log(rsp);
+        },
+        error: function(rsp) {
+            alert('Error');
+        },
+        complete:function(){
+            wc();
+        }
+    });
+}
 </script>

@@ -76,4 +76,12 @@ class Lotes extends CI_Model
         return $rsp;
     }
 
+    public function obtenerLote($lote)
+    {
+        $url = RESTPT . "lotes/codigo/$lote";
+        $rsp = $this->rest->callApi('GET', $url);
+        if($rsp['status']) $rsp['data'] = json_decode($rsp['data'])->lotes->lote;
+        return $rsp;
+    }
+
 }
