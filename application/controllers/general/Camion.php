@@ -32,12 +32,31 @@ class Camion extends CI_Controller
         $this->load->view('camion/descarga_camion', $data);
     }
 
-    public function salidaCamion()
+    public function salidaCamion($patente = false)
     {
+        // var_dump("entra: " . $patente);
+        // $data = $this->input->post('data');
+        // $estado = "ASIGNADO";
+        $data['patente'] = $patente;
         $data['fecha'] = date('Y-m-d');
         $data['lang'] = lang_get('spanish', 4);
-        $data['camiones'] = $this->Camiones->listarCargados()->camiones->camion;
-        $data['establecimientos'] = $this->Establecimientos->listarTodo()->establecimientos->establecimiento;
+
+        // var_dump($data['camion'][0]->patente);
+        if ($patente) {
+            $rsp = $this->Camiones->obtenerInfo($patente);
+            $data['camion'] = $rsp['data'];
+            $data['finaliza'] = true;
+            // $data['establecimiento'] = $this->Establecimientos->getEstablecimiento($data['camion'][0]->esta_id);
+        }
+        if (isset($data['camion'][0]->bruto)) {
+            $data['readonlyBruto'] = 'readonly';
+        } elseif (isset($data['camion'][0]->tara)) {
+            $data['readonlyTara'] = 'readonly';
+        } else {
+            $data['readonlyBruto'] = 'readonly';
+            $data['readonlyTara'] = 'readonly';
+        }
+
         $this->load->view('camion/salida_camion', $data);
     }
 
@@ -71,6 +90,26 @@ class Camion extends CI_Controller
         echo json_encode($rsp);
     }
 
+    public function finalizarSalida()
+    {
+        // $camion = json_decode($this->input->post('data'));
+        $camion = $this->input->post('data');
+        // var_dump(json_encode($camion));
+        // $array = [];
+        // foreach ($camion as $key => $o) {
+        $array = array(            
+            "bruto" => $camion['bruto'],
+            "tara" => $camion['tara'],
+            "neto" => $camion['neto'],
+            "patente" => $camion['patente']
+        );
+        // }
+        $rsp = $this->Camiones->finalizarSalida($array);
+        echo json_encode($rsp);
+        // var_dump($camion);
+        // echo 'ok';
+    }
+
     public function entradaCamion()
     {
         $data['fecha'] = date('Y-m-d');
@@ -88,14 +127,14 @@ class Camion extends CI_Controller
         $entrada = json_decode($this->input->post('entrada'));
         var_dump($entrada);
         echo 'ok';
-	}
+    }
 
-	#FLEIVA
-	public function setEntrada()
-	{
+    #FLEIVA
+    public function setEntrada()
+    {
         $this->load->model('general/Entradas');
 
-		$data = $this->input->post();
+        $data = $this->input->post();
         $rsp = $this->Entradas->guardar($data);
         echo json_encode($rsp);
     }
@@ -108,10 +147,9 @@ class Camion extends CI_Controller
     }
     #_____________________________________________________________________________________
 
-    public function obtenerInfo($patente){
-
+    public function obtenerInfo($patente = null)
+    {
         $rsp = $this->Camiones->obtenerInfo($patente);
         echo json_encode($rsp);
-
     }
 }
