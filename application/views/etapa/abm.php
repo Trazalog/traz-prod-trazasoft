@@ -52,7 +52,7 @@ $this->load->view('etapa/modal_finalizar');}?>
 
 								if(($accion == 'Editar' || $etapa->estado =='FINALIZADO' ) && $fila->nombre == $etapa->establecimiento){
 
-										echo '<option value="'.$fila->id.'" selected>'.$fila->nombre.'</option>';
+										echo '<option value="'.$fila->esta_id.'" selected>'.$fila->nombre.'</option>';
 								}else{
 
 										echo '<option value="'.$fila->esta_id.'" >'.$fila->nombre.'</option>';

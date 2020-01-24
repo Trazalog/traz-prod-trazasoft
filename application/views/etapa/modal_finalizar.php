@@ -137,7 +137,7 @@
                 <div class="row" style="margin-top:20px">
                     <div class="col-md-3 col-xs-12"></div>
                     <div class="col-md-3 col-xs-12"><button class="btn btn-success btn-block"
-                            onclick="AgregarProducto()">Guardar</button></div>
+                            onclick="AgregarProducto()"><i class="fa fa-plus"></i>  Agregar</button></div>
                     <div class="col-md-6"></div>
                 </div>
                 <div class="row">
@@ -151,7 +151,7 @@
                     <div class="col-md-8"></div>
                     <div class="col-md-2 col-xs-6">
                         <button type="button" class="btn btn-success btn-block "
-                            onclick="FinalizarEtapa()">Aceptar</button>
+                            onclick="FinalizarEtapa()"><i class="fa fa-save"></i>  Guardar</button>
                     </div>
                     <div class="col-md-2 col-xs-6">
                         <button type="button" class="btn btn-default btn-block" data-dismiss="modal">Cancelar</button>
@@ -162,6 +162,13 @@
     </div>
 </div>
 <script>
+// Filtrar Recipientes por Establecimineto
+$('#productodestino').find('option').each(function(){
+    var data  = getJson(this);
+    var esta = $('#establecimientos').val();
+    if(data.esta_id != esta) $(this).remove();
+});
+
 $('.datalist').on('change', function() {
     this.dataset.json = $('#' + this.getAttribute('list')).find('[value="' + this.value + '"]').attr(
         'data-json');

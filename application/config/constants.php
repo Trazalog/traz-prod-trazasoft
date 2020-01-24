@@ -86,7 +86,7 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 
 # DNATO
 define('LOGIN', false);
-define('DNATO','http://localhost/Dnato/');
+define('DNATO','http://localhost/traz-comp-dnato/');
 
 #TRAZ-COMP-BPM
 define('BPM', 'traz-comp-bpm/');

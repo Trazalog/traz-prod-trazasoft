@@ -80,16 +80,18 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
             <div class="col-xs-12">
                 <table id="etapas" class="table table-bordered table-hover">
                     <thead class="thead-dark">
-                        <tr>
+                      
                             <th width="5%">Acciones</th>
                             <th>Etapa</th>
                             <th>Lote</th>
-                            <th>Producto Origen</th>
+                            <th>Producto</th>
                             <th>Cantidad</th>
                             <th>Establecimiento</th>
                             <th>Recipiente</th>
                             <th>OP</th>
-                        </tr>
+                            <th>Fecha</th>
+                            <th>Estado</th>
+                      
                     </thead>
                     <tbody>
                         <?php
@@ -98,10 +100,10 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
                       {
                     
                           $id=$fila->id;
-                          echo '<tr  id="'.$id.'" data-json:'.json_encode($fila).'>';
+                          echo '<tr  id="'.$id.'" data-json=\''.json_encode($fila).'\'>';
 
                           echo '<td width="5%" class="text-center">';
-                          echo '<i class="fa fa-fw fa-pencil text-light-blue ml-1" style="cursor: pointer;" title="Editar" onclick=linkTo("general/Etapa/editar?id='.$id.'")></i>';
+                          echo '<i class="fa fa-fw fa-cogs text-light-blue ml-1" style="cursor: pointer;" title="Editar" onclick=linkTo("general/Etapa/editar?id='.$id.'")></i>';
                           echo '<i class="fa fa-fw fa-times-circle text-light-blue ml-1" style="cursor: pointer;" title="Eliminar" onclick="seleccionar(this)"></i>';
                           echo '</td>';
                           
@@ -112,6 +114,8 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
                           echo '<td>'.$fila->establecimiento.'</td>';
                           echo '<td>'.$fila->recipiente.'</td>';
                           echo '<td>'.$fila->orden.'</td>';
+                          echo  "<td>".formatFechaPG($fila->fecha)."</td>";
+                          echo '<td>'.estado($fila->estado).'</td>';
                           echo '</tr>';
                         
                       }

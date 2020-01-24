@@ -56,7 +56,7 @@ $this->load->view('camion/modal_recepcioncamion');
 
             <!--Articulo-->
             <div class="form-group">
-                <label style="font-weight: lighter;" for="exampleInputEmail1">Articulo</label>
+                <label style="font-weight: lighter;" for="exampleInputEmail1">Artículo</label>
                 <input style="font-weight: lighter;" type="text" class="form-control" id="articulo"
                     placeholder="Ingresar Articulo">
             </div>
@@ -82,6 +82,7 @@ $this->load->view('camion/modal_recepcioncamion');
                 <th>N° Boleta</th>
                 <th>Proveedor</th>
                 <th>Transportista</th>
+                <th>CUIT</th>
                 <th>Fecha</th>
                 <th>Patente - Acoplado</th>
                 <th>Neto</th>
@@ -105,8 +106,9 @@ $this->load->view('camion/modal_recepcioncamion');
           echo '<td style="font-weight: lighter;">'.$fila->boleta.'</td>';
           echo '<td style="font-weight: lighter;">'.$fila->proveedor.'</td>';
           echo '<td style="font-weight: lighter;">'.$fila->transportista.'</td>';
+          echo '<td style="font-weight: lighter;">'.$fila->cuit.'</td>';
           echo '<td style="font-weight: lighter;">'.$fila->fecha_entrada.'</td>';
-          echo '<td style="font-weight: lighter;">'.$fila->patente.'</td>';
+          echo '<td style="font-weight: lighter;">'.$fila->patente .' | '.$fila->acoplado.'</td>';
           echo '<td style="font-weight: lighter;">'.$fila->neto.'</td>';
           echo '<td style="font-weight: lighter;">'.estado($fila->estado).'</td>';
           echo '</tr>';

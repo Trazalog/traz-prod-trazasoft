@@ -168,20 +168,14 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
           <div class="col-md-3 col-xs-12">
             <label class="form-label">Articulos:</label>
           </div>
-          <div class="col-md-9 col-xs-10 input-group">
-            <input list="productos" id="inputproductos" class="form-control" autocomplete="off">
-            <datalist id="productos">
-              <?php foreach($materias as $fila)
-                    {
-                      echo  "<option data-json='".json_encode($fila)."' value='".$fila->titulo."'>";
-                    }
+          <div class="col-md-9 col-xs-10">
+
+              <?php 
+
+              echo selectBusquedaAvanzada('inputproductos', 'arti_id', $articulos, 'arti_id', 'barcode',array('descripcion','Stock:' => 'stock'));
+          
               ?>
-            </datalist>
-            <!-- <span class="input-group-btn">
-              <button class='btn btn-sm btn-primary'
-                onclick='checkTabla("tabla_productos","modalproductos",`<?php //echo json_encode($materias);?>`,"Add")' data-toggle="modal" data-target="#modal_productos">
-                <i class="glyphicon glyphicon-search"></i></button>
-            </span> -->
+
           </div>
         </div>
       </div>
@@ -314,10 +308,11 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
       url: 'general/Recipiente/listarPorEstablecimiento',
       success: function (result) {
         result = JSON.parse(result);
+        result =  result.data;
         var html = "";
         html = html + '<option value="" disabled selected>-Seleccione Recipiente-</option>';
         for (var i = 0; i < result.length; i++) {
-          html = html + '<option value="' + result[i].id + '">' + result[i].titulo + '</option>';
+          html = html + '<option value="' + result[i].reci_id + '">' + result[i].nombre + '</option>';
         }
         document.getElementById(recipientes).disabled = false;
         document.getElementById(recipientes).innerHTML = html;
@@ -337,38 +332,27 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
 
   // elige producto y muestra el stock en
   $("#inputproductos").on('change', function () {
-      ban = $("#productos option[value='" + $('#inputproductos').val() + "']").length;
-      estado = '<?php echo $etapa->estado;?>';
-      if (ban == 0) {
-        alert('Producto Inexistente');
-        document.getElementById('inputproductos').value = "";
-        if (estado != 'En Curso') {
-          document.getElementById('stock').value = "";
-        }
-      } else {
-        if (estado == 'En Curso') {
+      // ban = $("#productos option[value='" + $('#inputproductos').val() + "']").length;
+      // estado = '<?php #echo $etapa->estado;?>';
+      // if (ban == 0) {
+      //   alert('Producto Inexistente');
+      //   document.getElementById('inputproductos').value = "";
+      //   if (estado != 'En Curso') {
+      //     document.getElementById('stock').value = "";
+      //   }
+      // } else {
+      //   if (estado == 'En Curso') {
 
-        } else {
-          producto = JSON.parse($("#productos option[value='" + $('#inputproductos').val() + "']").attr('data-json'));
-          //ActualizaProducto(producto);
-        }
-      }
+      //   } else {
+      //     producto = JSON.parse($("#productos option[value='" + $('#inputproductos').val() + "']").attr('data-json'));
+      //     //ActualizaProducto(producto);
+      //   }
+      // }
       //  agrega stock al input 
-        materias = <?php echo json_encode($materias); ?> ;
-        titulo = document.getElementById('inputproductos').value; 
-        banStock = false;
-        i = 0;
-        while (!banStock && i < materias.length) {
-            if (titulo == materias[i].titulo) {
-                banStock = true;
-                materia = materias[i];
-            }
-            i++;
-        }
-        if (banStock) {
-            var stock = materia.stock; 
-            document.getElementById('stock').value = stock;         
-        }
+        //materias = <?php #echo json_encode($materias); ?> ;
+   
+      document.getElementById('stock').value = getJson(this).stock;         
+    
       //// stock
   });
   function ActualizaEmpaques() {
@@ -409,7 +393,7 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
       alert(msj);
     } else {
 
-      producto = JSON.parse($("#productos option[value='" + $('#inputproductos').val() + "']").attr('data-json'));
+      producto = getJson($('#inputproductos'));
       empaque = $("#empaques option:selected").attr('data-json');
       empaque = JSON.parse(empaque);
       producto.empaque = empaque.id;
@@ -447,14 +431,14 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
       html += "<th>Empaque</th>";
       html += "<th>Cantidad</th>";
       html += '</tr></thead><tbody>';
-      html += "<tr data-json='" + JSON.stringify(producto) + "' id='" + producto.id + "'>";
+      html += "<tr data-json='" + JSON.stringify(producto) + "' id='" + producto.arti_id + "'>";
       if (estado != 'En Curso') {
         html += '<td><i class="fa fa-fw fa-minus text-light-blue tablaproductos_borrar" style="cursor: pointer; margin-left: 15px;" title="Nuevo"></i></td>';
       }
       if (estado == 'En Curso') {
         html += "<td>" + producto.lote + "</td>";
       }
-      html += '<td>' + producto.titulo + '</td>';
+      html += '<td>' + producto.barcode + '</td>';
       html += '<td>' + producto.cant_descontar + '</td>';
       html += '<td>' + producto.empaquetitulo + '</td>';
       html += '<td>' + producto.cantidad + '</td>';
@@ -469,14 +453,14 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
 
     } else if (existe == 'si') {
 
-        html += "<tr data-json='" + JSON.stringify(producto) + "' id='" + producto.id + "'>";
+        html += "<tr data-json='" + JSON.stringify(producto) + "' id='" + producto.arti_id + "'>";
         if (estado != 'En Curso') {
           html += '<td><i class="fa fa-fw fa-minus text-light-blue tablaproductos_borrar" style="cursor: pointer; margin-left: 15px;" title="Nuevo"></i></td>';
         }
         if (estado == 'En Curso') {
           html += "<td>" + producto.lote + "</td>";
         }
-        html += '<td>' + producto.titulo + '</td>';
+        html += '<td>' + producto.barcode + '</td>';
         html += '<td>' + producto.cant_descontar + '</td>';
         html += '<td>' + producto.empaquetitulo + '</td>';
         html += '<td>' + producto.cantidad + '</td>';

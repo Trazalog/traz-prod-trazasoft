@@ -249,7 +249,7 @@ class Etapa extends CI_Controller {
 					$i = 0;
 					foreach ($productos as $key => $prod) {
 							$p = json_decode($prod);
-							$recurso_id = $this->Etapas->getRecursoId($p->id);
+							$recurso_id = $this->Etapas->getRecursoId($p->arti_id);
 							$arrRec['batch_id'] = (string)$batch_id;
 							$arrRec['recu_id'] = (string)$recurso_id;
 							$arrRec['usuario'] = userNick();
@@ -281,7 +281,7 @@ class Etapa extends CI_Controller {
 									foreach ($productos as $key => $prod) {								
 											$p = json_decode($prod);				
 											$det['pema_id'] = (string)$pema_id;
-											$det['arti_id'] = (string)$p->id;
+											$det['arti_id'] = (string)$p->arti_id;
 											$det['cantidad'] = (string)$p->cant_descontar;
 											$detalle['_post_notapedido_detalle'][$x]=(object) $det;
 											$x++;					
@@ -389,6 +389,12 @@ class Etapa extends CI_Controller {
 	// Levanta pantalla abm fraccionar
 	public function fraccionar()
 	{
+			$this->load->model(ALM . 'Articulos');
+			$this->load->model('general/Recipientes');
+
+			$data['articulos'] = $this->Articulos->getList();
+
+
 			$data['accion'] = 'Nuevo';
 			$data['etapa']= $this->Etapas->nuevo(5)->etapa; // igual que en contrato pedido
 			$data['fecha'] = date('Y-m-d');
@@ -397,7 +403,7 @@ class Etapa extends CI_Controller {
 			//	$data['lang'] = lang_get('spanish',5);
 			$data['establecimientos'] = $this->Establecimientos->listarTodo()->establecimientos->establecimiento;
 			$data['empaques'] = $this->Recipientes->listarEmpaques()->empaques->empaque;
-			$data['materias'] = $this->Materias->listar()->materias->materia;
+			//$data['materias'] = $this->Materias->listar()->materias->materia;
 			$this->load->view('etapa/fraccionar/fraccionar', $data);
 	}
 }

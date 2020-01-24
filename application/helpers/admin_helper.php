@@ -40,13 +40,18 @@ if (!function_exists('bolita')) {
 
     function estado($estado)
     {
+     #   $estado =  trim($estado);
+
         switch ($estado) {
+
+            //Estado Generales
             case 'AC':
                 return bolita('Activo', 'green');
                 break;
             case 'IN':
                 return bolita('Inactivo', 'red');
                 break;
+
             //Estado Camiones
             case 'ASIGNADO':
                 return bolita('Asignado','blue');
@@ -58,10 +63,21 @@ if (!function_exists('bolita')) {
                 return bolita('Finalizado','yellow');
             break;
 
+            //Estado Etapas
+            case 'En Curso':
+                return bolita('En Curso','green');
+            break;
+            case 'finalizado':
+                return bolita('Finalizado','yellow');
+            break;
+
+            //Estado por Defecto
             default:
                 return bolita('S/E', '');
-                break;
+            break;
         }
     }
+
+    
 
 }

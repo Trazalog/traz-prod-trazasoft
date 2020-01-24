@@ -47,7 +47,6 @@
 </div><!-- /.box -->
 
 <script>
-DataTable($('table'));
 
 function guardarArticulo() {
 
@@ -176,6 +175,8 @@ function validarForm() {
     if (!ban) alert('Complete los Campos Obligatorios (*)');
     return ban;
 }
+
+DataTable($('table'));
 </script>
 
 <!-- Modal -->
