@@ -14,7 +14,7 @@
         </table>
         <hr>
         <button id="guardarDescarga" class="btn btn-primary btn-sm" style="float:right"
-            onclick="guardarDescargaOrigen()" disabled><i class="fa fa-check"></i> Guardar Descarga</button>
+            onclick="guardarDescargaOrigen();guardarLoteSistema();" disabled><i class="fa fa-check"></i> Guardar Descarga</button>
     </div>
 </div>
 
@@ -26,12 +26,13 @@ function agregarFila(data) {
     var lote_origen = $('#new_codigo').hasClass('hidden')?$('#codigo').select2('data')[0].text:$('#new_codigo').val();
 
     $('#lotes').append(
-        `<tr data-json='${JSON.stringify(data)}'>"
+        `<tr data-json='${JSON.stringify(data)}' class='${loteSistema?'lote-sistema':'lote'}'>
             <td class="text-center"><i class="fa fa-times text-danger" onclick="fila = $(this).closest('tr'); $('#eliminar_fila').modal('show');"></i></td>
             <td>${lote_origen}</td>
             <td>${$('.frm-destino #art-detalle').val()}</td>
             <td>${data.destino.cantidad + ' | ' + data.destino.unidad_medida}</td>
             <td>${data.destino.lote_id}</td>
+            <td>${loteSistema?'<i class="fa fa-barcode text-blue" title="Lote Trazable"></i>':null}</td>
         </tr>`
     );
 
@@ -41,14 +42,17 @@ function agregarFila(data) {
 function guardarDescargaOrigen() {
 
      //Guardar Datos de Camión parametro = FALSE es para NO mostrar el MSJ de Datos Guardados
-    addCamion(false);
 
     var array = [];
-    $('#lotes tr').each(function() {
+    $('#lotes tr.lote').each(function() {
         array.push(JSON.parse(this.dataset.json));
     });
 
-    if (!array) return;
+    if(array.length == 0) return;
+    alert('guardaDescarga ajax');
+    console.log(array);
+    
+    //addCamion(false);
 
     $.ajax({
         type: 'POST',
@@ -58,7 +62,7 @@ function guardarDescargaOrigen() {
             array
         },
         success: function(rsp) {
-            if(rsp.status == true){
+            if(rsp.status){
               alert('Hecho');
               linkTo();
             }else{
@@ -70,6 +74,47 @@ function guardarDescargaOrigen() {
             console.log(rsp.msj);
         }
     });
+}
+
+function guardarLoteSistema(){
+    
+    var frmCamion = obtenerFormularioCamion();
+
+    var array = [];
+    $('#lotes tr.lote-sistema').each(function() {
+        const e = JSON.parse(this.dataset.json);
+        e.loteSistema = loteSistemaData;
+        array.push(e);
+    });
+    
+    if (array.length == 0) return;
+  
+    wo();
+    $.ajax({
+        type: 'POST',
+        dataType: 'JSON',
+        url: 'index.php/general/Camion/guardarLoteSistema',
+        data: {
+            array,
+            frmCamion
+        },
+        success: function(rsp) {
+            if(rsp.status == true){
+              alert('Hecho');
+              //linkTo();
+            }else{
+                alert('Falla al Guardar Lotes Sistema');
+            }
+        },
+        error: function(rsp) {
+            alert('Error: ' + rsp.msj);
+            console.log(rsp.msj);
+        },
+        complete:function(){
+            wc();
+        }
+    });
+
 }
 
 function eliminarFila() {

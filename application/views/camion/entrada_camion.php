@@ -275,6 +275,14 @@ function guardarDecarga() {
     });
 }
 
+function obtenerFormularioCamion(){
+    var frmCamion = new FormData($('#frm-camion')[0]);
+    var frmInfo = new FormData($('#frm-info')[0]);
+    var dataForm = mergeFD(frmInfo, frmCamion);
+    dataForm.append('estado', 'EN CURSO');
+    return formToObject(dataForm);
+}
+
 function addCamion(msj = true) {
     var frmCamion = new FormData($('#frm-camion')[0]);
     var frmInfo = new FormData($('#frm-info')[0]);

@@ -152,25 +152,36 @@ $('.frm-origen #um').on('change', function() {
 
 //Cambios Mauri
 
+//Cuando no hay lotes asociados busca por codigo de lote, lotes internos registrados en el sistema
 $('#new_codigo').keyup(function(e) {
+    loteSistema = false;
     if (e.keyCode === 13) {
-
         buscarLote(this.value);
-
-
-
     }
 });
 
+
+var loteSistema =  false;
+var loteSistemaData = null;
 function buscarLote(lote) {
+    loteSistema =  false;
     wo();
     $.ajax({
         type: 'GET',
         dataType: 'JSON',
         url: 'index.php/general/Lote/obtenerLote/'+lote,
         success: function(rsp) {
-            alert('Hecho');
             console.log(rsp);
+            
+           if(rsp.status && rsp.data){
+                var data = rsp.data[0];
+                loteSistemaData = data;
+                $('.frm-origen #articulos').val(data.arti_id).trigger('change');
+                $('.frm-origen #cantidad').val(data.cantidad);
+                $('.frm-origen #um').val(data.unidad_medida);
+                $('.frm-destino #unidad_medida').val(data.unidad_medida);
+                loteSistema = true;
+           }
         },
         error: function(rsp) {
             alert('Error');

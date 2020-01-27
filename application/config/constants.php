@@ -141,11 +141,8 @@ define('TSK', 'traz-comp-tareas/');
 define('TAREAS_ASIGNAR', 'traz-comp-tareasestandar/asignar');
 
 define('REST', 'http://dev-trazalog.com.ar:8280/services/ProduccionDataService/');
-//define('REST', 'http://pc-pc:8280/services/ProduccionDataService/');
 define('RESTPT','http://dev-trazalog.com.ar:8280/services/produccionTest/');
-//define('REST_TDS', 'http://pc-pc:8280/services/TrazabilidadDataService/');
 define('REST_TDS', 'http://dev-trazalog.com.ar:8280/services/TrazabilidadDataService/');
-
 define('REST2', 'http://dev-trazalog.com.ar:8280/services/ProduccionDataService');
 define('REST3', 'http://dev-trazalog.com.ar:8280/services/produccionTest');
 define('REST4', 'http://dev-trazalog.com.ar:8280/services/TrazabilidadDataService');
