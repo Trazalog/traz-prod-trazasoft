@@ -49,5 +49,7 @@
             <!-- <li><a href="#" class="link" data-link="Reportes/tarjetas"><i class="fa fa-circle-o"></i>Tarjetas</a></li> -->
         </ul>
     </li>
+    <li><a class="link" href="#" data-link="general/CodigoQR/generarQR"><i class="fa fa-qrcode"></i>Código QR</a>
+            </li>
 </ul>
 ||
