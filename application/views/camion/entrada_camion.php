@@ -175,7 +175,7 @@ $('#patente').keyup(function(e) {
         console.log('Obtener Lotes Patentes');
 
         if (this.value == null || this.value == '') return;
-        obtenerInfoCamion(this.value);
+       
         wo();
         $.ajax({
             type: 'GET',
@@ -190,6 +190,9 @@ $('#patente').keyup(function(e) {
 
                 $('#codigo').attr('disabled', false).next(".select2-container").show();
                 $('#new_codigo').addClass('hidden').attr('disabled', true);
+
+                obtenerInfoCamion(this . value);
+
 
                 fillSelect("#codigo", rsp.data);
 
@@ -270,6 +273,14 @@ function guardarDecarga() {
             wc();
         }
     });
+}
+
+function obtenerFormularioCamion(){
+    var frmCamion = new FormData($('#frm-camion')[0]);
+    var frmInfo = new FormData($('#frm-info')[0]);
+    var dataForm = mergeFD(frmInfo, frmCamion);
+    dataForm.append('estado', 'EN CURSO');
+    return formToObject(dataForm);
 }
 
 function addCamion(msj = true) {
