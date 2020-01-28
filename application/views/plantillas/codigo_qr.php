@@ -13,11 +13,11 @@
         <div class="box-body">
             <div class="row">
                 <!-- <h3>Código QR</h3> -->
-                <div class="col-md-12 col-xs-12">
-                    <div class="col-md-4 col-xs-12">
+                <div class="col-md-12 col-xs-12" id="idQR">
+                    <div class="col-md-4 col-xs-12" id="contenidoImgQR">
                         <?php //echo '<img id="imagenQR" src="' . $dir . basename($filename) . '" /><hr/>'; 
                         ?>
-                        <?php echo '<img id="imagenQR" src="" /><hr/>'; ?>
+                        <?php echo '<img id="imagenQR" src="" />'; ?>
                     </div>
                     <div class="col-md-4 col-xs-12" id="contenidoQR">
                         <?php
@@ -34,28 +34,24 @@
 </div>
 <script>
     $('#codigo').keyup(function(e) {
-        // if ($('#accioncamion').val() != 'descarga') return;
         if (e.keyCode === 13) {
             console.log('Obtener datos lote: ' + this.value);
 
             if (this.value == null || this.value == '') return;
-            // alert(this.value);
-
-            // alert("hecho");
-            // wo();
+            wo();
             $.ajax({
                 type: 'GET',
                 dataType: 'JSON',
                 url: 'index.php/general/CodigoQR/generarQR/' + this.value,
                 success: function(rsp) {
-                    // alert("Hecho");
                     // alert(fillForm(rsp.data[0]));
                     if (_isset(rsp.data)) {
                         $('#imagenQR').attr('src', rsp.filename);
                         $('#contenidoQR').html('<h3>Datos lote</h3>' +
-                            '<p>Codigo: ' + rsp.data[0].codigo +
+                            '<p>Código: ' + rsp.data[0].codigo +
                             '<br>Tel.: ' + rsp.data[0].tel +
-                            '<br>Email: ' + rsp.data[0].email + '</p>');
+                            '<br>Email: ' + rsp.data[0].email +
+                            '<br><button type="button" class="btn btn-default btn-flat btn-dropbox" onclick="imprimirElemento();" id="idPrint"><i class="fa fa-print"></i></button></p>');
                     } else {
                         // alert('Código de lote no encontrado, ingrese nuevamente');
                         // $('#frm-datosCamion')[0].reset();
@@ -67,7 +63,7 @@
                     alert('Error');
                 },
                 complete: function() {
-                    // wc();
+                    wc();
                 }
             });
         }
@@ -81,5 +77,25 @@
             return false;
         else
             return true;
+    }
+
+    function imprimirElemento() {
+        var elemento2 = $("#idQR").html();
+        $('#idPrint').remove();
+        var elemento = $("#idQR").html();
+        $("#idQR").empty();
+        
+        var ventana = window.open('', 'PRINT', 'height=600,width=800');
+        ventana.document.write('<html><head><title>Código QR</title>');
+        ventana.document.write('<link rel="stylesheet" href="<?php base_url(); ?>application/css/codigoQR.css">');
+        ventana.document.write('</head><body >');
+        ventana.document.write(elemento);
+        ventana.document.write('</body></html>');
+        ventana.document.close();
+        ventana.focus();
+        ventana.print();
+        // ventana.close();
+        $("#idQR").html(elemento2);
+        return true;
     }
 </script>
