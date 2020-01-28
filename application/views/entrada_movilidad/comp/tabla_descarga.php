@@ -49,10 +49,8 @@ function guardarDescargaOrigen() {
     });
 
     if(array.length == 0) return;
-    alert('guardaDescarga ajax');
-    console.log(array);
-    
-    //addCamion(false);
+
+    addCamion(false);
 
     $.ajax({
         type: 'POST',
@@ -101,7 +99,7 @@ function guardarLoteSistema(){
         success: function(rsp) {
             if(rsp.status == true){
               alert('Hecho');
-              //linkTo();
+              linkTo();
             }else{
                 alert('Falla al Guardar Lotes Sistema');
             }

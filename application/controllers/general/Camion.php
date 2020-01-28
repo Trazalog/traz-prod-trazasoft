@@ -123,8 +123,5 @@ class Camion extends CI_Controller
         $rsp = $this->Camiones->guardarLoteSistema($frmCamion, $frmDescarga);
 
         echo json_encode($rsp);
-
-
-       
     }
 }
