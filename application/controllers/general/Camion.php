@@ -152,4 +152,14 @@ class Camion extends CI_Controller
         $rsp = $this->Camiones->obtenerInfo($patente);
         echo json_encode($rsp);
     }
+
+    public function guardarLoteSistema()
+    {
+        $frmCamion = $this->input->post('frmCamion');
+        $frmDescarga = $this->input->post('array');
+
+        $rsp = $this->Camiones->guardarLoteSistema($frmCamion, $frmDescarga);
+
+        echo json_encode($rsp);
+    }
 }

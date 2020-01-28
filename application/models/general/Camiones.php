@@ -150,4 +150,50 @@ class Camiones extends CI_Model
         return $rsp;
     }
     #_____________________________________________________________________________________
+
+
+    public function guardarLoteSistema($frmCamion, $frmDescarga)
+    {
+        #Esta función hara automáticamente la ENTRADA CAMIÓN y la CARGA CAMIÓN
+
+        #Entrada Camion
+        $this->load->model('general/Entradas');
+        $frmCamion['bruto'] = "0";
+        $frmCamion['tara'] = "0";
+        $frmCamion['neto'] = "0";
+        $frmCamion['establecimiento'] = $frmDescarga['loteSistema'][0]['esta_id'];
+        $frmCamion['estado'] = 'INICIADO';
+        $rsp = $this->Entradas->guardar($frmCamion);
+        if (!$rsp['status']) {
+            $rsp['msj'] = 'Error al Guardar Entrada Camion';
+            return $rsp;
+        }
+
+        #Obtener motr_id
+        $rsp = $this->obtenerInfo($frmCamion['patente']);
+        if(!$rsp['status']){
+            $rsp['msj'] = 'Error al Obtener MOTR_ID';
+            return $rsp;
+        }
+
+        #Carga Camion
+        $lotes = [];
+        foreach ($frmDescarga as $o) {
+            $aux = new StdClass();
+        
+            $aux->patente = $frmCamion['patente'];
+            $aux->motr_id = $rsp['data'][0]->motr_id;
+            $aux->batch_id = $o['loteSistema']['batch_id'];
+            $aux->cantidad = $o['loteSistema']['cantidad'];
+            $lotes[] =  $aux;
+        }
+
+        $rsp = $this->guardarCarga($lotes);
+        if(!$rsp['status']){
+            $rsp['msj'] = 'Error al Guardar Carga Camion';
+            return $rsp;
+        }
+
+        return $rsp;
+    }
 }
