@@ -4,6 +4,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 require APPPATH . "/reports/Primer_Reporte.php";
 require APPPATH . "/reports/produccion/Produccion.php";
 require APPPATH . "/reports/prodResponsable/Prod_Responsable.php";
+require APPPATH . "/reports/tarjetas/Tarjetas.php";
 
 class Reportes extends CI_Controller
 {
@@ -171,5 +172,36 @@ class Reportes extends CI_Controller
         $data['op'] = 'prodResponsable';
 
         $this->load->view('layout/Filtro', $data);
+    }
+
+
+
+    /* TARJETAS */
+    public function tarjetas()
+    {
+        // $url = REST . 'articulos';
+        //     $json = $this->Koolreport->depurarJson($url)->materias->materia;
+
+        //     $primerreporte = new Primer_Reporte($json);
+        //     $primerreporte->run()->render();
+
+
+        // $reporte->run()->render();
+        // echo json_encode($etapa);
+        // log_message('INFO', '#TRAZA| #REPORTES.PHP|#REPORTES|#PRODUCCION| #INGRESO');
+        $url['lote'] = 'http://localhost:3000/lotes';
+        // // var_dump($url);
+        $valores['lote'] = $this->Koolreport->depurarJson($url['lote'])->lotes->lote;
+        // // $json = $this->$url->lotes->lote;
+        // var_dump($valores['lote']);
+        // // log_message('DEBUG', '#TRAZA| #REPORTES.PHP|#REPORTES|#PRODRESPONSABLE| #JSON: >>' . $json);
+        // $reporte = new Tarjetas($json);
+        // // var_dump($reporte);
+        // $reporte->run()->render();
+        //echo json_encode(["hola"=>$etapa]);
+        $data['lote'] = "N° de Lote";
+        $data['datos_lote'] = $this->Koolreport->getDatosTarjeta($valores['lote']);
+        // $data['ejemplo'] = "Prueba";
+        $this->load->view('reportes/Tarjetas', $data);
     }
 }

@@ -10,7 +10,7 @@ use \koolreport\processes\Limit;
 use \koolreport\processes\OnlyColumn;
 
 //Define the class
-class Produccion extends \koolreport\KoolReport
+class Tarjetas extends \koolreport\KoolReport
 {
     // use \koolreport\clients\Bootstrap;
     use \koolreport\codeigniter\Friendship;
@@ -31,7 +31,7 @@ class Produccion extends \koolreport\KoolReport
         log_message('DEBUG', '#TRAZA| #PRODUCCION.PHP|#PRODUCCION|#SETTINGS| #INGRESO');
         $json = $this->params;
         $data = json_encode($json);
-
+        // var_dump($data);
         return array(
             "dataSources" => array(
                 "apiarray" => array(
@@ -41,27 +41,26 @@ class Produccion extends \koolreport\KoolReport
                 )
             )
         );
-
-        // $data2 = json_encode("123");
-        // return array(
-        //     "dataSources" => array(
-        //         "apiarray2" => array(
-        //             "class" => '\koolreport\datasources\ArrayDataSource',
-        //             "dataFormat" => "associate",
-        //             "data" => json_decode($data2, true),
-        //         )
-        //     )
-        // );
     }
 
     protected function setup()
     {
         log_message('DEBUG', '#TRAZA| #PRODUCCION.PHP|#PRODUCCION|#SETUP| #INGRESO');
         $this->src("apiarray")
-            // ->pipe(new OnlyColumn(array(
-            //     "titulo", "stock", "unidad_medida", "estado"
-            // )))
-            ->pipe($this->dataStore("data_produccion_table"));
+            ->pipe(new OnlyColumn(array(
+                "etapa"
+            )))
+            ->pipe($this->dataStore("data_etapa"));
+        $this->src("apiarray")
+            ->pipe(new OnlyColumn(array(
+                "responsable"
+            )))
+            ->pipe($this->dataStore("data_responsable"));
+        $this->src("apiarray")
+            ->pipe(new OnlyColumn(array(
+                "producto"
+            )))
+            ->pipe($this->dataStore("data_producto"));
 
         $this->src("apiarray")
             // ->pipe(new RemoveColumn(array(
