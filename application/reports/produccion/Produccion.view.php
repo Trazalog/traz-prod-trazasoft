@@ -198,38 +198,38 @@ use \koolreport\widgets\koolphp\Card;
                                 <!--_________________ CHARTS 2_________________-->
 
 
-                                <div class="col-md-6">
+                                <!-- <div class="col-md-6">
 
                                     <div class="box-header">
                                         <h3 class="box-title">
                                             <i class="fa fa-pie-chart"></i>
                                             TARGETAS
                                         </h3>
-                                    </div>
+                                    </div> -->
 
-                                    <!--_________________ TARGET_________________-->
+                                <!--_________________ TARGET_________________-->
 
-                                    <div class="box-body">
+                                <!-- <div class="box-body">
                                         <div style="margin-bottom:50px;">
                                             <?php
-                                            Card::create(array(
-                                                "value" => $this->dataStore('ejemplo'),
-                                                "format" => array(
-                                                    "value" => array(
-                                                        "prefix" => "$%&"
-                                                    )
-                                                ),
-                                                "title" => "Cantidad",
-                                                "cssClass" => array(
-                                                    "card" => "bg-primary",
-                                                    "title" => "text-white",
-                                                    "value" => "text-white"
-                                                )
-                                            ));
+                                            //Card::create(array(
+                                            //     "value" => $this->dataStore('ejemplo'),
+                                            //     "format" => array(
+                                            //         "value" => array(
+                                            //             "prefix" => "$%&"
+                                            //         )
+                                            //     ),
+                                            //     "title" => "Cantidad",
+                                            //     "cssClass" => array(
+                                            //         "card" => "bg-primary",
+                                            //         "title" => "text-white",
+                                            //         "value" => "text-white"
+                                            //     )
+                                            // ));
                                             ?>
                                         </div>
-                                    </div>
-                                </div>
+                                    </div> -->
+                                <!-- </div> -->
                             </div>
 
                             <!--_________________ FIN CHARTS_________________-->
@@ -266,7 +266,7 @@ use \koolreport\widgets\koolphp\Card;
     <script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.print.min.js"></script> -->
 
-    <script>
+    <!-- <script>
         $('tr > td').each(function() {
             if ($(this).text() == 0) {
                 $(this).text('-');
@@ -277,7 +277,7 @@ use \koolreport\widgets\koolphp\Card;
             }
         });
 
-        $('#panel-derecho-body').load('<?php echo base_url() ?>index.php/Reportes/filtroProduccion');
+        $('#panel-derecho-body').load('<?php //echo base_url() ?>index.php/Reportes/filtroProduccion');
         var id = $('.dataTable').getElementById();
         var table = DataTable($('.dataTable').getElementById());
 
@@ -320,7 +320,7 @@ use \koolreport\widgets\koolphp\Card;
                 [0, "asc"]
             ],
         });
-    </script>
+    </script> -->
 
     <!-- <script>
         DataTable($('.dataTable'))
@@ -364,4 +364,22 @@ use \koolreport\widgets\koolphp\Card;
             ],
         });
     </script> -->
+    <script>
+        // $('.report-content').click(function() {
+        //     $('#formulario')[0].reset();
+        // });
+
+        $('tr > td').each(function() {
+            if ($(this).text() == 0) {
+                $(this).text('-');
+                $(this).css('text-align', 'center');
+            }
+        });
+
+        $('#panel-derecho-body').load('<?php echo base_url() ?>index.php/Reportes/filtroProduccion');
+    </script>
+
+    <script>
+        DataTable($('.dataTable'))
+    </script>
 </body>
