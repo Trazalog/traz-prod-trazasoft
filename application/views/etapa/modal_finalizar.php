@@ -378,7 +378,7 @@ function FinalizarEtapa() {
         batch_id_padre = $('#batch_id_padre').val();
         destino = select.value;
 
-
+        wo();
         $.ajax({
             type: 'POST',
             async: false,
@@ -401,6 +401,9 @@ function FinalizarEtapa() {
                     alert("Hubo un error en Dataservice");
                     linkTo('general/Etapa/index');
                 }
+            },
+            complete:function(){
+                wc();
             }
         });
     }

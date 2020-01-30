@@ -280,12 +280,12 @@ function guardar() {
             if (result == "ok") {
                 linkTo('general/Etapa/index');
             } else {
-                alert("Hubo un error en BD");
+                alert("Hubo un error en BD"); return;
             }
             if (result == 'Error al Inciar Proceso') {
                 alert("Hubo un error al iniciar Proceso BPM");
             } else {
-                linkTo('general/Etapa/index');
+                linkTo('general/Etapa/index'); return;
             }
         },
         error: function(rsp) {
