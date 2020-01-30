@@ -85,9 +85,14 @@ class Camiones extends CI_Model
 
     public function actualizarEstado($data)
     {
+        log_message('DEBUG','#Camiones/actualizarEstado | DATA: '.json_encode($data));
+
         $aux['post_camion_estado']['data'] = $data;
         $url = RESTPT . "camion/estado_batch_req";
         $rsp = $this->rest->callApi('PUT', $url, $aux);
+
+        log_message('DEBUG', '#Camiones/actualizarEstado | RSP: ' . json_encode($rsp));
+
         return $rsp;
     }
 
@@ -176,13 +181,16 @@ class Camiones extends CI_Model
             return $rsp;
         }
 
+        $motr_id = $rsp['data'][0]->motr_id;
+
+
         #Carga Camion
         $lotes = [];
         foreach ($frmDescarga as $o) {
             $aux = new StdClass();
         
             $aux->patente = $frmCamion['patente'];
-            $aux->motr_id = $rsp['data'][0]->motr_id;
+            $aux->motr_id = $motr_id;
             $aux->batch_id = $o['loteSistema']['batch_id'];
             $aux->cantidad = $o['loteSistema']['cantidad'];
             $lotes[] =  $aux;
@@ -193,6 +201,14 @@ class Camiones extends CI_Model
             $rsp['msj'] = 'Error al Guardar Carga Camion';
             return $rsp;
         }
+
+        #Cambio Estado Camion
+        $aux1 = array(array(
+            'motr_id' => $motr_id,
+            'estado' => 'FINALIZADO'
+        ));
+
+        $rsp = $this->actualizarEstado($aux1);
 
         return $rsp;
     }

@@ -18,7 +18,7 @@ class Establecimientos extends CI_Model
   }
   public function listarTodo($esta_id = null)
   {
-    $resource = 'establecimiento/' . $esta_id;
+    $resource = 'establecimiento' . ($esta_id?"/$esta_id":null);
     $url = REST . $resource;
     // $url = 'http://localhost:3000/establecimientos';
     // $array = file_get_contents($url, false, http('GET'));
