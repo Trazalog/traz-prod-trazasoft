@@ -40,6 +40,9 @@
 
        <script src="<?php base_url(); ?>lib/plugins/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
 
+       <!-- Moment Date Time -->
+       <script src="<?php base_url(); ?>lib/plugins/moment-datetime/moment.min.js"></script>
+
        <!-- Select2 -->
        <script src="<?php echo base_url() ?>lib/bower_components/select2/dist/js/select2.full.min.js"></script>
        <!-- <script src="https://code.jquery.com/jquery-migrate-3.0.0.min.js"></script> -->
