@@ -13,6 +13,7 @@ $this->load->view('etapa/modal_finalizar');}?>
             <h3 class="box-title">
                 <?php echo $accion.' '.$etapa->titulo ?>
             </h3>
+            <button class="btn btn-success btn-xs pull-right" onclick="deleteSnapshot()">Limpiar Campos</button>
         </div>
         <!-- /.box-header -->
         <div class="box-body">
@@ -196,9 +197,10 @@ if (accion == "Editar") {
 }
 
 function actualizaRecipiente(establecimiento, recipientes) {
-    wo();
-    establecimiento = establecimiento;
     $('#recipientes').empty();
+    establecimiento = establecimiento;
+    if(!establecimiento) return;
+    wo();
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
