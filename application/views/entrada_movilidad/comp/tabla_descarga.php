@@ -42,6 +42,7 @@ function agregarFila(data) {
 function guardarDescargaOrigen() {
 
      //Guardar Datos de Camión parametro = FALSE es para NO mostrar el MSJ de Datos Guardados
+    if($('#lotes tr').length != 0) addCamion(false);
 
     var array = [];
     $('#lotes tr.lote').each(function() {
@@ -50,7 +51,6 @@ function guardarDescargaOrigen() {
 
     if(array.length == 0) return;
 
-    addCamion(false);
 
     $.ajax({
         type: 'POST',

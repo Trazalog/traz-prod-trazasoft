@@ -21,5 +21,12 @@ class Snapshot extends CI_Controller {
       $res = $this->Snapshots->guardar($data);
       echo json_encode($res);
    }
+
+   public function eliminar()
+   {
+      $key = $this->input->post('key');
+      $rsp = $this->Snapshots->eliminar($key);
+      echo json_encode($rsp);
+   }
 }
 ?>

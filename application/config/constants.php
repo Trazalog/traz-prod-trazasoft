@@ -142,7 +142,7 @@ define('TAREAS_ASIGNAR', 'traz-comp-tareasestandar/asignar');
 
 define('REST', 'http://dev-trazalog.com.ar:8280/services/ProduccionDataService/');
 define('RESTPT','http://dev-trazalog.com.ar:8280/services/produccionTest/');
-define('REST_TDS', 'http://dev-trazalog.com.ar:8280/services/TrazabilidadDataService/');
+define('REST_TDS','http://dev-trazalog.com.ar:8280/services/TrazabilidadDataService/');
 define('REST2', 'http://dev-trazalog.com.ar:8280/services/ProduccionDataService');
 define('REST3', 'http://dev-trazalog.com.ar:8280/services/produccionTest');
 define('REST4', 'http://dev-trazalog.com.ar:8280/services/TrazabilidadDataService');
@@ -161,7 +161,7 @@ define('RECURSO_CONSUMO', 'CONSUMO');
 # >> Proyecto
 # Default View
 #define('DEFAULT_VIEW', 'general/Reporte/tareasOperario');
-define('DEFAULT_VIEW', 'general/Etapa');
+define('DEFAULT_VIEW', 'general/Establecimiento');
 
 #TRAZASOFT
 define('PROVEEDOR_INTERNO', 1000);

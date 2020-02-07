@@ -61,7 +61,7 @@ if (!function_exists('selectBusquedaAvanzada')) {
 
         }
 
-        $html .= "<label id='detalle' class='text-blue'></label>";
+        $html .= "<label id='detalle' class='select-detalle' class='text-blue'></label>";
         $html .= "<script>$('#$id').select2({matcher: matchCustom,templateResult: formatCustom}).on('change', function() { selectEvent(this);})</script>";
         return $html;
     }

@@ -25,4 +25,13 @@ class Snapshots extends CI_Model
         return $rsp;
     }
     
+    function eliminar($key){
+
+        $aux['delete_snapshot']['clave'] = $key;
+
+        $url = RESTPT . 'snapshots';
+        $rsp = $this->rest->callApi('DELETE', $url, $aux);
+        return $rsp;
+
+    }
 }
