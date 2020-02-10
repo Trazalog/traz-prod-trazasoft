@@ -14,7 +14,6 @@ if (!function_exists('bolita')) {
             case 'Creada':
                 return bolita($estado, 'purple');
                 break;
-
             case 'Solicitado':
                 return bolita($estado, 'orange');
                 break;
@@ -41,17 +40,44 @@ if (!function_exists('bolita')) {
 
     function estado($estado)
     {
+     #   $estado =  trim($estado);
+
         switch ($estado) {
+
+            //Estado Generales
             case 'AC':
                 return bolita('Activo', 'green');
                 break;
             case 'IN':
                 return bolita('Inactivo', 'red');
                 break;
+
+            //Estado Camiones
+            case 'ASIGNADO':
+                return bolita('Asignado','blue');
+            break;
+            case 'EN CURSO':
+                return bolita('En Curso','green');
+            break;
+            case 'FINALIZADO':
+                return bolita('Finalizado','yellow');
+            break;
+
+            //Estado Etapas
+            case 'En Curso':
+                return bolita('En Curso','green');
+            break;
+            case 'finalizado':
+                return bolita('Finalizado','yellow');
+            break;
+
+            //Estado por Defecto
             default:
                 return bolita('S/E', '');
-                break;
+            break;
         }
     }
+
+    
 
 }

@@ -4,7 +4,7 @@ if(!function_exists('userId')){
 
     function userId()
     {
-        return 101;//!HARDCODE
+        return 301;//!HARDCODE
 
         $ci =& get_instance();			
         $userdata  = $ci->session->userdata('user_data');
@@ -33,11 +33,20 @@ if(!function_exists('userPass')){
 
 if(!function_exists('empresa')){
 
-   
     function empresa(){
         return 1; //!HARDCODE
         $ci =& get_instance();			
         $userdata  = $ci->session->userdata('user_data');
 		return  empresa();
     }
+}
+
+if(!function_exists('validarSesion')){
+
+    function validarSesion(){
+        $ci = &get_instance();
+        $userdata = $ci->session->userdata('user_data');
+        if(empty($userdata)) redirect(base_url().'Login');
+    }
+
 }

@@ -137,7 +137,7 @@
                 <div class="row" style="margin-top:20px">
                     <div class="col-md-3 col-xs-12"></div>
                     <div class="col-md-3 col-xs-12"><button class="btn btn-success btn-block"
-                            onclick="AgregarProducto()">Guardar</button></div>
+                            onclick="AgregarProducto()"><i class="fa fa-plus"></i>  Agregar</button></div>
                     <div class="col-md-6"></div>
                 </div>
                 <div class="row">
@@ -151,7 +151,7 @@
                     <div class="col-md-8"></div>
                     <div class="col-md-2 col-xs-6">
                         <button type="button" class="btn btn-success btn-block "
-                            onclick="FinalizarEtapa()">Aceptar</button>
+                            onclick="FinalizarEtapa()"><i class="fa fa-save"></i>  Guardar</button>
                     </div>
                     <div class="col-md-2 col-xs-6">
                         <button type="button" class="btn btn-default btn-block" data-dismiss="modal">Cancelar</button>
@@ -162,6 +162,13 @@
     </div>
 </div>
 <script>
+// Filtrar Recipientes por Establecimineto
+$('#productodestino').find('option').each(function(){
+    var data  = getJson(this);
+    var esta = $('#establecimientos').val();
+    if(data.esta_id != esta) $(this).remove();
+});
+
 $('.datalist').on('change', function() {
     this.dataset.json = $('#' + this.getAttribute('list')).find('[value="' + this.value + '"]').attr(
         'data-json');
@@ -226,9 +233,15 @@ function AgregarProducto() {
         producto.destino = destino;
         producto.titulodestino = $('#productodestino').find('option:selected').text();
         producto.destinofinal = establecimiento + " " + recipientefinal;
-        producto.recu_id = JSON.parse($('#operarios').find('[value="' + $('#operario').val() + '"]').attr('data-json'))
-            .recu_id;
-        producto.tipo_recurso = 'HUMANO';
+
+        var json = $('#operarios').find('[value="' + $('#operario').val() + '"]').attr('data-json');
+        if(json){
+           producto.recu_id = JSON.parse(json).recu_id;
+           producto.tipo_recurso = 'HUMANO';
+        }else{
+           producto.recu_id  = 0;
+           producto.tipo_recurso = '';
+        }
         producto.unificar = $('#unificar').val();
         fraccionado = document.getElementById('fraccionado').checked;
         if (fraccionado) {
@@ -365,7 +378,7 @@ function FinalizarEtapa() {
         batch_id_padre = $('#batch_id_padre').val();
         destino = select.value;
 
-
+        wo();
         $.ajax({
             type: 'POST',
             async: false,
@@ -388,6 +401,9 @@ function FinalizarEtapa() {
                     alert("Hubo un error en Dataservice");
                     linkTo('general/Etapa/index');
                 }
+            },
+            complete:function(){
+                wc();
             }
         });
     }
@@ -419,8 +435,11 @@ function validarRecipiente(json) {
         if ($('#tabla_productos_asignados').length != 0) {
 
             // Validar si el recipiente ha sido elegido en la tabla Anteriormente
+            var recipientes =  $('#tabla_productos_asignados').find('.res-' + json.reci_id);
+          
+            if(recipientes.length == 0){ $('#unificar').val(false); return true;}
             var ban = true;
-            $('#tabla_productos_asignados').find('.res-' + json.reci_id).each(function() {
+            recipientes.each(function() {
 
                 ban = ban && $(this).hasClass(arti_id + lote_id);
 
@@ -428,7 +447,7 @@ function validarRecipiente(json) {
 
             if (ban) {
                 // Pregunta si quiere Unificar los Lotes
-                if (confirm('¿Desea mezclar los Artículos en el Recipiente?') != true) {
+                if (confirm('-¿Desea mezclar los Artículos en el Recipiente?') != true) {
                     // Respuesta Negativa
                     $('#recipiente').val('').trigger('change');
                     $('#unificar').val(false);
@@ -438,7 +457,7 @@ function validarRecipiente(json) {
                 return true;
 
             } else {
-                alert('- No se pueden mezclar Distintos Articulos y Distintos Lotes en un mismo Recipiente');
+                alert('-No se pueden mezclar Distintos Articulos y Distintos Lotes en un mismo Recipiente');
                 $('#recipiente').val('').trigger('change');
                 //$('#lotedestino').val('').trigger('change');
                 $('#unificar').val(false);

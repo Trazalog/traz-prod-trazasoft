@@ -1,0 +1,15 @@
+#contenidoQR > h3 {
+	font-family: arial;
+	font-size: 40;
+	text-align: center;
+}
+
+#contenidoQR > p {
+	font-family: arial;
+	font-size: 20;
+	text-align: center;
+}
+
+#contenidoImgQR {
+	text-align: center;
+}

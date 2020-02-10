@@ -45,4 +45,11 @@ class Lote extends CI_Controller
         $rsp['data'] = selectBusquedaAvanzada(false, false, $rsp['data'], 'batch_id', 'lote_id',array('Origen:'=>'establecimiento', 'Cantidad:' =>'cantidad','Unidad Medida:'=>'um'));
 		echo json_encode($rsp);
     }
+
+    public function obtenerLote($lote)
+    {
+        $this->load->model('general/Lotes');
+        $rsp = $this->Lotes->obtenerLote($lote);
+        echo json_encode($rsp);
+    }
 }

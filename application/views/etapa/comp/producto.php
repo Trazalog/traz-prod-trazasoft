@@ -17,7 +17,7 @@
                     <div class="col-md-6 col-xs-12 input-group ba">
                      
                           <?php
-                            echo selectBusquedaAvanzada('idproducto', false, $materias, 'arti_id', 'barcode',  array('descripcion', 'Unidad Medida:'=>'unidad_medida'));
+                            echo selectBusquedaAvanzada('idproducto', 'vprod', $materias, 'arti_id', 'barcode',  array('descripcion', 'Unidad Medida:'=>'unidad_medida'));
                         ?>
                     </div>
                 </div>
@@ -29,10 +29,10 @@
                         <label for="template" class="form-label">Cantidad:</label>
                     </div>
                     <div class="col-md-5 col-xs-11">
-                        <input type="number" class="form-control" placeholder="Inserte Cantidad" id="cantidadproducto">
+                        <input type="number" class="form-control" placeholder="Inserte Cantidad" id="cantidadproducto" name="vcantprod">
                     </div>
                    <div class="col-md-1 col-xs-1">
-                            <input type="text" class="form-control" value=" - " id="um" disabled>
+                            <input type="text" class="form-control" value=" - " id="um" disabled name="vum">
                    </div>
                 </div>
             </div>
@@ -50,7 +50,7 @@
                     </div>
                     <div class="col-md-6 col-xs-12 input-group">
                         <input list="productos" id="" class="form-control"
-                            value="<?php echo $producto[0]->descripcion; ?>" disabled>
+                            value="<?php echo $producto[0]->descripcion; ?>" disabled name="vproddesc">
                     </div>
                 </div>
             </div>
@@ -63,7 +63,7 @@
                     <div class="col-md-6 col-xs-12 input-group">
                         <input type="text" class="form-control"
                             value="<?php echo $producto[0]->cantidad.' ('.$producto[0]->uni_med.')'  ; ?>" id=""
-                            disabled>
+                            disabled name="prodcantidad">
                     </div>
                 </div>
             </div>

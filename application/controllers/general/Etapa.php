@@ -35,7 +35,12 @@ class Etapa extends CI_Controller {
 	}
 	// Llama a etapas para una nueva Etapa
 	public function nuevo()
-	{
+	{		
+			#Snapshot
+			$user = 'fernando_leiva';
+			$view = 'etapa/abm';
+			$data['key'] = $view . $user;
+
 			$data['fecha'] = date('Y-m-d');
 			$data['id'] = $this->input->get('op');
 			$data['etapa'] = $this->Etapas->nuevo($data['id'])->etapa; // listo llama a etapas/1
@@ -51,7 +56,7 @@ class Etapa extends CI_Controller {
 			$data['establecimientos'] = $this->Establecimientos->listar($data['id'])->establecimientos->establecimiento; // listo
 			$data['recursosmateriales'] = [];//;$this->Recursos_Materiales->listar()->recursos->recurso;
 			$data['rec_trabajo'] = $this->Recursos->obtenerXTipo('TRABAJO')['data'];
-			$this->load->view('etapa/abm', $data);
+			$this->load->view($view, $data);
 	}
 	// guarda el Inicio de una nueva etapa mas orden pedido y lanza pedido almac
 	public function guardar(){
@@ -244,7 +249,7 @@ class Etapa extends CI_Controller {
 					$i = 0;
 					foreach ($productos as $key => $prod) {
 							$p = json_decode($prod);
-							$recurso_id = $this->Etapas->getRecursoId($p->id);
+							$recurso_id = $this->Etapas->getRecursoId($p->arti_id);
 							$arrRec['batch_id'] = (string)$batch_id;
 							$arrRec['recu_id'] = (string)$recurso_id;
 							$arrRec['usuario'] = userNick();
@@ -276,7 +281,7 @@ class Etapa extends CI_Controller {
 									foreach ($productos as $key => $prod) {								
 											$p = json_decode($prod);				
 											$det['pema_id'] = (string)$pema_id;
-											$det['arti_id'] = (string)$p->id;
+											$det['arti_id'] = (string)$p->arti_id;
 											$det['cantidad'] = (string)$p->cant_descontar;
 											$detalle['_post_notapedido_detalle'][$x]=(object) $det;
 											$x++;					
@@ -322,12 +327,12 @@ class Etapa extends CI_Controller {
 			$arrayPost["cantidad_padre"] =	strval($key==(sizeof($productos) -1) ?$cantidad_padre:0);		//cantida padre esl lo que descuenta del batch actual
 			$arrayPost["num_orden_prod"] =	$num_orden_prod;			
 			$arrayPost["reci_id"] = $value->destino;  //reci_id destino del nuevo batch
-			$arrayPost["etap_id"] = (string)DEPOSITO_TRANSPORTE;
+			$arrayPost["etap_id"] = (string)ETAPA_DEPOSITO;
 			$arrayPost["usuario_app"] = userNick();
 			$arrayPost["empr_id"] = (string)empresa();	
 			$arrayPost["forzar_agregar"] = $value->unificar;
 			$arrayPost["fec_vencimiento"] = "01-01-1988";
-			$arrayPost["recu_id"] = $value->recu_id;
+			$arrayPost["recu_id"] = strval($value->recu_id);
 			$arrayPost["tipo_recurso"] = $value->tipo_recurso;
 			$arrayDatos['_post_lote_list_batch_req']['_post_lote_lis'][] = $arrayPost;	
 		}	
@@ -367,7 +372,7 @@ class Etapa extends CI_Controller {
 			$arrayPost["empr_id"] = (string)empresa();	
 			$arrayPost["forzar_agregar"] = false;
 			$arrayPost["fec_vencimiento"] = "01-01-1988";
-			$arrayPost["recu_id"] = (string)0;
+			$arrayPost["recu_id"] = "0";
 			$arrayPost["tipo_recurso"] = "";
 			$arrayDatos['_post_lote_list_batch_req']['_post_lote_lis'][] = $arrayPost;	
 		}	
@@ -384,6 +389,12 @@ class Etapa extends CI_Controller {
 	// Levanta pantalla abm fraccionar
 	public function fraccionar()
 	{
+			$this->load->model(ALM . 'Articulos');
+			$this->load->model('general/Recipientes');
+
+			$data['articulos'] = $this->Articulos->getList();
+
+
 			$data['accion'] = 'Nuevo';
 			$data['etapa']= $this->Etapas->nuevo(5)->etapa; // igual que en contrato pedido
 			$data['fecha'] = date('Y-m-d');
@@ -392,7 +403,7 @@ class Etapa extends CI_Controller {
 			//	$data['lang'] = lang_get('spanish',5);
 			$data['establecimientos'] = $this->Establecimientos->listarTodo()->establecimientos->establecimiento;
 			$data['empaques'] = $this->Recipientes->listarEmpaques()->empaques->empaque;
-			$data['materias'] = $this->Materias->listar()->materias->materia;
+			//$data['materias'] = $this->Materias->listar()->materias->materia;
 			$this->load->view('etapa/fraccionar/fraccionar', $data);
 	}
 }

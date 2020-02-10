@@ -28,7 +28,7 @@
 
                     echo '<i class="fa fa-fw fa-pencil " style="cursor: pointer; margin: 3px;" title="Editar" onclick="editar(this)"></i>';
                    
-                    echo '<i class="fa fa-fw fa-times-circle eliminar" style="cursor: pointer;margin: 3px;" title="Eliminar"></i>';
+                    echo '<i class="fa fa-fw fa-times-circle eliminar" style="cursor: pointer;margin: 3px;" title="Eliminar" onclick="eliminar(this)"></i>';
                     
                     echo "</td>";
 
@@ -47,10 +47,9 @@
 </div><!-- /.box -->
 
 <script>
-DataTable($('table'));
 
 function guardarArticulo() {
-    
+
     var formData = new FormData($('#frm-articulo')[0]);
 
     if (!validarForm()) return;
@@ -65,23 +64,23 @@ function guardarArticulo() {
         contentType: false,
         processData: false,
         success: function(rsp) {
-            
-          mdlClose('new_articulo');
 
-           linkTo();
+            mdlClose('new_articulo');
+
+            linkTo();
         },
         error: function(rsp) {
             alert('Error: No se pudo Guardar Artículo');
             console.log(rsp.msj);
         },
-        complete:function() {
+        complete: function() {
             wc();
         }
     });
 }
 
 function editarArticulo() {
-    
+
     var formData = new FormData($('#frm-articulo')[0]);
 
     if (!validarForm()) return;
@@ -96,15 +95,15 @@ function editarArticulo() {
         contentType: false,
         processData: false,
         success: function(rsp) {
-          
-             mdlClose('new_articulo');
-             linkTo();
+
+            mdlClose('new_articulo');
+            linkTo();
         },
         error: function(rsp) {
             alert('Error: No se pudo Editar Artículo');
             console.log(rsp.msj);
         },
-        complete:function() {
+        complete: function() {
             wc();
         }
     });
@@ -122,7 +121,7 @@ function ver(e) {
 }
 
 function editar(e) {
-     $('#arti_id').prop('disabled',false);
+    $('#arti_id').prop('disabled', false);
     var json = JSON.parse(JSON.stringify($(e).closest('tr').data('json')));
     Object.keys(json).forEach(function(key, index) {
         $('[name="' + key + '"]').val(json[key]);
@@ -130,15 +129,15 @@ function editar(e) {
     $('#mdl-titulo').html('Editar Artículo');
     $('#btn-accion').attr('onclick', 'editarArticulo()');
     $('#new_articulo').modal('show');
-    
+
 }
 
 // Eliminar Articulo
 var selected = null;
-$('.eliminar').click(function() {
-    selected = $(this).closest('tr').attr('id');
+function eliminar(e){
+    selected = $(e).closest('tr').attr('id');
     $('#mdl-eliminar').modal('show');
-});
+}
 
 function eliminar_articulo() {
     $.ajax({
@@ -165,16 +164,19 @@ $("#new_articulo").on("hide.bs.modal", function() {
     $('#btn-accion').show();
     $('#frm-articulo')[0].reset();
     $('#read-only').prop('disabled', false);
-    $('#arti_id').prop('disabled',true);
+    $('#arti_id').prop('disabled', true);
 });
 
 function validarForm() {
     console.log('Validando');
-    
-    var ban = ($('#unidmed').val() != 'false' &&  $('#unidmed').val() != '' &&  $('#artBarCode').val() != null && $('#artBarCode').val() != '' && $('#artDescription').val() != null &&  $('#artDescription').val() != '');
+
+    var ban = ($('#unidmed').val() != 'false' && $('#unidmed').val() != '' && $('#artBarCode').val() != null && $(
+        '#artBarCode').val() != '' && $('#artDescription').val() != null && $('#artDescription').val() != '');
     if (!ban) alert('Complete los Campos Obligatorios (*)');
     return ban;
 }
+
+DataTable($('table'));
 </script>
 
 <!-- Modal -->
@@ -199,12 +201,27 @@ function validarForm() {
                     <fieldset id="read-only">
                         <div class="row">
                             <!-- Código de Articulo -->
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Código <strong class="text-danger">*</strong>: </label>
                                     <input type="text" class="form-control" id="artBarCode" name="barcode">
                                 </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Tipo <strong class="text-danger">*</strong>: </label>
+                                    <select name="tipo" class="form-control">
+                                        <option value="" selected disabled> - Seleccionar - </option>
+                                        <?php 
+                                            foreach ($tipoArticulos as $key => $o) {
+                                                echo "<option value='$o->tabl_id'>$o->valor</option>";
+                                            }
 
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
                                 <!-- Código del Artículo -->
                                 <div class="form-group">
                                     <label>Descripción <strong class="text-danger">*</strong>: </label>
@@ -257,7 +274,8 @@ function validarForm() {
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <button type="button" id="btn-accion" class="btn btn-primary btn-guardar" onclick="guardarArticulo()">Guardar</button>
+                <button type="button" id="btn-accion" class="btn btn-primary btn-guardar"
+                    onclick="guardarArticulo()">Guardar</button>
             </div>
         </div>
     </div>
