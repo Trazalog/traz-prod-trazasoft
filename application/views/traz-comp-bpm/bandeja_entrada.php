@@ -40,15 +40,31 @@
                                     }
 
                                     echo '</td>';
+																		// TAREA	
+																		echo "<td class='mailbox-name'>
+																						<a href='#'>
+																						<b  style='color:$f->color'> $f->nombreProceso </b> 
+																						</a>|  $f->nombreTarea 
+																					</td>";
+																		// DESCRIPCION
+																		// echo '<td class="mailbox-subject oculto">' . substr($f->descripcion, 0, 500) . '</td>';
+																		// echo '<td class="mailbox-subject oculto">' . substr($f->nombreTarea, 0, 500) . ' <span class="label label-primary">Justificacion: '.$f->justificacion.'</span> <span class="label label-danger">Fecha: '.$f->fecha.'</span></td>';
+																		
+																		echo '<td class="mailbox-subject oculto">' . substr($f->nombreTarea, 0, 500) . ' | Justificacion: '.$f->justificacion.'</span> <span class="label label-danger">Fecha: '.formatFechaPG($f->fecha).'</span> <span class="label label-primary">Estado: '.$f->estado.'</span></td>';
 
-                                    echo "<td class='mailbox-name'><a href='#'><b  style='color:$f->color'> $f->nombreProceso </b> </a>|  $f->nombreTarea </td>";
 
-                                    echo '<td class="mailbox-subject oculto">' . substr($f->descripcion, 0, 500) . '</td>';
-
-                                    echo '<td class="mailbox-subject oculto"><span class="label label-primary">OT:??</span> <span class="label label-warning">SS:??</span></td>';
-
-                                    echo '<td class="mailbox-date oculto">' . formato_fecha_hora($f->fec_vencimiento) . 'dd/mm/aaaa</td>';
-
+																		// INFO
+																		// echo '<td class="mailbox-subject oculto"><span class="label label-primary">OT:??</span> <span class="label label-warning">SS:??</span></td>';
+																		echo '<td class="mailbox-subject oculto"><span class="label label-primary">Cod. Lote: '.$f->lote_id.'</span> <span class="label label-warning">Nº Pedido: '.$f->pema_id.'</span></td>';
+																		
+																		// echo '<td class="mailbox-date oculto">' . formato_fecha_hora($f->fec_vencimiento) . 'dd/mm/aaaa</td>';
+																		// FEC. VENCIMIENTO
+																		if ($f->fec_vencimiento == " ") {
+																			echo '<td class="mailbox-date oculto">' . formato_fecha_hora($f->fec_vencimiento) . '</td>';
+																		} else {
+																			echo '<td class="mailbox-date oculto">Sin fecha</td>';
+																		}																	
+																		
                                     echo '</tr>';
 
                                 }
