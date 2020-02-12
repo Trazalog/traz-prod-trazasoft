@@ -16,22 +16,17 @@ class Tareas extends CI_Model
     {
         $array = [];
 
-				// echo('datos de bpm');
-				// var_dump($data);
-
         foreach ($data as $o) {
 						
 					switch ($o['processId']) {
-						case BPM_PROCESS_ID_PEDIDOS_NORMALES:
-							//echo('entre por proceso pedido');
+						case BPM_PROCESS_ID_PEDIDOS_NORMALES:						
 							$aux = new StdClass();
 							$aux->taskId = $o['id'];
 							$aux->caseId = $o['caseId'];
 							$aux->processId = $o['processId'];
 							$aux->nombreTarea = $o['name'];
 							$aux->nombreProceso =  json_decode(BPM_PROCESS,true)[$o['processId']]['nombre'];
-							$aux->color =  json_decode(BPM_PROCESS,true)[$o['processId']]['color'];
-							// $aux->descripcion = 'Esto es una Descripcion de la Tarea...<p>Esto es un texto de la solcitud de servicio que puede ser muy larga</p><span class="label label-danger">Urgente</span> <span class="label label-primary">#PonganseLasPilas</span>';
+							$aux->color =  json_decode(BPM_PROCESS,true)[$o['processId']]['color'];						
 							$aux->descripcion = $o['name'];
 							$aux->fec_vencimiento = $o['dueDate'];
 							$aux->usuarioAsignado = 'Nombre Apellido';
@@ -42,30 +37,14 @@ class Tareas extends CI_Model
 							$aux->pema_id= $infoPema->pema_id;
 							$aux->justificacion = $infoPema->justificacion;
 							$aux->fecha = $infoPema->fecha;
-							$aux->estado = $infoPema->estado;
-							//TODO:DESHARDCODEAR LOTE
-						//	$aux->lote_id = $infoPema->lote_id;
-							$aux->lote_id = 8;
+							$aux->estado = $infoPema->estado;							
+							$aux->lote_id = $infoPema->lote_id;						
 							break;
 						
 						default:
 							# code...
 							break;
-					}
-					
-						// $aux = new StdClass();
-            // $aux->taskId = $o['id'];
-            // $aux->caseId = $o['caseId'];
-            // $aux->processId = $o['processId'];
-            // $aux->nombreTarea = $o['name'];
-            // $aux->nombreProceso =  json_decode(BPM_PROCESS,true)[$o['processId']]['nombre'];
-            // $aux->color =  json_decode(BPM_PROCESS,true)[$o['processId']]['color'];
-            // $aux->descripcion = 'Esto es una Descripcion de la Tarea...<p>Esto es un texto de la solcitud de servicio que puede ser muy larga</p><span class="label label-danger">Urgente</span> <span class="label label-primary">#PonganseLasPilas</span>';
-            // $aux->fec_vencimiento = 'dd/mm/aaaa';
-            // $aux->usuarioAsignado = 'Nombre Apellido';
-            // $aux->idUsuarioAsignado = $o['assigned_id'];
-            // $aux->fec_asignacion = $o['assigned_date'];
-            // $aux->prioridad = $o['priority'];
+					}				
            
             array_push($array, $aux);
         }

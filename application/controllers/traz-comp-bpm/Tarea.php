@@ -20,7 +20,6 @@ class Tarea extends CI_Controller
 
         $data['device'] = "";
         $data['list'] = $this->Tareas->listar();
-        //var_dump($data['list']);
         $this->load->view(BPM.'bandeja_entrada', $data);
 
     }
