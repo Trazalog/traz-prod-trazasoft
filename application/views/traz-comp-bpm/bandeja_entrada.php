@@ -48,15 +48,15 @@
 																					</td>";
 																		// DESCRIPCION					
 																		echo '<td class="mailbox-subject oculto">
-																			<p>' . substr($f->nombreTarea, 0, 500) . ' | Justificacion: '.$f->justificacion.'</p>
-																			<p class="label label-danger">Fecha: '.formatFechaPG($f->fecha).'</p> 
-																			<p class="label label-primary">Cod. Lote: '.$f->lote_id.'</p> 
-																			<p class="label label-warning">Nº Pedido: '.$f->pema_id.'</p>
-																		</td>';
+																						<p>' . substr($f->nombreTarea, 0, 500) . ' | Justificacion: '.$f->justificacion.'</p>
+																						<p class="label label-danger">Fecha: '.formatFechaPG($f->fecha).'</p> 
+																						<p class="label label-primary">Cod. Lote: '.$f->lote_id.'</p> 
+																						<p class="label label-warning">Nº Pedido: '.$f->pema_id.'</p>
+																					</td>';
 																		// INFO																		
 																		echo '<td class="mailbox-subject oculto">
-																			<p class="label label-primary">Estado: '.$f->estado.'</p>
-																		</td>';																	
+																						<p class="label label-primary">'.$f->estado.'</p>
+																					</td>';																	
 																	
 																		// FEC. VENCIMIENTO
 																		if ($f->fec_vencimiento == " ") {
