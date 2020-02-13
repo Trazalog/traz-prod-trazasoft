@@ -60,9 +60,9 @@ class Etapa extends CI_Controller {
 	}
 	// guarda el Inicio de una nueva etapa mas orden pedido y lanza pedido almac
 	public function guardar(){
-		    log_message('DEBUG','C#ETAPA > guardar | #DATA-POST: '.json_encode($this->input->post()));
-		//////////// PARA CREAR EL NUEVO BATCH ///////////////////
-		$datosCab['arti_id'] = (string)$this->input->post('idprod');
+		  log_message('DEBUG','C#ETAPA > guardar | #DATA-POST: '.json_encode($this->input->post()));
+			//////////// PARA CREAR EL NUEVO BATCH ///////////////////
+			$datosCab['arti_id'] = (string)$this->input->post('idprod');
 			$datosCab['lote_id'] = $this->input->post('lote');
 			$datosCab['arti_id'] = (string)$this->input->post('idprod');
 			$datosCab['prov_id'] = (string)PROVEEDOR_INTERNO;
@@ -98,7 +98,7 @@ class Etapa extends CI_Controller {
 			// guarda producto en tabla recurso_lotes			
 			$respRecurso = $this->Etapas->setRecursosLotesProd($batch_id, $recu_id, $datosCab['cantidad']);													
 
-		// guarda articulos(id de recurso en tabala recursos) origen en tabla recursos_lotes
+		// guarda articulos(id de recurso en tabla recursos) origen en tabla recursos_lotes
 		$x = 0;
 		foreach($materia as $id => $cantidad)	{
 						
@@ -158,7 +158,33 @@ class Etapa extends CI_Controller {
 								$this->load->model(ALM.'Notapedidos');
 								if($rsp['status']){
 									echo("ok");
-									$this->Notapedidos->setCaseId($pema_id, $rsp['data']['caseId']);
+									$this->Notapedidos->setCaseId($pema_id, $rsp['data']['caseId']);									
+									
+									//TODO: AVANZAR PROCESO A TAREA SIGUIENTE
+									if (PLANIF_AVANZA_TAREA) {
+											
+											$taskId = $this->bpm->ObtenerTaskidXNombre(BPM_PROCESS_ID_PEDIDOS_NORMALES, $rsp['data']['caseId'], 'Aprueba pedido de Recursos Materiales');
+											log_message('DEBUG','Etapa/guardar(ObtenerTaskidXNombre) #$taskId->'. $taskId);
+											
+											if ($taskId) {
+
+													$user = userId();													
+													$resultSetUsuario = $this->bpm->setUsuario($taskId, $user);
+													log_message('DEBUG','Etapa/guardar #$user->'. $user);
+													log_message('DEBUG','Etapa/guardar #$resultSetUsuario->'. $resultSetUsuario);		
+													
+													$contract = array(
+														"apruebaPedido" => true,
+													);
+
+													if ($resultSetUsuario['status']) {
+															$resulCerrar = $this->bpm->cerrarTarea($taskId, $contract);
+															log_message('DEBUG','Etapa/guardar #$resulCerrar->'. $resulCerrar);
+													}
+											}										
+									}
+
+									
 								}else{
 										echo ($rsp['msj']);
 								}								
