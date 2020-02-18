@@ -64,7 +64,7 @@ class Etapa extends CI_Controller
 	// guarda el Inicio de una nueva etapa mas orden pedido y lanza pedido almac
 	public function guardar($nuevo = null)
 	{
-		
+
 		// $rsp = "ok";
 		// echo ($nuevo);
 		log_message('DEBUG', 'C#ETAPA > guardar | #DATA-POST: ' . json_encode($this->input->post()));
@@ -93,8 +93,8 @@ class Etapa extends CI_Controller
 
 		// $batch_id = 'NadaDeNada';
 		// echo ($batch_id);
-		if ($estado == 'PLANIFICADO' || $nuevo == 'guardar') {			
-			$datosCab['planificado'] = 'true';			
+		if ($estado == 'PLANIFICADO' || $nuevo == 'guardar') {
+			$datosCab['planificado'] = 'true';
 			$data['_post_lote'] = $datosCab;
 
 			//guarda batch existente modificado (tabla lotes)
@@ -120,7 +120,7 @@ class Etapa extends CI_Controller
 		$materia = $this->input->post('materia');
 
 		if (!$batch_id) {
-			log_message('DEBUG', 'Etapa/guardar #ERROR BATCH_ID NULO: >>'. $batch_id);
+			log_message('DEBUG', 'Etapa/guardar #ERROR BATCH_ID NULO: >>' . $batch_id);
 			echo ("Error en creacion Batch");
 		}
 		// busca id recurso por id articulo
@@ -128,7 +128,7 @@ class Etapa extends CI_Controller
 		// guarda producto en tabla recurso_lotes			
 		$respRecurso = $this->Etapas->setRecursosLotesProd($batch_id, $recu_id, $datosCab['cantidad']);
 
-		// guarda articulos(id de recurso en tabala recursos) origen en tabla recursos_lotes
+		// guarda articulos(id de recurso en tabla recursos) origen en tabla recursos_lotes
 		$x = 0;
 		foreach ($materia as $id => $cantidad) {
 
@@ -190,6 +190,28 @@ class Etapa extends CI_Controller
 						if ($rsp['status']) {
 							echo ("ok");
 							$this->Notapedidos->setCaseId($pema_id, $rsp['data']['caseId']);
+
+							// AVANZA PROCESO A TAREA SIGUIENTE
+							if (PLANIF_AVANZA_TAREA) {
+
+								$taskId = $this->bpm->ObtenerTaskidXNombre(BPM_PROCESS_ID_PEDIDOS_NORMALES, $rsp['data']['caseId'], 'Aprueba pedido de Recursos Materiales');
+								log_message('DEBUG', 'Etapa/guardar(ObtenerTaskidXNombre) #$taskId->' . $taskId);
+
+								if ($taskId) {
+									$user = userId();
+									$resultSetUsuario = $this->bpm->setUsuario($taskId, $user);
+									log_message('DEBUG', 'Etapa/guardar #$user->' . $user);
+									log_message('DEBUG', 'Etapa/guardar #$resultSetUsuario->' . $resultSetUsuario);
+
+									$contract = array(
+										"apruebaPedido" => true,
+									);
+									if ($resultSetUsuario['status']) {
+										$resulCerrar = $this->bpm->cerrarTarea($taskId, $contract);
+										log_message('DEBUG', 'Etapa/guardar #$resulCerrar->' . $resulCerrar);
+									}
+								}
+							}
 						} else {
 							echo ($rsp['msj']);
 						}
@@ -198,21 +220,21 @@ class Etapa extends CI_Controller
 						echo ("Error en generacion de Detalle Pedido Materiales");
 						log_message('ERROR', 'Error en generacion de Detalle Pedido Materiales. respDetalle: >>' . $respDetalle);
 					}
-				} elseif ($estado == "PLANIFICADO") {//&& $result['data']
+				} elseif ($estado == "PLANIFICADO") { //&& $result['data']
 					log_message('DEBUG', 'Guardado, batch_id: >>' . $batch_id);
 					echo ($batch_id);
 					// echo json_decode($result);					
 				} else {
 					log_message('ERROR', 'Error al guardar. estado: >>' . $estado);
-					echo ("Error al guardar");					
+					echo ("Error al guardar");
 				}
 			} else {
 				log_message('ERROR', 'Error en generacion de Cabecera Pedido Materiales. pema_id: >>' . $pema_id);
-				echo ("Error en generacion de Cabecera Pedido Materiales");				
+				echo ("Error en generacion de Cabecera Pedido Materiales");
 			}
 		} else {
 			log_message('ERROR', 'Error en creacion Batch. batch_id: >>' . $batch_id);
-			echo ("Error en creacion Batch");			
+			echo ("Error en creacion Batch");
 		}
 	}
 	// trae info para informe de Etapa (Todas y Fraccionar)
