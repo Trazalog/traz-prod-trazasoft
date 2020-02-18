@@ -7,130 +7,138 @@
 
 
     <!-- ORIGEN INICIO ETAPA -->
-    <?php if($etapa->estado != 'En Curso' && $etapa->estado !='FINALIZADO'){?>
-    <div class="box-body">
-        
-        <div class="row" style="margin-top: 40px">
-            <div class="col-xs-12">
-                <div class="row form-group">
-                    <div class="col-md-3 col-xs-6">
-                        <label for="template" class="form-label">Materia:</label>
-               
+    <?php if ($etapa->estado != 'En Curso' && $etapa->estado != 'FINALIZADO') { ?>
+        <div class="box-body">
+
+            <div class="row" style="margin-top: 40px">
+                <div class="col-xs-12">
+                    <div class="row form-group">
+                        <div class="col-md-3 col-xs-6">
+                            <label for="template" class="form-label">Materia:</label>
+
+                        </div>
+                        <div class="col-md-6 col-xs-12 input-group ba">
+
+                            <?php
+                            echo selectBusquedaAvanzada('inputmaterias', 'vmateria', $materias, 'arti_id', 'barcode', array('descripcion', 'Unidad Medida:' => 'unidad_medida'));
+                            ?>
+                        </div>
                     </div>
-                    <div class="col-md-6 col-xs-12 input-group ba">
-                  
-                        <?php
-                            echo selectBusquedaAvanzada('inputmaterias', 'vmateria', $materias, 'arti_id', 'barcode', array('descripcion', 'Unidad Medida:'=>'unidad_medida'));
-                        ?>
+                </div>
+
+                <div class="col-xs-12">
+                    <div class="row form-group">
+                        <div class="col-md-3 col-xs-6">
+                            <label for="" class="form-label">Stock Actual:</label>
+                        </div>
+                        <div class="col-md-6 col-xs-12 input-group">
+                            <input type="number" class="form-control" disabled id="stockdisabled" name="vstock">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12">
+                    <div class="row form-group">
+                        <div class="col-md-3 col-xs-6">
+                            <label for="template" class="form-label">Cantidad:</label>
+                        </div>
+                        <div class="col-md-6 col-xs-12 input-group">
+                            <input type="number" class="form-control" placeholder="Inserte Cantidad" id="cantidadmateria" disabled name="vcantidadmateria">
+                            <span class="input-group-btn">
+                                <button class='btn btn-success' id="botonmateria" disabled onclick="aceptarMateria()">Aceptar
+                                </button>
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-xs-12">
-                <div class="row form-group">
-                    <div class="col-md-3 col-xs-6">
-                        <label for="" class="form-label">Stock Actual:</label>
-                    </div>
-                    <div class="col-md-6 col-xs-12 input-group">
-                        <input type="number" class="form-control" disabled id="stockdisabled" name="vstock">
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xs-12">
-                <div class="row form-group">
-                    <div class="col-md-3 col-xs-6">
-                        <label for="template" class="form-label">Cantidad:</label>
-                    </div>
-                    <div class="col-md-6 col-xs-12 input-group">
-                        <input type="number" class="form-control" placeholder="Inserte Cantidad" id="cantidadmateria"
-                            disabled name="vcantidadmateria">
-                        <span class="input-group-btn">
-                            <button class='btn btn-success' id="botonmateria" disabled
-                                onclick="aceptarMateria()">Aceptar
-                            </button>
-                        </span>
-                    </div>
+            <div class="row" style="margin-top: 40px ">
+                <input type="hidden" id="materiasexiste" value="no">
+                <div class="col-xs-12 table-responsive" id="materiasasignadas">
                 </div>
             </div>
         </div>
-
-        <div class="row" style="margin-top: 40px ">
-            <input type="hidden" id="materiasexiste" value="no">
-            <div class="col-xs-12 table-responsive" id="materiasasignadas">
-            </div>
-        </div>
-    </div>
     <?php } ?>
 
     <!-- ORIGEN INICIO ETAPA -->
 
     <!-- ORIGEN EDICION ETAPA -->
-    <?php if($accion == 'Editar' || $etapa->estado =='FINALIZADO'){?>
-    <div class="box-body">
-        <div class="row" style="margin-top: 40px ">
-            <input type="hidden" id="materiasexiste" value="no">
-            <div class="col-xs-12 table-responsive" id="materiasasignadas">
-                <table id="etapas" class="table table-bordered table-hover">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th>Producto</th>
-                            <th>Cantidad</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+    <?php if ($accion == 'Editar' && $etapa->estado == 'FINALIZADO') { ?>
+        <div class="box-body">
+            <div class="row" style="margin-top: 40px ">
+                <input type="hidden" id="materiasexiste" value="no">
+                <div class="col-xs-12 table-responsive" id="materiasasignadas">
+                    <table id="etapas" class="table table-bordered table-hover">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Producto</th>
+                                <th>Cantidad</th>
+                            </tr>
+                        </thead>
+                        <tbody>
 
-                        <?php											
-								foreach($matPrimas as $fila)
-								{
-										echo "<tr>";
-										echo "<td>$fila->descripcion</td>";
-                                        echo "<td>$fila->cantidad($fila->uni_med)</td>";														
-                                        echo "</tr>"; 																
-								}		
-						?>
-                    </tbody>
-                </table>
+                            <?php
+                            foreach ($matPrimas as $fila) {
+                                echo "<tr>";
+                                echo "<td>$fila->descripcion</td>";
+                                echo "<td>$fila->cantidad($fila->uni_med)</td>";
+                                echo "</tr>";
+                            }
+                            ?>
+                        </tbody>
+                    </table>
+
+                </div>
+                <!-- ORIGEN EDICION ETAPA -->
 
             </div>
-            <!-- ORIGEN EDICION ETAPA -->
-
         </div>
-    </div>
-            <?php }?>
+    <?php } ?>
 </div>
 <!-- ./ Origen -->
 
 <script>
-// al seleccionar desde el input de Origen muestra stock y habilita input para cantidad y btn aceptar
-var matSelect = null;
-$("#inputmaterias").on('change', function() {
+    // al seleccionar desde el input de Origen muestra stock y habilita input para cantidad y btn aceptar
+    var matSelect = null;
+    $("#inputmaterias").on('change', function() {
 
         var data = getJson(this);
-    
+        console.log('data: ' + data);
+        console.table(data);
+
         var stock = data.stock;
         document.getElementById('stockdisabled').value = stock;
         materia = this.dataset.json;
         // FIXME: SI SE SACA SIN QUE ANDE EL MODALCITO DE MATERIAS SE ROMPE LA CARGA EN TABLITA
         // agregaMateria(materia);
-        matSelect =  data;
+        matSelect = data;
         // FIXME: SI SE SACA SIN QUE ANDE EL MODALCITO DE MATERIAS SE ROMPE LA CARGA EN TABLITA
         //document.getElementById('stockdisabled').value = ma
-        
+
         document.getElementById('cantidadmateria').disabled = false;
         document.getElementById('botonmateria').disabled = false;
-});
+    });
 
-function aceptarMateria() {
-    cantidad = document.getElementById('cantidadmateria').value;
-    materia = matSelect;
-    materia.cantidad = cantidad;
-    materia = JSON.stringify(materia);
-    materia = '[' + materia + ']';
-    materia = JSON.parse(materia);
-    console.log(materia);
-    agregaMateria(materia);
-}
-
-
+    function aceptarMateria() {
+        cantidad = document.getElementById('cantidadmateria').value;
+        console.log('cantidad: ' + cantidad);
+        console.log('matSelect: ' + matSelect);
+        console.table(matSelect);
+        materia = matSelect;
+        console.log('materia: ' + materia);
+        console.table(materia);
+        materia.cantidad = cantidad;
+        // console.log('materia: ' + materia);
+        materia = JSON.stringify(materia);
+        console.log('materia: ' + materia);
+        console.table(materia);
+        materia = '[' + materia + ']';
+        console.log('materia: ' + materia);
+        console.table(materia);
+        materia = JSON.parse(materia);
+        console.log('materia: ' + materia);
+        console.table(materia);
+        agregaMateria(materia);
+    }
 </script>

@@ -67,7 +67,12 @@ if (!function_exists('bolita')) {
             case 'En Curso':
                 return bolita('En Curso','green');
             break;
-            case 'finalizado':
+
+            case 'PLANIFICADO':
+                return bolita('Planificado','blue');
+            break;
+
+            case 'FINALIZADO':
                 return bolita('Finalizado','yellow');
             break;
 

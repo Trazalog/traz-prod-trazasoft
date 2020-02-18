@@ -69,7 +69,8 @@ class Etapas extends CI_Model
 
         $resource = '/recurso/';
         $url = REST2 . $resource . $arti_id;
-        $array = $this->rest->callAPI("GET", $url, $data);
+        // $array = $this->rest->callAPI("GET", $url, $data);
+        $array = $this->rest->callAPI("GET", $url);//tincho
         $resp = json_decode($array['data']);
         $recu_id = $resp->recurso->recu_id;
         return $recu_id;
