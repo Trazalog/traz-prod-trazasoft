@@ -70,7 +70,8 @@
             
       } else  if(existe == 'si')
       {
-          html += '<tr data-json="'+materia[0]+'" id="'+materia[0].arti_id+'">';
+          // html += '<tr data-json="'+materia[0]+'" id="'+materia[0].arti_id+'">';
+          html += '<tr data-json="'+materia[0]+'" id="'+materia[0].id+'">';
           if(estado != 'En Curso'){
           html += '<td><i class="fa fa-fw fa-minus text-light-blue tablamateriasasignadas_borrar" style="cursor: pointer; margin-left: 15px;" title="Nuevo"></i></td>';
           }

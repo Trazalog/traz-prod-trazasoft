@@ -120,7 +120,7 @@ class Etapa extends CI_Controller
 		$materia = $this->input->post('materia');
 
 		if (!$batch_id) {
-			log_message('DEBUG', 'Etapa/guardar #ERROR BATCH_ID NULO: >>' . $batch_id);
+			log_message('ERROR', 'Etapa/guardar #ERROR BATCH_ID NULO: >>' . $batch_id);
 			echo ("Error en creacion Batch");
 		}
 		// busca id recurso por id articulo
@@ -129,9 +129,12 @@ class Etapa extends CI_Controller
 		$respRecurso = $this->Etapas->setRecursosLotesProd($batch_id, $recu_id, $datosCab['cantidad']);
 
 		// guarda articulos(id de recurso en tabla recursos) origen en tabla recursos_lotes
-		$x = 0;
+		$batchId['batch_id'] = $batch_id;
+		// $delete_recurso_lote['_delete_recurso_lote'] = $batchId;	
+		$arrayTemp1['_delete_recurso_lote'] = $batchId;
+		$arrayTemp2 = [];
+		// $x = 0;
 		foreach ($materia as $id => $cantidad) {
-
 			if ($cantidad !== "") {
 				$recurso_id = $this->Etapas->getRecursoId($id);
 				$detArt['batch_id'] = (string) $batch_id;
@@ -139,17 +142,25 @@ class Etapa extends CI_Controller
 				$detArt['usuario'] = userNick();
 				$detArt['empr_id'] = (string) empresa();
 				$detArt['cantidad'] = $cantidad;
+				$detArt['tipo'] = MATERIA_PRIMA;
 				$detArt['empa_id'] = (string) 0;
 				$detArt['empa_cantidad'] = (string) 0;
-				$detArt['tipo'] = MATERIA_PRIMA;
-				$detaArtPos['_post_recurso'][$x] = (object) $detArt;
-				$x++;
+				$arrayTemp2['_post_recurso_lote'][$id] = (object) $detArt;
+				// $x++;
 			}
 		}
 		// array para guardar
-		$arrayRecursos['_post_recurso_lote_batch_req'] = $detaArtPos;
-		$respArtic = $this->Etapas->setRecursosLotesMat($arrayRecursos);
+		$arrayTemp1['_post_recurso_lote'] = array_values($arrayTemp2['_post_recurso_lote']);
+		$arrayRecursos['request_box'] = $arrayTemp1;
+		log_message('DEBUG', 'JSON request_box: >>' . json_encode($arrayRecursos));		
 
+		// $respArtic = $this->Etapas->setRecursosLotesMat(json_encode($arrayRecursos));
+		$rspRequestBox = $this->Etapas->setRecursosLotes_requestBox($arrayRecursos);
+		log_message('DEBUG', 'setRecursosLotes_requestBox(): >>' . $rspRequestBox);
+		if (!isset($rspRequestBox)) {
+			log_message('ERROR', 'setRecursosLotes_requestBox(): >>' . $rspRequestBox);
+			echo ("Error al guardar las materias primas. ");
+		}
 
 		if (($batch_id != "BATCH_NO_CREADO")  || ($batch_id != "RECI_NO_VACIO")) {
 
