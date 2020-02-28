@@ -1,29 +1,29 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') or exit('No direct script access allowed');
 
-if(!function_exists('userId')){
+if (!function_exists('userId')) {
 
     function userId()
     {
-        return 301;//!HARDCODE
+        return 301; //!HARDCODE
 
-        $ci =& get_instance();			
-        $userdata  = $ci->session->userdata('user_data');
-		return  $userdata[0]['userBpm'];
+        $ci = &get_instance();
+        $userdata = $ci->session->userdata('user_data');
+        return $userdata[0]['userBpm'];
     }
 }
 
-if(!function_exists('userNick')){
-    
+if (!function_exists('userNick')) {
+
     function userNick()
     {
-        return 'almacen.tools'; //!HARDCODE
-        $ci =& get_instance();			
-        $userdata  = $ci->session->userdata('user_data');
-		return  $userdata[0]['usrNick'];
+        #return 'almacen.tools'; //!HARDCODE
+        $ci = &get_instance();
+        $userdata = $ci->session->userdata();
+        return $userdata['email'];
     }
 }
 
-if(!function_exists('userPass')){
+if (!function_exists('userPass')) {
 
     function userPass()
     {
@@ -31,22 +31,27 @@ if(!function_exists('userPass')){
     }
 }
 
-if(!function_exists('empresa')){
+if (!function_exists('empresa')) {
 
-    function empresa(){
+    function empresa()
+    {
         return 1; //!HARDCODE
-        $ci =& get_instance();			
-        $userdata  = $ci->session->userdata('user_data');
-		return  empresa();
+        $ci = &get_instance();
+        $userdata = $ci->session->userdata('user_data');
+        return empresa();
     }
 }
 
-if(!function_exists('validarSesion')){
+if (!function_exists('validarSesion')) {
 
-    function validarSesion(){
+    function validarSesion()
+    {
         $ci = &get_instance();
         $userdata = $ci->session->userdata('user_data');
-        if(empty($userdata)) redirect(base_url().'Login');
+        if (empty($userdata)) {
+            redirect(base_url() . 'Login');
+        }
+
     }
 
 }

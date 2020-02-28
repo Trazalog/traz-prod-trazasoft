@@ -66,4 +66,7 @@
 </div>
 
 
+<script>
+var task = <?php echo json_encode($tarea) ?> ;
+</script>
 <?php $this->load->view(BPM.'scripts/tarea_std'); ?>

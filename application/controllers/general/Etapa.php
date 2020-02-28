@@ -36,27 +36,27 @@ class Etapa extends CI_Controller {
 	// Llama a etapas para una nueva Etapa
 	public function nuevo()
 	{		
-			#Snapshot
-			$user = 'fernando_leiva';
-			$view = 'etapa/abm';
-			$data['key'] = $view . $user;
+		#Snapshot
+		$user = userNick();
+		$view = 'etapa/abm';
+		$data['key'] = $view . $user;
 
-			$data['fecha'] = date('Y-m-d');
-			$data['id'] = $this->input->get('op');
-			$data['etapa'] = $this->Etapas->nuevo($data['id'])->etapa; // listo llama a etapas/1
-			$data['idetapa'] = $data['etapa']->id;
-			$data['accion'] = 'Nuevo';
-			$data['op'] = 	$data['etapa']->titulo;
+		$data['fecha'] = date('Y-m-d');
+		$data['id'] = $this->input->get('op');
+		$data['etapa'] = $this->Etapas->nuevo($data['id'])->etapa; // listo llama a etapas/1
+		$data['idetapa'] = $data['etapa']->id;
+		$data['accion'] = 'Nuevo';
+		$data['op'] = 	$data['etapa']->titulo;
 
-			$this->load->model(ALM.'Articulos');
-			$data['materias'] = $this->Articulos->getList(); // listo
-			$data['lang'] = lang_get('spanish',5);
-			$data['tareas'] = [];//$this->Tareas->listar()->tareas->tarea; 
-			$data['templates'] = [];//$this->Templates->listar()->templates->template; 
-			$data['establecimientos'] = $this->Establecimientos->listar($data['id'])->establecimientos->establecimiento; // listo
-			$data['recursosmateriales'] = [];//;$this->Recursos_Materiales->listar()->recursos->recurso;
-			$data['rec_trabajo'] = $this->Recursos->obtenerXTipo('TRABAJO')['data'];
-			$this->load->view($view, $data);
+		$this->load->model(ALM.'Articulos');
+		$data['materias'] = $this->Articulos->getList(); // listo
+		$data['lang'] = lang_get('spanish',5);
+		$data['tareas'] = [];//$this->Tareas->listar()->tareas->tarea; 
+		$data['templates'] = [];//$this->Templates->listar()->templates->template; 
+		$data['establecimientos'] = $this->Establecimientos->listar($data['id'])->establecimientos->establecimiento; // listo
+		$data['recursosmateriales'] = [];//;$this->Recursos_Materiales->listar()->recursos->recurso;
+		$data['rec_trabajo'] = $this->Recursos->obtenerXTipo('TRABAJO')['data'];
+		$this->load->view($view, $data);
 	}
 	// guarda el Inicio de una nueva etapa mas orden pedido y lanza pedido almac
 	public function guardar(){
