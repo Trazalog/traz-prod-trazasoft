@@ -1,3 +1,4 @@
+<?php $this->load->view(TAREAS_ASIGNAR.'/modal_recurso_material');?>
 <div class="modal" id="modal_materia_prima" tabindex="1" style="z-index:5000;" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -36,8 +37,8 @@
       estado ='<?php echo $etapa->estado;?>'
       existe = document.getElementById('materiasexiste').value;
       var html = '';
-      materia = JSON.stringify(materia);
-      materia =JSON.parse(materia);   
+      var materia = JSON.stringify(materia);
+      materia =JSON.parse(materia); 
       document.getElementById('inputrecursosmateriales').value = materia[0].descripcion;
       if(existe == 'no')
       {
@@ -52,7 +53,8 @@
           html +="<th>Stock Actual</th>";
           html +="<th>Cantidad</th>";
           html +='</tr></thead><tbody>';
-          html += '<tr data-json="'+materia[0]+'" id="'+materia[0].arti_id+'">';
+          // html += '<tr data-json="'+materia[0]+'" id="'+materia[0].arti_id+'">';
+          html += '<tr data-json="'+materia[0]+'" id="'+materia[0].id+'">';
           if(estado != 'En Curso'){
           html += '<td><i class="fa fa-fw fa-minus text-light-blue tablamateriasasignadas_borrar" style="cursor: pointer; margin-left: 15px;" title="Nuevo"></i></td>';
           }
@@ -68,7 +70,8 @@
             
       } else  if(existe == 'si')
       {
-          html += '<tr data-json="'+materia[0]+'" id="'+materia[0].arti_id+'">';
+          // html += '<tr data-json="'+materia[0]+'" id="'+materia[0].arti_id+'">';
+          html += '<tr data-json="'+materia[0]+'" id="'+materia[0].id+'">';
           if(estado != 'En Curso'){
           html += '<td><i class="fa fa-fw fa-minus text-light-blue tablamateriasasignadas_borrar" style="cursor: pointer; margin-left: 15px;" title="Nuevo"></i></td>';
           }
