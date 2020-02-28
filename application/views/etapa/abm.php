@@ -19,7 +19,7 @@
         <!-- /.box-header -->
         <div class="box-body">
             <div class="row">
-                <input type="hidden" value="<?php echo $etapa->id ?>" id="batch_id" name="batch_id">
+                <input type="hidden" value="0" id="batch_id" name="batch_id">
                 <div class="col-md-1 col-xs-12">
                     <label for="Lote" class="form-label">Codigo Lote:*</label>
                 </div>
@@ -316,12 +316,12 @@
         var idetapa = <?php echo $idetapa; ?>;
         var cantidad = $('#cantidadproducto').val();
         if (_isset($('#idproducto').attr('data-json'))) {
-            var idprod = JSON.parse($('#idproducto').attr('data-json'));
-            console.log('idprod: ' + idprod.id);
+            var prod = JSON.parse($('#idproducto').attr('data-json'));
+            console.log(prod);
         }
         var estadoEtapa = $('#estadoEtapa').val();
         var batch_id = $('#batch_id').val();
-        // wo();
+
         console.log("Boton: " + boton);
         var data = {
             idetapa: idetapa,
@@ -332,7 +332,7 @@
             op: op,
             materia: materia,
             cantidad: cantidad,
-            idprod: idprod.id,
+            idprod: prod.arti_id,
             estadoEtapa: estadoEtapa,
             batch_id: batch_id
         };
@@ -343,17 +343,7 @@
             // dataType: 'JSON',
             url: 'general/Etapa/guardar/' + boton,
             data: {
-                idetapa: idetapa,
-                lote: lote,
-                fecha: fecha,
-                establecimiento: establecimiento,
-                recipiente: recipiente,
-                op: op,
-                materia: materia,
-                cantidad: cantidad,
-                idprod: idprod.id,
-                estadoEtapa: estadoEtapa,
-                batch_id: batch_id
+               data
             },
             success: function(rsp) {
                 // rsp = JSON.parse(rsp);

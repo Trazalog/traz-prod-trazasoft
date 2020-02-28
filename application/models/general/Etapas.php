@@ -49,14 +49,6 @@ class Etapas extends CI_Model
     }
     public function nuevo($opcion)
     {
-        // $parametros["http"]["method"] = "GET";
-        // $parametros["http"]["header"] = "Accept: application/json";
-        // $param = stream_context_create($parametros);
-        // $resource = '/etapas/';
-        // $url = REST2.$resource.$opcion;
-        // $array = file_get_contents($url, false, $param);
-        // return json_decode($array);
-
         log_message('DEBUG', 'Etapas/nuevo($opcion)-> ' . $opcion);
 
         $resource = '/etapas/';

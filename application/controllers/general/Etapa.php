@@ -61,25 +61,24 @@ class Etapa extends CI_Controller
 		$data['rec_trabajo'] = $this->Recursos->obtenerXTipo('TRABAJO')['data'];
 		$this->load->view($view, $data);
 	}
+	
 	// guarda el Inicio de una nueva etapa mas orden pedido y lanza pedido almac
 	public function guardar($nuevo = null)
 	{
-
-		// $rsp = "ok";
-		// echo ($nuevo);
-		log_message('DEBUG', 'C#ETAPA > guardar | #DATA-POST: ' . json_encode($this->input->post()));
+		$post_data =  $this->input->post('data');
+	
+		log_message('DEBUG', 'C#ETAPA > guardar | #DATA-POST: ' . json_encode($post_data));
 		//////////// PARA CREAR EL NUEVO BATCH ///////////////////
-		//  json_decode($this->input->post('batch_id'));
-		$datosCab['arti_id'] = (string) $this->input->post('idprod');
-		$datosCab['lote_id'] = (string) $this->input->post('lote');
-		// $datosCab['arti_id'] = (string) $this->input->post('idprod');
+		
+		$datosCab['arti_id'] = (string) $post_data['idprod'];
+		$datosCab['lote_id'] = (string) $post_data['lote'];
 		$datosCab['prov_id'] = (string) PROVEEDOR_INTERNO;
 		$datosCab['batch_id_padre'] = (string) 0;
-		$datosCab['cantidad'] = (string) $this->input->post('cantidad');
+		$datosCab['cantidad'] = (string) $post_data['cantidad'];
 		$datosCab['cantidad_padre'] = (string) 0;
-		$datosCab['num_orden_prod'] = (string) $this->input->post('op');
-		$datosCab['reci_id'] = (string) $this->input->post('recipiente');
-		$datosCab['etap_id'] = (string) $this->input->post('idetapa');
+		$datosCab['num_orden_prod'] = (string) $post_data['op'];
+		$datosCab['reci_id'] = (string) $post_data['recipiente'];
+		$datosCab['etap_id'] = (string) $post_data['idetapa'];
 		$datosCab['usuario_app'] = userNick();
 		$datosCab['empr_id'] = (string) empresa();
 		$datosCab['forzar_agregar'] = "FALSE";
@@ -87,12 +86,11 @@ class Etapa extends CI_Controller
 		$datosCab['recu_id'] = "0";
 		$datosCab['tipo_recurso'] = "";
 
-		$batch_id = (string) $this->input->post('batch_id'); //mbustos
-		$datosCab['batch_id'] = $batch_id;
-		$estado = $this->input->post('estadoEtapa'); //mbustos
+		$batch_id = (string) $post_data['batch_id']; //mbustos
+		$datosCab['batch_id'] = $batch_id; // SI LO MANDA VACIO LO CREA SINO LO EDITAR
+		$estado = $post_data['estadoEtapa']; //mbustos
 
-		// $batch_id = 'NadaDeNada';
-		// echo ($batch_id);
+		
 		if ($estado == 'PLANIFICADO' || $nuevo == 'guardar') {
 			$datosCab['planificado'] = 'true';
 			$data['_post_lote'] = $datosCab;
@@ -111,13 +109,13 @@ class Etapa extends CI_Controller
 		}
 		$respServ = $this->Etapas->SetNuevoBatch($data);
 		$batch_id	= $respServ->respuesta->resultado;
-		// $post = json_decode($this->input->post('batch_id'));
-		// $post = $this->input->post('batch_id');
+		// $post = json_decode($post_data['batch_id']);
+		// $post = $post_data['batch_id'];
 		// $batch_id = $post;
 		// echo ($batch_id);
 
 		// guardo recursos materiales (origen)
-		$materia = $this->input->post('materia');
+		$materia = $post_data['materia'];
 
 		if (!$batch_id) {
 			log_message('ERROR', 'Etapa/guardar #ERROR BATCH_ID NULO: >>' . $batch_id);
@@ -187,7 +185,7 @@ class Etapa extends CI_Controller
 		if (($batch_id != "BATCH_NO_CREADO")  || ($batch_id != "RECI_NO_VACIO")) {
 
 			////////////// INSERTAR CABECERA NOTA PEDIDO   ///
-			$arrayPost['fecha'] = $this->input->post('fecha');
+			$arrayPost['fecha'] = $post_data['fecha'];
 			$arrayPost['empr_id'] = (string) empresa();
 			$arrayPost['batch_id'] = $batch_id;
 			$cab['_post_notapedido'] = $arrayPost;
@@ -269,7 +267,9 @@ class Etapa extends CI_Controller
 			log_message('ERROR', 'Error en creacion Batch. batch_id: >>' . $batch_id);
 			echo ("Error en creacion Batch");
 		}
-	}
+	}}
+
+
 	// trae info para informe de Etapa (Todas y Fraccionar)
 	public function editar()
 	{
