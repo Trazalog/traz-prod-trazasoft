@@ -288,14 +288,15 @@
         var tabla = $('#tablamateriasasignadas tbody tr');
         var materiales = [];
         var materia = [];
-        var i = 0;
+     
         $.each(tabla, function(index) {
             var cantidad = $(this).find("td").eq(3).html();
             var id_materia = $(this).attr("id");
             if (id_materia != null) {
-                materia[id_materia] = cantidad;
+                materia.push({id_materia, cantidad});
             }
         });
+        
         var lote = $('#Lote').val();
         var fecha = $('#fecha').val();
         var establecimiento = document.getElementById('establecimientos').value;
@@ -323,6 +324,7 @@
         var batch_id = $('#batch_id').val();
 
         console.log("Boton: " + boton);
+        
         var data = {
             idetapa: idetapa,
             lote: lote,
@@ -347,10 +349,9 @@
             },
             success: function(rsp) {
                 // rsp = JSON.parse(rsp);
-                if (rsp) {
-                    alert('Salida Guardada exitosamente. Msj: ' + rsp);
-                    console.log("ok: " + rsp);
-                    linkTo('general/Etapa/index');
+                if (rsp.status == 'true') {
+                    alert('Salida Guardada exitosamente.');
+                   // linkTo('general/Etapa/index');
                 } else {
                     alert('Fallo al guardar. Msj: ' + rsp);
                 }

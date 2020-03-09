@@ -40,6 +40,9 @@
       var materia = JSON.stringify(materia);
       materia =JSON.parse(materia); 
       document.getElementById('inputrecursosmateriales').value = materia[0].descripcion;
+
+      console.log(materia);
+      
       if(existe == 'no')
       {
       
@@ -54,7 +57,7 @@
           html +="<th>Cantidad</th>";
           html +='</tr></thead><tbody>';
           // html += '<tr data-json="'+materia[0]+'" id="'+materia[0].arti_id+'">';
-          html += '<tr data-json="'+materia[0]+'" id="'+materia[0].id+'">';
+          html += '<tr data-json="'+JSON.stringify(materia[0])+'" id="'+materia[0].arti_id+'">';
           if(estado != 'En Curso'){
           html += '<td><i class="fa fa-fw fa-minus text-light-blue tablamateriasasignadas_borrar" style="cursor: pointer; margin-left: 15px;" title="Nuevo"></i></td>';
           }
@@ -70,8 +73,7 @@
             
       } else  if(existe == 'si')
       {
-          // html += '<tr data-json="'+materia[0]+'" id="'+materia[0].arti_id+'">';
-          html += '<tr data-json="'+materia[0]+'" id="'+materia[0].id+'">';
+          html += '<tr data-json="'+JSON.stringify(materia[0])+'" id="'+materia[0].arti_id+'">';
           if(estado != 'En Curso'){
           html += '<td><i class="fa fa-fw fa-minus text-light-blue tablamateriasasignadas_borrar" style="cursor: pointer; margin-left: 15px;" title="Nuevo"></i></td>';
           }

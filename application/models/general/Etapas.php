@@ -73,10 +73,6 @@ class Etapas extends CI_Model
     public function setRecursosLotesProd($batch_id, $recu_id, $cantidad)
     {
 
-        log_message('DEBUG', 'Etapas/setRecursos(batch_id)-> ' . $batch_id);
-        log_message('DEBUG', 'Etapas/setRecursos(tipoRecurso)-> ' . PRODUCTO);
-        log_message('DEBUG', 'Etapas/setRecursos(recu_id)-> ' . $recu_id);
-        log_message('DEBUG', 'Etapas/setRecursos(cantidad)-> ' . $cantidad);
         $arrayDatos['batch_id'] = (string) $batch_id;
         $arrayDatos['recu_id'] = (string) $recu_id;
         $arrayDatos['usuario'] = userNick();
@@ -87,17 +83,15 @@ class Etapas extends CI_Model
         $arrayDatos['empa_id'] = "0";
         $arrayDatos['empa_cantidad'] = "0";
         // FLEIVA 
-        // $arrayDatos['tipo_recurso'] = "";
         $data['_post_recurso'] = $arrayDatos;
-        // mens en log
-        $datos = json_encode($data);
-        log_message('DEBUG', 'Etapas/setRecursosLotes(recursos a grabar)-> ' . $datos);
+        
+        log_message('DEBUG', 'Etapas/setRecursosLotes(recursos a grabar)-> ' . json_encode($data));
 
         $resource = '/recurso/lote';
         $url = REST2 . $resource;
-        $array = $this->rest->callAPI("POST", $url, $data);
-        wso2Msj($array);
-        return json_decode($array['status']);
+        $rsp = $this->rest->callAPI("POST", $url, $data);
+        wso2Msj($rsp);
+        return $rsp;
     }
     // guarda prod en recursos lotes (articulos)
     public function setRecursosLotesMat($data)
@@ -116,13 +110,11 @@ class Etapas extends CI_Model
     // guarda materias primas en recursos lotes (request_box)
     public function setRecursosLotes_requestBox($data)
     {
-        log_message('DEBUG', 'Etapas/setRecursosLotes_requestBox: >>' . json_encode($data));
-
         $resource = '/request_box';
         $url = REST2 . $resource;
-        $array = $this->rest->callAPI("POST", $url, $data);
-        wso2Msj($array);
-        return json_decode($array['status']);
+        $rsp = $this->rest->callAPI("POST", $url, $data);
+        wso2Msj($rsp);
+        return $rsp;
     }
 
     // Inicia nueva Etapa (ej siembra)

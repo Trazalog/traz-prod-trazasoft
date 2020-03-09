@@ -15,11 +15,10 @@ if (!function_exists('userId')) {
 if (!function_exists('userNick')) {
 
     function userNick()
-    {
-        #return 'almacen.tools'; //!HARDCODE
+    {   
+        return 'almacen.tools'; //!HARDCODE
         $ci = &get_instance();
-        $userdata = $ci->session->userdata();
-        return $userdata['email'];
+        return $ci->session->userdata('email');
     }
 }
 
