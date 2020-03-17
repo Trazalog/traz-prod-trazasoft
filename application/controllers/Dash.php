@@ -9,7 +9,7 @@ class Dash extends CI_Controller {
    }
    function index(){
 
-      // var_dump($this->session->userdata());die;
+      #var_dump($this->session->userdata());die;
       $leng="spanish";
       $page="layout";
       $data['lang'] = lang_get($leng,$page);

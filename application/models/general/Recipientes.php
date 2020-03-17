@@ -14,7 +14,7 @@ class Recipientes extends CI_Model
         $url = REST2.$resource;      
         $array = $this->rest->callAPI("GET",$url); 		           
         log_message('DEBUG', 'Recipientes/listarPorEstablecimiento (resp del servicio)-> '.json_encode($array['data']));				       
-				return json_decode($array['data']);    
+		return json_decode($array['data']);    
     }
 
    

@@ -74,8 +74,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
 $active_group = 'default';
 $query_builder = true;
 $db['default'] = array(
-    'hostname' => 'dev-trazalog.com.ar',
+     'hostname' => 'dev-trazalog.com.ar',
+    //'hostname' => 'localhost',
     'username' => 'arbolado',
+    //'username' => 'postgres',
     'password' => 'password',
     'database' => 'tools_test',
     'dbdriver' => 'pdo', //mysqli
