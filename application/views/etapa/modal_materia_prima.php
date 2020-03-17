@@ -40,39 +40,38 @@
       var materia = JSON.stringify(materia);
       materia =JSON.parse(materia); 
       document.getElementById('inputrecursosmateriales').value = materia[0].descripcion;
-
-      console.log(materia);
       
-      if(existe == 'no')
-      {
+      // if(existe == 'no')
+      // {
       
-          html +='<table id="tablamateriasasignadas" class="table">';
-          html +="<thead>";
-          html +="<tr>";
-          if(estado != 'En Curso'){
-          html +="<th>Acciones</th>";
-          }
-          html +="<th>Titulo</th>";
-          html +="<th>Stock Actual</th>";
-          html +="<th>Cantidad</th>";
-          html +='</tr></thead><tbody>';
-          // html += '<tr data-json="'+materia[0]+'" id="'+materia[0].arti_id+'">';
-          html += '<tr data-json="'+JSON.stringify(materia[0])+'" id="'+materia[0].arti_id+'">';
-          if(estado != 'En Curso'){
-          html += '<td><i class="fa fa-fw fa-minus text-light-blue tablamateriasasignadas_borrar" style="cursor: pointer; margin-left: 15px;" title="Nuevo"></i></td>';
-          }
-          html += '<td>'+materia[0].barcode+'</td>';
-          html += '<td>'+materia[0].stock+'</td>';
-          html += '<td>'+materia[0].cantidad+'</td>';
-          html += '</tr>';
-          html += '</tbody></table>';
-          document.getElementById('materiasasignadas').innerHTML = "";
-          document.getElementById('materiasasignadas').innerHTML = html;
-          $('#tablamateriasasignadas').DataTable({});
-            document.getElementById('materiasexiste').value = 'si';
+      //     html +='<table id="tablamateriasasignadas" class="table">';
+      //     html +="<thead>";
+      //     html +="<tr>";
+      //     if(estado != 'En Curso'){
+      //     html +="<th>Acciones</th>";
+      //     }
+      //     html +="<th>Titulo</th>";
+      //     html +="<th>Stock Actual</th>";
+      //     html +="<th>Cantidad</th>";
+      //     html +='</tr></thead><tbody>';
+      //     // html += '<tr data-json="'+materia[0]+'" id="'+materia[0].arti_id+'">';
+      //     html += '<tr data-json="'+JSON.stringify(materia[0])+'" id="'+materia[0].arti_id+'">';
+      //     if(estado != 'En Curso'){
+      //     html += '<td><i class="fa fa-fw fa-minus text-light-blue tablamateriasasignadas_borrar" style="cursor: pointer; margin-left: 15px;" title="Nuevo"></i></td>';
+      //     }
+      //     html += '<td>'+materia[0].barcode+'</td>';
+      //     html += '<td>'+materia[0].stock+'</td>';
+      //     html += '<td>'+materia[0].cantidad+'</td>';
+      //     html += '</tr>';
+      //     html += '</tbody></table>';
+      //     document.getElementById('materiasasignadas').innerHTML = "";
+      //     document.getElementById('materiasasignadas').innerHTML = html;
+      //     $('#tablamateriasasignadas').DataTable({});
+      //       document.getElementById('materiasexiste').value = 'si';
             
-      } else  if(existe == 'si')
-      {
+      // } else  if(existe == 'si')
+     // {
+          $('#tablamateriasasignadas').dataTable().fnDestroy();
           html += '<tr data-json="'+JSON.stringify(materia[0])+'" id="'+materia[0].arti_id+'">';
           if(estado != 'En Curso'){
           html += '<td><i class="fa fa-fw fa-minus text-light-blue tablamateriasasignadas_borrar" style="cursor: pointer; margin-left: 15px;" title="Nuevo"></i></td>';
@@ -82,14 +81,13 @@
           html += '<td>'+materia[0].cantidad+'</td>';
           html += '</tr>';
           $('#tablamateriasasignadas tbody').append(html);
-          tabla = document.getElementById('tablamateriasasignadas').innerHTML;
-          tabla = '<table id="tablamateriasasignadas" class="table table-bordered table-hover">' + tabla + '</table>';
-          $('#tablamateriasasignadas').dataTable().fnDestroy();
-          document.getElementById('materiasasignadas').innerHTML = "";
-          document.getElementById('materiasasignadas').innerHTML = tabla;
-          $('#tablamateriasasignadas').DataTable({});
+          // tabla = document.getElementById('tablamateriasasignadas').innerHTML;
+          // tabla = '<table id="tablamateriasasignadas" class="table table-bordered table-hover">' + tabla + '</table>';
+          // document.getElementById('materiasasignadas').innerHTML = "";
+          // document.getElementById('materiasasignadas').innerHTML = tabla;
+           $('#tablamateriasasignadas').DataTable({});
           
-      }
+     // }
   }
 </script>
   

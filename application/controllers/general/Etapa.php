@@ -92,18 +92,9 @@ class Etapa extends CI_Controller
         $datosCab['batch_id'] = $batch_id; // SI LO MANDA VACIO LO CREA SINO LO EDITAR
         $estado = $post_data['estadoEtapa']; //mbustos
 
-        if ($estado == 'PLANIFICADO' || $nuevo == 'guardar') {
-            $datosCab['planificado'] = 'true';
-            $data['_post_lote'] = $datosCab;
+        $datosCab['planificado'] = ($estado == 'PLANIFICADO' || $nuevo == 'guardar')?'true':"";
+        $data['_post_lote'] = $datosCab;
 
-            //guarda batch existente modificado (tabla lotes)
-
-        } else {
-            $datosCab['planificado'] = "";
-
-            $data['_post_lote'] = $datosCab;
-
-        }
         $respServ = $this->Etapas->SetNuevoBatch($data);
 
         #En el caso de no existir devuelve nuevo BATCH_ID SINO el EXISTENTE
@@ -111,15 +102,17 @@ class Etapa extends CI_Controller
 
         if (!$batch_id) {
             log_message('ERROR', 'Etapa/guardar #ERROR BATCH_ID NULO: >>' . $batch_id);
-            echo ("Error en creacion Batch");
+            echo json_encode(["status" => false, "msj" => "Error en creacion Batch"]);
+            return;
         }
 
         log_message('DEBUG', 'ETAPA >> guardar | FIN');
 
         $this->guardarParte2($post_data, $datosCab, $batch_id);
 
-        $this->guardarParte3($post_data, $batch_id);
+        $this->guardarParte3($post_data, $batch_id, $nuevo, $estado);
 
+        echo json_encode(['status' => true]);
     }
 
     public function guardarParte2($post_data, $datosCab, $batch_id)
@@ -131,6 +124,10 @@ class Etapa extends CI_Controller
 
         // busca id recurso por id articulo
         $recu_id = $this->Etapas->getRecursoId($datosCab['arti_id']);
+        if(!$recu_id){
+            log_message('ERROR', 'ETAPA/guardarParte2 >> Error al traer ID Rercurso');
+            return false;
+        }
 
         // guarda producto en tabla recurso_lotes
         $respRecurso = $this->Etapas->setRecursosLotesProd($batch_id, $recu_id, $datosCab['cantidad']);
@@ -170,7 +167,7 @@ class Etapa extends CI_Controller
 
     }
 
-    public function guardarParte3($post_data, $batch_id)
+    public function guardarParte3($post_data, $batch_id, $nuevo, $estado)
     {
 
         log_message('DEBUG', 'ETAPA >> guardarParte3 | INICIO');
@@ -206,62 +203,64 @@ class Etapa extends CI_Controller
             }
         }
         $arrayDeta['_post_notapedido_detalle_batch_req'] = $detalle;
-
         $respDetalle = $this->Etapas->setDetaNP($arrayDeta);
 
-       // if ($estado != "PLANIFICADO" || $nuevo == 'iniciar') {
+        if ($respDetalle >= 300) {
+            log_message('ERROR', 'Error en generacion de Detalle Pedido Materiales. respDetalle: >>' . $respDetalle);
+            echo ("Error en generacion de Detalle Pedido Materiales");
+            return;
+        }
 
-          if(true){ 
-            if ($respDetalle < 300) {
-
-                $contract['pIdPedidoMaterial'] = $pema_id;
-                $rsp = $this->bpm->lanzarProceso(BPM_PROCESS_ID_PEDIDOS_NORMALES, $contract);
-
-                $this->load->model(ALM . 'Notapedidos');
-                if ($rsp['status']) {
-                    echo ("ok");
-                    $this->Notapedidos->setCaseId($pema_id, $rsp['data']['caseId']);
-
-                    // AVANZA PROCESO A TAREA SIGUIENTE
-                    if (PLANIF_AVANZA_TAREA) {
-
-                        $taskId = $this->bpm->ObtenerTaskidXNombre(BPM_PROCESS_ID_PEDIDOS_NORMALES, $rsp['data']['caseId'], 'Aprueba pedido de Recursos Materiales');
-                        log_message('DEBUG', 'Etapa/guardar(ObtenerTaskidXNombre) #$taskId->' . $taskId);
-
-                        if ($taskId) {
-                            $user = userId();
-                            $resultSetUsuario = $this->bpm->setUsuario($taskId, $user);
-                            log_message('DEBUG', 'Etapa/guardar #$user->' . $user);
-                            log_message('DEBUG', 'Etapa/guardar #$resultSetUsuario->' . $resultSetUsuario);
-
-                            $contract = array(
-                                "apruebaPedido" => true,
-                            );
-                            if ($resultSetUsuario['status']) {
-                                $resulCerrar = $this->bpm->cerrarTarea($taskId, $contract);
-                                log_message('DEBUG', 'Etapa/guardar #$resulCerrar->' . $resulCerrar);
-                            }
-                        }
-                    }
-                } else {
-                    echo ($rsp['msj']);
-                }
-            } else {
-
-                echo ("Error en generacion de Detalle Pedido Materiales");
-                log_message('ERROR', 'Error en generacion de Detalle Pedido Materiales. respDetalle: >>' . $respDetalle);
-            }
-        } elseif ($estado == "PLANIFICADO") { //&& $result['data']
-            log_message('DEBUG', 'Guardado, batch_id: >>' . $batch_id);
-            echo ($batch_id);
-            // echo json_decode($result);
-        } else {
-            log_message('ERROR', 'Error al guardar. estado: >>' . $estado);
-            echo ("Error al guardar");
+        if ($nuevo == 'iniciar') {
+            $this->lanzarPedidoEtapa($pema_id);
         }
 
         log_message('DEBUG', 'ETAPA >> guardarParte3 | FIN');
 
+    }
+
+    public function lanzarPedidoEtapa($pema_id)
+    {
+        log_message("DEBUG", "ETAPA / lanzarPedidoEtapa >> pema_id: $pema_id");
+
+        $contract['pIdPedidoMaterial'] = $pema_id;
+        $rsp = $this->bpm->lanzarProceso(BPM_PROCESS_ID_PEDIDOS_NORMALES, $contract);
+        if (!$rsp['status']) {
+            log_message('ERROR', 'Etapa/lanzarPedidoEtapa >> Error al lanzar pedido');
+            echo json_encode($rsp);
+            return;
+        }
+
+        $this->load->model(ALM . 'Notapedidos');
+
+        $this->Notapedidos->setCaseId($pema_id, $rsp['data']['caseId']);
+
+        // AVANZA PROCESO A TAREA SIGUIENTE
+        if (PLANIF_AVANZA_TAREA) {
+
+            $this->aceptarPedidoMateriales($rsp['data']['caseId']);
+
+        }
+
+        log_message('DEBUG', 'Etapa / lanzarPedidoEtapa >> FIN');
+    }
+
+    public function aceptarPedidoMateriales($case_id)
+    {
+        $taskId = $this->bpm->ObtenerTaskidXNombre(BPM_PROCESS_ID_PEDIDOS_NORMALES, $case_id, 'Aprueba pedido de Recursos Materiales');
+        log_message('DEBUG', 'Etapa/guardar(ObtenerTaskidXNombre) #$taskId->' . $taskId);
+
+        if ($taskId) {
+            $user = userId();
+            $resultSetUsuario = $this->bpm->setUsuario($taskId, $user);
+            $contract["apruebaPedido"] = true;
+
+            if ($resultSetUsuario['status']) {
+                $resulCerrar = $this->bpm->cerrarTarea($taskId, $contract);
+                log_message('DEBUG', 'Etapa/guardar #$resulCerrar->' . $resulCerrar);
+                return;
+            }
+        }
     }
 
     // trae info para informe de Etapa (Todas y Fraccionar)
@@ -272,17 +271,16 @@ class Etapa extends CI_Controller
         $data['accion'] = 'Editar';
         $data['etapa'] = $this->Etapas->buscar($id)->etapa;
         $data['idetapa'] = $data['etapa']->id;
-        //$data['recipientes'] = $this->Recipientes->listarPorEstablecimiento($data['etapa']->establecimiento->id)->recipientes->recipiente;
+
         $data['recipientes'] = $this->Recipientes->obtener('DEPOSITO', 'TODOS', $data['etapa']->esta_id)['data'];
+
         // trae tablita de materia prima Origen y producto
         $data['matPrimas'] = $this->Etapas->getRecursosOrigen($id, MATERIA_PRIMA)->recursos->recurso;
         $data['producto'] = $this->Etapas->getRecursosOrigen($id, PRODUCTO)->recursos->recurso;
-        // trae recipientes de Tipo Deposito
-        //$data['recipientes'] = $this->Recipientes->listarTodosDeposito()->recipientes->recipiente;
-        // $data['op'] =     $data['etapa']->orden;
+
         $data['op'] = $data['etapa']->titulo;
         $data['lang'] = lang_get('spanish', 4);
-        // $data['establecimientos'] = $this->Establecimientos->listar(2)->establecimientos->establecimiento;
+
         $data['establecimientos'] = $this->Establecimientos->listar()->establecimientos->establecimiento;
         $data['materias'] = $this->Materias->listar()->materias->materia;
         $data['fecha'] = $data['etapa']->fecha;
@@ -291,9 +289,7 @@ class Etapa extends CI_Controller
             // trae lotes segun entrega de materiales de almacen.(81)
             $data['lotesFracc'] = $this->Etapas->getLotesaFraccionar($id)->lotes->lote;
             $data['ordenProd'] = $data['etapa']->orden;
-            //$data['matfraccionar'] = $this->Etapas->getRecursosFraccionar($id, MATERIA_PRIMA)->recursos->recurso;
-            //$data['lotesFracc'] = $this->Etapas->getLotesaFraccionar(81)->lotes->lote;
-            //$data['empaques'] = $this->Recipientes->listarEmpaques()->empaques->empaque;
+
             $this->load->view('etapa/fraccionar/fraccionar', $data);
         } else {
 
@@ -301,7 +297,7 @@ class Etapa extends CI_Controller
             $data['templates'] = []; //$this->Templates->listar()->templates->template;
             $data['recursosmateriales'] = []; //$this->Recursos_Materiales->listar()->recursos->recurso;
             $data['rec_trabajo'] = $this->Recursos->obtenerXTipo('TRABAJO')['data'];
-            $this->load->view('etapa/abm', $data);
+            $this->load->view('etapa/abm_editar', $data);
         }
     }
     // guarda fraccionamiento y lanza pedido de materiales

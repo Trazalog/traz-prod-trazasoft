@@ -98,7 +98,35 @@
 
             </div>
         </div>
-    <?php } ?>
+    <?php }else{
+
+
+
+          echo'<table id="tablamateriasasignadas" class="table">';
+          echo"<thead>";
+        
+          if(estado != 'En Curso'){
+            echo"<th>Acciones</th>";
+          }
+          echo"<th>Titulo</th>";
+          echo"<th>Stock Actual</th>";
+          echo"<th>Cantidad</th>";
+          echo'</thead>';
+          echo '<tbody>';
+
+          foreach ($matPrimas as $fila) {
+                echo "<tr data-json='".json_encode($fila)."' id='$fila->arti_id'>";
+                #if(estado != 'En Curso'){
+                echo '<td><i class="fa fa-fw fa-minus text-light-blue tablamateriasasignadas_borrar" style="cursor: pointer; margin-left: 15px;" title="Nuevo"></i></td>';
+                echo "<td>$fila->barcode</td>";
+                echo "<td>$fila->stock</td>";
+                echo "<td>$fila->cantidad</td>";
+                echo "</tr>";
+         }
+          echo '</tbody></table>';
+
+
+    } ?>
 </div>
 <!-- ./ Origen -->
 

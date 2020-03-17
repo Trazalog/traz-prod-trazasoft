@@ -208,13 +208,9 @@
 
     }
 
-    // function callRecipiente(callback) {
+    callRecipiente();
     function callRecipiente() {
-        actualizaRecipiente($('#establecimientos').val());
-        // delay(1000);            
-        console.log('2');
-        // setTimeout(callback, 1250);
-        // callback();        
+        actualizaRecipiente($('#establecimientos').val());  
     }
 
     accion = '<?php echo $accion; ?>';
@@ -257,9 +253,7 @@
                     return;
                 }
                 fillSelect('#recipientes', result.data);
-                // if (estadoEtapa == 'FINALIZADO') {
-                //     selectOption();
-                // }
+       
 
             },
             error: function() {
@@ -300,18 +294,11 @@
         var lote = $('#Lote').val();
         var fecha = $('#fecha').val();
         var establecimiento = document.getElementById('establecimientos').value;
-        // recipiente = document.getElementById('recipientes').value;
+        
 
-        var recipiente1 = $('#recipientesHidden').attr('data-json');
-        if (_isset(recipiente1)) {
-            console.log('hay recipiente 1');
-            recipiente = recipiente1;
-        }
-        var recipiente2 = $('#recipientes').attr('data-json');
-        if (_isset(recipiente2)) {
-            console.log('hay recipiente 2');
-            recipiente = JSON.parse(recipiente2).reci_id; //si existen ambos reci, el reci2 pisa al reci1.
-        }
+    
+        var recipiente = getJson($('#recipientes')).reci_id;
+        
 
         var op = document.getElementById('ordenproduccion').value;
         var idetapa = <?php echo $idetapa; ?>;
@@ -339,19 +326,20 @@
             batch_id: batch_id
         };
         console.log(data);
-
+        wo();
         $.ajax({
             type: 'POST',
-            // dataType: 'JSON',
+            dataType: 'JSON',
             url: 'general/Etapa/guardar/' + boton,
             data: {
                data
             },
             success: function(rsp) {
-                // rsp = JSON.parse(rsp);
-                if (rsp.status == 'true') {
+                console.log(rsp);
+                
+                if (rsp.status) {
                     alert('Salida Guardada exitosamente.');
-                   // linkTo('general/Etapa/index');
+                    linkTo('general/Etapa/index');
                 } else {
                     alert('Fallo al guardar. Msj: ' + rsp);
                 }
@@ -362,7 +350,7 @@
                 console.log("error: " + rsp);
             },
             complete: function() {
-                // wc();
+                 wc();
             }
         });
     }
