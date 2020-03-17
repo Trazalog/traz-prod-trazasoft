@@ -92,7 +92,7 @@ class Etapa extends CI_Controller
         $datosCab['batch_id'] = $batch_id; // SI LO MANDA VACIO LO CREA SINO LO EDITAR
         $estado = $post_data['estadoEtapa']; //mbustos
 
-        $datosCab['planificado'] = ($estado == 'PLANIFICADO' || $nuevo == 'guardar')?'true':"";
+        $datosCab['planificado'] = ($estado == 'PLANIFICADO' && $nuevo == 'guardar')?'true':"";
         $data['_post_lote'] = $datosCab;
 
         $respServ = $this->Etapas->SetNuevoBatch($data);
