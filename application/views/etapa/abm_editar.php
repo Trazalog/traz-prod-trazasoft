@@ -29,8 +29,7 @@
                 <div class="col-md-5 col-xs-12">
                     <input name="vcode" type="text" id="Lote" <?php if ($accion == 'Editar') {
                         echo 'value="' . $etapa->lote . '"';
-                    } ?> class="form-control" placeholder="Inserte Lote"
-                        <?php if ($etapa->estado == 'En Curso' || $etapa->estado == 'FINALIZADO') {
+                    } ?> class="form-control" placeholder="Inserte Lote" <?php if ($etapa->estado == 'En Curso' || $etapa->estado == 'FINALIZADO') {
                                                                         echo 'disabled';
                                                                     } ?>>
                 </div>
@@ -149,13 +148,22 @@
                         <!-- /.box-body -->
                         <div class="modal-footer">
 
-                            <?php if ($etapa->estado != 'En Curso' || $etapa->estado != 'Finalizado') {
-                                echo "<button class='btn btn-primary' onclick='guardar(\"iniciar\")'>Iniciar Etapa</button>";
-                            } else if ($etapa->estado == 'En Curso') {
-                                echo '<button class="btn btn-primary" id="btnfinalizar" onclick="finalizar()">Reporte de Producción</button>';
+                            <?php 
+
+                            if($etapa->estado != 'Finalizado'){
+
+                                if ($etapa->estado == 'En Curso') {
+                                    
+                                    echo '<button class="btn btn-primary" id="btnfinalizar" onclick="finalizar()">Reporte de Producción</button>';
+                                    
+                                } else {
+                                    
+                                    echo "<button class='btn btn-primary' onclick='guardar(\"iniciar\")'>Iniciar Etapa</button>";
+                                    echo "<button class='btn btn-primary' onclick='guardar(" . '"guardar"' . ")'>Guardar</button>";
+                                }
                             }
 
-                            echo "<button class='btn btn-primary' onclick='guardar(" . '"guardar"' . ")'>Guardar</button>";
+                            
                             ?>
 
                         </div>
@@ -171,7 +179,14 @@
 
 
 <script>
-if ($('#accion').val() == 'Editar') actualizaRecipiente($('#establecimientos').val(), 'recipientes');
+
+if ($('#estado').val() == 'PLANIFICADO') actualizaRecipiente($('#establecimientos').val(), 'recipientes');
+else {
+    //Inhabilitar la edicion del los formularios
+    $('.form-control').prop('disabled', true);alert('holis');
+}
+
+
 
 function actualizaRecipiente(establecimiento, recipientes) {
 
@@ -262,10 +277,10 @@ function guardar(boton) {
     var cantidad = $('#cantidadproducto').val();
 
     var json = getJson($('#idproducto'));
-    var prod = prod?prod.id:0;
+    var prod = prod ? prod.id : 0;
 
     var recipiente = getJson($('#recipientes'));
-    var recipiente = recipiente?recipiente.reci_id:0;
+    var recipiente = recipiente ? recipiente.reci_id : 0;
 
     var estadoEtapa = $('#estadoEtapa').val();
     var batch_id = $('#batch_id').val();
@@ -287,9 +302,9 @@ function guardar(boton) {
     console.log('ETAPA_POST_DATA: ');
     console.log(data);
     console.log('FIN ETAPA');
-    
-    
-    
+
+
+
 
     wo();
     $.ajax({
