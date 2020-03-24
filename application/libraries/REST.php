@@ -89,24 +89,27 @@ class REST
             $body = substr($result, $header_size);
 
             curl_close($curl);
-
-            log_message('DEBUG', '#TRAZA | #REST | #CURL | #HEADER SALIDA >> ' . $headerSent);
+        if ($response_code >= 300) {
+           
 
            
 
-            log_message('DEBUG', '#TRAZA | #REST | #CURL | #HTTP_CODE >> ' . $response_code);
+            // log_message('DEBUG', '#TRAZA | #REST | #CURL | #HTTP_CODE >> ' . $response_code);
 
-            log_message('DEBUG', '#TRAZA | #REST | #CURL | #HEADER RESPUESTA>> ' . $headers);
+            // log_message('DEBUG', '#TRAZA | #REST | #CURL | #HEADER RESPUESTA>> ' . $headers);
 
-            log_message('DEBUG', '#TRAZA | #REST | #CURL | #BODY >> ' . json_encode($body));
+            // log_message('DEBUG', '#TRAZA | #REST | #CURL | #BODY >> ' . json_encode($body));
             
-             if ($response_code >= 300) {
+            
                     
                 log_message('ERROR', '#TRAZA | #REST | #CURL | #HTTP_CODE >> ' . $response_code);
+                log_message('ERROR', '#TRAZA | #REST | #CURL | #HEADER SALIDA >> ' . $headerSent);
+                log_message('ERROR', '#TRAZA | #REST | #CURL | #HEADER SALIDA BODY >> ' . json_encode($data));
 
-                log_message('ERROR', '#TRAZA | #REST | #CURL | #HEADER RESPUESTA>> ' . $headers);
-
+                
+                log_message('ERROR', '#TRAZA | #REST | #CURL | #HEADER RESPUESTA >> ' . $headers);
                 log_message('ERROR', '#TRAZA | #REST | #CURL | #BODY >> ' . json_encode($body));
+
             }
 
             return ['status' => ($response_code < 300), 'header' => $headers, 'data' =>$body, 'code' => $response_code];

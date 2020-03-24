@@ -154,23 +154,12 @@
 
     function aceptarMateria() {
         cantidad = document.getElementById('cantidadmateria').value;
-        console.log('cantidad: ' + cantidad);
-        console.log('matSelect: ' + matSelect);
-        console.table(matSelect);
         materia = matSelect;
-        console.log('materia: ' + materia);
-        console.table(materia);
         materia.cantidad = cantidad;
-        // console.log('materia: ' + materia);
         materia = JSON.stringify(materia);
-        console.log('materia: ' + materia);
-        console.table(materia);
         materia = '[' + materia + ']';
-        console.log('materia: ' + materia);
-        console.table(materia);
         materia = JSON.parse(materia);
-        console.log('materia: ' + materia);
-        console.table(materia);
+       
         agregaMateria(materia);
     }
 </script>

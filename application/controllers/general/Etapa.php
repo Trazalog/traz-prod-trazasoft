@@ -92,7 +92,7 @@ class Etapa extends CI_Controller
         $datosCab['batch_id'] = $batch_id; // SI LO MANDA VACIO LO CREA SINO LO EDITAR
         $estado = $post_data['estadoEtapa']; //mbustos
 
-        $datosCab['planificado'] = ($estado == 'PLANIFICADO' && $nuevo == 'guardar')?'true':"";
+        $datosCab['planificado'] = ($nuevo == 'guardar')?'true':"";
         $data['_post_lote'] = $datosCab;
 
         $respServ = $this->Etapas->SetNuevoBatch($data);
@@ -108,7 +108,8 @@ class Etapa extends CI_Controller
 
         log_message('DEBUG', 'ETAPA >> guardar | FIN');
 
-        $this->guardarParte2($post_data, $datosCab, $batch_id);
+        $res = $this->guardarParte2($post_data, $datosCab, $batch_id);
+        if(!$res) return;
 
         $this->guardarParte3($post_data, $batch_id, $nuevo, $estado);
 
@@ -154,16 +155,18 @@ class Etapa extends CI_Controller
             }
         }
 
-        log_message('DEBUG', 'JSON request_box: >>' . json_encode($arrayTemp1));
+        log_message('DEBUG', 'JSON request_box: >> ' . json_encode($arrayTemp1));
 
         $rspRequestBox = $this->Etapas->setRecursosLotes_requestBox($arrayTemp1);
-        log_message('DEBUG', 'setRecursosLotes_requestBox(): >>' . $rspRequestBox);
+      
         if (!$rspRequestBox['status']) {
-            log_message('ERROR', 'setRecursosLotes_requestBox(): >>' . $rspRequestBox);
+            log_message('ERROR', 'setRecursosLotes_requestBox(): >> ' . json_encode($rspRequestBox));
             echo ("Error al guardar las materias primas. ");
+            return false;
         }
 
         log_message('DEBUG', 'ETAPA >> guardarParte2 | FIN');
+        return true;
 
     }
 
