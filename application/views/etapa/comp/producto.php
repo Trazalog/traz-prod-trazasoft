@@ -25,11 +25,11 @@
                         <label for="template" class="form-label">Cantidad:</label>
                     </div>
                     <div class="col-md-5 col-xs-11">
-                        <input type="number" class="form-control" placeholder="Inserte Cantidad" id="cantidadproducto"
+                        <input type="number" class="form-control" placeholder="Inserte Cantidad" id="cantidad_producto"
                             name="vcantprod">
                     </div>
                     <div class="col-md-1 col-xs-1">
-                        <input type="text" class="form-control" value=" - " id="um" disabled name="vum">
+                        <input type="text" class="form-control" value=" - " id="pum" disabled name="vum">
                     </div>
                 </div>
             </div>
@@ -45,13 +45,13 @@ var producto = <?php echo json_encode($producto[0]) ?>
 if(producto){
     $('#idproducto').val(producto.arti_id);
     $('#idproducto').trigger('change');
-    $('#cantidadproducto').val(producto.cantidad);
-    $('#um').val(producto.uni_med);
+    $('#cantidad_producto').val(producto.cantidad);
+    $('#pum').val(producto.uni_med);
 }
 
 
 $('#idproducto').on('change', function() {
     var data = getJson(this);
-    $('#um').val(data.um);
+    $('#pum').val(data.um);
 });
 </script>

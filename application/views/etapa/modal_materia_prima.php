@@ -72,6 +72,8 @@
       // } else  if(existe == 'si')
      // {
           $('#tablamateriasasignadas').dataTable().fnDestroy();
+           
+          materia[0].arti_id = materia[0].id;
           html += '<tr data-json="'+JSON.stringify(materia[0])+'" id="'+materia[0].arti_id+'">';
           if(estado != 'En Curso'){
           html += '<td><i class="fa fa-fw fa-minus text-light-blue tablamateriasasignadas_borrar" style="cursor: pointer; margin-left: 15px;" title="Nuevo"></i></td>';

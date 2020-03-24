@@ -179,12 +179,12 @@
 
 
 <script>
-
-if ($('#estado').val() == 'PLANIFICADO') actualizaRecipiente($('#establecimientos').val(), 'recipientes');
-else {
+actualizaRecipiente($('#establecimientos').val(), 'recipientes');
+if ($('#estado_etapa').val() != 'PLANIFICADO') 
+{
     //Inhabilitar la edicion del los formularios
-    $('.form-control').prop('disabled', true);alert('holis');
-}
+    $('.form-control').prop('disabled', true);
+}    
 
 
 
@@ -263,22 +263,15 @@ function guardar(boton) {
     var lote = $('#Lote').val();
     var fecha = $('#fecha').val();
     var establecimiento = document.getElementById('establecimientos').value;
-    // recipiente = document.getElementById('recipientes').value;
-
-    var recipiente1 = $('#recipientesHidden').attr('data-json');
-    if (_isset(recipiente1)) {
-        console.log('hay recipiente 1');
-        recipiente = recipiente1;
-    }
-
 
     var op = document.getElementById('ordenproduccion').value;
     var idetapa = <?php echo $idetapa ?> ;
-    var cantidad = $('#cantidadproducto').val();
+    var cantidad = $('#cantidad_producto').val();
 
-    var json = getJson($('#idproducto'));
+    var prod = getJson($('#idproducto'));
     var prod = prod ? prod.id : 0;
-
+    
+    
     var recipiente = getJson($('#recipientes'));
     var recipiente = recipiente ? recipiente.reci_id : 0;
 
@@ -298,13 +291,6 @@ function guardar(boton) {
         estadoEtapa: estadoEtapa,
         batch_id: batch_id
     };
-
-    console.log('ETAPA_POST_DATA: ');
-    console.log(data);
-    console.log('FIN ETAPA');
-
-
-
 
     wo();
     $.ajax({
@@ -333,41 +319,7 @@ function guardar(boton) {
         }
     });
 }
-// valida campos vacios
-// function valida(boton) {
 
-//     alert('valida');    
-//     mensaje = "No se ha podido completar la operacion debido a que algunos datos no han sido completados: <br>";
-//     ban = true;
-//     if (document.getElementById('Lote').value == "") {
-//         mensaje += "- No ha ingresado Lote <br>";
-//         ban = false;
-//     }
-//     if (document.getElementById('fecha').value == "") {
-//         mensaje += "- No ha ingresado Fecha <br>";
-//         ban = false;
-//     }
-//     if ($('#establecimientos').val() == "") {
-//         mensaje += "- No ha seleccionado establecimiento <br>";
-//         ban = false;
-//     }
-//     if ($('#recipientes').val() == "") {
-//         mensaje += "- No ha seleccionado recipiente <br>";
-//         ban = false;
-//     }
-//     if (document.getElementById('materiasexiste').value == "no") {
-//         mensaje += "- No ha seleccionado ninguna materia prima <br>";
-//         ban = false;
-//     } //################# SOLUCIONAR ERROR AL INSERTAR MATERIA #################################################
-//     // if (document.getElementById('existe_tabla').value == "no") {
-//     //     mensaje += "- No ha seleccionado ninguna tarea <br>";
-//     //     ban = false;
-//     // }
-//     if (ban) {
-//         guardar(boton);
-//     }
-
-// }
 
 // selecciona id de producto y guarda en input hidden
 $("#inputproductos").on('change', function() {
