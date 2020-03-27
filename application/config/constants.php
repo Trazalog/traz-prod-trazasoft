@@ -91,14 +91,14 @@ define('DNATO','http://localhost/traz-comp-dnato/');
 #TRAZ-COMP-BPM
 define('BPM', 'traz-comp-bpm/');
 
-define('BONITA_URL', 'http://35.243.231.36:8080/bonita/');
+define('BONITA_URL', 'http://www.trazalog.com.ar:8080/bonita/');
 
-define('BPM_PROCESS_ID_PEDIDOS_NORMALES', '6352939331165329370');
+define('BPM_PROCESS_ID_PEDIDOS_NORMALES', '8803232493891311406');
 
 define('BPM_PROCESS_ID_PEDIDOS_EXTRAORDINARIOS', '6013058915384903051');
 
 define('BPM_PROCESS', json_encode(array(
-    '6352939331165329370' => ['nombre' => 'Ped. Materiales', 'color' => '#F39C12'],
+    '8803232493891311406' => ['nombre' => 'Ped. Materiales', 'color' => '#F39C12'],
     '6013058915384903051' => ['nombre' => 'Ped. Materiales Ext', 'color' => '#F39C12'],
     '7503443566840192735' => ['nombre' => 'Proc. Mantenimiento', 'color' => '#00A65A'],
 )));

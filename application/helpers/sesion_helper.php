@@ -4,7 +4,7 @@ if (!function_exists('userId')) {
 
     function userId()
     {
-        return 301; //!HARDCODE
+        return 101; //!HARDCODE
 
         $ci = &get_instance();
         $userdata = $ci->session->userdata('user_data');
@@ -15,11 +15,10 @@ if (!function_exists('userId')) {
 if (!function_exists('userNick')) {
 
     function userNick()
-    {
-        #return 'almacen.tools'; //!HARDCODE
+    {   
+        return 'almacen.tools'; //!HARDCODE
         $ci = &get_instance();
-        $userdata = $ci->session->userdata();
-        return $userdata['email'];
+        return $ci->session->userdata('email');
     }
 }
 

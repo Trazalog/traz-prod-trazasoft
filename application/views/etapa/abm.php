@@ -19,7 +19,7 @@
         <!-- /.box-header -->
         <div class="box-body">
             <div class="row">
-                <input type="hidden" value="<?php echo $etapa->id ?>" id="batch_id" name="batch_id">
+                <input type="hidden" value="0" id="batch_id" name="batch_id">
                 <div class="col-md-1 col-xs-12">
                     <label for="Lote" class="form-label">Codigo Lote:*</label>
                 </div>
@@ -177,7 +177,7 @@
                         <div class="modal-footer">
 
                             <?php if ($etapa->estado != 'En Curso' || $etapa->estado != 'Finalizado') {
-                                echo "<button class='btn btn-primary' onclick='valida(" . '"iniciar"' . ")'>Iniciar Etapa</button>";
+echo "<button class='btn btn-primary' onclick='guardar(\"iniciar\")'>Iniciar Etapa</button>";
                             } else if ($etapa->estado == 'En Curso') {
                                 echo '<button class="btn btn-primary" id="btnfinalizar" onclick="finalizar()">Reporte de Producción</button>';
                             }
@@ -208,13 +208,9 @@
 
     }
 
-    // function callRecipiente(callback) {
+    callRecipiente();
     function callRecipiente() {
-        actualizaRecipiente($('#establecimientos').val());
-        // delay(1000);            
-        console.log('2');
-        // setTimeout(callback, 1250);
-        // callback();        
+        actualizaRecipiente($('#establecimientos').val());  
     }
 
     accion = '<?php echo $accion; ?>';
@@ -257,9 +253,7 @@
                     return;
                 }
                 fillSelect('#recipientes', result.data);
-                // if (estadoEtapa == 'FINALIZADO') {
-                //     selectOption();
-                // }
+       
 
             },
             error: function() {
@@ -284,97 +278,80 @@
     // envia datos para iniciar etapa y acer orden de pedido a almacenes
     function guardar(boton) {
 
-        var recipiente = idprod = '';
-        var tabla = $('#tablamateriasasignadas tbody tr');
-        var materiales = [];
-        var materia = [];
-        var i = 0;
-        $.each(tabla, function(index) {
-            var cantidad = $(this).find("td").eq(3).html();
-            var id_materia = $(this).attr("id");
-            if (id_materia != null) {
-                materia[id_materia] = cantidad;
+    var recipiente = idprod = '';
+    var tabla = $('#tablamateriasasignadas tbody tr');
+    var materiales = [];
+    var materia = [];
+
+    $.each(tabla, function(index) {
+        var cantidad = $(this).find("td").eq(3).html();
+        var id_materia = $(this).attr("id");
+        if (id_materia != null) {
+            materia.push({
+                id_materia,
+                cantidad
+            });
+        }
+    });
+
+    var lote = $('#Lote').val();
+    var fecha = $('#fecha').val();
+    var establecimiento = document.getElementById('establecimientos').value;
+
+    var op = document.getElementById('ordenproduccion').value;
+    var idetapa = <?php echo $idetapa ?> ;
+    var cantidad = $('#cantidad_producto').val();
+
+    var prod = getJson($('#idproducto'));
+    var prod = prod ? prod.arti_id : 0;
+
+    var recipiente = getJson($('#recipientes'));
+    var recipiente = recipiente ? recipiente.reci_id : 0;
+
+    var estadoEtapa = $('#estadoEtapa').val();
+    var batch_id = $('#batch_id').val();
+
+    var data = {
+        idetapa: idetapa,
+        lote: lote,
+        fecha: fecha,
+        establecimiento: establecimiento,
+        recipiente: recipiente,
+        op: op,
+        materia: materia,
+        cantidad: cantidad,
+        idprod: prod,
+        estadoEtapa: estadoEtapa,
+        batch_id: batch_id
+    };
+
+    wo();
+    $.ajax({
+        type: 'POST',
+        dataType: 'JSON',
+        url: 'general/Etapa/guardar/' + boton,
+        data: {
+            data
+        },
+        success: function(rsp) {
+            console.log(rsp);
+
+            if (rsp.status) {
+                alert('Salida Guardada exitosamente.');
+                linkTo('general/Etapa/index');
+            } else {
+                alert('Fallo al guardar. Msj: ' + rsp);
             }
-        });
-        var lote = $('#Lote').val();
-        var fecha = $('#fecha').val();
-        var establecimiento = document.getElementById('establecimientos').value;
-        // recipiente = document.getElementById('recipientes').value;
-
-        var recipiente1 = $('#recipientesHidden').attr('data-json');
-        if (_isset(recipiente1)) {
-            console.log('hay recipiente 1');
-            recipiente = recipiente1;
+        },
+        error: function(rsp) {
+            alert('Error al Guardar Salida. Msj: ' + rsp);
+            console.log("error: " + rsp);
+        },
+        complete: function() {
+            wc();
         }
-        var recipiente2 = $('#recipientes').attr('data-json');
-        if (_isset(recipiente2)) {
-            console.log('hay recipiente 2');
-            recipiente = JSON.parse(recipiente2).reci_id; //si existen ambos reci, el reci2 pisa al reci1.
-        }
-
-        var op = document.getElementById('ordenproduccion').value;
-        var idetapa = <?php echo $idetapa; ?>;
-        var cantidad = $('#cantidadproducto').val();
-        if (_isset($('#idproducto').attr('data-json'))) {
-            var idprod = JSON.parse($('#idproducto').attr('data-json'));
-            console.log('idprod: ' + idprod.id);
-        }
-        var estadoEtapa = $('#estadoEtapa').val();
-        var batch_id = $('#batch_id').val();
-        // wo();
-        console.log("Boton: " + boton);
-        var data = {
-            idetapa: idetapa,
-            lote: lote,
-            fecha: fecha,
-            establecimiento: establecimiento,
-            recipiente: recipiente,
-            op: op,
-            materia: materia,
-            cantidad: cantidad,
-            idprod: idprod.id,
-            estadoEtapa: estadoEtapa,
-            batch_id: batch_id
-        };
-        console.log(data);
-
-        $.ajax({
-            type: 'POST',
-            // dataType: 'JSON',
-            url: 'general/Etapa/guardar/' + boton,
-            data: {
-                idetapa: idetapa,
-                lote: lote,
-                fecha: fecha,
-                establecimiento: establecimiento,
-                recipiente: recipiente,
-                op: op,
-                materia: materia,
-                cantidad: cantidad,
-                idprod: idprod.id,
-                estadoEtapa: estadoEtapa,
-                batch_id: batch_id
-            },
-            success: function(rsp) {
-                // rsp = JSON.parse(rsp);
-                if (rsp) {
-                    alert('Salida Guardada exitosamente. Msj: ' + rsp);
-                    console.log("ok: " + rsp);
-                    linkTo('general/Etapa/index');
-                } else {
-                    alert('Fallo al guardar. Msj: ' + rsp);
-                }
-            },
-            error: function(rsp) {
-                // rsp = JSON.parse(rsp);
-                alert('Error al Guardar Salida. Msj: ' + rsp);
-                console.log("error: " + rsp);
-            },
-            complete: function() {
-                // wc();
-            }
-        });
-    }
+    });
+}
     // valida campos vacios
     function valida(boton) {
         mensaje = "No se ha podido completar la operacion debido a que algunos datos no han sido completados: <br>";

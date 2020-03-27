@@ -74,12 +74,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
 $active_group = 'default';
 $query_builder = true;
 $db['default'] = array(
-    // 'hostname' => 'dev-trazalog.com.ar',
-    'hostname' => '192.168.0.6',
-    // 'username' => 'arbolado',
-    'username' => 'postgres',
-    'password' => 'admin24',
-    'database' => 'tools',
+     'hostname' => 'dev-trazalog.com.ar',
+    //'hostname' => 'localhost',
+    'username' => 'arbolado',
+    //'username' => 'postgres',
+    'password' => 'password',
+    'database' => 'tools_test',
     'dbdriver' => 'pdo', //mysqli
     'dbprefix' => '',
     'pconnect' => false,
@@ -95,5 +95,5 @@ $db['default'] = array(
     'failover' => array(),
     'save_queries' => true,
     'port' => '5432',
-    'dsn' => 'pgsql:host=192.168.0.6;port=5432;dbname=tools'
+    'dsn' => 'pgsql:host=dev-trazalog.com.ar;port=5432;dbname=tools_test'
 );
