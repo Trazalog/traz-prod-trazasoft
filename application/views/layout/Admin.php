@@ -128,6 +128,14 @@
 var link = '';
 var backLink = '';
 
+function wo() {
+    
+}
+
+function wc() {
+    
+}
+
 linkTo("<?php echo DEFAULT_VIEW ?>");
 
 $('.menu .link').on('click', function() {
