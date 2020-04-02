@@ -1,0 +1,3 @@
+[submodule "application/modules/traz-comp-form"]
+	path = application/modules/traz-comp-form
+	url = https://github.com/Trazalog/traz-comp-formularios.git
