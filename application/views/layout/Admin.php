@@ -51,7 +51,8 @@
 <?php $this->load->view('layout/wait') ?>
 
 
-<body class="hold-transition skin-blue sidebar-mini"></body>
+<body class="hold-transition skin-blue sidebar-mini">
+<div id="frm-list"></div>
 <div class="wrapper">
 
     <header class="main-header">
@@ -124,6 +125,7 @@
 
 </div>
 <!-- ./wrapper -->
+
 <script>
 var link = '';
 var backLink = '';
