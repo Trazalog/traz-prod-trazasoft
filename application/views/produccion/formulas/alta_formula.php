@@ -287,6 +287,6 @@
 				wc();
 			}
 		});
-		return; //comentar para finalizar
+		// return; //comentar para finalizar
 	}
 </script>

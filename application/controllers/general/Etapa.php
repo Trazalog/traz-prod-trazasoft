@@ -489,5 +489,18 @@ class Etapa extends CI_Controller
         $data['empaques'] = $this->Recipientes->listarEmpaques()->empaques->empaque;
         //$data['materias'] = $this->Materias->listar()->materias->materia;
         $this->load->view('etapa/fraccionar/fraccionar', $data);
-    }
+	}
+	
+	public function getUsers()
+	{
+		$usuarios = $this->bpm->getUsuariosBPM();
+		echo json_encode($usuarios['data']);
+	}
+
+	public function setUserEtapa()
+	{
+		$data['operario'] = $this->input->post('data');
+		$rsp = $this->Etapas->setUserEtapa($data);
+		$d = 0;
+	}
 }

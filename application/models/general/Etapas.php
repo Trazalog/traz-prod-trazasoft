@@ -207,5 +207,14 @@ class Etapas extends CI_Model
         $url = REST2 . $resource;
         $array = $this->rest->callAPI("GET", $url, $id);
         return json_decode($array['data']);
-    }
+	}
+	
+	public function setUserEtapa($data)
+	{
+		log_message('DEBUG', 'Etapas/setUserEtapa $data: >> ' . json_encode($data));
+		$resource = '/setUserEtapa';
+		$url = RESTPT . $resource;
+		$array = $this->rest->callAPI("POST", $url, $data);
+		return json_decode($array['code']);
+	}
 }
