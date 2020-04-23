@@ -13,8 +13,8 @@
 			</span>
 		</a>
 		<ul class="treeview-menu">
-			<li><a class="link" href="#" data-link="general/Etapa"><i class="fa fa-sitemap"></i>Etapas</a></li>
-			<li><a class="link" href="#" data-link="general/Reporte/tareasOperario"><i class="fa fa-arrow-left"></i>Producción</a>
+			<li><a class="link" href="#" data-link="general/Etapa"><i class="fa fa-sitemap"></i>Producción de Lotes</a></li>
+			<li><a class="link" href="#" data-link="general/Reporte/tareasOperario"><i class="fa fa-arrow-left"></i>Prod. de Lotes | Operario</a>
 			</li>
 			<li><a class="link" href="#" data-link="general/Formula"><i class="fa fa-magic"></i>Fórmulas</a>
 			</li>

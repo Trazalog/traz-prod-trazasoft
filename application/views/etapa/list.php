@@ -30,7 +30,7 @@
 
 <div class="box table-responsive">
 	<div class="box-header">
-		<h3 class="box-title">Etapas</h3>
+		<h4 class="box-title" style="margin-bottom: 20px;">Etapas</h4>
 		<div class="row" style="width:900px;">
 			<div class="col-xs-10">
 				<?php
@@ -74,6 +74,7 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
 	<div class="box-body">
 		<div class="row">
 			<div class="col-xs-12">
+				<h4 class="box-title" style="margin-bottom: 20px; margin-top: 0px;">Producción de Lotes</h4>
 				<table id="etapas" class="table table-bordered table-hover">
 					<thead class="thead-dark">
 
@@ -98,7 +99,7 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
 							echo '<tr  id="' . $id . '" data-json=\'' . json_encode($fila) . '\'>';
 
 							echo '<td width="6%" class="text-center">';
-							echo "<i data-toggle='modal' data-target='#modal-asignarResponsable' class='fa fa-fw fa-user text-green ml-1' style='cursor: pointer;' title='Asignar responsable' onclick='asignarResponsable($id)'></i>";
+							echo "<i data-toggle='modal' data-target='#modal-asignarResponsable' class='fa fa-fw fa-user-plus text-green ml-1' style='cursor: pointer;' title='Asignar responsable' onclick='asignarResponsable($id)'></i>";
 							echo '<i class="fa fa-fw fa-cogs text-light-blue ml-1" style="cursor: pointer;" title="Editar" onclick=linkTo("general/Etapa/editar?id=' . $id . '")></i>';
 							echo '<i class="fa fa-fw fa-times-circle text-red ml-1" style="cursor: pointer;" title="Eliminar" onclick="seleccionar(this)"></i>';
 							echo '</td>';
@@ -133,23 +134,66 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
 				<h4 class="modal-title">Asignar responsable</h4>
 			</div>
 			<div class="modal-body">
-				<form id="frm-asignarResponsable">
-					<input type="text" hidden id="idEtapa" name="idEtapa">
-					<div class="form-group col-md-6">
-						<label for="user">Usuario*</label>
-						<select id="user" name="user" class="form-control" required>
-						</select>
+				<div class="row">
+					<form id="frm-asignarResponsable">
+						<input type="text" hidden id="idLoteBatch" name="idLoteBatch">
+						<div class="form-group col-md-5">
+							<label for="user">Usuario*</label>
+							<select id="user" name="user" class="form-control" data-user required>
+							</select>
+						</div>
+						<div class="form-group col-md-5">
+							<label for="turno">Turno*</label>
+							<select id="turno" name="turno" class="form-control" data-descripcion required>
+							</select>
+						</div>
+						<div class="form-group col-md-1">
+							<label for=""></label>
+							<a class="btn btn-social-icon" style="margin-top: 4px;" onclick="agregarFila()"><i class="fa fa-fw fa-plus-square"></i></a>
+						</div>
+						<!-- <div class="form-group col-md-6">
+							<label for="turno">Turno*</label>
+							<select class="form-control" id="turno" name="turno" required>
+								<option selected disabled>Seleccione turno</option>
+								<option value="M">Mañana</option>
+								<option value="T">Tarde</option>
+								<option value="JC">Jornada completa</option>
+							</select>
+						</div> -->
+					</form>
+				</div>
+				<div class='dataTables_wrapper form-inline dt-bootstrap'>
+					<div class='row'>
+						<div class='col-sm-12'>
+							<table id='tabla-Operario' class='table table-bordered table-hover dataTable' role='grid'>
+								<?php
+								$operario = 1;
+								if (isset($operario)) {
+									echo
+										"<thead>
+											<tr role='row'>
+												<th>
+													<font style='vertical-align: inherit;'>
+														<font style='vertical-align: inherit;'>Usuario</font>
+													</font>
+												</th>
+												<th>
+													<font style='vertical-align: inherit;'>
+														<font style='vertical-align: inherit;'>Turno</font>
+													</font>
+												</th>
+											</tr>
+										</thead>
+								
+										<tbody>
+
+										</tbody>";
+								}
+								?>
+							</table>
+						</div>
 					</div>
-					<div class="form-group col-md-6">
-						<label for="turno">Turno*</label>
-						<select class="form-control" id="turno" name="turno" required>
-							<option selected disabled>Seleccione turno</option>
-							<option value="M">Mañana</option>
-							<option value="T">Tarde</option>
-							<option value="JC">Jornada completa</option>
-						</select>
-					</div>
-				</form>
+				</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default pull-right" data-dismiss="modal">Cancelar</button>
@@ -243,25 +287,76 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
 		linkTo(target.link);
 	}
 
-	function asignarResponsable(idEtapa) {
-		$('#modal-asignarResponsable').find('#idEtapa').attr('value', idEtapa);
+	function asignarResponsable(batch_id) {
+		$('#tabla-Operario tbody').empty();
+		$('#modal-asignarResponsable').find('#idLoteBatch').attr('value', batch_id);
 		// wo();
 		$.ajax({
 			type: "GET",
 			url: "general/Etapa/getUsers",
 			success: function(rsp) {
 				// alert("Fórmula creada correctamente.");
-				console.log('Usuarios BPM');
+				console.log('Usuarios Produccion Lote');
 				var htmlUser = '<option selected disabled>Seleccione operario</option>';
 				rsp = JSON.parse(rsp);
 				for (let i = 0; i < rsp.length; i++) {
-					htmlUser += '<option value="' + rsp[i].id + '" >' + rsp[i].lastname + ', ' + rsp[i].firstname + '</option>';
+					// htmlUser += '<option value="' + rsp[i].id + '" >' + rsp[i].lastname + ', ' + rsp[i].firstname + '</option>'; //bonita
+					htmlUser += '<option value="' + rsp[i].id_user + '" >' + rsp[i].last_name_user + ', ' + rsp[i].first_name_user + '</option>'; //seg.users
 				}
 				$('#modal-asignarResponsable').find('#user').html(htmlUser);
 			},
 			error: function() {
 				// alert("Se produjo un error al crear la fórmula.");
-				console.log('No se pudieron traer los usuarios');
+				console.log('Error al cargar usuarios');
+			},
+			complete: function() {
+				// wc();
+			}
+		});
+		$.ajax({
+			type: "GET",
+			url: "general/Etapa/getTurnosProd",
+			success: function(t) {
+				console.log('Turnos produccion de lotes');
+				console.log(t)
+				var htmlTurnos = '<option selected disabled>Seleccione turno</option>';
+				t = JSON.parse(t);
+				for (let i = 0; i < t.length; i++) {
+					htmlTurnos += '<option value="' + t[i].tabl_id + '" >' + t[i].descripcion + '</option>';
+				}
+				$('#modal-asignarResponsable').find('#turno').html(htmlTurnos);
+			},
+			error: function() {
+				// alert("Se produjo un error al crear la fórmula.");
+				console.log('Error al cargar turnos');
+			},
+			complete: function() {
+				// wc();
+			}
+		});
+		$.ajax({
+			type: "GET",
+			url: "general/Etapa/getUserLote/" + batch_id,
+			success: function(rsp) {
+				// alert("Fórmula creada correctamente.");
+				console.log('Usuarios resposables lote');
+				var htmlUserLote = '';
+				console.log('rsp' + rsp);
+				console.table(rsp);
+				rsp = JSON.parse(rsp);
+				console.log('rsp' + rsp);
+				console.table(rsp);
+				for (let i = 0; i < rsp.length; i++) {
+					htmlUserLote += '<tr>' +
+						'<td value=' + rsp[i].user_id + ' data-user=' + rsp[i].user_id + '>' + rsp[i].last_name + ', ' + rsp[i].first_name +
+						'<td value=' + rsp[i].turn_id + ' data-turno=' + rsp[i].turn_id + '>' + rsp[i].descripcion + '<a type="button" class="del pull-right" style="cursor: pointer;"><i class="fa fa-fw fa-minus"></i></a></td>' +
+						'</tr>';
+				}
+				$('#tabla-Operario tbody').append(htmlUserLote);
+			},
+			error: function() {
+				// alert("Se produjo un error al crear la fórmula.");
+				console.log('Error al cargar responsables');
 			},
 			complete: function() {
 				// wc();
@@ -269,21 +364,69 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
 		});
 	}
 
+	//Agregar fila a tabla usuarios modal
+	function agregarFila() {
+		// var batch_id = $('#idLoteBatch').val();
+		var user = $('#user').val();
+		var user_text = '';
+		$('#user').children('option').each(function() {
+			if ($(this).val() == user) {
+				user_text = $(this).text();
+			}
+		});
+		var turno = $('#turno').val();
+		var turno_text = '';
+		$('#turno').children('option').each(function() {
+			if ($(this).val() == turno) {
+				turno_text = $(this).text();
+			}
+		});
+		if (!user || !turno) {
+			alert('Complete usuario y turno.');
+			return;
+		}
+		$('#user').prop('selectedIndex', 0);
+		$('#turno').prop('selectedIndex', 0);
+		html = '<tr>' +
+			'<td value=' + user + ' data-user=' + user + '>' + user_text + '</td>' +
+			'<td value=' + turno + ' data-turno=' + turno + '>' + turno_text + '<a type="button" class="del pull-right" style="cursor: pointer;"><i class="fa fa-fw fa-minus"></i></a></td>' +
+			'</tr>';
+		$('#tabla-Operario tbody').append(html);
+	}
+
+	//Quitar fila de tabla usuarios modal
+	$("#tabla-Operario").on("click", ".del", function() {
+		$(this).parents("tr").remove();
+	});
+
 	function addRespToEtapa() {
-		var data = new FormData($('#frm-asignarResponsable')[0]);
-		showFD(data);
-		data = formToObject(data);
-		console.table(data);
+		var batch_id = $('#idLoteBatch').val();
+		//Datos de la tabla de artículos
+		var datosTabla = new Array();
+		$('#tabla-Operario tr').each(function(row, tr) {
+			datosTabla[row] = {
+				"user_id": $(tr).find('td:eq(0)').data('user'),
+				"turn_id": $(tr).find('td:eq(1)').data('turno')
+			}
+		});
+		datosTabla.shift(); //borra encabezado de la tabla
+		var responsables = JSON.stringify(datosTabla);
+
+		console.table(datosTabla);
+		console.log('responsables: ' + responsables);
 
 		wo();
 		$.ajax({
 			type: "POST",
-			url: "general/Etapa/setUserEtapa",
+			url: "general/Etapa/setUserLote",
 			data: {
-				data
+				batch_id: batch_id,
+				responsables: responsables
 			},
 			success: function(rsp) {
-				// alert("Fórmula creada correctamente.");
+				rsp = JSON.stringify(rsp)
+				alert(rsp);
+				$('#modal-asignarResponsable').modal('hide')
 				// linkTo('general/Formula');
 			},
 			error: function() {
