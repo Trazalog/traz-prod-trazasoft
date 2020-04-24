@@ -151,15 +151,6 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
 							<label for=""></label>
 							<a class="btn btn-social-icon" style="margin-top: 4px;" onclick="agregarFila()"><i class="fa fa-fw fa-plus-square"></i></a>
 						</div>
-						<!-- <div class="form-group col-md-6">
-							<label for="turno">Turno*</label>
-							<select class="form-control" id="turno" name="turno" required>
-								<option selected disabled>Seleccione turno</option>
-								<option value="M">Mañana</option>
-								<option value="T">Tarde</option>
-								<option value="JC">Jornada completa</option>
-							</select>
-						</div> -->
 					</form>
 				</div>
 				<div class='dataTables_wrapper form-inline dt-bootstrap'>
@@ -167,7 +158,7 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
 						<div class='col-sm-12'>
 							<table id='tabla-Operario' class='table table-bordered table-hover dataTable' role='grid'>
 								<?php
-								$operario = 1;
+								$operario = 1; //a futuro cambiarlo por si existe operario, sino no mostrar la tabla
 								if (isset($operario)) {
 									echo
 										"<thead>
@@ -184,7 +175,6 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
 												</th>
 											</tr>
 										</thead>
-								
 										<tbody>
 
 										</tbody>";
@@ -287,16 +277,18 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
 		linkTo(target.link);
 	}
 
+	//carga modal asignación de responsable/usuario/operario
 	function asignarResponsable(batch_id) {
 		$('#tabla-Operario tbody').empty();
 		$('#modal-asignarResponsable').find('#idLoteBatch').attr('value', batch_id);
-		// wo();
+
+		//trae los usuarios a responsables
 		$.ajax({
 			type: "GET",
 			url: "general/Etapa/getUsers",
 			success: function(rsp) {
-				// alert("Fórmula creada correctamente.");
-				console.log('Usuarios Produccion Lote');
+				// alert("Usuarios Produccion Lote.");
+				console.log('Usuarios Produccion Lote.');
 				var htmlUser = '<option selected disabled>Seleccione operario</option>';
 				rsp = JSON.parse(rsp);
 				for (let i = 0; i < rsp.length; i++) {
@@ -306,18 +298,17 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
 				$('#modal-asignarResponsable').find('#user').html(htmlUser);
 			},
 			error: function() {
-				// alert("Se produjo un error al crear la fórmula.");
-				console.log('Error al cargar usuarios');
-			},
-			complete: function() {
-				// wc();
+				// alert("Error al cargar usuarios.");
+				console.log('Error al cargar usuarios.');
 			}
 		});
+
+		//trae los turnos de produccion de lote
 		$.ajax({
 			type: "GET",
 			url: "general/Etapa/getTurnosProd",
 			success: function(t) {
-				console.log('Turnos produccion de lotes');
+				console.log('Turnos produccion de lotes: ');
 				console.log(t)
 				var htmlTurnos = '<option selected disabled>Seleccione turno</option>';
 				t = JSON.parse(t);
@@ -327,25 +318,22 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
 				$('#modal-asignarResponsable').find('#turno').html(htmlTurnos);
 			},
 			error: function() {
-				// alert("Se produjo un error al crear la fórmula.");
-				console.log('Error al cargar turnos');
-			},
-			complete: function() {
-				// wc();
+				// alert("Error al cargar turnos.");
+				console.log('Error al cargar turnos.');
 			}
 		});
+
+		//obtiene y carga usuarios cargados con anterioridad
 		$.ajax({
 			type: "GET",
 			url: "general/Etapa/getUserLote/" + batch_id,
 			success: function(rsp) {
-				// alert("Fórmula creada correctamente.");
-				console.log('Usuarios resposables lote');
+				// alert("Usuarios resposables lote.");
+				console.log('Usuarios resposables lote.');
 				var htmlUserLote = '';
 				console.log('rsp' + rsp);
 				console.table(rsp);
 				rsp = JSON.parse(rsp);
-				console.log('rsp' + rsp);
-				console.table(rsp);
 				for (let i = 0; i < rsp.length; i++) {
 					htmlUserLote += '<tr>' +
 						'<td value=' + rsp[i].user_id + ' data-user=' + rsp[i].user_id + '>' + rsp[i].last_name + ', ' + rsp[i].first_name +
@@ -355,18 +343,14 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
 				$('#tabla-Operario tbody').append(htmlUserLote);
 			},
 			error: function() {
-				// alert("Se produjo un error al crear la fórmula.");
-				console.log('Error al cargar responsables');
-			},
-			complete: function() {
-				// wc();
+				// alert("Error al cargar responsables.");
+				console.log('Error al cargar responsables.');
 			}
 		});
 	}
 
 	//Agregar fila a tabla usuarios modal
 	function agregarFila() {
-		// var batch_id = $('#idLoteBatch').val();
 		var user = $('#user').val();
 		var user_text = '';
 		$('#user').children('option').each(function() {
@@ -374,6 +358,7 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
 				user_text = $(this).text();
 			}
 		});
+
 		var turno = $('#turno').val();
 		var turno_text = '';
 		$('#turno').children('option').each(function() {
@@ -381,12 +366,15 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
 				turno_text = $(this).text();
 			}
 		});
+
 		if (!user || !turno) {
 			alert('Complete usuario y turno.');
 			return;
 		}
+		//restable a índice 0 luego de cargar un usuario
 		$('#user').prop('selectedIndex', 0);
 		$('#turno').prop('selectedIndex', 0);
+		//carga la tabla
 		html = '<tr>' +
 			'<td value=' + user + ' data-user=' + user + '>' + user_text + '</td>' +
 			'<td value=' + turno + ' data-turno=' + turno + '>' + turno_text + '<a type="button" class="del pull-right" style="cursor: pointer;"><i class="fa fa-fw fa-minus"></i></a></td>' +
@@ -410,6 +398,11 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
 			}
 		});
 		datosTabla.shift(); //borra encabezado de la tabla
+
+		if (datosTabla.length < 1) {
+			alert('Debe asignar un responsable.');
+			return;
+		}
 		var responsables = JSON.stringify(datosTabla);
 
 		console.table(datosTabla);
@@ -426,14 +419,13 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
 			success: function(rsp) {
 				rsp = JSON.stringify(rsp)
 				alert(rsp);
-				$('#modal-asignarResponsable').modal('hide')
-				// linkTo('general/Formula');
 			},
 			error: function() {
 				alert("Se produjo un error al crear cargar operario.");
 			},
 			complete: function() {
 				wc();
+				$('#modal-asignarResponsable').modal('hide')
 			}
 		});
 	}

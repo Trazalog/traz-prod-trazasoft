@@ -490,11 +490,11 @@ class Etapa extends CI_Controller
         //$data['materias'] = $this->Materias->listar()->materias->materia;
         $this->load->view('etapa/fraccionar/fraccionar', $data);
 	}
-	
+
 	public function getUsers()
 	{
-		// $usuarios = $this->bpm->getUsuariosBPM();
-		$usuarios = $this->Etapas->getUsers()->users->user;
+		// $usuarios = $this->bpm->getUsuariosBPM();//usuarios bonita
+		$usuarios = $this->Etapas->getUsers()->users->user; //usuarios seg.users
 		echo json_encode($usuarios);
 	}
 
@@ -507,14 +507,16 @@ class Etapa extends CI_Controller
 	public function setUserLote()
 	{
 		$batch_id = $this->input->post('batch_id');
+
 		//eliminamos los resonsables viejos
 		$delete = $this->Etapas->deleteUserLote($batch_id);
+
 		//cargamos los responsables nuevos
 		$responsables = $this->input->post('responsables');
 		$tableData = stripcslashes($responsables);
 		$tableDataArray['responsable'] = json_decode($tableData, TRUE);
 		foreach ($tableDataArray['responsable'] as $key => $x) {
-			$tableDataArray['responsable'][$key]['batch_id'] = $batch_id ;
+			$tableDataArray['responsable'][$key]['batch_id'] = $batch_id;
 			$tableDataArray['responsable'][$key]['user_id'] = strval($tableDataArray['responsable'][$key]['user_id']);
 			$tableDataArray['responsable'][$key]['turn_id'] = strval($tableDataArray['responsable'][$key]['turn_id']);
 		}
@@ -522,8 +524,7 @@ class Etapa extends CI_Controller
 		$rsp = $this->Etapas->setUserLote($responsablesArray);
 		if ($rsp == '202') {
 			echo 'Responsables cargados correctamente.';
-		}
-		else return;
+		} else return;
 	}
 
 	public function getUserLote($batch_id)

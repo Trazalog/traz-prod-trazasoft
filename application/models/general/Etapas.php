@@ -216,7 +216,7 @@ class Etapas extends CI_Model
 		$url = RESTPT . $resource;
 		$array = $this->rest->callAPI("GET", $url);
 		return json_decode($array['data']);
-	}	
+	}
 
 	public function getTurnosProd()
 	{
