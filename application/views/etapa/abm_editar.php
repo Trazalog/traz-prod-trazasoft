@@ -4,11 +4,10 @@
 
 <input class="hidden" type="text" id="estado_etapa" value="<?php echo $etapa->estado ?>">
 <input class="hidden" type="text" id="accion" value="<?php echo $accion ?>">
-
-<div id="snapshot" data-key="<?php echo $key ?>">
-    <?php if ($etapa->estado == "En Curso") {
+  <?php if ($etapa->estado == "En Curso") {
         $this->load->view('etapa/modal_finalizar');
     } ?>
+<div id="snapshot" data-key="<?php echo $key ?>" id="frm-etapa">
 
     <!-- Cabecera -->
     <div class="box box-primary">
@@ -183,7 +182,7 @@ actualizaRecipiente($('#establecimientos').val(), 'recipientes');
 if ($('#estado_etapa').val() != 'PLANIFICADO') 
 {
     //Inhabilitar la edicion del los formularios
-    $('.form-control').prop('disabled', true);
+    $('#frm-etapa').find('.form-control').prop('disabled', true);
 }    
 
 
