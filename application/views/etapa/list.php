@@ -52,8 +52,8 @@
                 <button style="background: #1D976C;  /* fallback for old browsers */
 background: -webkit-linear-gradient(to bottom, #93F9B9, #1D976C);  /* Chrome 10-25, Safari 5.1-6 */
 background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-" type="button" class=" btn dropdown-toggle btn-circle btn-xl"
-                    data-toggle="dropdown" aria-expanded="false"> <b style="color:#ffffff">+</b></button>
+" type="button" class=" btn dropdown-toggle btn-circle btn-xl" data-toggle="dropdown" aria-expanded="false"> <b
+                        style="color:#ffffff">+</b></button>
                 <ul class="dropdown-menu dropdown-menu-right" id="nuevo">
                     <li class="header text-center text-info"><b>Crear Nueva Etapa</b></li>
                     <?php
@@ -80,28 +80,29 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
             <div class="col-xs-12">
                 <table id="etapas" class="table table-bordered table-hover">
                     <thead class="thead-dark">
-                      
-                            <th width="5%">Acciones</th>
-                            <th>Etapa</th>
-                            <th>Lote</th>
-                            <th>Producto</th>
-                            <th>Cantidad</th>
-                            <th>Establecimiento</th>
-                            <th>Recipiente</th>
-                            <th>OP</th>
-                            <th>Fecha</th>
-                            <th>Estado</th>
-                      
+
+                        <th width="5%">Acciones</th>
+                        <th>Etapa</th>
+                        <th>Lote</th>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Establecimiento</th>
+                        <th>Recipiente</th>
+                        <th>OP</th>
+                        <th>Fecha</th>
+                        <th>Estado</th>
+
                     </thead>
                     <tbody>
                         <?php
-                        
-                      foreach($list as $fila)
-                      {
-                    
-                          $id=$fila->id;
-                          echo '<tr  id="'.$id.'" data-json=\''.json_encode($fila).'\'>';
+                    if($list){
 
+                        foreach($list as $fila)
+                        {
+                    
+                            $id=$fila->id;
+                          echo '<tr  id="'.$id.'" data-json=\''.json_encode($fila).'\'>';
+                          
                           echo '<td width="5%" class="text-center">';
                           echo '<i class="fa fa-fw fa-cogs text-light-blue ml-1" style="cursor: pointer;" title="Editar" onclick=linkTo("general/Etapa/editar?id='.$id.'")></i>';
                           echo '<i class="fa fa-fw fa-times-circle text-light-blue ml-1" style="cursor: pointer;" title="Eliminar" onclick="seleccionar(this)"></i>';
@@ -117,9 +118,10 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
                           echo  "<td>".formatFechaPG($fila->fecha)."</td>";
                           echo '<td>'.estado($fila->estado).'</td>';
                           echo '</tr>';
+                          
+                        }
+                    }
                         
-                      }
-        
                   ?>
                     </tbody>
                 </table>
@@ -131,7 +133,7 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
 </div><!-- /.row -->
 </body>
 <script>
-if(mobileAndTabletcheck())$('#etapas tbody').find('tr').on('click', function() {
+if (mobileAndTabletcheck()) $('#etapas tbody').find('tr').on('click', function() {
     $(this).find('.fa-pencil').click();
 });
 
@@ -196,7 +198,7 @@ function muestra(op, etapas) {
     document.getElementById('etapas').innerHTML = '';
     document.getElementById('etapas').innerHTML = html;
     $("#etapas").dataTable().fnDestroy();
-    if(mobileAndTabletcheck())$('#etapas tbody').find('tr').on('click', function() {
+    if (mobileAndTabletcheck()) $('#etapas tbody').find('tr').on('click', function() {
         $(this).find('.fa-pencil').click();
     });
     $("#etapas").dataTable({});
