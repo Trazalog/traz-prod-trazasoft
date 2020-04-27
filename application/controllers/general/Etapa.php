@@ -323,6 +323,8 @@ class Etapa extends CI_Controller
         $datosCab['fec_vencimiento'] = FEC_VEN;
         $datosCab['recu_id'] = (string) 0;
         $datosCab['tipo_recurso'] = "";
+
+        #FLEIVA
         $datosCab['batch_id'] = "0";
         $datosCab['planificado'] = "";
         $data['_post_lote'] = $datosCab;
@@ -423,10 +425,12 @@ class Etapa extends CI_Controller
             $arrayPost["usuario_app"] = userNick();
             $arrayPost["empr_id"] = (string) empresa();
             $arrayPost["forzar_agregar"] = $value->unificar;
-            $arrayPost["fec_vencimiento"] = "01-01-1988";
+            $arrayPost["fec_vencimiento"] = FEC_VEN;
             $arrayPost["recu_id"] = strval($value->recu_id);
             $arrayPost["tipo_recurso"] = $value->tipo_recurso;
-            $arrayDatos['_post_lote_list_batch_req']['_post_lote_lis'][] = $arrayPost;
+            $arrayPost['batch_id'] = "0";
+            $arrayPost['planificado'] = "";
+            $arrayDatos['_post_lote_list_batch_req']['_post_lote_list'][] = $arrayPost;
         }
 
         $resp = $this->Etapas->finalizarEtapa($arrayDatos);
@@ -464,9 +468,12 @@ class Etapa extends CI_Controller
             $arrayPost["usuario_app"] = userNick();
             $arrayPost["empr_id"] = (string) empresa();
             $arrayPost["forzar_agregar"] = false;
-            $arrayPost["fec_vencimiento"] = "01-01-1988";
+            $arrayPost["fec_vencimiento"] = FEC_VEN;
             $arrayPost["recu_id"] = "0";
             $arrayPost["tipo_recurso"] = "";
+            #FLEIVA
+            $arrayPost['batch_id'] = "0";
+            $arrayPost['planificado'] = "";
             $arrayDatos['_post_lote_list_batch_req']['_post_lote_lis'][] = $arrayPost;
         }
 

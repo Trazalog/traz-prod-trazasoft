@@ -1,5 +1,5 @@
 <!-- producto -->
-<div class="box box-primary">
+<div class="box box-primary" id="frm-producto">
     <div class="box-header">
         <h4 class="box-title">Producto</h4>
     </div>
@@ -39,15 +39,18 @@
 <!-- . /producto -->
 
 <script>
-
 var producto = <?php echo json_encode($producto[0]) ?>
 
-if(producto){
-    $('#idproducto').val(producto.arti_id);
-    $('#idproducto').trigger('change');
-    $('#cantidad_producto').val(producto.cantidad);
-    $('#pum').val(producto.uni_med);
-}
+    if (producto) {
+        $('#idproducto').val(producto.arti_id);
+        $('#idproducto').trigger('change');
+        $('#cantidad_producto').val(producto.cantidad);
+        $('#pum').val(producto.uni_med);
+        if ($('#estado_etapa').val() != 'PLANIFICADO') {
+            //Inhabilitar la edicion del los formularios
+            $('#frm-producto').find('.form-control').prop('disabled', true);
+        }
+    }
 
 
 $('#idproducto').on('change', function() {
