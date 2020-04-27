@@ -84,7 +84,7 @@ class Etapa extends CI_Controller
         $datosCab['usuario_app'] = userNick();
         $datosCab['empr_id'] = (string) empresa();
         $datosCab['forzar_agregar'] = "FALSE";
-        $datosCab['fec_vencimiento'] = date('d-m-Y');
+        $datosCab['fec_vencimiento'] = FEC_VEN;
         $datosCab['recu_id'] = "0";
         $datosCab['tipo_recurso'] = "";
 
@@ -320,14 +320,22 @@ class Etapa extends CI_Controller
         $datosCab['usuario_app'] = userNick();
         $datosCab['empr_id'] = (string) empresa();
         $datosCab['forzar_agregar'] = "FALSE";
-        $datosCab['fec_vencimiento'] = "01-01-1899";
+        $datosCab['fec_vencimiento'] = FEC_VEN;
         $datosCab['recu_id'] = (string) 0;
         $datosCab['tipo_recurso'] = "";
+        $datosCab['batch_id'] = "0";
+        $datosCab['planificado'] = "";
         $data['_post_lote'] = $datosCab;
         // guardo recursos materiales (origen)
         $productos = $this->input->post('productos');
         //guarda batch nuevo (tabla lotes)
         $respServ = $this->Etapas->SetNuevoBatch($data);
+
+        if(isset($respServ->Fault)){
+            echo json_encode($respServ);
+            return;
+        }
+
         $batch_id = $respServ->respuesta->resultado;
         //////////// PARA GUARDAR EN RECURSOS LOTES ///////////////////
         $i = 0;
