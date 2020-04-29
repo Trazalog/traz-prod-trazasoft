@@ -361,7 +361,7 @@
       productos = JSON.stringify(productos);
       num_orden_prod = $('#num_orden_prod').val();
       $('#Lote').val();
-
+      wo();
       $.ajax({
         type: 'POST',
         async: false,
@@ -383,6 +383,12 @@
             alert("Hubo un error en el fraccionamiento")
           }
 
+        },
+        error: function(){
+          alert('Error al finalizar etapa')
+        },
+        complete: function() {
+          wc();
         }
       });
       // }else{

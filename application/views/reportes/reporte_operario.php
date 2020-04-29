@@ -164,6 +164,7 @@ function FinalizarEtapa() {
     num_orden_prod = $('#num_orden_prod').val();
     destino = $('#articulo').val();
 
+    wo();
     $.ajax({
         type: 'POST',
         data: {
@@ -179,8 +180,11 @@ function FinalizarEtapa() {
             $('#datos tbody').empty();
             alert('Hecho');
         },
-        error: function() {
-            alert('Error');
+        error: function(){
+          alert('Error al finalizar etapa')
+        },
+        complete: function() {
+          wc();
         }
     });
 }

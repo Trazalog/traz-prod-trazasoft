@@ -39,18 +39,3 @@
     /*0.5 De Transparencia*/
 }
 </style>
-
-<script>
-function wo(texto) {
-    if (texto == '' || texto == null) {
-        $('#waitingText').html('Cargando ...');
-    } else {
-        $('#waitingText').html(texto);
-    }
-    $('#waiting').fadeIn('slow');
-}
-/* Cierra cuadro cargando ajax */
-function wc() {
-    $('#waiting').fadeOut('slow');
-}
-</script>

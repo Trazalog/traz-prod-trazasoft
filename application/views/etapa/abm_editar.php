@@ -2,13 +2,21 @@
 <?php $this->load->view('etapa/modal_lotes'); ?>
 <?php $this->load->view('etapa/modal_producto'); ?>
 
+<script>
+function validarEtapa() {
+    if ($('#estado_etapa').val() != 'PLANIFICADO') {
+        //Inhabilitar la edicion del los formularios
+        $('#frm-etapa').find('.form-control').prop('disabled', true);
+    }
+}
+</script>
+
 <input class="hidden" type="text" id="estado_etapa" value="<?php echo $etapa->estado ?>">
 <input class="hidden" type="text" id="accion" value="<?php echo $accion ?>">
-
-<div id="snapshot" data-key="<?php echo $key ?>">
-    <?php if ($etapa->estado == "En Curso") {
+<?php if ($etapa->estado == "En Curso") {
         $this->load->view('etapa/modal_finalizar');
     } ?>
+<div id="snapshot" data-key="<?php echo $key ?>" id="frm-etapa">
 
     <!-- Cabecera -->
     <div class="box box-primary">
@@ -150,7 +158,7 @@
 
                             <?php 
 
-                            if($etapa->estado != 'Finalizado'){
+                            if($etapa->estado != 'FINALIZADO'){
 
                                 if ($etapa->estado == 'En Curso') {
                                     
@@ -165,7 +173,7 @@
 
                             
                             ?>
-
+                            <button class="btn btn-danger" onclick="back()">Cerrar</button>
                         </div>
                     </div>
                 </div>
@@ -180,11 +188,6 @@
 
 <script>
 actualizaRecipiente($('#establecimientos').val(), 'recipientes');
-if ($('#estado_etapa').val() != 'PLANIFICADO') 
-{
-    //Inhabilitar la edicion del los formularios
-    $('.form-control').prop('disabled', true);
-}    
 
 
 
@@ -219,6 +222,10 @@ function actualizaRecipiente(establecimiento, recipientes) {
             if (reci_id) {
                 $('#recipientes').val(reci_id);
                 $('#recipientes').trigger('change');
+                if ($('#estado_etapa').val() != 'PLANIFICADO') {
+                    //Inhabilitar la edicion del los formularios
+                    $('#recipientes').prop('disabled', true);
+                }
             }
 
         },
@@ -270,8 +277,8 @@ function guardar(boton) {
 
     var prod = getJson($('#idproducto'));
     var prod = prod ? prod.id : 0;
-    
-    
+
+
     var recipiente = getJson($('#recipientes'));
     var recipiente = recipiente ? recipiente.reci_id : 0;
 
@@ -327,7 +334,7 @@ $("#inputproductos").on('change', function() {
     band = false;
     i = 0;
     $('#idproducto').val("");
-    articulos = <?php echo json_encode($materias); ?> ;
+    articulos = <?php echo json_encode($materias) ?> ;
     producto = document.getElementById('inputproductos').value;
 
     while (!band && i < articulos.length) {

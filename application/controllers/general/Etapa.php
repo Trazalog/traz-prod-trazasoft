@@ -84,7 +84,7 @@ class Etapa extends CI_Controller
         $datosCab['usuario_app'] = userNick();
         $datosCab['empr_id'] = (string) empresa();
         $datosCab['forzar_agregar'] = "FALSE";
-        $datosCab['fec_vencimiento'] = date('d-m-Y');
+        $datosCab['fec_vencimiento'] = FEC_VEN;
         $datosCab['recu_id'] = "0";
         $datosCab['tipo_recurso'] = "";
 
@@ -320,14 +320,24 @@ class Etapa extends CI_Controller
         $datosCab['usuario_app'] = userNick();
         $datosCab['empr_id'] = (string) empresa();
         $datosCab['forzar_agregar'] = "FALSE";
-        $datosCab['fec_vencimiento'] = "01-01-1899";
+        $datosCab['fec_vencimiento'] = FEC_VEN;
         $datosCab['recu_id'] = (string) 0;
         $datosCab['tipo_recurso'] = "";
+
+        #FLEIVA
+        $datosCab['batch_id'] = "0";
+        $datosCab['planificado'] = "";
         $data['_post_lote'] = $datosCab;
         // guardo recursos materiales (origen)
         $productos = $this->input->post('productos');
         //guarda batch nuevo (tabla lotes)
         $respServ = $this->Etapas->SetNuevoBatch($data);
+
+        if(isset($respServ->Fault)){
+            echo json_encode($respServ);
+            return;
+        }
+
         $batch_id = $respServ->respuesta->resultado;
         //////////// PARA GUARDAR EN RECURSOS LOTES ///////////////////
         $i = 0;
@@ -415,10 +425,12 @@ class Etapa extends CI_Controller
             $arrayPost["usuario_app"] = userNick();
             $arrayPost["empr_id"] = (string) empresa();
             $arrayPost["forzar_agregar"] = $value->unificar;
-            $arrayPost["fec_vencimiento"] = "01-01-1988";
+            $arrayPost["fec_vencimiento"] = FEC_VEN;
             $arrayPost["recu_id"] = strval($value->recu_id);
             $arrayPost["tipo_recurso"] = $value->tipo_recurso;
-            $arrayDatos['_post_lote_list_batch_req']['_post_lote_lis'][] = $arrayPost;
+            $arrayPost['batch_id'] = "0";
+            $arrayPost['planificado'] = "";
+            $arrayDatos['_post_lote_list_batch_req']['_post_lote_list'][] = $arrayPost;
         }
 
         $resp = $this->Etapas->finalizarEtapa($arrayDatos);
@@ -456,9 +468,12 @@ class Etapa extends CI_Controller
             $arrayPost["usuario_app"] = userNick();
             $arrayPost["empr_id"] = (string) empresa();
             $arrayPost["forzar_agregar"] = false;
-            $arrayPost["fec_vencimiento"] = "01-01-1988";
+            $arrayPost["fec_vencimiento"] = FEC_VEN;
             $arrayPost["recu_id"] = "0";
             $arrayPost["tipo_recurso"] = "";
+            #FLEIVA
+            $arrayPost['batch_id'] = "0";
+            $arrayPost['planificado'] = "";
             $arrayDatos['_post_lote_list_batch_req']['_post_lote_lis'][] = $arrayPost;
         }
 

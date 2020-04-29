@@ -101,14 +101,13 @@ class REST
             // log_message('DEBUG', '#TRAZA | #REST | #CURL | #BODY >> ' . json_encode($body));
             
             
-                    
+                log_message('ERROR', '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> REST ERROR <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<');
                 log_message('ERROR', '#TRAZA | #REST | #CURL | #HTTP_CODE >> ' . $response_code);
                 log_message('ERROR', '#TRAZA | #REST | #CURL | #HEADER SALIDA >> ' . $headerSent);
                 log_message('ERROR', '#TRAZA | #REST | #CURL | #HEADER SALIDA BODY >> ' . json_encode($data));
-
-                
                 log_message('ERROR', '#TRAZA | #REST | #CURL | #HEADER RESPUESTA >> ' . $headers);
                 log_message('ERROR', '#TRAZA | #REST | #CURL | #BODY >> ' . json_encode($body));
+                log_message('ERROR', '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< FIN REST ERROR >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
 
             }
 

@@ -140,18 +140,13 @@ define('TSK', 'traz-comp-tareas/');
 #REST
 define('TAREAS_ASIGNAR', 'traz-comp-tareasestandar/asignar');
 
-define('REST', 'http://dev-trazalog.com.ar:8280/services/ProduccionDataService/');
-define('RESTPT','http://dev-trazalog.com.ar:8280/services/produccionTest/');
-define('REST_TDS','http://dev-trazalog.com.ar:8280/services/TrazabilidadDataService/');
-define('REST2', 'http://dev-trazalog.com.ar:8280/services/ProduccionDataService');
-define('REST3', 'http://dev-trazalog.com.ar:8280/services/produccionTest');
-define('REST4', 'http://dev-trazalog.com.ar:8280/services/TrazabilidadDataService');
-// define('REST', 'http://pc-pc:8280/services/ProduccionDataService/');
-// define('RESTPT','http://pc-pc:8280/services/produccionTest/');
-// define('REST_TDS','http://pc-pc:8280/services/TrazabilidadDataService/');
-// define('REST2', 'http://pc-pc:8280/services/ProduccionDataService');
-// define('REST3', 'http://pc-pc:8280/services/produccionTest');
-// define('REST4', 'http://pc-pc:8280/services/TrazabilidadDataService');
+define('REST', 'http://34.66.255.127:8280/services/ProduccionDataService/');
+define('RESTPT','http://34.66.255.127:8280/services/produccionTest/');
+define('REST_TDS','http://34.66.255.127:8280/services/TrazabilidadDataService/');
+define('REST2', 'http://34.66.255.127:8280/services/ProduccionDataService');
+define('REST3', 'http://34.66.255.127:8280/services/produccionTest');
+define('REST4', 'http://34.66.255.127:8280/services/TrazabilidadDataService');
+
 
 //TODO:AGREGAR AL CONSTANT ORIGINAL
 #RECURSOS_LOTES
@@ -166,10 +161,11 @@ define('RECURSO_CONSUMO', 'CONSUMO');
 # >> Proyecto
 # Default View
 #define('DEFAULT_VIEW', 'general/Reporte/tareasOperario');
-define('DEFAULT_VIEW', 'traz-comp-form/Form/obtenerTodos');
+define('DEFAULT_VIEW', 'general/Etapa');
 
 #TRAZASOFT
 define('PROVEEDOR_INTERNO', 1000);
+define('FEC_VEN', '01-01-3000');
 
 #Deposito que contienen todos los reci_id que estan en transporte
 define('DEPOSITO_TRANSPORTE', 1000);
@@ -181,3 +177,5 @@ define('ETAPA_DEPOSITO', 2000);
 
 # >> ALM AVANZAR TASK
 define('PLANIF_AVANZA_TAREA', true);
+
+
