@@ -300,8 +300,10 @@ function addCamion(msj = true) {
         data: dataForm,
         success: function(rsp) {
             if (rsp.status) {
-                $('#frm-camion')[0].reset();
-                $('#frm-info')[0].reset();
+                if($('#bloque_descarga:visible').length == 0){
+                    $('#frm-camion')[0].reset();
+                    $('#frm-info')[0].reset();
+                }
                 if (msj) alert('Datos Guardados con Éxito');
             } else {
                 alert('Fallo al Guardar Datos del Camión');

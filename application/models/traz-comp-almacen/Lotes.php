@@ -185,15 +185,15 @@ class Lotes extends CI_Model
             $aux["usuario_app"] = userNick();
             $aux["empr_id"] = strval(empresa());
             $aux["forzar_agregar"] = isset($o->forzar_agregar) ? $o->forzar_agregar : "FALSE";
-            $aux["fec_vencimiento"] = date('d-m-Y');
+            $aux["fec_vencimiento"] = FEC_VEN;
             $aux["recu_id"] = "0";
             $aux["tipo_recurso"] = "";
+            $aux['batch_id'] = "0";
+            $aux['planificado'] = "";
 
 
             $batch_req['_post_lote_batch_req']['_post_lote'][] = $aux;
         }
-
-        log_message('DEBUG', '#MODEL > crearBatch | BATCH_REQ: ' . json_encode($rsp));
 
         $url = REST_TDS . 'lote/list_batch_req';
         $rsp = $this->rest->callApi('POST', $url, $batch_req);
