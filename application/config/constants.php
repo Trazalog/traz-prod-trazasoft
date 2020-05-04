@@ -179,5 +179,5 @@ define('LIB', 'lib/');
 define('RSP_LOTE', [
         "TOOLSERROR:RECI_NO_VACIO_DIST_ART" => "El recipiente contiene artículos distintos",
         "TOOLSERROR:RECI_NO_VACIO_DIST_LOTE_IGUAL_ART" => "El recipiente contiene lotes distintos",
-        "TOOLSERROR:RECI_NO_VACIO_MISMO_IGUAL_ART_LOTE" => "El recipiente contiene los mismos lotes y artículos"
+        "TOOLSERROR:RECI_NO_VACIO_IGUAL_ART_LOTE" => "El recipiente contiene los mismos lotes y artículos"
     ]);
