@@ -54,5 +54,6 @@ if (!function_exists('getJson')) {
         $msj = $rsp['data']->Fault->faultstring;
         preg_match('~>>([^{]*)<<~i', $msj, $match);
         log_message('DEBUG', '#WSO2 #RESPONSE: ' . $match[1]);
+        return $match[1];
     }
 }

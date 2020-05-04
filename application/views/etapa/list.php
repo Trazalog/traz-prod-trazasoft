@@ -133,6 +133,7 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
 </div><!-- /.row -->
 </body>
 <script>
+
 if (mobileAndTabletcheck()) $('#etapas tbody').find('tr').on('click', function() {
     $(this).find('.fa-pencil').click();
 });

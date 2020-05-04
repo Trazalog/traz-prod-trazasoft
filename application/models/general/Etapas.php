@@ -122,10 +122,14 @@ class Etapas extends CI_Model
         log_message('DEBUG', 'Etapas/SetNuevoBatch(datos)-> ' . $arrayBatch);
         $resource = '/lote';
         $url = REST4 . $resource;
-        $array = $this->rest->callAPI("POST", $url, $data);
-        wso2Msj($array);
-
-        return json_decode($array['data']);
+        $rsp = $this->rest->callAPI("POST", $url, $data);
+        if($rsp['status']){
+            $rsp['data']  = json_decode($rsp['data']);
+        }else{
+            $rsp['error'] = wso2Msj($rsp);
+            $rsp['msj'] = RSP_LOTE[$rsp['error']];
+        }
+        return $rsp;
     }
     // Guarda cabecera de Nota de pedido
     public function setCabeceraNP($data)
@@ -182,21 +186,22 @@ class Etapas extends CI_Model
         log_message('DEBUG', 'Etapas/finalizarEtapa(datos)-> ' . json_encode($arrayDatos));
         $resource = '/lote/list_batch_req';
         $url = REST4 . $resource;
-        $array = $this->rest->callAPI("POST", $url, $arrayDatos);
-        wso2Msj($array);
-        return json_decode($array['status']);
+        $rsp = $this->rest->callAPI("POST", $url, $arrayDatos);
+        wso2Msj($rsp);
+        return $rsp;
     }
+
     //TODO: BORAR DEPRECADA
     // Guarda fraccionamiento temp Etapa Fraccionamiento
     public function setFraccionamTemp($fraccionam)
     {
-
         log_message('DEBUG', 'Etapas/setFraccionamTemp(fraccionam)-> ' . json_encode($fraccionam));
         $resource = '/_post_fraccionamiento_batch_req';
         $url = REST2 . $resource;
         $array = $this->rest->callAPI("POST", $url, $fraccionam);
         return json_decode($array['code']);
     }
+
     // trae lotes a fraccionar desde entrega materiales por batch_id
     public function getLotesaFraccionar($id)
     {
