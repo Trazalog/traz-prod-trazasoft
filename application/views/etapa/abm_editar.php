@@ -248,6 +248,34 @@ function despliega() {
     }
 }
 
+var guardarForzado = function(data) {
+    console.log('Guardar Forzado...');
+    data.forzar = "true";
+    wo();
+    $.ajax({
+        type: 'POST',
+        dataType: 'JSON',
+        url: 'general/Etapa/guardar/iniciar',
+        data: {
+            data
+        },
+        success: function(rsp) {
+            console.log(rsp);
+            if (rsp.status) {
+                alert('Salida Guardada exitosamente.');
+                linkTo('general/Etapa/index');
+            } else {
+                alert('Fallo al iniciar la etapa');
+            }
+        },
+        error: function(rsp) {
+            alert('Error al iniciar etapa');
+        },
+        complete: function() {
+            wc();
+        }
+    });
+}
 // envia datos para iniciar etapa y acer orden de pedido a almacenes
 function guardar(boton) {
 
@@ -278,7 +306,6 @@ function guardar(boton) {
     var prod = getJson($('#idproducto'));
     var prod = prod ? prod.id : 0;
 
-
     var recipiente = getJson($('#recipientes'));
     var recipiente = recipiente ? recipiente.reci_id : 0;
 
@@ -296,7 +323,8 @@ function guardar(boton) {
         cantidad: cantidad,
         idprod: prod,
         estadoEtapa: estadoEtapa,
-        batch_id: batch_id
+        batch_id: batch_id,
+        forzar: "false"
     };
 
     wo();
@@ -309,23 +337,103 @@ function guardar(boton) {
         },
         success: function(rsp) {
             console.log(rsp);
-
             if (rsp.status) {
                 alert('Salida Guardada exitosamente.');
                 linkTo('general/Etapa/index');
             } else {
-                alert('Fallo al guardar. Msj: ' + rsp);
+                if (rsp.msj) {
+                    conf(guardarForzado, data, '¿Confirma Unificación de Lotes?', rsp.msj);
+                } else {
+                    alert('Fallo al iniciar la etapa');
+                }
             }
         },
         error: function(rsp) {
-            alert('Error al Guardar Salida. Msj: ' + rsp);
-            console.log("error: " + rsp);
+            alert('Error al iniciar etapa');
         },
         complete: function() {
             wc();
         }
     });
 }
+// envia datos para iniciar etapa y acer orden de pedido a almacenes
+// function guardar(boton) {
+
+//     var recipiente = idprod = '';
+//     var tabla = $('#tablamateriasasignadas tbody tr');
+//     var materiales = [];
+//     var materia = [];
+
+//     $.each(tabla, function(index) {
+//         var cantidad = $(this).find("td").eq(3).html();
+//         var id_materia = $(this).attr("id");
+//         if (id_materia != null) {
+//             materia.push({
+//                 id_materia,
+//                 cantidad
+//             });
+//         }
+//     });
+
+//     var lote = $('#Lote').val();
+//     var fecha = $('#fecha').val();
+//     var establecimiento = document.getElementById('establecimientos').value;
+
+//     var op = document.getElementById('ordenproduccion').value;
+//     var idetapa = <--?php echo $idetapa ?> ;
+//     var cantidad = $('#cantidad_producto').val();
+
+//     var prod = getJson($('#idproducto'));
+//     var prod = prod ? prod.id : 0;
+
+
+//     var recipiente = getJson($('#recipientes'));
+//     var recipiente = recipiente ? recipiente.reci_id : 0;
+
+//     var estadoEtapa = $('#estadoEtapa').val();
+//     var batch_id = $('#batch_id').val();
+
+//     var data = {
+//         idetapa: idetapa,
+//         lote: lote,
+//         fecha: fecha,
+//         establecimiento: establecimiento,
+//         recipiente: recipiente,
+//         op: op,
+//         materia: materia,
+//         cantidad: cantidad,
+//         idprod: prod,
+//         estadoEtapa: estadoEtapa,
+//         batch_id: batch_id
+//     };
+
+//     wo();
+//     $.ajax({
+//         type: 'POST',
+//         dataType: 'JSON',
+//         url: 'general/Etapa/guardar/' + boton,
+//         data: {
+//             data
+//         },
+//         success: function(rsp) {
+//             console.log(rsp);
+
+//             if (rsp.status) {
+//                 alert('Salida Guardada exitosamente.');
+//                 linkTo('general/Etapa/index');
+//             } else {
+//                 alert('Fallo al guardar. Msj: ' + rsp);
+//             }
+//         },
+//         error: function(rsp) {
+//             alert('Error al Guardar Salida. Msj: ' + rsp);
+//             console.log("error: " + rsp);
+//         },
+//         complete: function() {
+//             wc();
+//         }
+//     });
+// }
 
 
 // selecciona id de producto y guarda en input hidden

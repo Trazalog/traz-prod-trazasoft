@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /*
 |--------------------------------------------------------------------------
@@ -10,8 +10,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | error_reporting is disabled, the backtrace will not display, regardless
 | of this setting
 |
-*/
-defined('SHOW_DEBUG_BACKTRACE') OR define('SHOW_DEBUG_BACKTRACE', TRUE);
+ */
+defined('SHOW_DEBUG_BACKTRACE') or define('SHOW_DEBUG_BACKTRACE', true);
 
 /*
 |--------------------------------------------------------------------------
@@ -25,11 +25,11 @@ defined('SHOW_DEBUG_BACKTRACE') OR define('SHOW_DEBUG_BACKTRACE', TRUE);
 | user, PHP under CGI with Apache suEXEC, etc.).  Octal values should
 | always be used to set the mode correctly.
 |
-*/
-defined('FILE_READ_MODE')  OR define('FILE_READ_MODE', 0644);
-defined('FILE_WRITE_MODE') OR define('FILE_WRITE_MODE', 0666);
-defined('DIR_READ_MODE')   OR define('DIR_READ_MODE', 0755);
-defined('DIR_WRITE_MODE')  OR define('DIR_WRITE_MODE', 0755);
+ */
+defined('FILE_READ_MODE') or define('FILE_READ_MODE', 0644);
+defined('FILE_WRITE_MODE') or define('FILE_WRITE_MODE', 0666);
+defined('DIR_READ_MODE') or define('DIR_READ_MODE', 0755);
+defined('DIR_WRITE_MODE') or define('DIR_WRITE_MODE', 0755);
 
 /*
 |--------------------------------------------------------------------------
@@ -38,15 +38,15 @@ defined('DIR_WRITE_MODE')  OR define('DIR_WRITE_MODE', 0755);
 |
 | These modes are used when working with fopen()/popen()
 |
-*/
-defined('FOPEN_READ')                           OR define('FOPEN_READ', 'rb');
-defined('FOPEN_READ_WRITE')                     OR define('FOPEN_READ_WRITE', 'r+b');
-defined('FOPEN_WRITE_CREATE_DESTRUCTIVE')       OR define('FOPEN_WRITE_CREATE_DESTRUCTIVE', 'wb'); // truncates existing file data, use with care
-defined('FOPEN_READ_WRITE_CREATE_DESTRUCTIVE')  OR define('FOPEN_READ_WRITE_CREATE_DESTRUCTIVE', 'w+b'); // truncates existing file data, use with care
-defined('FOPEN_WRITE_CREATE')                   OR define('FOPEN_WRITE_CREATE', 'ab');
-defined('FOPEN_READ_WRITE_CREATE')              OR define('FOPEN_READ_WRITE_CREATE', 'a+b');
-defined('FOPEN_WRITE_CREATE_STRICT')            OR define('FOPEN_WRITE_CREATE_STRICT', 'xb');
-defined('FOPEN_READ_WRITE_CREATE_STRICT')       OR define('FOPEN_READ_WRITE_CREATE_STRICT', 'x+b');
+ */
+defined('FOPEN_READ') or define('FOPEN_READ', 'rb');
+defined('FOPEN_READ_WRITE') or define('FOPEN_READ_WRITE', 'r+b');
+defined('FOPEN_WRITE_CREATE_DESTRUCTIVE') or define('FOPEN_WRITE_CREATE_DESTRUCTIVE', 'wb'); // truncates existing file data, use with care
+defined('FOPEN_READ_WRITE_CREATE_DESTRUCTIVE') or define('FOPEN_READ_WRITE_CREATE_DESTRUCTIVE', 'w+b'); // truncates existing file data, use with care
+defined('FOPEN_WRITE_CREATE') or define('FOPEN_WRITE_CREATE', 'ab');
+defined('FOPEN_READ_WRITE_CREATE') or define('FOPEN_READ_WRITE_CREATE', 'a+b');
+defined('FOPEN_WRITE_CREATE_STRICT') or define('FOPEN_WRITE_CREATE_STRICT', 'xb');
+defined('FOPEN_READ_WRITE_CREATE_STRICT') or define('FOPEN_READ_WRITE_CREATE_STRICT', 'x+b');
 
 /*
 |--------------------------------------------------------------------------
@@ -72,21 +72,21 @@ defined('FOPEN_READ_WRITE_CREATE_STRICT')       OR define('FOPEN_READ_WRITE_CREA
 |    Bash scripting:
 |       http://tldp.org/LDP/abs/html/exitcodes.html
 |
-*/
-defined('EXIT_SUCCESS')        OR define('EXIT_SUCCESS', 0); // no errors
-defined('EXIT_ERROR')          OR define('EXIT_ERROR', 1); // generic error
-defined('EXIT_CONFIG')         OR define('EXIT_CONFIG', 3); // configuration error
-defined('EXIT_UNKNOWN_FILE')   OR define('EXIT_UNKNOWN_FILE', 4); // file not found
-defined('EXIT_UNKNOWN_CLASS')  OR define('EXIT_UNKNOWN_CLASS', 5); // unknown class
-defined('EXIT_UNKNOWN_METHOD') OR define('EXIT_UNKNOWN_METHOD', 6); // unknown class member
-defined('EXIT_USER_INPUT')     OR define('EXIT_USER_INPUT', 7); // invalid user input
-defined('EXIT_DATABASE')       OR define('EXIT_DATABASE', 8); // database error
-defined('EXIT__AUTO_MIN')      OR define('EXIT__AUTO_MIN', 9); // lowest automatically-assigned error code
-defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
+ */
+defined('EXIT_SUCCESS') or define('EXIT_SUCCESS', 0); // no errors
+defined('EXIT_ERROR') or define('EXIT_ERROR', 1); // generic error
+defined('EXIT_CONFIG') or define('EXIT_CONFIG', 3); // configuration error
+defined('EXIT_UNKNOWN_FILE') or define('EXIT_UNKNOWN_FILE', 4); // file not found
+defined('EXIT_UNKNOWN_CLASS') or define('EXIT_UNKNOWN_CLASS', 5); // unknown class
+defined('EXIT_UNKNOWN_METHOD') or define('EXIT_UNKNOWN_METHOD', 6); // unknown class member
+defined('EXIT_USER_INPUT') or define('EXIT_USER_INPUT', 7); // invalid user input
+defined('EXIT_DATABASE') or define('EXIT_DATABASE', 8); // database error
+defined('EXIT__AUTO_MIN') or define('EXIT__AUTO_MIN', 9); // lowest automatically-assigned error code
+defined('EXIT__AUTO_MAX') or define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
 
 # DNATO
 define('LOGIN', false);
-define('DNATO','http://localhost/traz-comp-dnato/');
+define('DNATO', 'http://localhost/traz-comp-dnato/');
 
 #TRAZ-COMP-BPM
 define('BPM', 'traz-comp-bpm/');
@@ -125,7 +125,6 @@ define('ASP_113', 'Usuario No Encontrado');
 define('ASP_114', 'Error al Actualizar Variable');
 define('ASP_115', 'Error al Leer Variable');
 
-
 #COMPONENTE ALMACENES
 define('ALM', 'traz-comp-almacen/');
 define('viewOT', false);
@@ -141,12 +140,11 @@ define('TSK', 'traz-comp-tareas/');
 define('TAREAS_ASIGNAR', 'traz-comp-tareasestandar/asignar');
 
 define('REST', 'http://34.66.255.127:8280/services/ProduccionDataService/');
-define('RESTPT','http://34.66.255.127:8280/services/produccionTest/');
-define('REST_TDS','http://34.66.255.127:8280/services/TrazabilidadDataService/');
+define('RESTPT', 'http://34.66.255.127:8280/services/produccionTest/');
+define('REST_TDS', 'http://34.66.255.127:8280/services/TrazabilidadDataService/');
 define('REST2', 'http://34.66.255.127:8280/services/ProduccionDataService');
 define('REST3', 'http://34.66.255.127:8280/services/produccionTest');
 define('REST4', 'http://34.66.255.127:8280/services/TrazabilidadDataService');
-
 
 //TODO:AGREGAR AL CONSTANT ORIGINAL
 #RECURSOS_LOTES
@@ -155,8 +153,6 @@ define('PRODUCTO', 'PRODUCTO');
 define('EQUIPO', 'EQUIPO');
 define('RECURSO_HUMANO', 'HUMANO');
 define('RECURSO_CONSUMO', 'CONSUMO');
-
-
 
 # >> Proyecto
 # Default View
@@ -178,4 +174,10 @@ define('ETAPA_DEPOSITO', 2000);
 # >> ALM AVANZAR TASK
 define('PLANIF_AVANZA_TAREA', true);
 
+define('LIB', 'lib/');
 
+define('RSP_LOTE', [
+        "TOOLSERROR:RECI_NO_VACIO_DIST_ART" => "El recipiente contiene artículos distintos",
+        "TOOLSERROR:RECI_NO_VACIO_DIST_LOTE_IGUAL_ART" => "El recipiente contiene lotes distintos",
+        "TOOLSERROR:RECI_NO_VACIO_IGUAL_ART_LOTE" => "El recipiente contiene los mismos lotes y artículos"
+    ]);

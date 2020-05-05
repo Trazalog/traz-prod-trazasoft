@@ -51,8 +51,8 @@ class Etapa extends CI_Controller
         $data['accion'] = 'Nuevo';
         $data['op'] = $data['etapa']->titulo;
 
-        $this->load->model(ALM . 'Articulos');
-        $data['materias'] = $this->Articulos->getList(); // listo
+        #$this->load->model(ALM . 'Articulos');
+        $data['materias'] = $this->Etapas->obtenerArticulos($data['etapa']->id)['data'];#$this->Articulos->getList(); // listo
         $data['lang'] = lang_get('spanish', 5);
         $data['tareas'] = []; //$this->Tareas->listar()->tareas->tarea;
         $data['templates'] = []; //$this->Templates->listar()->templates->template;
@@ -83,7 +83,7 @@ class Etapa extends CI_Controller
         $datosCab['etap_id'] = (string) $post_data['idetapa'];
         $datosCab['usuario_app'] = userNick();
         $datosCab['empr_id'] = (string) empresa();
-        $datosCab['forzar_agregar'] = "FALSE";
+        $datosCab['forzar_agregar'] = ($nuevo == 'guardar')? 'false':$post_data['forzar'];
         $datosCab['fec_vencimiento'] = FEC_VEN;
         $datosCab['recu_id'] = "0";
         $datosCab['tipo_recurso'] = "";
@@ -92,19 +92,17 @@ class Etapa extends CI_Controller
         $datosCab['batch_id'] = $batch_id; // SI LO MANDA VACIO LO CREA SINO LO EDITAR
         $estado = $post_data['estadoEtapa']; //mbustos
 
-        $datosCab['planificado'] = ($nuevo == 'guardar')?'true':"";
+        $datosCab['planificado'] = ($nuevo == 'guardar')?'true':"false";
         $data['_post_lote'] = $datosCab;
 
-        $respServ = $this->Etapas->SetNuevoBatch($data);
-
-        #En el caso de no existir devuelve nuevo BATCH_ID SINO el EXISTENTE
-        $batch_id = $respServ->respuesta->resultado;
-
-        if (!$batch_id) {
-            log_message('ERROR', 'Etapa/guardar #ERROR BATCH_ID NULO: >>' . $batch_id);
-            echo json_encode(["status" => false, "msj" => "Error en creacion Batch"]);
+        $rsp = $this->Etapas->SetNuevoBatch($data);
+        
+        if (!$rsp['status']) {
+            echo json_encode($rsp);
             return;
         }
+        #En el caso de no existir devuelve nuevo BATCH_ID SINO el EXISTENTE
+        $batch_id = $rsp['data']->respuesta->resultado;
 
         log_message('DEBUG', 'ETAPA >> guardar | FIN');
 
@@ -424,23 +422,18 @@ class Etapa extends CI_Controller
             $arrayPost["etap_id"] = (string) ETAPA_DEPOSITO;
             $arrayPost["usuario_app"] = userNick();
             $arrayPost["empr_id"] = (string) empresa();
-            $arrayPost["forzar_agregar"] = $value->unificar;
+            $arrayPost["forzar_agregar"] = $value->forzar;
             $arrayPost["fec_vencimiento"] = FEC_VEN;
             $arrayPost["recu_id"] = strval($value->recu_id);
             $arrayPost["tipo_recurso"] = $value->tipo_recurso;
             $arrayPost['batch_id'] = "0";
-            $arrayPost['planificado'] = "";
+            $arrayPost['planificado'] = "false";
             $arrayDatos['_post_lote_list_batch_req']['_post_lote_list'][] = $arrayPost;
         }
 
-        $resp = $this->Etapas->finalizarEtapa($arrayDatos);
+        $rsp = $this->Etapas->finalizarEtapa($arrayDatos);
 
-        if ($resp > 300) {
-            echo ("Error en dataservice");
-            return;
-        } else {
-            echo ("ok");
-        }
+        echo json_encode($rsp);
     }
     // Informe de etata fracccionamiento.
     public function finalizaFraccionar()
