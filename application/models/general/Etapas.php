@@ -220,4 +220,15 @@ class Etapas extends CI_Model
         $array = $this->rest->callAPI("GET", $url, $id);
         return json_decode($array['data']);
     }
+
+    public function obtenerArticulos($id_etapa)
+    {
+        $resource = "/etapas/productos/$id_etapa";
+        $url = REST2 . $resource;
+        $rsp = $this->rest->callAPI("GET", $url);
+        if($rsp['status']){
+            $rsp['data'] = json_decode($rsp['data'])->productos->producto;
+        }
+        return $rsp;
+    }
 }

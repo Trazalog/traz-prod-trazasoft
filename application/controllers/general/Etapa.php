@@ -51,8 +51,8 @@ class Etapa extends CI_Controller
         $data['accion'] = 'Nuevo';
         $data['op'] = $data['etapa']->titulo;
 
-        $this->load->model(ALM . 'Articulos');
-        $data['materias'] = $this->Articulos->getList(); // listo
+        #$this->load->model(ALM . 'Articulos');
+        $data['materias'] = $this->Etapas->obtenerArticulos($data['etapa']->id)['data'];#$this->Articulos->getList(); // listo
         $data['lang'] = lang_get('spanish', 5);
         $data['tareas'] = []; //$this->Tareas->listar()->tareas->tarea;
         $data['templates'] = []; //$this->Templates->listar()->templates->template;
