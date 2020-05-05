@@ -126,7 +126,8 @@ class Etapas extends CI_Model
         if($rsp['status']){
             $rsp['data']  = json_decode($rsp['data']);
         }else{
-            $rsp['error'] = wso2Msj($rsp);
+            $msj = explode('-', wso2Msj($rsp));
+            $rsp['error'] = $msj[0];
             $rsp['msj'] = RSP_LOTE[$rsp['error']];
         }
         return $rsp;
@@ -184,10 +185,16 @@ class Etapas extends CI_Model
     public function finalizarEtapa($arrayDatos)
     {
         log_message('DEBUG', 'Etapas/finalizarEtapa(datos)-> ' . json_encode($arrayDatos));
-        $resource = '/lote/list_batch_req';
+        $resource = '/_post_lote_list_batch_req';
         $url = REST4 . $resource;
         $rsp = $this->rest->callAPI("POST", $url, $arrayDatos);
-        wso2Msj($rsp);
+        if(!$rsp['status']){
+            $msj = explode('-', wso2Msj($rsp));
+            $rsp['error'] = $msj[0];
+            $rsp['reci_id'] = explode('=',$msj[1])[1];
+            $rsp['msj'] = RSP_LOTE[$rsp['error']];
+        }
+
         return $rsp;
     }
 

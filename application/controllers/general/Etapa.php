@@ -422,16 +422,16 @@ class Etapa extends CI_Controller
             $arrayPost["etap_id"] = (string) ETAPA_DEPOSITO;
             $arrayPost["usuario_app"] = userNick();
             $arrayPost["empr_id"] = (string) empresa();
-            $arrayPost["forzar_agregar"] = $value->unificar;
+            $arrayPost["forzar_agregar"] = $value->forzar;
             $arrayPost["fec_vencimiento"] = FEC_VEN;
             $arrayPost["recu_id"] = strval($value->recu_id);
             $arrayPost["tipo_recurso"] = $value->tipo_recurso;
             $arrayPost['batch_id'] = "0";
-            $arrayPost['planificado'] = "";
+            $arrayPost['planificado'] = "false";
             $arrayDatos['_post_lote_list_batch_req']['_post_lote_list'][] = $arrayPost;
         }
 
-        $resp = $this->Etapas->finalizarEtapa($arrayDatos);
+        $rsp = $this->Etapas->finalizarEtapa($arrayDatos);
 
         echo json_encode($rsp);
     }
