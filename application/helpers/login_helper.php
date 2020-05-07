@@ -2,7 +2,7 @@
 
 if(!function_exists('login')){
 
-    function login($dir)
+    function login($dir = false)
     {
         redirect(DNATO.'main/setdir?direccion='.base_url().'Dash&direccionsalida='.base_url().'Login');
     }

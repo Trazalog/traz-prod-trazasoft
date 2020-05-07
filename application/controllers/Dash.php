@@ -13,8 +13,7 @@ class Dash extends CI_Controller
     public function index()
     {
         if (!$this->session->userdata('email')) {
-            $dir = 'traz-prod-trazasoft';
-            login($dir);
+            login();
         } else {  
             $leng = "spanish";
             $page = "layout";
