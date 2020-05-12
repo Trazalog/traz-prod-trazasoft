@@ -12,9 +12,9 @@ class Dash extends CI_Controller
     }
     public function index()
     {
-        if (!$this->session->userdata('email')) {
-            login();
-        } else {  
+         if (!$this->session->userdata('email')) {
+             login();
+         } else {  
             $leng = "spanish";
             $page = "layout";
             $data['lang'] = lang_get($leng, $page);

@@ -13,7 +13,7 @@
                     </div>
                     <div class="col-md-6 col-xs-12 input-group ba">
                         <?php
-                            echo selectBusquedaAvanzada('idproducto', 'vprod', $materias, 'id', 'barcode',  array('descripcion', 'Unidad Medida:' => 'unidad_medida'));
+                            echo selectBusquedaAvanzada('idproducto', 'vprod', $productos, 'arti_id', 'barcode',  array('descripcion', 'Unidad Medida:' => 'unidad_medida'));
                             ?>
                     </div>
                 </div>

@@ -51,8 +51,10 @@ class Etapa extends CI_Controller
         $data['accion'] = 'Nuevo';
         $data['op'] = $data['etapa']->titulo;
 
-        #$this->load->model(ALM . 'Articulos');
-        $data['materias'] = $this->Etapas->obtenerArticulos($data['etapa']->id)['data'];#$this->Articulos->getList(); // listo
+        $this->load->model(ALM . 'Articulos');
+        $data['articulos'] = $this->Articulos->obtenerXTipos(array('Proceso','Final'));
+        $data['materias'] = $this->Etapas->obtenerMateriales($data['etapa']->id)['data'];
+        $data['productos'] = $this->Etapas->obtenerArticulos($data['etapa']->id)['data'];
         $data['lang'] = lang_get('spanish', 5);
         $data['tareas'] = []; //$this->Tareas->listar()->tareas->tarea;
         $data['templates'] = []; //$this->Templates->listar()->templates->template;
@@ -268,6 +270,8 @@ class Etapa extends CI_Controller
     public function editar()
     {
         $id = $this->input->get('id'); // batch_id
+        $this->load->model(ALM . 'Articulos');
+        $data['articulos'] = $this->Articulos->obtenerXTipos(array('Proceso','Final'));
 
         $data['accion'] = 'Editar';
         $data['etapa'] = $this->Etapas->buscar($id)->etapa;
@@ -275,9 +279,12 @@ class Etapa extends CI_Controller
 
         $data['recipientes'] = $this->Recipientes->obtener('DEPOSITO', 'TODOS', $data['etapa']->esta_id)['data'];
 
+        $data['productos'] = $this->Etapas->obtenerArticulos($data['etapa']->etap_id)['data'];
+
         // trae tablita de materia prima Origen y producto
         $data['matPrimas'] = $this->Etapas->getRecursosOrigen($id, MATERIA_PRIMA)->recursos->recurso;
         $data['producto'] = $this->Etapas->getRecursosOrigen($id, PRODUCTO)->recursos->recurso;
+        
 
         $data['op'] = $data['etapa']->titulo;
         $data['lang'] = lang_get('spanish', 4);
@@ -290,6 +297,7 @@ class Etapa extends CI_Controller
             // trae lotes segun entrega de materiales de almacen.(81)
             $data['lotesFracc'] = $this->Etapas->getLotesaFraccionar($id)->lotes->lote;
             $data['ordenProd'] = $data['etapa']->orden;
+            $data['articulos_fraccionar'] =  $this->Articulos->obtenerXTipo('Proceso');
 
             $this->load->view('etapa/fraccionar/fraccionar', $data);
         } else {
@@ -317,7 +325,7 @@ class Etapa extends CI_Controller
         $datosCab['etap_id'] = $this->input->post('idetapa');
         $datosCab['usuario_app'] = userNick();
         $datosCab['empr_id'] = (string) empresa();
-        $datosCab['forzar_agregar'] = "FALSE";
+        $datosCab['forzar_agregar'] = "false";
         $datosCab['fec_vencimiento'] = FEC_VEN;
         $datosCab['recu_id'] = (string) 0;
         $datosCab['tipo_recurso'] = "";
@@ -336,7 +344,7 @@ class Etapa extends CI_Controller
             return;
         }
 
-        $batch_id = $respServ->respuesta->resultado;
+        $batch_id = $respServ['data']->respuesta->resultado;
         //////////// PARA GUARDAR EN RECURSOS LOTES ///////////////////
         $i = 0;
         foreach ($productos as $key => $prod) {
@@ -495,6 +503,7 @@ class Etapa extends CI_Controller
         //    $data['lang'] = lang_get('spanish',5);
         $data['establecimientos'] = $this->Establecimientos->listarTodo()->establecimientos->establecimiento;
         $data['empaques'] = $this->Recipientes->listarEmpaques()->empaques->empaque;
+        $data['articulos_fraccionar'] =  $this->Articulos->obtenerXTipo('Proceso')['data'];
         //$data['materias'] = $this->Materias->listar()->materias->materia;
         $this->load->view('etapa/fraccionar/fraccionar', $data);
     }
