@@ -231,4 +231,15 @@ class Etapas extends CI_Model
         }
         return $rsp;
     }
+
+    public function obtenerMateriales($id_etapa)
+    {
+        $resource = "/etapas/materiales/$id_etapa";
+        $url = REST2 . $resource;
+        $rsp = $this->rest->callAPI("GET", $url);
+        if($rsp['status']){
+            $rsp['data'] = json_decode($rsp['data'])->productos->producto;
+        }
+        return $rsp;
+    }
 }

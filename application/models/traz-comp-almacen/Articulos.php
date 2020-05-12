@@ -8,6 +8,27 @@ class Articulos extends CI_Model
 		parent::__construct();
 	}
 
+	public function obtenerXTipo($tipo)
+	{
+		$resource = "/articulos/tipo/$tipo";
+        $url = REST2 . $resource;
+        $rsp = $this->rest->callAPI("GET", $url);
+        if($rsp['status']){
+            $rsp['data'] = json_decode($rsp['data'])->articulos->articulo;
+        }
+        return $rsp;
+	}
+
+	public function obtenerXTipos($tipos)
+	{
+		$res = [];
+		foreach ($tipos as $o) {
+			$aux = $this->obtenerXTipo($o);
+			$res = array_merge(($aux['status']?$aux['data']:[]), $res);
+		}
+		return $res;
+	}
+
 	function getList()
 	{
 		$this->db->select('A.*, coalesce(sum(cantidad),0) as stock, T.valor');
@@ -220,8 +241,6 @@ class Articulos extends CI_Model
 			return true;
 		}
 	}
-
-
 
 	function getdatosfams()
 	{

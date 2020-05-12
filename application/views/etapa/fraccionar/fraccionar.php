@@ -167,15 +167,13 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
             <div class="col-md-6 col-xs-12">
                 <div class="row">
                     <div class="col-md-3 col-xs-12">
-                        <label class="form-label">Articulos:</label>
+                        <label class="form-label">Artículos:</label>
                     </div>
                     <div class="col-md-9 col-xs-10">
 
                         <?php 
-
-              echo selectBusquedaAvanzada('inputproductos', 'arti_id', $articulos, 'arti_id', 'barcode',array('descripcion','Stock:' => 'stock'));
-          
-              ?>
+                         echo selectBusquedaAvanzada('inputproductos', 'arti_id', $articulos_fraccionar, 'arti_id', 'barcode',array('descripcion','Stock:' => 'stock'));
+                        ?>
 
                     </div>
                 </div>

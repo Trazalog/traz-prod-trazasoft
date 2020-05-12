@@ -64,7 +64,7 @@
                         <label for="inputproducto" class="form-label">Producto*:</label>
                     </div>
                     <div class="col-md-8 col-xs-12">
-                        <?php  echo selectBusquedaAvanzada('inputproducto', false, $materias, 'id', 'titulo'); ?>
+                        <?php  echo selectBusquedaAvanzada('inputproducto', false, $articulos, 'arti_id', 'descripcion'); ?>
                     </div>
                     <div class="col-md-3"></div>
                 </div>
