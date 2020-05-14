@@ -15,7 +15,7 @@ class Etapas extends CI_Model
         $url = REST3 . $resource;
         $rsp = $this->rest->callApi('GET', $url);
         if($rsp['status']){
-            $rsp = json_decode($array['data']);
+            $rsp = json_decode($rsp['data']);
         }
         return $rsp;
     }
