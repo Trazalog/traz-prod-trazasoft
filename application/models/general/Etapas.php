@@ -11,15 +11,13 @@ class Etapas extends CI_Model
     // trae listado de etapas con sus datos (Tabla)
     public function listar()
     {
-        //TODO: DESHARDCODEAR SERVICIO
-        $parametros["http"]["method"] = "GET";
-        $parametros["http"]["header"] = "Accept: application/json";
-        $param = stream_context_create($parametros);
         $resource = '/lotes';
         $url = REST3 . $resource;
-        $array = file_get_contents($url, false, $param);
-
-        return json_decode($array);
+        $rsp = $this->rest->callApi('GET', $url);
+        if($rsp['status']){
+            $rsp = json_decode($array['data']);
+        }
+        return $rsp;
     }
     // Listado de etapas estandar para seleccionar
     public function listarEtapas()
