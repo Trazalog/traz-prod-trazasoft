@@ -374,7 +374,7 @@ function guardar(boton) {
                 linkTo('general/Etapa/index');
             } else {
                 if (rsp.msj) {
-                    conf(guardarForzado, data, '¿Confirma Unificación de Lotes?', rsp.msj);
+                    conf(guardarForzado, data, '¿Confirma Unificación de Lotes?', rsp.msj + " | Detalle del Contenido: LOTE: " + rsp.lote_id + " | PRODUCTO: " + rsp.barcode);
                 } else {
                     alert('Fallo al iniciar la etapa');
                 }

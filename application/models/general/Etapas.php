@@ -116,6 +116,8 @@ class Etapas extends CI_Model
     // Inicia nueva Etapa (ej siembra)
     public function SetNuevoBatch($data)
     {
+        $this->load->model(ALM. 'Articulos');
+
         $arrayBatch = json_encode($data);
         log_message('DEBUG', 'Etapas/SetNuevoBatch(datos)-> ' . $arrayBatch);
         $resource = '/lote';
@@ -127,7 +129,13 @@ class Etapas extends CI_Model
             $msj = explode('-', wso2Msj($rsp));
             $rsp['error'] = $msj[0];
             $rsp['msj'] = RSP_LOTE[$rsp['error']];
+            foreach ($msj as $key => $o) {
+                if(!$key) continue;
+                $aux = explode('=', $o);
+                $rsp[$aux[0]]  = $aux[1];
+            }
         }
+        $rsp['barcode'] = $this->Articulos->get($rsp['arti_id'])['barcode'];
         return $rsp;
     }
     // Guarda cabecera de Nota de pedido
