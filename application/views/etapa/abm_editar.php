@@ -304,7 +304,7 @@ function guardar(boton) {
     var cantidad = $('#cantidad_producto').val();
 
     var prod = getJson($('#idproducto'));
-    var prod = prod ? prod.id : 0;
+    var prod = prod ? prod.arti_id : 0;
 
     var recipiente = getJson($('#recipientes'));
     var recipiente = recipiente ? recipiente.reci_id : 0;
