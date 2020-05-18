@@ -1,0 +1,61 @@
+{
+    "menus": {
+        "menu": [
+            {
+                "icono": "fa fa-fw fa-barcode ",
+                "titulo": "Almacenes",
+                "nivel": "2",
+                "submenu": [
+                    {
+                        "link": "traz-comp-almacen/Articulo",
+                        "icono": "fa fa-fw fa-barcode ",
+                        "titulo": "Articulos",
+                        "nivel": "1"
+                    },
+                    {
+                        "link": "traz-comp-almacen/Lote",
+                        "icono": "fa fa-fw fa-cubes",
+                        "titulo": "Stock",
+                        "nivel": "1"
+                    },
+                    {
+                        "link": "traz-comp-almacen/new/Entrega_Material",
+                        "icono": "fa fa-fw fa-check",
+                        "titulo": "Entrega Materiales",
+                        "nivel": "1"
+                    },
+                    {
+                        "link": "traz-comp-almacen/Remito",
+                        "icono": "fa fa-fw fa-paperclip ",
+                        "titulo": "Recepción Materiales",
+                        "nivel": "1"
+                    },
+                    {
+                        "link": "traz-comp-almacen/Lote/puntoPedList",
+                        "icono": "fa fa-fw fa-bookmark",
+                        "titulo": "Punto Pedido",
+                        "nivel": "1"
+                    },
+                    {
+                        "link": "traz-comp-almacen/Notapedido",
+                        "icono": "fa fa-fw fa-cart-plus",
+                        "titulo": "Pedido Materiales",
+                        "nivel": "1"
+                    },
+                    {
+                        "link": "traz-comp-almacen/Proceso",
+                        "icono": "fa fa-cogs",
+                        "titulo": "Mis Tareas",
+                        "nivel": "1"
+                    },
+                    {
+                        "link": "traz-comp-almacen/Ajustestock",
+                        "icono": "fa fa-cogs",
+                        "titulo": "Ajuste de Stock",
+                        "nivel": "1"
+                    }
+                ]
+            }
+        ]
+    }
+}
