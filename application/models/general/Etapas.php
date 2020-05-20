@@ -4,6 +4,12 @@
 
 class Etapas extends CI_Model
 {
+    private $rsp_lote = [
+        "TOOLSERROR:RECI_NO_VACIO_DIST_ART" => "El recipiente ya contiene artículos distintos",
+        "TOOLSERROR:RECI_NO_VACIO_DIST_LOTE_IGUAL_ART" => "El recipiente ya contiene lotes distintos",
+        "TOOLSERROR:RECI_NO_VACIO_IGUAL_ART_LOTE" => "El recipiente ya contiene los mismos lotes y artículos"
+    ];
+    
     public function __construct()
     {
         parent::__construct();
@@ -128,7 +134,7 @@ class Etapas extends CI_Model
         }else{
             $msj = explode('-', wso2Msj($rsp));
             $rsp['error'] = $msj[0];
-            $rsp['msj'] = RSP_LOTE[$rsp['error']];
+            $rsp['msj'] = $this->rsp_lote[$rsp['error']];
             foreach ($msj as $key => $o) {
                 if(!$key) continue;
                 $aux = explode('=', $o);
@@ -198,7 +204,7 @@ class Etapas extends CI_Model
             $msj = explode('-', wso2Msj($rsp));
             $rsp['error'] = $msj[0];
             $rsp['reci_id'] = explode('=',$msj[1])[1];
-            $rsp['msj'] = RSP_LOTE[$rsp['error']];
+            $rsp['msj'] = $this->rsp_lote[$rsp['error']];
         }
 
         return $rsp;
