@@ -1,6 +1,7 @@
 <?php $this->load->view('etapa/modal_materia_prima'); ?>
 <?php $this->load->view('etapa/modal_lotes'); ?>
 <?php $this->load->view('etapa/modal_producto'); ?>
+<?php $this->load->view('etapa/modal_unificacion_lote'); ?>
 
 <div id="snapshot" data-key="<?php echo $key ?>">
     <?php if ($etapa->estado == "En Curso") {
@@ -294,6 +295,7 @@ var guardarForzado = function(data) {
         success: function(rsp) {
             console.log(rsp);
             if (rsp.status) {
+                $('#mdl-unificacion').modal('hide');
                 alert('Salida Guardada exitosamente.');
                 linkTo('general/Etapa/index');
             } else {
@@ -374,7 +376,9 @@ function guardar(boton) {
                 linkTo('general/Etapa/index');
             } else {
                 if (rsp.msj) {
-                    conf(guardarForzado, data, '¿Confirma Unificación de Lotes?', rsp.msj + " | Detalle del Contenido: LOTE: " + rsp.lote_id + " | PRODUCTO: " + rsp.barcode);
+                    // conf(guardarForzado, data, '¿Confirma Unificación de Lotes?', rsp.msj + " | Detalle del Contenido: LOTE: " + rsp.lote_id + " | PRODUCTO: " + rsp.barcode);
+                    bak_data = data;
+                    getContenidoRecipiente(recipiente);
                 } else {
                     alert('Fallo al iniciar la etapa');
                 }
