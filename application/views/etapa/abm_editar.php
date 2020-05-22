@@ -1,6 +1,7 @@
 <?php $this->load->view('etapa/modal_materia_prima'); ?>
 <?php $this->load->view('etapa/modal_lotes'); ?>
 <?php $this->load->view('etapa/modal_producto'); ?>
+<?php $this->load->view('etapa/modal_unificacion_lote'); ?>
 
 <script>
 function validarEtapa() {
@@ -342,7 +343,9 @@ function guardar(boton) {
                 linkTo('general/Etapa/index');
             } else {
                 if (rsp.msj) {
-                    conf(guardarForzado, data, '¿Confirma Unificación de Lotes?', rsp.msj + " | Detalle del Contenido: LOTE: " + rsp.lote_id + " | PRODUCTO: " + rsp.barcode);
+                    // conf(guardarForzado, data, '¿Confirma Unificación de Lotes?', rsp.msj + " | Detalle del Contenido: LOTE: " + rsp.lote_id + " | PRODUCTO: " + rsp.barcode);
+                    bak_data = data;
+                    getContenidoRecipiente(recipiente);
                 } else {
                     alert('Fallo al iniciar la etapa');
                 }

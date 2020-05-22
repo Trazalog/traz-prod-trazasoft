@@ -407,13 +407,16 @@ var FinalizarEtapa = function() {
                 console.log(rsp);
                 if (rsp.status) {
                     $('#modal_finalizar').modal('hide');
+                    $('#mdl-unificacion').modal('hide');
                     alert('Etapa finalizada exitosamente.');
                     linkTo('general/Etapa/index');
                 } else {
                     if (rsp.msj) {
                         unificar_lote = rsp.reci_id;
+                        getContenidoRecipiente(unificar_lote);
                         // conf(FinalizarEtapa, null, '¿Confirma Unificación de Lotes?','Destino: '+ $('#productodestino').find('[value="'+unificar_lote+'"]').html() + ' | ' + rsp.msj);
-                        conf(FinalizarEtapa, null, '¿Confirma Unificación de Lotes?', rsp.msj + " | Detalle del Contenido: LOTE: " + rsp.lote_id + " | PRODUCTO: " + rsp.barcode + ' | DESTINO: '+ $('#productodestino').find('[value="'+unificar_lote+'"]').html());
+                        // conf(FinalizarEtapa, null, '¿Confirma Unificación de Lotes?', rsp.msj + " | Detalle del Contenido: LOTE: " + rsp.lote_id + " | PRODUCTO: " + rsp.barcode + ' | DESTINO: '+ $('#productodestino').find('[value="'+unificar_lote+'"]').html());
+
                     } else {
                         alert('Fallo al finalizar la etapa');
                     }
