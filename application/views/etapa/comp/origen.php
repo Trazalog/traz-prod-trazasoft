@@ -117,7 +117,7 @@
           foreach ($matPrimas as $fila) {
                 echo "<tr data-json='".json_encode($fila)."' id='$fila->arti_id'>";
                 #if(estado != 'En Curso'){
-                echo '<td><i class="fa fa-fw fa-minus text-light-blue tablamateriasasignadas_borrar" style="cursor: pointer; margin-left: 15px;" title="Nuevo"></i></td>';
+                echo '<td><i class="fa fa-fw fa-minus text-light-blue" style="cursor: pointer; margin-left: 15px;" onclick="eliminarOrigen(this)"></i></td>';
                 echo "<td>$fila->barcode</td>";
                 echo "<td>$fila->stock</td>";
                 echo "<td>$fila->cantidad</td>";
@@ -161,5 +161,9 @@
         materia = JSON.parse(materia);
        
         agregaMateria(materia);
+    }
+
+    function eliminarOrigen(e) {
+        $(e).closest('tr').remove();
     }
 </script>
