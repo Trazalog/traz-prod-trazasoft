@@ -131,15 +131,16 @@ class Etapa extends CI_Controller
         }
 
         // guarda producto en tabla recurso_lotes
-        $respRecurso = $this->Etapas->setRecursosLotesProd($batch_id, $recu_id, $datosCab['cantidad']);
-        if (!$respRecurso['status']) {
-            log_message('ERROR', 'ETAPA/guardarParte2 >> Fallo: guarda producto en tabla recurso_lotes');
-            echo json_encode($respRecurso);
-            return;
-        }
+        // $respRecurso = $this->Etapas->setRecursosLotesProd($batch_id, $recu_id, $datosCab['cantidad']);
+        // if (!$respRecurso['status']) {
+        //     log_message('ERROR', 'ETAPA/guardarParte2 >> Fallo: guarda producto en tabla recurso_lotes');
+        //     echo json_encode($respRecurso);
+        //     return;
+        // }
         // guarda articulos(id de recurso en tabla recursos) origen en tabla recursos_lotes
         $arrayTemp1 = array();
         $arrayTemp1['request_box']['_delete_recurso_lote']['batch_id'] = $batch_id;
+        $arrayTemp1['request_box']['_post_recurso_lote'][] = $this->Etapas->setRecursosLotesProd($batch_id, $recu_id, $datosCab['cantidad']);
         foreach ($materia as $o) {
             if ($cantidad !== "") {
                 $recurso_id = $this->Etapas->getRecursoId($o['id_materia']);
@@ -156,7 +157,6 @@ class Etapa extends CI_Controller
         }
 
         log_message('DEBUG', 'JSON request_box: >> ' . json_encode($arrayTemp1));
-
         $rspRequestBox = $this->Etapas->setRecursosLotes_requestBox($arrayTemp1);
       
         if (!$rspRequestBox['status']) {
