@@ -313,6 +313,8 @@ var guardarForzado = function(data) {
 // envia datos para iniciar etapa y acer orden de pedido a almacenes
 function guardar(boton) {
 
+    if(!validarCampos()) return;
+
     var recipiente = idprod = '';
     var tabla = $('#tablamateriasasignadas tbody tr');
     var materiales = [];
@@ -393,6 +395,19 @@ function guardar(boton) {
     });
 }
 
+function validarCampos(){
+    if($('#Lote').val() == "" || $('#establecimientos').val() == "" || $('#recipientes').val() == ""){
+        alert('Completar los campos obligatorios *');
+        return false;
+    }
+
+    if($('#tablamateriasasignadas tbody tr').length == 0){
+        alert('No ha seleccionado ninguna materia prima');
+        return false;
+    }
+
+    return true;
+}
 
 
 // valida campos vacios
@@ -459,29 +474,10 @@ $("#inputproductos").on('change', function() {
 
 // levanta modal para finalizar la etapa solamente
 function finalizar() {
-    /* idetapa = //php echo $idetapa;?>;
-							$.ajax({
-									type: 'POST',
-									data: {idetapa:idetapa },
-									url: 'general/Etapa/checkFormularios', 
-									success: function(result){
-										if(result)
-										{
-											
-											}else
-											{
-												alert('Faltan formularios');
-											}
-										
-									}
-						);*/
+
     $("#modal_finalizar").modal('show');
 }
-$(document).off('click', '.tablamateriasasignadas_borrar').on('click', '.tablamateriasasignadas_borrar', {
-    idtabla: 'tablamateriasasignadas',
-    idrecipiente: 'materiasasignadas',
-    idbandera: 'materiasexiste'
-}, remover);
+
 
 <?php
 if ($accion == 'Editar' && $etapa->estado == "PLANIFICADO") {
