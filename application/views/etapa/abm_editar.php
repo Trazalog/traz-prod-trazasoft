@@ -280,6 +280,11 @@ var guardarForzado = function(data) {
 // envia datos para iniciar etapa y acer orden de pedido a almacenes
 function guardar(boton) {
 
+    if($('#cantidad_producto').val() == ''){
+        alert('Por favor ingresar cantidad para el Producto');
+        return false;
+    }
+
     var recipiente = idprod = '';
     var tabla = $('#tablamateriasasignadas tbody tr');
     var materiales = [];

@@ -153,7 +153,14 @@
     });
 
     function aceptarMateria() {
+        
         cantidad = document.getElementById('cantidadmateria').value;
+        //Validar Cantidad Materia
+        if(cantidad == ''){
+            alert('Por favor ingresar una cantidad para el origen');
+            return;
+        }
+
         materia = matSelect;
         materia.cantidad = cantidad;
         materia = JSON.stringify(materia);
