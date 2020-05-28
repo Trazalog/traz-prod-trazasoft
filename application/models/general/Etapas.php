@@ -80,7 +80,7 @@ class Etapas extends CI_Model
         $arrayDatos['usuario'] = userNick();
         $arrayDatos['empr_id'] = (string) empresa();
         $arrayDatos['cantidad'] = (string) $cantidad;
-        $arrayDatos['tipo'] = PRODUCTO;
+        $arrayDatos['tipo'] = 'PRODUCTO';
         // FLEIVA
         $arrayDatos['empa_id'] = "0";
         $arrayDatos['empa_cantidad'] = "0";
@@ -89,11 +89,13 @@ class Etapas extends CI_Model
         
         log_message('DEBUG', 'Etapas/setRecursosLotes(recursos a grabar)-> ' . json_encode($data));
 
-        $resource = '/recurso/lote';
-        $url = REST2 . $resource;
-        $rsp = $this->rest->callAPI("POST", $url, $data);
-        wso2Msj($rsp);
-        return $rsp;
+        return $arrayDatos;
+
+        // $resource = '/recurso/lote';
+        // $url = REST2 . $resource;
+        // $rsp = $this->rest->callAPI("POST", $url, $data);
+        // wso2Msj($rsp);
+        // return $rsp;
     }
     // guarda prod en recursos lotes (articulos)
     public function setRecursosLotesMat($data)
