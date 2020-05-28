@@ -406,6 +406,11 @@ function validarCampos(){
         return false;
     }
 
+    if($('#cantidad_producto').val() == ''){
+        alert('Por favor ingresar cantidad para el Producto');
+        return false;
+    }
+
     return true;
 }
 
