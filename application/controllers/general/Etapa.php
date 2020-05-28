@@ -339,7 +339,7 @@ class Etapa extends CI_Controller
         //guarda batch nuevo (tabla lotes)
         $respServ = $this->Etapas->SetNuevoBatch($data);
 
-        if(isset($respServ->Fault)){
+        if(!$respServ['status']){
             echo json_encode($respServ);
             return;
         }

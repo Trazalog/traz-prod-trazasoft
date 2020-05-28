@@ -19,15 +19,6 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
     <div class="box-body">
         <div class="row" style="margin-top: 50px;">
 
-            <!-- <div class="col-md-1 col-xs-12">
-          <label for="Lote" class="form-label">Codigo Lote:*</label>
-      </div> -->
-            <!-- <div class="col-md-5 col-xs-12">
-          <input type="text" id="Lote" <?php //if($accion=='Editar' ){echo 'value="'.$etapa->lote.'"';}?> class="form-control" placeholder="Inserte Lote"
-          <?php //if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
-      </div> -->
-
-
             <div class="col-md-1 col-xs-12">
                 <label class="form-label">Fecha*:</label>
             </div>
@@ -72,21 +63,16 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
               echo '<select class="form-control" id="recipientes" disabled></select>';
           }
           if($accion == 'Editar'){
-              if($etapa->estado == 'En Curso'){
-                echo '<select class="form-control" id="recipientes" disabled>';
-              }else
-              {
-                echo '<select class="form-control" id="recipientes">';
-              }
+             
+                echo '<select class="form-control" id="recipientes" '.($etapa->estado == 'En Curso'?'disabled':'').'>';
+            
+
               echo '<option value="" disabled selected>-Seleccione Recipiente-</option>';
-              foreach($recipientes as $recipiente)
+              foreach($recipientes as $o)
               {
-                if($recipiente->nombre == $etapa->recipiente)
-                {
-                  echo '<option value="'.$recipiente->id.'" selected>'.$recipiente->nombre.'</option>';
-                }else{
-                  echo '<option value="'.$recipiente->id.'" >'.$recipiente->titulo.'</option>';
-                }
+           
+                  echo "<option value='$o->reci_id' ".(($o->nombre == $etapa->recipiente)?'selected':'').">$o->nombre</option>";
+                
               }
               echo '</select>';
           }
@@ -305,7 +291,8 @@ function actualizaRecipiente(establecimiento, recipientes) {
     $.ajax({
         type: 'POST',
         data: {
-            establecimiento: establecimiento
+            establecimiento: establecimiento,
+            tipo: 'DEPOSITO'
         },
         url: 'general/Recipiente/listarPorEstablecimiento',
         success: function(result) {

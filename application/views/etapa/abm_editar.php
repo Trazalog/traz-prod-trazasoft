@@ -204,7 +204,8 @@ function actualizaRecipiente(establecimiento, recipientes) {
         type: 'POST',
         dataType: 'JSON',
         data: {
-            establecimiento
+            establecimiento,
+            tipo: 'PRODUCTIVO'
         },
         url: 'general/Recipiente/listarPorEstablecimiento/true',
         success: function(result) {
