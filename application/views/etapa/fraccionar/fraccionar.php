@@ -1,5 +1,6 @@
 <?php $this->load->view('camion/modal_lotes')?>
 <?php $this->load->view('etapa/fraccionar/modal_productos')?>
+<?php $this->load->view('etapa/modal_unificacion_lote'); ?>
 <?php if($etapa->estado == "En Curso"){
 $this->load->view('etapa/fraccionar/modal_finalizar');
 }?>
@@ -18,15 +19,6 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
     </div>
     <div class="box-body">
         <div class="row" style="margin-top: 50px;">
-
-            <!-- <div class="col-md-1 col-xs-12">
-          <label for="Lote" class="form-label">Codigo Lote:*</label>
-      </div> -->
-            <!-- <div class="col-md-5 col-xs-12">
-          <input type="text" id="Lote" <?php //if($accion=='Editar' ){echo 'value="'.$etapa->lote.'"';}?> class="form-control" placeholder="Inserte Lote"
-          <?php //if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
-      </div> -->
-
 
             <div class="col-md-1 col-xs-12">
                 <label class="form-label">Fecha*:</label>
@@ -68,28 +60,23 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
             </div>
             <div class="col-md-5 col-xs-12">
                 <?php 
-          if($accion == 'Nuevo'){
-              echo '<select class="form-control" id="recipientes" disabled></select>';
-          }
-          if($accion == 'Editar'){
-              if($etapa->estado == 'En Curso'){
-                echo '<select class="form-control" id="recipientes" disabled>';
-              }else
-              {
-                echo '<select class="form-control" id="recipientes">';
-              }
-              echo '<option value="" disabled selected>-Seleccione Recipiente-</option>';
-              foreach($recipientes as $recipiente)
-              {
-                if($recipiente->nombre == $etapa->recipiente)
-                {
-                  echo '<option value="'.$recipiente->id.'" selected>'.$recipiente->nombre.'</option>';
-                }else{
-                  echo '<option value="'.$recipiente->id.'" >'.$recipiente->titulo.'</option>';
-                }
-              }
-              echo '</select>';
-          }
+          //if($accion == 'Nuevo'){
+            echo selectBusquedaAvanzada('recipientes', 'vreci');
+         // }
+        //   if($accion == 'Editar'){
+             
+        //         echo '<select class="form-control" id="recipientes" '.($etapa->estado == 'En Curso'?'disabled':'').'>';
+            
+
+        //       echo '<option value="" disabled selected>-Seleccione Recipiente-</option>';
+        //       foreach($recipientes as $o)
+        //       {
+           
+        //           echo "<option value='$o->reci_id' ".(($o->nombre == $etapa->recipiente)?'selected':'').">$o->nombre</option>";
+                
+        //       }
+        //       echo '</select>';
+        //   }
         ?>
             </div>
 
@@ -281,43 +268,48 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
 </div>
 
 
-
-
-
-
-
-
 <script>
 $('#prodFracc').DataTable({});
 
-accion = '<?php echo $accion;?>';
-if (accion == "Editar") {
-    var productos = <?php echo json_encode($etapa->productos); ?> ;
+// accion = '<-?php echo $accion;?>';
+// if (accion == "Editar") {
+//     var productos = <-?php echo json_encode($etapa->productos); ?> ;
 
-    for (i = 0; i < productos.length; i++) {
-        producto = JSON.stringify(productos[i]);
-        AgregaProducto(producto);
-    }
-}
+//     for (i = 0; i < productos.length; i++) {
+//         producto = JSON.stringify(productos[i]);
+//         AgregaProducto(producto);
+//     }
+// }
 
+actualizaRecipiente($('#establecimientos').val());
 function actualizaRecipiente(establecimiento, recipientes) {
+
+    if(!establecimiento) return;
+    
     establecimiento = establecimiento;
     $.ajax({
         type: 'POST',
+        dataType: 'JSON',
         data: {
-            establecimiento: establecimiento
+            establecimiento: establecimiento,
+            tipo: 'DEPOSITO'
         },
-        url: 'general/Recipiente/listarPorEstablecimiento',
+        url: 'general/Recipiente/listarPorEstablecimiento/true',
         success: function(result) {
-            result = JSON.parse(result);
-            result = result.data;
-            var html = "";
-            html = html + '<option value="" disabled selected>-Seleccione Recipiente-</option>';
-            for (var i = 0; i < result.length; i++) {
-                html = html + '<option value="' + result[i].reci_id + '">' + result[i].nombre + '</option>';
+            console.log(result);
+            
+            if (!result.status) {
+                alert('Fallo al Traer Recipientes');
+                return;
             }
-            document.getElementById(recipientes).disabled = false;
-            document.getElementById(recipientes).innerHTML = html;
+
+            if (!result.data) {
+                alert('No hay Recipientes Asociados');
+                return;
+            }
+            fillSelect('#recipientes', result.data);
+
+            $('#recipientes').val('<?php echo  $etapa->reci_id ?>');        
         }
 
     });
@@ -544,33 +536,71 @@ function guardar() {
         // productos = JSON.stringify(productos);
     }
 
+    var data = {
+        idetapa: idetapa,
+        fecha: fecha,
+        establecimiento: establecimiento,
+        recipiente: recipiente,
+        productos: productos,
+        cant_total_desc: acum_cant,
+        ordProduccion: ordProduccion,
+        forzar: 'false'
+    };
 
+    wo();
     $.ajax({
         type: 'POST',
-        data: {
-            idetapa: idetapa,
-            fecha: fecha,
-            establecimiento: establecimiento,
-            recipiente: recipiente,
-            productos: productos,
-            cant_total_desc: acum_cant,
-            ordProduccion: ordProduccion
-        },
+        dataType: 'JSON',
+        data,
         url: 'general/Etapa/guardarFraccionar',
-        success: function(result) {
-          console.log(result);
-          
-            if (result == "ok") {
+        success: function(rsp) {
+            if (rsp.status) {
+                alert('Salida Guardada exitosamente.');
                 linkTo('general/Etapa/index');
-
             } else {
-                alert('Ups! algo salio mal')
+                if (rsp.msj) {
+                    bak_data = data;
+                    getContenidoRecipiente(recipiente);
+                } else {
+                    alert('Fallo al iniciar la etapa');
+                }
             }
-
+        },
+        error: function() {
+            alert('Error al iniciar etapa fraccionamiento');
+        },
+        complete: function() {
+            wc();
         }
-
     });
 }
+
+function guardarForzado(data) {
+    wo();
+    data.forzar = 'true';
+    $.ajax({
+        type: 'POST',
+        dataType: 'JSON',
+        data,
+        url: 'general/Etapa/guardarFraccionar',
+        success: function(rsp) {
+            $('#mdl-unificacion').modal('hide');
+            if (rsp.status) {
+                alert('Salida Guardada exitosamente.');
+                linkTo('general/Etapa/index');
+            } else {
+                alert('Fallo al iniciar la etapa fraccionamiento');
+            }
+        },
+        error: function() {
+            alert('Error al guardar fraccionamiento');
+        },
+        complete: function() {
+            wc();
+        }
+    });
+}
+
 // finalizar solo llena select y levanta modal 
 function finalizar() {
     // html = '<select class="form-control" id="loteorigen">';
