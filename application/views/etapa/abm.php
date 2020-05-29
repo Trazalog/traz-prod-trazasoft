@@ -239,7 +239,7 @@ function actualizaRecipiente(establecimiento, recipientes) {
     $('#recipientes').empty();
     establecimiento = establecimiento;
     if (!establecimiento) return;
-    // wo();
+     wo();
     $.ajax({
         type: 'POST',
         dataType: 'JSON',

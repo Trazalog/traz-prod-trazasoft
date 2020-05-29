@@ -325,14 +325,14 @@ class Etapa extends CI_Controller
         $datosCab['etap_id'] = $this->input->post('idetapa');
         $datosCab['usuario_app'] = userNick();
         $datosCab['empr_id'] = (string) empresa();
-        $datosCab['forzar_agregar'] = "false";
+        $datosCab['forzar_agregar'] = $this->input->post('forzar');
         $datosCab['fec_vencimiento'] = FEC_VEN;
         $datosCab['recu_id'] = (string) 0;
         $datosCab['tipo_recurso'] = "";
 
         #FLEIVA
         $datosCab['batch_id'] = "0";
-        $datosCab['planificado'] = "";
+        $datosCab['planificado'] = "false";
         $data['_post_lote'] = $datosCab;
         // guardo recursos materiales (origen)
         $productos = $this->input->post('productos');
@@ -395,11 +395,7 @@ class Etapa extends CI_Controller
                         'pIdPedidoMaterial' => $pema_id,
                     ];
                     $rsp = $this->bpm->lanzarProceso(BPM_PROCESS_ID_PEDIDOS_NORMALES, $contract);
-                    if ($rsp['status']) {
-                        echo ("ok");
-                    } else {
-                        echo ($rsp['msj']);
-                    }
+                    echo json_encode($rsp);
                 } else {
                     echo ("Error en generacion de Detalle Pedido Materiales");
                 }

@@ -1,4 +1,4 @@
-<div class="modal" id="mdl-unificacion" tabindex="-1" role="dialog" style='z-index:999999;'>
+<div class="modal" id="mdl-unificacion" tabindex="-1" role="dialog" style='z-index:9999;'>
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -38,23 +38,30 @@
 <script>
 var bak_data;
 function getContenidoRecipiente(reci_id) {
+    wo();
     $('#contenido-recipiente').empty();
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
         url: 'index.php/Recipiente/obtenerContenido/' + reci_id,
         success: function(result) {
-            if (result.status) {
+            
+            if (result.status && result.data) {
                 result.data.forEach(function(e) {
                     $('#contenido-recipiente').append(
                         `<tr><td>${e.lote_id}</td><td>${e.barcode}</td><td>${e.cantidad}</td></tr>`
                         );
                 });
                 $('#mdl-unificacion').modal('show');
+            }else{
+            alert('Fallo al obtener contenido del recipiente');  
             }
         },
         error: function() {
-            console.log('Error al traer el contedio del recipiente');
+            alert('Error al traer el contedio del recipiente');
+        },
+        complete:function() {
+            wc();
         }
     });
 }
