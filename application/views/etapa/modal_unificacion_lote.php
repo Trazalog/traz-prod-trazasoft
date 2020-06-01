@@ -46,12 +46,19 @@ function getContenidoRecipiente(reci_id) {
         url: 'index.php/Recipiente/obtenerContenido/' + reci_id,
         success: function(result) {
             
-            if (result.status && result.data) {
-                result.data.forEach(function(e) {
+            if (result.status) {
+                if(result.data){
+                  result.data.forEach(function(e) {
                     $('#contenido-recipiente').append(
                         `<tr><td>${e.lote_id}</td><td>${e.barcode}</td><td>${e.cantidad}</td></tr>`
                         );
-                });
+                    });
+                }else{
+                    $('#contenido-recipiente').append(
+                        `<tr><td colspan='3'>Recipiente sin contenido</td></tr>`
+                        `<tr><td colspan='3'>Los lotes a crear seran unificados en un mismo recipiente</td></tr>`
+                        );
+                }
                 $('#mdl-unificacion').modal('show');
             }else{
             alert('Fallo al obtener contenido del recipiente');  
