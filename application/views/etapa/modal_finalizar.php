@@ -91,7 +91,7 @@
                         <?php if($accion == 'Editar'){
         
 
-                      echo selectBusquedaAvanzada('productodestino', false, $recipientes, 'reci_id', 'nombre', array('Estado:'=>'estado','Lote:'=>'lote_id', 'barcode', 'descripcion'));
+                      echo selectBusquedaAvanzada('productodestino', false);
 
                         }
                         ?>
@@ -224,7 +224,7 @@ function AgregarProducto() {
         recipientes = '<?php echo json_encode($recipientes);?>';
         recipientes = JSON.parse(recipientes);
         idrecipiente = document.getElementById('productodestino').value;
-        indexrec = recipientes.findIndex(y => y.reci_id == idrecipiente);
+        //indexrec = recipientes.findIndex(y => y.reci_id == idrecipiente);
         producto.id = productoid;
         producto.titulo = $('#inputproducto').find('option:selected').text();
         producto.cantidad = cantidad;
@@ -434,4 +434,40 @@ $(document).off('click', '.tabla_productos_asignados_borrar').on('click', '.tabl
     idbandera: 'productos_existe'
 }, remover);
 
+
+obtenerDepositos($('#establecimientos').val());
+function obtenerDepositos(establecimiento, recipientes) {
+    establecimiento = establecimiento;
+    if (!establecimiento) return;
+
+    $.ajax({
+        type: 'POST',
+        dataType: 'JSON',
+        data: {
+            establecimiento,
+            tipo: 'DEPOSITO'
+        },
+        url: 'general/Recipiente/listarPorEstablecimiento/true',
+        success: function(result) {
+            console.log(result);
+            
+            if (!result.status) {
+                alert('Fallo al Traer Depositos');
+                return;
+            }
+
+            if (!result.data) {
+                alert('No hay Depositos Asociados');
+                return;
+            }
+            fillSelect('#productodestino', result.data);
+
+
+        },
+        error: function() {
+            alert('Error al Traer Depositos');
+        }
+    });
+
+}
 </script>

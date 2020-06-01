@@ -277,7 +277,7 @@ class Etapa extends CI_Controller
         $data['etapa'] = $this->Etapas->buscar($id)->etapa;
         $data['idetapa'] = $data['etapa']->id;
 
-        $data['recipientes'] = $this->Recipientes->obtener('DEPOSITO', 'TODOS', $data['etapa']->esta_id)['data'];
+        #$data['recipientes'] = $this->Recipientes->obtener('DEPOSITO', 'TODOS', $data['etapa']->esta_id)['data'];
 
         $data['productos'] = $this->Etapas->obtenerArticulos($data['etapa']->etap_id)['data'];
 
