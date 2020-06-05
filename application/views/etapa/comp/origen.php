@@ -161,6 +161,10 @@
             return;
         }
 
+        $('#cantidadmateria').val('');
+        $('#inputmaterias').val('').trigger('change');
+
+
         materia = matSelect;
         materia.cantidad = cantidad;
         materia = JSON.stringify(materia);
