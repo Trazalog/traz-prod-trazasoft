@@ -410,12 +410,11 @@ class Etapa extends CI_Controller
         $productos = json_decode($this->input->post('productos'));
         $cantidad_padre = $this->input->post('cantidad_padre');
         $num_orden_prod = $this->input->post('num_orden_prod');
-        $lote_id = $this->input->post('lote_id');
         $batch_id_padre = $this->input->post('batch_id_padre');
 
         foreach ($productos as $key => $value) {
 
-            $arrayPost["lote_id"] = $lote_id; // lote origen
+            $arrayPost["lote_id"] = $value->lotedestino; // lote origen
             $arrayPost["arti_id"] = $value->id; // art seleccionado en lista
             $arrayPost["prov_id"] = (string) PROVEEDOR_INTERNO;
             $arrayPost["batch_id_padre"] = $batch_id_padre; // bacth actual

@@ -91,7 +91,7 @@ define('DNATO', 'http://localhost/traz-comp-dnato/');
 #TRAZ-COMP-BPM
 define('BPM', 'traz-comp-bpm/');
 
-define('BONITA_URL', 'http://www.trazalog.com.ar:8080/bonita/');
+define('BONITA_URL', 'http:///10.142.0.3:8080/bonita/');
 
 define('BPM_PROCESS_ID_PEDIDOS_NORMALES', '8803232493891311406');
 
@@ -139,12 +139,12 @@ define('TSK', 'traz-comp-tareas/');
 #REST
 define('TAREAS_ASIGNAR', 'traz-comp-tareasestandar/asignar');
 
-define('REST', 'http://10.128.0.3:8280/services/ProduccionDataService/');
-define('RESTPT', 'http://10.128.0.3:8280/services/produccionTest/');
-define('REST_TDS', 'http://10.128.0.3:8280/services/TrazabilidadDataService/');
-define('REST2', 'http://10.128.0.3:8280/services/ProduccionDataService');
-define('REST3', 'http://10.128.0.3:8280/services/produccionTest');
-define('REST4', 'http://10.128.0.3:8280/services/TrazabilidadDataService');
+define('REST', 'http://10.142.0.3:8280/services/ProduccionDataService/');
+define('RESTPT', 'http://10.142.0.3:8280/services/produccionTest/');
+define('REST_TDS', 'http://10.142.0.3:8280/services/TrazabilidadDataService/');
+define('REST2', 'http://10.142.0.3:8280/services/ProduccionDataService');
+define('REST3', 'http://10.142.0.3:8280/services/produccionTest');
+define('REST4', 'http://10.142.0.3:8280/services/TrazabilidadDataService');
 
 //TODO:AGREGAR AL CONSTANT ORIGINAL
 #RECURSOS_LOTES
