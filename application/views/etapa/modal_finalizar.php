@@ -381,7 +381,6 @@ var FinalizarEtapa = function() {
         
 
         productos = JSON.stringify(productos);
-        lote_id = $('#loteorigen').val();
         cantidad_padre = $('#cant_descontar').val();
         num_orden_prod = $('#num_orden_prod').val();
         cantidad = $('#cant_origen').val();
@@ -395,7 +394,6 @@ var FinalizarEtapa = function() {
             dataType: 'JSON',
             async: false,
             data: {
-                lote_id,
                 productos,
                 cantidad_padre,
                 num_orden_prod,
