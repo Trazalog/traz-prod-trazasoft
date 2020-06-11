@@ -162,6 +162,7 @@
         }
 
         $('#cantidadmateria').val('');
+        $('#stockdisabled').val('');
         $('#inputmaterias').val('').trigger('change');
 
 

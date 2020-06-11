@@ -280,10 +280,15 @@ class Etapa extends CI_Controller
 
         #$data['recipientes'] = $this->Recipientes->obtener('DEPOSITO', 'TODOS', $data['etapa']->esta_id)['data'];
 
-        $data['productos'] = $this->Etapas->obtenerArticulos($data['etapa']->etap_id)['data'];
+        $data['materias'] = $this->Articulos->obtenerXTipos(array('Proceso', 'Final', 'Materia Prima'));
+        $data['productos'] = $this->Articulos->obtenerXTipos(array('Proceso', 'Producto'));
+        #$data['productos'] = $this->Etapas->obtenerArticulos($data['etapa']->etap_id)['data'];
+        #$data['materias'] = $this->Materias->listar()->materias->materia;
 
         // trae tablita de materia prima Origen y producto
         $data['matPrimas'] = $this->Etapas->getRecursosOrigen($id, MATERIA_PRIMA)->recursos->recurso;
+        
+        
         $data['producto'] = $this->Etapas->getRecursosOrigen($id, PRODUCTO)->recursos->recurso;
         
 
@@ -291,7 +296,6 @@ class Etapa extends CI_Controller
         $data['lang'] = lang_get('spanish', 4);
 
         $data['establecimientos'] = $this->Establecimientos->listar()->establecimientos->establecimiento;
-        $data['materias'] = $this->Materias->listar()->materias->materia;
         $data['fecha'] = $data['etapa']->fecha;
 
         if ($data['op'] == 'Fraccionamiento') {

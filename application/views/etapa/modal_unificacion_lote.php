@@ -55,8 +55,8 @@ function getContenidoRecipiente(reci_id) {
                     });
                 }else{
                     $('#contenido-recipiente').append(
-                        `<tr><td colspan='3'>Recipiente sin contenido</td></tr>`
-                        `<tr><td colspan='3'>Los lotes a crear seran unificados en un mismo recipiente</td></tr>`
+                        `<tr><td colspan='3'>Recipiente sin contenido</td></tr>
+                        <tr><td colspan='3'>Los lotes a crear seran unificados en un mismo recipiente</td></tr>`
                         );
                 }
                 $('#mdl-unificacion').modal('show');
