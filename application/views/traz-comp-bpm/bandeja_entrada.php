@@ -93,7 +93,6 @@
 <!-- /.row -->
 
 <script>
-DataTable('#tareas');
 
 $('.item').single_double_click(function() {
     // $('body').addClass('sidebar-collapse');
@@ -101,9 +100,9 @@ $('.item').single_double_click(function() {
     // $('#bandeja').removeClass().addClass('col-xs-4');
     // $('#miniView').empty();
     // $('#miniView').load('<?php #echo base_url(BPM) ?>Tarea/detalleTarea/' + $(this).attr('id'));
-    linkTo('<?php echo base_url(ALM) ?>Proceso/detalleTarea/' + $(this).attr('id'));
+    linkTo('<?php echo ALM   ?>Proceso/detalleTarea/' + $(this).attr('id'));
 }, function() {
-    linkTo('<?php echo base_url(ALM) ?>Proceso/detalleTarea/' + $(this).attr('id'));
+    linkTo('<?php echo ALM   ?>Proceso/detalleTarea/' + $(this).attr('id'));
 
 });
 
@@ -116,5 +115,6 @@ function closeView() {
 $('input').iCheck({
     checkboxClass: 'icheckbox_flat',
     radioClass: 'iradio_flat'
-});
+});DataTable('#tareas');
+
 </script>

@@ -53,13 +53,10 @@
                 <label for="Producto" class="form-label">Producto:</label>
               </div>
               <div class="col-md-8 col-xs-12 input-group">
-                <input list="productos" id="inputproductos" class="form-control" autocomplete="off">
-                <datalist id="productos">
-                  <?php foreach ($materias as $fila) {
-                    echo  "<option data-json='" . json_encode($fila) . "'value='" . $fila->titulo . "'>";
-                  }
-                  ?>
-                </datalist>
+                
+                <?php 
+                         echo selectBusquedaAvanzada('productos', 'arti_id', $articulos_fraccionar, 'arti_id', 'barcode',array('descripcion','Stock:' => 'stock'));
+                        ?>
                 <span class="input-group-btn">
                   <button class='btn btn-sm btn-primary' onclick='checkTabla("tabla_productos","modalproductos",`<?php echo json_encode($materias); ?>`,"Add")' data-toggle="modal" data-target="#modal_productos">
                     <i class="glyphicon glyphicon-search"></i></button>
@@ -189,7 +186,7 @@
       //   msj +="Falto seleccionar Lote Origen \n";
       //     ban = false;
       //  }
-      producto = document.getElementById('inputproductos').value;
+      producto = document.getElementById('productos').value;
 
       // validacion de campos vacios    
       if (producto == "") {
@@ -241,8 +238,8 @@
         idrecipiente = document.getElementById('productodestino').value;
         //indexrec = recipientes.findIndex(y => y.id == idrecipiente);    
         indexrec = recipientes.findIndex(y => y.reci_id == idrecipiente);
-        producto.id = JSON.parse($("#productos option[value='" + $('#inputproductos').val() + "']").attr('data-json')).id;
-        producto.titulo = document.getElementById('inputproductos').value;
+        producto.id = JSON.parse($("#productos option[value='" + $('#productos').val() + "']").attr('data-json')).id;
+        producto.titulo = document.getElementById('productos').value;
         producto.cantidad = cantidad;
         producto.loteorigen = document.getElementById('loteorigen').value;
         producto.lotedestino = lotedestino;
@@ -261,7 +258,7 @@
         document.getElementById('lotedestino').value = "";
         document.getElementById('productodestino').value = "";
         document.getElementById('productoestablecimientos').value = "";
-        document.getElementById('inputproductos').value = "";
+        document.getElementById('productos').value = "";
         document.getElementById('fraccionado').checked = false;
         document.getElementById('productorecipientes').value = "";
         document.getElementById('productorecipientes').disabled = true;
@@ -374,31 +371,22 @@
         //url: 'general/Etapa/Finalizar',
         url: 'general/Etapa/finalizaFraccionar',
         success: function(result) {
-          document.getElementById('btnfinalizar').style.display = "none";
-          $("#modal_finalizar").modal('hide');
-          if (result = "ok") {
+          if(result.status) {
+            $("#modal_finalizar").modal('hide');
+            hecho();
             linkTo('general/Etapa/index');
           } else {
-            $("#modal_finalizar").modal('hide');
             alert("Hubo un error en el fraccionamiento")
           }
 
         },
         error: function(){
-          alert('Error al finalizar etapa')
+          alert('Error al finalizar etapa');
         },
         complete: function() {
           wc();
         }
       });
-      // }else{
-      //   msj="";
-      //   for(i=0;i<diferencia.length;i++)
-      //   {
-      //     msj+="Falto darle salida al lote de origen "+diferencia[i]+"\n";
-      //   }
-      //   alert(msj);
-      // }
     }
   }
 

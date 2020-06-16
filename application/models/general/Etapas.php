@@ -164,6 +164,17 @@ class Etapas extends CI_Model
         $array = $this->rest->callAPI("POST", $url, $arrayDeta);
         return json_decode($array['code']);
     }
+
+    public function setCaseIdPedido($pema_id, $case_id)
+    {
+        $data['_post_pedidosMateriales_case']['pema_id'] = $pema_id;
+        $data['_post_pedidosMateriales_case']['case_id'] = $case_id;
+        $resource = '/pedidosMateriales/case';
+        $url = REST2 . $resource;
+        $rsp = $this->rest->callAPI("POST", $url, $data);
+        return $rsp;
+    }
+
     // devuelve de recursos_lotes materia prima y producto segun id batch y tipo
     public function getRecursosOrigen($id, $recursoTipo)
     {
@@ -231,7 +242,7 @@ class Etapas extends CI_Model
         log_message('DEBUG', 'Etapas/getLotesaFraccionar(batch_id)-> ' . $idBatch);
         $resource = '/lote/fraccionar/batch/' . $id;
         $url = REST2 . $resource;
-        $array = $this->rest->callAPI("GET", $url, $id);
+        $array = $this->rest->callAPI("GET", $url);
         return json_decode($array['data']);
     }
 
