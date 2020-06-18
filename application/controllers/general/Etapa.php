@@ -55,6 +55,9 @@ class Etapa extends CI_Controller
         $data['materias'] = $this->Articulos->obtenerXTipos(array('Proceso', 'Final', 'Materia Prima'));
         $data['productos'] = $this->Articulos->obtenerXTipos(array('Proceso', 'Producto'));
 
+        #Obtener Proucto por Etapa
+        $data['productos_etapa'] = $this->Etapas->obtenerArticulos($data['etapa']->id)['data'];
+
         $data['lang'] = lang_get('spanish', 5);
         $data['tareas'] = []; //$this->Tareas->listar()->tareas->tarea;
         $data['templates'] = []; //$this->Templates->listar()->templates->template;
@@ -277,18 +280,16 @@ class Etapa extends CI_Controller
         $data['etapa'] = $this->Etapas->buscar($id)->etapa;
         $data['idetapa'] = $data['etapa']->id;
 
-       
 
         $data['materias'] = $this->Articulos->obtenerXTipos(array('Proceso', 'Final', 'Materia Prima'));
         $data['productos'] = $this->Articulos->obtenerXTipos(array('Proceso', 'Producto'));
-        #$data['productos'] = $this->Etapas->obtenerArticulos($data['etapa']->etap_id)['data'];
-        #$data['materias'] = $this->Materias->listar()->materias->materia;
+  
 
         // trae tablita de materia prima Origen y producto
         $data['matPrimas'] = $this->Etapas->getRecursosOrigen($id, MATERIA_PRIMA)->recursos->recurso;
         
         #Obtener Proucto por Etapa
-        $data['productos_etapa'] = $this->Etapas->obtenerArticulos($data['etapa']->id)['data'];
+        $data['productos_etapa'] = $this->Etapas->obtenerArticulos($data['etapa']->etap_id)['data'];
         
         $data['producto'] = $this->Etapas->getRecursosOrigen($id, PRODUCTO)->recursos->recurso;
         
