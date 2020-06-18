@@ -36,7 +36,8 @@
 </div>
 
 <script>
-var bak_data;
+var bak_data = false;
+var bak_recipiente = false;
 function getContenidoRecipiente(reci_id) {
     wo();
     $('#contenido-recipiente').empty();

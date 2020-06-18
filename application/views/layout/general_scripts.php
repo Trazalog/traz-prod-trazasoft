@@ -81,6 +81,14 @@ function conf(fun, e, pregunta = 'Confirma realizar esta acción?', msj = "Esta 
     });
 }
 
+function hecho() {
+    alert('Hecho');
+}
+
+function error() {
+    alert('Error')
+}
+
 function conexion() {
     return true;
 }

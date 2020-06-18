@@ -2,8 +2,15 @@
 <?php $this->load->view('etapa/fraccionar/modal_productos')?>
 <?php $this->load->view('etapa/modal_unificacion_lote'); ?>
 <?php if($etapa->estado == "En Curso"){
-$this->load->view('etapa/fraccionar/modal_finalizar');
-}?>
+    $this->load->view('etapa/fraccionar/modal_finalizar');
+    echo "<script>$('.formulario .form-control').attr('disabled', true)</script>";
+}
+if($etapa->estado == "FINALIZADO"){
+    echo "<script>$('.formulario .form-control').attr('disabled', true)</script>";
+}
+?>
+<div class="formulario">
+<input class="hidden" type="text" id="batch_id" value="<?php echo $etapa->id ?>">
 <div class="box">
     <div class="box-header with-border">
         <!-- <h3><?php echo $lang["Fraccionar"];?></h3> -->
@@ -239,35 +246,35 @@ $this->load->view('etapa/fraccionar/modal_finalizar');
     </div>
 
     <!-- /.box-body -->
-    <div class="box-footer">
-        <div class="row">
-            <div class="col-md-8"></div>
-            <div class="col-md-2 col-xs-6">
-                <?php if($etapa->estado != 'En Curso')
+    <div class="modal-footer">
+
+                <?php if($etapa->estado != 'En Curso' && $etapa_estado != 'FINALIZADO')
               {
                 // echo '<button class="btn btn-primary btn-block" onclick="guardar()">Guardar</button>';
-                echo '<button class="btn btn-primary btn-block" onclick="guardar()">Iniciar</button>';
+                echo '<button class="btn btn-primary" onclick="guardar()">Iniciar</button>';
               }
               //echo '<button class="btn btn-primary btn-block" onclick="guardar()">Iniciar</button>';
         ?>
-            </div>
-            <div class="col-md-2 col-xs-6">
-                <?php //if($etapa->estado == 'planificado')
-              //{
-                //echo '<button class="btn btn-primary btn-block" onclick="valida()">Iniciar Etapa</button>';
-              //}else 
+            
+          
+                <?php 
+
+
               if($etapa->estado == 'En Curso')
               {
-                echo '<button class="btn btn-primary btn-block" id="btnfinalizar" onclick="finalizar()">Finalizar Etapa</button>';
+                   
+                  
+                  echo '<button class="btn btn-primary" id="btnfinalizar" onclick="finalizar()">Reporte Fraccionamiento</button>';
+                  $this->load->view('etapa/btn_finalizar_etapa');
               }
         ?>
-            </div>
-        </div>
-    </div>
+        <button class="btn btn-default" onclikc="back()">Cerrar</button>
+
     <!-- /.box-footer-->
 </div>
 
-
+</div>
+</div>
 <script>
 $('#prodFracc').DataTable({});
 

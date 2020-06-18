@@ -267,4 +267,12 @@ class Etapas extends CI_Model
         }
         return $rsp;
     }
+
+    public function finalizarLote($id)
+    {
+        $post['_post_lote_finalizar']['batch_id'] =  $id;
+        $url = REST2."/lote/finalizar";
+        $rsp = $this->rest->callApi('POST', $url, $post);
+        return $rsp;
+    }
 }
