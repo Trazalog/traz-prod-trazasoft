@@ -3,13 +3,13 @@
 <?php $this->load->view('etapa/modal_unificacion_lote'); ?>
 <?php if($etapa->estado == "En Curso"){
     $this->load->view('etapa/fraccionar/modal_finalizar');
-    echo "<script>$('.form-control').attr('disabled', true)</script>";
+    echo "<script>$('.formulario .form-control').attr('disabled', true)</script>";
 }
 if($etapa->estado == "FINALIZADO"){
-    echo "<script>$('.form-control').attr('disabled', true)</script>";
+    echo "<script>$('.formulario .form-control').attr('disabled', true)</script>";
 }
 ?>
-
+<div class="formulario">
 <input class="hidden" type="text" id="batch_id" value="<?php echo $etapa->id ?>">
 <div class="box">
     <div class="box-header with-border">
@@ -273,6 +273,7 @@ if($etapa->estado == "FINALIZADO"){
     <!-- /.box-footer-->
 </div>
 
+</div>
 </div>
 <script>
 $('#prodFracc').DataTable({});

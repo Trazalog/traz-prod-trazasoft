@@ -36,17 +36,7 @@
                                     }
                                 ?>
                             </div>
-                            <div class="col-md-3"></div>
-                            <div class="col-md-3">
-                                    <div class="form-group">
-                                    <div class="checkbox" >
-                                            <label class="text-primary">
-                                            <input type="checkbox" id="finalizar_etapa">
-                                                <b>Finalizar Etapa</b>
-                                            </label>
-                                        </div>
-                                    </div>
-                            </div>
+                           
                         </div>
 
 
@@ -319,6 +309,8 @@ function AgregarProductoFinal() {
             } else {
                 producto.fraccionado = 'No';
             }
+
+            producto.forzar = "false";
             agregaProductoFinal(producto);
             document.getElementById('cantidadproducto').value = "";
             document.getElementById('lotedestino').value = "";
@@ -349,7 +341,7 @@ function agregaProductoFinal(producto) {
         html += "<th>Destino Final</th>";
         html += "<th>Fracc</th>";
         html += '</tr></thead><tbody>';
-        html += "<tr data-json='" + JSON.stringify(producto) + "' id='" + producto.id + "'>";
+        html += "<tr data-json='" + JSON.stringify(producto) + "' id='" + producto.id + "' class='reci-"+producto.destino+"' data-forzar='false'>";
         html +=
             "<td><i id='generarQR' class='fa fa-fw fa-qrcode text-light-blue generarQR' style='cursor: pointer; margin-left: 15px;' title='QR' onclick='QR(this)'></i><i class='fa fa-fw fa-minus text-light-blue tabla_productos_asignados_borrar' style='cursor: pointer; margin-left: 15px;' title='Eliminar'></i></td>";
         html += '<td>' + producto.loteorigen + '</td>';
@@ -367,7 +359,7 @@ function agregaProductoFinal(producto) {
         document.getElementById('productos_existe').value = 'si';
 
     } else if (existe == 'si') {
-        html += "<tr data-json='" + JSON.stringify(producto) + "' id='" + producto.id + "'>";
+        html += "<tr data-json='" + JSON.stringify(producto) + "' id='" + producto.id + "' class='reci-"+producto.destino+"' data-forzar='false'>";
         html +=
             "<td><i id='generarQR' class='fa fa-fw fa-qrcode text-light-blue generarQR' style='cursor: pointer; margin-left: 15px;' title='QR' onclick='QR(this)'></i><i class='fa fa-fw fa-minus text-light-blue tabla_productos_asignados_borrar' style='cursor: pointer; margin-left: 15px;' title='Eliminar'></i></td>";
         html += '<td>' + producto.loteorigen + '</td>';
@@ -394,6 +386,8 @@ function copiaOrigen() {
 }
 // finaliza reporte de fraccionamiento
 function FinalizarEtapa() {
+    if(bak_recipiente) $('.reci-'+bak_recipiente).attr('data-forzar',true);
+
     existe = document.getElementById('productos_existe').value;
     if (existe == "no") {
         alert("No ha agregado ningun producto final");
@@ -417,20 +411,17 @@ function FinalizarEtapa() {
         $('#tabla_productos_asignados tbody').find('tr').each(function() {
             var json = $(this).attr('data-json');
             temp = JSON.parse(json);
-            temp.forzar = 'false';
+            temp.forzar = $(this).attr('data-forzar');
             productos.push(temp);
         });
         batch_id = <?php echo $etapa->id; ?> ;
         num_orden_prod = $('#num_orden_prod').val();
 
           var data = {
-            finalizar_etapa : $('#finalizar_etapa').val(),
             productos,
             batch_id: batch_id,
             num_orden_prod: num_orden_prod
           }
-
-        console.log(data);
         
         wo();
         $.ajax({
@@ -439,21 +430,20 @@ function FinalizarEtapa() {
             data,
             url: 'general/Etapa/finalizaFraccionar',
             success: function(result) {
-                console.log(result);
                 
                 if (result.msj) {
-                    bak_data = data;
+                    bak_recipiente = result.reci_id;
                     getContenidoRecipiente(result.reci_id);
                 } else {
-                    alert('Fallo al iniciar la etapa');
+                if (result.status) {
+                    $("#modal_finalizar").modal('hide');
+                    $('#mdl-unificacion').modal('hide');
+                    hecho();
+                    linkTo('general/Etapa/index');
+                } else {
+                    alert("Hubo un error en el fraccionamiento")
                 }
-                // if (result.status) {
-                //     $("#modal_finalizar").modal('hide');
-                //     hecho();
-                //     linkTo('general/Etapa/index');
-                // } else {
-                //     alert("Hubo un error en el fraccionamiento")
-                // }
+                }
 
             },
             error: function() {
