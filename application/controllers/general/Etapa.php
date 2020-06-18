@@ -54,8 +54,7 @@ class Etapa extends CI_Controller
         $this->load->model(ALM . 'Articulos');
         $data['materias'] = $this->Articulos->obtenerXTipos(array('Proceso', 'Final', 'Materia Prima'));
         $data['productos'] = $this->Articulos->obtenerXTipos(array('Proceso', 'Producto'));
-        // $data['materias'] = $this->Etapas->obtenerMateriales($data['etapa']->id)['data'];
-        // $data['productos'] = $this->Etapas->obtenerArticulos($data['etapa']->id)['data'];
+
         $data['lang'] = lang_get('spanish', 5);
         $data['tareas'] = []; //$this->Tareas->listar()->tareas->tarea;
         $data['templates'] = []; //$this->Templates->listar()->templates->template;
@@ -288,6 +287,8 @@ class Etapa extends CI_Controller
         // trae tablita de materia prima Origen y producto
         $data['matPrimas'] = $this->Etapas->getRecursosOrigen($id, MATERIA_PRIMA)->recursos->recurso;
         
+        #Obtener Proucto por Etapa
+        $data['productos_etapa'] = $this->Etapas->obtenerArticulos($data['etapa']->id)['data'];
         
         $data['producto'] = $this->Etapas->getRecursosOrigen($id, PRODUCTO)->recursos->recurso;
         
@@ -452,8 +453,7 @@ class Etapa extends CI_Controller
     public function finalizaFraccionar()
     {
 
-        $productos = json_decode($this->input->post('productos'));
-        $cantidad_padre = $this->input->post('cantidad_padre');
+        $productos = $this->input->post('productos');
         $num_orden_prod = $this->input->post('num_orden_prod');
         $lote_id = $this->input->post('lote_id');
         $batch_id_padre = $this->input->post('batch_id');
@@ -461,19 +461,19 @@ class Etapa extends CI_Controller
 
         foreach ($productos as $value) {
 
-            $info = json_decode($value);
-            $arrayPost["lote_id"] = $info->loteorigen; // lote origen
-            $arrayPost["arti_id"] = $info->titulo; // art seleccionado en lista
+            $info = $value;
+            $arrayPost["lote_id"] = $info['loteorigen']; // lote origen
+            $arrayPost["arti_id"] = $info['titulo']; // art seleccionado en lista
             $arrayPost["prov_id"] = (string) PROVEEDOR_INTERNO;
             $arrayPost["batch_id_padre"] = $batch_id_padre; // bacth actual
-            $arrayPost["cantidad"] = $info->cantidad; // art seleccionado en lista
+            $arrayPost["cantidad"] = $info['cantidad']; // art seleccionado en lista
             $arrayPost["cantidad_padre"] = "0"; //cantida padre esl lo que descuenta del batch actual
             $arrayPost["num_orden_prod"] = $num_orden_prod;
-            $arrayPost["reci_id"] = $info->destino; //reci_id destino del nuevo batch
+            $arrayPost["reci_id"] = $info['destino']; //reci_id destino del nuevo batch
             $arrayPost["etap_id"] = (string) ETAPA_DEPOSITO;
             $arrayPost["usuario_app"] = userNick();
             $arrayPost["empr_id"] = (string) empresa();
-            $arrayPost["forzar_agregar"] = "false";
+            $arrayPost["forzar_agregar"] = $info['forzar'];
             $arrayPost["fec_vencimiento"] = FEC_VEN;
             $arrayPost["recu_id"] = "0";
             $arrayPost["tipo_recurso"] = "";
@@ -506,5 +506,12 @@ class Etapa extends CI_Controller
         $data['articulos_fraccionar'] =  $this->Articulos->obtenerXTipo('Proceso')['data'];
         //$data['materias'] = $this->Materias->listar()->materias->materia;
         $this->load->view('etapa/fraccionar/fraccionar', $data);
+    }
+
+    public function finalizarLote()
+    {
+        $id = $this->input->post('batch_id');
+        $rsp = $this->Etapas->finalizarLote($id);
+        echo json_encode($rsp);
     }
 }

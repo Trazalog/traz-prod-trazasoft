@@ -180,6 +180,7 @@
                         </div> -->
                         <!-- /.box-body -->
                         <div class="modal-footer">
+                           
 
                             <?php if ($etapa->estado != 'En Curso' || $etapa->estado != 'Finalizado') {
 echo "<button class='btn btn-primary' onclick='guardar(\"iniciar\")'>Iniciar Etapa</button>";

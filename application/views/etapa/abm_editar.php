@@ -156,6 +156,7 @@ function validarEtapa() {
 
                         <!-- /.box-body -->
                         <div class="modal-footer">
+         
 
                             <?php 
 
@@ -164,7 +165,9 @@ function validarEtapa() {
                                 if ($etapa->estado == 'En Curso') {
                                     
                                     echo '<button class="btn btn-primary" id="btnfinalizar" onclick="finalizar()">Reporte de Producción</button>';
-                                    
+                                                 
+                                    $this->load->view('etapa/btn_finalizar_etapa');
+                
                                 } else {
                                     
                                     echo "<button class='btn btn-primary' onclick='guardar(\"iniciar\")'>Iniciar Etapa</button>";
@@ -174,7 +177,7 @@ function validarEtapa() {
 
                             
                             ?>
-                            <button class="btn btn-danger" onclick="back()">Cerrar</button>
+                            <button class="btn btn-default" onclick="back()">Cerrar</button>
                         </div>
                     </div>
                 </div>
