@@ -81,7 +81,7 @@ class Etapa extends CI_Controller
         $datosCab['lote_id'] = (string) $post_data['lote'];
         $datosCab['prov_id'] = (string) PROVEEDOR_INTERNO;
         $datosCab['batch_id_padre'] = (string) 0;
-        $datosCab['cantidad'] = (string) $post_data['cantidad'];
+        $datosCab['cantidad'] = (string) $post_data['cantidad']?$post_data['cantidad']:"0";
         $datosCab['cantidad_padre'] = (string) 0;
         $datosCab['num_orden_prod'] = (string) $post_data['op'];
         $datosCab['reci_id'] = (string) $post_data['recipiente'];
@@ -127,23 +127,18 @@ class Etapa extends CI_Controller
         $materia = $post_data['materia'];
 
         // busca id recurso por id articulo
-        $recu_id = $this->Etapas->getRecursoId($datosCab['arti_id']);
-        if(!$recu_id){
-            log_message('ERROR', 'ETAPA/guardarParte2 >> Error al traer ID Rercurso');
-            return false;
+        $recu_id = false;
+        if($datosCab['arti_id'] != "0"){
+            $recu_id = $this->Etapas->getRecursoId($datosCab['arti_id']);
+            if(!$recu_id){
+                log_message('ERROR', 'ETAPA/guardarParte2 >> Error al traer ID Rercurso');
+                return false;
+            }
         }
 
-        // guarda producto en tabla recurso_lotes
-        // $respRecurso = $this->Etapas->setRecursosLotesProd($batch_id, $recu_id, $datosCab['cantidad']);
-        // if (!$respRecurso['status']) {
-        //     log_message('ERROR', 'ETAPA/guardarParte2 >> Fallo: guarda producto en tabla recurso_lotes');
-        //     echo json_encode($respRecurso);
-        //     return;
-        // }
-        // guarda articulos(id de recurso en tabla recursos) origen en tabla recursos_lotes
         $arrayTemp1 = array();
         $arrayTemp1['request_box']['_delete_recurso_lote']['batch_id'] = $batch_id;
-        $arrayTemp1['request_box']['_post_recurso_lote'][] = $this->Etapas->setRecursosLotesProd($batch_id, $recu_id, $datosCab['cantidad']);
+        if($recu_id) $arrayTemp1['request_box']['_post_recurso_lote'][] = $this->Etapas->setRecursosLotesProd($batch_id, $recu_id, $datosCab['cantidad']);
         foreach ($materia as $o) {
             if ($cantidad !== "") {
                 $recurso_id = $this->Etapas->getRecursoId($o['id_materia']);

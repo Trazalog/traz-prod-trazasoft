@@ -407,12 +407,12 @@ function validarCampos(){
         alert('No ha seleccionado ninguna materia prima');
         return false;
     }
-
-    if($('#cantidad_producto').val() == ''){
+    
+    if($('#idproducto').val() != null && $('#cantidad_producto').val() == ''){
         alert('Por favor ingresar cantidad para el Producto');
         return false;
     }
-
+        
     return true;
 }
 
