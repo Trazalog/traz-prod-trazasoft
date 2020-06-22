@@ -283,10 +283,27 @@ function obtenerFormularioCamion(){
     return formToObject(dataForm);
 }
 
+function validarFormulario(){
+    $('#frm-info').find('.form-control').each(function() {
+        if(this.value != ""){
+            alert('Complete los campos obligatorios(*)');
+            return false;
+        }
+    })
+
+    $('#frm-camion').find('.form-control').each(function(){
+        if(this.value == ""){
+            alert('Datos Camión: Complete los campos obligatorios(*)');
+            return false;
+        }
+    });
+}
+
 function addCamion(msj = true) {
-    if($('#neto').val() == ""){
-        alert('Datos Incompletos: Valor Neto Inválido'); return;
-    }
+
+
+    if(!validarFormulario()) return;
+    
     var frmCamion = new FormData($('#frm-camion')[0]);
     var frmInfo = new FormData($('#frm-info')[0]);
     var dataForm = mergeFD(frmInfo, frmCamion);
