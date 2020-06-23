@@ -41,5 +41,23 @@ class Recipiente extends CI_Controller {
         echo json_encode($rsp);
     }
     
-  
+    public function guardar()
+    {
+
+    }  
+
+    public function editar()
+    {
+
+    }
+
+    public function eliminar()
+    {
+
+    }
+
+    public function listar()
+    {
+      
+    }
 }

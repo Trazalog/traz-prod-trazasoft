@@ -18,7 +18,7 @@ class Establecimientos extends CI_Model
   }
   public function listarTodo($esta_id = null)
   {
-    $resource = 'establecimiento' . ($esta_id?"/$esta_id":null);
+    $resource = 'establecimiento' . ($esta_id ? "/$esta_id" : null);
     $url = REST . $resource;
     // $url = 'http://localhost:3000/establecimientos';
     // $array = file_get_contents($url, false, http('GET'));
@@ -60,7 +60,32 @@ class Establecimientos extends CI_Model
     $data['delete_est']['esta_id'] = $id;
     $url = RESTPT . "establecimientos";
     $rsp = $this->rest->callApi("DELETE", $url, $data);
-    if($rsp['status']) $rsp['data'] = json_decode($rsp['data']);
+    if ($rsp['status']) $rsp['data'] = json_decode($rsp['data']);
+    return $rsp;
+  }
+
+  public function editar($data)
+  {
+    $url = RESTPT . "establecimientos";
+    $rsp = $this->rest->callApi("PUT", $url, $data);
+    if ($rsp['status']) $rsp['data'] = json_decode($rsp['data']);
+    return $rsp;
+  }
+
+  public function guardarTodo($depositos = null, $recipientes = null)
+  {
+    if (isset($depositos)) {
+      $url = RESTPT . "updateDepositos";
+      $rsp = $this->rest->callApi("PUT", $url, $depositos);
+      if ($rsp['status']) $rsp['data'] = json_decode($rsp['data']);
+    }
+
+    if (isset($recipientes)) {
+      $url = RESTPT . "updateRecipientes";
+      $rsp = $this->rest->callApi("PUT", $url, $recipientes);
+      if ($rsp['status']) $rsp['data'] = json_decode($rsp['data']);
+    }
+
     return $rsp;
   }
 }
