@@ -1,3 +1,6 @@
 [submodule "application/modules/traz-comp-form"]
 	path = application/modules/traz-comp-form
 	url = https://github.com/Trazalog/traz-comp-formularios.git
+[submodule "application/modules/traz-comp-bpm"]
+	path = application/modules/traz-comp-bpm
+	url = https://github.com/Trazalog/traz-comp-bpm.git
