@@ -70,7 +70,7 @@ function soltarTarea() {
 
 function cerrar() {
     if ($('#miniView').length == 0) {
-        linkTo('<?php echo BPM ?>Tarea');
+        linkTo('Proceso');
     } else {
         existFunction('closeView');
     }
