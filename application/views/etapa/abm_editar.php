@@ -1,6 +1,7 @@
 <?php $this->load->view('etapa/modal_materia_prima'); ?>
 <?php $this->load->view('etapa/modal_lotes'); ?>
 <?php $this->load->view('etapa/modal_producto'); ?>
+<?php $this->load->view('etapa/modal_unificacion_lote'); ?>
 
 <script>
 function validarEtapa() {
@@ -155,6 +156,7 @@ function validarEtapa() {
 
                         <!-- /.box-body -->
                         <div class="modal-footer">
+         
 
                             <?php 
 
@@ -163,7 +165,9 @@ function validarEtapa() {
                                 if ($etapa->estado == 'En Curso') {
                                     
                                     echo '<button class="btn btn-primary" id="btnfinalizar" onclick="finalizar()">Reporte de Producción</button>';
-                                    
+                                                 
+                                    $this->load->view('etapa/btn_finalizar_etapa');
+                
                                 } else {
                                     
                                     echo "<button class='btn btn-primary' onclick='guardar(\"iniciar\")'>Iniciar Etapa</button>";
@@ -173,7 +177,7 @@ function validarEtapa() {
 
                             
                             ?>
-                            <button class="btn btn-danger" onclick="back()">Cerrar</button>
+                            <button class="btn btn-default" onclick="back()">Cerrar</button>
                         </div>
                     </div>
                 </div>
@@ -203,7 +207,8 @@ function actualizaRecipiente(establecimiento, recipientes) {
         type: 'POST',
         dataType: 'JSON',
         data: {
-            establecimiento
+            establecimiento,
+            tipo: 'PRODUCTIVO'
         },
         url: 'general/Recipiente/listarPorEstablecimiento/true',
         success: function(result) {
@@ -279,6 +284,11 @@ var guardarForzado = function(data) {
 // envia datos para iniciar etapa y acer orden de pedido a almacenes
 function guardar(boton) {
 
+    if($('#cantidad_producto').val() == ''){
+        alert('Por favor ingresar cantidad para el Producto');
+        return false;
+    }
+
     var recipiente = idprod = '';
     var tabla = $('#tablamateriasasignadas tbody tr');
     var materiales = [];
@@ -342,7 +352,9 @@ function guardar(boton) {
                 linkTo('general/Etapa/index');
             } else {
                 if (rsp.msj) {
-                    conf(guardarForzado, data, '¿Confirma Unificación de Lotes?', rsp.msj + " | Detalle del Contenido: LOTE: " + rsp.lote_id + " | PRODUCTO: " + rsp.barcode);
+                    // conf(guardarForzado, data, '¿Confirma Unificación de Lotes?', rsp.msj + " | Detalle del Contenido: LOTE: " + rsp.lote_id + " | PRODUCTO: " + rsp.barcode);
+                    bak_data = data;
+                    getContenidoRecipiente(recipiente);
                 } else {
                     alert('Fallo al iniciar la etapa');
                 }

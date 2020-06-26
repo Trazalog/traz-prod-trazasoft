@@ -17,7 +17,15 @@ class Recipientes extends CI_Model
 		return json_decode($array['data']);    
     }
 
-   
+   public function obtenerContenido($reci_id)
+   {
+        $url = RESTPT."recipientes/contenido/$reci_id";
+        $rsp = $this->rest->callApi('GET', $url);
+        if($rsp['status']){
+            $rsp['data'] = json_decode($rsp['data'])->batches->batch;
+        }
+        return $rsp;
+   }
 
 
     public function listarTodosDeposito(){

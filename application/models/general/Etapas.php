@@ -4,6 +4,12 @@
 
 class Etapas extends CI_Model
 {
+    private $rsp_lote = [
+        "TOOLSERROR:RECI_NO_VACIO_DIST_ART" => "El recipiente ya contiene artículos distintos",
+        "TOOLSERROR:RECI_NO_VACIO_DIST_LOTE_IGUAL_ART" => "El recipiente ya contiene lotes distintos",
+        "TOOLSERROR:RECI_NO_VACIO_IGUAL_ART_LOTE" => "El recipiente ya contiene los mismos lotes y artículos"
+    ];
+    
     public function __construct()
     {
         parent::__construct();
@@ -74,7 +80,7 @@ class Etapas extends CI_Model
         $arrayDatos['usuario'] = userNick();
         $arrayDatos['empr_id'] = (string) empresa();
         $arrayDatos['cantidad'] = (string) $cantidad;
-        $arrayDatos['tipo'] = PRODUCTO;
+        $arrayDatos['tipo'] = 'PRODUCTO';
         // FLEIVA
         $arrayDatos['empa_id'] = "0";
         $arrayDatos['empa_cantidad'] = "0";
@@ -83,11 +89,13 @@ class Etapas extends CI_Model
         
         log_message('DEBUG', 'Etapas/setRecursosLotes(recursos a grabar)-> ' . json_encode($data));
 
-        $resource = '/recurso/lote';
-        $url = REST2 . $resource;
-        $rsp = $this->rest->callAPI("POST", $url, $data);
-        wso2Msj($rsp);
-        return $rsp;
+        return $arrayDatos;
+
+        // $resource = '/recurso/lote';
+        // $url = REST2 . $resource;
+        // $rsp = $this->rest->callAPI("POST", $url, $data);
+        // wso2Msj($rsp);
+        // return $rsp;
     }
     // guarda prod en recursos lotes (articulos)
     public function setRecursosLotesMat($data)
@@ -128,7 +136,7 @@ class Etapas extends CI_Model
         }else{
             $msj = explode('-', wso2Msj($rsp));
             $rsp['error'] = $msj[0];
-            $rsp['msj'] = RSP_LOTE[$rsp['error']];
+            $rsp['msj'] = $this->rsp_lote[$rsp['error']];
             foreach ($msj as $key => $o) {
                 if(!$key) continue;
                 $aux = explode('=', $o);
@@ -156,6 +164,17 @@ class Etapas extends CI_Model
         $array = $this->rest->callAPI("POST", $url, $arrayDeta);
         return json_decode($array['code']);
     }
+
+    public function setCaseIdPedido($pema_id, $case_id)
+    {
+        $data['_post_pedidosMateriales_case']['pema_id'] = $pema_id;
+        $data['_post_pedidosMateriales_case']['case_id'] = $case_id;
+        $resource = '/pedidosMateriales/case';
+        $url = REST2 . $resource;
+        $rsp = $this->rest->callAPI("POST", $url, $data);
+        return $rsp;
+    }
+
     // devuelve de recursos_lotes materia prima y producto segun id batch y tipo
     public function getRecursosOrigen($id, $recursoTipo)
     {
@@ -198,7 +217,7 @@ class Etapas extends CI_Model
             $msj = explode('-', wso2Msj($rsp));
             $rsp['error'] = $msj[0];
             $rsp['reci_id'] = explode('=',$msj[1])[1];
-            $rsp['msj'] = RSP_LOTE[$rsp['error']];
+            $rsp['msj'] = $this->rsp_lote[$rsp['error']];
         }
 
         return $rsp;
@@ -223,7 +242,7 @@ class Etapas extends CI_Model
         log_message('DEBUG', 'Etapas/getLotesaFraccionar(batch_id)-> ' . $idBatch);
         $resource = '/lote/fraccionar/batch/' . $id;
         $url = REST2 . $resource;
-        $array = $this->rest->callAPI("GET", $url, $id);
+        $array = $this->rest->callAPI("GET", $url);
         return json_decode($array['data']);
     }
 
@@ -246,6 +265,14 @@ class Etapas extends CI_Model
         if($rsp['status']){
             $rsp['data'] = json_decode($rsp['data'])->productos->producto;
         }
+        return $rsp;
+    }
+
+    public function finalizarLote($id)
+    {
+        $post['_post_lote_finalizar']['batch_id'] =  $id;
+        $url = REST2."/lote/finalizar";
+        $rsp = $this->rest->callApi('POST', $url, $post);
         return $rsp;
     }
 }
