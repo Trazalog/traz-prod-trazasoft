@@ -177,6 +177,11 @@
       <result outputType="json">{&#xd;  "articulos":{&#xd;     "articulo":[&#xd;        {&#xd;          "arti_id": "$arti_id",&#xd;          "descripcion": "$descripcion",&#xd;          "barcode":"$barcode",&#xd;          "um":"$um",&#xd;          "stock":"$stock"&#xd;                }&#xd;      ]&#xd;    }&#xd;}</result>
       <param name="tipo" sqlType="STRING"/>
    </query>
+   <query id="getEtapasSalida" useConfig="produccionDS">
+      <sql>select &#xd;  ar.arti_id&#xd;  , AR.descripcion&#xd;  , AR.barcode&#xd;  , ar.unidad_medida um&#xd;  , sum(lo.cantidad) stock&#xd;from &#xd;  prd.etapas_salidas EP&#xd;,alm.alm_articulos AR&#xd;left join alm.alm_lotes lo on lo.arti_id  = ar.arti_id &#xd;  and lo.eliminado = false &#xd;  and lo.estado = 'AC'&#xd;  and lo.fec_vencimiento &gt;=  date_trunc('day',now())&#xd;where EP.arti_id = AR.arti_id  &#xd;  and etap_id = CAST(:etap_id as INTEGER)&#xd;  group by ar.arti_id</sql>
+      <result outputType="json">&#xd;{&#xd;  "salidas":{&#xd;     "salida":[&#xd;        {&#xd;          "arti_id": "$arti_id",&#xd;          "descripcion": "$descripcion",&#xd;          "barcode":"$barcode",&#xd;          "um":"$um",&#xd;          "stock":"$stock"&#xd;                }&#xd;      ]&#xd;    }&#xd;}</result>
+      <param name="etap_id" sqlType="STRING"/>
+   </query>
    <operation name="etapaxId">
       <call-query href="getEtapaPorId">
          <with-param name="etap_id" query-param="etap_id"/>
@@ -353,6 +358,11 @@
    <resource method="GET" path="/articulos/tipo/{tipo}">
       <call-query href="getArticulosXTipo">
          <with-param name="tipo" query-param="tipo"/>
+      </call-query>
+   </resource>
+   <resource method="GET" path="/etapas/salidas/{etap_id}">
+      <call-query href="getEtapasSalida">
+         <with-param name="etap_id" query-param="etap_id"/>
       </call-query>
    </resource>
 </data>
