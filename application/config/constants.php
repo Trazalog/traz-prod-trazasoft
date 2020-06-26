@@ -98,10 +98,9 @@ define('BPM_PROCESS_ID_PEDIDOS_NORMALES', '8803232493891311406');
 define('BPM_PROCESS_ID_PEDIDOS_EXTRAORDINARIOS', '6013058915384903051');
 
 define('BPM_PROCESS', json_encode(array(
-    '8803232493891311406' => ['nombre' => 'Ped. Materiales', 'color' => '#F39C12'],
-    '6013058915384903051' => ['nombre' => 'Ped. Materiales Ext', 'color' => '#F39C12'],
-    '7503443566840192735' => ['nombre' => 'Proc. Mantenimiento', 'color' => '#00A65A'],
-)));
+    '8803232493891311406' => ['nombre' => 'Ped. Materiales', 'color' => '#F39C12', 'model' => 'ALM_Tareas'],
+    '6013058915384903051' => ['nombre' => 'Ped. Materiales Ext', 'color' => '#F39C12', 'model' => 'ALM_Tareas'],
+    '8664799170016058315' => ['nombre' => 'Proc. Mantenimiento', 'color' => '#00A65A', 'model' => 'MAN_Tareas'])));
 
 define('BPM_ADMIN_USER', 'almacen.tools');
 define('BPM_ADMIN_PASS', 'bpm');
@@ -157,7 +156,7 @@ define('RECURSO_CONSUMO', 'CONSUMO');
 # >> Proyecto
 # Default View
 #define('DEFAULT_VIEW', 'general/Reporte/tareasOperario');
-define('DEFAULT_VIEW', 'general/Etapa');
+define('DEFAULT_VIEW', 'traz-comp-bpm/Proceso');
 
 #TRAZASOFT
 define('PROVEEDOR_INTERNO', 1000);

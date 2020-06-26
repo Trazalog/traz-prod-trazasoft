@@ -49,6 +49,15 @@
 
     <link rel="stylesheet" href="<?php echo base_url(LIB) ?>swal/dist/sweetalert2.min.css">
 
+    <style>
+     .mr-2{
+       margin-right: 5px;
+     }
+     .ml-2{
+       margin-left: 5px;
+     }
+  </style>
+
 </head>
 
 <?php $this->load->view('layout/wait') ?>
