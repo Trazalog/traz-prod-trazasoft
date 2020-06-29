@@ -26,12 +26,10 @@
                             <?php
                             foreach ($list as $f) {
 
-                             //   if (true) { //($f->processId'] == BPM_PROCESS_ID_PEDIDOS_NORMALES || $f['processId'] == BPM_PROCESS_ID_PEDIDOS_EXTRAORDINARIOS) {
-
                                     $id = $f->taskId;
                                     $asig = $f->idUsuarioAsignado;
 
-                                    echo "<tr class='item' id='$id' data-caseId='$f->caseId' data-json='".json_encode($f)."'  style='cursor: pointer;'>";
+                                    echo "<tr id='$f->caseId' class='item' id='$id' data-caseId='' data-json='".json_encode($f)."'  style='cursor: pointer;'>";
 
                                     if ($asig != "") {
                                         echo '<td class="' . ($device == 'android' ? 'hidden"' : '') . '"><i class="fa fa-user text-primary" title="' . formato_fecha_hora($f->fec_asignacion) . '"></i></td>';
@@ -68,7 +66,6 @@
                                     echo '</tr>';
 
                                 }
-                         //   }
                             ?>
 
                         </tbody>
@@ -83,17 +80,11 @@
     </div>
     <!-- /. box -->
     <div id="miniView" class="view col-xs-8">
-            
+
     </div>
 </div>
 
-
-<!-- /.col -->
-</div>
-<!-- /.row -->
-
 <script>
-
 $('.item').single_double_click(function() {
     // $('body').addClass('sidebar-collapse');
     // $('.oculto').hide();
@@ -106,7 +97,7 @@ $('.item').single_double_click(function() {
 
 });
 
-function closeView() { 
+function closeView() {
     $('#miniView').empty();
     $('.oculto').show();
     $('#bandeja').removeClass().addClass('col-md-12');
@@ -115,6 +106,6 @@ function closeView() {
 $('input').iCheck({
     checkboxClass: 'icheckbox_flat',
     radioClass: 'iradio_flat'
-});DataTable('#tareas');
-
+});
+DataTable('#tareas');
 </script>

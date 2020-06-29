@@ -36,7 +36,7 @@ class BPM
     public function getTarea($id)
     {
 
-        $url = BONITA_URL . 'API/bpm/humanTask/' . $id;
+        $url = BONITA_URL . "API/bpm/humanTask/$id";
 
         $rsp = $this->REST->callAPI('GET', $url, false, $this->loggin(userNick(), userPass()));
 

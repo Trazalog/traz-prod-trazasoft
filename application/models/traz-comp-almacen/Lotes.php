@@ -105,9 +105,6 @@ class Lotes extends CI_Model
             $cant = $data['cant'];
             $motive = $data['motive'];
 
-            // $userdata = $this->session->userdata('user_data');
-            //$usrId = $userdata[0]['usrId'];
-
             $data = array(
                 'prodId' => $prodId,
                 'stkCant' => $cant,

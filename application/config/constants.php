@@ -91,16 +91,11 @@ define('DNATO', 'http://localhost/traz-comp-dnato/');
 #TRAZ-COMP-BPM
 define('BPM', 'traz-comp-bpm/');
 
-define('BONITA_URL', 'http:///10.142.0.3:8080/bonita/');
+define('BONITA_URL', 'http://10.142.0.3:8080/bonita/');
 
 define('BPM_PROCESS_ID_PEDIDOS_NORMALES', '8803232493891311406');
 
 define('BPM_PROCESS_ID_PEDIDOS_EXTRAORDINARIOS', '6013058915384903051');
-
-define('BPM_PROCESS', json_encode(array(
-    '8803232493891311406' => ['nombre' => 'Ped. Materiales', 'color' => '#F39C12', 'model' => 'ALM_Tareas'],
-    '6013058915384903051' => ['nombre' => 'Ped. Materiales Ext', 'color' => '#F39C12', 'model' => 'ALM_Tareas'],
-    '8664799170016058315' => ['nombre' => 'Proc. Mantenimiento', 'color' => '#00A65A', 'model' => 'MAN_Tareas'])));
 
 define('BPM_ADMIN_USER', 'almacen.tools');
 define('BPM_ADMIN_PASS', 'bpm');
@@ -180,3 +175,9 @@ define('RSP_LOTE', [
         "TOOLSERROR:RECI_NO_VACIO_DIST_LOTE_IGUAL_ART" => "El recipiente contiene lotes distintos",
         "TOOLSERROR:RECI_NO_VACIO_IGUAL_ART_LOTE" => "El recipiente contiene los mismos lotes y artículos"
     ]);
+
+
+define('BPM_PROCESS', json_encode(array(
+    '8803232493891311406' => ['nombre' => 'Ped. Materiales', 'color' => '#F39C12', 'proyecto' => ALM, 'model' => 'ALM_Tareas'],
+    '6013058915384903051' => ['nombre' => 'Ped. Materiales Ext', 'color' => '#F39C12', 'proyecto' => ALM, 'model' => 'ALM_Tareas'],
+    '8664799170016058315' => ['nombre' => 'Proc. Mantenimiento', 'color' => '#00A65A', 'proyecto' => 'traz-comp-mantenimiento/', 'model' => 'MAN_Tareas'])));
