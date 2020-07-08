@@ -276,6 +276,16 @@ class Etapas extends CI_Model
         return $rsp;
     }
 
+    public function getSalidaEtapa($etap_id)
+    {
+        $url = REST2."/etapas/salidas/$etap_id";
+        $rsp = $this->rest->callApi('GET', $url);
+        if($rsp['status']){
+            $rsp['data']  = json_decode($rsp['data'])->salidas->salida;
+        }
+        return $rsp;
+    }
+
 	public function getUsers()
 	{
 		log_message('DEBUG', 'Etapas/getUsers');
