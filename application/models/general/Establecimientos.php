@@ -83,9 +83,6 @@ class Establecimientos extends CI_Model
 
   public function obtenerRecipientesDeposito($data = null)
   {
-    // $resource = 'recipientes/deposito/' . $data['depo_id'] . '/establecimiento/' . $data['esta_id'];
-    // $url = RESTPT . $resource;
-    // $rsp = $this->rest->callApi('GET', $url);
     $rsp = '{
       "tipos":{
         "tipo":[

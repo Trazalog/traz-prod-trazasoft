@@ -40,17 +40,12 @@
               <select class="form-control select2 select2-hidden-accesible" id="establecimiento" name="establecimiento" onchange="selectEstablecimiento()" <?php echo req() ?>>
                 <option value="" disabled selected>Seleccionar</option>
                 <?php
-                // var_dump($establecimiento);
                 foreach ($establecimiento as $i) {
                   echo "<option value = $i->esta_id>$i->nombre</option>";
                 }
                 ?>
               </select>
               <span id="estabSelected" style="color: forestgreen;"></span>
-              <!-- <span class="input-group-btn">
-                <button class='btn btn-primary' data-toggle="modal" data-target="#modalEstablecimiento">
-                  <i class="fa fa-plus"></i></button>
-              </span> -->
             </div>
           </div>
           <!-- ___________________________________________________ -->
@@ -58,19 +53,8 @@
             <label for="" style="margin-left:10px">Depósito:</label>
             <div class="col-md-12  input-group" style="margin-left:15px">
               <select class="form-control select2 select2-hidden-accesible" id="depositos" name="depositos" onchange="selectDeposito()" <?php echo req() ?>>
-                <!-- <option value="" disabled selected>Seleccionar</option> -->
-                <!-- <?php
-                      // var_dump($establecimiento);
-                      //foreach ($establecimiento as $i) {
-                      // echo "<option value = $i['esta_id'] >$i->nombre</option>";
-                      // }
-                      ?> -->
               </select>
               <span id="deposSelected" style="color: forestgreen;"></span>
-              <!-- <span class="input-group-btn">
-                <button class='btn btn-primary' data-toggle="modal" data-target="#modalDeposito">
-                  <i class="fa fa-plus"></i></button>
-              </span> -->
             </div>
           </div>
         </div>
@@ -96,12 +80,6 @@
             <div class="form-group">
               <label for="tipores" class="form-label">Tipo:</label>
               <select class="form-control select2 select2-hidden-accesible" id="tipo_residuo" name="tipo_residuo" onchange="selectRecipiente()" <?php echo req() ?>>
-                <!-- <option value="" disabled selected>-Seleccione opcion-</option>
-                <?php
-                // foreach ($tiporesiduo as $i) {
-                //   echo '<option>' . $i->nombre . '</option>';
-                // }
-                ?> -->
               </select>
               <span id="recipSelected" style="color: forestgreen;"></span>
             </div>
@@ -154,17 +132,6 @@
           </thead>
           <!--__________________BODY TABLA___________________________-->
           <tbody>
-            <!-- <?php
-                  // foreach ($datosTabla as $d) {
-                  //   echo "<tr>
-                  //     <td></td>
-                  //     <td>$d->establecimiento</td>
-                  //     <td>$d->deposito</td>
-                  //     <td>$d->tipo_reci</td>
-                  //     <td>$d->nombre_reci</td>
-                  //   </tr>";
-                  // }
-                  ?> -->
           </tbody>
         </table>
         <!--__________________FIN TABLA___________________________-->
@@ -446,235 +413,7 @@
 </div> -->
 <!---//////////////////////////////////////--- FIN Modal Deposito---///////////////////////////////////////////////////////----->
 <!---//////////////////////////////////////--- SCRIPTS---///////////////////////////////////////////////////////----->
-<!--_____________________________________________________________-->
-<!-- script bootstrap validator FORMULARIO DATOS -->
-<!-- <script>
-  $('#formDatos').bootstrapValidator({
-    message: 'This value is not valid',
-    /*feedbackIcons: {
-        valid: 'glyphicon glyphicon-ok',
-        invalid: 'glyphicon glyphicon-remove',
-        validating: 'glyphicon glyphicon-refresh'
-    },*/
-    fields: {
-      contenedor: {
-        message: 'la entrada no es valida',
-        validators: {
-          notEmpty: {
-            message: 'la entrada no puede ser vacia'
-          },
-          /*stringLength: {
-              min: 6,
-              max: 30,
-              message: 'The username must be more than 6 and less than 30 characters long'
-          },*/
-          regexp: {
-            regexp: /^(0|[1-9][0-9]*)$/,
-            message: 'la entrada debe ser un numero natural'
-          }
-        }
-      },
-      tipo_residuo: {
-        message: 'la entrada no es valida',
-        validators: {
-          notEmpty: {
-            message: 'la entrada no puede ser vacia'
-          }
-          /*stringLength: {
-              min: 6,
-              max: 30,
-              message: 'The username must be more than 6 and less than 30 characters long'
-          },*/
-        }
-      },
-      porcent_llenado: {
-        message: 'la entrada no es valida',
-        validators: {
-          notEmpty: {
-            message: 'la entrada no puede ser vacia'
-          },
-          regexp: {
-            regexp: /[+]?[0-9]*\.?[0-9]*/,
-            message: 'la entrada debe ser un numero entero o flotante'
-          }
-          /*stringLength: {
-              min: 6,
-              max: 30,
-              message: 'The username must be more than 6 and less than 30 characters long'
-          },*/
-        }
-      },
-      metroscubicos: {
-        message: 'la entrada no es valida',
-        validators: {
-          notEmpty: {
-            message: 'la entrada no puede ser vacia'
-          },
-          regexp: {
-            regexp: /[+]?[0-9]*\.?[0-9]*/,
-            message: 'la entrada debe ser un numero entero o flotante'
-          }
-          /*stringLength: {
-              min: 6,
-              max: 30,
-              message: 'The username must be more than 6 and less than 30 characters long'
-          },*/
-        }
-      }
-    }
-  }).on('success.form.bv', function(e) {
-    e.preventDefault();
-    guardar();
-  });
-</script> -->
-<!--_____________________________________________________________-->
-<!-- script bootstrap validator FORMULARIO ESTABLECIMIENTO -->
-<!-- <script>
-  $('#formEstablecimiento').bootstrapValidator({
-    message: 'This value is not valid',
-    /*feedbackIcons: {
-        valid: 'glyphicon glyphicon-ok',
-        invalid: 'glyphicon glyphicon-remove',
-        validating: 'glyphicon glyphicon-refresh'
-    },*/
-    fields: {
-      Nombre: {
-        message: 'la entrada no es valida',
-        validators: {
-          notEmpty: {
-            message: 'la entrada no puede ser vacia'
-          },
-          regexp: {
-            regexp: /[A-Za-z]/,
-            message: 'la entrada debe ser un numero entero'
-          }
-        }
-      },
-      Ubicacion: {
-        message: 'la entrada no es valida',
-        validators: {
-          notEmpty: {
-            message: 'la entrada no puede ser vacia'
-          },
-          regexp: {
-            regexp: /[A-Za-z]/,
-            message: 'la entrada debe ser un numero entero'
-          }
-        }
-      },
-      Pais: {
-        message: 'la entrada no es valida',
-        validators: {
-          notEmpty: {
-            message: 'la entrada no puede ser vacia'
-          },
-        }
-      },
-      Fecha_de_alta: {
-        message: 'la entrada no es valida',
-        validators: {
-          notEmpty: {
-            message: 'la entrada no puede ser vacia'
-          },
-          regexp: {
-            regexp: /^(0|[1-9][0-9]*)$/,
-            message: 'la entrada debe ser un numero entero'
-          }
-        }
-      },
-      Usuario: {
-        message: 'la entrada no es valida',
-        validators: {
-          notEmpty: {
-            message: 'la entrada no puede ser vacia'
-          },
-          regexp: {
-            regexp: /[A-Za-z]/,
-            message: 'la entrada debe ser un numero entero'
-          }
-        }
-      },
-      Calles: {
-        message: 'la entrada no es valida',
-        validators: {
-          notEmpty: {
-            message: 'la entrada no puede ser vacia'
-          },
-          regexp: {
-            regexp: /[A-Za-z]/,
-            message: 'la entrada no debe ser un numero entero'
-          }
-        }
-      },
-      Altura: {
-        message: 'la entrada no es valida',
-        validators: {
-          notEmpty: {
-            message: 'la entrada no puede ser vacia'
-          },
-          regexp: {
-            regexp: /[A-Za-z]/,
-            message: 'la entrada no debe ser un numero entero'
-          }
-        }
-      },
-      Localidad: {
-        message: 'la entrada no es valida',
-        validators: {
-          notEmpty: {
-            message: 'la entrada no puede ser vacia'
-          },
-          regexp: {
-            regexp: /[A-Za-z]/,
-            message: 'la entrada no debe ser un numero entero'
-          }
-        }
-      },
-      Estado: {
-        message: 'la entrada no es valida',
-        validators: {
-          notEmpty: {
-            message: 'la entrada no puede ser vacia'
-          },
-          regexp: {
-            regexp: /[A-Za-z]/,
-            message: 'la entrada no debe ser un numero entero'
-          }
-        }
-      }
-    }
-  }).on('success.form.bv', function(e) {
-    e.preventDefault();
-    agregarDato();
-  });
-</script> -->
-<!--_____________________________________________________________-->
-<!-- Script Agregar datos de FORMULARIO ESTABLECIMIENTO-->
-<!-- <script>
-  // function Guardar_Recipiente() {
-  //   datos = $('#formEstablecimiento').serialize();
-  //   //console.log(datos);
-  //   //--------------------------------------------------------------
-  //   if ($("#formEstablecimiento").data('bootstrapValidator').isValid()) {
-  //     $.ajax({
-  //       type: "POST",
-  //       data: datos,
-  //       url: "ajax/Registrarinspector/guardarDato",
-  //       success: function(r) {
-  //         if (r == "ok") {
-  //           //console.log(datos);
-  //           $('#formEstablecimiento')[0].reset();
-  //           alertify.success("Agregado con exito");
-  //         } else {
-  //           console.log(r);
-  //           $('#formEstablecimiento')[0].reset();
-  //           alertify.error("error al agregar");
-  //         }
-  //       }
-  //     });
-  //   }
-  // }
-</script> -->
+
 <!--_____________________________________________________________-->
 <!-- script que muestra box de datos al dar click en boton agregar -->
 <script>
@@ -889,23 +628,6 @@
     });
   }
 
-  // function editarRecipiente(id) {
-  //   $("#botonAgregar").attr("disabled", "");
-  //   $("#boxRecipientesCargados").hide(500);
-  //   $('#boxRecipientesCargados').attr("style", "display: none;");
-  //   //$("#boxDatos").removeAttr("hidden");
-  //   $("#boxDatos").focus();
-  //   $("#boxDatos").show();
-  //   //cargar box con datos
-  //   var reci_id = id;
-  //   var reci_nombre = reci_tipo '';
-  //   reci_nombre = $('#' + id).find('td:eq(1)').text();
-  //   reci_tipo = $('#' + id).find('td:eq(2)').text();
-  //   $('#editarEstablecimiento').prop('onchange', 'selectEstablecimiento('+esta_id+')');
-  //   $('#editarDeposito').prop('onchange', 'selectDeposito('+depo_id+')');
-  //   $('#editarRecipiente').prop('onchange', 'selectRecipiente('+reci_tipo+')');
-  // }
-
   $("#modal-delete").modal('hide');
 
   function validarEliminar(id) {
@@ -989,31 +711,4 @@
       }
     });
   }
-
-  // var data = mergeFD(datosEsta, datosReci);
-  //console.log(datos);
-  //--------------------------------------------------------------
-  // if ($("#formEstablecimiento").data('bootstrapValidator').isValid()) {
-  // $.ajax({
-  //   type: "POST",
-  //   data: data,
-  //   url: "general/Establecimiento/guardarTodo",
-  //   success: function(r) {
-  //     if (r == "ok") {
-  //       //console.log(datos);
-  //       $('#formEstablecimiento')[0].reset();
-  //       alertify.success("Agregado con exito");
-  //     } else {
-  //       console.log(r);
-  //       $('#formEstablecimiento')[0].reset();
-  //       alertify.error("error al agregar");
-  //     }
-  //   }
-  // });
-  // }
 </script>
-<!--_____________________________________________________________-->
-<!-- script Datatables -->
-<!-- <script>
-  DataTable($('#tabla_recipientes'));
-</script> -->

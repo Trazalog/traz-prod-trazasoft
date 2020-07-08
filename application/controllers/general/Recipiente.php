@@ -43,14 +43,6 @@ class Recipiente extends CI_Controller
     echo json_encode($rsp);
   }
 
-  public function guardar()
-  {
-  }
-
-  public function editar()
-  {
-  }
-
   public function deleteRecipiente($id =  null)
   {
     $rsp = $this->Recipientes->deleteRecipiente($id);
@@ -74,9 +66,5 @@ class Recipiente extends CI_Controller
     } else {
       echo "Se produjo un error al editar el recipiente.";
     }
-  }
-
-  public function listar()
-  {
   }
 }

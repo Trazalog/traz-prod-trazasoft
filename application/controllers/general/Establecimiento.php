@@ -66,25 +66,9 @@ class Establecimiento extends CI_Controller
     $this->load->view('Establecimientos/Asignar_establecimiento', $data);
   }
 
-  public function editar()
-  { //edita establecimiento
-    $data = $this->input->post('data');
-    $rsp = $this->Establecimientos->editar($data);
-    echo json_encode($rsp);
-  }
-
   public function guardarTodo()
   { //asigna a un establecimiento, depositos, recipientes y tipos de los mismos
     $recipientes = $this->input->post('recipientes');
-
-    // $arrayDatos = '';
-    // foreach ($recipientes as $key) {
-    //   $arrayPost['tipo'] = $key['reci_tipo'];
-    //   $arrayPost['patente'] = $key['reci_nombre'];
-    //   $arrayPost['depo_id'] = $key['depo_id'];
-    //   $arrayDatos['_post_recipiente_batch_req']['_post_recipiente'][] = $arrayPost;
-    // }
-    // $rsp = $this->Establecimientos->guardarTodo($arrayDatos);
 
     $tableData = stripcslashes($recipientes);
     $tableDataArray['recipientes'] = json_decode($tableData, TRUE);
@@ -99,45 +83,6 @@ class Establecimiento extends CI_Controller
     $arrayDatos['_post_recipientes_batch_req'] = $pinchila;
     $rsp = $this->Establecimientos->guardarTodo($arrayDatos);
 
-    echo json_encode($rsp);
-  }
-
-  public function editarTodo()
-  {
-  }
-
-  public function guardarDepositos()
-  { //inserta depositos de un establecimiento
-    $data = $this->input->post('data'); //id estab., depositos
-    $rsp = $this->Establecimientos->guardarDepositos($data);
-    echo json_encode($rsp);
-  }
-
-  public function editarDepositos()
-  { //edita depositos de un establecimiento
-    $data = $this->input->post('data'); //id estab., depositos
-    $rsp = $this->Establecimientos->guardarDepositos($data);
-    echo json_encode($rsp);
-  }
-
-  public function obtenerRecipientes()
-  { //get recipientes y sus tipos, de un establecimiento
-    $idestablecimiento = $this->input->get("esta_id");
-    $datos = $this->Establecimientos->obtenerRecipientes($idestablecimiento)->recipientes->recipiente;
-    echo json_encode($datos);
-  }
-
-  public function guardarRecipientes()
-  { //inserta recipientes y sus tipos, de un establecimiento
-    $data = $this->input->post('data'); //id estab., recipientes y tipo de recipientes
-    $rsp = $this->Establecimientos->guardarRecipientes($data);
-    echo json_encode($rsp);
-  }
-
-  public function editarRecipientes()
-  { //edita recipientes de un establecimiento
-    $data = $this->input->post('data'); //id estab., recipientes y tipo de recipientes
-    $rsp = $this->Establecimientos->editarRecipientes($data);
     echo json_encode($rsp);
   }
 }
