@@ -18,7 +18,7 @@
       </li>
       <li><a class="link" href="#" data-link="general/Formula"><i class="fa fa-magic"></i>Fórmulas</a>
       </li>
-      <li><a class="link" href="#" data-link="general/Establecimiento"><i class="fa fa-bank"></i>Asignar a Establecimiento</a>
+      <li><a class="link" href="#" data-link="general/Establecimiento/asignarAEstablecimiento"><i class="fa fa-database"></i>Configurar establecimientos</a>
       </li>
     </ul>
   </li>

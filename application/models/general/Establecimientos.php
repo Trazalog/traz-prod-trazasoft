@@ -9,7 +9,7 @@ class Establecimientos extends CI_Model
   }
   public function listar()
   {
-    log_message('DEBUG', 'Establecimientos/listar (id etapa)-> ' . $etapa);
+    // log_message('DEBUG', 'Establecimientos/listar (id etapa)-> ' . $etapa);
     $resource = '/establecimiento';
     $url = REST2 . $resource;
     $array = $this->rest->callAPI("GET", $url);
@@ -25,12 +25,12 @@ class Establecimientos extends CI_Model
     $array = $this->rest->callApi('GET', $url);
     return json_decode($array['data']);
   }
-  public function obtenerDepositos($idestablecimiento)
+  public function obtenerDepositos($esta_id)
   {
-    $resource = 'establecimiento/' . $idestablecimiento . '/deposito/list';
-    $url = REST0 . $resource;
-    $array = file_get_contents($url, false, http('GET'));
-    return json_decode($array);
+    $resource = 'depositos_establecimiento/' . $esta_id;
+    $url = RESTPT . $resource;
+    $rsp = $this->rest->callApi('GET', $url);
+    return json_decode($rsp['data']);
   }
 
   public function getEstablecimiento($esta_id = null)
@@ -72,20 +72,29 @@ class Establecimientos extends CI_Model
     return $rsp;
   }
 
-  public function guardarTodo($depositos = null, $recipientes = null)
+  public function guardarTodo($datos)
   {
-    if (isset($depositos)) {
-      $url = RESTPT . "updateDepositos";
-      $rsp = $this->rest->callApi("PUT", $url, $depositos);
-      if ($rsp['status']) $rsp['data'] = json_decode($rsp['data']);
-    }
-
-    if (isset($recipientes)) {
-      $url = RESTPT . "updateRecipientes";
-      $rsp = $this->rest->callApi("PUT", $url, $recipientes);
-      if ($rsp['status']) $rsp['data'] = json_decode($rsp['data']);
-    }
-
+    $resource = '_post_recipientes_batch_req';
+    $url = RESTPT . $resource;
+    $rsp = $this->rest->callApi("POST", $url, $datos);
+    if ($rsp['status']) $rsp['data'] = json_decode($rsp['data']);
     return $rsp;
+  }
+
+  public function obtenerRecipientesDeposito($data = null)
+  {
+    // $resource = 'recipientes/deposito/' . $data['depo_id'] . '/establecimiento/' . $data['esta_id'];
+    // $url = RESTPT . $resource;
+    // $rsp = $this->rest->callApi('GET', $url);
+    $rsp = '{
+      "tipos":{
+        "tipo":[
+          {"nombre":"DEPOSITO"},
+          {"nombre":"PRODUCTIVO"},
+          {"nombre":"TRANSPORTE"}
+      ]
+    }
+    }';
+    return json_decode($rsp);
   }
 }

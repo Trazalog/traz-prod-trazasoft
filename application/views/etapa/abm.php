@@ -1,6 +1,7 @@
 <?php $this->load->view('etapa/modal_materia_prima'); ?>
 <?php $this->load->view('etapa/modal_lotes'); ?>
 <?php $this->load->view('etapa/modal_producto'); ?>
+<?php $this->load->view('etapa/modal_unificacion_lote'); ?>
 
 <div id="snapshot" data-key="<?php echo $key ?>">
     <?php if ($etapa->estado == "En Curso") {
@@ -26,7 +27,8 @@
                 <div class="col-md-5 col-xs-12">
                     <input name="vcode" type="text" id="Lote" <?php if ($accion == 'Editar') {
                         echo 'value="' . $etapa->lote . '"';
-                    } ?> class="form-control" placeholder="Inserte Lote" <?php if ($etapa->estado == 'En Curso' || $etapa->estado == 'FINALIZADO') {
+                    } ?> class="form-control" placeholder="Inserte Lote"
+                        <?php if ($etapa->estado == 'En Curso' || $etapa->estado == 'FINALIZADO') {
                                                                                                                             echo 'disabled';
                                                                                                                         } ?>>
                 </div>
@@ -48,7 +50,9 @@
                     <label for="establecimientos" class="form-label">Establecimiento*:</label>
                 </div>
                 <div class="col-md-4 col-xs-12">
-                    <select class="form-control select2 select2-hidden-accesible" name="vestablecimiento" onchange="actualizaRecipiente(this.value,'recipientes')" id="establecimientos" <?php if ($etapa->estado == 'En Curso' || $etapa->estado == 'FINALIZADO') {                                                                                                                                                            echo 'disabled';
+                    <select class="form-control select2 select2-hidden-accesible" name="vestablecimiento"
+                        onchange="actualizaRecipiente(this.value,'recipientes')" id="establecimientos"
+                        <?php if ($etapa->estado == 'En Curso' || $etapa->estado == 'FINALIZADO') {                                                                                                                                                            echo 'disabled';
                                                                                                                                                                                             } ?>>
                         <option value="" disabled selected>-Seleccione Establecimiento-</option>
                         <?php
@@ -100,7 +104,8 @@
 
                     <input type="text" id="ordenproduccion" class="form-control" name="vorden" <?php if ($accion == 'Editar' || $etapa->estado == 'PLANIFICADO') {
                         echo ('value="' . $etapa->orden . '"');
-                    } ?> placeholder="Inserte Orden de Produccion" <?php if ($etapa->estado == 'En Curso' || $etapa->estado == 'FINALIZADO') {
+                    } ?> placeholder="Inserte Orden de Produccion"
+                        <?php if ($etapa->estado == 'En Curso' || $etapa->estado == 'FINALIZADO') {
                                                                                                                                                     echo 'disabled';
                                                                                                                                                 } ?>>
                 </div>
@@ -175,6 +180,7 @@
                         </div> -->
                         <!-- /.box-body -->
                         <div class="modal-footer">
+                           
 
                             <?php if ($etapa->estado != 'En Curso' || $etapa->estado != 'Finalizado') {
 echo "<button class='btn btn-primary' onclick='guardar(\"iniciar\")'>Iniciar Etapa</button>";
@@ -198,85 +204,118 @@ echo "<button class='btn btn-primary' onclick='guardar(\"iniciar\")'>Iniciar Eta
 
 
 <script>
-    // getSnapshot();
-    var estadoEtapa = $('#estadoEtapa').val();
-    if (estadoEtapa == 'PLANIFICADO') {
-        $(".recipientesDiv").addClass("hidden");
-        console.log('1');
-        // callRecipiente(selectOption);
-        // callRecipiente();
+// getSnapshot();
+var estadoEtapa = $('#estadoEtapa').val();
+if (estadoEtapa == 'PLANIFICADO') {
+    $(".recipientesDiv").addClass("hidden");
+    console.log('1');
+    // callRecipiente(selectOption);
+    // callRecipiente();
 
-    }
+}
 
-    callRecipiente();
-    function callRecipiente() {
-        actualizaRecipiente($('#establecimientos').val());  
-    }
+callRecipiente();
 
-    accion = '<?php echo $accion; ?>';
-    if (accion == "Editar") {
-        var materias = <?php echo json_encode($etapa->materias); ?>;
-        if (_isset(materias)) {
-            for (i = 0; i < materias.length; i++) {
-                materia = materias[i];
-                materia = JSON.stringify(materia);
-                materia = '[' + materia + ']';
-                materia = JSON.parse(materia);
-                //agregaMateria(materia);
-            }
+function callRecipiente() {
+    actualizaRecipiente($('#establecimientos').val());
+}
+
+accion = '<?php echo $accion; ?>';
+if (accion == "Editar") {
+    var materias = <?php echo json_encode($etapa->materias); ?> ;
+    if (_isset(materias)) {
+        for (i = 0; i < materias.length; i++) {
+            materia = materias[i];
+            materia = JSON.stringify(materia);
+            materia = '[' + materia + ']';
+            materia = JSON.parse(materia);
+            //agregaMateria(materia);
         }
     }
+}
 
-    function actualizaRecipiente(establecimiento, recipientes) {
-        $(".recipienteSelected").addClass("hidden");
-        $(".recipientesDiv").removeClass("hidden");       
-        $('#recipientes').empty();
-        establecimiento = establecimiento;
-        if (!establecimiento) return;
-        // wo();
-        $.ajax({
-            type: 'POST',
-            dataType: 'JSON',
-            data: {
-                establecimiento
-            },
-            url: 'general/Recipiente/listarPorEstablecimiento/true',
-            success: function(result) {
+function actualizaRecipiente(establecimiento, recipientes) {
+    $(".recipienteSelected").addClass("hidden");
+    $(".recipientesDiv").removeClass("hidden");
+    $('#recipientes').empty();
+    establecimiento = establecimiento;
+    if (!establecimiento) return;
+     wo();
+    $.ajax({
+        type: 'POST',
+        dataType: 'JSON',
+        data: {
+            establecimiento,
+            tipo: 'PRODUCTIVO'
+        },
+        url: 'general/Recipiente/listarPorEstablecimiento/true',
+        success: function(result) {
 
-                if (!result.status) {
-                    alert('Fallo al Traer Recipientes');
-                    return;
-                }
-
-                if (!result.data) {
-                    alert('No hay Recipientes Asociados');
-                    return;
-                }
-                fillSelect('#recipientes', result.data);
-       
-
-            },
-            error: function() {
-                alert('Error al Traer Recipientes');
-            },
-            complete: function() {
-                wc();
+            if (!result.status) {
+                alert('Fallo al Traer Recipientes');
+                return;
             }
-        });
 
-    }
+            if (!result.data) {
+                alert('No hay Recipientes Asociados');
+                return;
+            }
+            fillSelect('#recipientes', result.data);
 
-    function despliega() {
-        estado = document.getElementById('desplegable').hidden;
-        if (estado) {
-            document.getElementById('desplegable').hidden = false;
-        } else {
-            document.getElementById('desplegable').hidden = true;
+
+        },
+        error: function() {
+            alert('Error al Traer Recipientes');
+        },
+        complete: function() {
+            wc();
         }
-    }
+    });
 
-    // envia datos para iniciar etapa y acer orden de pedido a almacenes
-    function guardar(boton) {
+}
+
+function despliega() {
+    estado = document.getElementById('desplegable').hidden;
+    if (estado) {
+        document.getElementById('desplegable').hidden = false;
+    } else {
+        document.getElementById('desplegable').hidden = true;
+    }
+}
+
+var guardarForzado = function(data) {
+    console.log('Guardar Forzado...');
+    data.forzar = "true";
+    wo();
+    $.ajax({
+        type: 'POST',
+        dataType: 'JSON',
+        url: 'general/Etapa/guardar/iniciar',
+        data: {
+            data
+        },
+        success: function(rsp) {
+            console.log(rsp);
+            if (rsp.status) {
+                $('#mdl-unificacion').modal('hide');
+                alert('Salida Guardada exitosamente.');
+                linkTo('general/Etapa/index');
+            } else {
+                alert('Fallo al iniciar la etapa');
+            }
+        },
+        error: function(rsp) {
+            alert('Error al iniciar etapa');
+        },
+        complete: function() {
+            wc();
+        }
+    });
+}
+// envia datos para iniciar etapa y acer orden de pedido a almacenes
+function guardar(boton) {
+
+    if(!validarCampos()) return;
 
     var recipiente = idprod = '';
     var tabla = $('#tablamateriasasignadas tbody tr');
@@ -322,7 +361,8 @@ echo "<button class='btn btn-primary' onclick='guardar(\"iniciar\")'>Iniciar Eta
         cantidad: cantidad,
         idprod: prod,
         estadoEtapa: estadoEtapa,
-        batch_id: batch_id
+        batch_id: batch_id,
+        forzar: "false"
     };
 
     wo();
@@ -335,121 +375,130 @@ echo "<button class='btn btn-primary' onclick='guardar(\"iniciar\")'>Iniciar Eta
         },
         success: function(rsp) {
             console.log(rsp);
-
             if (rsp.status) {
                 alert('Salida Guardada exitosamente.');
                 linkTo('general/Etapa/index');
             } else {
-                alert('Fallo al guardar. Msj: ' + rsp);
+                if (rsp.msj) {
+                    // conf(guardarForzado, data, '¿Confirma Unificación de Lotes?', rsp.msj + " | Detalle del Contenido: LOTE: " + rsp.lote_id + " | PRODUCTO: " + rsp.barcode);
+                    bak_data = data;
+                    getContenidoRecipiente(recipiente);
+                } else {
+                    alert('Fallo al iniciar la etapa');
+                }
             }
         },
         error: function(rsp) {
-            alert('Error al Guardar Salida. Msj: ' + rsp);
-            console.log("error: " + rsp);
+            alert('Error al iniciar etapa');
         },
         complete: function() {
             wc();
         }
     });
 }
-    // valida campos vacios
-    function valida(boton) {
-        mensaje = "No se ha podido completar la operacion debido a que algunos datos no han sido completados: <br>";
-        ban = true;
-        if (document.getElementById('Lote').value == "") {
-            mensaje += "- No ha ingresado Lote <br>";
-            ban = false;
-        }
-        if (document.getElementById('fecha').value == "") {
-            mensaje += "- No ha ingresado Fecha <br>";
-            ban = false;
-        }
-        if ($('#establecimientos').val() == "") {
-            mensaje += "- No ha seleccionado establecimiento <br>";
-            ban = false;
-        }
-        if ($('#recipientes').val() == "") {
-            mensaje += "- No ha seleccionado recipiente <br>";
-            ban = false;
-        }
-        if (document.getElementById('materiasexiste').value == "no") {
-            mensaje += "- No ha seleccionado ninguna materia prima <br>";
-            ban = false;
-        } //################# SOLUCIONAR ERROR AL INSERTAR MATERIA #################################################
-        if (document.getElementById('existe_tabla').value == "no") {
-            mensaje += "- No ha seleccionado ninguna tarea <br>";
-            ban = false;
-        }
-        if (ban) {
-            guardar(boton);
-        }
-        // else {
-        //     document.getElementById('mensajeincompleto').innerHTML = "";
-        //     document.getElementById('mensajeincompleto').innerHTML = mensaje;
-        //     document.getElementById('incompleto').hidden = false;
-        // }
+
+function validarCampos(){
+    if($('#Lote').val() == "" || $('#establecimientos').val() == "" || $('#recipientes').val() == ""){
+        alert('Completar los campos obligatorios *');
+        return false;
     }
 
-    // selecciona id de producto y guarda en input hidden
-    $("#inputproductos").on('change', function() {
-
-        band = false;
-        i = 0;
-        $('#idproducto').val("");
-        articulos = <?php echo json_encode($materias); ?>;
-        producto = document.getElementById('inputproductos').value;
-
-        while (!band && i < articulos.length) {
-
-            if (producto == articulos[i].titulo) {
-                band = true;
-                $('#idproducto').val(articulos[i].id);
-                console.log('materia id: ' + articulos[i].id);
-            }
-            i++;
-        }
-
-        prod = $('#idproducto').val();
-    });
-
-
-
-    // levanta modal para finalizar la etapa solamente
-    function finalizar() {
-        /* idetapa = //php echo $idetapa;?>;
-							$.ajax({
-									type: 'POST',
-									data: {idetapa:idetapa },
-									url: 'general/Etapa/checkFormularios', 
-									success: function(result){
-										if(result)
-										{
-											
-											}else
-											{
-												alert('Faltan formularios');
-											}
-										
-									}
-						);*/
-        $("#modal_finalizar").modal('show');
+    if($('#tablamateriasasignadas tbody tr').length == 0){
+        alert('No ha seleccionado ninguna materia prima');
+        return false;
     }
-    $(document).off('click', '.tablamateriasasignadas_borrar').on('click', '.tablamateriasasignadas_borrar', {
-        idtabla: 'tablamateriasasignadas',
-        idrecipiente: 'materiasasignadas',
-        idbandera: 'materiasexiste'
-    }, remover);
+    
+    if($('#idproducto').val() != null && $('#cantidad_producto').val() == ''){
+        alert('Por favor ingresar cantidad para el Producto');
+        return false;
+    }
+        
+    return true;
+}
 
-    <?php if ($accion == 'Editar' && $etapa->estado == "PLANIFICADO") { ?>
 
-        var inputs = $("#editFinal").html();            
-        $("#editPlani").html(inputs);
+// valida campos vacios
+function valida(boton) {
+    mensaje = "No se ha podido completar la operacion debido a que algunos datos no han sido completados: <br>";
+    ban = true;
+    if (document.getElementById('Lote').value == "") {
+        mensaje += "- No ha ingresado Lote <br>";
+        ban = false;
+    }
+    if (document.getElementById('fecha').value == "") {
+        mensaje += "- No ha ingresado Fecha <br>";
+        ban = false;
+    }
+    if ($('#establecimientos').val() == "") {
+        mensaje += "- No ha seleccionado establecimiento <br>";
+        ban = false;
+    }
+    if ($('#recipientes').val() == "") {
+        mensaje += "- No ha seleccionado recipiente <br>";
+        ban = false;
+    }
+    if (document.getElementById('materiasexiste').value == "no") {
+        mensaje += "- No ha seleccionado ninguna materia prima <br>";
+        ban = false;
+    } //################# SOLUCIONAR ERROR AL INSERTAR MATERIA #################################################
+    if (document.getElementById('existe_tabla').value == "no") {
+        mensaje += "- No ha seleccionado ninguna tarea <br>";
+        ban = false;
+    }
+    if (ban) {
+        guardar(boton);
+    }
+    // else {
+    //     document.getElementById('mensajeincompleto').innerHTML = "";
+    //     document.getElementById('mensajeincompleto').innerHTML = mensaje;
+    //     document.getElementById('incompleto').hidden = false;
+    // }
+}
 
-        function editProducto() {
-            $("#editPlani").empty();
-            var select = $("#nuevaEtapa").html();
-            $("#editPlani").html(select);
+// selecciona id de producto y guarda en input hidden
+$("#inputproductos").on('change', function() {
+
+    band = false;
+    i = 0;
+    $('#idproducto').val("");
+    articulos = <?php echo json_encode($materias); ?> ;
+    producto = document.getElementById('inputproductos').value;
+
+    while (!band && i < articulos.length) {
+
+        if (producto == articulos[i].titulo) {
+            band = true;
+            $('#idproducto').val(articulos[i].id);
+            console.log('materia id: ' + articulos[i].id);
         }
+        i++;
+    }
 
-    <?php } ?>
+    prod = $('#idproducto').val();
+});
+
+
+
+// levanta modal para finalizar la etapa solamente
+function finalizar() {
+
+    $("#modal_finalizar").modal('show');
+}
+
+
+<?php
+if ($accion == 'Editar' && $etapa->estado == "PLANIFICADO") {
+    ?>
+
+    var inputs = $("#editFinal").html();
+    $("#editPlani").html(inputs);
+
+    function editProducto() {
+        $("#editPlani").empty();
+        var select = $("#nuevaEtapa").html();
+        $("#editPlani").html(select);
+    }
+
+    <?php
+} ?>
 </script>

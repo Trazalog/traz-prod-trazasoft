@@ -1,14 +1,23 @@
 <?php $this->load->view('etapa/modal_materia_prima'); ?>
 <?php $this->load->view('etapa/modal_lotes'); ?>
 <?php $this->load->view('etapa/modal_producto'); ?>
+<?php $this->load->view('etapa/modal_unificacion_lote'); ?>
+
+<script>
+function validarEtapa() {
+    if ($('#estado_etapa').val() != 'PLANIFICADO') {
+        //Inhabilitar la edicion del los formularios
+        $('#frm-etapa').find('.form-control').prop('disabled', true);
+    }
+}
+</script>
 
 <input class="hidden" type="text" id="estado_etapa" value="<?php echo $etapa->estado ?>">
 <input class="hidden" type="text" id="accion" value="<?php echo $accion ?>">
-
-<div id="snapshot" data-key="<?php echo $key ?>">
-    <?php if ($etapa->estado == "En Curso") {
+<?php if ($etapa->estado == "En Curso") {
         $this->load->view('etapa/modal_finalizar');
     } ?>
+<div id="snapshot" data-key="<?php echo $key ?>" id="frm-etapa">
 
     <!-- Cabecera -->
     <div class="box box-primary">
@@ -147,15 +156,18 @@
 
                         <!-- /.box-body -->
                         <div class="modal-footer">
+         
 
                             <?php 
 
-                            if($etapa->estado != 'Finalizado'){
+                            if($etapa->estado != 'FINALIZADO'){
 
                                 if ($etapa->estado == 'En Curso') {
                                     
                                     echo '<button class="btn btn-primary" id="btnfinalizar" onclick="finalizar()">Reporte de Producción</button>';
-                                    
+                                                 
+                                    $this->load->view('etapa/btn_finalizar_etapa');
+                
                                 } else {
                                     
                                     echo "<button class='btn btn-primary' onclick='guardar(\"iniciar\")'>Iniciar Etapa</button>";
@@ -165,7 +177,7 @@
 
                             
                             ?>
-
+                            <button class="btn btn-default" onclick="back()">Cerrar</button>
                         </div>
                     </div>
                 </div>
@@ -180,11 +192,6 @@
 
 <script>
 actualizaRecipiente($('#establecimientos').val(), 'recipientes');
-if ($('#estado_etapa').val() != 'PLANIFICADO') 
-{
-    //Inhabilitar la edicion del los formularios
-    $('.form-control').prop('disabled', true);
-}    
 
 
 
@@ -200,7 +207,8 @@ function actualizaRecipiente(establecimiento, recipientes) {
         type: 'POST',
         dataType: 'JSON',
         data: {
-            establecimiento
+            establecimiento,
+            tipo: 'PRODUCTIVO'
         },
         url: 'general/Recipiente/listarPorEstablecimiento/true',
         success: function(result) {
@@ -219,6 +227,10 @@ function actualizaRecipiente(establecimiento, recipientes) {
             if (reci_id) {
                 $('#recipientes').val(reci_id);
                 $('#recipientes').trigger('change');
+                if ($('#estado_etapa').val() != 'PLANIFICADO') {
+                    //Inhabilitar la edicion del los formularios
+                    $('#recipientes').prop('disabled', true);
+                }
             }
 
         },
@@ -241,8 +253,41 @@ function despliega() {
     }
 }
 
+var guardarForzado = function(data) {
+    console.log('Guardar Forzado...');
+    data.forzar = "true";
+    wo();
+    $.ajax({
+        type: 'POST',
+        dataType: 'JSON',
+        url: 'general/Etapa/guardar/iniciar',
+        data: {
+            data
+        },
+        success: function(rsp) {
+            console.log(rsp);
+            if (rsp.status) {
+                alert('Salida Guardada exitosamente.');
+                linkTo('general/Etapa/index');
+            } else {
+                alert('Fallo al iniciar la etapa');
+            }
+        },
+        error: function(rsp) {
+            alert('Error al iniciar etapa');
+        },
+        complete: function() {
+            wc();
+        }
+    });
+}
 // envia datos para iniciar etapa y acer orden de pedido a almacenes
 function guardar(boton) {
+
+    if($('#cantidad_producto').val() == ''){
+        alert('Por favor ingresar cantidad para el Producto');
+        return false;
+    }
 
     var recipiente = idprod = '';
     var tabla = $('#tablamateriasasignadas tbody tr');
@@ -269,9 +314,8 @@ function guardar(boton) {
     var cantidad = $('#cantidad_producto').val();
 
     var prod = getJson($('#idproducto'));
-    var prod = prod ? prod.id : 0;
-    
-    
+    var prod = prod ? prod.arti_id : 0;
+
     var recipiente = getJson($('#recipientes'));
     var recipiente = recipiente ? recipiente.reci_id : 0;
 
@@ -289,7 +333,8 @@ function guardar(boton) {
         cantidad: cantidad,
         idprod: prod,
         estadoEtapa: estadoEtapa,
-        batch_id: batch_id
+        batch_id: batch_id,
+        forzar: "false"
     };
 
     wo();
@@ -302,23 +347,105 @@ function guardar(boton) {
         },
         success: function(rsp) {
             console.log(rsp);
-
             if (rsp.status) {
                 alert('Salida Guardada exitosamente.');
                 linkTo('general/Etapa/index');
             } else {
-                alert('Fallo al guardar. Msj: ' + rsp);
+                if (rsp.msj) {
+                    // conf(guardarForzado, data, '¿Confirma Unificación de Lotes?', rsp.msj + " | Detalle del Contenido: LOTE: " + rsp.lote_id + " | PRODUCTO: " + rsp.barcode);
+                    bak_data = data;
+                    getContenidoRecipiente(recipiente);
+                } else {
+                    alert('Fallo al iniciar la etapa');
+                }
             }
         },
         error: function(rsp) {
-            alert('Error al Guardar Salida. Msj: ' + rsp);
-            console.log("error: " + rsp);
+            alert('Error al iniciar etapa');
         },
         complete: function() {
             wc();
         }
     });
 }
+// envia datos para iniciar etapa y acer orden de pedido a almacenes
+// function guardar(boton) {
+
+//     var recipiente = idprod = '';
+//     var tabla = $('#tablamateriasasignadas tbody tr');
+//     var materiales = [];
+//     var materia = [];
+
+//     $.each(tabla, function(index) {
+//         var cantidad = $(this).find("td").eq(3).html();
+//         var id_materia = $(this).attr("id");
+//         if (id_materia != null) {
+//             materia.push({
+//                 id_materia,
+//                 cantidad
+//             });
+//         }
+//     });
+
+//     var lote = $('#Lote').val();
+//     var fecha = $('#fecha').val();
+//     var establecimiento = document.getElementById('establecimientos').value;
+
+//     var op = document.getElementById('ordenproduccion').value;
+//     var idetapa = <--?php echo $idetapa ?> ;
+//     var cantidad = $('#cantidad_producto').val();
+
+//     var prod = getJson($('#idproducto'));
+//     var prod = prod ? prod.id : 0;
+
+
+//     var recipiente = getJson($('#recipientes'));
+//     var recipiente = recipiente ? recipiente.reci_id : 0;
+
+//     var estadoEtapa = $('#estadoEtapa').val();
+//     var batch_id = $('#batch_id').val();
+
+//     var data = {
+//         idetapa: idetapa,
+//         lote: lote,
+//         fecha: fecha,
+//         establecimiento: establecimiento,
+//         recipiente: recipiente,
+//         op: op,
+//         materia: materia,
+//         cantidad: cantidad,
+//         idprod: prod,
+//         estadoEtapa: estadoEtapa,
+//         batch_id: batch_id
+//     };
+
+//     wo();
+//     $.ajax({
+//         type: 'POST',
+//         dataType: 'JSON',
+//         url: 'general/Etapa/guardar/' + boton,
+//         data: {
+//             data
+//         },
+//         success: function(rsp) {
+//             console.log(rsp);
+
+//             if (rsp.status) {
+//                 alert('Salida Guardada exitosamente.');
+//                 linkTo('general/Etapa/index');
+//             } else {
+//                 alert('Fallo al guardar. Msj: ' + rsp);
+//             }
+//         },
+//         error: function(rsp) {
+//             alert('Error al Guardar Salida. Msj: ' + rsp);
+//             console.log("error: " + rsp);
+//         },
+//         complete: function() {
+//             wc();
+//         }
+//     });
+// }
 
 
 // selecciona id de producto y guarda en input hidden
@@ -327,7 +454,7 @@ $("#inputproductos").on('change', function() {
     band = false;
     i = 0;
     $('#idproducto').val("");
-    articulos = <?php echo json_encode($materias); ?> ;
+    articulos = <?php echo json_encode($materias) ?> ;
     producto = document.getElementById('inputproductos').value;
 
     while (!band && i < articulos.length) {

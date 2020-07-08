@@ -1,5 +1,5 @@
 <!-- indicador de carga -->
-<div class="waiting" id="waiting">
+<div class="waiting" id="waiting" style='z-index:999999;'>
     <div style="top: 45%; left: 45%; position: fixed;">
         <!--<div class="progress progress active">
             <div class="progress-bar progress-bar-warning progress-bar-striped" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
@@ -39,18 +39,3 @@
     /*0.5 De Transparencia*/
 }
 </style>
-
-<script>
-function wo(texto) {
-    if (texto == '' || texto == null) {
-        $('#waitingText').html('Cargando ...');
-    } else {
-        $('#waitingText').html(texto);
-    }
-    $('#waiting').fadeIn('slow');
-}
-/* Cierra cuadro cargando ajax */
-function wc() {
-    $('#waiting').fadeOut('slow');
-}
-</script>

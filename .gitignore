@@ -47,3 +47,5 @@ assets/koolreport_assets/4007379878/KoolReport.js
 assets/koolreport_assets/4007379878/KoolReport.subReport.js
 
 lib/bower_components/bootstrap-datepicker.rar
+
+*.swp

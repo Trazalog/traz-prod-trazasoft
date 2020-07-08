@@ -115,11 +115,11 @@ foreach ($establecimientos as $fila) {
             </div>
             <div class="row" style="margin-top:40px">
                 <div class="col-md-1 col-xs-12"><label class="form-label">Bruto*:</label></div>
-                <div class="col-md-3 col-xs-12"><input type="number" class="form-control" onchange=actualizaNeto()
+                <div class="col-md-3 col-xs-12"><input type="number" class="form-control" onkeyup="actualizaNeto()"
                         id="bruto" name="bruto"></div>
                 <div class="col-md-1 col-xs-12"><label class="form-label">Tara*:</label></div>
                 <div class="col-md-3 col-xs-12"><input type="number" class="form-control" id="tara"
-                        onchange=actualizaNeto() name="tara"></div>
+                        onkeyup="actualizaNeto()" name="tara"></div>
                 <div class="col-md-1 col-xs-12"><label class="form-label">Neto:</label></div>
                 <div class="col-md-3 col-xs-12"><input type="text" class="form-control" id="neto" name="neto" readonly>
                 </div>
@@ -283,7 +283,27 @@ function obtenerFormularioCamion(){
     return formToObject(dataForm);
 }
 
+function validarFormulario(){
+    $('#frm-info').find('.form-control').each(function() {
+        if(this.value != ""){
+            alert('Complete los campos obligatorios(*)');
+            return false;
+        }
+    })
+
+    $('#frm-camion').find('.form-control').each(function(){
+        if(this.value == ""){
+            alert('Datos Camión: Complete los campos obligatorios(*)');
+            return false;
+        }
+    });
+}
+
 function addCamion(msj = true) {
+
+
+    if(!validarFormulario()) return;
+    
     var frmCamion = new FormData($('#frm-camion')[0]);
     var frmInfo = new FormData($('#frm-info')[0]);
     var dataForm = mergeFD(frmInfo, frmCamion);
@@ -300,8 +320,10 @@ function addCamion(msj = true) {
         data: dataForm,
         success: function(rsp) {
             if (rsp.status) {
-                $('#frm-camion')[0].reset();
-                $('#frm-info')[0].reset();
+                if($('#bloque_descarga:visible').length == 0){
+                    $('#frm-camion')[0].reset();
+                    $('#frm-info')[0].reset();
+                }
                 if (msj) alert('Datos Guardados con Éxito');
             } else {
                 alert('Fallo al Guardar Datos del Camión');

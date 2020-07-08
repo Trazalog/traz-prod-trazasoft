@@ -8,9 +8,15 @@ class Test extends CI_Controller
         parent::__construct();
     }
 
-    public function index()
+    public function test()
     {
-        echo formatFechaPG("2020-01-01+00:00");
+        // $contract = [
+        //     'pIdPedidoMaterial' => 711,
+        // ];
+        // $rsp = $this->bpm->lanzarProceso(BPM_PROCESS_ID_PEDIDOS_NORMALES, $contract);
+        // echo json_encode($rsp);
+        $this->load->model('general/Etapas');
+        echo json_encode($this->Etapas->setCaseIdPedido("712", "1010"));
     }
 
     public function index6($id = 389)
