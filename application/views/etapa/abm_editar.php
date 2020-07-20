@@ -150,9 +150,11 @@ function validarEtapa() {
         </div>
         <!-- /.box-header -->
         <div class="box-body">
-            <div class="row" style="margin-top: 40px ">
-                <div class="col-xs-12">
-                    <div class="nav-tabs-custom">
+        <tareas>
+            <script>
+                $('tareas').load('<?php echo TST ?>Tarea/planificar/BATCH/' + $('#batch_id').val());
+            </script>
+        </tareas>
 
                         <!-- /.box-body -->
                         <div class="modal-footer">
@@ -179,9 +181,7 @@ function validarEtapa() {
                             ?>
                             <button class="btn btn-default" onclick="back()">Cerrar</button>
                         </div>
-                    </div>
-                </div>
-            </div>
+                  
         </div>
         <!-- /.box -->
     </div>
