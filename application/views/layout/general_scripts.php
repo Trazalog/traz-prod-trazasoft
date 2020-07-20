@@ -65,21 +65,21 @@ $.widget.bridge('uibutton', $.ui.button);
 
 
        <script>
-function conf(fun, e, pregunta = 'Confirma realizar esta acción?', msj = "Esta acción no se pordrá revertir") {
-    Swal.fire({
-        title: pregunta,
-        text: msj,
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Si",
-    }).then((result) => {
-        if (result.value) {
-            fun(e);
-        }
-    });
-}
+    function conf(fun, e, pregunta = 'Confirma realizar esta acción?', msj = "Esta acción no se pordrá revertir") {
+        Swal.fire({
+            title: pregunta,
+            text: msj,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Si",
+        }).then((result) => {
+            if (result.value) {
+                fun(e);
+            }
+        });
+    }
 
 function hecho() {
     alert('Hecho');

@@ -3,9 +3,7 @@
 if (!function_exists('bolita')) {
     function bolita($texto, $color, $detalle = null)
     {
-        return
-
-            '<span data-toggle="tooltip" title="' . $detalle . '" class="badge bg-' . $color . ' estado">' . $texto . '</span>';
+        return "<span data-toggle='tooltip' title='$detalle' class='badge bg-$color estado'>$texto </span>";
     }
 
     function estadoPedido($estado)

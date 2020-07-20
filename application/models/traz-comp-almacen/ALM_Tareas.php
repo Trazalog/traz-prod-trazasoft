@@ -55,13 +55,13 @@ class ALM_Tareas extends CI_Model
         return $array;
     }
 
-    public function deplegarVista($tarea)
+    public function desplegarVista($tarea)
     {
-        switch ($tarea['displayName']) {
+        switch ($tarea->nombreTarea) {
 
             case 'Aprueba pedido de Recursos Materiales':
 
-                $data['pema_id'] = $this->Notapedidos->getXCaseId($tarea['rootCaseId'])['pema_id'];
+                $data['pema_id'] = $this->Notapedidos->getXCaseId($tarea->caseId)['pema_id'];
 
                 return $this->load->view(ALM . 'proceso/tareas/pedido_materiales/view_aprueba_pedido', $data, true);
 
@@ -73,17 +73,17 @@ class ALM_Tareas extends CI_Model
                     $this->load->model('Otrabajos');
                 }
 
-                $proceso = $tarea['processId'];
+                $proceso = $tarea->processId;
 
                 $aux = null;
 
                 if ($proceso == BPM_PROCESS_ID_PEDIDOS_EXTRAORDINARIOS) {
 
-                    $aux = $this->Pedidoextra->getXCaseId($tarea['rootCaseId']);
+                    $aux = $this->Pedidoextra->getXCaseId($tarea->caseId);
 
                 } else {
 
-                    $aux = $this->Notapedidos->getXCaseId($tarea['rootCaseId']);
+                    $aux = $this->Notapedidos->getXCaseId($tarea->caseId);
 
                 }
 
@@ -102,17 +102,17 @@ class ALM_Tareas extends CI_Model
 
             case 'Comunica Rechazo':
 
-                $proceso = $tarea['processId'];
+                $proceso = $tarea->processId;
                 $res = null;
                 $obj = new stdClass();
 
                 if ($proceso == BPM_PROCESS_ID_PEDIDOS_EXTRAORDINARIOS) {
 
-                    $res = $this->Pedidoextra->getXCaseId($tarea['rootCaseId']);
+                    $res = $this->Pedidoextra->getXCaseId($tarea->caseId);
 
                 } else {
 
-                    $res = $this->Notapedidos->getXCaseId($tarea['rootCaseId']);
+                    $res = $this->Notapedidos->getXCaseId($tarea->caseId);
 
                 }
 
@@ -135,7 +135,7 @@ class ALM_Tareas extends CI_Model
 
             case 'Aprueba pedido de Recursos Materiales Extraordinarios':
 
-                $data = $this->Pedidoextra->getXCaseId($tarea['rootCaseId']);
+                $data = $this->Pedidoextra->getXCaseId($tarea->caseId);
 
                 return $this->load->view(ALM . 'proceso/tareas/pedido_extraordinario/view_aprueba_pedido', $data, true);
 
@@ -143,7 +143,7 @@ class ALM_Tareas extends CI_Model
 
             case 'Solicita Compra de Recursos Materiales Extraordiinarios':
 
-                $data = $this->Pedidoextra->getXCaseId($tarea['rootCaseId']);
+                $data = $this->Pedidoextra->getXCaseId($tarea->caseId);
 
                 return $this->load->view(ALM . 'proceso/tareas/pedido_extraordinario/view_aprueba_compras', $data, true);
 
@@ -151,7 +151,7 @@ class ALM_Tareas extends CI_Model
 
             case 'Comunica Rechazo por Compras':
 
-                $data['motivo'] = $this->Pedidoextra->getXCaseId($tarea['rootCaseId'])['motivo_rechazo'];
+                $data['motivo'] = $this->Pedidoextra->getXCaseId($tarea->caseId)['motivo_rechazo'];
 
                 return $this->load->view(ALM . 'proceso/tareas/pedido_materiales/view_comunica_rechazo', $data, true);
 
@@ -159,7 +159,7 @@ class ALM_Tareas extends CI_Model
 
             case 'Generar Pedido de Materiales':
 
-                $peex = $this->Pedidoextra->getXCaseId($tarea['rootCaseId']);
+                $peex = $this->Pedidoextra->getXCaseId($tarea->caseId);
 
                 $this->load->model('traz-comp/Componentes');
 
@@ -182,7 +182,7 @@ class ALM_Tareas extends CI_Model
     public function getContrato($tarea, $form)
     {
 
-        switch ($tarea['displayName']) {
+        switch ($tarea->nombreTarea) {
             case 'Aprueba pedido de Recursos Materiales':
 
                 $this->Notapedidos->setMotivoRechazo($form['pema_id'], $form['motivo_rechazo']);
@@ -257,7 +257,7 @@ class ALM_Tareas extends CI_Model
 
                 $this->Pedidoextra->setPemaId($form['peex_id'], $form['pema_id']);
 
-                $this->Notapedidos->setCaseId($form['pema_id'], $tarea['rootCaseId']);
+                $this->Notapedidos->setCaseId($form['pema_id'], $tarea->caseId);
 
                 return;
 
