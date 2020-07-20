@@ -130,6 +130,12 @@ define('FILES', 'files/');
 #COMPONENTE TAREAS
 define('TSK', 'traz-comp-tareas/');
 
+#COMPONENTE TAREASSESTANDAR
+define('TST', 'traz-comp-tareasestandar/');
+define('REST_TST', 'http://10.142.0.7:8280/services/TareasSTD/');
+define('CAL','traz-comp-calendar/');
+
+
 #REST
 define('TAREAS_ASIGNAR', 'traz-comp-tareasestandar/asignar');
 
@@ -151,7 +157,7 @@ define('RECURSO_CONSUMO', 'CONSUMO');
 # >> Proyecto
 # Default View
 #define('DEFAULT_VIEW', 'general/Reporte/tareasOperario');
-define('DEFAULT_VIEW', 'general/Etapa');
+define('DEFAULT_VIEW', TST.'Tarea/planificar');
 
 #TRAZASOFT
 define('PROVEEDOR_INTERNO', 1000);
