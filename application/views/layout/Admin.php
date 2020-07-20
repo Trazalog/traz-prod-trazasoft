@@ -49,14 +49,19 @@
 
     <link rel="stylesheet" href="<?php echo base_url(LIB) ?>swal/dist/sweetalert2.min.css">
 
+    <script src="<?php echo base_url(LIB)?>props\notificaciones.js"></script>
+    <script src="<?php echo base_url(LIB)?>props\date.format.js"></script>
+    <script src="<?php echo base_url(LIB)?>props\json.js"></script>
+
     <style>
-     .mr-2{
-       margin-right: 5px;
-     }
-     .ml-2{
-       margin-left: 5px;
-     }
-  </style>
+    .mr-2 {
+        margin-right: 5px;
+    }
+
+    .ml-2 {
+        margin-left: 5px;
+    }
+    </style>
 
 </head>
 
@@ -130,6 +135,8 @@
             <!--<strong>Copyright &copy; 2014-2016 <a href="https://adminlte.io">Almsaeed Studio</a>.</strong> All rights
     reserved. -->
         </footer>
+
+        <?php $this->load->view('layout/modal_generico') ?>
         <?php $this->load->view('layout/general_scripts') ?>
         <?php
           $this->load->view("layout/Panel_Derecho");
@@ -138,7 +145,7 @@
     </div>
     <!-- ./wrapper -->
 
- 
+
 
     <script>
     linkTo("<?php echo DEFAULT_VIEW ?>");
