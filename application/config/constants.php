@@ -121,6 +121,7 @@ define('ASP_115', 'Error al Leer Variable');
 
 #COMPONENTE ALMACENES
 define('ALM', 'traz-comp-almacen/');
+define('REST_ALM', 'http://10.142.0.7:8280/services/ALMDataService/');
 define('viewOT', false);
 
 #COMPONENTE FORMULARIOS
@@ -139,12 +140,12 @@ define('CAL','traz-comp-calendar/');
 #REST
 define('TAREAS_ASIGNAR', 'traz-comp-tareasestandar/asignar');
 
-define('REST', 'http://10.142.0.7:8280/services/ProduccionDataService/');
-define('RESTPT', 'http://10.142.0.7:8280/services/produccionTest/');
-define('REST_TDS', 'http://10.142.0.7:8280/services/TrazabilidadDataService/');
-define('REST2', 'http://10.142.0.7:8280/services/ProduccionDataService');
-define('REST3', 'http://10.142.0.7:8280/services/produccionTest');
-define('REST4', 'http://10.142.0.7:8280/services/TrazabilidadDataService');
+define('REST', 'http://10.142.0.7:8280/services/PRDDataService/');
+define('RESTPT', 'http://10.142.0.7:8280/services/PRDDataService/');
+define('REST_TDS', 'http://10.142.0.7:8280/services/PRDDataService/');
+define('REST2', 'http://10.142.0.7:8280/services/PRDDataService');
+define('REST3', 'http://10.142.0.7:8280/services/PRDDataService');
+define('REST4', 'http://10.142.0.7:8280/services/PRDDataService');
 
 //TODO:AGREGAR AL CONSTANT ORIGINAL
 #RECURSOS_LOTES
@@ -156,8 +157,8 @@ define('RECURSO_CONSUMO', 'CONSUMO');
 
 # >> Proyecto
 # Default View
-#define('DEFAULT_VIEW', 'general/Reporte/tareasOperario');
-define('DEFAULT_VIEW', TST.'Tarea/planificar');
+define('DEFAULT_VIEW', 'general/Etapa');
+#define('DEFAULT_VIEW', TST.'Tarea/planificar');
 
 #TRAZASOFT
 define('PROVEEDOR_INTERNO', 1000);

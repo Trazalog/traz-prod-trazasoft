@@ -102,7 +102,7 @@
 
         if (!validar_campos_obligatorios()) return;
 
-        var id = $('#idTarBonita').val();
+        var id = $('#taskId').val();
 
         var pema_id = $('#pema').val();
 
@@ -129,7 +129,7 @@
         $.ajax({
             type: 'POST',
             data: {completa, info_entrega: get_info_entrega(), detalles, cantidades, pema_id},
-            url: '<?php base_url() ?>index.php/<?php echo ALM ?>Proceso/cerrarTarea/' + id,
+            url: '<?php echo BPM ?>Proceso/cerrarTarea/' + id,
             success: function (data) {
 
                back();

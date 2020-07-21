@@ -127,6 +127,19 @@
 
 
     } ?>
+
+    <div class="box-body">
+    
+    <?php if($tarea){ ?>
+        <pema>
+            <script>
+                $('pema').load('<?php echo BPM . 'Proceso/detalleTarea/' . $tarea ?>');
+            </script>
+        </pema>
+    <?php  } ?>
+    
+    </div>
+
 </div>
 <!-- ./ Origen -->
 

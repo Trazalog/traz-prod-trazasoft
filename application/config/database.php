@@ -74,7 +74,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 $active_group = 'default';
 $query_builder = true;
 $db['default'] = array(
-    'hostname' => '10.142.0.3',
+    'hostname' => '10.142.0.7',
     'username' => 'postgres',
     'password' => '!Password00',
     'database' => 'tools_prod_t',
@@ -93,5 +93,5 @@ $db['default'] = array(
     'failover' => array(),
     'save_queries' => true,
     'port' => '5432',
-    'dsn' => 'pgsql:host=10.142.0.3;port=5432;dbname=tools_prod_t'
+    'dsn' => 'pgsql:host=10.142.0.7;port=5432;dbname=tools_prod_t'
 );

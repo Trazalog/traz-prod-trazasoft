@@ -46,7 +46,7 @@ class REST
                     }
 
                     if ($data) {
-                        $url = sprintf("%s?%s", $url, http_build_query($data));
+                        $url = sprintf("%s?%s", $url, http_build_query(json_decode($data)));
                     }
 
             }

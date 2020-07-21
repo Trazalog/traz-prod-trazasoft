@@ -268,6 +268,11 @@ class Etapa extends CI_Controller
     public function editar()
     {
         $id = $this->input->get('id'); // batch_id
+
+
+        $data['tarea'] = $this->Etapas->validarPedidoMaterial($id);
+
+
         $this->load->model(ALM . 'Articulos');
         $data['articulos'] = $this->Articulos->obtenerXTipos(array('Proceso','Final'));
 
@@ -512,4 +517,6 @@ class Etapa extends CI_Controller
         $rsp = $this->Etapas->finalizarLote($id);
         echo json_encode($rsp);
     }
+
+ 
 }

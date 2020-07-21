@@ -257,6 +257,7 @@ class Etapas extends CI_Model
         return $rsp;
     }
 
+
     public function obtenerMateriales($id_etapa)
     {
         $resource = "/etapas/materiales/$id_etapa";
@@ -284,5 +285,23 @@ class Etapas extends CI_Model
             $rsp['data']  = json_decode($rsp['data'])->salidas->salida;
         }
         return $rsp;
+    }
+
+    public function validarPedidoMaterial($batch_id)
+    {
+        $url = REST_ALM."pedidos/batch/$batch_id";
+
+        $rsp = wso2($url);
+        
+        if($rsp['status'] && $rsp['data'])
+        {
+            $caseId = $rsp['data'][0]->case_id;
+
+            $tarea = $this->bpm->ObtenerTaskidXNombre(BPM_PROCESS_ID_PEDIDOS_NORMALES, $caseId, "Entrega pedido pendiente");
+
+            return $tarea;
+        }
+
+        return false;
     }
 }

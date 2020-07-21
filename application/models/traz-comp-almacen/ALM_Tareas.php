@@ -55,6 +55,11 @@ class ALM_Tareas extends CI_Model
         return $array;
     }
 
+    public function desplegarCabecera($tarea)
+    {
+        # code...
+    }
+
     public function desplegarVista($tarea)
     {
         switch ($tarea->nombreTarea) {

@@ -20,7 +20,9 @@ class BPM
 
         $url = BONITA_URL . $resource . userId();
 
-        $rsp = $this->REST->callAPI('GET', $url, false, $this->loggin(BPM_ADMIN_USER, BPM_ADMIN_PASS));
+        $token = $this->loggin(BPM_ADMIN_USER, BPM_ADMIN_PASS);
+
+        $rsp = $this->REST->callAPI('GET', $url, false, $token);
 
         if (!$rsp['status']) {
 
