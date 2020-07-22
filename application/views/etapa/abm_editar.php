@@ -144,17 +144,17 @@ function validarEtapa() {
 
 
     <!-- Tareas -->
-    <div class="box box-primary">
-        <div class="box-header">
-            <h4 class="box-title">Tareas</h4>
-        </div>
-        <!-- /.box-header -->
+        
+            <tareas>
+                <script>
+                    $('tareas').load('<?php echo TST ?>Tarea/planificar/BATCH/' + $('#batch_id').val());
+                </script>
+            </tareas>
+
+
+        <div class="box box-primary">
+     
         <div class="box-body">
-        <tareas>
-            <script>
-                $('tareas').load('<?php echo TST ?>Tarea/planificar/BATCH/' + $('#batch_id').val());
-            </script>
-        </tareas>
 
                         <!-- /.box-body -->
                         <div class="modal-footer">

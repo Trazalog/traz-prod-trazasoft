@@ -291,7 +291,7 @@ class Etapas extends CI_Model
 
     public function validarPedidoMaterial($batch_id)
     {
-        if (userId()) { #Pregunta Magica
+        if (PLANIF_AVANZA_TAREA) { #Pregunta Magica
 
             $url = REST_ALM . "pedidos/batch/$batch_id";
 

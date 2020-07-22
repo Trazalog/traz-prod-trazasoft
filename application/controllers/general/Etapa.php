@@ -269,7 +269,6 @@ class Etapa extends CI_Controller
     {
         $id = $this->input->get('id'); // batch_id
 
-
         $data['tarea'] = $this->Etapas->validarPedidoMaterial($id);
 
 

@@ -1,15 +1,6 @@
-<table class="table table-hover table-striped">
-    <thead>
-        <th>Lista articulos</th>
-    </thead>
-    <tbody><?php 
-    foreach ($articulos as $o) {
-        echo "<tr>";
-            
-        echo "<td>$o->barcode</td>";
-
-        echo "</tr>";
-    }
-?>
-    </tbody>
-</table>
+<div class="box" id="box">
+<h1>Holis</h1>
+</div>
+<script>
+wbox('#box');
+</script>
