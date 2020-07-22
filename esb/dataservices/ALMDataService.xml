@@ -1,0 +1,84 @@
+<data enableBatchRequests="true" enableBoxcarring="true" name="ALMDataService" transports="http https local">
+   <config enableOData="false" id="produccionDS">
+      <property name="carbon_datasource_name">ToolsDataSource</property>
+   </config>
+   <query id="getArticulos" useConfig="produccionDS">
+      <sql>SELECT A.*, coalesce(sum(cantidad), 0) as stock&#xd;FROM alm.alm_articulos A&#xd;LEFT JOIN alm.alm_lotes C ON C.arti_id = A.arti_id&#xd;WHERE A.empr_id = cast(:empr_id as integer)&#xd;AND not A.eliminado&#xd;GROUP BY A.arti_id</sql>
+      <result outputType="json">{&#xd;    "articulos": {&#xd;        "articulo": [&#xd;            {&#xd;                "arti_id": "$arti_id",&#xd;                "barcode": "$barcode",&#xd;                "titulo": "$descripcion",&#xd;                "descripcion": "$descripcion",&#xd;                "costo": "$costo",&#xd;                "cantidad_caja": "$cantidad_caja",&#xd;                "punto_pedido": "$punto_pedido",&#xd;                "estado": "$estado",&#xd;                "unidad_medida": "$unidad_medida",&#xd;                "es_loteado": "$es_loteado",&#xd;                "stock": "$stock"&#xd;            }&#xd;        ]&#xd;    }&#xd;}</result>
+      <param name="empr_id" sqlType="STRING"/>
+   </query>
+   <query id="setDetallePedido" useConfig="produccionDS">
+      <sql>INSERT INTO alm.alm_deta_pedidos_materiales&#xd;(cantidad, pema_id, arti_id)&#xd;VALUES(cast(:cantidad as float4), cast(:pema_id as integer), cast(:arti_id as integer));</sql>
+      <param name="cantidad" sqlType="STRING"/>
+      <param name="pema_id" sqlType="STRING"/>
+      <param name="arti_id" sqlType="STRING"/>
+   </query>
+   <query id="setPedido" useConfig="produccionDS">
+      <sql>INSERT INTO alm.alm_pedidos_materiales&#xd;(fecha, justificacion, case_id, estado, empr_id, batch_id)&#xd;VALUES(TO_DATE(:fecha, 'YYYY-MM-DD'), :justificacion, cast(:case_id as integer), :estado, cast(:empr_id as integer), cast(:batch_id as integer)) returning pema_id;</sql>
+      <result outputType="json">{&#xd;  "respuesta": {&#xd;    "pema_id":"$pema_id"&#xd;  }&#xd;}</result>
+      <param name="fecha" sqlType="STRING"/>
+      <param name="justificacion" sqlType="STRING"/>
+      <param name="case_id" sqlType="STRING"/>
+      <param name="estado" sqlType="STRING"/>
+      <param name="empr_id" sqlType="STRING"/>
+      <param name="batch_id" sqlType="STRING"/>
+   </query>
+   <query id="deleteDetalle" useConfig="produccionDS">
+      <sql>DELETE FROM alm.alm_deta_pedidos_materiales&#xd;WHERE pema_id = cast(:pema_id as integer)</sql>
+      <param name="pema_id" sqlType="STRING"/>
+   </query>
+   <query id="getPedido" useConfig="produccionDS">
+      <sql>select *&#xd;from alm.alm_pedidos_materiales&#xd;where pema_id = cast(:pema_id as integer)&#xd;and empr_id = cast(:empr_id as integer)&#xd;and not eliminado</sql>
+      <result outputType="json">{&#xd;  "pedidos": {&#xd;    "pedido": [&#xd;        {&#xd;            "pema_id":"$pema_id",&#xd;            "case_id":"$case_id",&#xd;            "estado":"$estado",&#xd;            "batch_id":"$batch_id",&#xd;            "fecha":"$fecha",&#xd;            "justificacion":"$justificacion",&#xd;            "motivo_rechazo":"$motivo_rechazo",&#xd;            "@getDetallePedido":"$pema_id-&gt;pema_id"&#xd;        }&#xd;    ]&#xd;  }&#xd;}</result>
+      <param name="pema_id" sqlType="STRING"/>
+      <param name="empr_id" sqlType="STRING"/>
+   </query>
+   <query id="getDetallePedido" useConfig="produccionDS">
+      <sql>select pm.*, a.barcode, a.descripcion&#xd;from alm.alm_deta_pedidos_materiales pm&#xd;join alm.alm_articulos a&#xd;on a.arti_id = pm.arti_id&#xd;where pema_id = cast(:pema_id as integer)&#xd;and not eliminado</sql>
+      <result outputType="json">{&#xd;  "detalles": {&#xd;    "detalle": [&#xd;        {&#xd;            "depe_id":"$depe_id",&#xd;            "cantidad":"$cantidad",&#xd;            "resto":"$resto",&#xd;            "arti_id":"$arti_id",&#xd;"barcode":"$barcode",&#xd;"descripcion":"$descripcion"&#xd;        }&#xd;    ]&#xd;  }&#xd;}</result>
+      <param name="pema_id" sqlType="STRING"/>
+   </query>
+   <query id="getPedidoXBatch" useConfig="produccionDS">
+      <sql>SELECT *&#xd;FROM alm.alm_pedidos_materiales&#xd;WHERE batch_id = cast(:batch_id as integer)&#xd;and not eliminado</sql>
+      <result outputType="json">{&#xd;  "pedidos": {&#xd;    "pedido": [&#xd;        {&#xd;            "pema_id":"$pema_id",&#xd;            "case_id":"$case_id",&#xd;            "estado":"$estado",&#xd;            "batch_id":"$batch_id",&#xd;            "fecha":"$fecha",&#xd;            "justificacion":"$justificacion",&#xd;            "motivo_rechazo":"$motivo_rechazo",&#xd;         }&#xd;    ]&#xd;  }&#xd;}</result>
+      <param name="batch_id" sqlType="STRING"/>
+   </query>
+   <resource method="GET" path="/articulos/{empr_id}">
+      <call-query href="getArticulos">
+         <with-param name="empr_id" query-param="empr_id"/>
+      </call-query>
+   </resource>
+   <resource method="POST" path="/pedidos">
+      <call-query href="setPedido">
+         <with-param name="fecha" query-param="fecha"/>
+         <with-param name="justificacion" query-param="justificacion"/>
+         <with-param name="case_id" query-param="case_id"/>
+         <with-param name="estado" query-param="estado"/>
+         <with-param name="empr_id" query-param="empr_id"/>
+         <with-param name="batch_id" query-param="batch_id"/>
+      </call-query>
+   </resource>
+   <resource method="POST" path="/pedidos/detalle">
+      <call-query href="setDetallePedido">
+         <with-param name="cantidad" query-param="cantidad"/>
+         <with-param name="pema_id" query-param="pema_id"/>
+         <with-param name="arti_id" query-param="arti_id"/>
+      </call-query>
+   </resource>
+   <resource method="DELETE" path="/pedidos/detalle">
+      <call-query href="deleteDetalle">
+         <with-param name="pema_id" query-param="pema_id"/>
+      </call-query>
+   </resource>
+   <resource method="GET" path="/pedidos/{pema_id}/{empr_id}">
+      <call-query href="getPedido">
+         <with-param name="pema_id" query-param="pema_id"/>
+         <with-param name="empr_id" query-param="empr_id"/>
+      </call-query>
+   </resource>
+   <resource method="GET" path="/pedidos/batch/{batch_id}">
+      <call-query href="getPedidoXBatch">
+         <with-param name="batch_id" query-param="batch_id"/>
+      </call-query>
+   </resource>
+</data>

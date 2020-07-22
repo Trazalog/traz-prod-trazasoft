@@ -560,12 +560,25 @@
       <param name="reci_nombre" sqlType="STRING"/>
       <param name="reci_id" sqlType="STRING"/>
    </query>
-
-	      <operation name="getprod">
+   <query id="getRecipientesFull" useConfig="ToolsDataSource">
+      <sql>select re.reci_id&#xd;      ,re.nombre&#xd;      ,re.tipo&#xd;      ,ta.valor care_id&#xd;      ,ta.descripcion categoria_recipiente&#xd;      ,re.estado&#xd;      ,re.depo_id&#xd;      ,es.esta_id&#xd;       ,re.row&#xd;        ,re.col&#xd;from prd.recipientes as re&#xd;     ,alm.alm_depositos as de  &#xd;	 ,prd.establecimientos as es &#xd;	 ,core.tablas ta&#xd;     ,(select :tipo as tipo) as tipo&#xd;     ,(SELECT :care_id AS care_id) AS care&#xd;     ,(select :estado as estado) as estado&#xd;     ,(select :esta_id  as esta_id) as esta&#xd;     ,(SELECT :depo_id AS depo_id) AS depo&#xd;where de.depo_id = re.depo_id&#xd;AND es.esta_id =  de.esta_id&#xd;AND re.care_id = ta.tabl_id &#xd;AND re.tipo = case when tipo.tipo = 'TODOS' then re.tipo else tipo.tipo end&#xd;and re.estado = case when estado.estado = 'TODOS' then re.estado else estado.estado end &#xd;and re.care_id = case when care.care_id = 'TODOS' then re.care_id else care.care_id end &#xd;and re.depo_id = case when depo.depo_id = 'TODOS' then re.depo_id else CAST(depo.depo_id AS integer) end &#xd;and es.esta_id = case when esta.esta_id = 'TODOS' then es.esta_id else CAST(esta.esta_id AS integer) END</sql>
+      <result outputType="json">{&#xd;    "recipientes": {&#xd;        "recipiente": [&#xd;            {&#xd;                "reci_id": "$reci_id",&#xd;                "nombre": "$nombre",&#xd;                "tipo": "$tipo",&#xd;                "care_id":"$care_id",&#xd;                "categoria_recipiente":"$categoria_recipiente",&#xd;                "estado": "$estado",&#xd;                "depo_id": "$depo_id",&#xd;                "esta_id":"$esta_id",&#xd;                "row":"$row",&#xd;                "col":"$col"&#xd;            }&#xd;        ]&#xd;    }&#xd;}</result>
+      <param name="tipo" sqlType="STRING"/>
+      <param name="estado" sqlType="STRING"/>
+      <param name="esta_id" sqlType="STRING"/>
+      <param name="depo_id" sqlType="STRING"/>
+      <param name="care_id" sqlType="STRING"/>
+   </query>
+   <operation name="getprod">
       <call-query href="getProduccion">
          <with-param name="etapa" query-param="etapa"/>
          <with-param name="fechasta" query-param="fechasta"/>
          <with-param name="fecdesde" query-param="fecdesde"/>
+      </call-query>
+   </operation>
+   <operation name="etapaxId">
+      <call-query href="getEtapaPorId">
+         <with-param name="etap_id" query-param="etap_id"/>
       </call-query>
    </operation>
    <resource method="POST" path="/lote">
@@ -695,13 +708,6 @@
    <resource method="GET" path="/recursos/list">
       <call-query href="getRecursos"/>
    </resource>
-
-
-   <operation name="etapaxId">
-      <call-query href="getEtapaPorId">
-         <with-param name="etap_id" query-param="etap_id"/>
-      </call-query>
-   </operation>
    <resource method="GET" path="/establecimiento">
       <call-query href="getEstablecimiento"/>
    </resource>
@@ -880,7 +886,6 @@
          <with-param name="etap_id" query-param="etap_id"/>
       </call-query>
    </resource>
-
    <resource method="GET" path="/camion_establecimiento/{esta_id}">
       <call-query href="getCamionEstablecimiento">
          <with-param name="esta_id" query-param="esta_id"/>
@@ -1143,5 +1148,13 @@
          <with-param name="reci_id" query-param="reci_id"/>
       </call-query>
    </resource>
+   <resource method="GET" path="/recipientes/establecimiento/{esta_id}/deposito/{depo_id}/estado/{estado}/tipo/{tipo}/categoria/{care_id}">
+      <call-query href="getRecipientesFull">
+         <with-param name="tipo" query-param="tipo"/>
+         <with-param name="estado" query-param="estado"/>
+         <with-param name="esta_id" query-param="esta_id"/>
+         <with-param name="depo_id" query-param="depo_id"/>
+         <with-param name="care_id" query-param="care_id"/>
+      </call-query>
+   </resource>
 </data>
-
