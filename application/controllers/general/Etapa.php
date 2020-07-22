@@ -518,5 +518,11 @@ class Etapa extends CI_Controller
         echo json_encode($rsp);
     }
 
+    public function validarPedidoMaterial($batch_id)
+    {
+        $rsp['tarea'] = $this->Etapas->validarPedidoMaterial($batch_id);
+        echo json_encode($rsp);
+    }
+
  
 }

@@ -157,7 +157,8 @@ define('RECURSO_CONSUMO', 'CONSUMO');
 
 # >> Proyecto
 # Default View
-define('DEFAULT_VIEW', 'general/Etapa');
+#define('DEFAULT_VIEW', 'general/Etapa');
+define('DEFAULT_VIEW', 'Test');
 #define('DEFAULT_VIEW', TST.'Tarea/planificar');
 
 #TRAZASOFT

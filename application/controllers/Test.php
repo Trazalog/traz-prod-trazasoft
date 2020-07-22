@@ -10,8 +10,9 @@ class Test extends CI_Controller
 
     public function index()
     {
-       $url = REST_ALM.'pedidos/batch/6801';
-       show(wso2($url,'aaaa'));
+        $data['articulos'] = wso2(REST_ALM . 'articulos/1')['data'];
+       
+        $this->load->view('test', $data);
     }
 
 }
