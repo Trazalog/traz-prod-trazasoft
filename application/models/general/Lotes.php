@@ -84,4 +84,24 @@ class Lotes extends CI_Model
         return $rsp;
     }
 
+  public function getBatchIdLote($lote_id)
+  {
+    $path = "lote/". $lote_id."/ultimo";
+    $url = RESTPT . $path;
+    $rsp = $this->rest->callApi('GET', $url);
+    if ($rsp['status']) $rsp['data'] = json_decode($rsp['data'])->lotes->lote;
+    return $rsp;
+  }
+  
+    public function trazabilidadBatch($batch_id)
+  {
+    $path = "lote/" . $batch_id . "/trazabilidad";
+    $url = RESTPT . $path;
+    $rsp = $this->rest->callApi('GET', $url);
+    if ($rsp['status']) {
+      $rsp['data'] = json_decode($rsp['data'])->lotes->lote;
+    }
+    return $rsp;
+  }
+
 }

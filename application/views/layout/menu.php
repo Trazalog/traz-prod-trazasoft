@@ -18,8 +18,10 @@
       </li>
       <li><a class="link" href="#" data-link="general/Formula"><i class="fa fa-magic"></i>Fórmulas</a>
       </li>
-      <li><a class="link" href="#" data-link="general/Establecimiento/asignarAEstablecimiento"><i class="fa fa-database"></i>Configurar establecimientos</a>
+      <li>
+        <a class="link" href="#" data-link="general/Establecimiento/asignarAEstablecimiento"><i class="fa fa-database"></i>Configurar establecimientos</a>
       </li>
+      <li><a class="link" href="#" data-link="general/Lote/informeTrazabilidad"><i class="fa fa-sort-amount-desc"></i>Trazabilidad</a></li>
     </ul>
   </li>
 
@@ -32,17 +34,10 @@
     </a>
     <ul class="treeview-menu">
       <li><a class="link" href="#" data-link="general/Camion/recepcionCamion"><i class="fa fa-exchange"></i> Entrada | Recepción</a></li>
-      <li><a class="link" href="#" data-link="general/Camion/cargarCamion"><i class="fa fa-upload"></i>Carga
-          Camión</a>
-      </li>
-      <li><a class="link" href="#" data-link="general/Camion/salidaCamion"><i class="fa fa-download"></i>Descarga
-          Camión</a></li>
-      <li><a class="link" href="#" data-link="general/Camion/salidaCamion"><i class="fa  fa-external-link"></i>Salida Camion</a>
-      </li>
-      <li><a class="link" href="#" data-link="general/Camion/cargadeCamion"><i class="fa fa-list-ul"></i>Listado
-          Carga
-          Camion</a>
-      </li>
+      <li><a class="link" href="#" data-link="general/Camion/cargarCamion"><i class="fa fa-upload"></i>Carga camión</a></li>
+      <li><a class="link" href="#" data-link="general/Camion/salidaCamion"><i class="fa fa-download"></i>Descarga camión</a></li>
+      <li><a class="link" href="#" data-link="general/Camion/salidaCamion"><i class="fa  fa-external-link"></i>Salida camión</a></li>
+      <li><a class="link" href="#" data-link="general/Camion/cargadeCamion"><i class="fa fa-list-ul"></i>Listado carga camión</a></li>
     </ul>
   </li>
   <li class="treeview">
