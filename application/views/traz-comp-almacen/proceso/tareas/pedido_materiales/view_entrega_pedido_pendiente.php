@@ -31,19 +31,19 @@
 
 <hr>
 <div class="table-responsive">
-<h3>Pedido Materiales <small>Detalles del Pedido</small></h3>
-<table class="table table-striped">
-    <thead>
-        <th>Código Articulo</th>
-        <th>Descripción</th>
-        <th>Cant. Pedida</th>
-        <th>Cant. Entregada</th>
-        <th>Cant. Stock</th>
-        <th>Cant. a Entregar</th>
-        <th>a Entregar</th>
-    </thead>
-    <tbody id="entregas">
-        <?php
+    <h3>Pedido Materiales <small>Detalles del Pedido</small></h3>
+    <table class="table table-striped">
+        <thead>
+            <th>Código Articulo</th>
+            <th>Descripción</th>
+            <th>Cant. Pedida</th>
+            <th>Cant. Entregada</th>
+            <th>Cant. Stock</th>
+            <th>Cant. a Entregar</th>
+            <th>a Entregar</th>
+        </thead>
+        <tbody id="entregas">
+            <?php
 
             foreach ($list_deta_pema as $o) {
                 echo '<tr data-id="' . $o['arti_id'] . '">';
@@ -58,98 +58,116 @@
             }
 
 ?>
-    </tbody>
-</table>
+        </tbody>
+    </table>
 </div>
 
 
 
 <script>
+$("#fecha_entrega").datetimepicker({
+    format: 'YYYY-MM-DD',
+    locale: 'es',
+});
 
-    $("#fecha_entrega").datetimepicker({
-        format: 'YYYY-MM-DD',
-        locale: 'es',
+var select_row = null;
+
+function ver_info(e) {
+
+    select_row = $(e).closest('tr');
+
+    var id = $(select_row).data('id');
+
+    $('#modal_view .view').empty();
+    $('#modal_view .view').load("<?php echo ALM ?>Articulo/getLotes/" + id);
+    $('#modal_view').modal('show');
+}
+
+function validar_campos_obligatorios() {
+    var ban = true;
+    $('.required').each(function() {
+        ban = ban && ($(this).val() != '');
     });
 
-    var select_row = null;
-    function ver_info(e) {
-
-        select_row = $(e).closest('tr');
-
-        var id = $(select_row).data('id');
-
-        $('#modal_view .view').empty();
-        $('#modal_view .view').load("<?php echo ALM ?>Articulo/getLotes/" + id);
-        $('#modal_view').modal('show');
+    if (!ban) {
+        alert('Campos Obligatorios Incompletos (*)');
+        return false;
     }
 
-    function validar_campos_obligatorios() {
-        var ban = true;
-        $('.required').each(function () {
-            ban = ban && ($(this).val() != '');
-        });
-
-        if (!ban) { alert('Campos Obligatorios Incompletos (*)'); return false; }
-
-        return true;
-    }
-
-
+    return true;
+}
 </script>
 
 <script>
-    function cerrarTarea() {
+function cerrarTarea() {
 
-        if (!validar_campos_obligatorios()) return;
+    if (!validar_campos_obligatorios()) return;
 
-        var id = $('#idTarBonita').val();
+    var id = $('#taskId').val();
 
-        var pema_id = $('#pema').val();
+    var pema_id = $('#pema').val();
 
-        var cantidades =[];
+    var cantidades = [];
 
-        var detalles = [];
+    var detalles = [];
 
-        var completa = true;
+    var completa = true;
 
-        $('#entregas tr').each(function() {
-            const row = $(this).data('json');
-            completa = completa && (parseInt($(this).find('.pedido').html()) == (parseInt($(this).find('.entregado').html()) + parseInt($(this).find('.extraer').html()=='-'?0:$(this).find('.extraer').html())));
+    $('#entregas tr').each(function() {
+        const row = $(this).data('json');
+        completa = completa && (parseInt($(this).find('.pedido').html()) == (parseInt($(this).find('.entregado')
+            .html()) + parseInt($(this).find('.extraer').html() == '-' ? 0 : $(this).find(
+            '.extraer').html())));
 
-            if(row == null) return;
-            row.forEach(element => {
-                detalles.push(element);
-            });
-
-            cantidades.push({arti_id:$(this).data('id'), resto:$(this).attr('resto')});
+        if (row == null) return;
+        row.forEach(element => {
+            detalles.push(element);
         });
 
-        if(detalles == null || detalles.length == 0) {alert('No se Registraron Entregas');return;}
-
-        $.ajax({
-            type: 'POST',
-            data: {completa, info_entrega: get_info_entrega(), detalles, cantidades, pema_id},
-            url: '<?php base_url() ?>index.php/<?php echo ALM ?>Proceso/cerrarTarea/' + id,
-            success: function (data) {
-
-               back();
-
-            },
-            error: function (data) {
-                alert("Error");
-            }
+        cantidades.push({
+            arti_id: $(this).data('id'),
+            resto: $(this).attr('resto')
         });
+    });
+
+    if (detalles == null || detalles.length == 0) {
+        alert('No se Registraron Entregas');
+        return;
     }
 
-    function get_info_entrega() {
-        return JSON.stringify(obj = {
-            comprobante: $('#comprobante').val(),
-            fecha: $('#fecha_entrega').val(),
-            solicitante: $('#solicitante').val(),
-            dni: $('#dni').val(),
-            pema_id: $('#pema').val()
-        });
-    }
+    wbox('#view');
+    $.ajax({
+        type: 'POST',
+        data: {
+            completa,
+            info_entrega: get_info_entrega(),
+            detalles,
+            cantidades,
+            pema_id
+        },
+        url: '<?php echo BPM ?>Proceso/cerrarTarea/' + id,
+        success: function(data) {
+            if (!existFunction('actualizarEntrega')) back();
+
+        },
+        error: function(data) {
+            alert("Error");
+        },
+        complete:function(){
+            wbox();
+        }
+    });
+}
+
+function get_info_entrega() {
+    return JSON.stringify(obj = {
+        comprobante: $('#comprobante').val(),
+        fecha: $('#fecha_entrega').val(),
+        solicitante: $('#solicitante').val(),
+        dni: $('#dni').val(),
+        pema_id: $('#pema').val()
+    });
+}
 </script>
 
 

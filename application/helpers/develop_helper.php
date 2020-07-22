@@ -26,19 +26,20 @@ if (!function_exists('getJson')) {
         $parametros["http"]["method"] = $metodo;
         $parametros["http"]["header"] = $header;
 
-        log_message('DEBUG', '#REST #OUT-HEADER: '.json_encode($parametros));
+        log_message('DEBUG', '#REST #OUT-HEADER: ' . json_encode($parametros));
 
         return stream_context_create($parametros);
     }
 
-    function rsp($header, $msj = false, $data = false){
+    function rsp($header, $msj = false, $data = false)
+    {
 
-        log_message('DEBUG', '#REST #RESPONCE-HEADER: '.json_encode($header) .' | #RESPONCE-DATA: '.json_encode($data));
+        log_message('DEBUG', '#REST #RESPONCE-HEADER: ' . json_encode($header) . ' | #RESPONCE-DATA: ' . json_encode($data));
         return array(
             'status' => rspCode($header) < 300,
             'code' => rspCode($header),
             'msj' => $msj,
-            'data' => $data
+            'data' => $data,
         );
     }
 
@@ -50,10 +51,16 @@ if (!function_exists('getJson')) {
 
     function wso2Msj($rsp)
     {
-        $rsp['data'] = json_decode( $rsp['data']);
+        $rsp['data'] = json_decode($rsp['data']);
         $msj = $rsp['data']->Fault->faultstring;
         preg_match('~>>([^{]*)<<~i', $msj, $match);
         log_message('DEBUG', '#WSO2 #RESPONSE: ' . $match[1]);
         return $match[1];
+    }
+
+
+    function show($data)
+    {
+        echo "<pre>".json_encode($data, JSON_PRETTY_PRINT)."</pre>";
     }
 }

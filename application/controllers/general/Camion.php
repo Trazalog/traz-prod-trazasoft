@@ -104,7 +104,7 @@ class Camion extends CI_Controller
             "patente" => $camion['patente']
         );
         // }
-        $rsp = $this->Camiones->finalizarSalida($array);
+        $rsp = $this->Camiones->FSalida($array);
         echo json_encode($rsp);
         // var_dump($camion);
         // echo 'ok';
