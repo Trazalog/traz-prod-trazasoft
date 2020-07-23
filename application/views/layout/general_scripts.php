@@ -63,6 +63,9 @@ $.widget.bridge('uibutton', $.ui.button);
        <!-- SWAL ALERT -->
        <script src="<?php echo base_url(LIB) ?>swal/dist/sweetalert2.min.js"></script>
 
+<script src="https://cdn.jsdelivr.net/jquery.tablednd/0.8/jquery.tablednd.0.8.min.js"></script>
+
+
 
        <script>
     function conf(fun, e, pregunta = 'Confirma realizar esta acción?', msj = "Esta acción no se pordrá revertir") {
