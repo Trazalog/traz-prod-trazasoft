@@ -68,6 +68,9 @@
        <link rel="stylesheet" href="<?php echo base_url(); ?>lib/plugins/jHTree/Themes/ui-lightness/jquery-ui-1.10.4.custom.css">
        <script src="<?php echo base_url(); ?>lib\plugins\jHTree\js\jQuery.jHTree.js"></script>
 
+       <!-- printThis -->
+       <script src="<?php echo base_url(); ?>lib\plugins\jasonday-printThis-f73ca19\printThis.js"></script>
+
        <script>
          function conf(fun, e, pregunta = 'Confirma realizar esta acción?', msj = "Esta acción no se pordrá revertir") {
            Swal.fire({

@@ -799,7 +799,11 @@ body .ui-tooltip {
 .ui-widget-content {
 	border: 1px solid #dddddd;
 	background: #eeeeee url("images/ui-bg_highlight-soft_100_eeeeee_1x100.png") 50% top repeat-x;
-	color: #333333;
+  color: #333333;
+  font-size: 0.9em;
+  font-weight: 400;
+  text-align: left;
+  padding-left: 2px;
 }
 .ui-widget-content a {
 	color: #333333;

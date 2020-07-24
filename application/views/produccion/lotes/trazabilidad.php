@@ -4,6 +4,13 @@
     margin-right: auto;
     margin-left: auto;
   }
+
+  .scrolls {
+    overflow-x: scroll;
+    overflow-y: hidden;
+    /* height: 80px; */
+    white-space: nowrap
+  }
 </style>
 <section class="content">
   <div class="row">
@@ -24,56 +31,59 @@
           </div>
         </div>
       </div>
-      <div class="col-sm-12 col-sm-12 col-md-12 col-lg-12">
-        <!-- lote_id(codigo), estado, num_orden_prod, fec_alta, nombre etapa, nombre recipiente, tipo recipiente, estado recipiente -->
-        <!-- <div id="themes">
-            <span id="changeItUp">Change Theme</span>
-            <div id="set">
-              <a href="<?php echo base_url(); ?> lib/plugins/jHTree/Themes/smoothness/jquery-ui-1.10.4.custom.min.css" title="Smoothness">
-                <img src="lib/plugins/jHTree/images/themethumbs/themenail_smoothness.png" alt="image" width="25" height="22">
-              </a>
-              <a href="<?php echo base_url(); ?>lib/plugins/jHTree/Themes/black-tie/jquery-ui-1.10.4.custom.min.css" title="blacktie">
-                <img src="lib/plugins/jHTree/images/themethumbs/themenail_blacktie.png" alt="image" width="25" height="22">
-              </a>
-
-              <a href="<?php echo base_url(); ?> lib/plugins/jHTree/Themes/south-street/jquery-ui-1.10.4.custom.min.css" title="South Street">
-                <img src="lib/plugins/jHTree/images/themethumbs/themenail_southst.png" alt="image" width="25" height="22">
-              </a>
-
-              <a href="<?php echo base_url(); ?> lib/plugins/jHTree/Themes/mint-choc/jquery-ui-1.10.4.custom.min.css" title="Mint Choco">
-                <img src="lib/plugins/jHTree/images/themethumbs/themenail_mintchoc.png" alt="image" width="25" height="22">
-              </a>
-
-              <a href="<?php echo base_url(); ?> lib/plugins/jHTree/Themes/dot-luv/jquery-ui-1.10.4.custom.min.css" title="Dot Luv">
-                <img src="lib/plugins/jHTree/images/themethumbs/themenail_dotluv.png" alt="image" width="25" height="22">
-              </a>
-
-              <a href="<?php echo base_url(); ?> lib/plugins/jHTree/Themes/humanity/jquery-ui-1.10.4.custom.min.css" title="humanity">
-                <img src="lib/plugins/jHTree/images/themethumbs/humanity.png" alt="image" width="25" height="22">
-              </a>
-              <a href="<?php echo base_url(); ?> lib/plugins/jHTree/Themes/cupertino/jquery-ui-1.10.4.custom.min.css" title="Cupertino">
-                <img src="lib/plugins/jHTree/images/themethumbs/themenail_cupertino.png" alt="image" width="25" height="22">
-              </a>
-              <a href="<?php echo base_url(); ?> lib/plugins/jHTree/Themes/le-frog/jquery-ui-1.10.4.custom.min.css" title="le-frog">
-                <img src="lib/plugins/jHTree/images/themethumbs/le-frog.png" alt="image" width="25" height="22">
-              </a>
-              <a href="<?php echo base_url(); ?> lib/plugins/jHTree/Themes/swanky-purse/jquery-ui-1.10.4.custom.min.css" title="swanky-purse">
-                <img src="lib/plugins/jHTree/images/themethumbs/swanky-purse.png" alt="image" width="25" height="22">
-              </a>
-
-              <a href="<?php echo base_url(); ?> lib/plugins/jHTree/Themes/trontastic/jquery-ui-1.10.4.custom.min.css" title="trontastic">
-                <img src="lib/plugins/jHTree/images/themethumbs/trontastic.png" alt="image" width="25" height="22">
-              </a>
-
-              <a href="<?php echo base_url(); ?> lib/plugins/jHTree/Themes/ui-lightness/jquery-ui-1.10.4.custom.min.css" title="lightness">
-                <img src="lib/plugins/jHTree/images/themethumbs/lightness.png" alt="image" width="25" height="22">
-              </a>
-            </div>
-          </div> -->
-        <div id="tree">
-
+    </div>
+  </div>
+  <div class="row" hidden>
+    <div class="box box-warning">
+      <div class="box-header">
+        <a class="btn btn-social-icon btn-vk pull-left" onclick="print('tree')"><i class="fa fa-print"></i></a>
+        <h3 class="box-title"></h3>
+        <div class="box-tools pull-right">
+          <button type="button" class="btn btn-box-tool" data-toggle="collapse" data-target="#boxTree" aria-expanded="true" aria-controls="collapseOne"><i class="fa fa-minus"></i>
+          </button>
+        </div>
+        <!-- /.box-tools -->
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body panel-collapse collapse in" id="boxTree" aria-expanded="true">
+        <div id="tree" class="scrolls">
         </div>
       </div>
+      <!-- /.box-body -->
+    </div>
+  </div>
+  <div class="row" hidden>
+    <div class="box box-default">
+      <div class="box-header">
+        <a class="btn btn-social-icon btn-vk pull-left" onclick="print('tabla')"><i class="fa fa-print"></i></a>
+        <h3 class="box-title"></h3>
+        <div class="box-tools pull-right">
+          <button type="button" class="btn btn-box-tool" data-toggle="collapse" data-target="#boxTabla" aria-expanded="true" aria-controls="collapseOne"><i class="fa fa-minus"></i>
+          </button>
+        </div>
+        <!-- /.box-tools -->
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body panel-collapse collapse in" id="boxTabla" aria-expanded="true">
+        <table id="tabla" class="table table-bordered table-striped table-hover">
+          <thead>
+            <tr>
+              <th style="width: 8%;">Cod. Lote</th>
+              <th>Estado</th>
+              <th style="width: 10%;">N° Orden</th>
+              <th>Etapa</th>
+              <th>Recipiente</th>
+              <th>Articulo</th>
+              <th style="width: 10%;">Path</th>
+              <th style="width: 10%;">Alta lote</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyTabla">
+
+          </tbody>
+        </table>
+      </div>
+      <!-- /.box-body -->
     </div>
   </div>
 </section>
@@ -82,6 +92,7 @@
 <link rel="stylesheet" href="<?php echo base_url(); ?>lib/plugins/jHTree/CSS/jHTree.css">
 <link rel="stylesheet" href="<?php echo base_url(); ?>lib/plugins/jHTree/Themes/black-tie/jquery-ui-1.10.4.custom.min.css">
 <script src="<?php echo base_url(); ?>lib\plugins\jHTree\js\jQuery.jHTree.js"></script> -->
+<script src="<?php echo base_url(); ?>lib\plugins\jasonday-printThis-f73ca19\printThis.js"></script>
 
 <script>
   function buscarBatch() {
@@ -96,6 +107,8 @@
       dataType: 'JSON',
       url: 'general/Lote/trazabilidadBatch',
       success: function(rsp) {
+        $('#tree').parents('div .row').prop('hidden', '');
+        $('#tabla').parents('div .row').prop('hidden', '');
         console.log(rsp.data);
         var aux = [];
         rsp.data.forEach(function(e) {
@@ -109,6 +122,7 @@
         var reducido = reduceDatos(rsp.data, aux);
         nodos = formarJson(rsp.data, reducido);
         ttt(nodos);
+        crearTabla(rsp.data);
         // list_to_tree(cuerpo);
       },
       error: function(rsp) {
@@ -167,6 +181,12 @@
         //-----------------------------------------------------------
       }
     });
+
+    // $("#tree").jHTree({
+    //   callType: 'obj',
+    //   structureObj: nodos,
+    //   zoomer: true
+    // });
     return;
   }
 
@@ -283,6 +303,11 @@
         //-----------------------------------------------------------
       }
     });
+    // $("#tree").jHTree({
+    // callType: 'obj',
+    // structureObj: myData,
+    // zoomer: false
+    // });
   }
 
   function list_to_tree(list) {
@@ -315,7 +340,7 @@
       array[i] = new Array();
       array[i]['head'] = data[i].lote_id;
       array[i]['id'] = data[i].batch_id;
-      array[i]['contents'] = "Estado: " + data[0].lote_estado + "<br>Alta: " + data[0].lote_fec_alta + "<br>Recipiente: " + data[0].reci_nombre + "<br>Tipo: " + data[0].reci_tipo;
+      array[i]['contents'] = "Estado: " + data[i].lote_estado + "<br>Alta: " + data[i].lote_fec_alta + "<br>Etapa: " + data[i].etap_nombre + "<br>Recipiente: " + data[i].reci_nombre + "<br>Tipo: " + data[i].reci_tipo;
       array[i]['children'] = aux[data[i].batch_id];
       // array[i]['children'] = [];
 
@@ -337,7 +362,7 @@
           aux3[h] = [];
           aux3[h]['head'] = o.lote_id;
           aux3[h]['id'] = o.batch_id;
-          aux3[h]['contents'] = "Estado: " + o.lote_estado + "<br>Alta: " + o.lote_fec_alta + "<br>Recipiente: " + o.reci_nombre + "<br>Tipo: " + o.reci_tipo;
+          aux3[h]['contents'] = "Estado: " + o.lote_estado + "<br>Alta: " + o.lote_fec_alta + "<br>Etapa: " + o.etap_nombre + "<br>Recipiente: " + o.reci_nombre + "<br>Tipo: " + o.reci_tipo;
           // aux3[h]['children'] = '';
           // aux2[e.id].push(aux3[h]);
           h++;
@@ -400,6 +425,53 @@
     //   }
     // })
     return array;
+  }
+
+  function crearTabla(data) {
+    var datosTabla = '';
+    for (let i = 0; i < data.length; i++) {
+      datosTabla += "<tr>" +
+        "<td>" + data[i].lote_id + "</td>" +
+        "<td>" + data[i].lote_estado + "</td>" +
+        "<td>" + data[i].lote_num_orden_prod + "</td>" +
+        "<td>" + data[i].etap_nombre + "</td>" +
+        "<td>" + data[i].reci_nombre + "</td>" +
+        "<td>" + data[i].arti_descripcion + "</td>" +
+        "<td>" + data[i].path + "</td>" +
+        "<td>" + data[i].lote_fec_alta + "</td>" +
+        "</tr>";
+    }
+    console.log('datosTabla');
+    console.log(datosTabla);
+    $('#tbodyTabla').html(datosTabla);
+    // $('#tabla').dataTable();
+    DataTable('#tabla');
+  }
+
+  function print(id) {
+    console.log('id: ' + id);
+    $("#" + id).printThis({
+      debug: false, // show the iframe for debugging
+      importCSS: true, // import parent page css
+      importStyle: false, // import style tags
+      printContainer: true, // print outer container/$.selector
+      loadCSS: "", // path to additional css file - use an array [] for multiple
+      pageTitle: "", // add title to print page
+      removeInline: false, // remove inline styles from print elements
+      removeInlineSelector: "*", // custom selectors to filter inline styles. removeInline must be true
+      printDelay: 333, // variable print delay
+      header: null, // prefix to html
+      footer: null, // postfix to html
+      base: false, // preserve the BASE tag or accept a string for the URL
+      formValues: true, // preserve input/form values
+      canvas: false, // copy canvas content
+      doctypeString: 'Informe de Trazabilidad', // enter a different doctype for older markup
+      removeScripts: false, // remove script tags from print content
+      copyTagClasses: false, // copy classes from the html & body tag
+      beforePrintEvent: null, // function for printEvent in iframe
+      beforePrint: null, // function called before iframe is filled
+      afterPrint: null // function called before iframe is removed
+    });
   }
 
 
