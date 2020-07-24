@@ -25,7 +25,7 @@ if (!function_exists('selectBusquedaAvanzada')) {
         #Convertir Datos a Arreglo
         $list = json_decode(json_encode($list), true);
 
-        $opt = $list?"<option value='' data-foo='' selected disabled> -  Seleccionar  - </option>":null;
+        $opt = $list?"<option value='0' data-foo='' selected disabled> -  Seleccionar  - </option>":null;
         
         # Si Trae Datos Construir Opciones
         if($list) {

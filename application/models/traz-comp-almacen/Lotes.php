@@ -105,9 +105,6 @@ class Lotes extends CI_Model
             $cant = $data['cant'];
             $motive = $data['motive'];
 
-            // $userdata = $this->session->userdata('user_data');
-            //$usrId = $userdata[0]['usrId'];
-
             $data = array(
                 'prodId' => $prodId,
                 'stkCant' => $cant,
@@ -195,7 +192,7 @@ class Lotes extends CI_Model
             $batch_req['_post_lote_batch_req']['_post_lote'][] = $aux;
         }
 
-        $url = REST_TDS . 'lote/list_batch_req';
+        $url = REST_TDS . 'lote/list_batch_req';//
         $rsp = $this->rest->callApi('POST', $url, $batch_req);
         wso2Msj($rsp);
         log_message('DEBUG','#LOTES > crearBatch | RSP: '.json_encode($rsp));

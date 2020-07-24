@@ -63,23 +63,26 @@ $.widget.bridge('uibutton', $.ui.button);
        <!-- SWAL ALERT -->
        <script src="<?php echo base_url(LIB) ?>swal/dist/sweetalert2.min.js"></script>
 
+<script src="https://cdn.jsdelivr.net/jquery.tablednd/0.8/jquery.tablednd.0.8.min.js"></script>
+
+
 
        <script>
-function conf(fun, e, pregunta = 'Confirma realizar esta acción?', msj = "Esta acción no se pordrá revertir") {
-    Swal.fire({
-        title: pregunta,
-        text: msj,
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Si",
-    }).then((result) => {
-        if (result.value) {
-            fun(e);
-        }
-    });
-}
+    function conf(fun, e, pregunta = 'Confirma realizar esta acción?', msj = "Esta acción no se pordrá revertir") {
+        Swal.fire({
+            title: pregunta,
+            text: msj,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Si",
+        }).then((result) => {
+            if (result.value) {
+                fun(e);
+            }
+        });
+    }
 
 function hecho() {
     alert('Hecho');

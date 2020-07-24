@@ -284,19 +284,27 @@ function obtenerFormularioCamion(){
 }
 
 function validarFormulario(){
+
+    var ban =  true;
     $('#frm-info').find('.form-control').each(function() {
-        if(this.value != ""){
-            alert('Complete los campos obligatorios(*)');
-            return false;
+        if(this.id !='proveedor' && this.id != 'nombreproveedor'){
+            console.log(this.id + ' = ' + this.value);
+            if(this.value == ""){
+                
+                ban =  ban && false; return;
+            }
         }
     })
-
+    
     $('#frm-camion').find('.form-control').each(function(){
         if(this.value == ""){
-            alert('Datos Camión: Complete los campos obligatorios(*)');
-            return false;
+            ban =  ban && false; return;
         }
     });
+    
+    if(!ban) alert('Complete los campos obligatorios(*)');
+
+    return ban;
 }
 
 function addCamion(msj = true) {

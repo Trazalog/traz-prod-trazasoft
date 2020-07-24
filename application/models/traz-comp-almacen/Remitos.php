@@ -4,12 +4,11 @@ class Remitos extends CI_Model {
 
 	function __construct()
 	{
-		parent::__construct();
+        parent::__construct();
 	}
 	
     function getRemitosList()
     {
-        $userdata  = $this->session->userdata('user_data');
         $empresaId = empresa();
 
         $this->db->select('T.rema_id as remitoId, T.fecha, T.comprobante, A.prov_id as provid,  A.nombre as provnombre');
@@ -48,7 +47,6 @@ class Remitos extends CI_Model {
 
     function getdeposito()
     {
-        $userdata  = $this->session->userdata('user_data');
         $empresaId = empresa();
      
         $query = $this->db->get_where('alm.alm_depositos', array('empr_id' => $empresaId));
@@ -62,7 +60,6 @@ class Remitos extends CI_Model {
 
 	function getproveedor()
     {
-        $userdata  = $this->session->userdata('user_data');
         $empresaId = empresa();
 		$query     = $this->db->get_where('alm.alm_proveedores', array('empr_id' => $empresaId));
 			if($query->num_rows()>0){
@@ -140,7 +137,6 @@ class Remitos extends CI_Model {
     function alerta($codigo,$de)
     {
         //arriba es artId, prodId
-        $userdata  = $this->session->userdata('user_data');
         $empresaId = empresa();
 
         $sql       = "SELECT  alm.alm_lotes.cantidad
@@ -160,7 +156,6 @@ class Remitos extends CI_Model {
 
 	function getlote($idHerramienta,$idDeposito)
     {
-		$userdata  = $this->session->userdata('user_data');
         $empresaId = empresa();
 
         $sql       = "SELECT alm.alm_lotes.lote_id as loteid
@@ -250,7 +245,6 @@ class Remitos extends CI_Model {
 
     function loteres($idArticulo,$idDeposito)
     {
-        $userdata  = $this->session->userdata('user_data');
         $empresaId = empresa();
 
         $sql       = "SELECT alm.alm_lotes.lote_id as loteid
@@ -274,7 +268,6 @@ class Remitos extends CI_Model {
 
     function insert_detaremito($data2)
     {
-        $userdata          = $this->session->userdata('user_data');
         $data2['empr_id'] = empresa();
 
         $query = $this->db->insert("alm.alm_deta_recepcion_materiales", $data2);
@@ -329,7 +322,6 @@ class Remitos extends CI_Model {
 
     function insert_lote($data3)
     {
-        $userdata  = $this->session->userdata('user_data');
         $data3['empr_id'] = empresa();
         $query   = $this->db->insert("alm.alm_lotes",$data3);
         return $query;
