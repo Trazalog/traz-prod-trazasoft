@@ -7,9 +7,9 @@
             <div class="row">
                 <!--__________________________________________________-->
                 <!--DROPDOWN ETAPAS-->
-                <div class="col-md-12">
-                    <div class="col-md-4">
-                        <div class="form-group">
+                <div class="col-md-12" id="prueba">
+                    <div class="col-md-4" >
+                        <div class="form-group" >
                             <select class="custom-select form-control" name="etap_id" id="etap_id" requiered>
                                 <?php
                                     echo "<option selected disable>seleccione una etapa</option>";
@@ -20,6 +20,9 @@
                                 ?>
                             </select>
                         </div>
+                    </div>
+                    <div class="col-md-4">
+                        <p class="text-danger" hidden id="lab_et">la etapa no tiene materiales asignados</p>
                     </div>
                 </div>
                 <!--__________________________________________________-->
@@ -55,7 +58,6 @@
                 <table class="table table-striped table-hover" id="tablaPrueba">
                     <thead>
                         <tr>
-                            <th>Id</th>
                             <th>Nombres</th>
                             <th>unidad de medida</th>
                         </tr>
@@ -96,16 +98,21 @@ $('#etap_id').on('change',function(){
         url:'Test/getMaterialesPorEtapa/'+etap_id,
         success: function(res) {
             $('#tablaPrueba tbody').empty();
-            console.log(res);
-            res.data.forEach(function(e){
-                var htmlTags = '<tr>' +
-                '<td>' + e.arti_id + '</td>' +
+            $('#lab_et').hide();
+            $();
+            console.log(res.data);
+            if(res.data)
+            {
+                res.data.forEach(function(e){
+                var htmlTags = '<tr ' + e.id + '>' +
                 '<td>' + e.descripcion + '</td>' +
                 '<td>' + e.um + '</td>' +
                 '<td><button id="borrar" class="btn bg-red"><i class="fa fa-trash"></i></button></td>' +
                 '</tr>';
-            $('#tablaPrueba tbody').append(htmlTags);
-            })
+                $('#tablaPrueba tbody').append(htmlTags);
+                });
+            }else $('#lab_et').show();
+            
         },
         error: function() {
         },
@@ -118,13 +125,20 @@ $('#etap_id').on('change',function(){
 function agregarFila() {
 
     var data = JSON.parse($("#mate_id").val());
-    var htmlTags = '<tr>' +
-        '<td>' + data.arti_id + '</td>' +
+    console.log(''.aux);
+    var aux = $('tr #'+data.id).length();
+    console.log(aux);
+    if()
+    {
+        var htmlTags = '<tr id= '+ data.id +'>' +
         '<td>' + data.titulo + '</td>' +
         '<td>' + data.unidad_medida + '</td>' +
-        '<td><button id="borrar" class="btn primary"><i class="fa fa-trash"></i></button></td>' +
+        '<td><button id="borrar" class="btn bg-red"><i class="fa fa-trash"></i></button></td>' +
         '</tr>';
-    $('#tablaPrueba tbody').append(htmlTags);
+        $('#tablaPrueba tbody').append(htmlTags);
+        $('#lab_et').hide();
+    }
+    
 }
 
 /*******ELIMINA MATERIAL DE LA TABLA*******/
@@ -132,5 +146,6 @@ $(document).on('click', '#borrar', function (event) {
     event.preventDefault();
     $(this).closest('tr').remove();
 });
+
 
 </script>

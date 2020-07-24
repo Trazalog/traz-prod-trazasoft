@@ -27,12 +27,6 @@ class Test extends CI_Controller
         $this->load->view('test',$data);
     }
 
-    // public function prueba()
-    // {
-    //     $post = $this->input->post();
-    //     show($post);
-    // }
-
     public function getMaterialesPorEtapa($etap_id)
     {
         $data = $this->TestModel->getMaterialesPorEtapa($etap_id);
