@@ -58,8 +58,8 @@ $autoload['packages'] = array();
 |
 |	$autoload['libraries'] = array('user_agent' => 'ua');
 */
-$autoload['libraries'] = array('database','session', 'REST' , 'BPM');
-
+// $autoload['libraries'] = array('database','session', 'REST' , 'BPM');
+$autoload['libraries'] = array('session', 'REST' , 'BPM');
 /*
 | -------------------------------------------------------------------
 |  Auto-load Drivers
@@ -89,7 +89,7 @@ $autoload['drivers'] = array();
 |
 |	$autoload['helper'] = array('url', 'file');
 */
-$autoload['helper'] = array('url', 'sesion','lenguaje_helper', 'tabla_helper', 'develop', 'fecha', 'admin', 'form', 'timeline', 'componente');
+$autoload['helper'] = array('wso2','url', 'sesion','lenguaje_helper', 'tabla_helper', 'develop', 'fecha', 'admin', 'form', 'timeline', 'componente');
 
 /*
 | -------------------------------------------------------------------

@@ -157,7 +157,7 @@ define('RECURSO_CONSUMO', 'CONSUMO');
 # >> Proyecto
 # Default View
 #define('DEFAULT_VIEW', 'general/Reporte/tareasOperario');
-define('DEFAULT_VIEW', 'general/Etapa');
+define('DEFAULT_VIEW', 'test/test');
 
 #TRAZASOFT
 define('PROVEEDOR_INTERNO', 1000);
@@ -170,6 +170,9 @@ define('ESTABLECIMIENTO_TRANSPORTE', 1000);
 #ID DE ETAPA
 define('ETAPA_TRANSPORTE', 1000);
 define('ETAPA_DEPOSITO', 2000);
+
+# >> HELPER WSO2
+define('REST_ALM', 'http://10.142.0.7:8280/services/ALMDataService/');
 
 # >> ALM AVANZAR TASK
 define('PLANIF_AVANZA_TAREA', true);

@@ -56,4 +56,9 @@ if (!function_exists('getJson')) {
         log_message('DEBUG', '#WSO2 #RESPONSE: ' . $match[1]);
         return $match[1];
     }
+
+    function show($data)
+    {
+        echo "<pre>".json_encode($data, JSON_PRETTY_PRINT)."</pre>";
+    }
 }

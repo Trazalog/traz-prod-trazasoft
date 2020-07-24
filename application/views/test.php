@@ -1,50 +1,136 @@
-<div id="snapshot" data-key="<?php echo $key ?>">
-    <div class="box box-primary">
-        <div class="box-header">
-            <h3 class="box-title">View Test</h3>
+<div class="box box-primary animated fadeInLeft">
+    <div class="box-header with-border">
+        <h4>Etapas y materiales</h4>
+    </div>
+    <div class="box-body">
+        <form id="frm-test">
+            <div class="row">
+                <!--__________________________________________________-->
+                <!--DROPDOWN ETAPAS-->
+                <div class="col-md-12">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <select class="custom-select form-control" name="etap_id" id="etap_id" requiered>
+                                <?php
+                                    echo "<option selected disable>seleccione una etapa</option>";
+                                    foreach($etapas as $valor)
+                                    {
+                                        echo "<option value='$valor->id'>$valor->titulo</option>";
+                                    }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <!--__________________________________________________-->
+                <div class="col-md-12">
+                    <!--DROPDOWN MATERIALES-->
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <select class="custom-select form-control" name="mate_id" id="mate_id" required>
+                                <?php 
+                                    echo "<option selected>seleccione un material</option>";
+                                    foreach($materiales as $value)
+                                    {
+                                        echo "<option value='".json_encode($value)."'>$value->titulo</option>";
+                                    }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                    <!--__________________________________________________-->
+                    <!--BOTON AGREGAR MATERIALES A TABLA-->
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-success btn-block" onclick="agregarFila()">agregar
+                            material</button>
+                    </div>
+                    <!--__________________________________________________-->
+                </div>
+            </div>
+        </form>
+        <!--__________________________________________________-->
+        <!--TABLA DINAMICA DE MATERIALES-->
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-striped table-hover" id="tablaPrueba">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Nombres</th>
+                            <th>unidad de medida</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <div class="box-body">
-            <div class="form-group">
-                <label>Nombre:</label>
-                <input name="vnombre" class="form-control " type="text">
-            </div>
-            <div class="form-group">
-                <label>Provincia:</label>
-                <select name="vprovincia" class="form-control">
-                    <option value="" selected disabled></option>
-                    <option value="San Juan">San Juan</option>
-                    <option value="Mendoza">Mendoza</option>
-                    <option value="San Luis">San Luis</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <input class="hidden" type="radio" name="vopciones">
-                <input name="vopciones" type="radio" value="op1" id="opt1" /><label for="opt1">
-                    Opción1
-                </label><br>
-                <input name="vopciones" type="radio" value="op2" id="opt2" /><label for="opt2">
-                    Opción2
-                </label><br>
-                <input name="vopciones" type="radio" value="op3" id="opt3" /><label for="opt3">
-                    Opción3
-                </label>
-            </div>
-            <div class="form-group">
-                <label>
-                    <input name="vterminos" type="checkbox" value="true"> Acepto Términos y Condiciones
-                </label><br>
-                <label>
-                    <input name="vemail" type="checkbox" value="true"> Enviar Mails
-                </label>
-            </div>
-            <div class="form-group">
-                <label>Detalle:</label>
-                <textarea name="vdetalle" class="form-control"></textarea>
-            </div>
-            <button onclick="saveSnapshot()">Guardar</button>
-        </div>
+        <!--__________________________________________________-->
     </div>
 </div>
 <script>
-getSnapshot()
+// function guardarSalida() {
+//     var data = getForm('#frm-test');
+//     console.log(data);
+//     $.ajax({
+//         type: 'POST',
+//         data,
+//         url: "Test/prueba",
+//         success: function(res) {
+//             console.log('succes ' + res);
+//         },
+//         error: function(res) {
+//             console.log('error ' + res);
+//         },
+//         complete: function() {}
+//     });
+// }
+
+/*******CARGA TABLA CON MATERIALES DE ETAPA*******/
+$('#etap_id').on('change',function(){
+
+    var etap_id = this.value;
+    $.ajax({
+        dataType:'JSON',
+        type: 'GET',
+        url:'Test/getMaterialesPorEtapa/'+etap_id,
+        success: function(res) {
+            $('#tablaPrueba tbody').empty();
+            console.log(res);
+            res.data.forEach(function(e){
+                var htmlTags = '<tr>' +
+                '<td>' + e.arti_id + '</td>' +
+                '<td>' + e.descripcion + '</td>' +
+                '<td>' + e.um + '</td>' +
+                '<td><button id="borrar" class="btn bg-red"><i class="fa fa-trash"></i></button></td>' +
+                '</tr>';
+            $('#tablaPrueba tbody').append(htmlTags);
+            })
+        },
+        error: function() {
+        },
+        complete: function() {
+        }
+    });
+});
+
+/*******AGREGA MATERIAL A LA TABLA*******/
+function agregarFila() {
+
+    var data = JSON.parse($("#mate_id").val());
+    var htmlTags = '<tr>' +
+        '<td>' + data.arti_id + '</td>' +
+        '<td>' + data.titulo + '</td>' +
+        '<td>' + data.unidad_medida + '</td>' +
+        '<td><button id="borrar" class="btn primary"><i class="fa fa-trash"></i></button></td>' +
+        '</tr>';
+    $('#tablaPrueba tbody').append(htmlTags);
+}
+
+/*******ELIMINA MATERIAL DE LA TABLA*******/
+$(document).on('click', '#borrar', function (event) {
+    event.preventDefault();
+    $(this).closest('tr').remove();
+});
+
 </script>
