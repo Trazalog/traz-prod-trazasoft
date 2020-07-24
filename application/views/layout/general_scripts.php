@@ -62,6 +62,7 @@
        <!-- SWAL ALERT -->
        <script src="<?php echo base_url(LIB) ?>swal/dist/sweetalert2.min.js"></script>
 
+<script src="https://cdn.jsdelivr.net/jquery.tablednd/0.8/jquery.tablednd.0.8.min.js"></script>
        <!-- jHTree -->
        <script src="<?php echo base_url(); ?>lib\plugins\jHTree\js\jquery-ui-1.10.4.custom.min.js"></script>
        <link rel="stylesheet" href="<?php echo base_url(); ?>lib/plugins/jHTree/CSS/jHTree.css">
@@ -72,21 +73,21 @@
        <script src="<?php echo base_url(); ?>lib\plugins\jasonday-printThis-f73ca19\printThis.js"></script>
 
        <script>
-         function conf(fun, e, pregunta = 'Confirma realizar esta acción?', msj = "Esta acción no se pordrá revertir") {
-           Swal.fire({
-             title: pregunta,
-             text: msj,
-             icon: "warning",
-             showCancelButton: true,
-             confirmButtonColor: "#3085d6",
-             cancelButtonColor: "#d33",
-             confirmButtonText: "Si",
-           }).then((result) => {
-             if (result.value) {
-               fun(e);
-             }
-           });
-         }
+    function conf(fun, e, pregunta = 'Confirma realizar esta acción?', msj = "Esta acción no se pordrá revertir") {
+        Swal.fire({
+            title: pregunta,
+            text: msj,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Si",
+        }).then((result) => {
+            if (result.value) {
+                fun(e);
+            }
+        });
+    }
 
          function hecho() {
            alert('Hecho');

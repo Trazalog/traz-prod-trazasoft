@@ -12,7 +12,7 @@
       <param name="esta_id" sqlType="STRING"/>
    </query>
    <query id="getEtapa" useConfig="produccionDS">
-      <sql>select &#xd;   etap_id, nombre, nom_recipiente, fec_alta, usuario, proc_id , link&#xd;from &#xd;   prd.etapas &#xd;where eliminado = 0 &#xd;and&#xd;etap_id &lt; 1000</sql>
+      <sql>select &#xd;   etap_id, nombre, nom_recipiente, fec_alta, usuario, proc_id , link&#xd;from &#xd;   prd.etapas &#xd;where eliminado = 0 &#xd;and&#xd;etap_id &lt; 1000&#xd;order by orden</sql>
       <result outputType="json">{&#xd;    "etapas":&#xd;      {"etapa":&#xd;        [&#xd;          {&#xd;            "id": "$etap_id",&#xd;            "titulo":"$nombre",&#xd;            "nom_recipiente": "$nom_recipiente",&#xd;            "fec_alta": "$fec_alta",&#xd;            "usuario": "$usuario",&#xd;            "proc_id": "$proc_id",&#xd;            "link": "$link"           &#xd;          }&#xd;        ]&#xd;      }&#xd;  }</result>
    </query>
    <query id="getArticulos" useConfig="produccionDS">

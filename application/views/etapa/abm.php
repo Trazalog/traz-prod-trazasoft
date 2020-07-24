@@ -141,49 +141,24 @@
         </div>
     </div>
 
+    <!-- <tareas>
+        <script>
+            $('tareas').load('<--?php echo TST ?>Tarea/planificar/BATCH/' + $('#batch_id').val());
+        </script>
+    </tareas> -->
 
     <!-- Tareas -->
     <div class="box box-primary">
-        <div class="box-header">
-            <h4 class="box-title">Tareas</h4>
-        </div>
+    
         <!-- /.box-header -->
         <div class="box-body">
-            <div class="row" style="margin-top: 40px ">
-                <div class="col-xs-12">
-                    <div class="nav-tabs-custom">
-                        <!-- <ul class="nav nav-tabs">
-                            <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">Calendario</a>
-                            </li>
-                            <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">Tareas</a></li>
-                        </ul>
-                        <div class="tab-content">
-                            <div class="tab-pane active" id="tab_1">
-                                <p>Aca iria el Calendario</p>
-                            </div>
-                            <div class="tab-pane" id="tab_2">
-                                <?php
-                                //TODO: NO COMETAR, TIENEUN INPUT Q NO SE LLENA  Y ROPE JAVASCRIPT											
-                                // $this->load->view(TAREAS_ASIGNAR . '/tareas') 
-                                ?>
-                            </div>
-                            <div class="row" hidden id="incompleto">
-                                <div class="col-xs-12">
-                                    <div class="alert alert-danger alert-dismissible">
-                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                                        <h4><i class="icon fa fa-ban"></i> Datos incompletos</h4>
-                                        <p id="mensajeincompleto"></p>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div> -->
-                        <!-- /.box-body -->
+            
+                      
                         <div class="modal-footer">
                            
 
                             <?php if ($etapa->estado != 'En Curso' || $etapa->estado != 'Finalizado') {
-echo "<button class='btn btn-primary' onclick='guardar(\"iniciar\")'>Iniciar Etapa</button>";
+                            echo "<button class='btn btn-primary' onclick='guardar(\"iniciar\")'>Iniciar Etapa</button>";
                             } else if ($etapa->estado == 'En Curso') {
                                 echo '<button class="btn btn-primary" id="btnfinalizar" onclick="finalizar()">Reporte de Producción</button>';
                             }
@@ -192,9 +167,7 @@ echo "<button class='btn btn-primary' onclick='guardar(\"iniciar\")'>Iniciar Eta
                             ?>
 
                         </div>
-                    </div>
-                </div>
-            </div>
+                    
         </div>
         <!-- /.box -->
     </div>
