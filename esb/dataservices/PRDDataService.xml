@@ -305,7 +305,7 @@
       <param name="case_id" sqlType="STRING"/>
    </query>
    <query id="deleteRecursosLote" useConfig="ToolsDataSource">
-      <sql>delete &#xd;from &#xd;   prd.recursos_lotes &#xd;where &#xd;   batch_id = cast(:batch_id as INTEGER)&#xd;and tipo = 'MATERIA_PRIMA'</sql>
+      <sql>delete &#xd;from &#xd;   prd.recursos_lotes &#xd;where &#xd;   batch_id = cast(:batch_id as INTEGER)</sql>
       <param name="batch_id" sqlType="STRING"/>
    </query>
    <query id="getArticulosXTipo" useConfig="ToolsDataSource">
