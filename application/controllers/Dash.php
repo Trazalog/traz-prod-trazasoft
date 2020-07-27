@@ -23,11 +23,11 @@ class Dash extends CI_Controller {
 }
 
       #var_dump($this->session->userdata());die;
-      $leng="spanish";
-      $page="layout";
-      $data['lang'] = lang_get($leng,$page);
-      $data['menu'] = menu($data['lang'],$this->session->userdata['id']);
-      $this->load->view('layout/Admin',$data);
-   }
-}
-?>
+//       $leng="spanish";
+//       $page="layout";
+//       $data['lang'] = lang_get($leng,$page);
+//       $data['menu'] = menu($data['lang'],$this->session->userdata['id']);
+//       $this->load->view('layout/Admin',$data);
+//    }
+// }
+// ?>
