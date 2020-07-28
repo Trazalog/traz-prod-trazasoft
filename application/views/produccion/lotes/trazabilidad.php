@@ -11,15 +11,6 @@
     /* height: 80px; */
     white-space: nowrap
   }
-
-  td.details-control {
-    background: url('../resources/details_open.png') no-repeat center center;
-    cursor: pointer;
-  }
-
-  tr.shown td.details-control {
-    background: url('../resources/details_close.png') no-repeat center center;
-  }
 </style>
 <section class="content">
   <div class="row">
@@ -77,7 +68,7 @@
         <table id="tabla" class="table table-bordered table-striped table-hover display">
           <thead>
             <tr>
-              <th style="width: 5%;"></th>
+              <th style="width: 1%;"></th>
               <th style="width: 8%;">Cod. Lote</th>
               <th style="width: 9%;">Estado</th>
               <th style="width: 10%;">N° Orden</th>
@@ -99,19 +90,14 @@
     </div>
   </div>
 </section>
-<!-- jHTree -->
-<!-- <script src="<?php echo base_url(); ?>lib\plugins\jHTree\js\jquery-ui-1.10.4.custom.min.js"></script>
-<link rel="stylesheet" href="<?php echo base_url(); ?>lib/plugins/jHTree/CSS/jHTree.css">
-<link rel="stylesheet" href="<?php echo base_url(); ?>lib/plugins/jHTree/Themes/black-tie/jquery-ui-1.10.4.custom.min.css">
-<script src="<?php echo base_url(); ?>lib\plugins\jHTree\js\jQuery.jHTree.js"></script> -->
-<script src="<?php echo base_url(); ?>lib\plugins\jasonday-printThis-f73ca19\printThis.js"></script>
-<!-- <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script> -->
 
 <script>
+  var table = '';
+
   function buscarBatch() {
     var nodos = '';
     var batch = $('#batch').val();
-    // wo();
+    wo();
     $.ajax({
       type: 'GET',
       data: {
@@ -122,7 +108,7 @@
       success: function(rsp) {
         $('#tree').parents('div .row').prop('hidden', '');
         $('#tabla').parents('div .row').prop('hidden', '');
-        console.log(rsp.data);
+        // console.log(rsp.data);
         var aux = [];
         rsp.data.forEach(function(e) {
           if (!aux[e.batch_id_padre]) aux[e.batch_id_padre] = [];
@@ -130,59 +116,35 @@
           // console.log(e);
         });
 
-        // console.log(aux);
-        // return;
         var reducido = reduceDatos(rsp.data, aux);
         nodos = formarJson(rsp.data, reducido);
-        ttt(nodos);
+        crearArbol(nodos);
         crearTabla(rsp.data);
-        // list_to_tree(cuerpo);
       },
       error: function(rsp) {
-        alert("No se encontró batch! Intente nuevamente.");
+        $("#tree").empty();
+        $('.zmrcntr').empty();
+        $('#tabla').empty();
+
+        // if (!_isset(table)) {
+        //   console.log('entra');
+        //   table = $('#tabla').dataTable().fnDestroy();
+        // }
+        // alert("¡Batch no se encontrado! Intente nuevamente.");
+        Swal.fire({
+          icon: 'error',
+          title: rsp.responseText
+        })
       },
       complete: function(rsp) {
-        // wc();
+        wc();
       }
     })
   }
 
-  function ttt(nodos) {
-    console.log('nodosssss');
-    console.log(nodos);
-    // var nodos = [{
-    //   "head": "asd",
-    //   "id": "padre",
-    //   "contents": "Estado: ",
-    //   "children": "asd",
-    //   "children": [{
-    //       "head": "Batch_id: 2",
-    //       "id": "2",
-    //       "contents": "asd2",
-    //       "children": [{
-    //         "head": "Batch_id: 3",
-    //         "id": "3",
-    //         "contents": "asd3"
-    //       }]
-    //     },
-    //     {
-    //       "head": "Batch_id: 4",
-    //       "id": "4",
-    //       "contents": "asd4",
-    //       "children": [{
-    //           "head": "Batch_id: 5",
-    //           "id": "5",
-    //           "contents": "asd5"
-    //         },
-    //         {
-    //           "head": "Batch_id: 6",
-    //           "id": "6",
-    //           "contents": "asd6"
-    //         }
-    //       ]
-    //     }
-    //   ]
-    // }]
+  function crearArbol(nodos) {
+    $("#tree").empty();
+    $('.zmrcntr').empty();
     // console.log('nodosssss');
     // console.log(nodos);
     $("#tree").jHTree({
@@ -203,167 +165,15 @@
     return;
   }
 
-  function crearArbol(data, i = 0) {
-    // var val = 4;
-    // var data = JSON.parse(data);
-    if (data) {
-      var padre = data[i].batch_id;
-      var hijo = data[i].batch_id_padre;
-      var children = new array();
-      children[i]['head'].push(data[i + 1].lote_id);
-      children[i]['id'].push(data[i + 1].batch_id);
-      var contents = "Estado: " + data[i + 1].lote_estado + "<br>Alta: " + data[i + 1].lote_fec_alta + "<br>Recipiente: " + data[i + 1].reci_nombre + "<br>Tipo: " + data[i + 1].reci_tipo;
-      children[i]['contents'].push(contents);
-      // children = convertirHijo(data[0], children);
-      crearArbol(data, i);
-    } else {
-      i++
-      return;
-    }
-    // var nodos = [{
-    //   "head": data[0].lote_id,
-    //   "id": padre,
-    //   "contents": "Estado: " + data[0].lote_estado + "<br>Alta: " + data[0].lote_fec_alta + "<br>Recipiente: " + data[0].reci_nombre + "<br>Tipo: " + data[0].reci_tipo,
-    //   "children": hijos(data, data[0].batch_id),
-    //   "children": [{
-    //       "head": "Batch_id: 2",
-    //       "id": "2",
-    //       "contents": "asd2",
-    //       "children": [{
-    //         "head": "Batch_id: 3",
-    //         "id": "3",
-    //         "contents": "asd3"
-    //       }]
-    //     },
-    //     {
-    //       "head": "Batch_id: 4",
-    //       "id": "4",
-    //       "contents": "asd4",
-    //       "children": [{
-    //           "head": "Batch_id: 5",
-    //           "id": "5",
-    //           "contents": "asd5"
-    //         },
-    //         {
-    //           "head": "Batch_id: 6",
-    //           "id": "6",
-    //           "contents": "asd6"
-    //         }
-    //       ]
-    //     }
-    //   ]
-    // }]
-
-    // $("#tree").jHTree({
-    //   callType: 'obj',
-    //   structureObj: nodos,
-    //   nodeDropComplete: function(event, data) {
-    //     //----- Do Something @ Server side or client side -----------
-    //     // alert("Node ID: " + 4 + " Parent Node ID: " + 6);
-    //     //-----------------------------------------------------------
-    //   }
-    // });
-  }
-
-  function convertirHijo(data) {
-    var children = new array();
-    children['head'].push(data.lote_id);
-    children['id'].push(data.batch_id);
-    var contents = "Estado: " + data[0].lote_estado + "<br>Alta: " + data[0].lote_fec_alta + "<br>Recipiente: " + data[0].reci_nombre + "<br>Tipo: " + data[0].reci_tipo;
-    children['contents'].push(contents);
-    children['children'].push(hijo);
-    return children;
-  }
-
-  function arbolito(data) {
-    var nodo = new array();
-    var head, id, contents;
-    nodo = [{
-      "head": data[0].lote_id,
-      "id": data[0].batch_id,
-      "contents": "Estado: " + data[0].lote_estado + "<br>Alta: " + data[0].lote_fec_alta + "<br>Recipiente: " + data[0].reci_nombre + "<br>Tipo: " + data[0].reci_tipo
-    }];
-    var i = 0;
-    while (i < data.length) {
-      var hijo = new array();
-      var j = 1;
-      while (j < data.length || [i].batch_id == data[j].batch_id_padre) {
-        hijo['head'] = data[j].lote_id;
-        hijo['id'] = data[j].batch_id;
-        hijo['contents'] = "Estado: " + data[j].lote_estado + "<br>Alta: " + data[j].lote_fec_alta + "<br>Recipiente: " + data[j].reci_nombre + "<br>Tipo: " + data[j].reci_tipo;
-        nodo.children = hijo;
-        j++;
-      }
-      i++;
-    }
-
-    var nodo = [{
-      "head": data[0].lote_id,
-      "id": data[0].batch_id,
-      "contents": "Estado: " + data[0].lote_estado + "<br>Alta: " + data[0].lote_fec_alta + "<br>Recipiente: " + data[0].reci_nombre + "<br>Tipo: " + data[0].reci_tipo,
-      "children": arbolRecursivo(data, data[1]),
-    }];
-  }
-
-  function abc(data) {
-    var nodos = list_to_tree(data);
-    $("#tree").jHTree({
-      callType: 'obj',
-      structureObj: nodos,
-      nodeDropComplete: function(event, data) {
-        //----- Do Something @ Server side or client side -----------
-        // alert("Node ID: " + 4 + " Parent Node ID: " + 6);
-        //-----------------------------------------------------------
-      }
-    });
-    // $("#tree").jHTree({
-    // callType: 'obj',
-    // structureObj: myData,
-    // zoomer: false
-    // });
-  }
-
-  function list_to_tree(list) {
-    var map = {},
-      node, roots = [],
-      i;
-
-    for (i = 0; i < list.length; i += 1) {
-      map[list[i].id] = i; // initialize the map
-      list[i].children = []; // initialize the children
-    }
-
-    for (i = 0; i < list.length; i += 1) {
-      node = list[i];
-      if (node.batch_id_padre !== "0") {
-        // if you have dangling branches check that map[node.batch_id_padre] exists
-        list[map[node.batch_id_padre]].children.push(node);
-      } else {
-        roots.push(node);
-      }
-    }
-    console.log(roots);
-    return roots;
-  }
-
   function reduceDatos(data, aux) {
     var array = [data.length];
-    console.table(array);
+    // console.table(array);
     for (let i = 0; i < data.length; i++) {
       array[i] = new Array();
       array[i]['head'] = data[i].lote_id;
       array[i]['id'] = data[i].batch_id;
       array[i]['contents'] = "Estado: " + data[i].lote_estado + "<br>Alta: " + data[i].lote_fec_alta + "<br>Etapa: " + data[i].etap_nombre + "<br>Recipiente: " + data[i].reci_nombre + "<br>Tipo: " + data[i].reci_tipo;
       array[i]['children'] = aux[data[i].batch_id];
-      // array[i]['children'] = [];
-
-      // if (!data[i].batch_id_padre) {
-      //   array[i]
-      // }
-
-      // if (!aux[e.batch_id_padre]) aux[e.batch_id_padre] = [];
-      // aux[e.batch_id_padre].push(e);
-      // console.log(e);
     }
     var aux2 = [];
     array.forEach(function(e) {
@@ -376,29 +186,25 @@
           aux3[h]['head'] = o.lote_id;
           aux3[h]['id'] = o.batch_id;
           aux3[h]['contents'] = "Estado: " + o.lote_estado + "<br>Alta: " + o.lote_fec_alta + "<br>Etapa: " + o.etap_nombre + "<br>Recipiente: " + o.reci_nombre + "<br>Tipo: " + o.reci_tipo;
-          // aux3[h]['children'] = '';
-          // aux2[e.id].push(aux3[h]);
           h++;
         })
       }
     });
-    console.log(aux2);
+    // console.log(aux2);
     for (let i = 0; i < data.length; i++) {
       var id = array[i]['id'];
       array[i]['children'] = aux2[id];
     }
 
-    console.log('array:');
-    console.log(array);
+    // console.log('array:');
+    // console.log(array);
     return array;
   }
 
   function formarJson(entero, reducido) {
-    // console.log('reducido: ');
-    // console.log(reducido);
     for (let i = entero.length - 2; i >= 0; i--) {
-      console.log("reducido[i]['children']: ");
-      console.log(reducido[i]['children']);
+      // console.log("reducido[i]['children']: ");
+      // console.log(reducido[i]['children']);
       for (let j = i + 1; j < entero.length; j++) {
         if (entero[i].batch_id == entero[j].batch_id_padre) {
           var o = Object.assign({}, reducido[j])
@@ -407,55 +213,37 @@
       }
     }
     var data = Object.assign({}, reducido[0]);
-    console.log('data: ');
-    console.log(data);
-    console.table(data);
+    // console.log('data: ');
+    // console.log(data);
+    // console.table(data);
     var rsp = JSON.stringify(reducido[0]);
-    // rsp = JSON.parse(rsp);
-    console.log('rsp: ');
-    console.log(rsp);
-    console.table(rsp);
+    // console.log('rsp: ');
+    // console.log(rsp);
+    // console.table(rsp);
 
     var array = [];
     array.push(data);
     // console.log('array');
     // console.log(array);
     var json = JSON.stringify(array);
-    console.log('json');
-    console.log(json);
-    // var json = '';
-    // $.ajax({
-    //   type: 'GET',
-    //   data: data,
-    //   dataType: 'JSON',
-    //   url: 'general/Lote/convertToJson',
-    //   success: function(data) {
-    //     var array = [];
-    //     array.push(data);
-    //     console.log('array');
-    //     console.log(array);
-    //     json = JSON.stringify(array);
-    //   }
-    // })
+    // console.log('json');
+    // console.log(json);
     return array;
   }
 
-  // var dataGlobal = '';
   function format(d) { //child row
     // console.log('entra a format');
     return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
       '<tr>' +
-      '<td>Artículo: </td>' +
+      '<td><b>Artículo: </b></td>' +
       '<td>' + d.arti_descripcion + '</td>' +
       '</tr>' +
       '<tr>' +
-      '<td>Path: </td>' +
+      '<td><b>Path: </b></td>' +
       '<td>' + d.path_lote_id + '</td>' +
       '</tr>' +
       '</table>';
   }
-
-  var table = '';
 
   function crearTabla(data) {
     // dataGlobal = data;
@@ -492,14 +280,22 @@
     // var data = {
     //   "data": data
     // }
-    console.log(data);
+    // console.log(data);
+    // table = DataTable('#tabla') {
+
+    if (!_isset(table)) {
+      console.log('entra');
+      // table = $('#tabla').dataTable().fnDestroy();
+    }
+
     table = $('#tabla').DataTable({
+      "bDestroy": true,
       "data": data,
       "columns": [{
           "className": 'details-control',
           "orderable": false,
           "data": null,
-          "defaultContent": ''
+          "defaultContent": "<i class ='fa fa-fw fa-plus-circle' style='color: #39ac39; cursor: pointer;'></i>"
         },
         {
           "data": "lote_id"
@@ -519,12 +315,6 @@
         {
           "data": "lote_fec_alta"
         }
-        // {
-        //   "data": "arti_descripcion"
-        // },
-        // {
-        //   "data": "path_lote_id"
-        // }
       ]
     });
   }
@@ -537,68 +327,13 @@
     if (row.child.isShown()) {
       // This row is already open - close it
       row.child.hide();
-      // tr.removeClass('shown');
-      // tr.find('svg').attr('data-icon', 'plus-circle');          
       tr.find('td:eq(0)').empty();
-      tr.find('td:eq(0)').html("<i class ='fa fa-fw fa-plus-circle'></i>");
+      tr.find('td:eq(0)').html("<i class ='fa fa-fw fa-plus-circle' style='color: #39ac39; cursor: pointer;'></i>");
     } else {
-      // Open this row
-      console.log('child: ');
-      console.log(row.data());
+      // Open this row      
       row.child(format(row.data())).show();
-      // tr.addClass('shown');
       tr.find('td:eq(0)').empty();
-      tr.find('td:eq(0)').html("<i class ='fa fa-fw fa-minus-circle'></i>");
-      // tr.find('svg').attr('data-icon', 'minus-circle');
+      tr.find('td:eq(0)').html("<i class ='fa fa-fw fa-minus-circle' style='color: #e60000; cursor: pointer;'></i>");
     }
   });
-
-  function print(id) {
-    console.log('id: ' + id);
-    $("#" + id).printThis({
-      debug: false, // show the iframe for debugging
-      importCSS: true, // import parent page css
-      importStyle: false, // import style tags
-      printContainer: true, // print outer container/$.selector
-      loadCSS: "", // path to additional css file - use an array [] for multiple
-      pageTitle: "", // add title to print page
-      removeInline: false, // remove inline styles from print elements
-      removeInlineSelector: "*", // custom selectors to filter inline styles. removeInline must be true
-      printDelay: 333, // variable print delay
-      header: null, // prefix to html
-      footer: null, // postfix to html
-      base: false, // preserve the BASE tag or accept a string for the URL
-      formValues: true, // preserve input/form values
-      canvas: false, // copy canvas content
-      doctypeString: 'Informe de Trazabilidad', // enter a different doctype for older markup
-      removeScripts: false, // remove script tags from print content
-      copyTagClasses: false, // copy classes from the html & body tag
-      beforePrintEvent: null, // function for printEvent in iframe
-      beforePrint: null, // function called before iframe is filled
-      afterPrint: null // function called before iframe is removed
-    });
-  }
-
-
-  // $("#tree").jHTree({
-  //   callType: 'obj',
-  //   structureObj: myData,
-  //   zoomer: false
-  // });
-
-  // $('.zmrcntr').addClass('hidden');
-
-  // var _gaq = _gaq || [];
-  // _gaq.push(['_setAccount', 'UA-36251023-1']);
-  // _gaq.push(['_setDomainName', 'jqueryscript.net']);
-  // _gaq.push(['_trackPageview']);
-
-  // (function() {
-  //   var ga = document.createElement('script');
-  //   ga.type = 'text/javascript';
-  //   ga.async = true;
-  //   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-  //   var s = document.getElementsByTagName('script')[0];
-  //   s.parentNode.insertBefore(ga, s);
-  // })();
 </script>

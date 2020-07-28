@@ -86,6 +86,7 @@ class Lotes extends CI_Model
 
   public function getBatchIdLote($lote_id)
   {
+    $lote_id = str_replace(' ','%20', $lote_id);
     $path = "lote/". $lote_id."/ultimo";
     $url = RESTPT . $path;
     $rsp = $this->rest->callApi('GET', $url);

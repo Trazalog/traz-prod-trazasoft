@@ -63,15 +63,9 @@ class Lote extends CI_Controller
   {
     $lote_id = $this->input->get('batch');
     $batch_id = $this->Lotes->getBatchIdLote($lote_id)['data'][0]->batch_id;
-    $rsp = $this->Lotes->trazabilidadBatch($batch_id);
-    
-    echo json_encode($rsp);
-  }
-
-  public function convertToJson()
-  {
-    $data = $this->input->get();
-    $json = json_encode($data);
-    echo $json;
+    if (isset($batch_id)) {
+      $rsp = $this->Lotes->trazabilidadBatch($batch_id);
+      echo json_encode($rsp);
+    } else echo "¡Batch no encontrado! Intente nuevamente.";
   }
 }
