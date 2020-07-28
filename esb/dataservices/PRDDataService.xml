@@ -539,12 +539,14 @@
       <param name="depo_id" sqlType="STRING"/>
       <param name="esta_id" sqlType="STRING"/>
    </query>
-   <query id="setRecipiente" useConfig="ToolsDataSource">
-      <sql>INSERT INTO prd.recipientes (tipo,nombre,empr_id,depo_id) &#xd;VALUES &#xd;(:tipo,:patente, CAST(:empr_id as INTEGER), CAST(:depo_id as INTEGER))</sql>
+     <query id="setRecipiente" keyColumns="reci_id" returnGeneratedKeys="true" useConfig="produccionTest">
+      <sql>INSERT INTO prd.recipientes (tipo,nombre,empr_id,depo_id, motr_id) &#xd;VALUES &#xd;(:tipo,:patente, CAST(:empr_id as INTEGER), CAST(:depo_id as INTEGER), CAST(:motr_id as INTEGER))</sql>
+      <result outputType="json">{&#xd; "resultado":{"reci_id":"$reci_id"}&#xd;}</result>
       <param name="tipo" sqlType="STRING"/>
       <param name="patente" sqlType="STRING"/>
       <param name="empr_id" sqlType="STRING"/>
       <param name="depo_id" sqlType="STRING"/>
+      <param name="motr_id" sqlType="STRING"/>
    </query>
    <query id="getAllRecipientes" useConfig="ToolsDataSource">
       <sql>SELECT r.reci_id, r.tipo as reci_tipo, r.nombre as reci_nombre, cast(r.fec_alta as date) as reci_fec_alta, &#xd;d.depo_id, d.descripcion as depo_descripcion, e.esta_id, e.nombre as esta_nombre&#xd;FROM prd.recipientes r &#xd;join alm.alm_depositos d on d.depo_id = r.depo_id&#xd;join prd.establecimientos e on e.esta_id = d.esta_id&#xd;where r.eliminado = 0&#xd;order by r.fec_alta desc, d.esta_id asc, r.tipo asc, d.descripcion asc, r.nombre asc</sql>
@@ -1131,6 +1133,7 @@
          <with-param name="patente" query-param="patente"/>
          <with-param name="empr_id" query-param="empr_id"/>
          <with-param name="depo_id" query-param="depo_id"/>
+         <with-param name="motr_id" query-param="motr_id"/>
       </call-query>
    </resource>
    <resource method="GET" path="/getAllRecipientes">
