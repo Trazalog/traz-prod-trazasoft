@@ -26,22 +26,22 @@
                     <div class="col-md-5"></div>
                 </div>
 
-                <div class="row form-group" style="margin-top:20px">
+                <div class="row form-group <?php echo ($producto?'':'hidden') ?>" style="margin-top:20px">
                     <div class="col-md-3 col-xs-12"><label class="form-label">Producto:</label></div>
                     <div class="col-md-8 col-xs-12"><input class="form-control" type="text" id="prod_origen"
                             value="<?php echo $producto[0]->descripcion;?>" disabled></div>
                     <div class="col-md-5"></div>
                 </div>
 
-                <div class="row form-group" style="margin-top:20px">
+                <div class="row form-group <?php echo ($producto?'':'hidden') ?>" style="margin-top:20px">
                     <div class="col-md-3 col-xs-12"><label class="form-label">Cantidad:</label></div>
                     <div class="col-md-4 col-xs-12"><input class="form-control" type="text" id="cant_origen"
                             value="<?php echo $producto[0]->stock.' ('.$producto[0]->uni_med.')';?>" disabled></div>
                     <div class="col-md-5"></div>
                 </div>
-                <div class="row form-group" style="margin-top:20px">
+                <div class="row form-group <?php echo ($producto?'':'hidden') ?>" style="margin-top:20px">
                     <div class="col-md-3 col-xs-12"><label class="form-label">Cantidad a Extraer:</label></div>
-                    <div class="col-md-4 col-xs-12"><input class="form-control" type="text" id="cant_descontar" value=""
+                    <div class="col-md-4 col-xs-12"><input class="form-control" type="text" id="cant_descontar" value="<?php echo ($producto?'':0) ?>"
                             placeholder="Inserte cantidad a Extraer"></div>
                     <div class="col-md-5"></div>
                 </div>
@@ -64,7 +64,7 @@
                         <label for="inputproducto" class="form-label">Producto*:</label>
                     </div>
                     <div class="col-md-8 col-xs-12">
-                        <?php  echo selectBusquedaAvanzada('inputproducto', false, $articulos, 'arti_id', 'descripcion'); ?>
+                        <?php  echo selectBusquedaAvanzada('inputproducto', false, $productos_salida_etapa, 'arti_id', 'descripcion'); ?>
                     </div>
                     <div class="col-md-3"></div>
                 </div>
@@ -91,7 +91,7 @@
                         <?php if($accion == 'Editar'){
         
 
-                      echo selectBusquedaAvanzada('productodestino', false, $recipientes, 'reci_id', 'nombre', array('Estado:'=>'estado','Lote:'=>'lote_id', 'barcode', 'descripcion'));
+                      echo selectBusquedaAvanzada('productodestino', false);
 
                         }
                         ?>
@@ -183,7 +183,7 @@ function AgregarProducto() {
     ban = true;
 
     productoid = $("#inputproducto").val();
-    if (productoid == "") {
+    if (!productoid || productoid == "") {
         ban = false;
     }
     cantidad = document.getElementById('cantidadproducto').value;
@@ -224,7 +224,7 @@ function AgregarProducto() {
         recipientes = '<?php echo json_encode($recipientes);?>';
         recipientes = JSON.parse(recipientes);
         idrecipiente = document.getElementById('productodestino').value;
-        indexrec = recipientes.findIndex(y => y.reci_id == idrecipiente);
+        //indexrec = recipientes.findIndex(y => y.reci_id == idrecipiente);
         producto.id = productoid;
         producto.titulo = $('#inputproducto').find('option:selected').text();
         producto.cantidad = cantidad;
@@ -381,7 +381,6 @@ var FinalizarEtapa = function() {
         
 
         productos = JSON.stringify(productos);
-        lote_id = $('#loteorigen').val();
         cantidad_padre = $('#cant_descontar').val();
         num_orden_prod = $('#num_orden_prod').val();
         cantidad = $('#cant_origen').val();
@@ -395,7 +394,6 @@ var FinalizarEtapa = function() {
             dataType: 'JSON',
             async: false,
             data: {
-                lote_id,
                 productos,
                 cantidad_padre,
                 num_orden_prod,
@@ -407,13 +405,16 @@ var FinalizarEtapa = function() {
                 console.log(rsp);
                 if (rsp.status) {
                     $('#modal_finalizar').modal('hide');
+                    $('#mdl-unificacion').modal('hide');
                     alert('Etapa finalizada exitosamente.');
                     linkTo('general/Etapa/index');
                 } else {
                     if (rsp.msj) {
                         unificar_lote = rsp.reci_id;
+                        getContenidoRecipiente(unificar_lote);
                         // conf(FinalizarEtapa, null, '¿Confirma Unificación de Lotes?','Destino: '+ $('#productodestino').find('[value="'+unificar_lote+'"]').html() + ' | ' + rsp.msj);
-                        conf(FinalizarEtapa, null, '¿Confirma Unificación de Lotes?', rsp.msj + " | Detalle del Contenido: LOTE: " + rsp.lote_id + " | PRODUCTO: " + rsp.barcode + ' | DESTINO: '+ $('#productodestino').find('[value="'+unificar_lote+'"]').html());
+                        // conf(FinalizarEtapa, null, '¿Confirma Unificación de Lotes?', rsp.msj + " | Detalle del Contenido: LOTE: " + rsp.lote_id + " | PRODUCTO: " + rsp.barcode + ' | DESTINO: '+ $('#productodestino').find('[value="'+unificar_lote+'"]').html());
+
                     } else {
                         alert('Fallo al finalizar la etapa');
                     }
@@ -431,4 +432,40 @@ $(document).off('click', '.tabla_productos_asignados_borrar').on('click', '.tabl
     idbandera: 'productos_existe'
 }, remover);
 
+
+obtenerDepositos($('#establecimientos').val());
+function obtenerDepositos(establecimiento, recipientes) {
+    establecimiento = establecimiento;
+    if (!establecimiento) return;
+
+    $.ajax({
+        type: 'POST',
+        dataType: 'JSON',
+        data: {
+            establecimiento,
+            tipo: 'DEPOSITO'
+        },
+        url: 'general/Recipiente/listarPorEstablecimiento/true',
+        success: function(result) {
+            console.log(result);
+            
+            if (!result.status) {
+                alert('Fallo al Traer Depositos');
+                return;
+            }
+
+            if (!result.data) {
+                alert('No hay Depositos Asociados');
+                return;
+            }
+            fillSelect('#productodestino', result.data);
+
+
+        },
+        error: function() {
+            alert('Error al Traer Depositos');
+        }
+    });
+
+}
 </script>

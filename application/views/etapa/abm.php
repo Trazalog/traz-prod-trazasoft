@@ -1,6 +1,7 @@
 <?php $this->load->view('etapa/modal_materia_prima'); ?>
 <?php $this->load->view('etapa/modal_lotes'); ?>
 <?php $this->load->view('etapa/modal_producto'); ?>
+<?php $this->load->view('etapa/modal_unificacion_lote'); ?>
 
 <div id="snapshot" data-key="<?php echo $key ?>">
     <?php if ($etapa->estado == "En Curso") {
@@ -140,48 +141,24 @@
         </div>
     </div>
 
+    <!-- <tareas>
+        <script>
+            $('tareas').load('<--?php echo TST ?>Tarea/planificar/BATCH/' + $('#batch_id').val());
+        </script>
+    </tareas> -->
 
     <!-- Tareas -->
     <div class="box box-primary">
-        <div class="box-header">
-            <h4 class="box-title">Tareas</h4>
-        </div>
+    
         <!-- /.box-header -->
         <div class="box-body">
-            <div class="row" style="margin-top: 40px ">
-                <div class="col-xs-12">
-                    <div class="nav-tabs-custom">
-                        <!-- <ul class="nav nav-tabs">
-                            <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">Calendario</a>
-                            </li>
-                            <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">Tareas</a></li>
-                        </ul>
-                        <div class="tab-content">
-                            <div class="tab-pane active" id="tab_1">
-                                <p>Aca iria el Calendario</p>
-                            </div>
-                            <div class="tab-pane" id="tab_2">
-                                <?php
-                                //TODO: NO COMETAR, TIENEUN INPUT Q NO SE LLENA  Y ROPE JAVASCRIPT											
-                                // $this->load->view(TAREAS_ASIGNAR . '/tareas') 
-                                ?>
-                            </div>
-                            <div class="row" hidden id="incompleto">
-                                <div class="col-xs-12">
-                                    <div class="alert alert-danger alert-dismissible">
-                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                                        <h4><i class="icon fa fa-ban"></i> Datos incompletos</h4>
-                                        <p id="mensajeincompleto"></p>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div> -->
-                        <!-- /.box-body -->
+            
+                      
                         <div class="modal-footer">
+                           
 
                             <?php if ($etapa->estado != 'En Curso' || $etapa->estado != 'Finalizado') {
-echo "<button class='btn btn-primary' onclick='guardar(\"iniciar\")'>Iniciar Etapa</button>";
+                            echo "<button class='btn btn-primary' onclick='guardar(\"iniciar\")'>Iniciar Etapa</button>";
                             } else if ($etapa->estado == 'En Curso') {
                                 echo '<button class="btn btn-primary" id="btnfinalizar" onclick="finalizar()">Reporte de Producción</button>';
                             }
@@ -190,9 +167,7 @@ echo "<button class='btn btn-primary' onclick='guardar(\"iniciar\")'>Iniciar Eta
                             ?>
 
                         </div>
-                    </div>
-                </div>
-            </div>
+                    
         </div>
         <!-- /.box -->
     </div>
@@ -238,12 +213,13 @@ function actualizaRecipiente(establecimiento, recipientes) {
     $('#recipientes').empty();
     establecimiento = establecimiento;
     if (!establecimiento) return;
-    // wo();
+     wo();
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
         data: {
-            establecimiento
+            establecimiento,
+            tipo: 'PRODUCTIVO'
         },
         url: 'general/Recipiente/listarPorEstablecimiento/true',
         success: function(result) {
@@ -294,6 +270,7 @@ var guardarForzado = function(data) {
         success: function(rsp) {
             console.log(rsp);
             if (rsp.status) {
+                $('#mdl-unificacion').modal('hide');
                 alert('Salida Guardada exitosamente.');
                 linkTo('general/Etapa/index');
             } else {
@@ -310,6 +287,8 @@ var guardarForzado = function(data) {
 }
 // envia datos para iniciar etapa y acer orden de pedido a almacenes
 function guardar(boton) {
+
+    if(!validarCampos()) return;
 
     var recipiente = idprod = '';
     var tabla = $('#tablamateriasasignadas tbody tr');
@@ -374,7 +353,9 @@ function guardar(boton) {
                 linkTo('general/Etapa/index');
             } else {
                 if (rsp.msj) {
-                    conf(guardarForzado, data, '¿Confirma Unificación de Lotes?', rsp.msj + " | Detalle del Contenido: LOTE: " + rsp.lote_id + " | PRODUCTO: " + rsp.barcode);
+                    // conf(guardarForzado, data, '¿Confirma Unificación de Lotes?', rsp.msj + " | Detalle del Contenido: LOTE: " + rsp.lote_id + " | PRODUCTO: " + rsp.barcode);
+                    bak_data = data;
+                    getContenidoRecipiente(recipiente);
                 } else {
                     alert('Fallo al iniciar la etapa');
                 }
@@ -389,6 +370,24 @@ function guardar(boton) {
     });
 }
 
+function validarCampos(){
+    if($('#Lote').val() == "" || $('#establecimientos').val() == "" || $('#recipientes').val() == ""){
+        alert('Completar los campos obligatorios *');
+        return false;
+    }
+
+    if($('#tablamateriasasignadas tbody tr').length == 0){
+        alert('No ha seleccionado ninguna materia prima');
+        return false;
+    }
+    
+    if($('#idproducto').val() != null && $('#cantidad_producto').val() == ''){
+        alert('Por favor ingresar cantidad para el Producto');
+        return false;
+    }
+        
+    return true;
+}
 
 
 // valida campos vacios
@@ -455,29 +454,10 @@ $("#inputproductos").on('change', function() {
 
 // levanta modal para finalizar la etapa solamente
 function finalizar() {
-    /* idetapa = //php echo $idetapa;?>;
-							$.ajax({
-									type: 'POST',
-									data: {idetapa:idetapa },
-									url: 'general/Etapa/checkFormularios', 
-									success: function(result){
-										if(result)
-										{
-											
-											}else
-											{
-												alert('Faltan formularios');
-											}
-										
-									}
-						);*/
+
     $("#modal_finalizar").modal('show');
 }
-$(document).off('click', '.tablamateriasasignadas_borrar').on('click', '.tablamateriasasignadas_borrar', {
-    idtabla: 'tablamateriasasignadas',
-    idrecipiente: 'materiasasignadas',
-    idbandera: 'materiasexiste'
-}, remover);
+
 
 <?php
 if ($accion == 'Editar' && $etapa->estado == "PLANIFICADO") {

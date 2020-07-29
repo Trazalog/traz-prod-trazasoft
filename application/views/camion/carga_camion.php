@@ -131,7 +131,7 @@
         <div class="row">
             <div class="col-md-8"></div>
             <div class="col-md-2 col-xs-6">
-                <button type="button" class="btn btn-block btn-success " onclick="FinalizarCarga()">Finalzar</button>
+                <button type="button" class="btn btn-block btn-success " onclick="FinalizarCarga()">Finalizar</button>
             </div>
             <div class="col-md-2 col-xs-6">
                 <button type="button" class="btn btn-block btn-danger"

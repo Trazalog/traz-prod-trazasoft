@@ -175,12 +175,13 @@ $('#patente').keyup(function(e) {
         console.log('Obtener Lotes Patentes');
 
         if (this.value == null || this.value == '') return;
-       
+    
+        var patente = this.value;
         wo();
         $.ajax({
             type: 'GET',
             dataType: 'JSON',
-            url: 'index.php/general/Lote/obtenerLotesCamion?patente=' + this.value,
+            url: 'index.php/general/Lote/obtenerLotesCamion?patente=' + patente,
             success: function(rsp) {
 
                 if (!rsp.data) {
@@ -191,7 +192,7 @@ $('#patente').keyup(function(e) {
                 $('#codigo').attr('disabled', false).next(".select2-container").show();
                 $('#new_codigo').addClass('hidden').attr('disabled', true);
 
-                obtenerInfoCamion(this . value);
+                obtenerInfoCamion(patente);
 
 
                 fillSelect("#codigo", rsp.data);
@@ -283,10 +284,35 @@ function obtenerFormularioCamion(){
     return formToObject(dataForm);
 }
 
+function validarFormulario(){
+
+    var ban =  true;
+    $('#frm-info').find('.form-control').each(function() {
+        if(this.id !='proveedor' && this.id != 'nombreproveedor'){
+            console.log(this.id + ' = ' + this.value);
+            if(this.value == ""){
+                
+                ban =  ban && false; return;
+            }
+        }
+    })
+    
+    $('#frm-camion').find('.form-control').each(function(){
+        if(this.value == ""){
+            ban =  ban && false; return;
+        }
+    });
+    
+    if(!ban) alert('Complete los campos obligatorios(*)');
+
+    return ban;
+}
+
 function addCamion(msj = true) {
-    if($('#neto').val() == ""){
-        alert('Datos Incompletos: Valor Neto Inválido'); return;
-    }
+
+
+    if(!validarFormulario()) return;
+    
     var frmCamion = new FormData($('#frm-camion')[0]);
     var frmInfo = new FormData($('#frm-info')[0]);
     var dataForm = mergeFD(frmInfo, frmCamion);
@@ -309,7 +335,8 @@ function addCamion(msj = true) {
                 }
                 if (msj) alert('Datos Guardados con Éxito');
             } else {
-                alert('Fallo al Guardar Datos del Camión');
+                if(rsp.msj) alert(rsp.msj)
+                else alert('Fallo al Guardar Datos del Camión');
             }
         },
         error: function(rsp) {

@@ -448,5 +448,14 @@
          <with-param name="batch_id" query-param="batch_id"/>
       </call-query>
    </resource>
+   <resource method="GET" path="/recipientes/contenido/{reci_id}">
+      <call-query href="getContenidoRecipiente">
+         <with-param name="reci_id" query-param="reci_id"/>
+      </call-query>
+   </resource>
+   <query id="getContenidoRecipiente" useConfig="produccionTest">
+      <sql>select al.arti_id, arti.barcode, al.codigo as lote_id, al.cantidad &#xd;from prd.lotes  pl&#xd;join alm.alm_lotes al on pl.batch_id = al.batch_id &#xd;join alm.alm_articulos arti on arti.arti_id = al.arti_id&#xd;where reci_id = CAST(:reci_id as integer)</sql>
+      <result outputType="json">{&#xd;    "batches":{&#xd;       "batch":[&#xd;           {&#xd;               "arti_id":"$arti_id",&#xd;               "barcode":"$barcode",&#xd;               "cantidad":"$cantidad",&#xd;               "lote_id":"$lote_id"&#xd;           }&#xd;       ] &#xd;    }&#xd;}</result>
+      <param name="reci_id" sqlType="STRING"/>
+   </query>
 </data>
-

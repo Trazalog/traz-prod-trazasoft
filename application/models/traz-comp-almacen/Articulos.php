@@ -82,7 +82,6 @@ class Articulos extends CI_Model
 
 	function getpencil($id) // Ok
 	{
-		$userdata  = $this->session->userdata('user_data');
 		$empresaId = empresa();
 
 		$this->db->select('A.*, B.tabl_id as unidadmedida,B.descripcion as unidad_descripcion');
@@ -139,7 +138,6 @@ class Articulos extends CI_Model
 		if ($data == null || strpos('Add', $data['act']) == 0) {
 			return false;
 		} else {
-			$userdata  = $this->session->userdata('user_data');
 			$empresaId = empresa();
 			$action    = $data['act'];
 			$idArt     = $data['id'];
@@ -193,7 +191,6 @@ class Articulos extends CI_Model
 		if ($data == null) {
 			return false;
 		} else {
-			$userdata  = $this->session->userdata('user_data');
 			$empresaId = empresa();
 			$id        = $data['id'];
 			$act       = $data['act'];
@@ -244,7 +241,6 @@ class Articulos extends CI_Model
 
 	function getdatosfams()
 	{
-		$userdata  = $this->session->userdata('user_data');
 		$empresaId = empresa();
 		$query     = $this->db->get_where('conffamily', array('id_empresa' => $empresaId));
 		if ($query->num_rows() > 0) {
@@ -256,7 +252,6 @@ class Articulos extends CI_Model
 
 	function update_articulo($data, $idarticulo)
 	{
-		$userdata           = $this->session->userdata('user_data');
 		$empresaId          = empresa();
 		$data['id_empresa'] = $empresaId;
 		$this->db->where('artId', $idarticulo);
@@ -354,7 +349,6 @@ class Articulos extends CI_Model
 
 	function getestados()
 	{
-		$userdata  = $this->session->userdata('user_data');
 		$empresaId = empresa();
 
 		$this->db->select('articles.artEstado, tbl_estado.estadoid, tbl_estado.descripcion');

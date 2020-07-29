@@ -30,16 +30,7 @@ class Camiones extends CI_Model
         $url = 'http://localhost:3000/camiones/';
         // $array2 = file_get_contents($url, false, http('GET'));
         $array = $this->rest->callApi('GET', $url);
-        // var_dump(json_decode($array)->camiones->camion);
 
-        // var_dump(json_decode($array['data'])->camiones->camion);
-        // var_dump(json_decode($array['data']));
-        // var_dump(json_decode($array2)->camiones->camion);
-        // var_dump($array['data']);
-        // var_dump(json_decode($array)->camiones->camion);
-        // return json_decode($array['data']);
-        // return json_encode($array);
-        // var_dump($array['status']);
         return json_decode($array['data']);
     }
 
