@@ -175,8 +175,7 @@ $('#patente').keyup(function(e) {
         console.log('Obtener Lotes Patentes');
 
         if (this.value == null || this.value == '') return;
-        
-
+    
         var patente = this.value;
         wo();
         $.ajax({
@@ -336,7 +335,8 @@ function addCamion(msj = true) {
                 }
                 if (msj) alert('Datos Guardados con Éxito');
             } else {
-                alert('Fallo al Guardar Datos del Camión');
+                if(rsp.msj) alert(rsp.msj)
+                else alert('Fallo al Guardar Datos del Camión');
             }
         },
         error: function(rsp) {
