@@ -34,6 +34,17 @@
             $data = wso2(REST.'etapas/salidas/'.$etap_id);
             return $data;
         }
+
+        function putMaterial($data)
+        {
+            // $data = $this->Test->agregaMaterial('POST');
+            $a = '';
+        }
+
+        function deleteMaterial()
+        {
+            $a = '';
+        }
     }
 
 ?>

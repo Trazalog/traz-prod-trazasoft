@@ -84,13 +84,6 @@ $.widget.bridge('uibutton', $.ui.button);
         });
     }
 
-function hecho() {
-    alert('Hecho');
-}
-
-function error() {
-    alert('Error')
-}
 
 function conexion() {
     return true;

@@ -173,7 +173,7 @@ define('ETAPA_TRANSPORTE', 1000);
 define('ETAPA_DEPOSITO', 2000);
 
 # >> HELPER WSO2
-define('REST_ALM', 'http://10.142.0.7:8280/services/ALMDataService/');
+// define('REST_ALM', 'http://10.142.0.7:8280/services/ALMDataService/');
 
 # >> ALM AVANZAR TASK
 define('PLANIF_AVANZA_TAREA', true);

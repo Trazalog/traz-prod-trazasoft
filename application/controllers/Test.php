@@ -13,11 +13,6 @@ class Test extends CI_Controller
         $this->load->model('TestModel');
     }
 
-    /**
-     * 
-     * @param
-     * @return
-     */
     public function test()
     {
         log_message('INFO','#TRAZA|test|test() >>');
@@ -33,4 +28,15 @@ class Test extends CI_Controller
         echo json_encode($data);
     }
 
+    public function agregaMaterial()
+    {
+        $data = $this->input->post();
+        $data = $this->TestModel->putMaterial($data);
+    }
+
+    public function eliminarMaterial()
+    {
+        $data = $this->input->post();
+        $data = $this->TestModel->deleteMaterial($data);
+    }
 }

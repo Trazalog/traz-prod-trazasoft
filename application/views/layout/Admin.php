@@ -18,6 +18,7 @@
     <!-- AdminLTE Skins. Choose a skin from the css/skins
     folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="<?php echo base_url() ?>lib/dist/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="<?php echo base_url() ?>lib/swal/dist/sweetalert2.css">
 
     <link rel="stylesheet"
         href="<?php echo base_url()?>lib/plugins/datetimepicker/css/bootstrap-datetimepicker.min.css">
