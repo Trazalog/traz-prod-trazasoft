@@ -31,20 +31,24 @@
 
         function getMaterialesPorEtapa($etap_id)
         {
-            $data = wso2(REST.'etapas/salidas/'.$etap_id);
+            $data = wso2(REST.'etapas/entradas/'.$etap_id);
             return $data;
         }
 
-        function putMaterial($data)
+        function setMaterial($data)
         {
-            // $data = $this->Test->agregaMaterial('POST');
-            $a = '';
+            $url = REST.'etapas/entradas';
+            $aux['_post_etapas_entradas'] = $data;
+            $rsp = wso2($url,'POST',$aux);
+            return $rsp;
         }
 
-        function deleteMaterial()
+        function deleteMaterial($data)
         {
-            $a = '';
+            $url = REST.'etapas/entradas';
+            $aux['_delete_etapas_entradas'] = $data;
+            $rsp = wso2($url,'DELETE',$aux);
+            return $rsp;
         }
     }
-
 ?>

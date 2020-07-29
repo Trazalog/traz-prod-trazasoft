@@ -91,7 +91,7 @@ define('DNATO', 'http://localhost/traz-comp-dnato/');
 #TRAZ-COMP-BPM
 define('BPM', 'traz-comp-bpm/');
 
-define('BONITA_URL', 'http://10.142.0.3:8080/bonita/');
+define('BONITA_URL', 'http://10.142.0.7:8080/bonita/');
 
 define('BPM_PROCESS_ID_PEDIDOS_NORMALES', '8803232493891311406');
 
@@ -121,7 +121,7 @@ define('ASP_115', 'Error al Leer Variable');
 
 #COMPONENTE ALMACENES
 define('ALM', 'traz-comp-almacen/');
-define('REST_ALM', 'http://10.142.0.3:8280/services/ALMDataService/');
+define('REST_ALM', 'http://10.142.0.7:8280/services/ALMDataService/');
 define('viewOT', false);
 
 #COMPONENTE FORMULARIOS
@@ -133,19 +133,19 @@ define('TSK', 'traz-comp-tareas/');
 
 #COMPONENTE TAREASSESTANDAR
 define('TST', 'traz-comp-tareasestandar/');
-define('REST_TST', 'http://10.142.0.3:8280/services/TareasSTD/');
+define('REST_TST', 'http://10.142.0.7:8280/services/TareasSTD/');
 define('CAL','traz-comp-calendar/');
 
 
 #REST
 define('TAREAS_ASIGNAR', 'traz-comp-tareasestandar/asignar');
 
-define('REST', 'http://10.142.0.3:8280/services/PRDDataService/');
-define('RESTPT', 'http://10.142.0.3:8280/services/PRDDataService/');
-define('REST_TDS', 'http://10.142.0.3:8280/services/PRDDataService/');
-define('REST2', 'http://10.142.0.3:8280/services/PRDDataService');
-define('REST3', 'http://10.142.0.3:8280/services/PRDDataService');
-define('REST4', 'http://10.142.0.3:8280/services/PRDDataService');
+define('REST', 'http://10.142.0.7:8280/services/PRDDataService/');
+define('RESTPT', 'http://10.142.0.7:8280/services/PRDDataService/');
+define('REST_TDS', 'http://10.142.0.7:8280/services/PRDDataService/');
+define('REST2', 'http://10.142.0.7:8280/services/PRDDataService');
+define('REST3', 'http://10.142.0.7:8280/services/PRDDataService');
+define('REST4', 'http://10.142.0.7:8280/services/PRDDataService');
 
 //TODO:AGREGAR AL CONSTANT ORIGINAL
 #RECURSOS_LOTES

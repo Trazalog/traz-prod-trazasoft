@@ -31,7 +31,7 @@ class Test extends CI_Controller
     public function agregaMaterial()
     {
         $data = $this->input->post();
-        $data = $this->TestModel->putMaterial($data);
+        $data = $this->TestModel->setMaterial($data);
     }
 
     public function eliminarMaterial()
