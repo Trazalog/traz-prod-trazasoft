@@ -89,7 +89,7 @@ var eliminar = function(valor) {
             etap_id,
             arti_id
         },
-        url: 'Test/eliminarMaterial',
+        url: 'general/Etapa/eliminarMaterial',
         success: function() {},
         error: function() {},
         complete: function() {
@@ -108,7 +108,7 @@ $('#etap_id').on('change', function() {
         $.ajax({
             dataType: 'JSON',
             type: 'GET',
-            url: 'Test/getMaterialesPorEtapa/' + etap_id,
+            url: 'general/Etapa/obtenerMaterialesPorEtapa/' + etap_id,
             success: function(res) {
                 $('#tablaMateriales tbody').empty();
                 $();
@@ -166,7 +166,7 @@ function agregarFila() {
                     etap_id,
                     arti_id
                 },
-                url: 'Test/agregaMaterial',
+                url: 'general/Etapa/agregaMaterial',
                 success: function() {},
                 error: function() {},
                 complete: function() {

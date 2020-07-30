@@ -10,35 +10,5 @@ class Test extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('TestModel');
-    }
-
-    public function test()
-    {
-        log_message('INFO','#TRAZA|test|test() >>');
-        $data['materiales'] = $this->TestModel->getMateriales()['data'];
-        $data['etapas'] = $this->TestModel->getEtapas()['data'];
-        // show($data['etapas']);
-        $this->load->view('test',$data);
-    }
-
-    public function getMaterialesPorEtapa($etap_id)
-    {
-        $rsp = $this->TestModel->getMaterialesPorEtapa($etap_id);
-        echo json_encode($rsp);
-    }
-
-    public function agregaMaterial()
-    {
-        $data = $this->input->post();
-        $rsp = $this->TestModel->setMaterial($data);
-        echo json_encode($rsp);
-    }
-
-    public function eliminarMaterial()
-    {
-        $data = $this->input->post();
-        $rsp = $this->TestModel->deleteMaterial($data);
-        echo json_enconde($rsp);
     }
 }

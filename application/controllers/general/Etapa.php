@@ -523,5 +523,34 @@ class Etapa extends CI_Controller
         echo json_encode($rsp);
     }
 
- 
+
+    /*******ABM ENTRADA DE ETAPAS*******/
+    public function obtenerMyE()
+    {
+        log_message('INFO','#TRAZA|Etapas|obtenerMyE() >>');
+        $data['materiales'] = $this->Etapas->getMateriales()['data'];
+        $data['etapas'] = $this->Etapas->getEtapas()['data'];
+        $this->load->view('etapa/abm/entradasEtapas',$data);
+    }
+
+    public function obtenerMaterialesPorEtapa($etap_id)
+    {
+        $rsp = $this->Etapas->getMaterialesPorEtapa($etap_id);
+        echo json_encode($rsp);
+    }
+
+    public function agregaMaterial()
+    {
+        $data = $this->input->post();
+        $rsp = $this->Etapas->setMaterial($data);
+        echo json_encode($rsp);
+    }
+
+    public function eliminarMaterial()
+    {
+        $data = $this->input->post();
+        $rsp = $this->Etapas->deleteMaterial($data);
+        echo json_enconde($rsp);
+    }
+    /***********************************/
 }

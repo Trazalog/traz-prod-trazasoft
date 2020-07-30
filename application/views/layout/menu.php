@@ -59,5 +59,10 @@
 	</li>
 	<!-- <li><a class="link" href="#" data-link="general/CodigoQR/generarQR"><i class="fa fa-qrcode"></i>Código QR</a>
 	</li> -->
+	<li>
+		<a class="link" href="#" data-link="general/Etapa/obtenerMyE">
+			<i class="fa fa-list-alt"></i>Entrada de etapas
+		</a>
+	</li>
 </ul>
 ||
