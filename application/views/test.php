@@ -1,4 +1,4 @@
-<div id="pnl-general" class="box box-primary animated fadeInLeft">
+<div id="pnl-general" class="box animated fadeInLeft">
     <div class="box-header with-border">
         <h3 class="box-title">Asignar materiales de entrada</h3>
     </div>
@@ -39,38 +39,49 @@
                         <!--__________________________________________________-->
                         <!--BOTON AGREGAR MATERIALES A TABLA-->
                         <span class="input-group-btn">
-                            <button type="button" class="btn btn-success btn-block"
-                                onclick="agregarFila()"><i class="fa fa-plus"></i></button>
+                            <button type="button" class="btn btn-success btn-block" onclick="agregarFila()"><i
+                                    class="fa fa-plus"></i></button>
                         </span>
                         <!--__________________________________________________-->
                     </div>
                 </div>
             </div>
         </form>
-        <!--__________________________________________________-->
-        <!--TABLA DINAMICA DE MATERIALES-->
-        <div class="row">
-            <div class="col-md-12">
-                <table class="table table-striped table-hover" id="tablaPrueba">
-                    <thead>
-                        <tr>
-                            <th>Nombres</th>
-                            <th>Unidad de medida</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <!--__________________________________________________-->
     </div>
 </div>
+<div class="box" id="tabla">
+    <div class="box-header with-border">
+        <h3 class="box-title">Tabla de materiales por etapa</h3>
+    </div>
+    <!--__________________________________________________-->
+    <!--TABLA DINAMICA DE MATERIALES-->
+    <div class="box-body">
+
+        <table class="table table-striped table-hover table-bordered" id="tablaMateriales">
+            <thead>
+                <tr>
+                    <th>Nombres</th>
+                    <th>Unidad de medida</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="2" class="text-center">No hay materiales</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <!--__________________________________________________-->
+</div>
+
 <script>
+
 /*******ELIMINA MATERIAL DE LA TABLA*******/
 var eliminar = function(valor) {
     arti_id = valor;
-    wbox('#pnl-general');
+    wbox('#tabla');
     var etap_id = $('#etap_id').val();
     $.ajax({
         type: 'POST',
@@ -92,14 +103,14 @@ var eliminar = function(valor) {
 $('#etap_id').on('change', function() {
     var etap_id = this.value;
     if (etap_id != -1) {
-        $('#mate_id').attr('disabled',false);
-        wbox('#pnl-general');
+        $('#mate_id').attr('disabled', false);
+        wbox('#tabla');
         $.ajax({
             dataType: 'JSON',
             type: 'GET',
             url: 'Test/getMaterialesPorEtapa/' + etap_id,
             success: function(res) {
-                $('#tablaPrueba tbody').empty();
+                $('#tablaMateriales tbody').empty();
                 $();
                 console.log(res.data);
                 if (res.data) {
@@ -110,12 +121,13 @@ $('#etap_id').on('change', function() {
                             '<td><button id="borrar" onclick="conf(eliminar,' + e.arti_id +
                             ')" class="btn bg-red"><i class="fa fa-trash"></i></button></td>' +
                             '</tr>';
-                        $('#tablaPrueba tbody').append(htmlTags);
+                        $('#tablaMateriales tbody').append(htmlTags);
+                        $('#tablaMateriales tfoot').attr('hidden',true);
                     });
                 } else {
                     error('la etapa no tiene materiales asignados', '');
+                    $('#tablaMateriales tfoot').attr('hidden',false);
                 }
-
             },
             error: function() {},
             complete: function() {
@@ -123,18 +135,20 @@ $('#etap_id').on('change', function() {
             }
         });
     } else {
-        $('#tablaPrueba tbody').empty(); //LIMPIA TABLA POR SELECCIONAR ETAPA NO VALIDA
-        $('#mate_id').attr('disabled',true);
+        $('#tablaMateriales tbody').empty(); //LIMPIA TABLA POR SELECCIONAR ETAPA NO VALIDA
+        $('#mate_id').attr('disabled', true);
+        $('#tablaMateriales tfoot').attr('hidden',false);
     }
 });
 
 /*******AGREGA MATERIAL A LA TABLA*******/
 function agregarFila() {
 
+    $('#tablaMateriales tfoot').attr('hidden',true);
     var etap_id = $('#etap_id').val();
     if (etap_id != -1) {
         var data = JSON.parse($("#mate_id").val());
-        //var aux = $('#tablaPrueba').find('#'+data.arti_id).length; // tambien funciona
+        //var aux = $('#tablaMateriales').find('#'+data.arti_id).length; // tambien funciona
         var aux = $('#' + data.arti_id).length;
         if (aux == 0) {
             var htmlTags = '<tr id="' + data.arti_id + '">' +
@@ -143,10 +157,10 @@ function agregarFila() {
                 '<td><button id="borrar" onclick="conf(eliminar,' + data.arti_id +
                 ')" class="btn bg-red"><i class="fa fa-trash"></i></button></td>' +
                 '</tr>';
-            $('#tablaPrueba tbody').append(htmlTags);
+            $('#tablaMateriales tbody').append(htmlTags);
 
             var arti_id = data.arti_id;
-            wbox('#pnl-general');
+            wbox('#tabla');
             $.ajax({
                 type: 'POST',
                 data: {
@@ -163,5 +177,4 @@ function agregarFila() {
         } else error('El material ya esta asignado', '');
     } else error('Debe seleccionar una etapa', '');
 }
-
 </script>

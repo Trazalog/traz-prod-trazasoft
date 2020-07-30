@@ -24,19 +24,21 @@ class Test extends CI_Controller
 
     public function getMaterialesPorEtapa($etap_id)
     {
-        $data = $this->TestModel->getMaterialesPorEtapa($etap_id);
-        echo json_encode($data);
+        $rsp = $this->TestModel->getMaterialesPorEtapa($etap_id);
+        echo json_encode($rsp);
     }
 
     public function agregaMaterial()
     {
         $data = $this->input->post();
-        $data = $this->TestModel->setMaterial($data);
+        $rsp = $this->TestModel->setMaterial($data);
+        echo json_encode($rsp);
     }
 
     public function eliminarMaterial()
     {
         $data = $this->input->post();
-        $data = $this->TestModel->deleteMaterial($data);
+        $rsp = $this->TestModel->deleteMaterial($data);
+        echo json_enconde($rsp);
     }
 }
