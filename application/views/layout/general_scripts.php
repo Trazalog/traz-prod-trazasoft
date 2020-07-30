@@ -14,9 +14,9 @@
        <!-- jQuery Knob Chart -->
        <script src="<?php echo base_url() ?>lib/bower_components/jquery-knob/dist/jquery.knob.min.js"></script>
        <!-- daterangepicker -->
-       <!-- <script src="<--?php echo base_url() ?>lib/bower_components/moment/min/moment.min.js"></script> -->
-
-       <!-- <script src="<--?php echo base_url() ?>lib/bower_components/bootstrap-daterangepicker/daterangepicker.js"></script> -->
+       <script src="<?php echo base_url() ?>lib/bower_components/moment/min/moment.min.js"></script>
+       <link rel="stylesheet" href="<?php echo base_url() ?>lib/bower_components/bootstrap-daterangepicker/daterangepicker.css">
+       <script src="<?php echo base_url() ?>lib/bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
        <!-- datepicker -->
        <!-- <script src="<--?php echo base_url() ?>lib/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script> -->
        <!-- Bootstrap WYSIHTML5 -->
@@ -132,7 +132,7 @@
              return true;
          }
 
-         function print(id) {//plugin printThis
+         function print(id) { //plugin printThis
            console.log('id: ' + id);
            $("#" + id).printThis({
              debug: false, // show the iframe for debugging

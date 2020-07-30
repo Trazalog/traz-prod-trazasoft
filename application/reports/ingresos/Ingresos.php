@@ -10,14 +10,11 @@ use \koolreport\processes\Limit;
 use \koolreport\processes\OnlyColumn;
 
 //Define the class
-class Produccion extends \koolreport\KoolReport
+class Ingresos extends \koolreport\KoolReport
 {
-  // use \koolreport\clients\Bootstrap;
   use \koolreport\codeigniter\Friendship;
   /*Filtros Avanzados*/
   /*Enlace de datos entre los parámetros del informe y los Controles de entrada */
-  // use \koolreport\inputs\Bindable;
-  // use \koolreport\inputs\POSTBinding;
 
   function cacheSettings()
   {
@@ -28,9 +25,10 @@ class Produccion extends \koolreport\KoolReport
 
   protected function settings()
   {
-    log_message('DEBUG', '#TRAZA| #PRODUCCION.PHP|#PRODUCCION|#SETTINGS| #INGRESO');
-    $json = $this->params;
-    $data = json_encode($json);
+    log_message('DEBUG', '#TRAZA| #INGRESOS|#SETTINGS| #INGRESO');
+    // $json = $this->params;
+    // $data = json_encode($json);
+    $data = "holanda";
 
     return array(
       "dataSources" => array(
@@ -39,6 +37,7 @@ class Produccion extends \koolreport\KoolReport
           "dataFormat" => "associate",
           "data" => json_decode($data, true),
         )
+        // "apiarray" => array("holanda" => "holanda")
       )
     );
 
@@ -56,7 +55,7 @@ class Produccion extends \koolreport\KoolReport
 
   protected function setup()
   {
-    log_message('DEBUG', '#TRAZA| #PRODUCCION.PHP|#PRODUCCION|#SETUP| #INGRESO');
+    log_message('DEBUG', '#TRAZA| #INGRESOS|#SETUP| #INGRESO');
     $this->src("apiarray")
       // ->pipe(new OnlyColumn(array(
       //     "titulo", "stock", "unidad_medida", "estado"
@@ -67,21 +66,22 @@ class Produccion extends \koolreport\KoolReport
       // ->pipe(new RemoveColumn(array(
       //     "extraInfo","unwantedColumn"
       // )))
-      ->pipe(new OnlyColumn(array(
-        "producto", "cantidad"
-      )))
-      ->pipe(new Sort(array(
-        "cantidad" => "desc"
-      )))
-      ->pipe(new Limit(
-        array(6)
-      ))
+
+      // ->pipe(new OnlyColumn(array(
+      //   "producto", "cantidad"
+      // )))
+      // ->pipe(new Sort(array(
+      //   "cantidad" => "desc"
+      // )))
+      // ->pipe(new Limit(
+      //   array(6)
+      // ))
       ->pipe($this->dataStore("data_produccion_pieChart"));
 
     $this->src("apiarray")
-      ->pipe(new OnlyColumn(array(
-        "producto", "etapa"
-      )))
+      // ->pipe(new OnlyColumn(array(
+      //   "producto", "etapa"
+      // )))
       ->pipe($this->dataStore("data_produccion_clumnChart"));
 
     // $this->src("apiarray2")
