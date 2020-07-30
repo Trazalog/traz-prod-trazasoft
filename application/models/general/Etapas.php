@@ -104,7 +104,7 @@ class Etapas extends CI_Model
         log_message('DEBUG', 'Etapas/setRecursos(materias a grabar)-> ' . $data);
 
         $resource = '/recurso/lote_batch_req';
-        $url = REST2 . $resource;
+        $url = REST_PRD_LOTE . $resource;
         $array = $this->rest->callAPI("POST", $url, $data);
         wso2Msj($array);
         return json_decode($array['status']);
@@ -129,7 +129,7 @@ class Etapas extends CI_Model
         $arrayBatch = json_encode($data);
         log_message('DEBUG', 'Etapas/SetNuevoBatch(datos)-> ' . $arrayBatch);
         $resource = '/lote';
-        $url = REST4 . $resource;
+        $url = REST_PRD_LOTE . $resource;
         $rsp = $this->rest->callAPI("POST", $url, $data);
         if ($rsp['status']) {
             $rsp['data'] = json_decode($rsp['data']);
