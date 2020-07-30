@@ -36,7 +36,7 @@
                 <div class="row form-group <?php echo ($producto?'':'hidden') ?>" style="margin-top:20px">
                     <div class="col-md-3 col-xs-12"><label class="form-label">Cantidad:</label></div>
                     <div class="col-md-4 col-xs-12"><input class="form-control" type="text" id="cant_origen"
-                            value="<?php echo $producto[0]->stock.' ('.$producto[0]->uni_med.')';?>" disabled></div>
+                            value="<?php echo $producto[0]->cantidad.' ('.$producto[0]->uni_med.')';?>" disabled></div>
                     <div class="col-md-5"></div>
                 </div>
                 <div class="row form-group <?php echo ($producto?'':'hidden') ?>" style="margin-top:20px">
