@@ -1,0 +1,88 @@
+<data enableBatchRequests="true" enableBoxcarring="true" name="PRDLoteDataService" transports="http https local">
+   <config enableOData="false" id="ToolsDataSource">
+      <property name="carbon_datasource_name">ToolsDataSource</property>
+   </config>
+   <query id="loteSetV2" useConfig="ToolsDataSource">
+      <sql>select prd.crear_lote_v2(&#xd; :lote_id &#xd;,cast(:arti_id as integer)&#xd;,cast(:prov_id as integer)&#xd;,cast(:batch_id_padre as bigint)&#xd;,cast(:cantidad as float8) &#xd;,cast(:cantidad_padre as float8)&#xd;,:num_orden_prod&#xd;,cast(:reci_id as integer)&#xd;,cast(:etap_id as integer)&#xd;,:usuario_app&#xd;,cast(:empr_id as integer)&#xd;,:forzar_agregar&#xd;,to_date(:fec_vencimiento,'DD-MM-YYYY')&#xd;,cast (:recu_id as integer)&#xd;,:tipo_recurso&#xd;,:planificado&#xd;,cast(:batch_id as bigint))&#xd;resultado;</sql>
+      <result outputType="json">{"respuesta":{"resultado":"$resultado"}}</result>
+      <param name="lote_id" sqlType="STRING"/>
+      <param name="batch_id_padre" sqlType="STRING"/>
+      <param name="cantidad" sqlType="STRING"/>
+      <param name="cantidad_padre" sqlType="STRING"/>
+      <param name="num_orden_prod" sqlType="STRING"/>
+      <param name="reci_id" sqlType="STRING"/>
+      <param name="etap_id" sqlType="STRING"/>
+      <param name="usuario_app" sqlType="STRING"/>
+      <param name="empr_id" sqlType="STRING"/>
+      <param name="forzar_agregar" optional="true" sqlType="STRING"/>
+      <param name="arti_id" sqlType="STRING"/>
+      <param name="prov_id" sqlType="STRING"/>
+      <param name="fec_vencimiento" optional="true" sqlType="STRING"/>
+      <param name="recu_id" sqlType="STRING"/>
+      <param name="tipo_recurso" sqlType="STRING"/>
+      <param name="planificado" sqlType="STRING"/>
+      <param name="batch_id" optional="true" sqlType="STRING"/>
+   </query>
+   <query id="loteSetV2_batch_req" useConfig="ToolsDataSource">
+      <sql>select prd.crear_lote_v2(&#xd; :lote_id &#xd;,cast(:arti_id as integer)&#xd;,cast(:prov_id as integer)&#xd;,cast(:batch_id_padre as bigint)&#xd;,cast(:cantidad as float8)&#xd;,cast(:cantidad_padre as float8)&#xd;,:num_orden_prod&#xd;,cast(:reci_id as integer)&#xd;,cast(:etap_id as integer)&#xd;,:usuario_app&#xd;,cast(:empr_id as integer)&#xd;,:forzar_agregar&#xd;,to_date(:fec_vencimiento,'DD-MM-YYYY')&#xd;,cast (:recu_id as int4)&#xd;,:tipo_recurso&#xd;,:planificado&#xd;,cast(:batch_id as bigint))&#xd;resultado;</sql>
+      <param name="lote_id" sqlType="STRING"/>
+      <param name="arti_id" sqlType="STRING"/>
+      <param name="prov_id" sqlType="STRING"/>
+      <param name="batch_id_padre" sqlType="STRING"/>
+      <param name="cantidad" sqlType="STRING"/>
+      <param name="cantidad_padre" sqlType="STRING"/>
+      <param name="num_orden_prod" sqlType="STRING"/>
+      <param name="reci_id" sqlType="STRING"/>
+      <param name="etap_id" sqlType="STRING"/>
+      <param name="usuario_app" sqlType="STRING"/>
+      <param name="empr_id" sqlType="STRING"/>
+      <param name="forzar_agregar" sqlType="STRING"/>
+      <param name="fec_vencimiento" sqlType="STRING"/>
+      <param name="recu_id" sqlType="STRING"/>
+      <param name="tipo_recurso" sqlType="STRING"/>
+      <param name="planificado" sqlType="STRING"/>
+      <param name="batch_id" optional="true" sqlType="STRING"/>
+   </query>
+   <resource method="POST" path="/lote">
+      <call-query href="loteSetV2">
+         <with-param name="lote_id" query-param="lote_id"/>
+         <with-param name="batch_id_padre" query-param="batch_id_padre"/>
+         <with-param name="cantidad" query-param="cantidad"/>
+         <with-param name="cantidad_padre" query-param="cantidad_padre"/>
+         <with-param name="num_orden_prod" query-param="num_orden_prod"/>
+         <with-param name="reci_id" query-param="reci_id"/>
+         <with-param name="etap_id" query-param="etap_id"/>
+         <with-param name="usuario_app" query-param="usuario_app"/>
+         <with-param name="empr_id" query-param="empr_id"/>
+         <with-param name="forzar_agregar" query-param="forzar_agregar"/>
+         <with-param name="arti_id" query-param="arti_id"/>
+         <with-param name="prov_id" query-param="prov_id"/>
+         <with-param name="fec_vencimiento" query-param="fec_vencimiento"/>
+         <with-param name="recu_id" query-param="recu_id"/>
+         <with-param name="tipo_recurso" query-param="tipo_recurso"/>
+         <with-param name="planificado" query-param="planificado"/>
+         <with-param name="batch_id" query-param="batch_id"/>
+      </call-query>
+   </resource>
+   <resource method="POST" path="/lote/list" returnRequestStatus="true">
+      <call-query href="loteSetV2_batch_req">
+         <with-param name="lote_id" query-param="lote_id"/>
+         <with-param name="arti_id" query-param="arti_id"/>
+         <with-param name="prov_id" query-param="prov_id"/>
+         <with-param name="batch_id_padre" query-param="batch_id_padre"/>
+         <with-param name="cantidad" query-param="cantidad"/>
+         <with-param name="cantidad_padre" query-param="cantidad_padre"/>
+         <with-param name="num_orden_prod" query-param="num_orden_prod"/>
+         <with-param name="reci_id" query-param="reci_id"/>
+         <with-param name="etap_id" query-param="etap_id"/>
+         <with-param name="usuario_app" query-param="usuario_app"/>
+         <with-param name="empr_id" query-param="empr_id"/>
+         <with-param name="forzar_agregar" query-param="forzar_agregar"/>
+         <with-param name="fec_vencimiento" query-param="fec_vencimiento"/>
+         <with-param name="recu_id" query-param="recu_id"/>
+         <with-param name="tipo_recurso" query-param="tipo_recurso"/>
+         <with-param name="planificado" query-param="planificado"/>
+         <with-param name="batch_id" query-param="batch_id"/>
+      </call-query>
+   </resource>
+</data>
