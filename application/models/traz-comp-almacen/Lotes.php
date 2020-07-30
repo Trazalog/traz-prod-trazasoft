@@ -192,7 +192,7 @@ class Lotes extends CI_Model
             $batch_req['_post_lote_batch_req']['_post_lote'][] = $aux;
         }
 
-        $url = REST_PRD_LOTE . 'lote/list_batch_req';//
+        $url = REST_PRD_LOTE . '/lote/list_batch_req';//
         $rsp = $this->rest->callApi('POST', $url, $batch_req);
         wso2Msj($rsp);
         log_message('DEBUG','#LOTES > crearBatch | RSP: '.json_encode($rsp));
@@ -216,7 +216,7 @@ class Lotes extends CI_Model
             $batch_req['_post_lote_recipiente_cambiar_batch_req']['_post_lote_recipiente_cambiar'][] = $aux;
         }
 
-        $url = REST_PRD_LOTE . 'lote/recipiente/cambiar_batch_req';
+        $url = REST . 'lote/recipiente/cambiar_batch_req';
         $rsp = $this->rest->callApi('POST', $url, $batch_req);
         wso2Msj($rsp);
         if (!$rsp['status']) {
