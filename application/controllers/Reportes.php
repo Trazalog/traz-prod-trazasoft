@@ -206,17 +206,9 @@ class Reportes extends CI_Controller
   public function filtroIngresos()
   {
     log_message('INFO', '#TRAZA| #REPORTES|#FILTROINGRESOS| #INGRESO');
-    $url['productos'] = REST_TDS . 'productos/list';
-    $url['etapas'] = REST_TDS . 'etapas/all/list';
-
-    $valores['productos'] = $this->Koolreport->depurarJson($url['productos'])->productos->producto;
-    $valores['etapas'] = $this->Koolreport->depurarJson($url['etapas'])->etapas->etapa;
-
-    $data['filtro'] = $this->Opciones_Filtros->filtrosProduccion($valores);
-    $data['calendarioDesde'] = true;
-    $data['calendarioHasta'] = true;
-    $data['op'] = "produccion";
-
-    $this->load->view('layout/Filtro', $data);
+    $rsp['proveedores'] = $this->Opciones_Filtros->getProveedores();
+    $rsp['transportista'] = $this->Opciones_Filtros->getTransportistas();
+    $rsp['productos'] = $this->Opciones_Filtros->getProductos();
+    echo json_encode($rsp);
   }
 }

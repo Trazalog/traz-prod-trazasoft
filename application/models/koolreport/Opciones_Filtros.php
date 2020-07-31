@@ -6,6 +6,8 @@ class Opciones_Filtros extends CI_Model
   function __construct()
   {
     parent::__construct();
+    $this->load->helper('wso2_helper');
+    $this->load->helper('sesion_helper');
   }
 
   public function ejemplo($valores)
@@ -39,4 +41,23 @@ class Opciones_Filtros extends CI_Model
     log_message('DEBUG', '#TRAZA| #OPCIONES_FILTROS.PHP|#OPCIONES_FILTROS|#FILTROSPRODRESPONSABLE| #REPONSABLES: >>' . $res->responsable . '#PRODUCTOS: >>' . $res->producto . '#ETAPAS: >>' . $res->etapa);
     return $res;
   }
+
+  public function getTransportistas()
+  {
+    $url = RESTPT . 'transportistas';
+    return wso2($url)['data'];
+  }
+
+  public function getProductos()
+  {//articulos
+    $url = REST_ALM . 'articulos/' . empresa();
+    return wso2($url)['data'];
+  }
+
+  public function getProveedores()
+  {
+    $url = REST_ALM . 'proveedores/' . empresa();
+    return wso2($url)['data'];
+  }
+
 }

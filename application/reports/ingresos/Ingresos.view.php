@@ -7,6 +7,14 @@ use \koolreport\widgets\google\PieChart;
 // use \koolreport\inputs\Select2;
 use \koolreport\widgets\koolphp\Card;
 ?>
+<style>
+  .truck {
+    padding-bottom: 0%;
+    margin-bottom: -4%;
+    padding-top: 4%;
+    margin-top: -20%;
+  }
+</style>
 
 <body>
   <!--_________________BODY REPORTE___________________________-->
@@ -20,35 +28,80 @@ use \koolreport\widgets\koolphp\Card;
                 Reporte de Ingresos
               </h3>
             </div>
-            <hr>
+            <br><br>
             <!--_________________FILTRO_________________-->
-            <div class="row">
-              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                  <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
+            <form id="frm-filtros">
+              <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                  <!-- <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6"> -->
+                  <!-- <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6"> -->
+                  <div class="form-group col-xs-12 col-sm-3 col-md-3 col-lg-3">
                     <label style="padding-left: 20%;">Desde</label>
                     <div class="input-group date">
-                      <div class="input-group-addon" id="daterange-btn">
+                      <a class="input-group-addon" id="daterange-btn" title="Más fechas">
                         <i class="fa fa-magic"></i>
                         <span></span>
-                        </button>
-                      </div>
+                      </a>
                       <input type="date" class="form-control pull-right" id="desde" name="desde" placeholder="Desde">
                     </div>
                   </div>
                   <!-- /.form-group -->
-                  <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                  <!-- <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6"> -->
+                  <div class="form-group col-xs-12 col-sm-3 col-md-3 col-lg-3">
                     <label>Hasta</label>
                     <div class="input-group">
                       <input type="date" class="form-control" id="hasta" name="hasta" placeholder="Hasta">
-                      <div class="input-group-addon" style="cursor: pointer;" onclick="filtro()">
+                      <a class="input-group-addon" style="cursor: pointer;" onclick="filtro()" title="Más filtros">
                         <i class="fa fa-filter"></i>
+                      </a>
+                    </div>
+                  </div>
+                  <div class="form-group col-xs-12 col-sm-4 col-md-4 col-lg-4 pull-right">
+                    <div class="small-box bg-yellow">
+                      <div class="inner truck">
+                        <h3 id="cant_ingresos">456</h3>
+                        <h4>Cantidad de ingresos</h4>
                       </div>
+                      <div class="icon">
+                        <i class="fa fa-truck"></i>
+                      </div>
+                      <br>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
+              <br>
+              <div class="row" id="filtrosExt" data="false" hidden>
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                  <!-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"> -->
+                  <div class="form-group col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                    <label>Proveedor</label>
+                    <select class="form-control" id="proveedor" name="proveedor">
+                      <!-- <?php
+                            echo "<option selected disabled>Seleccione proveedor</option>"
+                            ?> -->
+                    </select>
+                  </div>
+                  <div class="form-group col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                    <label>Transporte</label>
+                    <select class="form-control" id="transporte" name="transporte">
+                      <!-- <?php
+                            echo "<option selected disabled>Seleccione transporte</option>"
+                            ?> -->
+                    </select>
+                  </div>
+                  <div class="form-group col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                    <label>Producto</label>
+                    <select class="form-control" id="producto" name="producto">
+                      <!-- <?php
+                            echo "<option selected disabled>Seleccione producto</option>"
+                            ?> -->
+                    </select>
+                  </div>
+                  <!-- </div> -->
+                </div>
+              </div>
+            </form>
             <br>
             <!--_________________TABLA_________________-->
             <div class="box-body">
@@ -245,10 +298,53 @@ use \koolreport\widgets\koolphp\Card;
       }
     );
 
+    // $('#filtrosExt').val('false');
+
     function filtro() {
-      var desde2 = $('#desde').val();
-      var hasta2 = $('#hasta').val();
+      var filtrosExt = $('#filtrosExt').attr('data');
       // debugger;
+      if (filtrosExt == "false") {
+        $('#filtrosExt').removeAttr('hidden');
+        $('#filtrosExt').attr('data', "true");
+      } else {
+        $('#filtrosExt').attr('hidden', '');
+        $('#filtrosExt').attr('data', "false");
+      }
+    }
+
+    filtroIngresos();
+
+    function filtroIngresos() {
+      $.ajax({
+        type: "GET",
+        dataType: "JSON",
+        url: "Reportes/filtroIngresos",
+        success: function(rsp) {
+          var html_trans = '<option selected disabled>Seleccione transportista</option>';
+          debugger;
+          rsp.transportista.forEach(element => {
+            html_trans += "<option value=" + element.cuit + ">" + element.razon_social + "</option>";
+          });
+          $('#transporte').html(html_trans);
+
+          // var html_prov = '<option selected disabled>Seleccione proveedor</option>';
+          // debugger;
+          // rsp.proveedores.forEach(element => {
+          //   html_prov += "<option value=" + element.cuit + ">" + element.razon_social + "</option>";
+          // });
+          // $('#proveedor').html(html_prov);
+
+          var html_prod = '<option selected disabled>Seleccione producto</option>';
+          debugger;
+          rsp.productos.forEach(element => {
+            html_prod += "<option value=" + element.arti_id + ">" + element.descripcion + "</option>";
+          });
+          $('#producto').html(html_prod);
+        },
+        error: function(rsp) {
+
+        }
+      })
     }
     // }
     // })
