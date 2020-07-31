@@ -7,9 +7,9 @@ class Etapas extends CI_Model
     private $rsp_lote = [
         "TOOLSERROR:RECI_NO_VACIO_DIST_ART" => "El recipiente ya contiene artículos distintos",
         "TOOLSERROR:RECI_NO_VACIO_DIST_LOTE_IGUAL_ART" => "El recipiente ya contiene lotes distintos",
-        "TOOLSERROR:RECI_NO_VACIO_IGUAL_ART_LOTE" => "El recipiente ya contiene los mismos lotes y artículos"
+        "TOOLSERROR:RECI_NO_VACIO_IGUAL_ART_LOTE" => "El recipiente ya contiene los mismos lotes y artículos",
     ];
-    
+
     public function __construct()
     {
         parent::__construct();
@@ -20,7 +20,7 @@ class Etapas extends CI_Model
         $resource = '/lotes';
         $url = REST3 . $resource;
         $rsp = $this->rest->callApi('GET', $url);
-        if($rsp['status']){
+        if ($rsp['status']) {
             $rsp = json_decode($rsp['data']);
         }
         return $rsp;
@@ -84,9 +84,9 @@ class Etapas extends CI_Model
         // FLEIVA
         $arrayDatos['empa_id'] = "0";
         $arrayDatos['empa_cantidad'] = "0";
-        // FLEIVA 
+        // FLEIVA
         $data['_post_recurso'] = $arrayDatos;
-        
+
         log_message('DEBUG', 'Etapas/setRecursosLotes(recursos a grabar)-> ' . json_encode($data));
 
         return $arrayDatos;
@@ -104,13 +104,13 @@ class Etapas extends CI_Model
         log_message('DEBUG', 'Etapas/setRecursos(materias a grabar)-> ' . $data);
 
         $resource = '/recurso/lote_batch_req';
-        $url = REST2 . $resource;
+        $url = REST_PRD_LOTE . $resource;
         $array = $this->rest->callAPI("POST", $url, $data);
         wso2Msj($array);
         return json_decode($array['status']);
     }
 
-    //Tincho 
+    //Tincho
     // guarda materias primas en recursos lotes (request_box)
     public function setRecursosLotes_requestBox($data)
     {
@@ -124,23 +124,26 @@ class Etapas extends CI_Model
     // Inicia nueva Etapa (ej siembra)
     public function SetNuevoBatch($data)
     {
-        $this->load->model(ALM. 'Articulos');
+        $this->load->model(ALM . 'Articulos');
 
         $arrayBatch = json_encode($data);
         log_message('DEBUG', 'Etapas/SetNuevoBatch(datos)-> ' . $arrayBatch);
         $resource = '/lote';
-        $url = REST4 . $resource;
+        $url = REST_PRD_LOTE . $resource;
         $rsp = $this->rest->callAPI("POST", $url, $data);
-        if($rsp['status']){
-            $rsp['data']  = json_decode($rsp['data']);
-        }else{
+        if ($rsp['status']) {
+            $rsp['data'] = json_decode($rsp['data']);
+        } else {
             $msj = explode('-', wso2Msj($rsp));
             $rsp['error'] = $msj[0];
             $rsp['msj'] = $this->rsp_lote[$rsp['error']];
             foreach ($msj as $key => $o) {
-                if(!$key) continue;
+                if (!$key) {
+                    continue;
+                }
+
                 $aux = explode('=', $o);
-                $rsp[$aux[0]]  = $aux[1];
+                $rsp[$aux[0]] = $aux[1];
             }
         }
         $rsp['barcode'] = $this->Articulos->get($rsp['arti_id'])['barcode'];
@@ -211,12 +214,12 @@ class Etapas extends CI_Model
     {
         log_message('DEBUG', 'Etapas/finalizarEtapa(datos)-> ' . json_encode($arrayDatos));
         $resource = '/_post_lote_list_batch_req';
-        $url = REST4 . $resource;
+        $url = REST_PRD_LOTE . $resource;
         $rsp = $this->rest->callAPI("POST", $url, $arrayDatos);
-        if(!$rsp['status']){
+        if (!$rsp['status']) {
             $msj = explode('-', wso2Msj($rsp));
             $rsp['error'] = $msj[0];
-            $rsp['reci_id'] = explode('=',$msj[1])[1];
+            $rsp['reci_id'] = explode('=', $msj[1])[1];
             $rsp['msj'] = $this->rsp_lote[$rsp['error']];
         }
 
@@ -251,7 +254,7 @@ class Etapas extends CI_Model
         $resource = "/etapas/productos/$id_etapa";
         $url = REST2 . $resource;
         $rsp = $this->rest->callAPI("GET", $url);
-        if($rsp['status']){
+        if ($rsp['status']) {
             $rsp['data'] = json_decode($rsp['data'])->productos->producto;
         }
         return $rsp;
@@ -262,7 +265,7 @@ class Etapas extends CI_Model
         $resource = "/etapas/materiales/$id_etapa";
         $url = REST2 . $resource;
         $rsp = $this->rest->callAPI("GET", $url);
-        if($rsp['status']){
+        if ($rsp['status']) {
             $rsp['data'] = json_decode($rsp['data'])->productos->producto;
         }
         return $rsp;
@@ -270,9 +273,41 @@ class Etapas extends CI_Model
 
     public function finalizarLote($id)
     {
-        $post['_post_lote_finalizar']['batch_id'] =  $id;
-        $url = REST2."/lote/finalizar";
-        $rsp = $this->rest->callApi('POST', $url, $post);
+        $post['_put_lote_finalizar']['batch_id'] = $id;
+        $url = REST2 . "/lote/finalizar";
+        $rsp = $this->rest->callApi('PUT', $url, $post);
         return $rsp;
+    }
+
+    public function getSalidaEtapa($etap_id)
+    {
+        $url = REST2 . "/etapas/salidas/$etap_id";
+        $rsp = $this->rest->callApi('GET', $url);
+        if ($rsp['status']) {
+            $rsp['data'] = json_decode($rsp['data'])->salidas->salida;
+        }
+        return $rsp;
+    }
+
+    public function validarPedidoMaterial($batch_id)
+    {
+        if (PLANIF_AVANZA_TAREA) { #Pregunta Magica
+
+            $url = REST_ALM . "pedidos/batch/$batch_id";
+
+            $rsp = wso2($url);
+
+            if ($rsp['status'] && $rsp['data']) {
+                $caseId = $rsp['data'][0]->case_id;
+
+                $tarea = $this->bpm->ObtenerTaskidXNombre(BPM_PROCESS_ID_PEDIDOS_NORMALES, $caseId, "Entrega pedido pendiente");
+
+                return $tarea;
+            }
+
+            return false;
+        } else {
+            return false;
+        }
     }
 }

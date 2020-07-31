@@ -12,6 +12,15 @@
       <result outputType="json">{&#xd;    "lotes":{&#xd;        "lote":[&#xd;            {&#xd;                "id":"$id",&#xd;                "batch_id":"$batch_id",&#xd;                "titulo":"$titulo",&#xd;                "producto":"$producto",&#xd;                "tituloproducto":"$tituloproducto",&#xd;                "fecha":"$fecha",&#xd;                "stock":"$stock",&#xd;                "envase":"$envase",&#xd;                "tituloenvase":"$tituloenvase"&#xd;&#xd;            }&#xd;        ]&#xd;    }&#xd;}</result>
       <param name="esta_id" sqlType="STRING"/>
    </query>
+   <query id="setRecipiente" keyColumns="reci_id" returnGeneratedKeys="true" useConfig="produccionTest">
+      <sql>INSERT INTO prd.recipientes (tipo,nombre,empr_id,depo_id, motr_id) &#xd;VALUES &#xd;(:tipo,:patente, CAST(:empr_id as INTEGER), CAST(:depo_id as INTEGER), CAST(:motr_id as INTEGER))</sql>
+      <result outputType="json">{&#xd; "resultado":{"reci_id":"$reci_id"}&#xd;}</result>
+      <param name="tipo" sqlType="STRING"/>
+      <param name="patente" sqlType="STRING"/>
+      <param name="empr_id" sqlType="STRING"/>
+      <param name="depo_id" sqlType="STRING"/>
+      <param name="motr_id" sqlType="STRING"/>
+   </query>
    <query id="extraerCantidadLote" useConfig="produccionTest">
       <sql>update alm.alm_lotes&#xd;set cantidad = cantidad - CAST(:cantidad as FLOAT8)&#xd;where batch_id = CAST(:batch_id as VARCHAR)&#xd;and empr_id = CAST(:empr_id as INTEGER)</sql>
       <param name="cantidad" sqlType="STRING"/>
@@ -207,43 +216,6 @@
       <sql>DELETE FROM prd.lotes_responsables&#xd;WHERE batch_id = cast(:batch_id as int8)</sql>
       <param name="batch_id" sqlType="STRING"/>
    </query>
-   <query id="getContenidoRecipiente" useConfig="produccionTest">
-      <sql>select al.arti_id, arti.barcode, al.codigo as lote_id, al.cantidad &#xd;from prd.lotes  pl&#xd;join alm.alm_lotes al on pl.batch_id = al.batch_id &#xd;join alm.alm_articulos arti on arti.arti_id = al.arti_id&#xd;where reci_id = CAST(:reci_id as integer)</sql>
-      <result outputType="json">{&#xd;    "batches":{&#xd;       "batch":[&#xd;           {&#xd;               "arti_id":"$arti_id",&#xd;               "barcode":"$barcode",&#xd;               "cantidad":"$cantidad",&#xd;               "lote_id":"$lote_id"&#xd;           }&#xd;       ] &#xd;    }&#xd;}</result>
-      <param name="reci_id" sqlType="STRING"/>
-   </query>
-   <query id="getDepositosEstablecimiento" useConfig="produccionTest">
-      <sql>SELECT a.depo_id, a.descripcion, e.esta_id, e.nombre&#xd;FROM alm.alm_depositos a &#xd;join prd.establecimientos e on e.esta_id = a.esta_id&#xd;WHERE e.esta_id = CAST(:esta_id as integer)&#xd;AND a.eliminado = false</sql>
-      <result outputType="json">{&#xd;   "depositos":{&#xd;      "deposito":[&#xd;         {&#xd;            "depo_id":"$depo_id",&#xd;            "descripcion":"$descripcion",&#xd;            "esta_id":"$esta_id",&#xd;            "esta_nombre":"$nombre"&#xd;         }&#xd;      ]&#xd;   }&#xd;}</result>
-      <param name="esta_id" sqlType="STRING"/>
-   </query>
-   <query id="getRecipientesDepositoEstablecimiento" useConfig="produccionTest">
-      <sql>SELECT r.reci_id, r.nombre as reci_nombre, a.depo_id, a.descripcion as depo_descripcion, e.esta_id, e.nombre as esta_nombre&#xd;FROM prd.recipientes r&#xd;JOIN alm.alm_depositos a ON a.depo_id = r.depo_id&#xd;JOIN prd.establecimientos e ON e.esta_id = a.esta_id&#xd;WHERE r.eliminado = 0&#xd;AND a.depo_id = CAST(:depo_id as integer) AND a.eliminado = false&#xd;AND e.esta_id = CAST(:esta_id as integer)</sql>
-      <result outputType="json">{&#xd;   "recipientes":{&#xd;      "recipiente":[&#xd;         {&#xd;            "reci_id":"$reci_id",&#xd;            "reci_nombre":"$reci_nombre",&#xd;            "depo_id":"$depo_id",&#xd;            "depo_descripcion":"$depo_descripcion",&#xd;            "esta_id":"$esta_id",&#xd;            "esta_nombre":"$esta_nombre"&#xd;         }&#xd;      ]&#xd;   }&#xd;}</result>
-      <param name="depo_id" sqlType="STRING"/>
-      <param name="esta_id" sqlType="STRING"/>
-   </query>
-   <query id="setRecipiente" useConfig="produccionTest">
-      <sql>INSERT INTO prd.recipientes (tipo,nombre,empr_id,depo_id) &#xd;VALUES &#xd;(:tipo,:patente, CAST(:empr_id as INTEGER), CAST(:depo_id as INTEGER))</sql>
-      <param name="tipo" sqlType="STRING"/>
-      <param name="patente" sqlType="STRING"/>
-      <param name="empr_id" sqlType="STRING"/>
-      <param name="depo_id" sqlType="STRING"/>
-   </query>
-   <query id="getAllRecipientes" useConfig="produccionTest">
-      <sql>SELECT r.reci_id, r.tipo as reci_tipo, r.nombre as reci_nombre, cast(r.fec_alta as date) as reci_fec_alta, &#xd;d.depo_id, d.descripcion as depo_descripcion, e.esta_id, e.nombre as esta_nombre&#xd;FROM prd.recipientes r &#xd;join alm.alm_depositos d on d.depo_id = r.depo_id&#xd;join prd.establecimientos e on e.esta_id = d.esta_id&#xd;where r.eliminado = 0&#xd;order by r.fec_alta desc, d.esta_id asc, r.tipo asc, d.descripcion asc, r.nombre asc</sql>
-      <result outputType="json">{&#xd;   "recipientes":{&#xd;      "recipiente":[&#xd;         {&#xd;            "reci_id":"$reci_id", &#xd;            "reci_tipo":"$reci_tipo", &#xd;            "reci_nombre":"$reci_nombre", &#xd;            "reci_fec_alta":"$reci_fec_alta ", &#xd;            "depo_id":"$depo_id", &#xd;            "depo_descripcion":"$depo_descripcion", &#xd;            "esta_id":"$esta_id", &#xd;            "esta_nombre":"$esta_nombre"&#xd;         }&#xd;      ]&#xd;   }&#xd;}</result>
-   </query>
-   <query id="deleteRecipiente" useConfig="produccionTest">
-      <sql>UPDATE prd.recipientes&#xd;SET eliminado = 1 &#xd;WHERE reci_id = cast(:reci_id as int8)</sql>
-      <param name="reci_id" sqlType="STRING"/>
-   </query>
-   <query id="updateRecipiente" useConfig="produccionTest">
-      <sql>UPDATE prd.recipientes&#xd;SET tipo = :reci_tipo, nombre = :reci_nombre&#xd;WHERE reci_id = cast(:reci_id as int8)</sql>
-      <param name="reci_tipo" sqlType="STRING"/>
-      <param name="reci_nombre" sqlType="STRING"/>
-      <param name="reci_id" sqlType="STRING"/>
-   </query>
    <resource method="GET" path="/camion_establecimiento/{esta_id}">
       <call-query href="getCamionEstablecimiento">
          <with-param name="esta_id" query-param="esta_id"/>
@@ -252,6 +224,15 @@
    <resource method="GET" path="/lotes_establecimiento/{esta_id}">
       <call-query href="getLotesEstablecimiento">
          <with-param name="esta_id" query-param="esta_id"/>
+      </call-query>
+   </resource>
+   <resource method="POST" path="/recipientes">
+      <call-query href="setRecipiente">
+         <with-param name="tipo" query-param="tipo"/>
+         <with-param name="patente" query-param="patente"/>
+         <with-param name="empr_id" query-param="empr_id"/>
+         <with-param name="depo_id" query-param="depo_id"/>
+         <with-param name="motr_id" query-param="motr_id"/>
       </call-query>
    </resource>
    <resource method="POST" path="/extraer_cantidad_lote">
@@ -472,39 +453,9 @@
          <with-param name="reci_id" query-param="reci_id"/>
       </call-query>
    </resource>
-   <resource method="GET" path="/depositos_establecimiento/{esta_id}">
-      <call-query href="getDepositosEstablecimiento">
-         <with-param name="esta_id" query-param="esta_id"/>
-      </call-query>
-   </resource>
-   <resource method="GET" path="/recipientes/deposito/{depo_id}/establecimiento/{esta_id}">
-      <call-query href="getRecipientesDepositoEstablecimiento">
-         <with-param name="depo_id" query-param="depo_id"/>
-         <with-param name="esta_id" query-param="esta_id"/>
-      </call-query>
-   </resource>
-   <resource method="POST" path="/recipientes">
-      <call-query href="setRecipiente">
-         <with-param name="tipo" query-param="tipo"/>
-         <with-param name="patente" query-param="patente"/>
-         <with-param name="empr_id" query-param="empr_id"/>
-         <with-param name="depo_id" query-param="depo_id"/>
-      </call-query>
-   </resource>
-   <resource method="GET" path="/getAllRecipientes">
-      <call-query href="getAllRecipientes"/>
-   </resource>
-   <resource method="PUT" path="/deleteRecipiente">
-      <call-query href="deleteRecipiente">
-         <with-param name="reci_id" query-param="reci_id"/>
-      </call-query>
-   </resource>
-   <resource method="PUT" path="/updateRecipiente">
-      <call-query href="updateRecipiente">
-         <with-param name="reci_tipo" query-param="reci_tipo"/>
-         <with-param name="reci_nombre" query-param="reci_nombre"/>
-         <with-param name="reci_id" query-param="reci_id"/>
-      </call-query>
-   </resource>
+   <query id="getContenidoRecipiente" useConfig="produccionTest">
+      <sql>select al.arti_id, arti.barcode, al.codigo as lote_id, al.cantidad &#xd;from prd.lotes  pl&#xd;join alm.alm_lotes al on pl.batch_id = al.batch_id &#xd;join alm.alm_articulos arti on arti.arti_id = al.arti_id&#xd;where reci_id = CAST(:reci_id as integer)</sql>
+      <result outputType="json">{&#xd;    "batches":{&#xd;       "batch":[&#xd;           {&#xd;               "arti_id":"$arti_id",&#xd;               "barcode":"$barcode",&#xd;               "cantidad":"$cantidad",&#xd;               "lote_id":"$lote_id"&#xd;           }&#xd;       ] &#xd;    }&#xd;}</result>
+      <param name="reci_id" sqlType="STRING"/>
+   </query>
 </data>
-

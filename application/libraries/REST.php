@@ -8,14 +8,14 @@ class REST
 
         try {
             $curl = curl_init();
-
+            $data = is_array($data)?json_encode($data):$data;
             switch ($method) {
                 case "POST":
                     curl_setopt($curl, CURLOPT_POST, true);
                     if ($data) {
-                        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
+                        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
                         array_push($token, 'Content-Type: application/json');
-                        log_message('DEBUG', '#TRAZA | #REST | #CURL | #PAYLOAD >> ' . json_encode($data));
+                        log_message('DEBUG', '#TRAZA | #REST | #CURL | #PAYLOAD >> ' . $data);
                     } else {
                         curl_setopt($curl, CURLOPT_POSTFIELDS, null);
                     }
@@ -24,26 +24,29 @@ class REST
                 case "PUT":
                     curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PUT");
                     if ($data) {
-                        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
+                        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
                         array_push($token, 'Content-Type: application/json');
-                        log_message('DEBUG', '#TRAZA | #REST | #CURL | #PAYLOAD >> ' . json_encode($data));
+                        log_message('DEBUG', '#TRAZA | #REST | #CURL | #PAYLOAD >> ' . $data);
                     }
 
                     break;
 
-                    case "DELETE":
-                        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "DELETE");
-                        if ($data) {
-                            curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
-                            array_push($token, 'Content-Type: application/json');
-                            log_message('DEBUG', '#TRAZA | #REST | #CURL | #PAYLOAD >> ' . json_encode($data));
-                        }
+                case "DELETE":
+                    curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "DELETE");
+                    if ($data) {
+                        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+                        array_push($token, 'Content-Type: application/json');
+                        log_message('DEBUG', '#TRAZA | #REST | #CURL | #PAYLOAD >> ' . $data);
+                    }
 
                     break;
                 default:
-                    if(!strpos($url, 'bonita')) array_push($token, 'Accept: application/json');
+                    if (!strpos($url, 'bonita')) {
+                        array_push($token, 'Accept: application/json');
+                    }
+
                     if ($data) {
-                        $url = sprintf("%s?%s", $url, http_build_query($data));
+                        $url = sprintf("%s?%s", $url, http_build_query(json_decode($data)));
                     }
 
             }
@@ -65,7 +68,6 @@ class REST
             if ($token) {
 
                 curl_setopt($curl, CURLOPT_HTTPHEADER, $token);
-
 
             }
 
@@ -89,29 +91,24 @@ class REST
             $body = substr($result, $header_size);
 
             curl_close($curl);
-        if ($response_code >= 300) {
-           
+            if ($response_code >= 300) {
 
-           
+                // log_message('DEBUG', '#TRAZA | #REST | #CURL | #HTTP_CODE >> ' . $response_code);
 
-            // log_message('DEBUG', '#TRAZA | #REST | #CURL | #HTTP_CODE >> ' . $response_code);
+                // log_message('DEBUG', '#TRAZA | #REST | #CURL | #HEADER RESPUESTA>> ' . $headers);
 
-            // log_message('DEBUG', '#TRAZA | #REST | #CURL | #HEADER RESPUESTA>> ' . $headers);
+                // log_message('DEBUG', '#TRAZA | #REST | #CURL | #BODY >> ' . json_encode($body));
 
-            // log_message('DEBUG', '#TRAZA | #REST | #CURL | #BODY >> ' . json_encode($body));
-            
-            
-                log_message('ERROR', '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> REST ERROR <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<');
                 log_message('ERROR', '#TRAZA | #REST | #CURL | #HTTP_CODE >> ' . $response_code);
                 log_message('ERROR', '#TRAZA | #REST | #CURL | #HEADER SALIDA >> ' . $headerSent);
                 log_message('ERROR', '#TRAZA | #REST | #CURL | #HEADER SALIDA BODY >> ' . json_encode($data));
+
                 log_message('ERROR', '#TRAZA | #REST | #CURL | #HEADER RESPUESTA >> ' . $headers);
                 log_message('ERROR', '#TRAZA | #REST | #CURL | #BODY >> ' . json_encode($body));
-                log_message('ERROR', '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< FIN REST ERROR >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
 
             }
 
-            return ['status' => ($response_code < 300), 'header' => $headers, 'data' =>$body, 'code' => $response_code];
+            return ['status' => ($response_code < 300), 'header' => $headers, 'data' => $body, 'code' => $response_code];
 
         } catch (Exception $e) {
 

@@ -26,22 +26,22 @@
                     <div class="col-md-5"></div>
                 </div>
 
-                <div class="row form-group" style="margin-top:20px">
+                <div class="row form-group <?php echo ($producto?'':'hidden') ?>" style="margin-top:20px">
                     <div class="col-md-3 col-xs-12"><label class="form-label">Producto:</label></div>
                     <div class="col-md-8 col-xs-12"><input class="form-control" type="text" id="prod_origen"
                             value="<?php echo $producto[0]->descripcion;?>" disabled></div>
                     <div class="col-md-5"></div>
                 </div>
 
-                <div class="row form-group" style="margin-top:20px">
+                <div class="row form-group <?php echo ($producto?'':'hidden') ?>" style="margin-top:20px">
                     <div class="col-md-3 col-xs-12"><label class="form-label">Cantidad:</label></div>
                     <div class="col-md-4 col-xs-12"><input class="form-control" type="text" id="cant_origen"
-                            value="<?php echo $producto[0]->stock.' ('.$producto[0]->uni_med.')';?>" disabled></div>
+                            value="<?php echo $producto[0]->cantidad.' ('.$producto[0]->uni_med.')';?>" disabled></div>
                     <div class="col-md-5"></div>
                 </div>
-                <div class="row form-group" style="margin-top:20px">
+                <div class="row form-group <?php echo ($producto?'':'hidden') ?>" style="margin-top:20px">
                     <div class="col-md-3 col-xs-12"><label class="form-label">Cantidad a Extraer:</label></div>
-                    <div class="col-md-4 col-xs-12"><input class="form-control" type="text" id="cant_descontar" value=""
+                    <div class="col-md-4 col-xs-12"><input class="form-control" type="text" id="cant_descontar" value="<?php echo ($producto?'':0) ?>"
                             placeholder="Inserte cantidad a Extraer"></div>
                     <div class="col-md-5"></div>
                 </div>
@@ -64,7 +64,7 @@
                         <label for="inputproducto" class="form-label">Producto*:</label>
                     </div>
                     <div class="col-md-8 col-xs-12">
-                        <?php  echo selectBusquedaAvanzada('inputproducto', false, $articulos, 'arti_id', 'descripcion'); ?>
+                        <?php  echo selectBusquedaAvanzada('inputproducto', false, $productos_salida_etapa, 'arti_id', 'descripcion'); ?>
                     </div>
                     <div class="col-md-3"></div>
                 </div>
@@ -183,7 +183,7 @@ function AgregarProducto() {
     ban = true;
 
     productoid = $("#inputproducto").val();
-    if (productoid == "") {
+    if (!productoid || productoid == "") {
         ban = false;
     }
     cantidad = document.getElementById('cantidadproducto').value;
