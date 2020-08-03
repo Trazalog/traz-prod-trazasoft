@@ -146,8 +146,8 @@ define('REST_TDS', 'http://10.142.0.7:8280/services/PRDDataService/');
 define('REST2', 'http://10.142.0.7:8280/services/PRDDataService');
 define('REST3', 'http://10.142.0.7:8280/services/PRDDataService');
 define('REST4', 'http://10.142.0.7:8280/services/PRDDataService');
-
 define('REST_PRD_LOTE', 'http://10.142.0.7:8280/services/PRDLoteDataService');
+define('REST_CORE', 'http://10.142.0.7:8280/services/COREDataService/');
 
 //TODO:AGREGAR AL CONSTANT ORIGINAL
 #RECURSOS_LOTES

@@ -373,4 +373,11 @@ class Articulos extends CI_Model
 		}
 		return $data['data'];
 	}
+
+	#FLEIVA
+	public function obtener($id = false)
+	{
+		$recurso = REST_ALM.'/articulos/'.($id?$id:empresa());
+		return wso2($recurso);
+	}
 }
