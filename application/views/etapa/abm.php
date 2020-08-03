@@ -141,11 +141,11 @@
         </div>
     </div>
 
-    <!-- <tareas>
+    <tareas>
         <script>
-            $('tareas').load('<--?php echo TST ?>Tarea/planificar/BATCH/' + $('#batch_id').val());
+            $('tareas').load('<?php echo TST ?>Tarea/planificar/BATCH/' + $('#batch_id').val());
         </script>
-    </tareas> -->
+    </tareas>
 
     <!-- Tareas -->
     <div class="box box-primary">
