@@ -1,8 +1,14 @@
+<style>
+    .box-disabled{
+        background-color: rgba(0,0,0,0.3);
+        z-index: 999999999 !important;
+    }
+</style>
 <div class="box box-primary">
     <div class="box-header">
         <h3 class="box-title">Fraccionamiento</h3>
     </div>
-    <div class="box-body">
+    <div class="box-body ">
         <form id="frm-fraccionamiento">
             <div class="row">
                 <div class="col-md-6">
@@ -173,7 +179,7 @@
 <script>
 initForm();
 //$('input.form-control').val('Valor Test');
-$('small').remove();
+//$('small').remove();
 
 function gFraccionamiento() {
 
