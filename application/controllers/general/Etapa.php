@@ -33,7 +33,7 @@ class Etapa extends CI_Controller
                 $value->link = $urlComp;
             }
         }
-        $data['etapas'] = $temp;
+		$data['etapas'] = $temp;
         $this->load->view('etapa/list', $data);
     }
     // Llama a etapas para una nueva Etapa
@@ -553,4 +553,47 @@ class Etapa extends CI_Controller
         echo json_enconde($rsp);
     }
     /***********************************/
+ 
+
+    public function getUsers()
+    {
+      // $usuarios = $this->bpm->getUsuariosBPM();//usuarios bonita
+      $usuarios = $this->Etapas->getUsers()->users->user; //usuarios seg.users
+      echo json_encode($usuarios);
+    }
+
+    public function getTurnosProd()
+    {
+      $turnos = $this->Etapas->getTurnosProd()->turnos->turno;
+      echo json_encode($turnos);
+    }
+
+    public function setUserLote()
+    {
+      $batch_id = $this->input->post('batch_id');
+
+      //eliminamos los resonsables viejos
+      $delete = $this->Etapas->deleteUserLote($batch_id);
+
+      //cargamos los responsables nuevos
+      $responsables = $this->input->post('responsables');
+      $tableData = stripcslashes($responsables);
+      $tableDataArray['responsable'] = json_decode($tableData, TRUE);
+      foreach ($tableDataArray['responsable'] as $key => $x) {
+        $tableDataArray['responsable'][$key]['batch_id'] = $batch_id;
+        $tableDataArray['responsable'][$key]['user_id'] = strval($tableDataArray['responsable'][$key]['user_id']);
+        $tableDataArray['responsable'][$key]['turn_id'] = strval($tableDataArray['responsable'][$key]['turn_id']);
+      }
+      $responsablesArray['_post_responsable'] = $tableDataArray;
+      $rsp = $this->Etapas->setUserLote($responsablesArray);
+      if ($rsp == '202') {
+        echo 'Responsables cargados correctamente.';
+      } else return;
+    }
+
+    public function getUserLote($batch_id)
+    {
+      $user = $this->Etapas->getUserLote($batch_id)->users->user;
+      echo json_encode($user);
+    }
 }
