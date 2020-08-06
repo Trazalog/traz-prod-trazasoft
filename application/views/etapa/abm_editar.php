@@ -123,9 +123,10 @@ function validarEtapa() {
             </div>
             <div class="row" style="margin-top: 40px">
                 <div class="col-xs-12">
-                    <i class="glyphicon glyphicon-plus"></i><a onclick="despliega()" class="">Datos Adicionales</a>
-                    <div id="desplegable" hidden>
-                        <h3></h3>
+                    <a onclick="despliega()" class=""><i class="glyphicon glyphicon-plus"></i>Datos Adicionales</a>
+                    <div id="desplegable" class="panel panel-default" hidden>
+                        <div class="panel-heading">Formulario Etapa</div>
+                        <div class="panel-body frm-new" data-info="<?php echo $info_id ?>"></div>
                     </div>
                 </div>
             </div>

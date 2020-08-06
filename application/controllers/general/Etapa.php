@@ -55,6 +55,9 @@ class Etapa extends CI_Controller
         $data['materias'] = $this->Articulos->obtenerXTipos(array('Proceso', 'Final', 'Materia Prima'));
         $data['productos'] = $this->Articulos->obtenerXTipos(array('Proceso', 'Producto'));
 
+        #FORMULARIO GENERICO
+        $data['form_id'] = 1;
+
         #Obtener Proucto por Etapa
         $data['productos_etapa'] = $this->Etapas->obtenerArticulos($data['etapa']->id)['data'];
 
@@ -242,8 +245,6 @@ class Etapa extends CI_Controller
             $this->aceptarPedidoMateriales($rsp['data']['caseId']);
 
         }
-
-        log_message('DEBUG', 'Etapa / lanzarPedidoEtapa >> FIN');
     }
 
     public function aceptarPedidoMateriales($case_id)
@@ -406,7 +407,15 @@ class Etapa extends CI_Controller
                     $rsp = $this->bpm->lanzarProceso(BPM_PROCESS_ID_PEDIDOS_NORMALES, $contract);
                     if($rsp['status']){
                         $case_id = strval($rsp['data']['caseId']);
-                        $this->Etapas->setCaseIdPedido($pema_id, $case_id);
+                        $this->load->model(ALM . 'Notapedidos');
+                        $this->Notapedidos->setCaseId($pema_id, $case_id);
+                         // AVANZA PROCESO A TAREA SIGUIENTE
+                        if (PLANIF_AVANZA_TAREA) {
+
+                            $this->aceptarPedidoMateriales($case_id);
+
+                        }
+                        
                     }
                     echo json_encode($rsp);
                 } else {
@@ -457,13 +466,13 @@ class Etapa extends CI_Controller
 
         $productos = $this->input->post('productos');
         $num_orden_prod = $this->input->post('num_orden_prod');
-        $lote_id = $this->input->post('lote_id');
         $batch_id_padre = $this->input->post('batch_id');
-        $cantidad = $this->input->post('cant_total_desc');
+        
+        #No se usan
+        #$lote_id = $this->input->post('lote_id');
+        #$cantidad = $this->input->post('cant_total_desc');
 
-        foreach ($productos as $value) {
-
-            $info = $value;
+        foreach ($productos as $info) {
             $arrayPost["lote_id"] = $info['loteorigen']; // lote origen
             $arrayPost["arti_id"] = $info['titulo']; // art seleccionado en lista
             $arrayPost["prov_id"] = (string) PROVEEDOR_INTERNO;

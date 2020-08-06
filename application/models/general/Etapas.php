@@ -240,9 +240,6 @@ class Etapas extends CI_Model
     // trae lotes a fraccionar desde entrega materiales por batch_id
     public function getLotesaFraccionar($id)
     {
-
-        $idBatch = json_encode($id);
-        log_message('DEBUG', 'Etapas/getLotesaFraccionar(batch_id)-> ' . $idBatch);
         $resource = '/lote/fraccionar/batch/' . $id;
         $url = REST2 . $resource;
         $array = $this->rest->callAPI("GET", $url);

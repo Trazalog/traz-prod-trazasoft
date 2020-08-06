@@ -4,7 +4,9 @@ if (!function_exists('wso2')) {
 
     function wso2($url, $metodo = 'GET', $data = false)
     {
-        $url = str_replace( '//', '/', $url);
+        $url = str_replace('//','&', $url);
+        $url = str_replace('http:&','http://', $url);
+        $url = str_replace('&','//', $url);
 
         $ci = &get_instance();
 

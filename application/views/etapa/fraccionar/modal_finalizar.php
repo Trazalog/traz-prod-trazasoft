@@ -12,10 +12,6 @@
             </div>
 
             <div class="modal-body" id="modalBodyArticle">
-                <!-- <div class="row">
-          <div class="col-md-3 col-xs-12"><label class="form-label">Lote a fraccionar:</label></div>
-          <div class="col-md-9 col-xs-12" id="divloteorigen"></div>
-      </div> -->
 
                 <div class="panel panel-primary">
                     <!-- Default panel contents -->
@@ -38,14 +34,8 @@
                             </div>
                            
                         </div>
-
-
-
-
                     </div>
-
                 </div>
-
 
                 <div class="panel panel-primary">
                     <!-- Default panel contents -->
