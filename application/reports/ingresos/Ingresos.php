@@ -26,9 +26,9 @@ class Ingresos extends \koolreport\KoolReport
   protected function settings()
   {
     log_message('DEBUG', '#TRAZA| #INGRESOS|#SETTINGS| #INGRESO');
-    // $json = $this->params;
-    // $data = json_encode($json);
-    $data = "holanda";
+    $json = $this->params;
+    $data = json_encode($json);
+    // $data = "holanda";
 
     return array(
       "dataSources" => array(

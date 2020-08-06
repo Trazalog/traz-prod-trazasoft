@@ -123,7 +123,7 @@
          }
 
          function _isset(variable) {
-           if (typeof(variable) == "undefined" || variable == null)
+           if (typeof(variable) == "undefined" || variable == null || variable == '')
              return false;
            else
            if (typeof(variable) == "object" && !variable.length)

@@ -179,28 +179,39 @@ class Reportes extends CI_Controller
   {
     $data = $this->input->post('data');
 
-    $cliente = $data['cliente'];
-    $transporte = $data['transporte'];
-    $desde = $data['datepickerDesde'];
-    $hasta = $data['datepickerHasta'];
+    $prov_id = $data['prov_id'];
+    $cuit = $data['tran_id'];
+    $arti_id = $data['arti_id'];
+    $fecdesde = $data['datepickerDesde'];
+    $fechasta = $data['datepickerHasta'];
 
-    if ($cliente || $transporte || $desde || $hasta) {
-      $desde = ($desde) ? date("d-m-Y", strtotime($desde)) : null;
-      $hasta = ($hasta) ? date("d-m-Y", strtotime($hasta)) : null;
-      // log_message('INFO', '#TRAZA| #REPORTES.PHP|#REPORTES|#PRODUCCION| #ETAPA: >>' . $etapa . '#DESDE: >>' . $desde . '#HASTA: >>' . $hasta);
-      // $url = REST_TDS . 'productos/etapa/' . $etapa . '/desde/' . $desde . '/hasta/' . $hasta . '/producto/' . $producto;
-      // $json = $this->Koolreport->depurarJson($url)->productos->producto;
-      // $reporte = new Produccion($json);
-      // $reporte->run()->render();
+    if ($prov_id || $cuit || $arti_id || $fecdesde || $fechasta) {
+      $fecdesde = ($fecdesde) ? date("Y-m-d", strtotime($fecdesde)) : null;
+      $fechasta = ($fechasta) ? date("Y-m-d", strtotime($fechasta)) : null;
+      // log_message('INFO', '#TRAZA| #REPORTES.PHP|#REPORTES|#Ingresos| #ETAPA: >>' . $etapa . '#DESDE: >>' . $desde . '#HASTA: >>' . $hasta);
+      $url = LOG_DS . 'movimientos/proveedor/' . $prov_id . '/transporte/' . $cuit . '/producto/' . $arti_id . '/desde/' . $fecdesde . '/hasta/' . $fechasta . '/ingresos';
+      $json = $this->Koolreport->depurarJson($url)->movimientos->movimiento;
+
+      $reporte = new Ingresos($json);
+      $reporte->run()->render();
     } else {
       log_message('INFO', '#TRAZA| #REPORTES|#INGRESOS| #INGRESO');
-      // $url = REST_TDS . 'productos/etapa//desde//hasta//producto/';
-      // $json = $this->Koolreport->depurarJson($url)->productos->producto;
-      // log_message('DEBUG', '#TRAZA| #REPORTES.PHP|#REPORTES|#PRODRESPONSABLE| #JSON: >>' . $json);
+      $url = LOG_DS . 'movimientos/proveedor//transporte//producto//desde//hasta//ingresos';
+      $json = $this->Koolreport->depurarJson($url)->movimientos->movimiento;
+      log_message('DEBUG', '#TRAZA| #REPORTES.PHP|#REPORTES|#Ingresos| #JSON: >>' . $json);
+
       // $reporte = new Produccion($json);
-      $reporte = new Ingresos();
+      $reporte = new Ingresos($json);
       $reporte->run()->render();
     }
+  }
+
+  public function cantidadIngresos()
+  {
+    log_message('INFO', '#TRAZA| #REPORTES|#CANTIDADINGRESOS| #INGRESO');
+    $data = $this->input->post('data');
+    $rsp = $this->Opciones_Filtros->getCantidadIngresos($data);
+    echo json_encode($rsp);
   }
 
   public function filtroIngresos()
