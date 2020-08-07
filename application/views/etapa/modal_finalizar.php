@@ -72,7 +72,7 @@
                     <div class="col-md-3 col-xs-12"><label class="form-label">Cantidad*:</label></div>
                     <div class="col-md-4 col-xs-12"><input class="form-control" id="cantidadproducto" type="text"
                             value="" placeholder="Inserte Cantidad"></div>
-                    <div class="col-md-1 col-xs-1">
+                    <div class="col-md-2 col-xs-2">
                             <input type="text" class="form-control" value=" - " id="um" disabled>
                    </div>
                     <div class="col-md-5"></div>

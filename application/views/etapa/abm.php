@@ -122,9 +122,10 @@
             </div>
             <div class="row" style="margin-top: 40px">
                 <div class="col-xs-12">
-                    <i class="glyphicon glyphicon-plus"></i><a onclick="despliega()" class="">Datos Adicionales</a>
-                    <div id="desplegable" hidden>
-                        <h3></h3>
+                    <a onclick="despliega()" href="#"><i class="glyphicon glyphicon-plus"></i>Datos Adicionales</a>
+                    <div id="desplegable" class="panel panel-default" hidden>
+                        <div class="panel-heading">Formulario Etapa</div>
+                        <div class="panel-body frm-new" data-form="<?php echo $form_id ?>"></div>
                     </div>
                 </div>
             </div>
@@ -141,11 +142,11 @@
         </div>
     </div>
 
-    <!-- <tareas>
+    <tareas>
         <script>
-            $('tareas').load('<--?php echo TST ?>Tarea/planificar/BATCH/' + $('#batch_id').val());
+            $('tareas').load('<?php echo TST ?>Tarea/planificar/BATCH/' + $('#batch_id').val());
         </script>
-    </tareas> -->
+    </tareas>
 
     <!-- Tareas -->
     <div class="box box-primary">
@@ -178,6 +179,7 @@
 
 <script>
 // getSnapshot();
+detectarForm();
 var estadoEtapa = $('#estadoEtapa').val();
 if (estadoEtapa == 'PLANIFICADO') {
     $(".recipientesDiv").addClass("hidden");

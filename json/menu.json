@@ -1,61 +1,110 @@
 {
-    "menus": {
-        "menu": [
-            {
-                "icono": "fa fa-fw fa-barcode ",
-                "titulo": "Almacenes",
-                "nivel": "2",
-                "submenu": [
-                    {
-                        "link": "traz-comp-almacen/Articulo",
-                        "icono": "fa fa-fw fa-barcode ",
-                        "titulo": "Articulos",
-                        "nivel": "1"
-                    },
-                    {
-                        "link": "traz-comp-almacen/Lote",
-                        "icono": "fa fa-fw fa-cubes",
-                        "titulo": "Stock",
-                        "nivel": "1"
-                    },
-                    {
-                        "link": "traz-comp-almacen/new/Entrega_Material",
-                        "icono": "fa fa-fw fa-check",
-                        "titulo": "Entrega Materiales",
-                        "nivel": "1"
-                    },
-                    {
-                        "link": "traz-comp-almacen/Remito",
-                        "icono": "fa fa-fw fa-paperclip ",
-                        "titulo": "Recepción Materiales",
-                        "nivel": "1"
-                    },
-                    {
-                        "link": "traz-comp-almacen/Lote/puntoPedList",
-                        "icono": "fa fa-fw fa-bookmark",
-                        "titulo": "Punto Pedido",
-                        "nivel": "1"
-                    },
-                    {
-                        "link": "traz-comp-almacen/Notapedido",
-                        "icono": "fa fa-fw fa-cart-plus",
-                        "titulo": "Pedido Materiales",
-                        "nivel": "1"
-                    },
-                    {
-                        "link": "traz-comp-almacen/Proceso",
-                        "icono": "fa fa-cogs",
-                        "titulo": "Mis Tareas",
-                        "nivel": "1"
-                    },
-                    {
-                        "link": "traz-comp-almacen/Ajustestock",
-                        "icono": "fa fa-cogs",
-                        "titulo": "Ajuste de Stock",
-                        "nivel": "1"
-                    }
-                ]
-            }
-        ]
-    }
+	"menu_items": {
+		"menu_item": [
+			{
+				"texto": "Producción",
+				"camino": "1.PRD.produccion",
+				"opcion": "produccion",
+				"url_icono": "/img/icono.gif",
+				"habilitado": "false",
+				"opcion_padre": null,
+				"modulo": "PRD",
+				"nivel": "1",
+				"url": "",
+				"javascript": null,
+				"texto_onmouseover": "Módulo de Producción"
+			},
+			{
+				"texto": "Planificar Etapas",
+				"camino": "1.PRD.produccion>10.PRD.etapas",
+				"opcion": "etapas",
+				"url_icono": "/img/icono.gif",
+				"habilitado": "false",
+				"opcion_padre": "produccion",
+				"modulo": "PRD",
+				"nivel": "2",
+				"url": "/traz-prod-trazasoft/dash",
+				"javascript": null,
+				"texto_onmouseover": "Planificación de etapas"
+			},
+			{
+				"texto": "Pantalla Operario",
+				"camino": "1.PRD.produccion>20.PRD.aminowana",
+				"opcion": "aminowana",
+				"url_icono": "/img/icono.gif",
+				"habilitado": "false",
+				"opcion_padre": "produccion",
+				"modulo": "PRD",
+				"nivel": "2",
+				"url": "/traz-prod-trazasoft/amino",
+				"javascript": null,
+				"texto_onmouseover": "Etapas operario"
+			},
+			{
+				"texto": "Mantenimiento",
+				"camino": "2.MAN.mantenimiento",
+				"opcion": "mantenimiento",
+				"url_icono": "/img/asset.gif",
+				"habilitado": "true",
+				"opcion_padre": null,
+				"modulo": "MAN",
+				"nivel": "1",
+				"url": "",
+				"javascript": null,
+				"texto_onmouseover": "Asset loco"
+			},
+			{
+				"texto": "Crear Orde de Trabajo",
+				"camino": "2.MAN.mantenimiento>100.MAN.ot",
+				"opcion": "ot",
+				"url_icono": "/img/asset.gif",
+				"habilitado": "false",
+				"opcion_padre": "mantenimiento",
+				"modulo": "MAN",
+				"nivel": "2",
+				"url": "/traz-prod-assetplanner/asset",
+				"javascript": null,
+				"texto_onmouseover": "Crear ot"
+			},
+			{
+				"texto": "Reporte ot",
+				"camino": "2.MAN.mantenimiento>100.MAN.ot>1000.MAN.reporte",
+				"opcion": "reporte",
+				"url_icono": "/img/repo.gif",
+				"habilitado": "false",
+				"opcion_padre": "ot",
+				"modulo": "MAN",
+				"nivel": "3",
+				"url": "/traz-prod_assetplanner/reportes",
+				"javascript": null,
+				"texto_onmouseover": "Sheportes"
+			},
+			{
+				"texto": "Almacenes",
+				"camino": "4.ALM.almacenes",
+				"opcion": "almacenes",
+				"url_icono": "/img/icono.gif",
+				"habilitado": "true",
+				"opcion_padre": null,
+				"modulo": "ALM",
+				"nivel": "1",
+				"url": "",
+				"javascript": null,
+				"texto_onmouseover": "Almacenes"
+			},
+			{
+				"texto": "Stock Articulos",
+				"camino": "4.ALM.almacenes>50.ALM.stock",
+				"opcion": "stock",
+				"url_icono": "/img/alm.gif",
+				"habilitado": "false",
+				"opcion_padre": "almacenes",
+				"modulo": "ALM",
+				"nivel": "2",
+				"url": "/traz-prod-trazasoft/stock",
+				"javascript": null,
+				"texto_onmouseover": null
+			}
+		]
+	}
 }
