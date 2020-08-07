@@ -76,7 +76,7 @@
           <div class="col-md-1"></div>
           <!--_____________________________________________-->
           <!-- -- Tipo-- -->
-          <div class="col-md-5 col-sm-6 col-xs-12">
+          <div class="col-md-4 col-sm-5 col-xs-12">
             <div class="form-group">
               <label for="tipores" class="form-label">Tipo:</label>
               <select class="form-control select2 select2-hidden-accesible" id="tipo_residuo" name="tipo_residuo" onchange="selectRecipiente()" <?php echo req() ?>>
@@ -86,12 +86,28 @@
           </div>
           <!--_____________________________________________-->
           <!-- -- Nombre -- -->
-          <div class="col-md-5 col-sm-6 col-xs-12">
+          <div class="col-md-4 col-sm-5 col-xs-12">
             <div class="form-group">
               <label for="nom" class="form-label">Nombre:</label>
               <input type="text" id="nombreReci" name="nombreReci" class="form-control" <?php echo req() ?>>
             </div>
           </div>
+          <!--_____________________________________________-->
+          <!-- -- Box + boton -- -->
+          <div class="col-md-2 col-sm-2 col-xs-4">
+            <div class="form group">
+              <!-- <label for="box" class="form-label">box:</label>
+              <input type="text" id="box_id" name="box_id" class="form-control" <?php echo req()?>> -->
+              <label for="nom" class="form-label">Box:</label>
+              <div class="input-group input-group-sm">
+                <input type="text" class="form-control">
+                    <span class="input-group-btn">
+                      <button type="button" class="btn btn-info btn-flat"><i class="fa fa-angle-right"></i></button>
+                    </span>
+              </div>
+            </div>
+          </div>
+          <!--_____________________________________________-->
       </div>
       <br>
       <div class="col-md-12">
@@ -114,6 +130,8 @@
         <hr>
       </div>
       </form>
+    </div>
+    <div class="col-md-12" id="grid">
     </div>
   </div>
   <!---//////////////////////////////////////--- FIN BOX RECIPIENTES ---///////////////////////////////////////////////////////----->
@@ -499,7 +517,8 @@
       },
       dataType: 'JSON',
       url: 'general/Establecimiento/obtenerRecipientesDeposito/',
-      success: function(rsp) {
+      success: function(rsp,rsp2) {
+        console.log(rsp2);
         var datos = "<option value='' disabled selected>Seleccionar</option>";
         for (let i = 0; i < rsp.length; i++) {
           datos += "<option value=" + rsp[i].nombre + ">" + rsp[i].nombre + "</option>";
@@ -711,4 +730,22 @@
       }
     });
   }
+
+  $('#depositos').on('change', function() {
+    var aux = this.value;
+    wbox('#boxes');
+    $.ajax({
+        type: 'GET',
+        url: 'general/Establecimiento/obtenerRecipientes/' + aux,
+        success: function(rsp) {
+          console.log(rsp);
+            $('#grid >').remove();
+            $('#grid').prepend(rsp);
+        },
+        error: function() {},
+        complete: function() {
+            wbox();
+        }
+    });
+});
 </script>

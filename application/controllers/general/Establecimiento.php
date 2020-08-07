@@ -52,11 +52,20 @@ class Establecimiento extends CI_Controller
     $data = $this->input->get();
     $rsp = $this->Establecimientos->obtenerRecipientesDeposito($data)->tipos->tipo;
     if ($rsp) {
+      $aux = $this->Establecimientos->getRecipientes($data['depo_id'],$data['esta_id']);
+      $aux = $this->load->view('Establecimientos/gridRecipientes',$aux);
       echo json_encode($rsp);
     } else {
       echo "No existen recipientes";
     }
   }
+
+  // public function obtenerRecipientes($depo_id)
+  // {
+  //     $rsp = $this->Establecimientos->getRecipientes($depo_id);
+  //     $rsp = $this->load->view('Establecimientos/gridRecipientes',$rsp);
+  //     return($rsp);
+  // }
 
   public function asignarAEstablecimiento()
   {

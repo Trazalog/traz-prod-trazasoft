@@ -44,6 +44,19 @@ class Establecimientos extends CI_Model
     return $rsp;
   }
 
+  public function getRecipientes($depo_id,$esta_id)
+  {
+    // $esta_id = 1;
+      $url = REST_ALM."recipientes/establecimiento/$esta_id/deposito/$depo_id/estado/TODOS/tipo/TODOS/categoria/TODOS";
+      $aux['data'] = wso2($url);
+      $url = REST_ALM."/depositos/$depo_id";
+      $a = $this->rest->callApi('GET',$url);
+      $b = json_decode($a['data']);
+      $aux['col'] = $b->deposito->col;
+      $aux['row'] = $b->deposito->row;
+      return $aux;
+  }
+
   public function guardar($data)
   {
     $data['empr_id'] = (string) empresa();
