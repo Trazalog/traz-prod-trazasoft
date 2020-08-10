@@ -1,19 +1,19 @@
 <data enableBatchRequests="true" enableBoxcarring="true" name="ALMDataService" transports="http https local">
-   <config enableOData="false" id="ToolsDataSource">
+   <config enableOData="false" id="produccionDS">
       <property name="carbon_datasource_name">ToolsDataSource</property>
    </config>
-   <query id="getArticulos" useConfig="ToolsDataSource">
+   <query id="getArticulos" useConfig="produccionDS">
       <sql>SELECT A.*, coalesce(sum(cantidad), 0) as stock&#xd;FROM alm.alm_articulos A&#xd;LEFT JOIN alm.alm_lotes C ON C.arti_id = A.arti_id&#xd;WHERE A.empr_id = cast(:empr_id as integer)&#xd;AND not A.eliminado&#xd;GROUP BY A.arti_id</sql>
       <result outputType="json">{&#xd;    "articulos": {&#xd;        "articulo": [&#xd;            {&#xd;                "arti_id": "$arti_id",&#xd;                "barcode": "$barcode",&#xd;                "titulo": "$descripcion",&#xd;                "descripcion": "$descripcion",&#xd;                "costo": "$costo",&#xd;                "cantidad_caja": "$cantidad_caja",&#xd;                "punto_pedido": "$punto_pedido",&#xd;                "estado": "$estado",&#xd;                "unidad_medida": "$unidad_medida",&#xd;                "es_loteado": "$es_loteado",&#xd;                "stock": "$stock"&#xd;            }&#xd;        ]&#xd;    }&#xd;}</result>
       <param name="empr_id" sqlType="STRING"/>
    </query>
-   <query id="setDetallePedido" useConfig="ToolsDataSource">
+   <query id="setDetallePedido" useConfig="produccionDS">
       <sql>INSERT INTO alm.alm_deta_pedidos_materiales&#xd;(cantidad, pema_id, arti_id)&#xd;VALUES(cast(:cantidad as float4), cast(:pema_id as integer), cast(:arti_id as integer));</sql>
       <param name="cantidad" sqlType="STRING"/>
       <param name="pema_id" sqlType="STRING"/>
       <param name="arti_id" sqlType="STRING"/>
    </query>
-   <query id="setPedido" useConfig="ToolsDataSource">
+   <query id="setPedido" useConfig="produccionDS">
       <sql>INSERT INTO alm.alm_pedidos_materiales&#xd;(fecha, justificacion, case_id, estado, empr_id, batch_id)&#xd;VALUES(TO_DATE(:fecha, 'YYYY-MM-DD'), :justificacion, cast(:case_id as integer), :estado, cast(:empr_id as integer), cast(:batch_id as integer)) returning pema_id;</sql>
       <result outputType="json">{&#xd;  "respuesta": {&#xd;    "pema_id":"$pema_id"&#xd;  }&#xd;}</result>
       <param name="fecha" sqlType="STRING"/>
@@ -23,49 +23,49 @@
       <param name="empr_id" sqlType="STRING"/>
       <param name="batch_id" sqlType="STRING"/>
    </query>
-   <query id="deleteDetalle" useConfig="ToolsDataSource">
+   <query id="deleteDetalle" useConfig="produccionDS">
       <sql>DELETE FROM alm.alm_deta_pedidos_materiales&#xd;WHERE pema_id = cast(:pema_id as integer)</sql>
       <param name="pema_id" sqlType="STRING"/>
    </query>
-   <query id="getPedido" useConfig="ToolsDataSource">
+   <query id="getPedido" useConfig="produccionDS">
       <sql>select *&#xd;from alm.alm_pedidos_materiales&#xd;where pema_id = cast(:pema_id as integer)&#xd;and empr_id = cast(:empr_id as integer)&#xd;and not eliminado</sql>
       <result outputType="json">{&#xd;  "pedidos": {&#xd;    "pedido": [&#xd;        {&#xd;            "pema_id":"$pema_id",&#xd;            "case_id":"$case_id",&#xd;            "estado":"$estado",&#xd;            "batch_id":"$batch_id",&#xd;            "fecha":"$fecha",&#xd;            "justificacion":"$justificacion",&#xd;            "motivo_rechazo":"$motivo_rechazo",&#xd;            "@getDetallePedido":"$pema_id-&gt;pema_id"&#xd;        }&#xd;    ]&#xd;  }&#xd;}</result>
       <param name="pema_id" sqlType="STRING"/>
       <param name="empr_id" sqlType="STRING"/>
    </query>
-   <query id="getDetallePedido" useConfig="ToolsDataSource">
+   <query id="getDetallePedido" useConfig="produccionDS">
       <sql>select pm.*, a.barcode, a.descripcion&#xd;from alm.alm_deta_pedidos_materiales pm&#xd;join alm.alm_articulos a&#xd;on a.arti_id = pm.arti_id&#xd;where pema_id = cast(:pema_id as integer)&#xd;and not eliminado</sql>
       <result outputType="json">{&#xd;  "detalles": {&#xd;    "detalle": [&#xd;        {&#xd;            "depe_id":"$depe_id",&#xd;            "cantidad":"$cantidad",&#xd;            "resto":"$resto",&#xd;            "arti_id":"$arti_id",&#xd;"barcode":"$barcode",&#xd;"descripcion":"$descripcion"&#xd;        }&#xd;    ]&#xd;  }&#xd;}</result>
       <param name="pema_id" sqlType="STRING"/>
    </query>
-   <query id="getPedidoXBatch" useConfig="ToolsDataSource">
+   <query id="getPedidoXBatch" useConfig="produccionDS">
       <sql>SELECT *&#xd;FROM alm.alm_pedidos_materiales&#xd;WHERE batch_id = cast(:batch_id as integer)&#xd;and not eliminado</sql>
       <result outputType="json">{&#xd;  "pedidos": {&#xd;    "pedido": [&#xd;        {&#xd;            "pema_id":"$pema_id",&#xd;            "case_id":"$case_id",&#xd;            "estado":"$estado",&#xd;            "batch_id":"$batch_id",&#xd;            "fecha":"$fecha",&#xd;            "justificacion":"$justificacion",&#xd;            "motivo_rechazo":"$motivo_rechazo",&#xd;         }&#xd;    ]&#xd;  }&#xd;}</result>
       <param name="batch_id" sqlType="STRING"/>
    </query>
-   <query id="getEstablecimiento" useConfig="ToolsDataSource">
+   <query id="getEstablecimiento" useConfig="produccionDS">
       <sql>SELECT *&#xd; FROM&#xd;prd.establecimientos&#xd;where eliminado = false</sql>
       <result outputType="json">{&#xd; "establecimientos": {&#xd;      "establecimiento": [&#xd;        {&#xd;          "esta_id": "$esta_id",&#xd;          "nombre": "$nombre",&#xd;          "lng": "$lng",&#xd;          "lat": "$lat",&#xd;          "calle": "$calle",&#xd;          "altura": "$altura",&#xd;          "localidad": "$localidad",&#xd;          "estado": "$estado",&#xd;          "pais": "$pais",&#xd;          "fec_alta": "$fec_alta",&#xd;          "usuario": "$usuario"&#xd;        }&#xd;      ]&#xd; }&#xd;}</result>
    </query>
-   <query id="getLote" useConfig="ToolsDataSource">
+   <query id="getLote" useConfig="produccionDS">
       <sql>select RECI.reci_id, reci.nombre, reci.estado from prd.recipientes Reci, alm.alm_depositos Depo&#xd;where reci.depo_id = depo.depo_id AND&#xd;depo.esta_id = CAST(:esta_id as INTEGER)</sql>
       <result outputType="json">{&#xd;"recipientes":&#xd;      {"recipiente":&#xd;        [&#xd;          {&#xd;          "id": "$reci_id",&#xd;          "titulo":"$nombre",&#xd;          "estado":"$estado"&#xd;          }          &#xd;        ]&#xd;      }&#xd; }</result>
       <param name="esta_id" sqlType="STRING"/>
    </query>
-   <query id="getArticulos2" useConfig="ToolsDataSource">
+   <query id="getArticulos2" useConfig="produccionDS">
       <sql>SELECT A.*, coalesce(sum(cantidad), 0) as stock&#xd;FROM alm.alm_articulos A&#xd;LEFT JOIN alm.alm_lotes C ON C.arti_id = A.arti_id&#xd;WHERE A.empr_id = 1&#xd;AND A.eliminado = FALSE&#xd;GROUP BY A.arti_id</sql>
       <result outputType="json">{&#xd;    "materias": {&#xd;        "materia": [&#xd;            {&#xd;                "id": "$arti_id",&#xd;                "barcode": "$barcode",&#xd;                "titulo": "$descripcion",&#xd;                "descripcion": "$descripcion",&#xd;                "costo": "$costo",&#xd;                "cantidad_caja": "$cantidad_caja",&#xd;                "punto_pedido": "$punto_pedido",&#xd;                "estado": "$estado",&#xd;                "unidad_medida": "$unidad_medida",&#xd;                "es_loteado": "$es_loteado",&#xd;                "stock": "$stock"&#xd;            }&#xd;        ]&#xd;    }&#xd;}</result>
    </query>
-   <query id="getArticulosBusqueda" useConfig="ToolsDataSource">
+   <query id="getArticulosBusqueda" useConfig="produccionDS">
       <sql>SELECT A.*, coalesce(sum(cantidad), 0) as stock, unidad_medida as um&#xd;FROM alm.alm_articulos A&#xd;LEFT JOIN alm.alm_lotes C ON C.arti_id = A.arti_id&#xd;WHERE A.empr_id = 1&#xd;AND A.eliminado = FALSE&#xd;GROUP BY A.arti_id</sql>
       <result outputType="json">{&#xd;    "materias": {&#xd;        "materia": [&#xd;            {&#xd;                "id": "$arti_id",&#xd;                "barcode": "$barcode",&#xd;                "titulo": "$descripcion",&#xd;                "descripcion": "$descripcion",&#xd;                "stock": "$stock",&#xd;                "um":"$um"&#xd;            }&#xd;        ]&#xd;    }&#xd;}</result>
    </query>
-   <query id="getArticulo" useConfig="ToolsDataSource">
+   <query id="getArticulo" useConfig="produccionDS">
       <sql>SELECT A.*, coalesce(sum(cantidad), 0) as stock&#xd;FROM alm.alm_articulos A&#xd;LEFT JOIN alm.alm_lotes C ON C.arti_id = A.arti_id&#xd;WHERE A.empr_id = 1&#xd;AND A.eliminado = FALSE&#xd;AND A.arti_id = CAST(:arti_id as INTEGER)&#xd;GROUP BY A.arti_id</sql>
       <result outputType="json">{&#xd;    "articulos": {&#xd;        "articulo": [&#xd;            {&#xd;                "arti_id": "$arti_id",&#xd;                "barcode": "$barcode",&#xd;                "descripcion": "$descripcion",&#xd;                "costo": "$costo",&#xd;                "cantidad_caja": "$cantidad_caja",&#xd;                "punto_pedido": "$punto_pedido",&#xd;                "estado": "$estado",&#xd;                "unidad_medida": "$unidad_medida",&#xd;                "es_loteado": "$es_loteado",&#xd;                "stock": "$stock"&#xd;            }&#xd;        ]&#xd;    }&#xd;}</result>
       <param name="arti_id" sqlType="STRING"/>
    </query>
-   <query id="setArticulo" useConfig="ToolsDataSource">
+   <query id="setArticulo" useConfig="produccionDS">
       <sql>INSERT INTO alm_articulos&#xd;(barcode, descripcion, es_caja, es_loteado, unidad_medida)&#xd;VALUES &#xd;(:barcode, :descripcion, CAST(:es_caja as INTERGER), CAST(:es_loteado as INTERGER), :unidad_medida)</sql>
       <param name="barcode" sqlType="STRING"/>
       <param name="descripcion" sqlType="STRING"/>
@@ -73,63 +73,63 @@
       <param name="es_loteado" sqlType="STRING"/>
       <param name="unidad_medida" sqlType="STRING"/>
    </query>
-   <query id="getProveedores" useConfig="ToolsDataSource">
+   <query id="getProveedores" useConfig="produccionDS">
       <sql>SELECT * &#xd;FROM alm.alm_proveedores&#xd;WHERE&#xd;empr_id = CAST(:empr_id as INTEGER)&#xd;AND eliminado = FALSE</sql>
       <result outputType="json">{&#xd; "proveedores": {&#xd; "proveedor": [&#xd; {&#xd;"id":"$prov_id",&#xd;"titulo":"$nombre",&#xd;"cuit":"$cuit"&#xd; }&#xd; ]&#xd; }&#xd;}</result>
       <param name="empr_id" sqlType="STRING"/>
    </query>
-   <query id="setNotaPedido" keyColumns="pema_id" returnGeneratedKeys="true" useConfig="ToolsDataSource">
+   <query id="setNotaPedido" keyColumns="pema_id" returnGeneratedKeys="true" useConfig="produccionDS">
       <sql>insert into alm.alm_pedidos_materiales(fecha, empr_id, batch_id) &#xd;values(TO_DATE(:fecha, 'YYYY-MM-DD'), CAST(:empr_id AS INTEGER), CAST(:batch_id AS INTEGER))</sql>
       <result outputType="json">{&#xd; "nota_id": { &#xd;   "pedido_id": "$pema_id" &#xd; }&#xd;}&#xd;&#xd;</result>
       <param name="fecha" sqlType="STRING"/>
       <param name="empr_id" sqlType="STRING"/>
       <param name="batch_id" sqlType="STRING"/>
    </query>
-   <query id="setDetaNotaPedido" useConfig="ToolsDataSource">
+   <query id="setDetaNotaPedido" useConfig="produccionDS">
       <sql>insert into alm.alm_deta_pedidos_materiales(pema_id, arti_id, cantidad) &#xd;values(CAST(:pema_id AS INTEGER), CAST(:arti_id AS INTEGER), CAST(:cantidad AS FLOAT8))</sql>
       <param name="pema_id" sqlType="STRING"/>
       <param name="arti_id" sqlType="STRING"/>
       <param name="cantidad" sqlType="STRING"/>
    </query>
-   <query id="getArticuloPorId" useConfig="ToolsDataSource">
+   <query id="getArticuloPorId" useConfig="produccionDS">
       <sql>select &#xd;   arti_id, barcode, descripcion &#xd;from &#xd;   alm.alm_articulos &#xd;where &#xd;   arti_id = CAST(:arti_id AS INTEGER)</sql>
       <result outputType="json">{&#xd; "articulo":{&#xd;     "arti_id": "$arti_id",&#xd;     "barcode": "$barcode",&#xd;     "descripcion": "$descripcion"&#xd;  }&#xd;} </result>
       <param name="arti_id" sqlType="STRING"/>
    </query>
-   <query id="getinfoPedMatPorCaseId" useConfig="ToolsDataSource">
+   <query id="getinfoPedMatPorCaseId" useConfig="produccionDS">
       <sql>select &#xd; PM.pema_id, PM.fecha, PM.justificacion, PM.estado, LO.lote_id &#xd;from &#xd; alm.alm_pedidos_materiales PM&#xd;join prd.lotes LO on LO.batch_id = PM.batch_id &#xd;where &#xd; case_id = CAST(:case_id as INTEGER)</sql>
       <result outputType="json">{&#xd;    "info":{&#xd;      "pema_id": "$pema_id",&#xd;      "lote_id": "$lote_id",&#xd;      "fecha": "$fecha",&#xd;      "justificacion": "$justificacion",&#xd;      "estado": "$estado"&#xd;    }&#xd;}</result>
       <param name="case_id" sqlType="STRING"/>
    </query>
-   <query id="getArticulosXTipo" useConfig="ToolsDataSource">
+   <query id="getArticulosXTipo" useConfig="produccionDS">
       <sql>select &#xd;  ar.arti_id&#xd;  , AR.descripcion&#xd;  , AR.barcode&#xd;  , ar.unidad_medida um&#xd;  , COALESCE(sum(lo.cantidad),0) stock&#xd;from &#xd;  core.tablas t&#xd;,alm.alm_articulos AR&#xd;left join alm.alm_lotes lo on lo.arti_id  = ar.arti_id &#xd;  and lo.eliminado = false &#xd;  and lo.estado = 'AC'&#xd;  and lo.fec_vencimiento &gt;=  date_trunc('day',now())&#xd;where t.valor = :tipo and t.tabl_id = AR.tipo&#xd;  group by ar.arti_id</sql>
       <result outputType="json">{&#xd;  "articulos":{&#xd;     "articulo":[&#xd;        {&#xd;          "arti_id": "$arti_id",&#xd;          "descripcion": "$descripcion",&#xd;          "barcode":"$barcode",&#xd;          "um":"$um",&#xd;          "stock":"$stock"&#xd;                }&#xd;      ]&#xd;    }&#xd;}</result>
       <param name="tipo" sqlType="STRING"/>
    </query>
-   <query id="extraerCantidadLote" useConfig="ToolsDataSource">
+   <query id="extraerCantidadLote" useConfig="produccionDS">
       <sql>update alm.alm_lotes&#xd;set cantidad = cantidad - CAST(:cantidad as FLOAT8)&#xd;where batch_id = CAST(:batch_id as VARCHAR)&#xd;and empr_id = CAST(:empr_id as INTEGER)</sql>
       <param name="cantidad" sqlType="STRING"/>
       <param name="empr_id" sqlType="STRING"/>
       <param name="batch_id" sqlType="STRING"/>
    </query>
-   <query id="movimientoStock" useConfig="ToolsDataSource">
+   <query id="movimientoStock" useConfig="produccionDS">
       <sql>insert&#xd;	into&#xd;	alm.alm_lotes (prov_id,&#xd;	arti_id,&#xd;	depo_id,&#xd;	codigo,&#xd;	fec_vencimiento,&#xd;	cantidad,&#xd;	empr_id,&#xd;	user_id,&#xd;	estado,batch_id)&#xd;select prov_id,&#xd;	arti_id,&#xd;	depo_id,&#xd;	codigo,&#xd;	fec_vencimiento,&#xd;	cast(:cantidad as float8),&#xd;	empr_id,&#xd;	user_id,&#xd;	estado&#xd; ,cast(:batch_id as VARCHAR) from alm.alm_lotes&#xd;where batch_id = CAST(:old_batch_id as VARCHAR)</sql>
       <param name="batch_id" sqlType="STRING"/>
       <param name="cantidad" sqlType="STRING"/>
       <param name="old_batch_id" sqlType="STRING"/>
    </query>
-   <query id="setTabla" useConfig="ToolsDataSource">
+   <query id="setTabla" useConfig="produccionDS">
       <sql>INSERT INTO alm.utl_tablas&#xd;(tabla, valor, descripcion)&#xd;VALUES(:tabla, :valor, :descripcion);</sql>
       <param name="tabla" sqlType="STRING"/>
       <param name="valor" sqlType="STRING"/>
       <param name="descripcion" sqlType="STRING"/>
    </query>
-   <query id="getEstablecimiento2" useConfig="ToolsDataSource">
+   <query id="getEstablecimiento2" useConfig="produccionDS">
       <sql>SELECT * FROM prd.establecimientos&#xd;WHERE esta_id = CAST(:esta_id as INTEGER)</sql>
       <result outputType="json">{&#xd;    "establecimientos":{&#xd;        "establecimiento":[&#xd;            {&#xd;                "esta_id":"$esta_id",&#xd;                "nombre":"$nombre"&#xd;            }&#xd;        ]&#xd;    }&#xd;}</result>
       <param name="esta_id" sqlType="STRING"/>
    </query>
-   <query id="setEstablecimiento" useConfig="ToolsDataSource">
+   <query id="setEstablecimiento" useConfig="produccionDS">
       <sql>INSERT INTO prd.establecimientos (nombre, lng, lat, calle, altura, localidad, pais, fec_alta, usuario, empr_id) &#xd;VALUES(:nombre, :longitud, :latitud, :calles, :altura, :localidad, :pais, now(), :usuario, CAST(:empr_id as integer));</sql>
       <param name="nombre" sqlType="STRING"/>
       <param name="longitud" sqlType="STRING"/>
@@ -141,27 +141,27 @@
       <param name="usuario" sqlType="STRING"/>
       <param name="empr_id" sqlType="STRING"/>
    </query>
-   <query id="delEstablecimiento" useConfig="ToolsDataSource">
+   <query id="delEstablecimiento" useConfig="produccionDS">
       <sql>UPDATE&#xd;prd.establecimientos &#xd;set eliminado = true&#xd;where esta_id = CAST(:esta_id as integer)</sql>
       <param name="esta_id" sqlType="STRING"/>
    </query>
-   <query id="getContenidoRecipiente" useConfig="ToolsDataSource">
+   <query id="getContenidoRecipiente" useConfig="produccionDS">
       <sql>select al.arti_id, arti.barcode, al.codigo as lote_id, al.cantidad &#xd;from prd.lotes  pl&#xd;join alm.alm_lotes al on pl.batch_id = al.batch_id &#xd;join alm.alm_articulos arti on arti.arti_id = al.arti_id&#xd;where reci_id = CAST(:reci_id as integer)</sql>
       <result outputType="json">{&#xd;    "batches":{&#xd;       "batch":[&#xd;           {&#xd;               "arti_id":"$arti_id",&#xd;               "barcode":"$barcode",&#xd;               "cantidad":"$cantidad",&#xd;               "lote_id":"$lote_id"&#xd;           }&#xd;       ] &#xd;    }&#xd;}</result>
       <param name="reci_id" sqlType="STRING"/>
    </query>
-   <query id="getDepositosEstablecimiento" useConfig="ToolsDataSource">
+   <query id="getDepositosEstablecimiento" useConfig="produccionDS">
       <sql>SELECT a.depo_id, a.descripcion, e.esta_id, e.nombre&#xd;FROM alm.alm_depositos a &#xd;join prd.establecimientos e on e.esta_id = a.esta_id&#xd;WHERE e.esta_id = CAST(:esta_id as integer)&#xd;AND a.eliminado = false</sql>
       <result outputType="json">{&#xd;   "depositos":{&#xd;      "deposito":[&#xd;         {&#xd;            "depo_id":"$depo_id",&#xd;            "descripcion":"$descripcion",&#xd;            "esta_id":"$esta_id",&#xd;            "esta_nombre":"$nombre"&#xd;         }&#xd;      ]&#xd;   }&#xd;}</result>
       <param name="esta_id" sqlType="STRING"/>
    </query>
-   <query id="getRecipientesDepositoEstablecimiento" useConfig="ToolsDataSource">
+   <query id="getRecipientesDepositoEstablecimiento" useConfig="produccionDS">
       <sql>SELECT r.reci_id, r.nombre as reci_nombre, a.depo_id, a.descripcion as depo_descripcion, e.esta_id, e.nombre as esta_nombre&#xd;FROM prd.recipientes r&#xd;JOIN alm.alm_depositos a ON a.depo_id = r.depo_id&#xd;JOIN prd.establecimientos e ON e.esta_id = a.esta_id&#xd;WHERE r.eliminado = 0&#xd;AND a.depo_id = CAST(:depo_id as integer) AND a.eliminado = false&#xd;AND e.esta_id = CAST(:esta_id as integer)</sql>
       <result outputType="json">{&#xd;   "recipientes":{&#xd;      "recipiente":[&#xd;         {&#xd;            "reci_id":"$reci_id",&#xd;            "reci_nombre":"$reci_nombre",&#xd;            "depo_id":"$depo_id",&#xd;            "depo_descripcion":"$depo_descripcion",&#xd;            "esta_id":"$esta_id",&#xd;            "esta_nombre":"$esta_nombre"&#xd;         }&#xd;      ]&#xd;   }&#xd;}</result>
       <param name="depo_id" sqlType="STRING"/>
       <param name="esta_id" sqlType="STRING"/>
    </query>
-   <query id="setRecipiente" keyColumns="reci_id" returnGeneratedKeys="true" useConfig="ToolsDataSource">
+   <query id="setRecipiente" keyColumns="reci_id" returnGeneratedKeys="true" useConfig="produccionDS">
       <sql>INSERT INTO prd.recipientes (tipo,nombre,empr_id,depo_id, motr_id) &#xd;VALUES &#xd;(:tipo,:patente, CAST(:empr_id as INTEGER), CAST(:depo_id as INTEGER), CAST(:motr_id as INTEGER))</sql>
       <result outputType="json">{&#xd; "resultado":{"reci_id":"$reci_id"}&#xd;}</result>
       <param name="tipo" sqlType="STRING"/>
@@ -170,21 +170,21 @@
       <param name="depo_id" sqlType="STRING"/>
       <param name="motr_id" sqlType="STRING"/>
    </query>
-   <query id="getAllRecipientes" useConfig="ToolsDataSource">
+   <query id="getAllRecipientes" useConfig="produccionDS">
       <sql>SELECT r.reci_id, r.tipo as reci_tipo, r.nombre as reci_nombre, cast(r.fec_alta as date) as reci_fec_alta, &#xd;d.depo_id, d.descripcion as depo_descripcion, e.esta_id, e.nombre as esta_nombre&#xd;FROM prd.recipientes r &#xd;join alm.alm_depositos d on d.depo_id = r.depo_id&#xd;join prd.establecimientos e on e.esta_id = d.esta_id&#xd;where r.eliminado = 0&#xd;order by r.fec_alta desc, d.esta_id asc, r.tipo asc, d.descripcion asc, r.nombre asc</sql>
       <result outputType="json">{&#xd;   "recipientes":{&#xd;      "recipiente":[&#xd;         {&#xd;            "reci_id":"$reci_id", &#xd;            "reci_tipo":"$reci_tipo", &#xd;            "reci_nombre":"$reci_nombre", &#xd;            "reci_fec_alta":"$reci_fec_alta ", &#xd;            "depo_id":"$depo_id", &#xd;            "depo_descripcion":"$depo_descripcion", &#xd;            "esta_id":"$esta_id", &#xd;            "esta_nombre":"$esta_nombre"&#xd;         }&#xd;      ]&#xd;   }&#xd;}</result>
    </query>
-   <query id="deleteRecipiente" useConfig="ToolsDataSource">
+   <query id="deleteRecipiente" useConfig="produccionDS">
       <sql>UPDATE prd.recipientes&#xd;SET eliminado = 1 &#xd;WHERE reci_id = cast(:reci_id as int8)</sql>
       <param name="reci_id" sqlType="STRING"/>
    </query>
-   <query id="updateRecipiente" useConfig="ToolsDataSource">
+   <query id="updateRecipiente" useConfig="produccionDS">
       <sql>UPDATE prd.recipientes&#xd;SET tipo = :reci_tipo, nombre = :reci_nombre&#xd;WHERE reci_id = cast(:reci_id as int8)</sql>
       <param name="reci_tipo" sqlType="STRING"/>
       <param name="reci_nombre" sqlType="STRING"/>
       <param name="reci_id" sqlType="STRING"/>
    </query>
-   <query id="getRecipientesFull" useConfig="ToolsDataSource">
+   <query id="getRecipientesFull" useConfig="produccionDS">
       <sql>select re.reci_id&#xd;      ,re.nombre&#xd;      ,re.tipo&#xd;      ,ta.valor care_id&#xd;      ,ta.descripcion categoria_recipiente&#xd;      ,re.estado&#xd;      ,re.depo_id&#xd;      ,es.esta_id&#xd;       ,re.row&#xd;        ,re.col&#xd;from prd.recipientes as re&#xd;     ,alm.alm_depositos as de  &#xd;	 ,prd.establecimientos as es &#xd;	 ,core.tablas ta&#xd;     ,(select :tipo as tipo) as tipo&#xd;     ,(SELECT :care_id AS care_id) AS care&#xd;     ,(select :estado as estado) as estado&#xd;     ,(select :esta_id  as esta_id) as esta&#xd;     ,(SELECT :depo_id AS depo_id) AS depo&#xd;where de.depo_id = re.depo_id&#xd;AND es.esta_id =  de.esta_id&#xd;AND re.care_id = ta.tabl_id &#xd;AND re.tipo = case when tipo.tipo = 'TODOS' then re.tipo else tipo.tipo end&#xd;and re.estado = case when estado.estado = 'TODOS' then re.estado else estado.estado end &#xd;and re.care_id = case when care.care_id = 'TODOS' then re.care_id else care.care_id end &#xd;and re.depo_id = case when depo.depo_id = 'TODOS' then re.depo_id else CAST(depo.depo_id AS integer) end &#xd;and es.esta_id = case when esta.esta_id = 'TODOS' then es.esta_id else CAST(esta.esta_id AS integer) END</sql>
       <result outputType="json">{&#xd;    "recipientes": {&#xd;        "recipiente": [&#xd;            {&#xd;                "reci_id": "$reci_id",&#xd;                "nombre": "$nombre",&#xd;                "tipo": "$tipo",&#xd;                "care_id":"$care_id",&#xd;                "categoria_recipiente":"$categoria_recipiente",&#xd;                "estado": "$estado",&#xd;                "depo_id": "$depo_id",&#xd;                "esta_id":"$esta_id",&#xd;                "row":"$row",&#xd;                "col":"$col"&#xd;            }&#xd;        ]&#xd;    }&#xd;}</result>
       <param name="tipo" sqlType="STRING"/>
@@ -192,6 +192,11 @@
       <param name="esta_id" sqlType="STRING"/>
       <param name="depo_id" sqlType="STRING"/>
       <param name="care_id" sqlType="STRING"/>
+   </query>
+   <query id="getEstablecimeintos" useConfig="produccionDS">
+      <sql>select *&#xd;from prd.establecimientos e &#xd;where e.empr_id =  cast(:empr_id as integer)</sql>
+      <result outputType="json">{&#xd; "establecimientos": {&#xd;      "establecimiento": [&#xd;        {&#xd;          "esta_id": "$esta_id",&#xd;          "nombre": "$nombre",&#xd;          "lng": "$lng",&#xd;          "lat": "$lat",&#xd;          "calle": "$calle",&#xd;          "altura": "$altura",&#xd;          "localidad": "$localidad",&#xd;          "estado": "$estado",&#xd;          "pais": "$pais",&#xd;          "fec_alta": "$fec_alta",&#xd;          "usuario": "$usuario"&#xd;        }&#xd;      ]&#xd; }&#xd;}</result>
+      <param name="empr_id" sqlType="STRING"/>
    </query>
    <resource method="GET" path="/articulos/{empr_id}">
       <call-query href="getArticulos">
@@ -242,7 +247,7 @@
    <resource method="GET" path="/articulos">
       <call-query href="getArticulos2"/>
    </resource>
-   <resource method="GET" path="/articulos/{arti_id}">
+   <resource method="GET" path="/articulos/obtener/{arti_id}">
       <call-query href="getArticulo">
          <with-param name="arti_id" query-param="arti_id"/>
       </call-query>
@@ -392,4 +397,3 @@
       </call-query>
    </resource>
 </data>
-

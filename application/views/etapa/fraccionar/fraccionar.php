@@ -127,15 +127,15 @@ if($etapa->estado == "FINALIZADO"){
                 <div class="panel-body">
                     <?php  if($etapa->estado != 'En Curso'){?>
                     <div class="row">
-                        <div class="col-xs-4">
+                        <div class="col-xs-6">
                             <div class="form-group">
-                                <label class="form-label">Artículos:</label>
+                                <label class="form-label">Producto:</label>
                                 <?php 
                         echo selectBusquedaAvanzada('inputproductos', 'arti_id', $articulos_fraccionar, 'arti_id', 'barcode',array('descripcion','Stock:' => 'stock'));
                     ?>
                             </div>
                         </div>
-                        <div class="col-xs-4">
+                        <div class="col-xs-6">
                             <div class="form-group">
                                 <label class="form-label">Stock:</label>
                                 <input type="number" disabled id="stock" value="" class="form-control">
@@ -146,7 +146,7 @@ if($etapa->estado == "FINALIZADO"){
                                 <label class="form-label">Empaque:</label>
                                 <select class="form-control select2 select2-hidden-accesible" id="empaques"
                                     onchange="ActualizaEmpaques()">
-                                    <option value="" disabled selected>-Seleccione Empaque-</option>
+                                    <option value="" disabled selected>- Seleccionar -</option>
                                     <?php
                             foreach($empaques as $fila)
                             { 
@@ -166,6 +166,12 @@ if($etapa->estado == "FINALIZADO"){
                             <div class="form-group">
                                 <label class="form-label">Capacidad:</label>
                                 <input type="number" id="volumen" class="form-control" disabled>
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <div class="form-group">
+                                <label class="form-label">Peso Tara:</label>
+                                <input type="number" id="tara" class="form-control" disabled>
                             </div>
                         </div>
                         <div class="col-xs-4">
@@ -295,6 +301,7 @@ function ActualizaEmpaques() {
     empaque = JSON.parse(empaque);
     //document.getElementById('unidad').value = ;
     document.getElementById('volumen').value = empaque.volumen ;
+    document.getElementById('tara').value = empaque.tara ;
     document.getElementById('cantidad').disabled = false;
     CalculaStock();
 }
@@ -335,6 +342,7 @@ function ControlaProducto() {
         empaque = JSON.parse(empaque);
         producto.empaque = empaque.id;
         producto.empaquetitulo = empaque.titulo;
+        producto.envase_arti_id = empaque.arti_id;
         producto.cantidad = document.getElementById('cantidad').value;
         producto.cant_descontar = document.getElementById('calculo').value;
         producto = JSON.stringify(producto);
@@ -454,7 +462,7 @@ function guardar() {
     fecha = document.getElementById('fecha').value;
     establecimiento = document.getElementById('establecimientos').value;
     recipiente = document.getElementById('recipientes').value;
-    idetapa = <?php echo $etapa->id; ?> ;
+    idetapa = <?php echo $etapa->id ?> ;
     existe = document.getElementById('productoexiste').value;
     ordProduccion = document.getElementById('ordenproduccion').value;
     var productos = [];

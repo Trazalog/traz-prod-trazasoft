@@ -322,7 +322,6 @@ class Etapa extends CI_Controller
     // guarda fraccionamiento y lanza pedido de materiales
     public function guardarFraccionar()
     {
-
         //////////// PARA CREAR EL NUEVO BATCH ///////////////////
         $datosCab['lote_id'] = 'FRACCIONAMIENTO';
         $datosCab['arti_id'] = (string) 0;
@@ -385,6 +384,7 @@ class Etapa extends CI_Controller
             $response = $this->Etapas->setCabeceraNP($cab);
             $pema_id = $response->nota_id->pedido_id;
 
+            $envases = array();
             //////////// PARA CREAR EL BATCH PARA EL BATCH REQUEST //////////
             if ($pema_id) {
                 $x = 0;
@@ -394,10 +394,16 @@ class Etapa extends CI_Controller
                     $det['arti_id'] = (string) $p->arti_id;
                     $det['cantidad'] = (string) $p->cant_descontar;
                     $detalle['_post_notapedido_detalle'][$x] = (object) $det;
+
+                    $envases[$key]['pema_id'] = (string) $pema_id;
+                    $envases[$key]['arti_id'] = (string) $p->envase_arti_id;
+                    $envases[$key]['cantidad'] = (string) $p->cantidad;
                     $x++;
                 }
                 $arrayDeta['_post_notapedido_detalle_batch_req'] = $detalle;
                 $respDetalle = $this->Etapas->setDetaNP($arrayDeta);
+
+                $rsp = $this->pedidoEnvases($envases);
 
                 if ($respDetalle < 300) {
                     /////// LANZAR EL PROCESO DE BONITA DE PEDIDO
@@ -424,6 +430,20 @@ class Etapa extends CI_Controller
             } else {
                 echo ("Error en generacion de Cabecera Pedido Materiales");
             }
+        }
+    }
+
+    public function pedidoEnvases($envases)
+    { 
+        if(false){ //HAY FORMULA
+
+        }else{
+          
+            $detalle['_post_notapedido_detalle_batch_req']['_post_notapedido_detalle'] = $envases;
+            
+            $rsp = $this->Etapas->setDetaNP($detalle);
+
+            return $rsp;
         }
     }
     // Elabora informe de Etapa hasta que se saque el total del contenido de batch origen
@@ -467,13 +487,9 @@ class Etapa extends CI_Controller
         $productos = $this->input->post('productos');
         $num_orden_prod = $this->input->post('num_orden_prod');
         $batch_id_padre = $this->input->post('batch_id');
-        
-        #No se usan
-        #$lote_id = $this->input->post('lote_id');
-        #$cantidad = $this->input->post('cant_total_desc');
 
         foreach ($productos as $info) {
-            $arrayPost["lote_id"] = $info['loteorigen']; // lote origen
+            $arrayPost["lote_id"] = $info['lotedestino']; // lote origen
             $arrayPost["arti_id"] = $info['titulo']; // art seleccionado en lista
             $arrayPost["prov_id"] = (string) PROVEEDOR_INTERNO;
             $arrayPost["batch_id_padre"] = $batch_id_padre; // bacth actual

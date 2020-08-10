@@ -365,5 +365,9 @@
          <with-param name="etap_id" query-param="etap_id"/>
       </call-query>
    </resource>
+   <resource method="GET" path="/lote/fraccionar/batch/{batch_id}">
+      <call-query href="getLoteAFraccionar">
+         <with-param name="batch_id" query-param="batch_id"/>
+      </call-query>
+   </resource>
 </data>
-
