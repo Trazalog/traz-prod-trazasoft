@@ -125,7 +125,7 @@
                     <a onclick="despliega()" href="#"><i class="glyphicon glyphicon-plus"></i>Datos Adicionales</a>
                     <div id="desplegable" class="panel panel-default" hidden>
                         <div class="panel-heading">Formulario Etapa</div>
-                        <div class="panel-body frm-new" data-form="<?php echo $form_id ?>"></div>
+                        <div class="panel-body"><?php echo nuevoForm($form_id) ?></div>
                     </div>
                 </div>
             </div>
@@ -178,19 +178,14 @@
 
 
 <script>
-// getSnapshot();
-detectarForm();
+$('.frm-save').hide();
+initForm();
 var estadoEtapa = $('#estadoEtapa').val();
 if (estadoEtapa == 'PLANIFICADO') {
     $(".recipientesDiv").addClass("hidden");
-    console.log('1');
-    // callRecipiente(selectOption);
-    // callRecipiente();
-
 }
 
 callRecipiente();
-
 function callRecipiente() {
     actualizaRecipiente($('#establecimientos').val());
 }
@@ -292,6 +287,8 @@ function guardar(boton) {
 
     if(!validarCampos()) return;
 
+    $('.frm').find('.frm-save').click();
+    var info_id = $('.frm').attr('data-info');
     var recipiente = idprod = '';
     var tabla = $('#tablamateriasasignadas tbody tr');
     var materiales = [];
@@ -326,6 +323,7 @@ function guardar(boton) {
     var batch_id = $('#batch_id').val();
 
     var data = {
+        info_id: info_id,
         idetapa: idetapa,
         lote: lote,
         fecha: fecha,
