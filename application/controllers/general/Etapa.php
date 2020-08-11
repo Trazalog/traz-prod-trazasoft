@@ -109,8 +109,11 @@ class Etapa extends CI_Controller
             echo json_encode($rsp);
             return;
         }
+
         #En el caso de no existir devuelve nuevo BATCH_ID SINO el EXISTENTE
         $batch_id = $rsp['data']->respuesta->resultado;
+
+        $this->Etapas->asociarFormulario($batch_id, $post_data['info_id']);
 
         log_message('DEBUG', 'ETAPA >> guardar | FIN');
 

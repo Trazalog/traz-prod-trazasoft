@@ -126,7 +126,7 @@ function validarEtapa() {
                     <a onclick="despliega()" class=""><i class="glyphicon glyphicon-plus"></i>Datos Adicionales</a>
                     <div id="desplegable" class="panel panel-default" hidden>
                         <div class="panel-heading">Formulario Etapa</div>
-                        <div class="panel-body frm-new" data-info="<?php echo $info_id ?>"></div>
+                        <div class="panel-body"><?php echo getForm($etapa->info_id) ?></div>
                     </div>
                 </div>
             </div>
@@ -192,9 +192,9 @@ function validarEtapa() {
 
 
 <script>
+initForm();
+$('.frm').find('.frm-save').hide();
 actualizaRecipiente($('#establecimientos').val(), 'recipientes');
-
-
 
 function actualizaRecipiente(establecimiento, recipientes) {
 
@@ -289,6 +289,7 @@ function guardar(boton) {
     //     alert('Por favor ingresar cantidad para el Producto');
     //     return false;
     // }
+    $('.frm').find('.frm-save').click();
 
     var recipiente = idprod = '';
     var tabla = $('#tablamateriasasignadas tbody tr');

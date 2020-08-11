@@ -42,10 +42,8 @@ class Etapas extends CI_Model
             log_message('DEBUG', 'Etapas/buscar #ERROR | BATCH_ID NULO');
             return;
         }
-
-        log_message('DEBUG', 'Etapas/buscar(batch_id)-> ' . $id);
         $resource = '/lote/';
-        $url = REST3 . $resource . $id;
+        $url = REST_PRD_LOTE. $resource . $id;
         $array = $this->rest->callAPI("GET", $url);
         $resp = json_decode($array['data']);
 
@@ -306,5 +304,14 @@ class Etapas extends CI_Model
         } else {
             return false;
         }
+    }
+
+    public function asociarFormulario($batch_id, $info_id)
+    {
+        $rec = '_put_lote_instancia_formulario';
+        $url = REST_PRD_ETAPA . "/$rec";
+        $data[$rec] = array('batch_id' => $batch_id, 'info_id' => $info_id); 
+        $res = wso2($url, 'PUT', $data);
+        return $res;
     }
 }
