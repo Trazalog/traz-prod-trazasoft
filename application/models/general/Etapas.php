@@ -309,7 +309,7 @@ class Etapas extends CI_Model
     public function asociarFormulario($batch_id, $info_id)
     {
         $rec = '_put_lote_instancia_formulario';
-        $url = REST_PRD_ETAPA . "/$rec";
+        $url = REST_PRD_LOTE . "/$rec";
         $data[$rec] = array('batch_id' => $batch_id, 'info_id' => $info_id); 
         $res = wso2($url, 'PUT', $data);
         return $res;

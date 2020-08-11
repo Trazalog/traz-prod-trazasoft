@@ -123,8 +123,8 @@
       <result outputType="json">{&#xd; "etapas": {&#xd; "etapa": [&#xd; {&#xd; "id": "$batch_id",&#xd; "lote": "$lote_id",&#xd; "titulo" : "$titulo",&#xd; "producto" : "$producto",&#xd; "cantidad" : "$cantidad",&#xd; "unidad" : "$unidad" &#xd; ,"establecimiento" : "$establecimiento",&#xd; "recipiente" : "$recipiente",&#xd; "orden" : "$orden",&#xd; "estado" : "$estado",&#xd;  "fecha":"$fecha"&#xd; }&#xd; ]&#xd; }&#xd;}</result>
    </query>
    <query id="getLote2" useConfig="ToolsDataSource">
-      <sql>select &#xd;lote.batch_id&#xd;,lote.lote_id&#xd;,lote.fec_alta as fecha&#xd;,etap.nombre as titulo&#xd;,etap.nom_recipiente&#xd;,'' as producto&#xd;,0 as cantidad&#xd;,'n/a' as unidad&#xd;,esta.nombre as establecimiento&#xd;,esta.esta_id&#xd;,reci.nombre as recipiente&#xd;,lote.num_orden_prod as orden&#xd;,lote.estado as estado&#xd;,reci.reci_id&#xd;,etap.etap_id&#xd;from &#xd;prd.etapas etap&#xd;,prd.establecimientos esta &#xd;,prd.recipientes reci &#xd;,prd.lotes lote &#xd;,alm.alm_depositos depo&#xd;where&#xd;lote.etap_id = etap.etap_id&#xd;and lote.reci_id = reci.reci_id&#xd;and reci.depo_id = depo.depo_id&#xd;and depo.esta_id = esta.esta_id&#xd;and lote.batch_id = cast(:batch_id as integer)</sql>
-      <result outputType="json">{ &#xd; "etapa": &#xd; {&#xd;   "id": "$batch_id",&#xd;   "fecha": "$fecha",&#xd;   "lote": "$lote_id",&#xd;   "titulo" : "$titulo",&#xd;   "producto" : "$producto",&#xd;   "cantidad" : "$cantidad",&#xd;   "unidad" : "$unidad", &#xd;   "establecimiento" : "$establecimiento",&#xd;   "esta_id": "$esta_id",&#xd;   "recipiente" : "$recipiente",&#xd;   "reci_estab_nom": "$nom_recipiente",&#xd;   "orden" : "$orden",&#xd;   "estado" : "$estado",&#xd;   "reci_id" : "$reci_id",&#xd;   "etap_id" : "$etap_id"&#xd; } &#xd;}</result>
+      <sql>select &#xd;lote.batch_id&#xd;,lote.lote_id&#xd;,lote.fec_alta as fecha&#xd;,etap.nombre as titulo&#xd;,etap.nom_recipiente&#xd;,'' as producto&#xd;,0 as cantidad&#xd;,'n/a' as unidad&#xd;,esta.nombre as establecimiento&#xd;,esta.esta_id&#xd;,reci.nombre as recipiente&#xd;,lote.num_orden_prod as orden&#xd;,lote.estado as estado&#xd;,reci.reci_id&#xd;,etap.etap_id,&#xd;lote.info_id&#xd;from &#xd;prd.etapas etap&#xd;,prd.establecimientos esta &#xd;,prd.recipientes reci &#xd;,prd.lotes lote &#xd;,alm.alm_depositos depo&#xd;where&#xd;lote.etap_id = etap.etap_id&#xd;and lote.reci_id = reci.reci_id&#xd;and reci.depo_id = depo.depo_id&#xd;and depo.esta_id = esta.esta_id&#xd;and lote.batch_id = cast(:batch_id as integer)</sql>
+      <result outputType="json">{ &#xd; "etapa": &#xd; {&#xd;   "id": "$batch_id",&#xd;   "fecha": "$fecha",&#xd;   "lote": "$lote_id",&#xd;   "titulo" : "$titulo",&#xd;   "producto" : "$producto",&#xd;   "cantidad" : "$cantidad",&#xd;   "unidad" : "$unidad", &#xd;   "establecimiento" : "$establecimiento",&#xd;   "esta_id": "$esta_id",&#xd;   "recipiente" : "$recipiente",&#xd;   "reci_estab_nom": "$nom_recipiente",&#xd;   "orden" : "$orden",&#xd;   "estado" : "$estado",&#xd;   "reci_id" : "$reci_id",&#xd;   "etap_id" : "$etap_id",&#xd;"info_id":"$info_id"&#xd; } &#xd;}</result>
       <param name="batch_id" sqlType="STRING"/>
    </query>
    <query id="getLoteXCodigo" useConfig="ToolsDataSource">
@@ -304,6 +304,17 @@
    </resource>
    <resource method="DELETE" path="/deleteUserLote">
       <call-query href="deleteUserLote">
+         <with-param name="batch_id" query-param="batch_id"/>
+      </call-query>
+   </resource>
+   <query id="setLoteInstanciaFormulario" useConfig="ToolsDataSource">
+      <sql>UPDATE prd.lotes set info_id = cast(:info_id as integer) where batch_id = cast(:batch_id as integer)</sql>
+      <param name="info_id" sqlType="STRING"/>
+      <param name="batch_id" sqlType="STRING"/>
+   </query>
+   <resource method="PUT" path="/lote/instancia/formulario">
+      <call-query href="setLoteInstanciaFormulario">
+         <with-param name="info_id" query-param="info_id"/>
          <with-param name="batch_id" query-param="batch_id"/>
       </call-query>
    </resource>
