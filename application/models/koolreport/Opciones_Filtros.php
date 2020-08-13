@@ -64,29 +64,83 @@ class Opciones_Filtros extends CI_Model
 
   public function getCantidadIngresos($data)
   {
-    $prov_id = $data['prov_id'];
-    $tran_id = $data['tran_id'];
-    $arti_id = $data['arti_id'];
-    $fecdesde = $data['datepickerDesde'];
-    $fechasta = $data['datepickerHasta'];
+    log_message('DEBUG', '#TRAZA| #REPORTES|#GETCANTIDADINGRESOS| #INGRESO: >>' . json_encode($data));
+    $arti_id = (isset($data['arti_id'])) ? $data['arti_id'] : '';
+    $prov_id = (isset($data['prov_id'])) ? $data['prov_id'] : '';
+    $cuit = (isset($data['tran_id'])) ? $data['tran_id'] : '';
+    $fecdesde = (isset($data['datepickerDesde'])) ? date("Y-m-d", strtotime($data['datepickerDesde'])) : '';
+    $fechasta = (isset($data['datepickerHasta'])) ? date("Y-m-d", strtotime($data['datepickerHasta'])) : '';
 
-    if ($prov_id || $tran_id || $arti_id || $fecdesde || $fechasta) {
-      $fecdesde = ($fecdesde) ? date("Y-m-d", strtotime($fecdesde)) : null;
-      $fechasta = ($fechasta) ? date("Y-m-d", strtotime($fechasta)) : null;
-      // $url = LOG_DS . 'productos/etapa/' . 'cantidad/proveedor/' . $prov_id . '/transporte/' . $tran_id . '/producto/' . $arti_id . '/desde/' . $fecdesde . '/hasta/' . $fechasta . '/ingresos';
-      // $json = $this->Koolreport->depurarJson($url)->cantidades->cantidad;
-      // return $json[0]->cant_ingresos;
+    $url = LOG_DS . 'cantidad/proveedor/' . $prov_id . '/transporte/' . $cuit . '/producto/' . $arti_id . '/desde/' . $fecdesde . '/hasta/' . $fechasta . '/ingresos';
+    return wso2($url)['data'];
+  }
 
-      $url = LOG_DS . 'cantidad/proveedor/' . $prov_id . '/transporte/' . $tran_id . '/producto/' . $arti_id . '/desde/' . $fecdesde . '/hasta/' . $fechasta . '/ingresos';
-      return wso2($url)['data'];
-    } else {
-      // log_message('INFO', '#TRAZA| #REPORTES|#INGRESOS| #INGRESO');
-      // $url = LOG_DS . 'productos/etapa/cantidad/proveedor//transporte//producto//desde//hasta//ingresos';
-      // $json = $this->Koolreport->depurarJson($url)->cantidades->cantidad;
-      // return $json[0]->cant_ingresos;
+  public function getLotes()
+  {
+    // $url = PRD_Lote_DS . 'lotes';
+    $url = 'http://10.142.0.7:8280/services/PRDLoteDataService/lotes';
+    return wso2($url)['data'];
+  }
 
-      $url = LOG_DS . 'cantidad/proveedor//transporte//producto//desde//hasta//ingresos';
-      return wso2($url)['data'];
-    }
+  public function getClientes()
+  {
+    $url = CORE_DS . 'clientes';
+    return wso2($url)['data'];
+  }
+
+  public function asignacionDeRecursos($data)
+  {
+    log_message('DEBUG', '#TRAZA| #REPORTES|#ASIGNACIONDERECURSOS| #INGRESO: >>' . json_encode($data));
+    $empr_id = empresa();
+    $lote_id = (isset($data['lote_id'])) ? $data['lote_id'] : '';
+    $empr_id = (isset($empr_id)) ? $empr_id : '';
+
+    // $json = '{
+    //     "asignaciones":{
+    //       "asignacion":[{
+    //         "comprobante":"0023",
+    //         "fecha":"02-02-2020",
+    //         "tarea":"Primera",
+    //         "articulo":"Mosca",
+    //         "cantidad":"22",
+    //         "um":"L",
+    //         "tipo":"caca"
+    //     }
+    //     ]
+    //   }
+    // }';
+
+    // $url = PRD_Lote_DS . 'asignaciones/' . $lote_id . '/empresa/' . $empr_id;
+    $url = 'http://10.142.0.7:8280/services/PRDLoteDataService/' . 'asignaciones/' . $lote_id . '/empresa/' . $empr_id; //TODO: comentar y descomentar la linea de arriba
+
+    return wso2($url)['data'];
+  }
+
+  public function getSalidas($data)
+  {
+    log_message('DEBUG', '#TRAZA| #REPORTES|#GETSALIDAS| #INGRESO: >>' . json_encode($data));
+    $arti_id = (isset($data['arti_id'])) ? $data['arti_id'] : '';
+    $clie_id = (isset($data['clie_id'])) ? $data['clie_id'] : '';
+    $cuit = (isset($data['tran_id'])) ? $data['tran_id'] : '';
+    $fecdesde = (isset($data['datepickerDesde'])) ? date("Y-m-d", strtotime($data['datepickerDesde'])) : '';
+    $fechasta = (isset($data['datepickerHasta'])) ? date("Y-m-d", strtotime($data['datepickerHasta'])) : '';
+
+    // $url = LOG_DS . 'movimientos/cliente/' . $clie_id . '/transporte/' . $cuit . '/producto/' . $arti_id . '/desde/' . $fecdesde . '/hasta/' . $fechasta . '/salidas';
+    $url = 'http://10.142.0.7:8280/services/LOGDataService/' . 'movimientos/cliente/' . $clie_id . '/transporte/' . $cuit . '/producto/' . $arti_id . '/desde/' . $fecdesde . '/hasta/' . $fechasta . '/salidas'; //TODO:comentar y descomentar el de arriba
+    return wso2($url)['data'];
+  }
+
+  public function getIngresos($data)
+  {
+    log_message('DEBUG', '#TRAZA| #REPORTES|#GETINGRESOS| #INGRESO: >>' . json_encode($data));
+    $arti_id = (isset($data['arti_id'])) ? $data['arti_id'] : '';
+    $prov_id = (isset($data['prov_id'])) ? $data['prov_id'] : '';
+    $cuit = (isset($data['tran_id'])) ? $data['tran_id'] : '';
+    $fecdesde = (isset($data['datepickerDesde'])) ? date("Y-m-d", strtotime($data['datepickerDesde'])) : '';
+    $fechasta = (isset($data['datepickerHasta'])) ? date("Y-m-d", strtotime($data['datepickerHasta'])) : '';
+
+    $url = LOG_DS . 'movimientos/proveedor/' . $prov_id . '/transporte/' . $cuit . '/producto/' . $arti_id . '/desde/' . $fecdesde . '/hasta/' . $fechasta . '/ingresos';
+    // $url = 'http://10.142.0.7:8280/services/LOGDataService/' . 'movimientos/cliente/' . $prov_id . '/transporte/' . $cuit . '/producto/' . $arti_id . '/desde/' . $fecdesde . '/hasta/' . $fechasta . '/ingresos'; //TODO:comentar y descomentar el de arriba
+    return wso2($url)['data'];
   }
 }

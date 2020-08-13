@@ -3,9 +3,9 @@
 use \koolreport\widgets\koolphp\Table;
 // use \koolreport\widgets\google\BarChart;
 use \koolreport\widgets\google\ColumnChart;
-use \koolreport\widgets\google\PieChart;
+// use \koolreport\widgets\google\PieChart;
 // use \koolreport\inputs\Select2;
-use \koolreport\widgets\koolphp\Card;
+// use \koolreport\widgets\koolphp\Card;
 ?>
 <style>
   .truck {
@@ -115,7 +115,7 @@ use \koolreport\widgets\koolphp\Card;
               <div class="col-md-12">
                 <?php
                 Table::create(array(
-                  "dataStore" => $this->dataStore('data_produccion_table'),
+                  "dataStore" => $this->dataStore('data_ingresos_table'),
                   // "themeBase" => "bs4",
                   // "showFooter" => true, // cambiar true por "top" para ubicarlo en la parte superior
                   // "headers" => array(
@@ -165,7 +165,7 @@ use \koolreport\widgets\koolphp\Card;
                 ?>
               </div>
             </div>
-            <!--_________________FIN TABLA_________________-->
+            <!-- _________________FIN TABLA_________________-->
             <!-- <div class="col-md-12">
               <br>
               <div class="box box-primary">
@@ -173,113 +173,51 @@ use \koolreport\widgets\koolphp\Card;
             </div> -->
             <!--_________________ CHARTS_________________-->
             <!-- <div class="row">
-              <div class="col-md-12">
-                <!--_________________ CHARTS 1_________________-->
+              <div class="col-md-12"> -->
+            <!--_________________ CHARTS 1_________________-->
             <!-- <div class="col-md-6">
               <div class="box-header">
                 <h3 class="box-title center">
                   <i class="fa fa-pie-chart"></i>
                   Cantidad de ingresos
                 </h3>
-              </div>
-              <!--_________________ BODY CHART 1_________________-->
+              </div> -->
+            <!--_________________ BODY CHART 1_________________-->
             <!-- <div class="box-body">
               <div style="margin-bottom:50px;">
                 <?php
-                // ColumnChart::create(array(
-                //   // "title" => "Productos con mayor cantidad",
-                //   "dataStore" => $this->dataStore('data_produccion_clumnChart'),
-                //   "columns" => array(
-                //     "nombre" => array(
-                //       "label" => "Proveedor"
-                //     ),
-                //     "cantidad" => array(
-                //       "type" => "number",
-                //       "label" => "Cantidad"
-                //     )
-                //   ),
-                //   "colorScheme" => array(
-                //     "#2f4454",
-                //     "#2e1518",
-                //     "#da7b93",
-                //     "#376e6f",
-                //     "#1c3334"
-                //   )
-                // ));
+                ColumnChart::create(array(
+                  "title" => "Proveedores",
+                  "dataStore" => $this->dataStore('data_ingresos_clumnChart'),
+                  "columns" => array(
+                    "nombre" => array(
+                      "label" => "Proveedor"
+                    ),
+                    "neto" => array(
+                      "type" => "number",
+                      "label" => "Neto"
+                    )
+                  ),
+                  "colorScheme" => array(
+                    "#2f4454",
+                    "#2e1518",
+                    "#da7b93",
+                    "#376e6f",
+                    "#1c3334"
+                  )
+                ));
                 ?>
               </div>
             </div>
           </div> -->
-            <!--_________________ CHARTS 2_________________-->
-            <!-- <div class="col-md-6">
-              <div class="box-header">
-                <h3 class="box-title">
-                  <i class="fa fa-pie-chart"></i>
-                  Productos con mayor cantidad
-                </h3>
-              </div>
-              <!--_________________ BODY CHART 2_________________-->
-            <!-- <div class="box-body">
-            <div style="margin-bottom:50px;">
-              <?php
-              // ColumnChart::create(array(
-              //   // "title" => "Productos con mayor cantidad",
-              //   "dataStore" => $this->dataStore('data_produccion_pieChart'),
-              //   "columns" => array(
-              //     "producto",
-              //     "cantidad" => array(
-              //       "type" => "number",
-              //       "label" => "Cantidad"
-              //     )
-              //   ),
-              //   "colorScheme" => array(
-              //     "#2f4454",
-              //     "#2e1518",
-              //     "#da7b93",
-              //     "#376e6f",
-              //     "#1c3334"
-              //   )
-              // ));
-              ?>
-            </div>
-          </div> -->
+            <!-- </div>
+        </div> -->
+            <!--_________________ FIN CHARTS_________________-->
           </div>
-          <!--_________________ CHARTS 2_________________-->
-          <!-- <div class="col-md-6">
-                                    <div class="box-header">
-                                        <h3 class="box-title">
-                                            <i class="fa fa-pie-chart"></i>
-                                            TARGETAS
-                                        </h3>
-                                    </div> -->
-          <!--_________________ TARGET_________________-->
-          <!-- <div class="box-body">
-                                        <div style="margin-bottom:50px;">
-                                            <?php
-                                            //Card::create(array(
-                                            //     "value" => $this->dataStore('ejemplo'),
-                                            //     "format" => array(
-                                            //         "value" => array(
-                                            //             "prefix" => "$%&"
-                                            //         )
-                                            //     ),
-                                            //     "title" => "Cantidad",
-                                            //     "cssClass" => array(
-                                            //         "card" => "bg-primary",
-                                            //         "title" => "text-white",
-                                            //         "value" => "text-white"
-                                            //     )
-                                            // ));
-                                            ?>
-                                        </div>
-                                    </div>
-        <!-- </div> -->
+          <!--_________________ FIN BODY REPORTE ____________________________-->
         </div>
-        <!--_________________ FIN CHARTS_________________-->
       </div>
-      <!--_________________ FIN BODY REPORTE ____________________________-->
     </div>
-  </div>
   </div>
   <script>
     filtroIngresos();
@@ -293,14 +231,9 @@ use \koolreport\widgets\koolphp\Card;
       }
     });
 
-    $('#panel-derecho-body').load('<?php echo base_url() ?>index.php/Reportes/filtroProduccion');
+    // DataTable($('.dataTable'));
+    $('.dataTable').dataTable();
 
-    DataTable($('.dataTable'));
-
-
-    // function rangoFechas() {
-    //   debugger;
-    // $(function() {
     function fechaMagic() {
       $('#daterange-btn').daterangepicker({
           ranges: {
@@ -315,21 +248,16 @@ use \koolreport\widgets\koolphp\Card;
           endDate: moment()
         },
         function(start, end) {
-          // $('#daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
           $('#datepickerDesde').val(start.format('YYYY-MM-DD'));
           $('#datepickerHasta').val(end.format('YYYY-MM-DD'));
         }
       );
     }
 
-    // $('#filtrosExt').val('false');
     function filtrar() {
       var data = new FormData($('#frm-filtros')[0]);
       data = formToObject(data);
-      // console.log(data);
-      // debugger
       wo();
-      // $('#reportContent').remove();
       var url = 'ingresos';
       $.ajax({
         type: 'POST',
@@ -339,10 +267,6 @@ use \koolreport\widgets\koolphp\Card;
         },
         url: 'Reportes/' + url,
         success: function(result) {
-          // $('#reportContent').remove();
-          // $('#reportContent').add('reportContentFiltrado');
-          //  alert('OK');
-          console.log(result);
           $('#reportContent').empty();
           $('#reportContent').html(result);
         },
@@ -350,8 +274,6 @@ use \koolreport\widgets\koolphp\Card;
           alert('Error');
         },
         complete: function(result) {
-          // debugger;
-          // cantidadIngresos();
           wc();
         }
       });
@@ -359,7 +281,6 @@ use \koolreport\widgets\koolphp\Card;
 
     function filtro() {
       var filtrosExt = $('#filtrosExt').attr('data');
-      // debugger;
       if (filtrosExt == "false") {
         $('#filtrosExt').removeAttr('hidden');
         $('#filtrosExt').attr('data', "true");
@@ -368,8 +289,6 @@ use \koolreport\widgets\koolphp\Card;
         $('#filtrosExt').attr('data', "false");
       }
     }
-
-
 
     function filtroIngresos() {
       wo();
@@ -406,7 +325,7 @@ use \koolreport\widgets\koolphp\Card;
           $('#arti_id').html(html_prod);
         },
         error: function(rsp) {
-
+          alert('Error tremendo');
         },
         complete: function() {
           wc();
@@ -415,10 +334,9 @@ use \koolreport\widgets\koolphp\Card;
     }
 
     function cantidadIngresos() {
-      // wo();
+      wo();
       $('#cant_ingresos').text('0');
       if ($('.dataTable tbody tr').find('td').text() == "No data available in table") {
-        // debugger;
         $('#cant_ingresos').text(0);
         return;
       }
@@ -427,7 +345,6 @@ use \koolreport\widgets\koolphp\Card;
         count++;
         var estado = $(this).find('td:eq(8)').text();
         var color = '';
-        // debugger;
         switch (estado.trim()) {
           case 'ASIGNADO':
             estado = 'Asignado';
@@ -449,15 +366,11 @@ use \koolreport\widgets\koolphp\Card;
         }
         $(this).find('td:eq(8)').html(bolita(estado, color));
       })
-      // debugger;
       $('#cant_ingresos').text(count);
     }
 
     $('.flt-clear').click(function() {
       $('#frm-filtros')[0].reset();
     });
-
-    // }
-    // })
   </script>
 </body>

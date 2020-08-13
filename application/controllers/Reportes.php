@@ -6,7 +6,7 @@ require APPPATH . "/reports/produccion/Produccion.php";
 require APPPATH . "/reports/prodResponsable/Prod_Responsable.php";
 require APPPATH . "/reports/ingresos/Ingresos.php";
 require APPPATH . "/reports/salidas/Salidas.php";
-require APPPATH . "/reports/asignacion_de_recursos/Asignacion_de_recusos.php";
+require APPPATH . "/reports/asignacion_de_recursos/Asignacion_de_recursos.php";
 class Reportes extends CI_Controller
 {
 
@@ -177,33 +177,11 @@ class Reportes extends CI_Controller
 
   public function ingresos()
   {
+    log_message('INFO', '#TRAZA| #REPORTES|#INGRESOS| #INGRESO');
     $data = $this->input->post('data');
-
-    $prov_id = $data['prov_id'];
-    $cuit = $data['tran_id'];
-    $arti_id = $data['arti_id'];
-    $fecdesde = $data['datepickerDesde'];
-    $fechasta = $data['datepickerHasta'];
-
-    if ($prov_id || $cuit || $arti_id || $fecdesde || $fechasta) {
-      $fecdesde = ($fecdesde) ? date("Y-m-d", strtotime($fecdesde)) : null;
-      $fechasta = ($fechasta) ? date("Y-m-d", strtotime($fechasta)) : null;
-      // log_message('INFO', '#TRAZA| #REPORTES.PHP|#REPORTES|#Ingresos| #ETAPA: >>' . $etapa . '#DESDE: >>' . $desde . '#HASTA: >>' . $hasta);
-      $url = LOG_DS . 'movimientos/proveedor/' . $prov_id . '/transporte/' . $cuit . '/producto/' . $arti_id . '/desde/' . $fecdesde . '/hasta/' . $fechasta . '/ingresos';
-      $json = $this->Koolreport->depurarJson($url)->movimientos->movimiento;
-
-      $reporte = new Ingresos($json);
-      $reporte->run()->render();
-    } else {
-      log_message('INFO', '#TRAZA| #REPORTES|#INGRESOS| #INGRESO');
-      $url = LOG_DS . 'movimientos/proveedor//transporte//producto//desde//hasta//ingresos';
-      $json = $this->Koolreport->depurarJson($url)->movimientos->movimiento;
-      log_message('DEBUG', '#TRAZA| #REPORTES.PHP|#REPORTES|#Ingresos| #JSON: >>' . $json);
-
-      // $reporte = new Produccion($json);
-      $reporte = new Ingresos($json);
-      $reporte->run()->render();
-    }
+    $json = $this->Opciones_Filtros->getIngresos($data);
+    $reporte = new Ingresos($json);
+    $reporte->run()->render();
   }
 
   public function cantidadIngresos()
@@ -220,6 +198,39 @@ class Reportes extends CI_Controller
     $rsp['proveedores'] = $this->Opciones_Filtros->getProveedores();
     $rsp['transportista'] = $this->Opciones_Filtros->getTransportistas();
     $rsp['productos'] = $this->Opciones_Filtros->getProductos();
+    echo json_encode($rsp);
+  }
+
+  public function asignacionDeRecursos()
+  {
+    log_message('INFO', '#TRAZA| #REPORTES|#ASIGNACIONDERECURSOS| #INGRESO');
+    $data = $this->input->post('data');
+    $json = $this->Opciones_Filtros->asignacionDeRecursos($data);
+    $reporte = new Asignacion_de_recursos($json);
+    $reporte->run()->render();
+  }
+
+  public function filtroAsignacionDeRecursos()
+  {
+    log_message('INFO', '#TRAZA| #REPORTES|#FILTROASIGNACIONDERECURSOS| #INGRESO');
+    $rsp['lote'] = $this->Opciones_Filtros->getLotes();
+    echo json_encode($rsp);
+  }
+
+  public function salidas()
+  {
+    log_message('INFO', '#TRAZA| #REPORTES|#SALIDAS| #INGRESO');
+    $data = $this->input->post('data');
+    $json = $this->Opciones_Filtros->getSalidas($data);
+    $reporte = new Salidas($json);
+    $reporte->run()->render();
+  }
+
+  public function filtroSalidas()
+  {
+    log_message('INFO', '#TRAZA| #REPORTES|#FILTROSALIDAS| #INGRESO');
+    $rsp['clientes'] = $this->Opciones_Filtros->getClientes();
+    $rsp['transportista'] = $this->Opciones_Filtros->getTransportistas();
     echo json_encode($rsp);
   }
 }
