@@ -1,0 +1,85 @@
+<data enableBatchRequests="true" enableBoxcarring="true" name="COREDataService" transports="http https local">
+   <config enableOData="false" id="ToolsDataSource">
+      <property name="carbon_datasource_name">ToolsDataSource</property>
+   </config>
+   <query id="getMenuByUserPermission" useConfig="ToolsDataSource">
+      <sql>WITH RECURSIVE menu_tree AS(&#xd;SELECT&#xd;	m.modulo , m.opcion, m.opcion_padre, m.texto , m.url , m.javascript , m.url_icono , m.texto_onmouseover, 1 AS nivel, m.orden || '.' || m.modulo || '.' || m.opcion AS camino&#xd;FROM&#xd;	seg.menues M&#xd;WHERE&#xd;	M.opcion_padre IS NULL&#xd;	AND eliminado = 0&#xd;UNION&#xd;SELECT&#xd;	m.modulo , m.opcion , m.opcion_padre , m.texto , m.url , m.javascript , m.url_icono , m.texto_onmouseover, (t.nivel + 1) AS nivel, t.camino || '&gt;' || m.orden || '.' || m.modulo || '.' || m.opcion AS PATH&#xd;FROM&#xd;	seg.menues M&#xd;INNER JOIN menu_tree t ON&#xd;	m.opcion_padre = t.opcion&#xd;	AND m.modulo = t.modulo&#xd;WHERE&#xd;	m.eliminado = 0 )&#xd;SELECT&#xd;	t.*&#xd;	, CASE&#xd;		WHEN mm."role" IS NOT NULL&#xd;		OR mm."group" IS NOT NULL THEN TRUE&#xd;		ELSE FALSE&#xd;	END habilitado&#xd;FROM&#xd;	menu_tree t&#xd;LEFT JOIN seg.memberships_users mu ON mu.email = :email&#xd;LEFT JOIN seg.memberships_menues mm ON&#xd;	(mm."group" = mu."group" OR mm."group" IS NULL)&#xd;	AND (mm."role" = mu."role" OR mm."role" IS NULL)&#xd;	AND mm.opcion = t.opcion&#xd;	AND mm.modulo = t.modulo&#xd;ORDER BY&#xd;	camino;</sql>
+      <result outputType="json">{&#xd;   "menu_items":{&#xd;      "menu_item":[&#xd;         {&#xd;            "modulo":"$modulo",&#xd;            "opcion":"$opcion",&#xd;            "opcion_padre":"$opcion_padre",&#xd;            "texto":"$texto",&#xd;            "url":"$url",&#xd;            "javascript":"$javascript",&#xd;            "url_icono":"$url_icono",&#xd;            "texto_onmouseover":"$texto_onmouseover",&#xd;            "nivel":"$nivel",&#xd;            "camino":"$camino",&#xd;            "habilitado":"$habilitado"&#xd;         }&#xd;      ]&#xd;   }&#xd;}</result>
+      <param name="email" sqlType="STRING"/>
+   </query>
+   <query id="setParametro" useConfig="ToolsDataSource">
+      <sql>INSERT INTO utl_tablas&#xd;(tabla, valor, descripcion)&#xd;VALUES&#xd;(:tabla, :valor, :descripcion)</sql>
+      <param name="tabla" sqlType="STRING"/>
+      <param name="valor" sqlType="STRING"/>
+      <param name="descripcion" sqlType="STRING"/>
+   </query>
+   <query id="getParametros" useConfig="ToolsDataSource">
+      <sql>SELECT * &#xd;FROM alm.utl_tablas&#xd;WHERE tabla = :tabla</sql>
+      <result outputType="json">{&#xd; "parametros": {&#xd; "parametro": [&#xd; {&#xd; "valor": "$valor",&#xd; "descripcion": "$descripcion"&#xd; }&#xd; ]&#xd; }&#xd;}</result>
+      <param name="tabla" sqlType="STRING"/>
+   </query>
+   <query id="getTabla" useConfig="ToolsDataSource">
+      <sql>SELECT * &#xd;FROM core.tablas&#xd;WHERE tabla = :tabla</sql>
+      <result outputType="json">{&#xd;    "tablas":{&#xd;        "tabla":[&#xd;            {&#xd;                "tabl_id":"$tabl_id",&#xd;                "valor":"$valor",&#xd;                "valor2":"$valor2",&#xd;                "valor3":"$valor3",&#xd;                "descripcion":"$descripcion",&#xd;            }&#xd;        ]&#xd;    }&#xd;}</result>
+      <param name="tabla" sqlType="STRING"/>
+   </query>
+   <query id="setSnapshot" useConfig="ToolsDataSource">
+      <sql>INSERT INTO core.snapshots&#xd;(snap_id, "data") &#xd;VALUES(:clave, :data)&#xd;ON CONFLICT (snap_id) DO UPDATE &#xd;  SET "data" = excluded.data;</sql>
+      <param name="data" sqlType="STRING"/>
+      <param name="clave" sqlType="STRING"/>
+   </query>
+   <query id="getSnapshot" useConfig="ToolsDataSource">
+      <sql>SELECT * FROM core.snapshots WHERE snap_id = :clave</sql>
+      <result outputType="json">{&#xd;    "data":{&#xd;        "snapshot":[&#xd;            {&#xd;                "data":"$data"&#xd;            }&#xd;        ]&#xd;    }&#xd;}</result>
+      <param name="clave" sqlType="STRING"/>
+   </query>
+   <query id="delSnapshot" useConfig="ToolsDataSource">
+      <sql>DELETE FROM&#xd;core.snapshots&#xd;where snap_id = :clave</sql>
+      <param name="clave" sqlType="STRING"/>
+   </query>
+   <query id="getUsers" useConfig="ToolsDataSource">
+      <sql>select id, first_name, last_name, email&#xd;FROM seg.users &#xd;WHERE status = 'approved' and banned_users = 'unban'</sql>
+      <result outputType="json">{&#xd;   "users":{&#xd;      "user":[&#xd;         {&#xd;            "id_user":"$id",&#xd;            "first_name_user":"$first_name",&#xd;            "last_name_user":"$last_name",&#xd;            "email_user":"$email"&#xd;         }&#xd;      ]&#xd;   }&#xd;}</result>
+   </query>
+   <resource method="GET" path="/menuitems/porEmail/{email}">
+      <call-query href="getMenuByUserPermission">
+         <with-param name="email" query-param="email"/>
+      </call-query>
+   </resource>
+   <resource method="POST" path="/parametros">
+      <call-query href="setParametro">
+         <with-param name="tabla" query-param="tabla"/>
+         <with-param name="valor" query-param="valor"/>
+         <with-param name="descripcion" query-param="descripcion"/>
+      </call-query>
+   </resource>
+   <resource method="GET" path="/parametros/{tabla}">
+      <call-query href="getParametros">
+         <with-param name="tabla" query-param="tabla"/>
+      </call-query>
+   </resource>
+   <resource method="GET" path="/tablas/{tabla}">
+      <call-query href="getTabla">
+         <with-param name="tabla" query-param="tabla"/>
+      </call-query>
+   </resource>
+   <resource method="POST" path="/snapshots">
+      <call-query href="setSnapshot">
+         <with-param name="data" query-param="data"/>
+         <with-param name="clave" query-param="clave"/>
+      </call-query>
+   </resource>
+   <resource method="GET" path="/snapshots/{clave}">
+      <call-query href="getSnapshot">
+         <with-param name="clave" query-param="clave"/>
+      </call-query>
+   </resource>
+   <resource method="DELETE" path="/snapshots">
+      <call-query href="delSnapshot">
+         <with-param name="clave" query-param="clave"/>
+      </call-query>
+   </resource>
+   <resource method="GET" path="/users">
+      <call-query href="getUsers"/>
+   </resource>
+</data>

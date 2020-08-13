@@ -148,6 +148,7 @@ define('REST3', 'http://10.142.0.7:8280/services/PRDDataService');
 define('REST4', 'http://10.142.0.7:8280/services/PRDDataService');
 define('REST_PRD_LOTE', 'http://10.142.0.7:8280/services/PRDLoteDataService');
 define('REST_CORE', 'http://10.142.0.7:8280/services/COREDataService/');
+define('REST_PRD_ETAPA', 'http://10.142.0.7:8280/services/PRDEtapaDataService');
 
 #TOOLS-PRD DATASERVICES /*NUEVOS*/
 define('PRD_Etapa_DS', 'http://10.142.0.3:8280/services/PRDEtapaDataService/');

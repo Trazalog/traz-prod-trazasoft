@@ -59,5 +59,7 @@
   </li>
   <!-- <li><a class="link" href="#" data-link="general/CodigoQR/generarQR"><i class="fa fa-qrcode"></i>Código QR</a>
 	</li> -->
+
+	<li><a class="link" href="#" data-link="<?php echo TST ?>Tarea"><i class="fa fa-tasks"></i>ABM Tareas</a></li>
 </ul>
 ||

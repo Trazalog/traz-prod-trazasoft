@@ -42,10 +42,8 @@ class Etapas extends CI_Model
             log_message('DEBUG', 'Etapas/buscar #ERROR | BATCH_ID NULO');
             return;
         }
-
-        log_message('DEBUG', 'Etapas/buscar(batch_id)-> ' . $id);
         $resource = '/lote/';
-        $url = REST3 . $resource . $id;
+        $url = REST_PRD_LOTE. $resource . $id;
         $array = $this->rest->callAPI("GET", $url);
         $resp = json_decode($array['data']);
 
@@ -104,7 +102,7 @@ class Etapas extends CI_Model
         log_message('DEBUG', 'Etapas/setRecursos(materias a grabar)-> ' . $data);
 
         $resource = '/recurso/lote_batch_req';
-        $url = REST2 . $resource;
+        $url = REST_PRD_LOTE . $resource;
         $array = $this->rest->callAPI("POST", $url, $data);
         wso2Msj($array);
         return json_decode($array['status']);
@@ -129,7 +127,7 @@ class Etapas extends CI_Model
         $arrayBatch = json_encode($data);
         log_message('DEBUG', 'Etapas/SetNuevoBatch(datos)-> ' . $arrayBatch);
         $resource = '/lote';
-        $url = REST4 . $resource;
+        $url = REST_PRD_LOTE . $resource;
         $rsp = $this->rest->callAPI("POST", $url, $data);
         if ($rsp['status']) {
             $rsp['data'] = json_decode($rsp['data']);
@@ -214,7 +212,7 @@ class Etapas extends CI_Model
     {
         log_message('DEBUG', 'Etapas/finalizarEtapa(datos)-> ' . json_encode($arrayDatos));
         $resource = '/_post_lote_list_batch_req';
-        $url = REST4 . $resource;
+        $url = REST_PRD_LOTE . $resource;
         $rsp = $this->rest->callAPI("POST", $url, $arrayDatos);
         if (!$rsp['status']) {
             $msj = explode('-', wso2Msj($rsp));
@@ -240,9 +238,6 @@ class Etapas extends CI_Model
     // trae lotes a fraccionar desde entrega materiales por batch_id
     public function getLotesaFraccionar($id)
     {
-
-        $idBatch = json_encode($id);
-        log_message('DEBUG', 'Etapas/getLotesaFraccionar(batch_id)-> ' . $idBatch);
         $resource = '/lote/fraccionar/batch/' . $id;
         $url = REST2 . $resource;
         $array = $this->rest->callAPI("GET", $url);
@@ -273,9 +268,9 @@ class Etapas extends CI_Model
 
     public function finalizarLote($id)
     {
-        $post['_post_lote_finalizar']['batch_id'] = $id;
+        $post['_put_lote_finalizar']['batch_id'] = $id;
         $url = REST2 . "/lote/finalizar";
-        $rsp = $this->rest->callApi('POST', $url, $post);
+        $rsp = $this->rest->callApi('PUT', $url, $post);
         return $rsp;
     }
 
@@ -309,6 +304,15 @@ class Etapas extends CI_Model
         } else {
             return false;
         }
+    }
+
+    public function asociarFormulario($batch_id, $info_id)
+    {
+        $rec = '_put_lote_instancia_formulario';
+        $url = REST_PRD_LOTE . "/$rec";
+        $data[$rec] = array('batch_id' => $batch_id, 'info_id' => $info_id); 
+        $res = wso2($url, 'PUT', $data);
+        return $res;
     }
 
 	public function getUsers()

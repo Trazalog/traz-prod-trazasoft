@@ -147,14 +147,18 @@ function cerrarTarea() {
         },
         url: '<?php echo BPM ?>Proceso/cerrarTarea/' + id,
         success: function(data) {
-            if (!existFunction('actualizarEntrega')) back();
+            if (!existFunction('actualizarEntrega')) {
+                wbox();
+                back()
+            };
 
         },
         error: function(data) {
             alert("Error");
-        },
-        complete:function(){
             wbox();
+        },
+        complete: function() {
+
         }
     });
 }

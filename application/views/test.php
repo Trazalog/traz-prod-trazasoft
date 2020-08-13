@@ -1,6 +1,6 @@
-<div class="box" id="box">
-<h1>Holis</h1>
+<div class="box">
+    <div class="box-body frm-new" data-form="1"></div>
 </div>
 <script>
-wbox('#box');
+detectarForm();
 </script>

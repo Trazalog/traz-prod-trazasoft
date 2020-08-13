@@ -64,6 +64,13 @@ class Establecimientos extends CI_Model
     return $rsp;
   }
 
+  #FLEIVA
+  public function obtener($id = false)
+  {
+    $recurso =  REST_ALM.'/establecimientos/'.($id?$id:empresa());
+    return wso2($recurso);
+  }
+
   public function editar($data)
   {
     $url = RESTPT . "establecimientos";

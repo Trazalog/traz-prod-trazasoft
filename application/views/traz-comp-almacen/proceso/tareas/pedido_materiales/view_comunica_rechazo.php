@@ -18,33 +18,33 @@
 </form>
 <hr>
 <div id="view_pedidoMateriales">
-<?php echo $this->load->view(ALM.'proceso/tareas/componentes/pedido_materiales',null,true); ?>
+    <?php echo $this->load->view(ALM.'proceso/tareas/componentes/pedido_materiales',null,true); ?>
 </div>
 <script>
-
 $('#view_pedidoMateriales').hide();
- function cerrarTarea() {
 
-var id = $('#idTarBonita').val();
+function cerrarTarea() {
 
-var dataForm = new FormData($('#generic_form')[0]);
+    var id = $('#taskId').val();
 
-dataForm.append('pema_id', $('#pema_id').val());
+    var dataForm = new FormData($('#generic_form')[0]);
 
-$.ajax({
-    type: 'POST',
-    data: dataForm,	
-    cache: false,
-    contentType: false,
-    processData: false,
-    url: '<?php base_url() ?>index.php/<?php echo ALM ?>Proceso/cerrarTarea/'+id,
-    success: function (data) {
-        back();
-    },
-    error: function (data) {
-       alert("Error");
-    }
-});
+    dataForm.append('pema_id', $('#pema_id').val());
+
+    $.ajax({
+        type: 'POST',
+        data: dataForm,
+        cache: false,
+        contentType: false,
+        processData: false,
+        url: '<?php base_url() ?>index.php/<?php echo ALM ?>Proceso/cerrarTarea/' + id,
+        success: function(data) {
+            back();
+        },
+        error: function(data) {
+            alert("Error");
+        }
+    });
 
 }
 </script>
