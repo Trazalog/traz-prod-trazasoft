@@ -62,7 +62,6 @@ class Etapas extends CI_Model
     // devuelve id recurso por id articulo
     public function getRecursoId($arti_id)
     {
-
         $resource = '/recurso/';
         $url = REST2 . $resource . $arti_id;
         $array = $this->rest->callAPI("GET", $url); //tincho
