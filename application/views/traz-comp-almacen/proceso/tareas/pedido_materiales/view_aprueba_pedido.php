@@ -50,13 +50,12 @@ function cargarPedidos() {
     var id = $('#pemaId').val();
     $.ajax({
         type: 'POST',
-        url: 'index.php/<?php echo BPM ?>Notapedido/getNotaPedidoId?id_nota=' + id,
+        url: 'index.php/<?php echo ALM ?>Notapedido/getNotaPedidoId?id_nota=' + id,
         success: function(data) {
 
             $('tr.celdas').remove();
             for (var i = 0; i < data.length; i++) {
                 var tr = "<tr class='celdas'>" +
-                    // "<td>" + data[i]['artBarcode'] + "</td>" +
                     "<td>" + data[i]['artDescription'] + "</td>" +
                     "<td class='text-center'>" + data[i]['cantidad'] + "</td>" +
                     "<td class='text-center'>" + data[i]['fecha'] + "</td>" +

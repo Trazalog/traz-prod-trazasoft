@@ -56,7 +56,7 @@ class Etapa extends CI_Controller
         $data['productos'] = $this->Articulos->obtenerXTipos(array('Proceso', 'Producto'));
 
         #FORMULARIO GENERICO
-        $data['form_id'] = 1;
+        $data['form_id'] = $data['etapa']->form_id;
 
         #Obtener Proucto por Etapa
         $data['productos_etapa'] = $this->Etapas->obtenerArticulos($data['etapa']->id)['data'];
