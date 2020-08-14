@@ -63,6 +63,7 @@ function del(e) {
 function del_detalle() {
     if (selectRow.hasClass('new')) $(selectRow).remove();
     else {
+        wo();
         $.ajax({
             type: 'POST',
             data: {
@@ -77,6 +78,9 @@ function del_detalle() {
             },
             error: function(data) {
                 alert('Error');
+            },
+            complete: function(){
+                wc();
             }
         });
     }
@@ -122,6 +126,7 @@ function get_detalle() {
     if (id == null || id == '') {
         return;
     }
+    wo();
     $.ajax({
         type: 'POST',
         url: 'index.php/<?php echo ALM ?>Notapedido/getNotaPedidoId?id_nota=' + id,
@@ -144,6 +149,9 @@ function get_detalle() {
         error: function(result) {
 
             console.log(result);
+        },
+        complete: function(){
+            wc();
         },
         dataType: 'json'
     });
@@ -242,7 +250,7 @@ function set_pedido() {
     var peex_id = $('#peex_id').val();
     var justificacion = $('#just').val();
 
-    wo("Guardando pedido...");
+    wo();
 
     $.ajax({
         data: {
@@ -285,6 +293,7 @@ function set_pedido() {
 }
 
 function lanzarPedido() {
+    wo();
     $.ajax({
         data: {
             id: $('#pema_id').val()
@@ -300,8 +309,10 @@ function lanzarPedido() {
             }
         },
         error: function(result) {
-            wc();
             alert("Error al Lanzar Pedido");
+        },
+        complete: function(){
+            wc();
         }
     });
 }
@@ -357,6 +368,7 @@ function lanzarPedidoModal() {
     console.log(articulos);
 
     if (conexion()) {
+        wo();
         $.ajax({
             type: 'POST',
             url: 'index.php/<?php echo ALM ?>Notapedido/pedidoNormal/' + notaid,
@@ -368,6 +380,10 @@ function lanzarPedidoModal() {
             },
             error: function() {
                 console.log('ALM | Error Pedido Materiales');
+                
+            },
+            complete: function() {
+                wc();   
             }
         });
     } else {
@@ -408,7 +424,7 @@ function edit_pedido() {
         return;
     }
 
-    wo("Guardando pedido...");
+    wo();
 
     $.ajax({
         data: {
@@ -421,14 +437,15 @@ function edit_pedido() {
         dataType: 'json',
         url: 'index.php/<?php echo ALM ?>Notapedido/editPedido',
         success: function(result) {
-            wc();
+          
             get_detalle();
             clear();
         },
         error: function(result) {
             alert('editesrt');
+        },
+        complete: function(){
             wc();
-            //  alert("Error en guardado...");
         }
     });
 }
