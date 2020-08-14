@@ -4,7 +4,7 @@
        <script src="<?php echo base_url() ?>lib/bower_components/jquery-ui/jquery-ui.min.js"></script>
        <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
        <script>
-$.widget.bridge('uibutton', $.ui.button);
+            $.widget.bridge('uibutton', $.ui.button);
        </script>
        <!-- Bootstrap 3.3.7 -->
        <script src="<?php echo base_url() ?>lib/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -14,11 +14,7 @@ $.widget.bridge('uibutton', $.ui.button);
        <!-- jQuery Knob Chart -->
        <script src="<?php echo base_url() ?>lib/bower_components/jquery-knob/dist/jquery.knob.min.js"></script>
        <!-- daterangepicker -->
-       <!-- <script src="<--?php echo base_url() ?>lib/bower_components/moment/min/moment.min.js"></script> -->
-
-       <!-- <script src="<--?php echo base_url() ?>lib/bower_components/bootstrap-daterangepicker/daterangepicker.js"></script> -->
-       <!-- datepicker -->
-       <!-- <script src="<--?php echo base_url() ?>lib/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script> -->
+       <script src="<?php echo base_url() ?>lib/bower_components/moment/min/moment.min.js"></script>
        <!-- Bootstrap WYSIHTML5 -->
        <script src="<?php echo base_url() ?>lib/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
        <!-- Slimscroll -->
@@ -26,9 +22,7 @@ $.widget.bridge('uibutton', $.ui.button);
        <!-- FastClick -->
        <script src="<?php echo base_url() ?>lib/bower_components/fastclick/lib/fastclick.js"></script>
 
-
        <!-- Datatbles -->
-
        <script src="<?php echo base_url() ?>lib/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
 
        <script src="<?php echo base_url() ?>lib/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js">
@@ -39,19 +33,11 @@ $.widget.bridge('uibutton', $.ui.button);
        <script type="text/javascript"
            src="//cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/js/bootstrapValidator.min.js"></script>
 
-       <!-- <script src="<--?php base_url(); ?>lib/plugins/datetimepicker/js/bootstrap-datetimepicker.min.js"></script> -->
-
-       <!-- Moment Date Time -->
-       <!-- <script src="<--?php base_url(); ?>lib/plugins/moment-datetime/moment.min.js"></script> -->
+       <script src="<?php echo base_url(); ?>lib/plugins/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
 
        <!-- Select2 -->
        <script src="<?php echo base_url() ?>lib/bower_components/select2/dist/js/select2.full.min.js"></script>
-       <!-- <script src="https://code.jquery.com/jquery-migrate-3.0.0.min.js"></script> -->
-       <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-       <!-- <script src="<?php echo base_url() ?>lib/dist/js/pages/dashboard.js"></script> -->
-       <!-- AdminLTE for demo purposes -->
-       <!-- <script src="<?php echo base_url() ?>lib/dist/js/demo.js"></script> -->
-       <!--Arma Tablas -->
+
        <script src="<?php echo base_url('lib/props/tabla.js'); ?>"></script>
        <script src="<?php echo base_url(); ?>lib\props\busqueda_avanzada.js"></script>
 

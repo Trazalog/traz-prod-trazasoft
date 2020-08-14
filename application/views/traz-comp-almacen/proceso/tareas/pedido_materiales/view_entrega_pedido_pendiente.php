@@ -148,17 +148,20 @@ function cerrarTarea() {
         url: '<?php echo BPM ?>Proceso/cerrarTarea/' + id,
         success: function(data) {
             if (!existFunction('actualizarEntrega')) {
-                wbox();
-                back()
-            };
 
+                if ($('#miniView').length == 1) {
+                    closeView();
+                } else {
+
+                    linkTo('<?php echo BPM ?>Proceso');
+                }
+            }
         },
         error: function(data) {
             alert("Error");
-            wbox();
         },
         complete: function() {
-
+            wbox();
         }
     });
 }
