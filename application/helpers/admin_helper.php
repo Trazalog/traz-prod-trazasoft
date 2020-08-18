@@ -1,12 +1,5 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
 
-function req()
-{
-  return
-    ' data-bv-notempty
-          data-bv-notempty-message="Campo Obligatorio *" ';
-}
-
 if (!function_exists('bolita')) {
   function bolita($texto, $color, $detalle = null)
   {
