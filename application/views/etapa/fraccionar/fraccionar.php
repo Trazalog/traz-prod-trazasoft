@@ -9,133 +9,103 @@ if($etapa->estado == "FINALIZADO"){
     echo "<script>$('.formulario .form-control').attr('disabled', true)</script>";
 }
 ?>
+
+<style>
+.panel-disabled{
+    background-color: rgb(0,0,0,0.3) !important;
+    z-index:99999999 !important;
+}
+</style>
 <div class="formulario">
-<input class="hidden" type="text" id="batch_id" value="<?php echo $etapa->id ?>">
-<div class="box">
-    <div class="box-header with-border">
-        <!-- <h3><?php echo $lang["Fraccionar"];?></h3> -->
-        <h3>Fraccionamiento</h3>
-        <div class="box-tools pull-right">
-            <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title=""
-                data-original-title="Collapse">
-                <i class="fa fa-minus"></i></button>
-            <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title=""
-                data-original-title="Remove">
-                <i class="fa fa-times"></i></button>
+    <input class="hidden" type="text" id="batch_id" value="<?php echo $etapa->id ?>">
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">Fraccionamiento</h3>
         </div>
-    </div>
-    <div class="box-body">
-        <div class="row" style="margin-top: 50px;">
+        <div class="box-body">
+            <div class="row">
+                <div class="col-xs-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Información</div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <label class="form-label">Fecha*:</label>
+                                    <input type="<?php if($accion != 'Editar'){echo 'date';} ?>" id="fecha"
+                                        value="<?php echo $fecha;?>" class="form-control"
+                                        <?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
+                                </div>
+                                <div class="col-xs-6">
+                                    <label for="op" class="form-label">Orden de Produccion:</label>
+                                    <input type="text" id="ordenproduccion" class="form-control"
+                                        <?php if($accion=='Editar' ){echo ( 'value="'.$ordenProd.'"');}?>
+                                        placeholder="Inserte Orde de Produccion"
+                                        <?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Ubicación</div>
+                            <div class="panel-disabled"></div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <label for="establecimientos" class="form-label">Establecimiento*:</label>
+                                    <select class="form-control select2 select2-hidden-accesible"
+                                        onchange="actualizaRecipiente(this.value,'recipientes')" id="establecimientos"
+                                        <?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
+                                        <option value="" disabled selected>-Seleccione Establecimiento-</option>
+                                        <?php
+                                                foreach($establecimientos as $fila)
+                                                {
+                                            
+                                                    if($accion == 'Editar' && $fila->nombre == $etapa->establecimiento)
+                                                    {
+                                                    echo '<option value="'.$fila->esta_id.'" selected >'.$fila->nombre.'</option>';
+                                                    }else
+                                                    {
+                                                    echo '<option value="'.$fila->esta_id.'" >'.$fila->nombre.'</option>';
+                                                    }
+                                                        }
+                                                ?>
+                                    </select>
+                                </div>
+                                <div class="col-xs-6">
+                                    <label for="Recipiente"
+                                        class="form-label">Linea*:</label>
+                                    <?php
+                                            echo selectBusquedaAvanzada('recipientes', 'vreci');
+                                            ?>
 
-            <div class="col-md-1 col-xs-12">
-                <label class="form-label">Fecha*:</label>
-            </div>
-
-            <div class="col-md-5 col-xs-12">
-                <input type="<?php if($accion != 'Editar'){echo 'date';} ?>" id="fecha" value="<?php echo $fecha;?>"
-                    class="form-control" <?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
-            </div>
-            <div class="col-md-6 col-xs-12">
-            </div>
-        </div>
-        <div class="row" style="margin-top: 50px">
-            <div class="col-md-2 col-xs-12">
-                <label for="establecimientos" class="form-label">Establecimiento*:</label>
-            </div>
-            <div class="col-md-4 col-xs-12">
-                <select class="form-control select2 select2-hidden-accesible"
-                    onchange="actualizaRecipiente(this.value,'recipientes')" id="establecimientos"
-                    <?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
-                    <option value="" disabled selected>-Seleccione Establecimiento-</option>
-                    <?php
-                  foreach($establecimientos as $fila)
-                  {
-                    // if($accion == 'Editar' && $fila->nombre == $etapa->establecimiento->titulo)
-                    if($accion == 'Editar' && $fila->nombre == $etapa->establecimiento)
-                    {
-                    echo '<option value="'.$fila->esta_id.'" selected >'.$fila->nombre.'</option>';
-                    }else
-                    {
-                      echo '<option value="'.$fila->esta_id.'" >'.$fila->nombre.'</option>';
-                    }
-                  }
-          ?>
-                </select>
-            </div>
-            <div class="col-md-1 col-xs-12">
-                <label for="Recipiente" class="form-label"><?php echo $etapa->reci_estab_nom;?>*:</label>
-            </div>
-            <div class="col-md-5 col-xs-12">
-                <?php 
-          //if($accion == 'Nuevo'){
-            echo selectBusquedaAvanzada('recipientes', 'vreci');
-         // }
-        //   if($accion == 'Editar'){
-             
-        //         echo '<select class="form-control" id="recipientes" '.($etapa->estado == 'En Curso'?'disabled':'').'>';
-            
-
-        //       echo '<option value="" disabled selected>-Seleccione Recipiente-</option>';
-        //       foreach($recipientes as $o)
-        //       {
-           
-        //           echo "<option value='$o->reci_id' ".(($o->nombre == $etapa->recipiente)?'selected':'').">$o->nombre</option>";
-                
-        //       }
-        //       echo '</select>';
-        //   }
-        ?>
-            </div>
-
-        </div>
-
-        <div class="row" style="margin-top: 50px">
-            <div class="col-md-2 col-xs-12">
-                <label for="op" class="form-label">Orden de Produccion:</label>
-            </div>
-            <div class="col-md-4 col-xs-12">
-                <!-- <input type="text" id="ordenproduccion" class="form-control" <?php //if($accion=='Editar' ){echo ( 'value="'.$etapa->op.'"');}?> placeholder="Inserte Orde de Produccion"
-          <?php //if($etapa->estado == 'En Curso'){echo 'disabled';}?>> -->
-
-                <input type="text" id="ordenproduccion" class="form-control"
-                    <?php if($accion=='Editar' ){echo ( 'value="'.$ordenProd.'"');}?>
-                    placeholder="Inserte Orde de Produccion" <?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
-            </div>
-        </div>
-
-        <div class="row" style="margin-top: 40px">
-            <div class="col-xs-12">
-                <i class="glyphicon glyphicon-plus" onclick="despliega()"></i><a onclick="despliega()" class="">Datos
-                    Adicionales</a>
-                <div id="desplegable" hidden>
-                    <h3>Lo que vaya aca</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
 
-<div class="box">
-    <div class="box-header">
-        <h4>Productos a Fraccionar</h4>
-    </div>
-    <!-- Producto fraccionado -->
-    <?php if($accion == 'Editar'){?>
-    <div class="box-body">
-        <div class="row" style="margin-top: 40px ">
+        <?php if($accion == 'Editar'){?>
+        <div class="box-body">
+              <enma></enma>
+        </div>
+
+        <div class="box-body">
             <input type="hidden" id="materiasexiste" value="no">
-            <div class="col-xs-12 table-responsive" id="materiasasignadas">
-                <table id="prodFracc" class="table table-bordered table-hover">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th>Titulo</th>
-                            <th>Cant a Descontar</th>
-                            <th>Empaque</th>
-                            <th>Cantidad</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php											
+            <table id="prodFracc" class="table table-bordered table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Titulo</th>
+                        <th>Cant a Descontar</th>
+                        <th>Empaque</th>
+                        <th>Cantidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php											
                           foreach($matPrimas as $fila)
                           {
                               echo '<tr  id="" data-json:>';
@@ -146,165 +116,148 @@ if($etapa->estado == "FINALIZADO"){
                               echo '</tr>'; 																
                           }		
                       ?>
-                    </tbody>
-                </table>
-
-            </div>
+                </tbody>
+            </table>
         </div>
-    </div>
-    <?php }?>
-    <!-- Producto fraccionado -->
-
-    <div class="box-body">
-        <?php  if($etapa->estado != 'En Curso'){?>
-        <div class="row" style="margin-top: 40px">
-            <div class="col-md-6 col-xs-12">
-                <div class="row">
-                    <div class="col-md-3 col-xs-12">
-                        <label class="form-label">Artículos:</label>
-                    </div>
-                    <div class="col-md-9 col-xs-10">
-
-                        <?php 
-                         echo selectBusquedaAvanzada('inputproductos', 'arti_id', $articulos_fraccionar, 'arti_id', 'barcode',array('descripcion','Stock:' => 'stock'));
+        <?php }else{ ?>
+        <!-- Producto fraccionado -->
+        <div class="box-body">
+            <div class="panel panel-default">
+                <div class="panel-heading">Detalle Fraccionamiento</div>
+                <div class="panel-body">
+                    <?php  if($etapa->estado != 'En Curso'){?>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label class="form-label">Producto:</label>
+                                <?php 
+                        echo selectBusquedaAvanzada('inputproductos', 'arti_id', $articulos_fraccionar, 'arti_id', 'barcode',array('descripcion','Stock:' => 'stock'));
+                    ?>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label class="form-label">Stock:</label>
+                                <input type="number" disabled id="stock" value="" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <div class="form-group">
+                                <label class="form-label">Empaque:</label>
+                                <select class="form-control select2 select2-hidden-accesible" id="empaques"
+                                    onchange="ActualizaEmpaques()">
+                                    <option value="" disabled selected>- Seleccionar -</option>
+                                    <?php
+                            foreach($empaques as $fila)
+                            { 
+                            if($accion == 'Editar' && $etapa->empaque->titulo == $fila->titulo)
+                            {
+                                echo "<option data-json='".json_encode($fila)."' selected value='".$fila->id."'>".$fila->titulo."</option>";
+                            }
+                                else{
+                                echo "<option data-json='".json_encode($fila)."' value='".$fila->id."'>".$fila->titulo."</option>";
+                                }
+                            } 
                         ?>
-
+                                </select>
+                            </div>
+                        </div> 
+                        <div class="col-xs-4">
+                            <div class="form-group">
+                                <label class="form-label">Capacidad:</label>
+                                <input type="number" id="volumen" class="form-control" disabled>
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <div class="form-group">
+                                <label class="form-label">Peso Tara:</label>
+                                <input type="number" id="tara" class="form-control" disabled>
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <div class="form-group">
+                                <label class="form-label">Cantidad:</label>
+                                <input type="number" id="cantidad" disabled onchange="CalculaStock()"
+                                    class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <div class="form-group">
+                                <label class="form-label">Stock Necesario:</label>
+                                <input type="number" id="calculo" class="form-control" disabled>
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <button style="margin-top:23px;" class="btn btn-success" onclick="ControlaProducto()"><i class="fa fa-plus"></i> Agregar</button>
+                        </div>
+                        <?php  }?>
+                        <div class="col-xs-12">
+                            <input type="hidden" value="no" id="productoexiste">
+                            <div class="col-xs-12 table-responsive" id="productosasignados"></div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-1 col-xs-12">
-                <label class="form-label">Stock:</label>
-            </div>
-            <div class="col-md-3 col-xs-12">
-                <input type="number" disabled id="stock" value="" class="form-control">
-            </div>
-            <div class="col-md-2 col-xs-12"></div>
-        </div>
-
-        <div class="row" style="margin-top: 50px">
-            <div class="col-md-1 col-xs-12">
-                <label class="form-label">Empaque:</label>
-            </div>
-            <div class="col-md-5 col-xs-12">
-                <select class="form-control select2 select2-hidden-accesible" id="empaques"
-                    onchange="ActualizaEmpaques()">
-                    <option value="" disabled selected>-Seleccione Empaque-</option>
-                    <?php
-            foreach($empaques as $fila)
-            { 
-              if($accion == 'Editar' && $etapa->empaque->titulo == $fila->titulo)
+        </div><?php } ?>
+        <!-- /.box-body -->
+        <div class="modal-footer">
+            <?php if($etapa->estado != 'En Curso' && $etapa_estado != 'FINALIZADO')
               {
-                echo "<option data-json='".json_encode($fila)."' selected value='".$fila->id."'>".$fila->titulo."</option>";
-              }
-                else{
-                echo "<option data-json='".json_encode($fila)."' value='".$fila->id."'>".$fila->titulo."</option>";
-                }
-            } 
-          ?>
-                </select>
-            </div>
-            <div class="col-md-1 col-xs-12">
-                <label class="form-label">Unidad:</label>
-            </div>
-            <div class="col-md-5 col-xs-12">
-                <input type="text" id="unidad" class="form-control" disabled>
-            </div>
-        </div>
-        <div class="row" style="margin-top: 50px">
-            <div class="col-md-1 col-xs-12">
-                <label class="form-label">Cantidad:</label>
-            </div>
-            <div class="col-md-5 col-xs-12">
-                <input type="number" id="cantidad" disabled onchange="CalculaStock()" class="form-control">
-            </div>
-            <div class="col-md-1 col-xs-12">
-                <label class="form-label">Volumen:</label>
-            </div>
-            <div class="col-md-5 col-xs-12">
-                <input type="number" id="volumen" class="form-control" disabled>
-            </div>
-        </div>
-        <hr>
-
-        <div class="row">
-            <div class="col-md-2 col-xs-12">
-                <label class="form-label">Stock Necesario:</label>
-            </div>
-            <div class="col-md-2 col-xs-12">
-                <input type="number" id="calculo" class="form-control" disabled>
-            </div>
-            <div class="col-md-5"></div>
-            <div class="col-md-3 col-xs-12">
-                <button class="btn btn-block btn-success" onclick=ControlaProducto()>Agregar</button>
-            </div>
-        </div>
-        <?php  }?>
-        <div class="row" style="margin-top: 40px">
-            <input type="hidden" value="no" id="productoexiste">
-            <div class="col-xs-12 table-responsive" id="productosasignados"></div>
-        </div>
-    </div>
-
-    <!-- /.box-body -->
-    <div class="modal-footer">
-
-                <?php if($etapa->estado != 'En Curso' && $etapa_estado != 'FINALIZADO')
-              {
-                // echo '<button class="btn btn-primary btn-block" onclick="guardar()">Guardar</button>';
+           
                 echo '<button class="btn btn-primary" onclick="guardar()">Iniciar</button>';
               }
-              //echo '<button class="btn btn-primary btn-block" onclick="guardar()">Iniciar</button>';
-        ?>
-            
-          
-                <?php 
-
-
+       
               if($etapa->estado == 'En Curso')
               {
-                   
-                  
                   echo '<button class="btn btn-primary" id="btnfinalizar" onclick="finalizar()">Reporte Fraccionamiento</button>';
                   $this->load->view('etapa/btn_finalizar_etapa');
               }
-        ?>
-        <button class="btn btn-default" onclikc="back()">Cerrar</button>
-
-    <!-- /.box-footer-->
+             ?>
+            <button class="btn btn-default" onclikc="back()">Cerrar</button>
+            <!-- /.box-footer-->
+        </div>
+    </div>
 </div>
 
-</div>
-</div>
+
 <script>
+actualizarEntrega()
+function actualizarEntrega() {
+    $.ajax({
+        type: 'GET',
+        dataType: 'JSON',
+        url: 'general/Etapa/validarPedidoMaterial/'+ $('#batch_id').val(),
+        success: function(res) {
+            if(res.tarea){
+                $('enma').load('<?php echo BPM . 'Proceso/detalleTarea/' ?>' + res.tarea);
+            }
+            else $('enma').empty();
+        },
+        error: function(res) {
+            error();wbox();
+        }
+    });
+}
+
+
+$('#recipientes').attr('disabled', true);
 $('#prodFracc').DataTable({});
 
-// accion = '<-?php echo $accion;?>';
-// if (accion == "Editar") {
-//     var productos = <-?php echo json_encode($etapa->productos); ?> ;
-
-//     for (i = 0; i < productos.length; i++) {
-//         producto = JSON.stringify(productos[i]);
-//         AgregaProducto(producto);
-//     }
-// }
-
 actualizaRecipiente($('#establecimientos').val());
-function actualizaRecipiente(establecimiento, recipientes) {
 
-    if(!establecimiento) return;
-    
-    establecimiento = establecimiento;
+function actualizaRecipiente(establecimiento, recipientes) {
+    if (!establecimiento) return;
+    $('#recipientes').attr('disabled', true);
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
         data: {
-            establecimiento: establecimiento,
+            establecimiento,
             tipo: 'DEPOSITO'
         },
         url: 'general/Recipiente/listarPorEstablecimiento/true',
         success: function(result) {
-            console.log(result);
-            
+
             if (!result.status) {
                 alert('Fallo al Traer Recipientes');
                 return;
@@ -314,9 +267,10 @@ function actualizaRecipiente(establecimiento, recipientes) {
                 alert('No hay Recipientes Asociados');
                 return;
             }
-            fillSelect('#recipientes', result.data);
 
-            $('#recipientes').val('<?php echo  $etapa->reci_id ?>');        
+            fillSelect('#recipientes', result.data);
+            $('#recipientes').val('<?php echo  $etapa->reci_id ?>');
+            $('#recipientes').attr('disabled', false);
         }
 
     });
@@ -334,24 +288,7 @@ function despliega() {
 
 // elige producto y muestra el stock en
 $("#inputproductos").on('change', function() {
-    // ban = $("#productos option[value='" + $('#inputproductos').val() + "']").length;
-    // estado = '<?php #echo $etapa->estado;?>';
-    // if (ban == 0) {
-    //   alert('Producto Inexistente');
-    //   document.getElementById('inputproductos').value = "";
-    //   if (estado != 'En Curso') {
-    //     document.getElementById('stock').value = "";
-    //   }
-    // } else {
-    //   if (estado == 'En Curso') {
 
-    //   } else {
-    //     producto = JSON.parse($("#productos option[value='" + $('#inputproductos').val() + "']").attr('data-json'));
-    //     //ActualizaProducto(producto);
-    //   }
-    // }
-    //  agrega stock al input 
-    //materias = <?php #echo json_encode($materias); ?> ;
 
     document.getElementById('stock').value = getJson(this).stock;
 
@@ -362,8 +299,9 @@ function ActualizaEmpaques() {
 
     empaque = $("#empaques option:selected").attr('data-json');
     empaque = JSON.parse(empaque);
-    document.getElementById('unidad').value = empaque.unidad;
-    document.getElementById('volumen').value = empaque.volumen;
+    //document.getElementById('unidad').value = ;
+    document.getElementById('volumen').value = empaque.volumen ;
+    document.getElementById('tara').value = empaque.tara ;
     document.getElementById('cantidad').disabled = false;
     CalculaStock();
 }
@@ -404,6 +342,7 @@ function ControlaProducto() {
         empaque = JSON.parse(empaque);
         producto.empaque = empaque.id;
         producto.empaquetitulo = empaque.titulo;
+        producto.envase_arti_id = empaque.arti_id;
         producto.cantidad = document.getElementById('cantidad').value;
         producto.cant_descontar = document.getElementById('calculo').value;
         producto = JSON.stringify(producto);
@@ -419,7 +358,7 @@ function ControlaProducto() {
 }
 
 function AgregaProducto(producto) {
-    estado = '<?php echo $etapa->estado;?>';
+    estado = '<?php echo $etapa->estado ?>';
     existe = document.getElementById('productoexiste').value;
     var html = '';
     producto = JSON.parse(producto);
@@ -507,10 +446,7 @@ function valida() {
         mensaje += "- No ha seleccionado ninguna materia prima <br>";
         ban = false;
     }
-    // if (document.getElementById('existe_tabla').value == "no") {
-    //     mensaje += "- No ha seleccionado ninguna tarea <br>";
-    //     ban = false;
-    // }
+
     if (ban) {
         guardar();
     } else {
@@ -526,7 +462,7 @@ function guardar() {
     fecha = document.getElementById('fecha').value;
     establecimiento = document.getElementById('establecimientos').value;
     recipiente = document.getElementById('recipientes').value;
-    idetapa = <?php echo $etapa->id; ?> ;
+    idetapa = <?php echo $etapa->id ?> ;
     existe = document.getElementById('productoexiste').value;
     ordProduccion = document.getElementById('ordenproduccion').value;
     var productos = [];
@@ -610,16 +546,7 @@ function guardarForzado(data) {
 
 // finalizar solo llena select y levanta modal 
 function finalizar() {
-    // html = '<select class="form-control" id="loteorigen">';
-    // html += '<option value="" disabled selected>-Seleccione Lote-</option>';
-    // cont = 0;
-    // $('#tablaproductos tbody').find('tr').each(function () {
-    //   lote = JSON.parse($(this).attr('data-json'));
-    //   html += "<option data-json='" + JSON.stringify(lote) + "' value='" + lote.lote + "'>" + lote.titulo + " " + lote.lote + "</option>";
-    // });
-    // html += '</select>';
-    // //TODO: COMENTADO PARA LLENAR SELECT
-    // document.getElementById('divloteorigen').innerHTML = html;
+
     $("#modal_finalizar").modal('show');
 }
 $(document).off('click', '.tablaproductos_borrar').on('click', '.tablaproductos_borrar', {

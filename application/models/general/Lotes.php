@@ -88,7 +88,7 @@ class Lotes extends CI_Model
   {
     $lote_id = str_replace(' ','%20', $lote_id);
     $path = "lote/". $lote_id."/ultimo";
-    $url = RESTPT . $path;
+    $url = PRD_Lote_DS . $path;
     $rsp = $this->rest->callApi('GET', $url);
     if ($rsp['status']) $rsp['data'] = json_decode($rsp['data'])->lotes->lote;
     return $rsp;
@@ -97,7 +97,7 @@ class Lotes extends CI_Model
     public function trazabilidadBatch($batch_id)
   {
     $path = "lote/" . $batch_id . "/trazabilidad";
-    $url = RESTPT . $path;
+    $url = PRD_Lote_DS . $path;
     $rsp = $this->rest->callApi('GET', $url);
     if ($rsp['status']) {
       $rsp['data'] = json_decode($rsp['data'])->lotes->lote;

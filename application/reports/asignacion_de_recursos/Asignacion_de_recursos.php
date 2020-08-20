@@ -8,10 +8,9 @@ use \koolreport\processes\Sort;
 use \koolreport\processes\Limit;
 // use \koolreport\processes\RemoveColumn;
 use \koolreport\processes\OnlyColumn;
-use \koolreport\processes\Custom;
 
 //Define the class
-class Ingresos extends \koolreport\KoolReport
+class Asignacion_de_recursos extends \koolreport\KoolReport
 {
   use \koolreport\codeigniter\Friendship;
   /*Filtros Avanzados*/
@@ -26,10 +25,9 @@ class Ingresos extends \koolreport\KoolReport
 
   protected function settings()
   {
-    log_message('DEBUG', '#TRAZA| #INGRESOS|#SETTINGS| #INGRESO');
+    log_message('DEBUG', '#TRAZA| #ASIGNACIONDERECURSOS|#SETTINGS| #INGRESO');
     $json = $this->params;
     $data = json_encode($json);
-    // $data = "holanda";
 
     return array(
       "dataSources" => array(
@@ -44,23 +42,14 @@ class Ingresos extends \koolreport\KoolReport
 
   protected function setup()
   {
-    log_message('DEBUG', '#TRAZA| #INGRESOS|#SETUP| #INGRESO');
+    log_message('DEBUG', '#TRAZA| #ASIGNACIONDERECURSOS|#SETUP| #INGRESO');
     $this->src("apiarray")
-      ->pipe($this->dataStore("data_ingresos_table"));
+      ->pipe($this->dataStore("data_asignacion_recurso_table"));
 
     $this->src("apiarray")
-      ->pipe($this->dataStore("data_ingresos_pieChart"));
+      ->pipe($this->dataStore("data_asignacion_recurso_pieChart"));
 
     $this->src("apiarray")
-      ->pipe(new OnlyColumn(array(
-        "nombre", "neto"
-      )))
-      ->pipe(new Sort(array(
-        "neto" => "desc"
-      )))
-      ->pipe(new Limit(
-        array(6)
-      ))
-      ->pipe($this->dataStore("data_ingresos_clumnChart"));
+      ->pipe($this->dataStore("data_asignacion_recurso_clumnChart"));
   }
 }

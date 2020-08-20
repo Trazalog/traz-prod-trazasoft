@@ -2,7 +2,6 @@
 
 class Tablas extends CI_Model
 {
-
     public function __construct()
     {
         parent::__construct();
@@ -10,10 +9,8 @@ class Tablas extends CI_Model
 
     public function obtenerTabla($tabla)
     {
-        $url = RESTPT . "tablas/$tabla";
-        $rsp = $this->rest->callApi('GET', $url);
-        if($rsp['status']) $rsp['data'] = json_decode($rsp['data'])->tablas->tabla;
-        return $rsp;
+        $url = REST_CORE . "tablas/$tabla";
+        return wso2($url);
     }
 
     public function obtener($id = false)

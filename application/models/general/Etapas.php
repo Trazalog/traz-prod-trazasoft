@@ -42,10 +42,8 @@ class Etapas extends CI_Model
             log_message('DEBUG', 'Etapas/buscar #ERROR | BATCH_ID NULO');
             return;
         }
-
-        log_message('DEBUG', 'Etapas/buscar(batch_id)-> ' . $id);
         $resource = '/lote/';
-        $url = REST3 . $resource . $id;
+        $url = REST_PRD_LOTE. $resource . $id;
         $array = $this->rest->callAPI("GET", $url);
         $resp = json_decode($array['data']);
 
@@ -64,7 +62,6 @@ class Etapas extends CI_Model
     // devuelve id recurso por id articulo
     public function getRecursoId($arti_id)
     {
-
         $resource = '/recurso/';
         $url = REST2 . $resource . $arti_id;
         $array = $this->rest->callAPI("GET", $url); //tincho
@@ -214,7 +211,7 @@ class Etapas extends CI_Model
     {
         log_message('DEBUG', 'Etapas/finalizarEtapa(datos)-> ' . json_encode($arrayDatos));
         $resource = '/_post_lote_list_batch_req';
-        $url = REST4 . $resource;
+        $url = REST_PRD_LOTE . $resource;
         $rsp = $this->rest->callAPI("POST", $url, $arrayDatos);
         if (!$rsp['status']) {
             $msj = explode('-', wso2Msj($rsp));
@@ -240,9 +237,6 @@ class Etapas extends CI_Model
     // trae lotes a fraccionar desde entrega materiales por batch_id
     public function getLotesaFraccionar($id)
     {
-
-        $idBatch = json_encode($id);
-        log_message('DEBUG', 'Etapas/getLotesaFraccionar(batch_id)-> ' . $idBatch);
         $resource = '/lote/fraccionar/batch/' . $id;
         $url = REST2 . $resource;
         $array = $this->rest->callAPI("GET", $url);
@@ -311,41 +305,14 @@ class Etapas extends CI_Model
         }
     }
 
-    /*******ABM ETRADAS DE ETAPAS*******/
-    function getMateriales()
+    public function asociarFormulario($batch_id, $info_id)
     {
-        $data = wso2(REST_ALM.'articulos/'.empresa());
-        return $data;
+        $rec = '_put_lote_instancia_formulario';
+        $url = REST_PRD_LOTE . "/$rec";
+        $data[$rec] = array('batch_id' => $batch_id, 'info_id' => $info_id); 
+        $res = wso2($url, 'PUT', $data);
+        return $res;
     }
-
-    function getEtapas()
-    {
-        $data = wso2(REST.'etapas');
-        return $data;
-    }
-
-    function getMaterialesPorEtapa($etap_id)
-    {
-        $data = wso2(REST.'etapas/entradas/'.$etap_id);
-        return $data;
-    }
-
-    function setMaterial($data)
-    {
-        $url = REST.'etapas/entradas';
-        $aux['_post_etapas_entradas'] = $data;
-        $rsp = wso2($url,'POST',$aux);
-        return $rsp;
-    }
-
-    function deleteMaterial($data)
-    {
-        $url = REST.'etapas/entradas';
-        $aux['_delete_etapas_entradas'] = $data;
-        $rsp = wso2($url,'DELETE',$aux);
-        return $rsp;
-    }
-    /********************************/
 
 	public function getUsers()
 	{

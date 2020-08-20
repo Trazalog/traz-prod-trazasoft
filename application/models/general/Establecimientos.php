@@ -77,6 +77,13 @@ class Establecimientos extends CI_Model
     return $rsp;
   }
 
+  #FLEIVA
+  public function obtener($id = false)
+  {
+    $recurso =  REST_ALM.'/establecimientos/'.($id?$id:empresa());
+    return wso2($recurso);
+  }
+
   public function editar($data)
   {
     $url = RESTPT . "establecimientos";
@@ -88,7 +95,7 @@ class Establecimientos extends CI_Model
   public function guardarTodo($datos)
   {
     $resource = '_post_recipientes_batch_req';
-    $url = RESTPT . $resource;
+    $url = REST_ALM . $resource;
     $rsp = $this->rest->callApi("POST", $url, $datos);
     if ($rsp['status']) $rsp['data'] = json_decode($rsp['data']);
     return $rsp;

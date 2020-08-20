@@ -32,7 +32,7 @@
 
         if($('#rechazo').prop('checked') && $('#motivo .form-control').val() == ''){alert('Completar Motivo de Rechazo'); return;}
 
-        var id = $('#idTarBonita').val();
+        var id = $('#taskId').val();
 
         var dataForm = new FormData($('#generic_form')[0]);
 

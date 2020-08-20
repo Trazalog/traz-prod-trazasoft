@@ -4,27 +4,27 @@ if(!function_exists('menu')){
 
     function menu($lang,$user)
     {
-      
-        $parametros["http"]["method"] = "GET";		 
-        $param = stream_context_create($parametros);
-        $resource = 'menu?user='.$user;	 	
-        $url = REST.$resource;
-       // $array = file_get_contents($url, false, $param);
-        $array = [];//json_decode($array);
-       // var_dump($array->menu);die;
-        if(!$array) return;
+        $array = getJson('menu')->menu_items->menu_item;
+        $menu = array();
+        foreach ($array as $o) {
+            if($o->opcion_padre){
+               $menu[$o->opcion_padre]->submenu[] = $o;
+            }else{
+              $menu[$o->opcion] = $o;
+            }
+        }
         $html = '<ul class="sidebar-menu menu" data-widget="tree">
         <li class="header">'.$lang['navegacion'].'</li>';
-        foreach ($array->menus->menu as $i) {
+        foreach ($array as $i) {
 
             switch ($i->nivel) {
-                case 1:
-                    $html .= '<li ><a class="link" href="#" data-link="'.$i->link.'"><i class="'.$i->icono.'"></i>'.$i->titulo.'</a></li>';
+                case 0:
+                    $html .= '<li ><a class="link" href="#" data-link="'.$i->url.'"><i class="'.$i->url_icono.'"></i>'.$i->text.'</a></li>';
                     break;
-                case 2:
+                case 1:
                     $html .= '<li class="treeview">
                     <a href="#">
-                        <i class="'.$i->icono.'"></i> <span>'.$i->titulo.'</span>
+                        <i class="'.$i->_url_icono.'"></i> <span>'.$i->texto.'</span>
                         <span class="pull-right-container">
                             <i class="fa fa-angle-left pull-right"></i>
                         </span>
@@ -45,7 +45,7 @@ if(!function_exists('menu')){
     {
         $html = ' <ul class="treeview-menu">';
         foreach ($data as $i) {
-            $html.= '<li ><a href="#" class="link"data-link="'.$i->link.'"><i class="'.$i->icono.'"></i>'.$i->titulo.'</a></li>';
+            $html.= '<li ><a href="#" class="link" data-link="'.$i->url.'"><i class="'.$i->url_icono.'"></i>'.$i->texto.'</a></li>';
         }
         return $html.'</ul>';
     }

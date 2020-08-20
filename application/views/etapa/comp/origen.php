@@ -143,21 +143,18 @@
 <script>
 actualizarEntrega()
 function actualizarEntrega() {
-    wbox('#view')
     $.ajax({
         type: 'GET',
         dataType: 'JSON',
         url: 'general/Etapa/validarPedidoMaterial/'+ $('#batch_id').val(),
         success: function(res) {
-            if(res.tarea)
-            $('enma').load('<?php echo BPM . 'Proceso/detalleTarea/' ?>' + res.tarea);
+            if(res.tarea){
+                $('enma').load('<?php echo BPM . 'Proceso/detalleTarea/' ?>' + res.tarea);
+            }
             else $('enma').empty();
         },
         error: function(res) {
-            error();
-        },
-        complete: function() {
-            wbox();
+            error();wbox();
         }
     });
 }

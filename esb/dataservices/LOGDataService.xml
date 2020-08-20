@@ -1,0 +1,204 @@
+<data enableBatchRequests="true" enableBoxcarring="true" name="LOGDataService" transports="http https local">
+   <config enableOData="false" id="ToolsDataSource">
+      <property name="carbon_datasource_name">ToolsDataSource</property>
+   </config>
+   <query id="getMovimientosTransporte" useConfig="ToolsDataSource">
+      <sql>select mt.motr_id, mv.tipo, es.nombre establecimiento ,mv.tipo tipo_movimiento,mt.cuit,mt.boleta,mt.acoplado, pr.nombre proveedor, tr.razon_social transportista ,to_char(mt.fecha_entrada,'dd-mm-yyyy') fecha_entrada, mt.patente, mt.neto, mt.estado&#xd;from prd.movimientos_trasportes mt&#xd;, prd.establecimientos es&#xd;, alm.alm_proveedores pr&#xd;, core.transportistas tr&#xd;,(select :tipo_movimiento tipo) mv&#xd;where mt.prov_id = pr.prov_id&#xd;and mt.cuit = tr.cuit&#xd;and es.esta_id = mt.esta_id&#xd;and mt.estado= case	&#xd;	when mv.tipo='RECEPCION' then 'FINALIZADO'&#xd;	else 'ASIGNADO'&#xd;	end;</sql>
+      <result outputType="json">{"movimientosTransporte":{&#xd;   "movimientoTransporte":[&#xd;     {&#xd;      "boleta":"$boleta"&#xd;      ,"establecimiento":"$establecimiento"&#xd;      ,"proveedor":"$proveedor"  &#xd;      ,"transportista":"$transportista"&#xd;      ,"fecha_entrada":"$fecha_entrada"&#xd;      ,"patente":"$patente"&#xd;   ,"acoplado":"$acoplado"&#xd;      ,"neto":"$neto"&#xd;      ,"estado":"$estado",&#xd;"cuit":"$cuit"&#xd;      ,"@getArticulosMovimientoTransporte":"$tipo_movimiento-&gt;tipo_movimiento,$motr_id-&gt;motr_id"&#xd;     }&#xd;   ]&#xd;}&#xd;}&#xd;</result>
+      <param name="tipo_movimiento" sqlType="STRING"/>
+   </query>
+   <query id="getArticulosMovimientoTransporte" useConfig="ToolsDataSource">
+      <sql>select al.codigo codigo_lote, ar.descripcion articulo, ar.unidad_medida um,&#xd;case when tm.tipo='RECEPCION'&#xd;then lh.cantidad_padre &#xd;else lh.cantidad &#xd;end cantidad&#xd;from alm.alm_articulos ar&#xd;,alm.alm_lotes al&#xd;,prd.lotes lo&#xd;,prd.lotes_hijos lh&#xd;,prd.recipientes re &#xd;,prd.movimientos_trasportes tr &#xd;,(select :tipo_movimiento tipo) tm&#xd;where tr.motr_id = re.motr_id&#xd;and lo.reci_id = re.reci_id&#xd;and al.batch_id = lo.batch_id&#xd;and ar.arti_id = al.arti_id&#xd;and case &#xd;	when tm.tipo = 'RECEPCION' &#xd;	then lh.batch_id_padre = lo.batch_id &#xd;	else lh.batch_id=lo.batch_id &#xd;	end&#xd;and tr.motr_id = cast(:motr_id as integer)</sql>
+      <result outputType="json">{"articulos":{&#xd;"articulo":[&#xd;{&#xd;"codigo_lote":"$codigo_lote",&#xd;"articulo":"$articulo",&#xd;"cantidad":"$cantidad",&#xd;"um":"$um"&#xd;}&#xd;]&#xd;}&#xd;}</result>
+      <param name="tipo_movimiento" sqlType="STRING"/>
+      <param name="motr_id" sqlType="STRING"/>
+   </query>
+   <query id="setEntradaXReci" useConfig="ToolsDataSource">
+      <sql>INSERT INTO prd.movimientos_trasportes&#xd;(boleta, fecha_entrada, patente, acoplado, conductor, tipo, bruto, tara, neto, prov_id, esta_id, reci_id)&#xd;VALUES&#xd;(:boleta, TO_DATE(:fecha,'YYYY-MM-DD'), :patente, :acoplado, :conductor, :tipo, CAST(:bruto as float8), CAST(:tara as float8), CAST(:neto as float8), CAST(:proveedor as INTEGER), CAST(:establecimiento as INTEGER), CAST(:reci_id as INTEGER))</sql>
+      <param name="boleta" sqlType="STRING"/>
+      <param name="patente" sqlType="STRING"/>
+      <param name="acoplado" sqlType="STRING"/>
+      <param name="conductor" sqlType="STRING"/>
+      <param name="tipo" sqlType="STRING"/>
+      <param name="bruto" sqlType="STRING"/>
+      <param name="tara" sqlType="STRING"/>
+      <param name="neto" sqlType="STRING"/>
+      <param name="fecha" sqlType="STRING"/>
+      <param name="proveedor" sqlType="STRING"/>
+      <param name="establecimiento" sqlType="STRING"/>
+      <param name="reci_id" sqlType="STRING"/>
+   </query>
+   <query id="getCamionEstablecimiento" useConfig="ToolsDataSource">
+      <sql>SELECT motr_id as id ,patente,conductor, fecha_entrada as fecha, reci_id&#xd;FROM prd.movimientos_trasportes&#xd;WHERE esta_id = CAST(:esta_id as INTEGER)&#xd;AND estado = 'EN CURSO'&#xd;AND eliminado = FALSE</sql>
+      <result outputType="json">{&#xd;    "camiones":{&#xd;        "camion":[&#xd;            {&#xd;                "id":"$id",&#xd;                "patente":"$patente",&#xd;                "conductor":"$conductor",&#xd;                "fecha":"$fecha",&#xd;                "reci_id":"$reci_id"&#xd;            }&#xd;        ]&#xd;    }&#xd;}</result>
+      <param name="esta_id" sqlType="STRING"/>
+   </query>
+   <query id="getLotesCamion" useConfig="ToolsDataSource">
+      <sql>select lo.lote_id, lo.batch_id, lo.reci_id, al.cantidad,  e.nombre establecimiento, al.arti_id, aa.unidad_medida as um&#xd;from &#xd;prd.movimientos_trasportes as mt&#xd;,prd.recipientes as re&#xd;,prd.lotes as lo&#xd;,alm.alm_lotes as al&#xd;,alm.alm_depositos as ad&#xd;,prd.establecimientos as e&#xd;,alm.alm_articulos as aa&#xd;where mt.motr_id = re.motr_id &#xd;and re.reci_id = lo.reci_id&#xd;and al.batch_id = lo.batch_id&#xd;and al.depo_id = ad.depo_id&#xd;and ad.esta_id = e.esta_id&#xd;and al.arti_id = aa.arti_id&#xd;and mt.patente = :patente&#xd;and lo.estado != 'FINALIZADO'</sql>
+      <result outputType="json">{&#xd;    "lotes":{&#xd;        "lote":[&#xd;            {&#xd;                "lote_id":"$lote_id",&#xd;                "batch_id":"$batch_id",&#xd;                "reci_id":"$reci_id",&#xd;                "cantidad":"$cantidad",&#xd;                "establecimiento":"$establecimiento",&#xd;                "arti_id":"$arti_id",&#xd;                "um":"$um"&#xd;               &#xd;            }&#xd;        ]&#xd;    }&#xd;}</result>
+      <param name="patente" sqlType="STRING"/>
+   </query>
+   <query id="getTransportistas" useConfig="ToolsDataSource">
+      <sql>select * from core.transportistas</sql>
+      <result outputType="json">{&#xd;    "transportistas":{&#xd;        "transportista":[&#xd;            {&#xd;                "cuit":"$cuit",&#xd;                "razon_social":"$razon_social",&#xd;                "direccion":"$direccion"&#xd;            }&#xd;        ]&#xd;    }&#xd;}</result>
+   </query>
+   <query id="setCamionEstado" useConfig="ToolsDataSource">
+      <sql>update prd.movimientos_trasportes set estado= :estado where motr_id = cast(:motr_id as int4)</sql>
+      <param name="estado" sqlType="STRING"/>
+      <param name="motr_id" sqlType="STRING"/>
+   </query>
+   <query id="getCamion" useConfig="ToolsDataSource">
+      <sql>SELECT mt.patente, mt.acoplado, mt.conductor, mt.tipo, mt.bruto, mt.tara, mt.neto, mt.esta_id, &#xd;e.nombre AS esta_nombre&#xd;FROM prd.movimientos_trasportes mt&#xd;INNER JOIN prd.establecimientos e ON e.esta_id = mt.esta_id&#xd;WHERE mt.patente = :patente</sql>
+      <result outputType="json">{&#xd;    "camiones":{&#xd;        "camion":[&#xd;            {&#xd;                "acoplado":"$acoplado",&#xd;                "conductor":"$conductor",&#xd;                "tipo":"$tipo",&#xd;                "bruto":"$bruto",&#xd;                "tara":"$tara",&#xd;                "neto":"$neto",&#xd;                "patente":"$patente",&#xd;                "esta_id":"$esta_id",&#xd;                "esta_nombre":"$esta_nombre"&#xd;            }&#xd;        ]&#xd;    }&#xd;}</result>
+      <param name="patente" sqlType="STRING"/>
+   </query>
+   <query id="setSalidaCamion" useConfig="ToolsDataSource">
+      <sql>UPDATE prd.movimientos_trasportes&#xd;SET 	bruto = CAST(:bruto as float8), &#xd;		tara = CAST(:tara as float8), &#xd;		neto = CAST(:neto as float8), &#xd;		estado = 'FINALIZADO' &#xd;WHERE patente = :patente&#xd;AND	estado != 'FINALIZADO'</sql>
+      <param name="bruto" sqlType="STRING"/>
+      <param name="tara" sqlType="STRING"/>
+      <param name="neto" sqlType="STRING"/>
+      <param name="patente" sqlType="STRING"/>
+   </query>
+   <query id="setEntrada" useConfig="ToolsDataSource">
+      <sql>INSERT INTO prd.movimientos_trasportes&#xd;(boleta, fecha_entrada, patente, acoplado, conductor, tipo, bruto, tara, neto, prov_id, esta_id, cuit, estado, accion)&#xd;VALUES&#xd;(:boleta, TO_DATE(:fecha,'YYYY-MM-DD'), :patente, :acoplado, :conductor, :tipo, CAST(:bruto as float8), CAST(:tara as float8), CAST(:neto as float8), CAST(:proveedor as INTEGER), CAST(:establecimiento as INTEGER), :cuit, :estado, :accion)</sql>
+      <param name="boleta" sqlType="STRING"/>
+      <param name="patente" sqlType="STRING"/>
+      <param name="acoplado" sqlType="STRING"/>
+      <param name="conductor" sqlType="STRING"/>
+      <param name="tipo" sqlType="STRING"/>
+      <param name="bruto" sqlType="STRING"/>
+      <param name="tara" sqlType="STRING"/>
+      <param name="neto" sqlType="STRING"/>
+      <param name="fecha" sqlType="STRING"/>
+      <param name="proveedor" sqlType="STRING"/>
+      <param name="establecimiento" sqlType="STRING"/>
+      <param name="estado" sqlType="STRING"/>
+      <param name="cuit" sqlType="STRING"/>
+      <param name="accion" sqlType="STRING"/>
+   </query>
+   <query id="getIngresosMovimientoTransporte" useConfig="ToolsDataSource">
+      <sql>select &#xd;mt.boleta, &#xd;to_char(mt.fecha_entrada, 'DD-MM-YYYY') as fecha, &#xd;p.nombre, &#xd;t.razon_social,&#xd;mt.patente, &#xd;ROUND(cast(mt.neto as numeric), 2) as neto, &#xd;a.descripcion, &#xd;ROUND(cast(lo.cantidad as numeric), 2) as cantidad, &#xd;mt.estado&#xd;from &#xd;alm.alm_articulos a, &#xd;alm.alm_proveedores p, &#xd;core.transportistas t, &#xd;prd.movimientos_trasportes mt,&#xd;prd.recipientes r,&#xd;prd.lotes l,&#xd;alm.alm_lotes lo,&#xd;(select :fechasta fec ) hasta,&#xd;(select :fecdesde fec ) desde,&#xd;(select :arti_id filtro) arti_id,&#xd;(select :prov_id filtro ) prov_id,&#xd;(select :cuit filtro ) cuit&#xd;where &#xd;t.eliminado = false&#xd;and mt.cuit = t.cuit&#xd;and mt.motr_id = r. motr_id &#xd;and mt.eliminado = false&#xd;and mt.prov_id = p.prov_id &#xd;and r.tipo = 'TRANSPORTE'&#xd;and r.eliminado = 0&#xd;and r.reci_id = l.reci_id&#xd;and l.eliminado = 0&#xd;and l.batch_id = lo.batch_id&#xd;and lo.eliminado = false&#xd;and lo.arti_id = a.arti_id&#xd;---------------------------------------------------------&#xd;and t.cuit =  case when cuit.filtro is null or cuit.filtro = '' then t.cuit &#xd;else cuit.filtro end&#xd;and p.prov_id = case when prov_id.filtro is null or prov_id.filtro = '' then p.prov_id &#xd;else cast(prov_id.filtro as integer) end &#xd;and a.arti_id = case when arti_id.filtro is null or arti_id.filtro = '' then a.arti_id &#xd;else cast(arti_id.filtro  as integer) end &#xd;and lo.fec_alta &lt;= to_date(case when hasta.fec is null or hasta.fec = '' then '2100-01-01' &#xd;else hasta.fec end ,'YYYY-MM-DD') &#xd;and lo.fec_alta &gt;= to_date(case when desde.fec is null or desde.fec = '' then '1899-01-01' &#xd;else desde.fec end,'YYYY-MM-DD')</sql>
+      <result outputType="json">{"movimientos":{&#xd;"movimiento": [&#xd;{&#xd;"boleta":"$boleta",&#xd;"fecha":"$fecha",&#xd;"nombre":"$nombre",&#xd;"razon_social":"$razon_social",&#xd;"patente":"$patente",&#xd;"neto":"$neto",&#xd;"descripcion":"$descripcion",&#xd;"cantidad":"$cantidad",&#xd;"estado":"$estado"&#xd;}&#xd;]&#xd;}&#xd;}</result>
+      <param name="fechasta" sqlType="STRING"/>
+      <param name="fecdesde" sqlType="STRING"/>
+      <param name="arti_id" sqlType="STRING"/>
+      <param name="prov_id" sqlType="STRING"/>
+      <param name="cuit" sqlType="STRING"/>
+   </query>
+   <query id="getCantidadIngresosMovimientoTransporte" useConfig="ToolsDataSource">
+      <sql>select &#xd;COUNT(*)&#xd;from &#xd;alm.alm_articulos a, &#xd;alm.alm_proveedores p, &#xd;core.transportistas t, &#xd;prd.movimientos_trasportes mt,&#xd;prd.recipientes r,&#xd;prd.lotes l,&#xd;alm.alm_lotes lo,&#xd;(select :fechasta fec ) hasta,&#xd;(select :fecdesde fec ) desde,&#xd;(select :arti_id filtro) arti_id,&#xd;(select :prov_id filtro ) prov_id,&#xd;(select :cuit filtro ) cuit&#xd;where &#xd;t.eliminado = false&#xd;and mt.cuit = t.cuit&#xd;and mt.motr_id = r. motr_id &#xd;and mt.eliminado = false&#xd;and mt.prov_id = p.prov_id &#xd;and r.tipo = 'TRANSPORTE'&#xd;and r.eliminado = 0&#xd;and r.reci_id = l.reci_id&#xd;and l.eliminado = 0&#xd;and l.batch_id = lo.batch_id&#xd;and lo.eliminado = false&#xd;and lo.arti_id = a.arti_id&#xd;---------------------------------------------------------&#xd;and t.cuit =  case when cuit.filtro is null or cuit.filtro = '' then t.cuit &#xd;else cuit.filtro end&#xd;and p.prov_id = case when prov_id.filtro is null or prov_id.filtro = '' then p.prov_id &#xd;else cast(prov_id.filtro as integer) end &#xd;and a.arti_id = case when arti_id.filtro is null or arti_id.filtro = '' then a.arti_id &#xd;else cast(arti_id.filtro  as integer) end &#xd;and lo.fec_alta &lt;= to_date(case when hasta.fec is null or hasta.fec = '' then '2100-01-01' &#xd;else hasta.fec end ,'YYYY-MM-DD') &#xd;and lo.fec_alta &gt;= to_date(case when desde.fec is null or desde.fec = '' then '1899-01-01' &#xd;else desde.fec end,'YYYY-MM-DD')</sql>
+      <result outputType="json">{"cantidades":{&#xd;"cantidad": [&#xd;{&#xd;"cant_ingresos":"$count"&#xd;}&#xd;]&#xd;}&#xd;}</result>
+      <param name="fechasta" sqlType="STRING"/>
+      <param name="fecdesde" sqlType="STRING"/>
+      <param name="arti_id" sqlType="STRING"/>
+      <param name="prov_id" sqlType="STRING"/>
+      <param name="cuit" sqlType="STRING"/>
+   </query>
+   <resource method="GET" path="/transporte/movimiento/list/{tipo_movimiento}">
+      <call-query href="getMovimientosTransporte">
+         <with-param name="tipo_movimiento" query-param="tipo_movimiento"/>
+      </call-query>
+   </resource>
+   <resource method="POST" path="/entradas">
+      <call-query href="setEntradaXReci">
+         <with-param name="boleta" query-param="boleta"/>
+         <with-param name="patente" query-param="patente"/>
+         <with-param name="acoplado" query-param="acoplado"/>
+         <with-param name="conductor" query-param="conductor"/>
+         <with-param name="tipo" query-param="tipo"/>
+         <with-param name="bruto" query-param="bruto"/>
+         <with-param name="tara" query-param="tara"/>
+         <with-param name="neto" query-param="neto"/>
+         <with-param name="fecha" query-param="fecha"/>
+         <with-param name="proveedor" query-param="proveedor"/>
+         <with-param name="establecimiento" query-param="establecimiento"/>
+         <with-param name="reci_id" query-param="reci_id"/>
+      </call-query>
+   </resource>
+   <resource method="POST" path="/entradas">
+      <call-query href="setEntrada">
+         <with-param name="boleta" query-param="boleta"/>
+         <with-param name="patente" query-param="patente"/>
+         <with-param name="acoplado" query-param="acoplado"/>
+         <with-param name="conductor" query-param="conductor"/>
+         <with-param name="tipo" query-param="tipo"/>
+         <with-param name="bruto" query-param="bruto"/>
+         <with-param name="tara" query-param="tara"/>
+         <with-param name="neto" query-param="neto"/>
+         <with-param name="fecha" query-param="fecha"/>
+         <with-param name="proveedor" query-param="proveedor"/>
+         <with-param name="establecimiento" query-param="establecimiento"/>
+         <with-param name="estado" query-param="estado"/>
+         <with-param name="cuit" query-param="cuit"/>
+         <with-param name="accion" query-param="accion"/>
+      </call-query>
+   </resource>
+   <resource method="GET" path="/camion_establecimiento/{esta_id}">
+      <call-query href="getCamionEstablecimiento">
+         <with-param name="esta_id" query-param="esta_id"/>
+      </call-query>
+   </resource>
+   <resource method="GET" path="/camion/lotes/{patente}">
+      <call-query href="getLotesCamion">
+         <with-param name="patente" query-param="patente"/>
+      </call-query>
+   </resource>
+   <resource method="POST" path="/entradas">
+      <call-query href="setEntrada">
+         <with-param name="boleta" query-param="boleta"/>
+         <with-param name="patente" query-param="patente"/>
+         <with-param name="acoplado" query-param="acoplado"/>
+         <with-param name="conductor" query-param="conductor"/>
+         <with-param name="tipo" query-param="tipo"/>
+         <with-param name="bruto" query-param="bruto"/>
+         <with-param name="tara" query-param="tara"/>
+         <with-param name="neto" query-param="neto"/>
+         <with-param name="fecha" query-param="fecha"/>
+         <with-param name="proveedor" query-param="proveedor"/>
+         <with-param name="establecimiento" query-param="establecimiento"/>
+         <with-param name="estado" query-param="estado"/>
+         <with-param name="cuit" query-param="cuit"/>
+         <with-param name="accion" query-param="accion"/>
+      </call-query>
+   </resource>
+   <resource method="GET" path="/transportistas">
+      <call-query href="getTransportistas"/>
+   </resource>
+   <resource method="PUT" path="/camion/estado">
+      <call-query href="setCamionEstado">
+         <with-param name="estado" query-param="estado"/>
+         <with-param name="motr_id" query-param="motr_id"/>
+      </call-query>
+   </resource>
+   <resource method="GET" path="/camiones/{patente}">
+      <call-query href="getCamion">
+         <with-param name="patente" query-param="patente"/>
+      </call-query>
+   </resource>
+   <resource method="PUT" path="/camiones/salida">
+      <call-query href="setSalidaCamion">
+         <with-param name="bruto" query-param="bruto"/>
+         <with-param name="tara" query-param="tara"/>
+         <with-param name="neto" query-param="neto"/>
+         <with-param name="patente" query-param="patente"/>
+      </call-query>
+   </resource>
+   <resource method="GET" path="/movimientos/proveedor/{prov_id}/transporte/{cuit}/producto/{arti_id}/desde/{fecdesde}/hasta/{fechasta}/ingresos">
+      <call-query href="getIngresosMovimientoTransporte">
+         <with-param name="fechasta" query-param="fechasta"/>
+         <with-param name="fecdesde" query-param="fecdesde"/>
+         <with-param name="arti_id" query-param="arti_id"/>
+         <with-param name="prov_id" query-param="prov_id"/>
+         <with-param name="cuit" query-param="cuit"/>
+      </call-query>
+   </resource>
+   <resource method="GET" path="/cantidad/proveedor/{prov_id}/transporte/{cuit}/producto/{arti_id}/desde/{fecdesde}/hasta/{fechasta}/ingresos">
+      <call-query href="getCantidadIngresosMovimientoTransporte">
+         <with-param name="fechasta" query-param="fechasta"/>
+         <with-param name="fecdesde" query-param="fecdesde"/>
+         <with-param name="arti_id" query-param="arti_id"/>
+         <with-param name="prov_id" query-param="prov_id"/>
+         <with-param name="cuit" query-param="cuit"/>
+      </call-query>
+   </resource>
+</data>

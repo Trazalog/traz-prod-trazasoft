@@ -12,40 +12,24 @@
             </div>
 
             <div class="modal-body" id="modalBodyArticle">
-                <!-- <div class="row">
-          <div class="col-md-3 col-xs-12"><label class="form-label">Lote a fraccionar:</label></div>
-          <div class="col-md-9 col-xs-12" id="divloteorigen"></div>
-      </div> -->
 
                 <div class="panel panel-primary">
                     <!-- Default panel contents -->
                     <div class="panel-heading">Lotes para Fraccionamiento</div>
                     <div class="panel-body">
-
-                        <div class="row">
-                            <div class="col-md-3 col-xs-12"><label class="form-label">Lote a fraccionar:</label></div>
-                            <div class="col-md-9 col-xs-12" id="selLoteOrigen"></div>
-                            <div class="col-md-8 col-xs-12">
-                                <?php if ($accion == 'Editar') {
-                                    echo '<select class="form-control" id="loteorigen">';
-                                    echo '<option value="" disabled selected>-Seleccione Lote-</option>';
-                                    foreach ($lotesFracc as $lote) {
-                                        echo '<option value="' . $lote->codigo . '" >LOTE: ' . $lote->codigo . ' / ' . $lote->art_nombre . '</option>';
-                                    }
-                                    echo '</select>';
-                                    }
-                                ?>
-                            </div>
-                           
-                        </div>
-
-
-
-
+                        <table class="table table-striped">
+                            <tbody> 
+                                <?php 
+                                foreach ($lotesFracc as $lote) {
+                                    echo "<tr>";
+                                    echo "<td>LOTE: $lote->codigo | $lote->art_nombre</td>";
+                                    echo "<td>".($lote->tipo == 'Insumo'?bolita('Insumo','orange'):"<button title='Copiar Lote' class='btn btn-link' onclick='$(\"#lotedestino\").val(\"$lote->codigo\")'><i class='fa fa-copy'></i></button></td>");
+                                    echo "</tr>";
+                                }?>
+                            </tbody>
+                        </table>
                     </div>
-
                 </div>
-
 
                 <div class="panel panel-primary">
                     <!-- Default panel contents -->
@@ -59,8 +43,8 @@
                             <div class="col-md-8 col-xs-12 input-group">
 
                                 <?php 
-                         echo selectBusquedaAvanzada('productos', 'arti_id', $articulos_fraccionar, 'arti_id', 'barcode',array('descripcion','Stock:' => 'stock'));
-                        ?>
+                                    echo selectBusquedaAvanzada('productos', 'arti_id', $articulos_fraccionar, 'arti_id', 'barcode',array('descripcion','Stock:' => 'stock'));
+                                ?>
                                 <span class="input-group-btn">
                                     <button class='btn btn-sm btn-primary'
                                         onclick='checkTabla("tabla_productos","modalproductos",`<?php echo json_encode($materias); ?>`,"Add")'
@@ -80,23 +64,17 @@
                             <div class="col-md-3 col-xs-12"><label class="form-label">Codigo Lote Destino:</label></div>
                             <div class="col-md-4 col-xs-12"><input class="form-control" type="text" id="lotedestino"
                                     value="" placeholder="Inserte Lote destino"></div>
-                            <div class="col-md-4 col-xs-12"><button class="btn btn-primary btn-block"
-                                    onclick="copiaOrigen()">Copiar Lote Origen</button></div>
+                           
                             <div class="col-md-1"></div>
                         </div>
                         <div class="row" style="margin-top:20px">
                             <div class="col-md-3 col-xs-12"><label class="form-label">Destino:</label></div>
                             <div class="col-md-6 col-xs-12">
                                 <?php if ($accion == 'Editar') {
-                  // echo '<select class="form-control" id="productodestino">';
-                  // echo '<option value="" disabled selected>-Seleccione Destino-</option>';
-                  // foreach ($recipientes as $recipiente) {
-                  //   echo '<option value="' . $recipiente->reci_id . '" >' . $recipiente->nombre . '</option>';
-                  // }
-                  // echo '</select>';
-                  echo selectBusquedaAvanzada('productodestino', 'vreci');
-                }
-                ?>
+       
+                                echo selectBusquedaAvanzada('productodestino', 'vreci');
+                                }
+                                ?>
                             </div>
                             <div class="col-md-3"></div>
                         </div>
@@ -110,10 +88,10 @@
                                     id="productoestablecimientos">
                                     <option value="" disabled selected>-Seleccione Establecimiento-</option>
                                     <?php
-                  foreach ($establecimientos as $fila) {
-                    echo '<option value="' . $fila->esta_id . '" >' . $fila->nombre . '</option>';
-                  }
-                  ?>
+                                    foreach ($establecimientos as $fila) {
+                                        echo '<option value="' . $fila->esta_id . '" >' . $fila->nombre . '</option>';
+                                    }
+                                    ?>
                                 </select>
 
                             </div>
@@ -209,13 +187,10 @@ function actualizaRecipiente(establecimiento) {
 function AgregarProductoFinal() {
     cantidad = document.getElementById('cantidadproducto').value;
     if (cantidad == 0) {
-        //if(document.getElementById('loteorigen').value != "")
-        // {
         producto = {};
         producto.id = '-';
         producto.titulo = '-';
         producto.cantidad = '-';
-        producto.loteorigen = document.getElementById('loteorigen').value;
         producto.lotedestino = '-';
         producto.destino = '-';
         producto.titulodestino = '-';
@@ -230,17 +205,11 @@ function AgregarProductoFinal() {
         document.getElementById('fraccionado').checked = false;
         document.getElementById('productorecipientes').value = "";
         document.getElementById('productorecipientes').disabled = true;
-        // }else{
-        //   alert('Seleccione lote origen');
-        // }
+  
     } else {
         ban = true;
         msj = "";
-        //  if(document.getElementById('loteorigen').value == "")
-        //  {
-        //   msj +="Falto seleccionar Lote Origen \n";
-        //     ban = false;
-        //  }
+
         producto = document.getElementById('productos').value;
 
         // validacion de campos vacios    
@@ -298,7 +267,6 @@ function AgregarProductoFinal() {
             .id;
             producto.titulo = document.getElementById('productos').value;
             producto.cantidad = cantidad;
-            producto.loteorigen = document.getElementById('loteorigen').value;
             producto.lotedestino = lotedestino;
             producto.destino = destino;
             producto.titulodestino = $('#productodestino').find('option:selected').html();  
@@ -392,21 +360,20 @@ function FinalizarEtapa() {
     if (existe == "no") {
         alert("No ha agregado ningun producto final");
     } else {
-        ops = document.getElementById('loteorigen').options;
-        var lotes = [];
-        for (i = 0; i < ops.length; i++) {
-            lotes.push(ops[i].value);
-        }
-        lotes.shift();
-        lotesasignados = [];
-        for (i = 0; i < lotes.length; i++) {
-            if ($('#tabla_productos_asignados tr > td:nth-child(2):contains(' + lotes[i] + ')').length > 0) {
-                lotesasignados.push(lotes[i]);
-            }
-        }
-        diferencia = lotes.filter(x => !lotesasignados.includes(x));
-        // if(diferencia.length == 0)
-        // {
+        // ops = document.getElementById('loteorigen').options;
+        // var lotes = [];
+        // for (i = 0; i < ops.length; i++) {
+        //     lotes.push(ops[i].value);
+        // }
+        // lotes.shift();
+        // lotesasignados = [];
+        // for (i = 0; i < lotes.length; i++) {
+        //     if ($('#tabla_productos_asignados tr > td:nth-child(2):contains(' + lotes[i] + ')').length > 0) {
+        //         lotesasignados.push(lotes[i]);
+        //     }
+        // }
+        // diferencia = lotes.filter(x => !lotesasignados.includes(x));
+ 
         var productos = [];
         $('#tabla_productos_asignados tbody').find('tr').each(function() {
             var json = $(this).attr('data-json');
@@ -463,7 +430,7 @@ function QR(elemento) {
 
 function generarQR(data) {
     data = JSON.parse(data);
-    // console.log("ENTRA al generar QR: " + data);
+
     wo();
     $.ajax({
         type: 'POST',

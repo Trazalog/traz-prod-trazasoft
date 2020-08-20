@@ -284,9 +284,4 @@
     });
   }); 
 
-  function existFunction(nombre){
-		var fn = window[nombre]; 
-		return typeof fn === 'function';
-  }
-
 </script>

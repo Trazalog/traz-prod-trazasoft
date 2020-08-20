@@ -36,7 +36,7 @@
                 <div class="row form-group <?php echo ($producto?'':'hidden') ?>" style="margin-top:20px">
                     <div class="col-md-3 col-xs-12"><label class="form-label">Cantidad:</label></div>
                     <div class="col-md-4 col-xs-12"><input class="form-control" type="text" id="cant_origen"
-                            value="<?php echo $producto[0]->stock.' ('.$producto[0]->uni_med.')';?>" disabled></div>
+                            value="<?php echo $etapa->existencia->cantidad.' ('.$producto[0]->uni_med.')';?>" disabled></div>
                     <div class="col-md-5"></div>
                 </div>
                 <div class="row form-group <?php echo ($producto?'':'hidden') ?>" style="margin-top:20px">
@@ -72,7 +72,7 @@
                     <div class="col-md-3 col-xs-12"><label class="form-label">Cantidad*:</label></div>
                     <div class="col-md-4 col-xs-12"><input class="form-control" id="cantidadproducto" type="text"
                             value="" placeholder="Inserte Cantidad"></div>
-                    <div class="col-md-1 col-xs-1">
+                    <div class="col-md-2 col-xs-2">
                             <input type="text" class="form-control" value=" - " id="um" disabled>
                    </div>
                     <div class="col-md-5"></div>

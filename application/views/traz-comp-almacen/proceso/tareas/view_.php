@@ -113,9 +113,9 @@
                                         </div>
                                     </div>
                                     <div id="view" class="oculto" style="margin-left:3%;">
-
+                                     
                                         <?php echo $view ?>
-
+                       
                                     </div>
                                 </div>
 

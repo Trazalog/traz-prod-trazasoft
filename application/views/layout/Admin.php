@@ -109,6 +109,7 @@
                 <?php 
              
                 $this->load->view('layout/menu');
+                #echo $menu;
             ?>
 
             </section>
