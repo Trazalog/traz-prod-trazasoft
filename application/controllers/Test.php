@@ -23,4 +23,8 @@ class Test extends CI_Controller
         $this->load->view('test', $data);
     }
 
+    public function test2()
+    {
+        $this->load->view('test2');
+    }
 }
