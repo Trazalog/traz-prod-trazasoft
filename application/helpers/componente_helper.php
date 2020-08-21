@@ -66,3 +66,24 @@ if (!function_exists('selectBusquedaAvanzada')) {
         return $html;
     }
 }
+
+function selectFromCore($name, $placeholder, $tabla)
+{
+    $url = REST_CORE."tablas/$tabla";
+    $rsp = wso2($url);
+    $opt = '';
+    foreach ($rsp['data'] as $o) {
+        $opt .= "<option value='$o->value'>$o->descripcion</option>";
+    }
+    return "<select id='$name' name='$name' class='form-control' style='width: 100%;'><option value='0' disabled selected> - $placeholder - </option>$opt</select>";   
+}
+
+function selectFromFont($name, $placeholder, $url, $mapValues)
+{
+    $rsp = wso2($url);
+    $opt = '';
+    foreach ($rsp['data'] as $o) {
+        $opt .= "<option value='".($o->{$mapValues['value']})."'>".($o->{$mapValues['descripcion']})."</option>";
+    }
+    return "<select id='$name' name='$name' class='form-control' style='width: 100%;'><option value='0' disabled selected> - $placeholder - </option>$opt</select>";
+}

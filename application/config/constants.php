@@ -97,6 +97,8 @@ define('BPM_PROCESS_ID_PEDIDOS_NORMALES', '8803232493891311406');
 
 define('BPM_PROCESS_ID_PEDIDOS_EXTRAORDINARIOS', '6013058915384903051');
 
+define('BPM_PROCESS_ID_TAREAS', '7476185017663746474');
+
 define('BPM_ADMIN_USER', 'almacen.tools');
 define('BPM_ADMIN_PASS', 'bpm');
 define('BPM_USER_PASS', 'bpm');
@@ -194,8 +196,12 @@ define('RSP_LOTE', [
 ]);
 
 
+
 define('BPM_PROCESS', json_encode(array(
   '8803232493891311406' => ['nombre' => 'Ped. Materiales', 'color' => '#F39C12', 'proyecto' => ALM, 'model' => 'ALM_Tareas'],
   '6013058915384903051' => ['nombre' => 'Ped. Materiales Ext', 'color' => '#F39C12', 'proyecto' => ALM, 'model' => 'ALM_Tareas'],
-  '8664799170016058315' => ['nombre' => 'Proc. Mantenimiento', 'color' => '#00A65A', 'proyecto' => 'traz-comp-mantenimiento/', 'model' => 'MAN_Tareas']
+  '8664799170016058315' => ['nombre' => 'Proc. Mantenimiento', 'color' => '#00A65A', 'proyecto' => 'traz-comp-mantenimiento/', 'model' => 'MAN_Tareas'],
+  BPM_PROCESS_ID_TAREAS => ['nombre' => 'Proc. Tareas', 'color' => '#ff7701', 'proyecto' => TST, 'model' => 'TST_Tareas']
 )));
+
+define('REST_API_BPM', 'http://10.142.0.7:8280/tools/bpm/proceso/instancia');
