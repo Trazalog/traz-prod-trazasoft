@@ -13,13 +13,7 @@ class Test extends CI_Controller
 
     public function index()
     {
-        $contract['nombre_proceso'] = 'TST01';
-        $contract['session'] = $this->session->has_userdata('bpm_token')?$this->session->userdata('bpm_token'):'';
-        $contract['payload']['nombreTarea'] = 'Nombre Tarea test';
-        $contract['payload']['userNick'] = 'ad.min';
-        $contract['payload']['taplId'] = '370';
-        $res = wso2(REST_API_BPM, 'POST', $contract);
-        show($res);
+       $this->load->view('test');
     }
 
     public function index1()

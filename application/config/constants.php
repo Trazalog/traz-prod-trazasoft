@@ -157,6 +157,7 @@ define('PRD_Etapa_DS', 'http://10.142.0.7:8280/services/PRDEtapaDataService/');
 define('PRD_Lote_DS', 'http://10.142.0.7:8280/services/PRDLoteDataService/');
 define('LOG_DS', 'http://10.142.0.3:8280/services/LOGDataService/');
 define('CORE_DS','http://10.142.0.7:8280/services/COREDataService/');
+define('FRM_DS','http://10.142.0.7:8280/services/FRMDataService');
 
 //TODO:AGREGAR AL CONSTANT ORIGINAL
 #RECURSOS_LOTES

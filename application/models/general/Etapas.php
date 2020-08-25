@@ -54,7 +54,7 @@ class Etapas extends CI_Model
         log_message('DEBUG', 'Etapas/nuevo($opcion)-> ' . $opcion);
 
         $resource = '/etapas/';
-        $url = REST2 . $resource . $opcion;
+        $url = REST_PRD_ETAPA . $resource . $opcion;
         $array = $this->rest->callAPI("GET", $url);
         wso2Msj($array);
         return json_decode($array['data']);
