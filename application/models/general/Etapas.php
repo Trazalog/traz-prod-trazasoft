@@ -87,12 +87,6 @@ class Etapas extends CI_Model
         log_message('DEBUG', 'Etapas/setRecursosLotes(recursos a grabar)-> ' . json_encode($data));
 
         return $arrayDatos;
-
-        // $resource = '/recurso/lote';
-        // $url = REST2 . $resource;
-        // $rsp = $this->rest->callAPI("POST", $url, $data);
-        // wso2Msj($rsp);
-        // return $rsp;
     }
     // guarda prod en recursos lotes (articulos)
     public function setRecursosLotesMat($data)
@@ -190,14 +184,6 @@ class Etapas extends CI_Model
     public function getRecursosFraccionar($id, $recursoTipo)
     {
 
-        // $idBatch = json_encode($id);
-        // log_message('DEBUG', 'Etapas/getRecursosFraccionar(batch_id)-> ' . $idBatch);
-        // log_message('DEBUG', 'Etapas/getRecursosFraccionar(tipo de recurso)-> ' . $recursoTipo);
-        // $resource = '/lote/fraccionar/batch/'. $id .'/tipo/'.$recursoTipo;
-        // $url = REST2 . $resource;
-        // $array = $this->rest->callAPI("GET", $url);
-        // return json_decode($array['data']);
-
         $parametros["http"]["method"] = "GET";
         $parametros["http"]["header"] = "Accept: application/json";
         $param = stream_context_create($parametros);
@@ -276,11 +262,13 @@ class Etapas extends CI_Model
     public function getSalidaEtapa($etap_id)
     {
         $url = REST2 . "/etapas/salidas/$etap_id";
-        $rsp = $this->rest->callApi('GET', $url);
-        if ($rsp['status']) {
-            $rsp['data'] = json_decode($rsp['data'])->salidas->salida;
-        }
-        return $rsp;
+        return wso2($url);
+    }
+
+    public function getEntradaEtapa($etap_id)
+    {
+        $url = REST2 . "/etapas/entradas/$etap_id";
+        return wso2($url);
     }
 
     public function validarPedidoMaterial($batch_id)
