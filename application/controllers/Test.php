@@ -13,6 +13,7 @@ class Test extends CI_Controller
         $this->load->model('general/Establecimientos');
         $this->load->model('Tablas');
         $this->load->model(ALM.'Articulos');
+        $this->load->model('general/Etapas');
     }
 
     public function index()
@@ -25,6 +26,16 @@ class Test extends CI_Controller
 
     public function test2()
     {
-        $this->load->view('test2');
+        $etapas = $this->Etapas->obtenerEtapas();
+        $etapas = $etapas->etapas;
+        $this->load->view('test2',$etapas);
+    }
+
+    public function obtenerEtapas()
+    {
+        $rsp = $this->Etapas->listarEtapas();
+        $rsp = $rsp->etapas->etapa;
+        $rsp = json_encode($rsp);
+        echo $rsp;
     }
 }

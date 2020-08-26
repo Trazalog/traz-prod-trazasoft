@@ -36,6 +36,15 @@ class Etapas extends CI_Model
         $resp = json_decode($array['data']);
         return $resp;
     }
+
+    public function obtenerEtapas(){
+        log_message('DEBUG', 'Etapas/obtenerEtapas');
+        $url = 'http://localhost:8080/etapas';
+        $array = $this->rest->callAPI("GET", $url);
+        $resp = json_decode($array['data']);
+        return $resp;
+    }
+
     public function buscar($id)
     {
         if (!$id) {
