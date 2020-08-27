@@ -13,6 +13,7 @@ class Test extends CI_Controller
 
     public function index()
     {
+        echo intval(false);
        $this->load->view('test');
     }
 

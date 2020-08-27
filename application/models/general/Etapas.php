@@ -346,5 +346,11 @@ class Etapas extends CI_Model
 		$url = RESTPT . $resource;
 		$array = $this->rest->callAPI("GET", $url);
 		return json_decode($array['data']);
-	}
+    }
+    
+    public function validarFormularioCalidad($orta_id)
+    {
+        $url = FRM_REST."/formularios/variables/BATCH/$orta_id/VAR_SEX/Hombre";
+        return wso2($url);
+    }
 }

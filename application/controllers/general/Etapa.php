@@ -595,4 +595,10 @@ class Etapa extends CI_Controller
       $user = $this->Etapas->getUserLote($batch_id)->users->user;
       echo json_encode($user);
     }
+
+    public function validarFormularioCalidad($orta_id)
+    {
+        $res = $this->Etapas->validarFormularioCalidad($orta_id);
+        echo json_encode($res);
+    }
 }
