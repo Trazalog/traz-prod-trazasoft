@@ -13,8 +13,8 @@ class Test extends CI_Controller
 
     public function index()
     {
-        echo intval(false);
-       $this->load->view('test');
+        $this->load->model('general/Etapas');
+        echo $this->Etapas->validarFormularioCalidad(780);
     }
 
     public function index1()

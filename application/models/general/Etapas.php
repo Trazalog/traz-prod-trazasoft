@@ -350,7 +350,11 @@ class Etapas extends CI_Model
     
     public function validarFormularioCalidad($orta_id)
     {
-        $url = FRM_REST."/formularios/variables/BATCH/$orta_id/VAR_SEX/Hombre";
-        return wso2($url);
+        $url = FRM_DS."/formularios/etapa/variables/origen/BATCH/$orta_id";
+        $res = wso2($url);
+        if($res['data'])
+        foreach ($res['data'] as $o) {
+            if($o->variable == 'QC_OK' && $o->valor == 'true') return true;
+        }
     }
 }

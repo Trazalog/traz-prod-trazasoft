@@ -142,7 +142,7 @@
 
 <script>
 
-//actualizarEntrega()
+actualizarEntrega()
 function actualizarEntrega() {
     $.ajax({
         type: 'GET',

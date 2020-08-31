@@ -599,6 +599,6 @@ class Etapa extends CI_Controller
     public function validarFormularioCalidad($orta_id)
     {
         $res = $this->Etapas->validarFormularioCalidad($orta_id);
-        echo json_encode($res);
+        echo json_encode(['status'=>$res]);
     }
 }
