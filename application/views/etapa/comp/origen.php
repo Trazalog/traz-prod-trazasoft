@@ -25,7 +25,7 @@
                     <div class="col-md-6 col-xs-12 input-group ba">
 
                         <?php
-                            echo selectBusquedaAvanzada('inputmaterias', 'vmateria', $materias, 'arti_id', 'barcode', array('descripcion', 'Unidad Medida:' => 'unidad_medida'));
+                            echo selectBusquedaAvanzada('inputmaterias', 'vmateria', $productos_entrada_etapa, 'arti_id', 'barcode', array('descripcion', 'Unidad Medida:' => 'unidad_medida'));
                             ?>
                     </div>
                 </div>
