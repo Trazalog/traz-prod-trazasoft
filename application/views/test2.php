@@ -1,16 +1,8 @@
 <div class="row">
     <div class="col-md-12">
-        <div class="box  box-primary">
-            <div class="box-header">
-                <h3 class="box-title">Registro Etapas<h/3>
-            </div>
-            <div class="box-body">
-                <button class="btn btn-primary">Agregar</button>
-            </div>
-        </div>
         <div class="box box-primary">
             <div class="box-header">
-                <h3 class="box-title">Información</h3>
+                <h3 class="box-title">Registrar Etapa</h3>
             </div>
             <div class="box-body">
                 <div class="row">
@@ -20,17 +12,8 @@
                                 <div class="col-md-6">
                                     <label class="control-label">Etapa:</label>
                                     <div class="form-group " id="inp1">
-                                        <!-- <input type="text" class="form-control " id="nom_etapa"
-                                            placeholder="Campo obligatorio"> -->
-                                            <select class="form-control " id="nom_etapa">
-                                                <option disabled selected>- Seleccionar etapa -</option>
-                                                <?php
-                                                    foreach($etapa as $et){
-                                                        $aux = json_encode($et);
-                                                        echo "<option id='$et->id' value='$aux'>$et->nombre</option>";
-                                                    }
-                                                ?>
-                                            </select>
+                                        <input type="text" class="form-control " id="nom_etapa"
+                                            placeholder="Campo obligatorio">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -43,21 +26,9 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <label class="control-label">Fecha:</label>
+                                    <label class="control-label">Orden:</label>
                                     <div class="form-group " id="inp3">
-                                        <div class="input-group date">
-                                            <div class="input-group-addon">
-                                                <i class="fa fa-calendar"></i>
-                                            </div>
-                                            <input type="text" class="form-control pull-right" id="datepicker"
-                                                placeholder="Campo obligatorio">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="control-label">Usuario:</label>
-                                    <div class="form-group " id="inp4">
-                                        <input type="text" class="form-control" id="usu_etapa"
+                                        <input type="number" min="1" class="form-control" id="orden_etapa"
                                             placeholder="Campo obligatorio">
                                     </div>
                                 </div>
@@ -80,8 +51,10 @@
                         <table class="table table-striped table-hover table-bordered" id="table_id">
                             <thead>
                                 <tr>
+                                    <th>Orden</th>
                                     <th>Nombres</th>
                                     <th>Nombre recipiente</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -98,96 +71,66 @@
         </div>
     </div>
 </div>
-<!-- <span class="help-block"><i class="fa fa-check"></i>Help block with success</span> -->
+
+<!-- The Modal -->
+<div class="modal modal-fade" id="modal">
+    <div class="modal-dialog modal-lm">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Editar etapa</h4>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form role="form" data-toggle="validator" id="myForm">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="control-label">Etapa:</label>
+                                    <div class="form-group " id="inp_modal1">
+                                        <input type="text" class="form-control " id="nom_modal"
+                                            placeholder="Campo obligatorio">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="control-label">Nombre Recipiente:</label>
+                                    <div class="form-group " id="inp_modal2">
+                                        <input type="text" class="form-control " id="reci_modal"
+                                            placeholder="Campo obligatorio">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="control-label">Orden:</label>
+                                    <div class="form-group " id="inp_modal3">
+                                        <input type="number" min="1" class="form-control" id="orden_modal"
+                                            placeholder="Campo obligatorio">
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button class="btn btn-primary pull-right" id="btnGuardarModal" >Guardar</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script>
 //Date picker
 $('#datepicker').datepicker({
     autoclose: true
 })
-
-$('#table_id').dataTable();
-
-$('#btnGuardar').on('click', function() {
-    var aux = $('#nom_etapa').val();
-    aux = JSON.parse(aux);
-    var data = ['' + aux.nombre, '' + $('#reci_etapa').val(), '' + $('#datepicker').val(), '' + $(
-        '#usu_etapa').val(),'' + aux.id];
-    console.log(data);
-    $('#inp1').removeClass('has-success has-error');
-    $('#inp2').removeClass('has-success has-error');
-    $('#inp3').removeClass('has-success has-error');
-    $('#inp4').removeClass('has-success has-error');
-
-    if (data[0] && data[1] && data[2] && data[3]) {
-        $('#inp1').addClass('has-success');
-        $('#inp2').addClass('has-success');
-        $('#inp3').addClass('has-success');
-        $('#inp4').addClass('has-success');
-        // var aux = JSON.parse(data);
-        agregarFila(data);
-    } else {
-        if (!data[0]) $('#inp1').addClass('has-error');
-        if (!data[1]) $('#inp2').addClass('has-error');
-        if (!data[2]) $('#inp3').addClass('has-error');
-        if (!data[3]) $('#inp4').addClass('has-error');
-    }
-});
-
-/*******AGREGA MATERIAL A LA TABLA*******/
-function agregarFila(data) {
-    $('#table_id tfoot').attr('hidden', true);
-    // var etap_id = $('#etap_id').val();
-    // var data = JSON.parse($("#mate_id").val());
-    //var aux = $('#table_id').find('#'+data.arti_id).length; // tambien funciona
-    var aux = $('#' + data[4]).length;
-    if (aux == 0) {
-        var htmlTags = '<tr id="' + data[4] + '">' +
-            '<td>' + data[0] + '</td>' +
-            '<td>' + data[1] + '</td>' +
-            '<td><button id="borrar" onclick="conf(eliminar,' + data[4] +
-            ')" class="btn bg-red"><i class="fa fa-trash"></i></button></td>' +
-            '</tr>';
-        $('#table_id tbody').append(htmlTags);
-        var arti_id = data.arti_id;
-        wbox('#tabla');
-        $.ajax({
-            type: 'POST',
-            data: {
-                etap_id,
-                arti_id
-            },
-            url: 'general/Etapa/agregaMaterial',
-            success: function() {},
-            error: function() {},
-            complete: function() {
-                wbox();
-            }
-        });
-    } else error('El material ya esta asignado', '');
-}
-
-
-/*******ELIMINA MATERIAL DE LA TABLA*******/
-var eliminar = function(valor) {
-    arti_id = valor;
-    wbox('#tabla');
-    var etap_id = $('#etap_id').val();
-    $.ajax({
-        type: 'POST',
-        data: {
-            etap_id,
-            arti_id
-        },
-        url: 'general/Etapa/eliminarMaterial',
-        success: function() {},
-        error: function() {},
-        complete: function() {
-            wbox();
-        }
-    });
-    $('#' + valor).remove();
-}
-
 
 //CARGA LA TABLA CON LAS ETAPAS
 $.ajax({
@@ -195,24 +138,127 @@ $.ajax({
     type: 'GET',
     url: 'Test/obtenerEtapas',
     success: function(res) {
-        console.log(res);
         $('#table_id tbody').empty();
         res.forEach(function(e) {
-            var htmlTags = '<tr id="' + e.id + '">' +
-            '<td>' + e.titulo + '</td>' +
-            '<td>' + e.nom_recipiente + '</td>' +
-            '<td><button id="borrar" onclick="conf(eliminar,' + e.id +
-            ')" class="btn bg-red"><i class="fa fa-trash"></i></button></td>' +
-            '</tr>';
+            var htmlTags = '<tr id="' + e.titulo + '">' +
+                '<td>' + e.id + '</td>' +
+                '<td>' + e.titulo + '</td>' +
+                '<td>' + e.nom_recipiente + '</td>' +
+                '<td><button id="borrar" onclick="conf(eliminar,' + e.titulo +
+                ')" class="btn bg-red"><i class="fa fa-trash"></i></button>  <button id="editar" onclick="" class="btn bg-green" data-toggle="modal" data-target="#modal"><i class="fa fa-edit"></i></button></td>' +
+                '</tr>';
             $('#table_id tbody').append(htmlTags);
             $('#table_id tfoot').attr('hidden', true);
         });
+        $('#table_id').dataTable();
     },
     error: function() {},
     complete: function() {
-        wbox();
+        // wbox();
     }
+});
+
+$('#btnGuardar').on('click', function() {
+    var aux = $('#nom_etapa').val();
+    var data = ['' + $('#nom_etapa').val(), '' + $('#reci_etapa').val(), '' + $('#orden_etapa').val()];
+    $('#inp1').removeClass('has-success has-error');
+    $('#inp2').removeClass('has-success has-error');
+    $('#inp3').removeClass('has-success has-error');
+    var aux = $('#' + data[0]).length; //busca si existe el nombre
+    // var aux2 = $('#' + data[2]).length; //busca si existe el numero de orden
+    // console.log('' + $('#' + data[2]).length);
+    if (aux == 0 && data[1] && data[2] > 0) {
+        $('#inp1').addClass('has-success');
+        $('#inp2').addClass('has-success');
+        $('#inp3').addClass('has-success');
+        agregarFila(data);
+    } else {
+        if (!data[0]) $('#inp1').addClass('has-error');
+        if (!data[1]) $('#inp2').addClass('has-error');
+        if (!data[2]) $('#inp3').addClass('has-error');
+    }
+});
+
+/*******AGREGA MATERIAL A LA TABLA*******/
+function agregarFila(data) {
+    $('#table_id tfoot').attr('hidden', true);
+    //
+    $('#table_id').dataTable().fnDestroy();
+    var htmlTags = '<tr id="' + data[0] + '">' +
+        '<td>' + data[2] + '</td>' +
+        '<td>' + data[0] + '</td>' +
+        '<td>' + data[1] + '</td>' +
+        '<td><button id="borrar" onclick="conf(eliminar,' + data[0] +
+        ')" class="btn bg-red"><i class="fa fa-trash"></i></button>  <button id="editar" onclick="" class="btn bg-green"><i class="fa fa-edit" data-toggle="modal" data-target="#modal"></i></button></td>' +
+        '</tr>';
+    $('#table_id tbody').append(htmlTags);
+    $('#table_id').dataTable();
+    //wbox('#table_id');
+    $.ajax({
+        type: 'POST',
+        data: {
+            data
+        },
+        url: 'Test/guardarEtapa',
+        success: function() {},
+        error: function() {},
+        complete: function() {
+            // wbox();
+        }
     });
 
+}
 
+//GUARDAR ETAPA EDITADA
+$('#btnGuardarModal').on('click',function(){
+    $('#inp_modal1').removeClass('has-success has-error');
+    $('#inp_modal2').removeClass('has-success has-error');
+    $('#inp_modal3').removeClass('has-success has-error');
+    var data = ['' + $('#nom_modal').val(), '' + $('#reci_modal').val(), '' + $('#orden_modal').val()];
+    var aux = $('#' + data[0]).length; //busca si existe el nombre
+    if (aux == 0 && data[1] && data[2] > 0) {
+        $('#inp_modal1').addClass('has-success');
+        $('#inp_modal2').addClass('has-success');
+        $('#inp_modal3').addClass('has-success');
+
+        $.ajax({
+            type: 'POST',
+            data: {
+                data
+            },
+            url: 'Test/guardarEtapa',
+            success: function() {},
+            error: function() {},
+            complete: function() {
+            }
+        });
+    } else {
+        if (!data[0]) $('#inp_modal1').addClass('has-error');
+        if (!data[1]) $('#inp_modal2').addClass('has-error');
+        if (!data[2]) $('#inp_modal3').addClass('has-error');
+    }
+
+
+})
+
+/*******ELIMINA MATERIAL DE LA TABLA*******/
+var eliminar = function(valor) {
+    // arti_id = valor;
+    // wbox('#table_id');
+    // var etap_id = $('#etap_id').val();
+    etapa = valor.id;
+    $.ajax({
+        type: 'POST',
+        data: {
+            etapa
+        },
+        url: 'Test/eliminarEtapa',
+        success: function() {},
+        error: function() {},
+        complete: function() {
+            wbox();
+        }
+    });
+    $('#' + etapa).remove();
+}
 </script>

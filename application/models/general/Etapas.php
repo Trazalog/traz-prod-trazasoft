@@ -367,5 +367,25 @@ class Etapas extends CI_Model
 		$url = RESTPT . $resource;
 		$array = $this->rest->callAPI("GET", $url);
 		return json_decode($array['data']);
-	}
+    }
+    
+    //ABM etapas
+    public function guardarEtapa($etapa)
+    {
+        $a = '';
+        $etapa = json_encode($etapa);
+        $url = 'http://localhost:8080/setEtapas';
+        wso2($url,'POST',$etapa);
+    }
+
+    public function elimarEtapa()
+    {
+        $url = 'http://localhost:8080/deleteEtapa';
+        wso($url,'DELETE',$etapa);
+    }
+
+    public function  editarEtapa()
+    {
+        
+    }
 }

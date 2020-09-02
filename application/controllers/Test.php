@@ -26,9 +26,7 @@ class Test extends CI_Controller
 
     public function test2()
     {
-        $etapas = $this->Etapas->obtenerEtapas();
-        $etapas = $etapas->etapas;
-        $this->load->view('test2',$etapas);
+        $this->load->view('test2');
     }
 
     public function obtenerEtapas()
@@ -37,5 +35,26 @@ class Test extends CI_Controller
         $rsp = $rsp->etapas->etapa;
         $rsp = json_encode($rsp);
         echo $rsp;
+    }
+
+    public function guardarEtapa()
+    {
+        $rsp = $this->input->post('data');
+        $aux['nombre'] = $rsp[0];
+        $aux['nombre_recipiente'] = $rsp[1];
+        $aux['orden'] = $rsp[2];
+        $this->Etapas->guardarEtapa($aux);
+    }
+
+    public function eliminarEtapa()
+    {
+        $rsp = $this->input->post('data');
+        $this->Etapa->eliminarEtapa($rsp);
+    }
+
+    public function editarEtapa()
+    {
+        $rsp = $this->input->post('');
+        $this->Etapa->editaretapa($rsp);
     }
 }
