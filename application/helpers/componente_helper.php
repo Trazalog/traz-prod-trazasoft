@@ -87,3 +87,11 @@ function selectFromFont($name, $placeholder, $url, $mapValues)
     }
     return "<select id='$name' name='$name' class='form-control' style='width: 100%;'><option value='0' disabled selected> - $placeholder - </option>$opt</select>";
 }
+
+
+function componente($id, $url, $load = false)
+{
+  
+    if($load) $load = "<script>reload('#$id')</script>"; else   $load = '';
+    return "<componente id='$id' class='reload' data-link='$url'>$load</componente>";
+}

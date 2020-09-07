@@ -4,7 +4,7 @@ if (!function_exists('userId')) {
 
     function userId()
     {
-        return 615; //!HARDCODE
+        return 101; //!HARDCODE
 
         $ci = &get_instance();
         $userdata = $ci->session->userdata('user_data');

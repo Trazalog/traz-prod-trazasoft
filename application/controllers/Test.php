@@ -13,8 +13,7 @@ class Test extends CI_Controller
 
     public function index()
     {
-        $this->load->model('general/Etapas');
-        echo $this->Etapas->validarFormularioCalidad(780);
+        $this->load->view(TST.'pedidos/pedidos_tarea');
     }
 
     public function index1()

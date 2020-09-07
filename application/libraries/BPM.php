@@ -7,6 +7,7 @@ class BPM
     public function __construct()
     {
 
+        $CI = &get_instance();
         $this->REST = &get_instance()->rest;
 
     }
@@ -101,7 +102,6 @@ class BPM
         $resource = 'API/bpm/process/';
 
         $url = BONITA_URL . $resource . $processId . '/instantiation';
-
 		
          $rsp = $this->REST->callAPI('POST', $url, $contract, $this->loggin(userNick(), userPass()));
         
