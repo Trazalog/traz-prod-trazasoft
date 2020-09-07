@@ -3,7 +3,7 @@
       <property name="carbon_datasource_name">ToolsDataSource</property>
    </config>
    <query id="getTareas" useConfig="produccionDS">
-      <sql>SELECT * FROM tst.tareas_std&#xd;WHERE empr_id = CAST(:empr_id as integer)&#xd;AND not eliminado</sql>
+      <sql>SELECT * FROM tst.tareas_std&#xd;WHERE empr_id = CAST(:empr_id as integer)&#xd;AND not eliminado&#xd;ORDER BY nombre</sql>
       <result outputType="json">{&#xd;    "tareas":{&#xd;       "tarea":[&#xd;           {&#xd;            "tare_id":"$tare_id",&#xd;            "nombre":"$nombre",&#xd;            "descripcion":"$descripcion",&#xd;            "duracion":"$duracion",&#xd;            "form_id":"$form_id",&#xd;            "rece_id":"$rece_id",&#xd;            "proc_id":"$proc_id"&#xd;           }&#xd;       ] &#xd;    }&#xd;}</result>
       <param name="empr_id" sqlType="STRING"/>
    </query>
@@ -65,7 +65,7 @@
       <param name="suta_id" sqlType="STRING"/>
    </query>
    <query id="getPlantillas" useConfig="produccionDS">
-      <sql>SELECT *&#xd;FROM tst.plantillas&#xd;WHERE empr_id = CAST(:empr_id as integer)&#xd;AND not eliminado</sql>
+      <sql>SELECT *&#xd;FROM tst.plantillas&#xd;WHERE empr_id = CAST(:empr_id as integer)&#xd;AND not eliminado&#xd;ORDER BY nombre</sql>
       <result outputType="json">{&#xd;  "plantillas": {&#xd;    "plantilla": [&#xd;      {&#xd;        "plan_id": "$plan_id",&#xd;        "nombre": "$nombre",&#xd;        "@getTareasPlantilla":$plan_id-&gt;plan_id&#xd;      }&#xd;    ]&#xd;  }&#xd;}&#xd;</result>
       <param name="empr_id" sqlType="STRING"/>
    </query>
@@ -104,7 +104,7 @@
       <param name="plan_id" sqlType="STRING"/>
    </query>
    <query id="setTareaPlanificada" useConfig="produccionDS">
-      <sql>INSERT&#xd;	INTO&#xd;	tst.tareas_planificadas (tapl_id, nombre, fecha, user_id, info_id, case_id, tare_id)&#xd;SELECT&#xd;	CASE&#xd;		WHEN IDT.id IS NULL&#xd;		OR IDT.ID = '' THEN nextval('tst.tareas_planificadas_tapl_id_seq')&#xd;		ELSE CAST(idt.id AS INTEGER)&#xd;	END&#xd;	, :nombre, TO_DATE(:fecha,'YYYY-MM-DD'), CAST(:user_id as integer), CAST(:info_id as integer), CAST(:case_id as integer), CAST(:tare_id as integer)&#xd;FROM&#xd;	(SELECT :tapl_id ID) AS IDT&#xd;ON CONFLICT (tapl_id) DO&#xd;UPDATE&#xd;SET&#xd;    nombre = excluded.nombre,&#xd;    fecha = excluded.fecha,&#xd;    user_id = excluded.user_id,&#xd;    info_id = excluded.info_id,&#xd;    case_id = excluded.case_id,&#xd;    tare_id = excluded.tare_id returning tapl_id;</sql>
+      <sql>INSERT&#xd;	INTO&#xd;	tst.tareas_planificadas (tapl_id, nombre, fecha, user_id, info_id, case_id, tare_id, proc_id, form_id, descripcion, rece_id)&#xd;SELECT&#xd;	CASE&#xd;		WHEN IDT.id IS NULL&#xd;		OR IDT.ID = '' THEN nextval('tst.tareas_planificadas_tapl_id_seq')&#xd;		ELSE CAST(idt.id AS INTEGER)&#xd;	END&#xd;	, :nombre, TO_DATE(:fecha,'YYYY-MM-DD'),:user_id, CAST(:info_id as integer), CAST(:case_id as integer), CAST(:tare_id as integer), :proc_id, cast(:form_id as integer), :descripcion, cast(:rece_id as integer)&#xd;FROM&#xd;	(SELECT :tapl_id ID) AS IDT&#xd;ON CONFLICT (tapl_id) DO&#xd;UPDATE&#xd;SET&#xd;    nombre = excluded.nombre,&#xd;    fecha = excluded.fecha,&#xd;    user_id = excluded.user_id,&#xd;    info_id = excluded.info_id,&#xd;    case_id = excluded.case_id,&#xd;    tare_id = excluded.tare_id,&#xd;    proc_id = excluded.proc_id,&#xd;    form_id = excluded.form_id,&#xd;    descripcion = excluded.descripcion,&#xd;    rece_id = excluded.rece_id&#xd; returning tapl_id;</sql>
       <result outputType="json">{"respuesta":{"tapl_id":"$tapl_id"}}</result>
       <param name="nombre" sqlType="STRING"/>
       <param name="fecha" sqlType="STRING"/>
@@ -113,9 +113,13 @@
       <param name="tare_id" sqlType="STRING"/>
       <param name="info_id" sqlType="STRING"/>
       <param name="tapl_id" sqlType="STRING"/>
+      <param name="proc_id" sqlType="STRING"/>
+      <param name="form_id" sqlType="STRING"/>
+      <param name="descripcion" sqlType="STRING"/>
+      <param name="rece_id" sqlType="STRING"/>
    </query>
    <query id="updateTareaPlanificada" useConfig="produccionDS">
-      <sql>update tst.tareas_planificadas &#xd;    set&#xd;        nombre = :nombre,&#xd;        fecha = TO_DATE(:fecha,'YYYY-MM-DD'),&#xd;        hora =:hora,&#xd;        user_id = cast(:user_id as integer),&#xd;        equi_id = cast(:equi_id as integer),&#xd;        case_id = cast(:case_id as integer),&#xd;        tare_id = cast(:tare_id as integer)&#xd;    where tapl_id = CAST(:tapl_id as integer);</sql>
+      <sql>update tst.tareas_planificadas &#xd;    set&#xd;        nombre = :nombre,&#xd;        fecha = TO_DATE(:fecha,'YYYY-MM-DD'),&#xd;        hora =:hora,&#xd;        user_id = :user_id,&#xd;        equi_id = cast(:equi_id as integer),&#xd;        case_id = cast(:case_id as integer),&#xd;        tare_id = cast(:tare_id as integer)&#xd;    where tapl_id = CAST(:tapl_id as integer);</sql>
       <param name="nombre" sqlType="STRING"/>
       <param name="fecha" sqlType="STRING"/>
       <param name="hora" sqlType="STRING"/>
@@ -140,7 +144,7 @@
    </query>
    <query id="getTareasPlanificadas" useConfig="produccionDS">
       <sql>select tp.*&#xd;from tst.origen_tarea_planficada otp &#xd;join tst.tareas_planificadas tp &#xd;on otp.tapl_id = tp.tapl_id &#xd;where otp.origen = :origen&#xd;and otp.orta_id = cast(:orta_id as integer)&#xd;and not eliminado&#xd;order by tp.tapl_id</sql>
-      <result outputType="json">{&#xd;  "tareas": {&#xd;    "tarea": [&#xd;        {&#xd;            "tapl_id":"$tapl_id",&#xd;            "nombre":"$nombre",&#xd;            "user_id":"$user_id",&#xd;            "info_id":"$info_id",&#xd;            "case_id":"$case_id",&#xd;            "tare_id":"$tare_id",&#xd;            "fecha":"$fecha",&#xd;            "@getTareaRecursos":$tapl_id-&gt;tapl_id&#xd;         }&#xd;    ]&#xd;  }&#xd;}</result>
+      <result outputType="json">{&#xd;  "tareas": {&#xd;    "tarea": [&#xd;        {&#xd;            "tapl_id":"$tapl_id",&#xd;            "nombre":"$nombre",&#xd;            "user_id":"$user_id",&#xd;            "info_id":"$info_id",&#xd;            "case_id":"$case_id",&#xd;            "tare_id":"$tare_id",&#xd;            "fecha":"$fecha",&#xd;            "proc_id":"$proc_id",&#xd;            "form_id":"$form_id",&#xd;            "rece_id":"$rece_id",&#xd;            "descripcion":"$descripcion",&#xd;            "@getTareaRecursos":$tapl_id-&gt;tapl_id&#xd;         }&#xd;    ]&#xd;  }&#xd;}</result>
       <param name="orta_id" sqlType="STRING"/>
       <param name="origen" sqlType="STRING"/>
    </query>
@@ -163,6 +167,16 @@
       <sql>select r.recu_id, e.*&#xd;from core.equipos e&#xd;join prd.recursos r&#xd;on e.equi_id = r.equi_id&#xd;where sect_id = :sect_id</sql>
       <result outputType="json">{&#xd;  "equipos": {&#xd;    "equipo": [&#xd;        {&#xd;            "recu_id": "$recu_id",&#xd;            "equi_id":"$equi_id",&#xd;            "descripcion":"$descripcion",&#xd;            "marca":"$marca",&#xd;            "codigo":"$codigo"&#xd;        }&#xd;    ]&#xd;  }&#xd;}</result>
       <param name="sect_id" sqlType="STRING"/>
+   </query>
+   <query id="setEstadoTarea" useConfig="produccionDS">
+      <sql>UPDATE&#xd;tst.tareas_planificadas&#xd;SET estado = :estado&#xd;WHERE tapl_id = cast(:tapl_id as integer)</sql>
+      <param name="estado" sqlType="STRING"/>
+      <param name="tapl_id" sqlType="STRING"/>
+   </query>
+   <query id="getTareaPlanificadaXCaseId" useConfig="produccionDS">
+      <sql>SELECT * FROM tst.tareas_planificadas tp&#xd;JOIN tst.origen_tarea_planficada otp on otp.tapl_id = tp.tapl_id&#xd;WHERE tp.case_id = cast(:case_id as integer)</sql>
+      <result outputType="json">{&#xd;  "tareas": {&#xd;    "tarea": [&#xd;        {&#xd;            "tapl_id":"$tapl_id",&#xd;            "nombre":"$nombre",&#xd;            "user_id":"$user_id",&#xd;            "info_id":"$info_id",&#xd;            "case_id":"$case_id",&#xd;            "tare_id":"$tare_id",&#xd;            "fecha":"$fecha",&#xd;            "origen":"$origen",&#xd;            "orta_id":"$orta_id",&#xd;            "proc_id":"$proc_id",&#xd;            "estado":"$estado",&#xd;            "descripcion":"$descripcion",&#xd;            "@getTareaRecursos":"$tapl_id-&gt;tapl_id",&#xd;            "@getSubtareas":"$tare_id-&gt;tare_id"&#xd;         }&#xd;    ]&#xd;  }&#xd;}</result>
+      <param name="case_id" sqlType="STRING"/>
    </query>
    <resource method="GET" path="/tareas/{empr_id}">
       <call-query href="getTareas">
@@ -297,6 +311,10 @@
          <with-param name="tare_id" query-param="tare_id"/>
          <with-param name="info_id" query-param="info_id"/>
          <with-param name="tapl_id" query-param="tapl_id"/>
+         <with-param name="proc_id" query-param="proc_id"/>
+         <with-param name="form_id" query-param="form_id"/>
+         <with-param name="descripcion" query-param="descripcion"/>
+         <with-param name="rece_id" query-param="rece_id"/>
       </call-query>
    </resource>
    <resource method="DELETE" path="/tarea/planificar">
@@ -330,5 +348,16 @@
    </resource>
    <resource method="GET" path="/sectores">
       <call-query href="getSectores"/>
+   </resource>
+   <resource method="PUT" path="/tareas/estado">
+      <call-query href="setEstadoTarea">
+         <with-param name="estado" query-param="estado"/>
+         <with-param name="tapl_id" query-param="tapl_id"/>
+      </call-query>
+   </resource>
+   <resource method="GET" path="/tareas/planificadas/case/{case_id}">
+      <call-query href="getTareaPlanificadaXCaseId">
+         <with-param name="case_id" query-param="case_id"/>
+      </call-query>
    </resource>
 </data>
