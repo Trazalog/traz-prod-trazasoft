@@ -20,7 +20,6 @@ class Etapa extends CI_Controller
     // Muestra listado de etapas
     public function index()
     {
-
         $data['list'] = $this->Etapas->listar()->etapas->etapa;
         $temp = $this->Etapas->listarEtapas()->etapas->etapa;
         //reforma las url segun id
@@ -123,7 +122,7 @@ class Etapa extends CI_Controller
 
         $this->guardarParte3($post_data, $batch_id, $nuevo, $estado);
 
-        echo json_encode(['status' => true]);
+        echo json_encode(['status' => true, 'batch_id' => $batch_id]);
     }
 
     public function guardarParte2($post_data, $datosCab, $batch_id)
@@ -595,5 +594,11 @@ class Etapa extends CI_Controller
     {
       $user = $this->Etapas->getUserLote($batch_id)->users->user;
       echo json_encode($user);
+    }
+
+    public function validarFormularioCalidad($orta_id)
+    {
+        $res = $this->Etapas->validarFormularioCalidad($orta_id);
+        echo json_encode(['status'=>$res]);
     }
 }

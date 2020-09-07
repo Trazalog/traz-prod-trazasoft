@@ -21,6 +21,6 @@
 </div>
 
 <!-- The Modal -->
-<div class="modal modal-fade" id="mdl-back">
+<div class="modal modal-fade" id="mdl-back" data-keyboard="false" data-backdrop="static">
  
 </div>

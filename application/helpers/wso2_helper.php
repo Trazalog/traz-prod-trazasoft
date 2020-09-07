@@ -20,11 +20,18 @@ if (!function_exists('wso2')) {
 
         }
 
-        if ($rsp['status']) {
-            $aux = json_decode($rsp['data']);
-            if($aux) $aux = reset($aux);
-            if($aux) $aux = reset($aux);
-            $rsp['data'] = $aux;
+        if ($rsp['status']) 
+        {
+            $rsp['data'] = json_decode($rsp['data']);
+
+            #SOLO SI ES UNA API WSO2
+            if(isset($rsp['data']->session)){
+                $ci->session->set_userdata('bpm_token', $rsp['data']->session);
+                return $rsp;
+            }
+
+            if($rsp['data']) $rsp['data'] = reset($rsp['data']);
+            if($rsp['data']) $rsp['data'] = reset($rsp['data']);
         }
 
         return $rsp;

@@ -1,66 +1,58 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
 
-if (!function_exists('getJson')) {
-    function getJson($file, $show = false)
-    {
-        $url = base_url('json/') . $file . '.json';
+function http($metodo, $data = false)
+{
+    $header = array("Accept: application/json");
 
-        $rsp = json_decode(file_get_contents($url));
-
-        if ($show) {
-            echo var_dump($rsp);
-        } else {
-            return $rsp;
-        }
+    if ($data) {
+        array_push($header, 'Content-Type: application/json');
+        $parametros["http"]["content"] = json_encode($data);
     }
 
-    function http($metodo, $data = false)
-    {
-        $header = array("Accept: application/json");
+    $parametros["http"]["method"] = $metodo;
+    $parametros["http"]["header"] = $header;
 
-        if ($data) {
-            array_push($header, 'Content-Type: application/json');
-            $parametros["http"]["content"] = json_encode($data);
-        }
+    log_message('DEBUG', '#REST #OUT-HEADER: ' . json_encode($parametros));
 
-        $parametros["http"]["method"] = $metodo;
-        $parametros["http"]["header"] = $header;
+    return stream_context_create($parametros);
+}
 
-        log_message('DEBUG', '#REST #OUT-HEADER: ' . json_encode($parametros));
+function rsp($header, $msj = false, $data = false)
+{
 
-        return stream_context_create($parametros);
-    }
+    log_message('DEBUG', '#REST #RESPONCE-HEADER: ' . json_encode($header) . ' | #RESPONCE-DATA: ' . json_encode($data));
+    return array(
+        'status' => rspCode($header) < 300,
+        'code' => rspCode($header),
+        'msj' => $msj,
+        'data' => $data,
+    );
+}
 
-    function rsp($header, $msj = false, $data = false)
-    {
+function rspCode($header)
+{
+    $aux = explode(" ", $header[0]);
+    return $aux[1];
+}
 
-        log_message('DEBUG', '#REST #RESPONCE-HEADER: ' . json_encode($header) . ' | #RESPONCE-DATA: ' . json_encode($data));
-        return array(
-            'status' => rspCode($header) < 300,
-            'code' => rspCode($header),
-            'msj' => $msj,
-            'data' => $data,
-        );
-    }
+function wso2Msj($rsp)
+{
+    $rsp['data'] = json_decode($rsp['data']);
+    $msj = $rsp['data']->Fault->faultstring;
+    preg_match('~>>([^{]*)<<~i', $msj, $match);
+    log_message('DEBUG', '#WSO2 #RESPONSE: ' . $match[1]);
+    return $match[1];
+}
 
-    function rspCode($header)
-    {
-        $aux = explode(" ", $header[0]);
-        return $aux[1];
-    }
+function show($data)
+{
+    echo "<pre>" . json_encode($data, JSON_PRETTY_PRINT) . "</pre>";
+}
 
-    function wso2Msj($rsp)
-    {
-        $rsp['data'] = json_decode($rsp['data']);
-        $msj = $rsp['data']->Fault->faultstring;
-        preg_match('~>>([^{]*)<<~i', $msj, $match);
-        log_message('DEBUG', '#WSO2 #RESPONSE: ' . $match[1]);
-        return $match[1];
-    }
+function toStd($data){
+    return json_decode(json_encode($data));
+}
 
-
-    function show($data)
-    {
-        echo "<pre>".json_encode($data, JSON_PRETTY_PRINT)."</pre>";
-    }
+function toArray($data){
+    return json_decode(json_encode($data),true);
 }

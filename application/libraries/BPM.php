@@ -7,6 +7,7 @@ class BPM
     public function __construct()
     {
 
+        $CI = &get_instance();
         $this->REST = &get_instance()->rest;
 
     }
@@ -101,7 +102,6 @@ class BPM
         $resource = 'API/bpm/process/';
 
         $url = BONITA_URL . $resource . $processId . '/instantiation';
-
 		
          $rsp = $this->REST->callAPI('POST', $url, $contract, $this->loggin(userNick(), userPass()));
         
@@ -211,13 +211,8 @@ class BPM
         return $this->msj(true, 'OK', json_decode($rsp['data'], true));
     }
 
-    public function guardarComentario($caseId, $comentario)
+    public function guardarComentario($data)
     {
-        $data = array(
-            'processInstanceId' => $caseId,
-            'content' => $comentario,
-        );
-
         $url = BONITA_URL . 'API/bpm/comment';
 
         $rsp = $this->REST->callAPI('POST', $url, $data, $this->loggin(BPM_ADMIN_USER, BPM_ADMIN_PASS));
