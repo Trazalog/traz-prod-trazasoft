@@ -14,17 +14,13 @@ AS $function$
 $function$
 ;
 
-CREATE OR REPLACE FUNCTION alm.fnupdateresto()
- RETURNS trigger
- LANGUAGE plpgsql
-AS $function$
-	BEGIN
-		update alm.alm_deta_pedidos_materiales set resto = new.cantidad
-		where depe_id = new.depe_id;
-	    return new; 
-	END;
-$function$
-;
+-- DROP TRIGGER tgrupdateresto ON alm.alm_deta_pedidos_materiales;
+
+create trigger tgrupdateresto after
+insert
+    on
+    alm.alm_deta_pedidos_materiales for each row execute procedure alm.fnupdateresto();
+
 
 ALTER TABLE frm.formularios ADD empr_id int4 NULL;
 ALTER TABLE prd.etapas ADD form_id int4 NULL;
