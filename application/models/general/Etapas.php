@@ -63,7 +63,7 @@ class Etapas extends CI_Model
         log_message('DEBUG', 'Etapas/nuevo($opcion)-> ' . $opcion);
 
         $resource = '/etapas/';
-        $url = REST2 . $resource . $opcion;
+        $url = REST_PRD_ETAPA . $resource . $opcion;
         $array = $this->rest->callAPI("GET", $url);
         wso2Msj($array);
         return json_decode($array['data']);
@@ -372,8 +372,20 @@ class Etapas extends CI_Model
         wso($url,'DELETE',$etapa);
     }
 
-    public function  editarEtapa()
+    public function  obtenerEtapa($etapa)
     {
-        
+        $url = 'http://localhost:8080/obtenerEtapa';
+        $rsp = wso2($url,'GET');
+        return $rsp;
+    }
+    
+    public function validarFormularioCalidad($orta_id)
+    {
+        $url = FRM_DS."/formularios/etapa/variables/origen/BATCH/$orta_id";
+        $res = wso2($url);
+        if($res['data'])
+        foreach ($res['data'] as $o) {
+            if($o->variable == 'QC_OK' && $o->valor == 'true') return true;
+        }
     }
 }

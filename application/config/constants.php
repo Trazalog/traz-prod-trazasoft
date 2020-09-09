@@ -97,9 +97,11 @@ define('BPM_PROCESS_ID_PEDIDOS_NORMALES', '8803232493891311406');
 
 define('BPM_PROCESS_ID_PEDIDOS_EXTRAORDINARIOS', '6013058915384903051');
 
+define('BPM_PROCESS_ID_TAREAS', '7148440093058377088');
+
 define('BPM_ADMIN_USER', 'almacen.tools');
-define('BPM_ADMIN_PASS', 'bpm');
-define('BPM_USER_PASS', 'bpm');
+define('BPM_ADMIN_PASS', '123');
+define('BPM_USER_PASS', '123');
 
 #ERRORES DE BONITA
 define('ASP_100', 'Fallo Conexión BPM');
@@ -133,13 +135,8 @@ define('TSK', 'traz-comp-tareas/');
 
 #COMPONENTE TAREASSESTANDAR
 define('TST', 'traz-comp-tareasestandar/');
-<<<<<<< Updated upstream
-define('REST_TST', 'http://10.142.0.7:8280/services/TareasSTD/');
-define('CAL', 'traz-comp-calendar/');
-=======
 define('REST_TST', 'http://10.142.0.3:8280/services/TareasSTD/');
 define('CAL','traz-comp-calendar/');
->>>>>>> Stashed changes
 
 
 #REST
@@ -156,10 +153,11 @@ define('REST_CORE', 'http://10.142.0.3:8280/services/COREDataService/');
 define('REST_PRD_ETAPA', 'http://10.142.0.3:8280/services/PRDEtapaDataService');
 
 #TOOLS-PRD DATASERVICES /*NUEVOS*/
-define('PRD_Etapa_DS', 'http://10.142.0.7:8280/services/PRDEtapaDataService/');
-define('PRD_Lote_DS', 'http://10.142.0.7:8280/services/PRDLoteDataService/');
+define('PRD_Etapa_DS', 'http://10.142.0.3:8280/services/PRDEtapaDataService/');
+define('PRD_Lote_DS', 'http://10.142.0.3:8280/services/PRDLoteDataService/');
 define('LOG_DS', 'http://10.142.0.3:8280/services/LOGDataService/');
-define('CORE_DS','http://10.142.0.7:8280/services/COREDataService/');
+define('CORE_DS','http://10.142.0.3:8280/services/COREDataService/');
+define('FRM_DS','http://10.142.0.3:8280/services/FRMDataService');
 
 //TODO:AGREGAR AL CONSTANT ORIGINAL
 #RECURSOS_LOTES
@@ -201,8 +199,12 @@ define('RSP_LOTE', [
 ]);
 
 
+
 define('BPM_PROCESS', json_encode(array(
-  '8803232493891311406' => ['nombre' => 'Ped. Materiales', 'color' => '#F39C12', 'proyecto' => ALM, 'model' => 'ALM_Tareas'],
+   BPM_PROCESS_ID_PEDIDOS_NORMALES => ['nombre' => 'Ped. Materiales', 'color' => '#F39C12', 'proyecto' => ALM, 'model' => 'ALM_Tareas'],
   '6013058915384903051' => ['nombre' => 'Ped. Materiales Ext', 'color' => '#F39C12', 'proyecto' => ALM, 'model' => 'ALM_Tareas'],
-  '8664799170016058315' => ['nombre' => 'Proc. Mantenimiento', 'color' => '#00A65A', 'proyecto' => 'traz-comp-mantenimiento/', 'model' => 'MAN_Tareas']
+  '8664799170016058315' => ['nombre' => 'Proc. Mantenimiento', 'color' => '#00A65A', 'proyecto' => 'traz-comp-mantenimiento/', 'model' => 'MAN_Tareas'],
+   BPM_PROCESS_ID_TAREAS => ['nombre' => 'Proc. Tareas', 'color' => '#ff7701', 'proyecto' => TST, 'model' => 'TST_Tareas']
 )));
+
+define('REST_API_BPM', 'http://10.142.0.3:8280/tools/bpm/proceso/instancia');

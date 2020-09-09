@@ -44,7 +44,7 @@
        <script src="<?php echo base_url('lib/props/tabla.js'); ?>"></script>
        <script src="<?php echo base_url(); ?>lib\props\busqueda_avanzada.js"></script>
 
-       <script src="<?php echo base_url(); ?>lib\props\snapshot.js"></script>
+       <!-- <script src="<?php #echo base_url(); ?>lib\props\snapshot.js"></script> -->
        <!--Impresión -->
        <script src="<?php echo base_url(); ?>lib/props/Impresora.js"></script>
        <script src="<?php echo base_url(); ?>lib\props\navegacion.js"></script>

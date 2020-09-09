@@ -141,6 +141,7 @@
 <!-- ./ Origen -->
 
 <script>
+
 actualizarEntrega()
 function actualizarEntrega() {
     $.ajax({

@@ -18,6 +18,11 @@ class Test extends CI_Controller
 
     public function index()
     {
+        $this->load->view(TST.'pedidos/pedidos_tarea');
+    }
+
+    public function index1()
+    {
         $data['articulos'] = $this->Articulos->obtener()['data'];
         $data['envases'] = $this->Tablas->obtenerTabla('envases')['data'];
         $data['establecimientos'] =[];# $this->Establecimientos->obtener();
@@ -52,9 +57,10 @@ class Test extends CI_Controller
         $this->Etapa->eliminarEtapa($rsp);
     }
 
-    public function editarEtapa()
+    public function obtenerEtapa($etapa)
     {
-        $rsp = $this->input->post('');
-        $this->Etapa->editaretapa($rsp);
+        $rsp = $this->Etapas->obtenerEtapa($etapa);
+        $aux = json_encode($rsp['data']);
+        echo $aux;
     }
 }

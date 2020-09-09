@@ -41,6 +41,10 @@
       <sql>select id, first_name, last_name, email&#xd;FROM seg.users &#xd;WHERE status = 'approved' and banned_users = 'unban'</sql>
       <result outputType="json">{&#xd;   "users":{&#xd;      "user":[&#xd;         {&#xd;            "id_user":"$id",&#xd;            "first_name_user":"$first_name",&#xd;            "last_name_user":"$last_name",&#xd;            "email_user":"$email"&#xd;         }&#xd;      ]&#xd;   }&#xd;}</result>
    </query>
+   <query id="getClientes" useConfig="ToolsDataSource">
+      <sql>SELECT c.clie_id, c.nombre as clie_nombre FROM core.clientes c</sql>
+      <result outputType="json">{&#xd; "clientes": {&#xd; "cliente": [&#xd; {&#xd; "clie_id": "$clie_id",&#xd; "clie_nombre": "$clie_nombre"&#xd; }&#xd; ]&#xd; }&#xd;}</result>
+   </query>
    <resource method="GET" path="/menuitems/porEmail/{email}">
       <call-query href="getMenuByUserPermission">
          <with-param name="email" query-param="email"/>
@@ -81,5 +85,8 @@
    </resource>
    <resource method="GET" path="/users">
       <call-query href="getUsers"/>
+   </resource>
+   <resource method="GET" path="/clientes">
+      <call-query href="getClientes"/>
    </resource>
 </data>

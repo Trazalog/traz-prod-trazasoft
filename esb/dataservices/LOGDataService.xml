@@ -94,6 +94,15 @@
       <param name="prov_id" sqlType="STRING"/>
       <param name="cuit" sqlType="STRING"/>
    </query>
+   <query id="getSalidasMovimientoTransporte" useConfig="ToolsDataSource">
+      <sql>select &#xd;mt.boleta, &#xd;to_char(mt.fecha_entrada, 'DD-MM-YYYY') as fecha, &#xd;c.nombre, &#xd;t.razon_social,&#xd;mt.patente, &#xd;ROUND(cast(mt.neto as numeric), 2) as neto, &#xd;a.descripcion, &#xd;ROUND(cast(lo.cantidad as numeric), 2) as cantidad, &#xd;mt.estado&#xd;from &#xd;alm.alm_articulos a, &#xd;core.clientes c, &#xd;core.transportistas t, &#xd;prd.movimientos_trasportes mt,&#xd;prd.recipientes r,&#xd;prd.lotes l,&#xd;alm.alm_lotes lo,&#xd;(select :fechasta fec ) hasta,&#xd;(select :fecdesde fec ) desde,&#xd;(select :arti_id filtro) arti_id,&#xd;(select :clie_id filtro ) clie_id,&#xd;(select :cuit filtro ) cuit&#xd;where &#xd;t.eliminado = false&#xd;and mt.cuit = t.cuit&#xd;and mt.motr_id = r. motr_id &#xd;and mt.eliminado = false&#xd;and mt.clie_id = c.clie_id &#xd;and r.tipo = 'TRANSPORTE'&#xd;and r.eliminado = 0&#xd;and r.reci_id = l.reci_id&#xd;and l.eliminado = 0&#xd;and l.batch_id = lo.batch_id&#xd;and lo.eliminado = false&#xd;and lo.arti_id = a.arti_id&#xd;---------------------------------------------------------&#xd;and t.cuit =  case when cuit.filtro is null or cuit.filtro = '' then t.cuit &#xd;else cuit.filtro end&#xd;and c.clie_id = case when clie_id.filtro is null or clie_id.filtro = '' then c.clie_id &#xd;else cast(clie_id.filtro as integer) end &#xd;and a.arti_id = case when arti_id.filtro is null or arti_id.filtro = '' then a.arti_id &#xd;else cast(arti_id.filtro  as integer) end &#xd;and lo.fec_alta &lt;= to_date(case when hasta.fec is null or hasta.fec = '' then '2100-01-01' &#xd;else hasta.fec end ,'YYYY-MM-DD') &#xd;and lo.fec_alta &gt;= to_date(case when desde.fec is null or desde.fec = '' then '1899-01-01' &#xd;else desde.fec end,'YYYY-MM-DD')</sql>
+      <result outputType="json">{"movimientos":{&#xd;"movimiento": [&#xd;{&#xd;"boleta":"$boleta",&#xd;"fecha":"$fecha",&#xd;"nombre":"$nombre",&#xd;"razon_social":"$razon_social",&#xd;"patente":"$patente",&#xd;"neto":"$neto",&#xd;"descripcion":"$descripcion",&#xd;"cantidad":"$cantidad",&#xd;"estado":"$estado"&#xd;}&#xd;]&#xd;}&#xd;}</result>
+      <param name="fechasta" sqlType="STRING"/>
+      <param name="fecdesde" sqlType="STRING"/>
+      <param name="arti_id" sqlType="STRING"/>
+      <param name="clie_id" sqlType="STRING"/>
+      <param name="cuit" sqlType="STRING"/>
+   </query>
    <resource method="GET" path="/transporte/movimiento/list/{tipo_movimiento}">
       <call-query href="getMovimientosTransporte">
          <with-param name="tipo_movimiento" query-param="tipo_movimiento"/>
@@ -198,6 +207,15 @@
          <with-param name="fecdesde" query-param="fecdesde"/>
          <with-param name="arti_id" query-param="arti_id"/>
          <with-param name="prov_id" query-param="prov_id"/>
+         <with-param name="cuit" query-param="cuit"/>
+      </call-query>
+   </resource>
+   <resource method="GET" path="/movimientos/cliente/{clie_id}/transporte/{cuit}/producto/{arti_id}/desde/{fecdesde}/hasta/{fechasta}/salidas">
+      <call-query href="getSalidasMovimientoTransporte">
+         <with-param name="fechasta" query-param="fechasta"/>
+         <with-param name="fecdesde" query-param="fecdesde"/>
+         <with-param name="arti_id" query-param="arti_id"/>
+         <with-param name="clie_id" query-param="clie_id"/>
          <with-param name="cuit" query-param="cuit"/>
       </call-query>
    </resource>

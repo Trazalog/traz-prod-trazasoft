@@ -267,6 +267,8 @@ var guardarForzado = function(data) {
         success: function(rsp) {
             console.log(rsp);
             if (rsp.status) {
+                setAttr('#origen', 'orta_id', rsp.batch_id);
+                guardarTodasTareas();
                 $('#mdl-unificacion').modal('hide');
                 alert('Salida Guardada exitosamente.');
                 linkTo('general/Etapa/index');
@@ -347,8 +349,9 @@ function guardar(boton) {
             data
         },
         success: function(rsp) {
-            console.log(rsp);
             if (rsp.status) {
+                setAttr('#origen', 'orta_id', rsp.batch_id);
+                guardarTodasTareas();
                 alert('Salida Guardada exitosamente.');
                 linkTo('general/Etapa/index');
             } else {

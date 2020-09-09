@@ -36,8 +36,8 @@
       <result outputType="json">{&#xd;    "etapas":&#xd;      {"etapa":&#xd;        [&#xd;          {&#xd;            "id": "$etap_id",&#xd;            "titulo":"$nombre",&#xd;            "nom_recipiente": "$nom_recipiente",&#xd;            "fec_alta": "$fec_alta",&#xd;            "usuario": "$usuario",&#xd;            "proc_id": "$proc_id",&#xd;            "link": "$link"           &#xd;          }&#xd;        ]&#xd;      }&#xd;  }</result>
    </query>
    <query id="getEtapaPorId" useConfig="ToolsDataSource">
-      <sql>select &#xd;   E.etap_id, E.nombre, E.nom_recipiente, 'planificado' as estado, '' as fec_alta, &#xd;   '' as batch_id, '' as establecimiento, '' as num_orden_prod, '' as recipientes, '' as materias, '' as tareas&#xd;from &#xd;   prd.etapas E  &#xd;where &#xd;   E.etap_id = CAST(:etap_id AS INTEGER)&#xd;   and&#xd;   E.eliminado = 0</sql>
-      <result outputType="json">{&#xd;  "etapa":&#xd;      {&#xd;        "id": "$etap_id",&#xd;        "lote":"$batch_id",&#xd;        "fecha":"$fec_alta",&#xd;        "titulo":"$nombre",&#xd;        "establecimiento":"$establecimiento",&#xd;        "recipiente":"$recipientes",&#xd;        "titulorecipiente":"$nom_recipiente",&#xd;        "estado":"$estado",&#xd;        "op":"$num_orden_prod",&#xd;        "materias":"$materias",&#xd;        "tareas":"$tareas"&#xd;      }&#xd;}</result>
+      <sql>select &#xd;   E.etap_id, E.nombre, E.nom_recipiente, 'planificado' as estado, '' as fec_alta, &#xd;   '' as batch_id, '' as establecimiento, '' as num_orden_prod, '' as recipientes, '' as materias, '' as tareas, E.form_id&#xd;from &#xd;   prd.etapas E  &#xd;where &#xd;   E.etap_id = CAST(:etap_id AS INTEGER)&#xd;   and&#xd;   E.eliminado = 0</sql>
+      <result outputType="json">{&#xd;  "etapa":&#xd;      {&#xd;        "id": "$etap_id",&#xd;        "lote":"$batch_id",&#xd;        "fecha":"$fec_alta",&#xd;        "titulo":"$nombre",&#xd;        "establecimiento":"$establecimiento",&#xd;        "recipiente":"$recipientes",&#xd;        "titulorecipiente":"$nom_recipiente",&#xd;        "estado":"$estado",&#xd;        "op":"$num_orden_prod",&#xd;        "materias":"$materias",&#xd;        "tareas":"$tareas",&#xd;        "form_id":"$form_id"&#xd;      }&#xd;}</result>
       <param name="etap_id" sqlType="STRING"/>
    </query>
    <query id="getLotetodos" useConfig="ToolsDataSource">
@@ -91,8 +91,8 @@
       <param name="etap_id" sqlType="STRING"/>
    </query>
    <query id="getEtapasEntrada" useConfig="ToolsDataSource">
-      <sql>select &#xd;  ar.arti_id&#xd;  , AR.descripcion&#xd;  , AR.barcode&#xd;  , ar.unidad_medida um&#xd;  , sum(lo.cantidad) stock&#xd;from &#xd;  prd.etapas_materiales       EP&#xd;,alm.alm_articulos AR&#xd;left join alm.alm_lotes lo on lo.arti_id  = ar.arti_id &#xd;  and lo.eliminado = false &#xd;  and lo.estado = 'AC'&#xd;  and lo.fec_vencimiento &gt;=  date_trunc('day',now())&#xd;where EP.arti_id = AR.arti_id  &#xd;  and etap_id = CAST(:etap_id as INTEGER)&#xd;  group by ar.arti_id</sql>
-      <result outputType="json">&#xd;{&#xd;  "salidas":{&#xd;     "salida":[&#xd;        {&#xd;          "arti_id": "$arti_id",&#xd;          "descripcion": "$descripcion",&#xd;          "barcode":"$barcode",&#xd;          "um":"$um",&#xd;          "stock":"$stock"&#xd;                }&#xd;      ]&#xd;    }&#xd;}</result>
+      <sql>select &#xd;  ar.arti_id&#xd;  , AR.descripcion&#xd;  , AR.barcode&#xd;  , ar.unidad_medida um&#xd;  , COALESCE(sum(lo.cantidad),0) stock&#xd;from &#xd;  prd.etapas_materiales       EP&#xd;,alm.alm_articulos AR&#xd;left join alm.alm_lotes lo on lo.arti_id  = ar.arti_id &#xd;  and lo.eliminado = false &#xd;  and lo.estado = 'AC'&#xd;  and lo.fec_vencimiento &gt;=  date_trunc('day',now())&#xd;where EP.arti_id = AR.arti_id  &#xd;  and etap_id = CAST(:etap_id as INTEGER)&#xd;  group by ar.arti_id</sql>
+      <result outputType="json">{&#xd;  "salidas":{&#xd;     "salida":[&#xd;        {&#xd;          "arti_id": "$arti_id",&#xd;          "descripcion": "$descripcion",&#xd;          "barcode":"$barcode",&#xd;          "um":"$um",&#xd;          "stock":"$stock"&#xd;                }&#xd;      ]&#xd;    }&#xd;}</result>
       <param name="etap_id" sqlType="STRING"/>
    </query>
    <query id="getRecursos" useConfig="ToolsDataSource">

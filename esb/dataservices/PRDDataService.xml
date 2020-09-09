@@ -431,8 +431,8 @@
       <param name="form_id" sqlType="STRING"/>
    </query>
    <query id="getRecetaFormula" useConfig="ToolsDataSource">
-      <sql>select * from prd.formulas f &#xd;where f.form_id = cast(:form_id as int8)</sql>
-      <result outputType="json">{&#xd;   "formula":{&#xd;      "form_id":"$form_id",&#xd;      "descripcion":"$descripcion",&#xd;      "cantidad":"$cantidad",&#xd;      "aplicacion":"$aplicacion",&#xd;      "fec_alta":"$fec_alta",&#xd;      "usuario_app":"$usuario_app",&#xd;      "unme_id":"$unme_id"&#xd;   }&#xd;}</result>
+      <sql>select f.*,t.valor as unidad_medida from prd.formulas f,&#xd;core.tablas t &#xd;where f.form_id = cast(:form_id as int8)&#xd;and t.tabl_id = f.unme_id</sql>
+      <result outputType="json">{&#xd;   "formula":{&#xd;      "form_id":"$form_id",&#xd;      "descripcion":"$descripcion",&#xd;      "cantidad":"$cantidad",&#xd;      "aplicacion":"$aplicacion",&#xd;      "fec_alta":"$fec_alta",&#xd;      "usuario_app":"$usuario_app",&#xd;      "unme_id":"$unme_id",&#xd;      "unidad_medida":"$unidad_medida",&#xd;      "@getArticulosReceta":"$form_id-&gt;form_id"&#xd;   }&#xd;}</result>
       <param name="form_id" sqlType="STRING"/>
    </query>
    <query id="getArticulosReceta" useConfig="ToolsDataSource">
@@ -991,7 +991,7 @@
          <with-param name="form_id" query-param="form_id"/>
       </call-query>
    </resource>
-   <resource method="GET" path="/getArticulosReceta/{form_id}">
+   <resource method="GET" path="/    /{form_id}">
       <call-query href="getArticulosReceta">
          <with-param name="form_id" query-param="form_id"/>
       </call-query>

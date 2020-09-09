@@ -85,19 +85,19 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <form role="form" data-toggle="validator" id="myForm">
+                        <form role="form" data-toggle="validator" id="myFormModal">
                             <div class="row">
                                 <div class="col-md-6">
                                     <label class="control-label">Etapa:</label>
                                     <div class="form-group " id="inp_modal1">
-                                        <input type="text" class="form-control " id="nom_modal"
-                                            placeholder="Campo obligatorio">
+                                        <input type="text" class="form-control " name="titulo" id="nom_modal"
+                                            placeholder="Campo obligatorio" disabled>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="control-label">Nombre Recipiente:</label>
                                     <div class="form-group " id="inp_modal2">
-                                        <input type="text" class="form-control " id="reci_modal"
+                                        <input type="text" class="form-control " name="nom_recipiente" id="reci_modal"
                                             placeholder="Campo obligatorio">
                                     </div>
                                 </div>
@@ -106,7 +106,7 @@
                                 <div class="col-md-6">
                                     <label class="control-label">Orden:</label>
                                     <div class="form-group " id="inp_modal3">
-                                        <input type="number" min="1" class="form-control" id="orden_modal"
+                                        <input type="number" min="1" class="form-control" name="orden" id="orden_modal"
                                             placeholder="Campo obligatorio">
                                     </div>
                                 </div>
@@ -140,13 +140,11 @@ $.ajax({
     success: function(res) {
         $('#table_id tbody').empty();
         res.forEach(function(e) {
-            var htmlTags = '<tr id="' + e.titulo + '">' +
-                '<td>' + e.id + '</td>' +
-                '<td>' + e.titulo + '</td>' +
-                '<td>' + e.nom_recipiente + '</td>' +
-                '<td><button id="borrar" onclick="conf(eliminar,' + e.titulo +
-                ')" class="btn bg-red"><i class="fa fa-trash"></i></button>  <button id="editar" onclick="" class="btn bg-green" data-toggle="modal" data-target="#modal"><i class="fa fa-edit"></i></button></td>' +
-                '</tr>';
+            var htmlTags = `<tr id="${e.titulo }"> 
+                <td>${e.id }</td>
+                <td>${e.titulo }</td>
+                <td>${e.nom_recipiente }</td>
+                <td><button id="borrar" onclick="conf(eliminar,'${e.titulo}')" class="btn bg-red"><i class="fa fa-trash"></i></button>  <button id="editar" onclick="editarEtapa('${e.titulo}')" class="btn bg-green" data-toggle="modal" data-target="#modal"><i class="fa fa-edit"></i></button></td></tr>`;
             $('#table_id tbody').append(htmlTags);
             $('#table_id tfoot').attr('hidden', true);
         });
@@ -179,21 +177,17 @@ $('#btnGuardar').on('click', function() {
     }
 });
 
-/*******AGREGA MATERIAL A LA TABLA*******/
+/*******AGREGA ETAPA A LA TABLA*******/
 function agregarFila(data) {
     $('#table_id tfoot').attr('hidden', true);
-    //
     $('#table_id').dataTable().fnDestroy();
-    var htmlTags = '<tr id="' + data[0] + '">' +
-        '<td>' + data[2] + '</td>' +
-        '<td>' + data[0] + '</td>' +
-        '<td>' + data[1] + '</td>' +
-        '<td><button id="borrar" onclick="conf(eliminar,' + data[0] +
-        ')" class="btn bg-red"><i class="fa fa-trash"></i></button>  <button id="editar" onclick="" class="btn bg-green"><i class="fa fa-edit" data-toggle="modal" data-target="#modal"></i></button></td>' +
-        '</tr>';
+    var htmlTags = `<tr id="${data[0] }"> 
+        <td>${data[2] }</td>
+        <td>${data[0] }</td>
+        <td>${data[1] }</td>
+        <td><button id="borrar" onclick="conf(eliminar,'${data[0]}')" class="btn bg-red"><i class="fa fa-trash"></i></button>  <button id="editar" onclick="editarEtapa('${data[0]}')" class="btn bg-green" data-toggle="modal" data-target="#modal"><i class="fa fa-edit"></i></button></td></tr>`;
     $('#table_id tbody').append(htmlTags);
     $('#table_id').dataTable();
-    //wbox('#table_id');
     $.ajax({
         type: 'POST',
         data: {
@@ -203,7 +197,6 @@ function agregarFila(data) {
         success: function() {},
         error: function() {},
         complete: function() {
-            // wbox();
         }
     });
 
@@ -261,4 +254,42 @@ var eliminar = function(valor) {
     });
     $('#' + etapa).remove();
 }
+
+function editarEtapa(etapa){
+    $.ajax({
+        dataType: 'JSON',
+        type: 'GET',
+        url: 'Test/obtenerEtapa/'+etapa,
+        success: function(res) {
+            console.log(res);
+            var aux = '#myFormModal';
+            fillForm(res,aux);
+        },
+        error: function() {},
+        complete: function() {}
+    });
+}
+
+$('#btnGuardarModal').on('click',function(){
+    var data = ['' + $('#nom_modal').val(), '' + $('#reci_modal').val(), '' + $('#orden_modal').val()];
+    console.log(data);
+    $('#inp_modal1').removeClass('has-success has-error');
+    $('#inp_modal2').removeClass('has-success has-error');
+    $('#inp_modal3').removeClass('has-success has-error');
+
+    if (data[1] && data[2] > 0) {
+        $('#inp_modal1').addClass('has-success');
+        $('#inp_modal2').addClass('has-success');
+        $('#inp_modal3').addClass('has-success');
+        var aux = $('#' + data[0]).length; //busca si existe el nombre
+        if(!aux)eliminar(data);
+        agregarFila(data);
+    } else {
+        if (!data[0]) $('#inp_modal1').addClass('has-error');
+        if (!data[1]) $('#inp_modal2').addClass('has-error');
+        if (!data[2]) $('#inp_modal3').addClass('has-error');
+    }
+
+});
+
 </script>
