@@ -1,5 +1,5 @@
 <!-- producto -->
-<div class="box box-primary" id="frm-producto">
+<div class="box box-primary <?php echo (sizeof($productos_etapa)?'':'hidden') ?>" id="frm-producto" >
     <div class="box-header">
         <h4 class="box-title">Producto</h4>
     </div>

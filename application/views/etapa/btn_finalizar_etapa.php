@@ -1,5 +1,5 @@
 <?php
-    if(!sizeof($productos_etapa)){
+    if(sizeof($productos_etapa) == 0){
 ?>
 <button class='btn btn-success' onclick='btnFinalizar()'>Finalizar Etapa</button>
 <script>
@@ -13,10 +13,9 @@ function btnFinalizar() {
             batch_id: $('#batch_id').val()
         },
         success: function(res) {
-            console.log(res);
             if(res.status){
                 back();
-                hecho();
+                hecho('Etapa finalizada exitosamente');
             }
         },
         error: function(res) {

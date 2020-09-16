@@ -79,10 +79,9 @@
            });
          }
 
-         function hecho() {
-           alert('Hecho');
-         }
-
+         function hecho(msj = 'Hecho') {
+            alert(msj);
+        }
          function error() {
            alert('Error')
          }

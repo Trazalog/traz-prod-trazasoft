@@ -378,7 +378,6 @@ var FinalizarEtapa = function() {
         });
 
         console.log(productos);
-        
 
         productos = JSON.stringify(productos);
         cantidad_padre = $('#cant_descontar').val();
@@ -406,14 +405,16 @@ var FinalizarEtapa = function() {
                 if (rsp.status) {
                     $('#modal_finalizar').modal('hide');
                     $('#mdl-unificacion').modal('hide');
-                    alert('Etapa finalizada exitosamente.');
+                    if(rsp.data.estado.toUpperCase() == 'FINALIZADO'){
+                         hecho('Etapa finalizada exitosamente.');
+                    }else{
+                         hecho('Se genero el Reporte de Producción correctamente.');
+                    }
                     linkTo('general/Etapa/index');
                 } else {
                     if (rsp.msj) {
                         unificar_lote = rsp.reci_id;
                         getContenidoRecipiente(unificar_lote);
-                        // conf(FinalizarEtapa, null, '¿Confirma Unificación de Lotes?','Destino: '+ $('#productodestino').find('[value="'+unificar_lote+'"]').html() + ' | ' + rsp.msj);
-                        // conf(FinalizarEtapa, null, '¿Confirma Unificación de Lotes?', rsp.msj + " | Detalle del Contenido: LOTE: " + rsp.lote_id + " | PRODUCTO: " + rsp.barcode + ' | DESTINO: '+ $('#productodestino').find('[value="'+unificar_lote+'"]').html());
 
                     } else {
                         alert('Fallo al finalizar la etapa');
@@ -466,6 +467,5 @@ function obtenerDepositos(establecimiento, recipientes) {
             alert('Error al Traer Depositos');
         }
     });
-
 }
 </script>

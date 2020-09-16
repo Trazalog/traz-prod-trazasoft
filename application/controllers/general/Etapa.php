@@ -51,7 +51,7 @@ class Etapa extends CI_Controller
         $data['op'] = $data['etapa']->titulo;
 
         $this->load->model(ALM . 'Articulos');
-        $data['materias'] = $this->Articulos->obtenerXTipos(array('Proceso', 'Final', 'Materia Prima'));
+        #$data['materias'] = $this->Articulos->obtenerXTipos(array('Proceso', 'Final', 'Materia Prima'));
         $data['productos'] = $this->Articulos->obtenerXTipos(array('Proceso', 'Producto'));
 
         #FORMULARIO GENERICO
@@ -284,7 +284,7 @@ class Etapa extends CI_Controller
         $data['idetapa'] = $data['etapa']->id;
 
 
-        $data['materias'] = $this->Articulos->obtenerXTipos(array('Proceso', 'Final', 'Materia Prima'));
+        #$data['materias'] = $this->Articulos->obtenerXTipos(array('Proceso', 'Final', 'Materia Prima'));
         $data['productos'] = $this->Articulos->obtenerXTipos(array('Proceso', 'Producto'));
   
 
@@ -482,6 +482,11 @@ class Etapa extends CI_Controller
 
         $rsp = $this->Etapas->finalizarEtapa($arrayDatos);
 
+        if($rsp['status']){
+
+            $rsp['data'] = $this->Etapas->buscar($batch_id_padre)->etapa;
+        }
+
         echo json_encode($rsp);
     }
     // Informe de etata fracccionamiento.
@@ -515,6 +520,10 @@ class Etapa extends CI_Controller
         }
 
         $rsp = $this->Etapas->finalizarEtapa($arrayDatos);
+        if($rsp['status']){
+
+            $rsp = $this->Etapas->buscar($batch_id_padre)->etapa;
+        }
 
         echo json_encode($rsp);             
     }
@@ -600,5 +609,11 @@ class Etapa extends CI_Controller
     {
         $res = $this->Etapas->validarFormularioCalidad($orta_id);
         echo json_encode(['status'=>$res]);
+    }
+
+    function obtenerProductosSalida($etapId)
+    {
+        $productos_salida_etapa = $this->Etapas->getSalidaEtapa($etapId)['data'];
+        echo selectBusquedaAvanzada('inputproducto', 'id', $productos_salida_etapa, 'arti_id', 'descripcion');
     }
 }
