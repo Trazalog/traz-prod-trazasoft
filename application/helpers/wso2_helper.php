@@ -4,6 +4,10 @@ if (!function_exists('wso2')) {
 
     function wso2($url, $metodo = 'GET', $data = false)
     {
+        $url = str_replace('//','&', $url);
+        $url = str_replace('http:&','http://', $url);
+        $url = str_replace('&','//', $url);
+
         $ci = &get_instance();
 
         if ($metodo == 'GET') {
@@ -16,9 +20,18 @@ if (!function_exists('wso2')) {
 
         }
 
-        if ($rsp['status']) {
-            $aux = json_decode($rsp['data']);
-            $rsp['data'] = reset(reset($aux));
+        if ($rsp['status']) 
+        {
+            $rsp['data'] = json_decode($rsp['data']);
+
+            #SOLO SI ES UNA API WSO2
+            if(isset($rsp['data']->session)){
+                $ci->session->set_userdata('bpm_token', $rsp['data']->session);
+                return $rsp;
+            }
+
+            if($rsp['data']) $rsp['data'] = reset($rsp['data']);
+            if($rsp['data']) $rsp['data'] = reset($rsp['data']);
         }
 
         return $rsp;

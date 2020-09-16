@@ -56,7 +56,6 @@ function cargarPedidos() {
             $('tr.celdas').remove();
             for (var i = 0; i < data.length; i++) {
                 var tr = "<tr class='celdas'>" +
-                    // "<td>" + data[i]['artBarcode'] + "</td>" +
                     "<td>" + data[i]['artDescription'] + "</td>" +
                     "<td class='text-center'>" + data[i]['cantidad'] + "</td>" +
                     "<td class='text-center'>" + data[i]['fecha'] + "</td>" +
@@ -80,7 +79,7 @@ function cerrarTarea() {
         return;
     }
 
-    var id = $('#idTarBonita').val();
+    var id = $('#taskId').val();
 
     var dataForm = new FormData($('#generic_form')[0]);
 
@@ -92,7 +91,7 @@ function cerrarTarea() {
         cache: false,
         contentType: false,
         processData: false,
-        url: '<?php base_url() ?>index.php/<?php echo ALM ?>Proceso/cerrarTarea/' + id,
+        url: '<?php base_url() ?>index.php/<?php echo BPM ?>Proceso/cerrarTarea/' + id,
         success: function(data) {
             //wc();
             back();

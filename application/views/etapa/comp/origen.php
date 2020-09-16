@@ -25,7 +25,7 @@
                     <div class="col-md-6 col-xs-12 input-group ba">
 
                         <?php
-                            echo selectBusquedaAvanzada('inputmaterias', 'vmateria', $materias, 'arti_id', 'barcode', array('descripcion', 'Unidad Medida:' => 'unidad_medida'));
+                            echo selectBusquedaAvanzada('inputmaterias', 'vmateria', $productos_entrada_etapa, 'arti_id', 'barcode', array('descripcion', 'Unidad Medida:' => 'unidad_medida'));
                             ?>
                     </div>
                 </div>
@@ -141,23 +141,21 @@
 <!-- ./ Origen -->
 
 <script>
+
 actualizarEntrega()
 function actualizarEntrega() {
-    wbox('#view')
     $.ajax({
         type: 'GET',
         dataType: 'JSON',
         url: 'general/Etapa/validarPedidoMaterial/'+ $('#batch_id').val(),
         success: function(res) {
-            if(res.tarea)
-            $('enma').load('<?php echo BPM . 'Proceso/detalleTarea/' ?>' + res.tarea);
+            if(res.tarea){
+                $('enma').load('<?php echo BPM . 'Proceso/detalleTarea/' ?>' + res.tarea);
+            }
             else $('enma').empty();
         },
         error: function(res) {
-            error();
-        },
-        complete: function() {
-            wbox();
+            error();wbox();
         }
     });
 }

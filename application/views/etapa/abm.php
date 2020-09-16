@@ -122,9 +122,10 @@
             </div>
             <div class="row" style="margin-top: 40px">
                 <div class="col-xs-12">
-                    <i class="glyphicon glyphicon-plus"></i><a onclick="despliega()" class="">Datos Adicionales</a>
-                    <div id="desplegable" hidden>
-                        <h3></h3>
+                    <a onclick="despliega()" href="#"><i class="glyphicon glyphicon-plus"></i>Datos Adicionales</a>
+                    <div id="desplegable" class="panel panel-default" hidden>
+                        <div class="panel-heading">Formulario Etapa</div>
+                        <div class="panel-body"><?php echo nuevoForm($form_id) ?></div>
                     </div>
                 </div>
             </div>
@@ -141,11 +142,11 @@
         </div>
     </div>
 
-    <!-- <tareas>
+    <tareas>
         <script>
-            $('tareas').load('<--?php echo TST ?>Tarea/planificar/BATCH/' + $('#batch_id').val());
+            $('tareas').load('<?php echo TST ?>Tarea/planificar/BATCH/' + $('#batch_id').val());
         </script>
-    </tareas> -->
+    </tareas>
 
     <!-- Tareas -->
     <div class="box box-primary">
@@ -177,18 +178,14 @@
 
 
 <script>
-// getSnapshot();
+$('.frm-save').hide();
+initForm();
 var estadoEtapa = $('#estadoEtapa').val();
 if (estadoEtapa == 'PLANIFICADO') {
     $(".recipientesDiv").addClass("hidden");
-    console.log('1');
-    // callRecipiente(selectOption);
-    // callRecipiente();
-
 }
 
 callRecipiente();
-
 function callRecipiente() {
     actualizaRecipiente($('#establecimientos').val());
 }
@@ -270,6 +267,8 @@ var guardarForzado = function(data) {
         success: function(rsp) {
             console.log(rsp);
             if (rsp.status) {
+                setAttr('#origen', 'orta_id', rsp.batch_id);
+                guardarTodasTareas();
                 $('#mdl-unificacion').modal('hide');
                 alert('Salida Guardada exitosamente.');
                 linkTo('general/Etapa/index');
@@ -290,6 +289,8 @@ function guardar(boton) {
 
     if(!validarCampos()) return;
 
+    $('.frm').find('.frm-save').click();
+    var info_id = $('.frm').attr('data-info');
     var recipiente = idprod = '';
     var tabla = $('#tablamateriasasignadas tbody tr');
     var materiales = [];
@@ -324,6 +325,7 @@ function guardar(boton) {
     var batch_id = $('#batch_id').val();
 
     var data = {
+        info_id: info_id,
         idetapa: idetapa,
         lote: lote,
         fecha: fecha,
@@ -347,8 +349,9 @@ function guardar(boton) {
             data
         },
         success: function(rsp) {
-            console.log(rsp);
             if (rsp.status) {
+                setAttr('#origen', 'orta_id', rsp.batch_id);
+                guardarTodasTareas();
                 alert('Salida Guardada exitosamente.');
                 linkTo('general/Etapa/index');
             } else {

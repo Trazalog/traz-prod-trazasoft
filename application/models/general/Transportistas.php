@@ -10,6 +10,8 @@ class Transportistas extends CI_Model
     public function obtener()
     {
         $url = RESTPT . 'transportistas';
+        return wso2($url);
+
         $rsp = $this->rest->callApi('GET', $url);
         if(!$rsp['status']) return $rsp;
         $rsp['data'] = json_decode($rsp['data'])->transportistas->transportista;

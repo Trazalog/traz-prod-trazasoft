@@ -88,5 +88,28 @@ class Recipientes extends CI_Model
         $rsp['data'] = json_decode($rsp['data'])->recipientes->recipiente;
         return $rsp;
     }
-    
+
+  public function obtenerTodosRecipientes()
+  {
+    $url  = RESTPT . "getAllRecipientes";
+    $rsp = $this->rest->callAPI('GET', $url);
+    $rsp['data'] = json_decode($rsp['data'])->recipientes->recipiente;
+    return $rsp['data'];
+  }
+
+  public function deleteRecipiente($id)
+  {
+    $data['recipiente']['reci_id'] = $id;
+    $url  = RESTPT . "deleteRecipiente";
+    $rsp = $this->rest->callApi('PUT', $url, $data);
+    return $rsp;
+  }
+
+  public function editarRecipiente($data)
+  {
+    $url  = RESTPT . "updateRecipiente";
+    $rsp = $this->rest->callApi('PUT', $url, $data);
+    return $rsp;
+  }
+
 }

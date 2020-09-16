@@ -71,7 +71,7 @@
       <param name="tipo" sqlType="STRING"/>
    </query>
    <query id="getRecipientes" useConfig="produccionTest">
-      <sql>select r.reci_id&#xd;      ,r.nombre&#xd;      ,r.tipo&#xd;      ,r.estado&#xd;      ,r.depo_id&#xd;      ,esta.esta_id&#xd;from prd.recipientes as r&#xd;join alm.alm_depositos as alde on alde.depo_id = r.depo_id &#xd;join prd.establecimientos as esta on esta.esta_id =  alde.esta_id&#xd;     ,(select :tipo as tipo) as t&#xd;     ,(select :estado as estado) as e&#xd;     ,(select CAST(:esta_id as int4) as esta_id) as estable&#xd;where r.tipo = case when t.tipo = 'TODOS' then r.tipo else t.tipo end&#xd;and r.estado = case when e.estado = 'TODOS' then r.estado else e.estado end &#xd;and esta.esta_id = case when estable.esta_id = 0 then esta.esta_id else estable.esta_id end</sql>
+      <sql>select r.reci_id&#xd;      ,r.nombre&#xd;      ,r.tipo&#xd;      ,r.estado&#xd;      ,r.depo_id&#xd;      ,esta.esta_id&#xd;from prd.recipientes as r&#xd;join alm.alm_depositos as alde on alde.depo_id = r.depo_id &#xd;join prd.establecimientos as esta on esta.esta_id =  alde.esta_id&#xd;     ,(select :tipo as tipo) as t&#xd;     ,(select :estado as estado) as e&#xd;     ,(select CAST(:esta_id as int4) as esta_id) as estable&#xd;where r.tipo = case when t.tipo = 'TODOS' then r.tipo else t.tipo end&#xd;and r.estado = case when e.estado = 'TODOS' then r.estado else e.estado end &#xd;and esta.esta_id = case when estable.esta_id = 0 then esta.esta_id else estable.esta_id end&#xd;order by r.nombre</sql>
       <result outputType="json">{&#xd;    "recipientes": {&#xd;        "recipiente": [&#xd;            {&#xd;                "reci_id": "$reci_id",&#xd;                "nombre": "$nombre",&#xd;                "tipo": "$tipo",&#xd;                "estado": "$estado",&#xd;                "depo_id": "$depo_id",&#xd;                "esta_id":"$esta_id"&#xd;            }&#xd;        ]&#xd;    }&#xd;}</result>
       <param name="tipo" sqlType="STRING"/>
       <param name="estado" sqlType="STRING"/>
@@ -243,6 +243,16 @@
       <param name="reci_tipo" sqlType="STRING"/>
       <param name="reci_nombre" sqlType="STRING"/>
       <param name="reci_id" sqlType="STRING"/>
+   </query>
+   <query id="getBatchIDLote" useConfig="produccionTest">
+      <sql>select l.batch_id from prd.lotes l &#xd;where l.lote_id = :lote_id&#xd;order by l.batch_id desc, l.fec_alta desc limit 1</sql>
+      <result outputType="json">{&#xd;   "lotes":{&#xd;      "lote":[&#xd;         {&#xd;            "batch_id":"$batch_id"&#xd;         }&#xd;      ]&#xd;   }&#xd;}</result>
+      <param name="lote_id" sqlType="STRING"/>
+   </query>
+   <query id="trazabilidadBatch" useConfig="produccionTest">
+      <sql>WITH RECURSIVE cte AS (&#xd;        SELECT lh.batch_id, lh.batch_id_padre, 1 AS level, cast(lh.batch_id as varchar) as path, l.lote_id as path_lote_id&#xd;        FROM prd.lotes_hijos lh&#xd;        join prd.lotes l on l.batch_id = lh.batch_id&#xd;        where lh.batch_id = cast(:batch_id as int8)        &#xd;    UNION ALL&#xd;        SELECT e.batch_id, e.batch_id_padre, (cte.level + 1) AS level, cte.path || '-' || e.batch_id, cte.path_lote_id || ' | ' || l.lote_id&#xd;        FROM prd.lotes_hijos e&#xd;        JOIN cte ON e.batch_id_padre = cte.batch_id&#xd;        join prd.lotes l on l.batch_id = e.batch_id&#xd;)&#xd;&#xd;SELECT c.batch_id, c.batch_id_padre, c.level, c.path, c.path_lote_id,&#xd;l.lote_id, l.estado as lote_estado, l.num_orden_prod as lote_num_orden_prod, TO_char(l.fec_alta, 'DD-MM-YYYY') as lote_fec_alta, &#xd;r.tipo as reci_tipo, r.nombre as reci_nombre,&#xd;e.nombre as etap_nombre, &#xd;arti.descripcion as arti_descripcion, arti.barcode as arti_barcode&#xd;FROM cte c &#xd;join prd.lotes l on l.batch_id = c.batch_id &#xd;join prd.etapas e on e.etap_id = l.etap_id&#xd;join prd.recipientes r on r.reci_id = l.reci_id&#xd;join alm.alm_lotes a on a.batch_id = c.batch_id&#xd;join alm.alm_articulos arti on arti.arti_id = a.arti_id&#xd;where l.eliminado = 0&#xd;order by c.path</sql>
+      <result outputType="json">{&#xd;   "lotes":{&#xd;      "lote":[&#xd;         {&#xd;         "batch_id":"$batch_id", &#xd;         "batch_id_padre":"$batch_id_padre", &#xd;         "level":"$level", &#xd;         "path":"$path",&#xd;         "path_lote_id":"$path_lote_id", &#xd;         "lote_id":"$lote_id", &#xd;         "lote_estado":"$lote_estado", &#xd;         "lote_num_orden_prod":"$lote_num_orden_prod", &#xd;         "lote_fec_alta":"$lote_fec_alta",&#xd;         "etap_nombre":"$etap_nombre", &#xd;         "reci_tipo":"$reci_tipo", &#xd;         "reci_nombre":"$reci_nombre", &#xd;         "arti_descripcion":"$arti_descripcion", &#xd;         "arti_barcode":"$arti_barcode"&#xd;         }&#xd;      ]&#xd;   }&#xd;}</result>
+      <param name="batch_id" sqlType="STRING"/>
    </query>
    <resource method="GET" path="/camion_establecimiento/{esta_id}">
       <call-query href="getCamionEstablecimiento">
@@ -506,5 +516,14 @@
          <with-param name="reci_id" query-param="reci_id"/>
       </call-query>
    </resource>
+   <resource method="GET" path="/lote/{lote_id}/ultimo">
+      <call-query href="getBatchIDLote">
+         <with-param name="lote_id" query-param="lote_id"/>
+      </call-query>
+   </resource>
+   <resource method="GET" path="/lote/{batch_id}/trazabilidad">
+      <call-query href="trazabilidadBatch">
+         <with-param name="batch_id" query-param="batch_id"/>
+      </call-query>
+   </resource>
 </data>
-

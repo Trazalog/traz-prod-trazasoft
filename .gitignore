@@ -32,4 +32,20 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 
 application/config/constants.php
 
+assets/koolreport_assets/1355195728/googlechart.js
+
+assets/koolreport_assets/1686042427/jquery-ui.min.js
+
+assets/koolreport_assets/1686042427/jquery.min.js
+
+assets/koolreport_assets/2946825544/table.css
+
+assets/koolreport_assets/2946825544/table.js
+
+assets/koolreport_assets/4007379878/KoolReport.js
+
+assets/koolreport_assets/4007379878/KoolReport.subReport.js
+
+lib/bower_components/bootstrap-datepicker.rar
+
 *.swp

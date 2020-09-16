@@ -242,7 +242,7 @@
 		//Datos de la fórmula
 		var datosFormula = new FormData($('#form-Formulas')[0]);
 		var file = document.querySelector('#archivo').files[0];
-		if (file) {
+    if (file) {
 			var archivo = await getFile(file);
 			datosFormula.append('archivo', archivo.base64StringFile);
 		}
@@ -287,6 +287,6 @@
 				wc();
 			}
 		});
-		return; //comentar para finalizar
+		// return; //comentar para finalizar
 	}
 </script>

@@ -49,6 +49,25 @@ class ALM_Tareas extends CI_Model
             $array['info'][] = $aux;
 
             $array['descripcion'] = $infoPema->justificacion?$infoPema->justificacion:'Pedido Materiales sin Justificación';
+        }else{
+
+            $data = $this->Notapedidos->getXCaseId($tarea->caseId);
+
+            $aux = new StdClass();
+            $aux->color = 'warning';
+            $aux->texto = "N° Pedido: ".$data['pema_id'];
+            $array['info'][] = $aux;
+
+            $aux = new StdClass();
+            $aux->color = 'warning';
+            $aux->texto = "Estado: ".$data['estado'];
+            $array['info'][] = $aux;
+
+            $aux = new StdClass();
+            $aux->color = 'default';
+            $aux->texto = "Fecha: ".formatFechaPG($data['fecha']);
+            $array['info'][] = $aux;
+
         }
 
 

@@ -26,10 +26,10 @@
                             <button type="button" title="eliminar" class="btn btn-primary btn-circle"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>&nbsp';
                             
                         echo   '</td>';
-                        echo    '<td>'.$fila->.'</td>';
-                        echo    '<td>'.$fila->.'</td>';
+                        echo    '<td>'.$fila.'</td>';
+                        echo    '<td>'.$fila.'</td>';
                         echo    '<td>circuito</td>';
-                        echo    '<td>'.$fila->.'</td>';
+                        echo    '<td>'.$fila.'</td>';
                         echo '</tr>';
                     }
                     }
