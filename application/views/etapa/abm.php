@@ -3,7 +3,7 @@
 <?php $this->load->view('etapa/modal_producto'); ?>
 <?php $this->load->view('etapa/modal_unificacion_lote'); ?>
 
-<div id="snapshot" data-key="<?php echo $key ?>">
+<div id="pnl-etapa" data-key="<?php echo $key ?>">
     <?php if ($etapa->estado == "En Curso") {
         $this->load->view('etapa/modal_finalizar');
     } ?>
@@ -141,24 +141,24 @@
             <?php $this->load->view('etapa/comp/producto') ?>
         </div>
     </div>
+</div>
+<tareas>
+    <script>
+    $('tareas').load('<?php echo TST ?>Tarea/planificar/BATCH/' + $('#batch_id').val());
+    </script>
+</tareas>
 
-    <tareas>
-        <script>
-            $('tareas').load('<?php echo TST ?>Tarea/planificar/BATCH/' + $('#batch_id').val());
-        </script>
-    </tareas>
+<!-- Tareas -->
+<div class="box box-primary">
 
-    <!-- Tareas -->
-    <div class="box box-primary">
-    
-        <!-- /.box-header -->
-        <div class="box-body">
-            
-                      
-                        <div class="modal-footer">
-                           
+    <!-- /.box-header -->
+    <div class="box-body">
 
-                            <?php if ($etapa->estado != 'En Curso' || $etapa->estado != 'Finalizado') {
+
+        <div class="modal-footer">
+
+
+            <?php if ($etapa->estado != 'En Curso' || $etapa->estado != 'Finalizado') {
                             echo "<button class='btn btn-primary' onclick='guardar(\"iniciar\")'>Iniciar Etapa</button>";
                             } else if ($etapa->estado == 'En Curso') {
                                 echo '<button class="btn btn-primary" id="btnfinalizar" onclick="finalizar()">Reporte de Producción</button>';
@@ -167,14 +167,13 @@
                             echo "<button class='btn btn-primary' onclick='guardar(" . '"guardar"' . ")'>Guardar</button>";
                             ?>
 
-                        </div>
-                    
         </div>
-        <!-- /.box -->
+
     </div>
+    <!-- /.box -->
 </div>
-<!-- ./ Tareas-->
-</div>
+
+
 
 
 <script>
@@ -186,13 +185,14 @@ if (estadoEtapa == 'PLANIFICADO') {
 }
 
 callRecipiente();
+
 function callRecipiente() {
     actualizaRecipiente($('#establecimientos').val());
 }
 
 accion = '<?php echo $accion; ?>';
 if (accion == "Editar") {
-    var materias = <?php echo json_encode($etapa->materias); ?> ;
+    var materias = <?php echo json_encode($etapa-> materias); ?> ;
     if (_isset(materias)) {
         for (i = 0; i < materias.length; i++) {
             materia = materias[i];
@@ -210,7 +210,7 @@ function actualizaRecipiente(establecimiento, recipientes) {
     $('#recipientes').empty();
     establecimiento = establecimiento;
     if (!establecimiento) return;
-     wo();
+    wo();
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
@@ -287,7 +287,14 @@ var guardarForzado = function(data) {
 // envia datos para iniciar etapa y acer orden de pedido a almacenes
 function guardar(boton) {
 
-    if(!validarCampos()) return;
+    var dataReci =  getJson($('#recipientes'))
+    if(boton == "guardar" && dataReci.estado == "LLENO")
+    {
+        alert('Para iniciar etapa el recipiente seleccionado debes estar vacío.');
+        return;
+    }
+
+    if (!validarCampos()) return;
 
     $('.frm').find('.frm-save').click();
     var info_id = $('.frm').attr('data-info');
@@ -373,22 +380,22 @@ function guardar(boton) {
     });
 }
 
-function validarCampos(){
-    if($('#Lote').val() == "" || $('#establecimientos').val() == "" || $('#recipientes').val() == ""){
+function validarCampos() {
+    if ($('#Lote').val() == "" || $('#establecimientos').val() == "" || $('#recipientes').val() == "") {
         alert('Completar los campos obligatorios *');
         return false;
     }
 
-    if($('#tablamateriasasignadas tbody tr').length == 0){
+    if ($('#tablamateriasasignadas tbody tr').length == 0) {
         alert('No ha seleccionado ninguna materia prima');
         return false;
     }
-    
-    if($('#idproducto').val() != null && $('#cantidad_producto').val() == ''){
+
+    if ($('#idproducto').val() != null && $('#cantidad_producto').val() == '') {
         alert('Por favor ingresar cantidad para el Producto');
         return false;
     }
-        
+
     return true;
 }
 
@@ -463,8 +470,9 @@ function finalizar() {
 
 
 <?php
-if ($accion == 'Editar' && $etapa->estado == "PLANIFICADO") {
-    ?>
+if ($accion == 'Editar' && $etapa->estado == "PLANIFICADO") { 
+
+?>
 
     var inputs = $("#editFinal").html();
     $("#editPlani").html(inputs);

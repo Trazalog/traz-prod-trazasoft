@@ -91,7 +91,5 @@ function selectFromFont($name, $placeholder, $url, $mapValues)
 
 function componente($id, $url, $load = false)
 {
-  
-    if($load) $load = "<script>reload('#$id')</script>"; else   $load = '';
-    return "<componente id='$id' class='reload' data-link='$url'>$load</componente>";
+    return "<componente id='$id' class='reload' data-link='$url'>".($load?"<script>reload('#$id')</script>":'')."</componente>";
 }

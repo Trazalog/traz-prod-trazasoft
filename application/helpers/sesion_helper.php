@@ -10,6 +10,14 @@ if (!function_exists('userId')) {
         $userdata = $ci->session->userdata('user_data');
         return $userdata[0]['userBpm'];
     }
+    function xuserId()
+    {
+        return 202; //!HARDCODE
+
+        $ci = &get_instance();
+        $userdata = $ci->session->userdata('user_data');
+        return $userdata[0]['userBpm'];
+    }
 }
 
 if (!function_exists('userNick')) {

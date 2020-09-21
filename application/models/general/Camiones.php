@@ -203,4 +203,16 @@ class Camiones extends CI_Model
 
         return $rsp;
     }
+
+    function  guardarSalida($data)
+    {
+        $post['_put_camiones_salida'] = array(
+            'motr_id' => strval($data['motr_id']),
+            'patente' => $data['patente'],
+            'estado' => isset($data['destino_esta_id'])?'TRANSITO':'FINALIZADO',
+            'bruto' => strval($data['bruto']),
+            'neto' => strval($data['neto'])
+        );
+        return wso2(LOG_DS.'camiones/salida','PUT', $post);
+    }
 }

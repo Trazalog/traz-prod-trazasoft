@@ -13,15 +13,16 @@ class Test extends CI_Controller
 
     public function index()
     {
-        $this->load->view(TST.'pedidos/pedidos_tarea');
-    }
-
-    public function index1()
-    {
-        $data['articulos'] = $this->Articulos->obtener()['data'];
-        $data['envases'] = $this->Tablas->obtenerTabla('envases')['data'];
-        $data['establecimientos'] =[];# $this->Establecimientos->obtener();
+        $this->load->model('general/Etapas');
+        $this->load->model('general/Recursos');
+        $data['rec_trabajo'] = $this->Recursos->obtenerXTipo('TRABAJO')['data'];
+        $this->load->model('general/Etapas');
+        $data['lotes'] = $this->Etapas->listar()->etapas->etapa;
         $this->load->view('test', $data);
     }
 
+    public function p(Type $var = null)
+    {
+        # code...
+    }
 }
