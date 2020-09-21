@@ -53,11 +53,11 @@
       <param name="patente" sqlType="STRING"/>
    </query>
    <query id="setSalidaCamion" useConfig="ToolsDataSource">
-      <sql>UPDATE prd.movimientos_trasportes&#xd;SET 	bruto = CAST(:bruto as float8), &#xd;		tara = CAST(:tara as float8), &#xd;		neto = CAST(:neto as float8), &#xd;		estado = 'FINALIZADO' &#xd;WHERE patente = :patente&#xd;AND	estado != 'FINALIZADO'</sql>
+      <sql>UPDATE prd.movimientos_trasportes&#xd;SET 	bruto = CAST(:bruto as float8), &#xd;		neto = CAST(:neto as float8), &#xd;		estado = :estado&#xd;WHERE motr_id = cast(:motr_id as integer)</sql>
       <param name="bruto" sqlType="STRING"/>
-      <param name="tara" sqlType="STRING"/>
       <param name="neto" sqlType="STRING"/>
-      <param name="patente" sqlType="STRING"/>
+      <param name="estado" sqlType="STRING"/>
+      <param name="motr_id" sqlType="STRING"/>
    </query>
    <query id="setEntrada" useConfig="ToolsDataSource">
       <sql>INSERT INTO prd.movimientos_trasportes&#xd;(boleta, fecha_entrada, patente, acoplado, conductor, tipo, bruto, tara, neto, prov_id, esta_id, cuit, estado, accion)&#xd;VALUES&#xd;(:boleta, TO_DATE(:fecha,'YYYY-MM-DD'), :patente, :acoplado, :conductor, :tipo, CAST(:bruto as float8), CAST(:tara as float8), CAST(:neto as float8), CAST(:proveedor as INTEGER), CAST(:establecimiento as INTEGER), :cuit, :estado, :accion)</sql>
@@ -187,9 +187,9 @@
    <resource method="PUT" path="/camiones/salida">
       <call-query href="setSalidaCamion">
          <with-param name="bruto" query-param="bruto"/>
-         <with-param name="tara" query-param="tara"/>
          <with-param name="neto" query-param="neto"/>
-         <with-param name="patente" query-param="patente"/>
+         <with-param name="estado" query-param="estado"/>
+         <with-param name="motr_id" query-param="motr_id"/>
       </call-query>
    </resource>
    <resource method="GET" path="/movimientos/proveedor/{prov_id}/transporte/{cuit}/producto/{arti_id}/desde/{fecdesde}/hasta/{fechasta}/ingresos">

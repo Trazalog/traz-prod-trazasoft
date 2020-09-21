@@ -192,7 +192,7 @@ function callRecipiente() {
 
 accion = '<?php echo $accion; ?>';
 if (accion == "Editar") {
-    var materias = < ? php echo json_encode($etapa - > materias); ? > ;
+    var materias = <?php echo json_encode($etapa-> materias); ?> ;
     if (_isset(materias)) {
         for (i = 0; i < materias.length; i++) {
             materia = materias[i];
@@ -287,6 +287,13 @@ var guardarForzado = function(data) {
 // envia datos para iniciar etapa y acer orden de pedido a almacenes
 function guardar(boton) {
 
+    var dataReci =  getJson($('#recipientes'))
+    if(boton == "guardar" && dataReci.estado == "LLENO")
+    {
+        alert('Para iniciar etapa el recipiente seleccionado debes estar vacío.');
+        return;
+    }
+
     if (!validarCampos()) return;
 
     $('.frm').find('.frm-save').click();
@@ -312,7 +319,7 @@ function guardar(boton) {
     var establecimiento = document.getElementById('establecimientos').value;
 
     var op = document.getElementById('ordenproduccion').value;
-    var idetapa = < ? php echo $idetapa ? > ;
+    var idetapa = <?php echo $idetapa ?> ;
     var cantidad = $('#cantidad_producto').val();
 
     var prod = getJson($('#idproducto'));
@@ -437,7 +444,7 @@ $("#inputproductos").on('change', function() {
     band = false;
     i = 0;
     $('#idproducto').val("");
-    articulos = < ? php echo json_encode($materias); ? > ;
+    articulos = <?php echo json_encode($materias); ?> ;
     producto = document.getElementById('inputproductos').value;
 
     while (!band && i < articulos.length) {
@@ -462,12 +469,10 @@ function finalizar() {
 }
 
 
-<
-?
-php
-if ($accion == 'Editar' && $etapa - > estado == "PLANIFICADO") {
-    ?
-    >
+<?php
+if ($accion == 'Editar' && $etapa->estado == "PLANIFICADO") { 
+
+?>
 
     var inputs = $("#editFinal").html();
     $("#editPlani").html(inputs);
@@ -478,8 +483,6 @@ if ($accion == 'Editar' && $etapa - > estado == "PLANIFICADO") {
         $("#editPlani").html(select);
     }
 
-    <
-    ?
-    php
-} ? >
+    <?php
+} ?>
 </script>

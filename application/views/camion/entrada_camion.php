@@ -170,7 +170,7 @@ var recipienteSelect = null;
 $('#patente').keyup(function(e) {
     
     if ($('#accioncamion').val() != 'descarga') return;
-   // reset();
+    this.value =  this.value.replace(' ','');
     if (e.keyCode === 13) {
         console.log('Obtener Lotes Patentes');
 
@@ -179,9 +179,10 @@ $('#patente').keyup(function(e) {
         var patente = this.value;
         wo();
         $.ajax({
-            type: 'GET',
+            type: 'POST',
             dataType: 'JSON',
-            url: 'index.php/general/Lote/obtenerLotesCamion?patente=' + patente,
+            url: 'index.php/general/Lote/obtenerLotesCamion',
+            data:{patente},
             success: function(rsp) {
 
                 if (!rsp.data) {

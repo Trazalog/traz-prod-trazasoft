@@ -34,29 +34,7 @@ class Camion extends CI_Controller
 
     public function salidaCamion($patente = false)
     {
-        // var_dump("entra: " . $patente);
-        // $data = $this->input->post('data');
-        // $estado = "ASIGNADO";
-        $data['patente'] = $patente;
-        $data['fecha'] = date('Y-m-d');
-        $data['lang'] = lang_get('spanish', 4);
-
-        // var_dump($data['camion'][0]->patente);
-        if ($patente) {
-            $rsp = $this->Camiones->obtenerInfo($patente);
-            $data['camion'] = $rsp['data'];
-            $data['finaliza'] = true;
-            // $data['establecimiento'] = $this->Establecimientos->getEstablecimiento($data['camion'][0]->esta_id);
-        }
-        if (isset($data['camion'][0]->bruto)) {
-            $data['readonlyBruto'] = 'readonly';
-        } elseif (isset($data['camion'][0]->tara)) {
-            $data['readonlyTara'] = 'readonly';
-        } else {
-            $data['readonlyBruto'] = 'readonly';
-            $data['readonlyTara'] = 'readonly';
-        }
-
+        $data['establecimientos'] = $this->Establecimientos->listarTodo()->establecimientos->establecimiento;
         $this->load->view('camion/salida_camion', $data);
     }
 
@@ -161,5 +139,12 @@ class Camion extends CI_Controller
         $rsp = $this->Camiones->guardarLoteSistema($frmCamion, $frmDescarga);
 
         echo json_encode($rsp);
+    }
+
+    public function guardarSalida()
+    {
+        $data = $this->input->post();
+        $this->Camiones->guardarSalida($data);
+        echo json_encode($data);
     }
 }
