@@ -267,7 +267,7 @@ class Etapas extends CI_Model
 
     public function getEntradaEtapa($etap_id)
     {
-        $url = REST2 . "/etapas/entradas/$etap_id";
+        $url = REST_PRD_ETAPA . "/etapas/entradas/$etap_id";
         return wso2($url);
     }
 

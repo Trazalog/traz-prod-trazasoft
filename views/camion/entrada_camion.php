@@ -181,7 +181,7 @@ $('#patente').keyup(function(e) {
         $.ajax({
             type: 'POST',
             dataType: 'JSON',
-            url: 'index.php/general/Lote/obtenerLotesCamion',
+            url: '<?php echo base_url(PRD) ?>general/Lote/obtenerLotesCamion',
             data:{patente},
             success: function(rsp) {
 
@@ -215,7 +215,7 @@ function obtenerInfoCamion(patente) {
     $.ajax({
         type: 'GET',
         dataType: 'JSON',
-        url: 'index.php/general/Camion/obtenerInfo/'+patente,
+        url: '<?php echo base_url(PRD) ?>general/Camion/obtenerInfo/'+patente,
         success: function(rsp) {
             fillForm(rsp.data[0]);
         },
@@ -259,7 +259,7 @@ function guardarDecarga() {
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
-        url: 'index.php/general/Camion/guardarDescarga',
+        url: '<?php echo base_url(PRD) ?>general/Camion/guardarDescarga',
         data: {
             array
         },
@@ -323,7 +323,7 @@ function addCamion(msj = true) {
     $.ajax({
         type: 'POST',
         dataType: 'json',
-        url: 'index.php/general/Camion/setEntrada',
+        url: '<?php echo base_url(PRD) ?>general/Camion/setEntrada',
         contentType: false,
         processData: false,
         cache: false,
@@ -552,10 +552,10 @@ function Guardar() {
             data: {
                 entrada: entrada
             },
-            url: 'general/Camion/GuardarEntrada',
+            url: '<?php echo base_url(PRD) ?>general/Camion/GuardarEntrada',
             success: function(result) {
                 if (result == 'ok') {
-                    linkTo('general/Etapa/index');
+                   linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
                 } else {
                     alert('Ups');
                 }

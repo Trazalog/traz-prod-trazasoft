@@ -131,7 +131,7 @@ function obtenerArticulos() {
     $.ajax({
         type: 'GET',
         dataType: 'JSON',
-        url: 'index.php/<?php echo ALM ?>Articulo/obtener/true',
+        url: '<?php echo base_url(ALM) ?>Articulo/obtener/true',
         success: function(rsp) {
             console.log(rsp);
 
@@ -174,7 +174,7 @@ function buscarLote(lote) {
     $.ajax({
         type: 'GET',
         dataType: 'JSON',
-        url: 'index.php/general/Lote/obtenerLote/'+lote,
+        url: '<?php echo base_url(PRD) ?>general/Lote/obtenerLote/'+lote,
         success: function(rsp) {
             console.log(rsp);
             

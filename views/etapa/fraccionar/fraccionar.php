@@ -226,7 +226,7 @@ function actualizarEntrega() {
     $.ajax({
         type: 'GET',
         dataType: 'JSON',
-        url: 'general/Etapa/validarPedidoMaterial/'+ $('#batch_id').val(),
+        url:'<?php echo base_url(PRD) ?>general/Etapa/validarPedidoMaterial/'+ $('#batch_id').val(),
         success: function(res) {
             if(res.tarea){
                 $('enma').load('<?php echo BPM . 'Proceso/detalleTarea/' ?>' + res.tarea);
@@ -255,7 +255,7 @@ function actualizaRecipiente(establecimiento, recipientes) {
             establecimiento,
             tipo: 'DEPOSITO'
         },
-        url: 'general/Recipiente/listarPorEstablecimiento/true',
+        url: '<?php echo base_url(PRD) ?>general/Recipiente/listarPorEstablecimiento/true',
         success: function(result) {
 
             if (!result.status) {
@@ -495,11 +495,11 @@ function guardar() {
         type: 'POST',
         dataType: 'JSON',
         data,
-        url: 'general/Etapa/guardarFraccionar',
+        url: '<?php echo base_url(PRD) ?>general/Etapa/guardarFraccionar',
         success: function(rsp) {
             if (rsp.status) {
                 alert('Salida Guardada exitosamente.');
-                linkTo('general/Etapa/index');
+               linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
             } else {
                 if (rsp.msj) {
                     bak_data = data;
@@ -525,12 +525,12 @@ function guardarForzado(data) {
         type: 'POST',
         dataType: 'JSON',
         data,
-        url: 'general/Etapa/guardarFraccionar',
+        url: '<?php echo base_url(PRD) ?>general/Etapa/guardarFraccionar',
         success: function(rsp) {
             $('#mdl-unificacion').modal('hide');
             if (rsp.status) {
                 alert('Salida Guardada exitosamente.');
-                linkTo('general/Etapa/index');
+               linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
             } else {
                 alert('Fallo al iniciar la etapa fraccionamiento');
             }

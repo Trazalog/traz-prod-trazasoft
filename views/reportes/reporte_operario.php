@@ -175,7 +175,7 @@ function FinalizarEtapa() {
             num_orden_prod,
             destino
         },
-        url: 'general/Etapa/Finalizar',
+        url: '<?php echo base_url(PRD) ?>general/Etapa/Finalizar',
         success: function(result) {
             $('#datos tbody').empty();
             alert('Hecho');

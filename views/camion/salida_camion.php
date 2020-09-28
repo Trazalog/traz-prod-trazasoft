@@ -134,7 +134,7 @@ function obtenerLotesCamion(patente) {
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
-        url: 'index.php/general/Lote/obtenerLotesCamion/false',
+        url: '<?php echo base_url(PRD) ?>general/Lote/obtenerLotesCamion/false',
         data: {
             patente
         },
@@ -172,7 +172,7 @@ function obtenerInfoCamion(patente) {
     $.ajax({
         type: 'GET',
         dataType: 'JSON',
-        url: 'index.php/general/Camion/obtenerInfo/' + patente,
+        url: '<?php echo base_url(PRD) ?>general/Camion/obtenerInfo/' + patente,
         success: function(rsp) {
             console.log(rsp);
             if (rsp.status && rsp.data && rsp.data.length == 1 && rsp.data[0].esta_id == $('#esta_id')

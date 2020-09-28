@@ -57,7 +57,7 @@ function Validar()
    estado= $('#formejemplo').data('bootstrapValidator').isValid();
    if (estado)
    {
-    linkTo('general/Etapa/index');
+   linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
    }
 }
 </script>

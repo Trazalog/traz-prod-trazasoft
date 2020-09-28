@@ -147,7 +147,7 @@ function actualizarEntrega() {
     $.ajax({
         type: 'GET',
         dataType: 'JSON',
-        url: 'general/Etapa/validarPedidoMaterial/'+ $('#batch_id').val(),
+        url: '<?php echo base_url(PRD) ?>general/Etapa/validarPedidoMaterial/'+ $('#batch_id').val(),
         success: function(res) {
             if(res.tarea){
                 $('enma').load('<?php echo BPM . 'Proceso/detalleTarea/' ?>' + res.tarea);

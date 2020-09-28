@@ -135,7 +135,7 @@
             </div>
             <div class="col-md-2 col-xs-6">
                 <button type="button" class="btn btn-block btn-danger"
-                    onclick="linkTo('general/Etapa/index');">Cancelar</button>
+                    onclick="linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');">Cancelar</button>
             </div>
         </div>
     </div>
@@ -154,7 +154,7 @@ function Actualiza(establecimiento) {
         data: {
             establecimiento: establecimiento
         },
-        url: 'general/Camion/listarPorEstablecimiento',
+        url: '<?php echo base_url(PRD) ?>general/Camion/listarPorEstablecimiento',
         success: function(result) {
            console.table(result);
            document.getElementById('camiones').innerHTML = "";
@@ -206,7 +206,7 @@ function ActualizaLotes() {
             establecimiento: establecimiento,
             salida: salida
         },
-        url: 'general/Lote/listarPorEstablecimientoConSalida',
+        url: '<?php echo base_url(PRD) ?>general/Lote/listarPorEstablecimientoConSalida',
         success: function(result) {
        
 
@@ -338,7 +338,7 @@ function ModalLotes() {
             establecimiento: establecimiento,
             salida: salida
         },
-        url: 'general/Lote/listarPorEstablecimientoConSalida',
+        url: '<?php echo base_url(PRD) ?>general/Lote/listarPorEstablecimientoConSalida',
         success: function(result) {
             result = JSON.parse(result);
             var html = "";
@@ -402,7 +402,7 @@ function FinalizarCarga() {
             data: {
                 lotes: lotes
             },
-            url: 'general/Camion/finalizarCarga',
+            url: '<?php echo base_url(PRD) ?>general/Camion/finalizarCarga',
             success: function(result) {
 
                 console.log(result);
@@ -421,7 +421,7 @@ function FinalizarCarga() {
                 return;
 
                 if (result == "ok") {
-                    linkTo('general/Etapa/index');
+                    linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
 
                 } else {
                     alert('Ups! algo salio mal');

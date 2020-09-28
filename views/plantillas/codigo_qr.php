@@ -42,7 +42,7 @@
             $.ajax({
                 type: 'GET',
                 dataType: 'JSON',
-                url: 'index.php/general/CodigoQR/generarQR/' + this.value,
+                url: '<?php echo base_url(PRD) ?>general/CodigoQR/generarQR/' + this.value,
                 success: function(rsp) {
                     // alert(fillForm(rsp.data[0]));
                     if (_isset(rsp.data)) {

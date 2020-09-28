@@ -93,7 +93,7 @@ function obtenerDepositos(estaId) {
             establecimiento: estaId,
             tipo: 'DEPOSITO'
         },
-        url: 'general/Recipiente/listarPorEstablecimiento/true',
+        url: '<?php echo base_url(PRD) ?>general/Recipiente/listarPorEstablecimiento/true',
         success: function(result) {
             if (!result.status) {
                 alert('Fallo al Traer Depositos');
@@ -245,7 +245,7 @@ var FinalizarEtapa = function() {
             destino,
             batch_id_padre
         },
-        url: 'general/Etapa/Finalizar',
+        url: '<?php echo base_url(PRD) ?>general/Etapa/Finalizar',
         success: function(rsp) {
             console.log(rsp);
             if (rsp.status) {
@@ -273,7 +273,7 @@ var btnFinalizar = function() {
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
-        url: 'general/Etapa/finalizarLote',
+        url: '<?php echo base_url(PRD) ?>general/Etapa/finalizarLote',
         data: {
             batch_id: s_batchId
         },

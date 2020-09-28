@@ -125,7 +125,7 @@ function obtenerRecipientes() {
     $.ajax({
         type: 'GET',
         dataType: 'JSON',
-        url: 'index.php/general/Recipiente/obtenerOpciones?tipo=DEPOSITO&estado=TODOS',
+        url: '<?php echo base_url(PRD) ?>general/Recipiente/obtenerOpciones?tipo=DEPOSITO&estado=TODOS',
         success: function(rsp) {
             if (!rsp.status) {
                 alert('No se encontraron Recipientes');

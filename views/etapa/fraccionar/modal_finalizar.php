@@ -157,7 +157,7 @@ function actualizaRecipiente(establecimiento) {
             establecimiento,
             tipo: 'PRODUCTIVO'
         },
-        url: 'general/Recipiente/listarPorEstablecimiento/true',
+        url: '<?php echo base_url(PRD) ?>general/Recipiente/listarPorEstablecimiento/true',
         success: function(result) {
 
             if (!result.status) {
@@ -395,7 +395,7 @@ function FinalizarEtapa() {
             type: 'POST',
             dataType: 'JSON',
             data,
-            url: 'general/Etapa/finalizaFraccionar',
+            url: '<?php echo base_url(PRD) ?>general/Etapa/finalizaFraccionar',
             success: function(result) {
                 
                 if (result.msj) {
@@ -406,7 +406,7 @@ function FinalizarEtapa() {
                     $("#modal_finalizar").modal('hide');
                     $('#mdl-unificacion').modal('hide');
                     hecho();
-                    linkTo('general/Etapa/index');
+                   linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
                 } else {
                     alert("Hubo un error en el fraccionamiento")
                 }
@@ -438,7 +438,7 @@ function generarQR(data) {
         data: {
             data
         },
-        url: 'general/CodigoQR/generarQRFraccionamiento',
+        url: '<?php echo base_url(PRD) ?>general/CodigoQR/generarQRFraccionamiento',
         success: function(rsp) {
             rsp = JSON.parse(rsp);
 

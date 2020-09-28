@@ -188,7 +188,7 @@ function gFraccionamiento() {
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
-        url: 'general/Etapas/guardarFraccinamiento',
+        url: '<?php echo base_url(PRD) ?>general/Etapas/guardarFraccinamiento',
         data,
         success: function(res) {
             hecho();

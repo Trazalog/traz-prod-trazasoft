@@ -56,7 +56,7 @@ function guardarDescargaOrigen() {
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
-        url: 'index.php/general/Camion/guardarDescarga',
+        url: '<?php echo base_url(PRD) ?>general/Camion/guardarDescarga',
         data: {
             array
         },
@@ -92,7 +92,7 @@ function guardarLoteSistema(){
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
-        url: 'index.php/general/Camion/guardarLoteSistema',
+        url: '<?php echo base_url(PRD) ?>general/Camion/guardarLoteSistema',
         data: {
             array,
             frmCamion

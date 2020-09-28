@@ -8,7 +8,7 @@ function btnFinalizar() {
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
-        url: 'general/Etapa/finalizarLote',
+        url: '<?php echo base_url(PRD) ?>general/Etapa/finalizarLote',
         data: {
             batch_id: $('#batch_id').val()
         },

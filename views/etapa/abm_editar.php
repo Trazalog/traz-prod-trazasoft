@@ -148,7 +148,7 @@ function validarEtapa() {
         
             <tareas>
                 <script>
-                    $('tareas').load('<?php echo TST ?>Tarea/planificar/BATCH/' + $('#batch_id').val());
+                    $('tareas').load('<?php echo base_url(TST) ?>Tarea/planificar/BATCH/' + $('#batch_id').val());
                 </script>
             </tareas>
 
@@ -211,7 +211,7 @@ function actualizaRecipiente(establecimiento, recipientes) {
             establecimiento,
             tipo: 'PRODUCTIVO'
         },
-        url: 'general/Recipiente/listarPorEstablecimiento/true',
+        url: '<?php echo base_url(PRD) ?>general/Recipiente/listarPorEstablecimiento/true',
         success: function(result) {
 
             if (!result.status) {
@@ -261,7 +261,7 @@ var guardarForzado = function(data) {
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
-        url: 'general/Etapa/guardar/iniciar',
+        url: '<?php echo base_url(PRD) ?>general/Etapa/guardar/iniciar',
         data: {
             data
         },
@@ -269,7 +269,7 @@ var guardarForzado = function(data) {
             console.log(rsp);
             if (rsp.status) {
                 alert('Salida Guardada exitosamente.');
-                linkTo('general/Etapa/index');
+               linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
             } else {
                 alert('Fallo al iniciar la etapa');
             }
@@ -343,7 +343,7 @@ function guardar(boton) {
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
-        url: 'general/Etapa/guardar/' + boton,
+        url: '<?php echo base_url(PRD) ?>general/Etapa/guardar/' + boton,
         data: {
             data
         },
@@ -351,7 +351,7 @@ function guardar(boton) {
             console.log(rsp);
             if (rsp.status) {
                 alert('Salida Guardada exitosamente.');
-                linkTo('general/Etapa/index');
+               linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
             } else {
                 if (rsp.msj) {
                   

@@ -11,9 +11,9 @@ class Etapa extends CI_Controller
         $this->load->model('general/Establecimientos');
         $this->load->model('general/Recipientes');
         $this->load->model('general/Materias');
-        $this->load->model(TAREAS_ASIGNAR . '/Tareas');
-        $this->load->model(TAREAS_ASIGNAR . '/Templates');
-        $this->load->model(TAREAS_ASIGNAR . '/Recursos_Materiales');
+       # $this->load->model(TAREAS_ASIGNAR . '/Tareas');
+        #$this->load->model(TAREAS_ASIGNAR . '/Templates');
+        #$this->load->model(TAREAS_ASIGNAR . '/Recursos_Materiales');
         $this->load->model('general/Recursos');
     }
 
@@ -254,9 +254,8 @@ class Etapa extends CI_Controller
     {
         $taskId = $this->bpm->ObtenerTaskidXNombre(BPM_PROCESS_ID_PEDIDOS_NORMALES, $case_id, 'Aprueba pedido de Recursos Materiales');
         log_message('DEBUG', 'Etapa/guardar(ObtenerTaskidXNombre) #$taskId->' . $taskId);
-
-        if ($taskId) {
-            $user = userId();
+        $user = userId();
+        if ($taskId && $user) {
             $resultSetUsuario = $this->bpm->setUsuario($taskId, $user);
             $contract["apruebaPedido"] = true;
 

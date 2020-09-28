@@ -44,7 +44,7 @@ function getContenidoRecipiente(reci_id) {
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
-        url: 'index.php/Recipiente/obtenerContenido/' + reci_id,
+        url: '<?php echo base_url(PRD) ?>/Recipiente/obtenerContenido/' + reci_id,
         success: function(result) {
             
             if (result.status) {

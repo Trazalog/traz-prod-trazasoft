@@ -50,7 +50,7 @@
     $.ajax({
       type: 'POST',
       dataType: 'JSON',
-      url: 'index.php/general/Establecimiento/eliminar/' + id,
+      url: '<?php echo base_url(PRD) ?>general/Establecimiento/eliminar/' + id,
       data: {
         id
       },

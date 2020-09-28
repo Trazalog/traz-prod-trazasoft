@@ -111,7 +111,7 @@ $this->load->view('camion/modal_cargarcamion');
     
     function salidaCamiones(patente){
         wo();
-        linkTo('general/Camion/salidaCamion/' + patente);
+       linkTo('<?php echo base_url(PRD) ?>general/Camion/salidaCamion/' + patente);
         wc();
     }
     </script>

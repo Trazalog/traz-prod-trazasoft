@@ -399,7 +399,7 @@ var FinalizarEtapa = function() {
                 destino,
                 batch_id_padre
             },
-            url: 'general/Etapa/Finalizar',
+            url: '<?php echo base_url(PRD) ?>general/Etapa/Finalizar',
             success: function(rsp) {
                 console.log(rsp);
                 if (rsp.status) {
@@ -410,7 +410,7 @@ var FinalizarEtapa = function() {
                     }else{
                          hecho('Se genero el Reporte de Producción correctamente.');
                     }
-                    linkTo('general/Etapa/index');
+                   linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
                 } else {
                     if (rsp.msj) {
                         unificar_lote = rsp.reci_id;
@@ -446,7 +446,7 @@ function obtenerDepositos(establecimiento, recipientes) {
             establecimiento,
             tipo: 'DEPOSITO'
         },
-        url: 'general/Recipiente/listarPorEstablecimiento/true',
+        url: '<?php echo base_url(PRD) ?>general/Recipiente/listarPorEstablecimiento/true',
         success: function(result) {
             console.log(result);
             

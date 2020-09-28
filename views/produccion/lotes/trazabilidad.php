@@ -104,7 +104,7 @@
         batch: batch
       },
       dataType: 'JSON',
-      url: 'general/Lote/trazabilidadBatch',
+      url: '<?php echo base_url(PRD) ?>general/Lote/trazabilidadBatch',
       success: function(rsp) {
         $('#tree').parents('div .row').prop('hidden', '');
         $('#tabla').parents('div .row').prop('hidden', '');

@@ -463,7 +463,7 @@
         esta_id: esta_id
       },
       dataType: 'JSON',
-      url: 'general/Establecimiento/obtenerDepositos/',
+      url: '<?php echo base_url(PRD) ?>general/Establecimiento/obtenerDepositos/',
       success: function(rsp) {
         var datos = "<option value='' disabled selected>Seleccionar</option>";
         for (let i = 0; i < rsp.length; i++) {
@@ -498,7 +498,7 @@
         depo_id: depo_id
       },
       dataType: 'JSON',
-      url: 'general/Establecimiento/obtenerRecipientesDeposito/',
+      url: '<?php echo base_url(PRD) ?>general/Establecimiento/obtenerRecipientesDeposito/',
       success: function(rsp) {
         var datos = "<option value='' disabled selected>Seleccionar</option>";
         for (let i = 0; i < rsp.length; i++) {
@@ -617,7 +617,7 @@
       },
       success: function(rsp) {
         alert("Recipientes cargados correctamente.");
-        linkTo('general/Establecimiento/asignarAEstablecimiento');
+       linkTo('<?php echo base_url(PRD) ?>general/Establecimiento/asignarAEstablecimiento');
       },
       error: function() {
         alert("Se produjo un error al cargar recipientes.");
@@ -652,7 +652,7 @@
       dataType: "JSON",
       success: function(rsp) {
         alert("Recipiente eliminado!");
-        linkTo('general/Establecimiento/asignarAEstablecimiento');
+       linkTo('<?php echo base_url(PRD) ?>general/Establecimiento/asignarAEstablecimiento');
       },
       error: function(rsp) {
         alert(rsp);
@@ -701,7 +701,7 @@
       url: "general/Recipiente/editarRecipiente/",
       success: function(rsp) {
         alert("Recipiente modificado!");
-        linkTo('general/Establecimiento/asignarAEstablecimiento');
+       linkTo('<?php echo base_url(PRD) ?>general/Establecimiento/asignarAEstablecimiento');
       },
       error: function(rsp) {
         alert(rsp);

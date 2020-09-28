@@ -1,4 +1,4 @@
-<style>
+  <style>
   .flotante {
     display: scroll;
     position: fixed;
@@ -273,8 +273,7 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
   var ul = document.getElementById('nuevo');
   ul.onclick = function(event) {
     target = JSON.parse(event.target.getAttribute('data-json'));
-    console.log(target);
-    linkTo(target.link);
+    linkTo(`<?php echo PRD ?>${target.link}`);
   }
 
   //carga modal asignación de responsable/usuario/operario

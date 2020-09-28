@@ -142,7 +142,7 @@
             </div>
             <div class="col-md-2 col-xs-6">
                 <button type="button" class="btn btn-block btn-danger"
-                    onclick="linkTo('general/Etapa/index');">Cancelar</button>
+                    onclick="linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');">Cancelar</button>
             </div>
         </div>
     </div>
@@ -159,7 +159,7 @@ function Actualiza(establecimiento) {
         data: {
             establecimiento: establecimiento
         },
-        url: 'general/Camion/listarPorEstablecimiento',
+        url: '<?php echo base_url(PRD) ?>general/Camion/listarPorEstablecimiento',
         success: function(result) {
             result = JSON.parse(result);
             var html = "";
@@ -197,7 +197,7 @@ function ActualizaLotes() {
         data: {
             camion: camion
         },
-        url: 'general/Lote/listarPorCamion',
+        url: '<?php echo base_url(PRD) ?>general/Lote/listarPorCamion',
         success: function(result) {
             result = JSON.parse(result);
             var html = " <datalist id='lotes'>";
@@ -320,7 +320,7 @@ function ModalLotes() {
         data: {
             camion: camion
         },
-        url: 'general/Lote/listarPorCamion',
+        url: '<?php echo base_url(PRD) ?>general/Lote/listarPorCamion',
         success: function(result) {
             result = JSON.parse(result);
             var html = "";
@@ -382,10 +382,10 @@ function FinalizarCarga() {
             data: {
                 lotes: lotes
             },
-            url: 'general/Camion/Finalizar',
+            url: '<?php echo base_url(PRD) ?>general/Camion/Finalizar',
             success: function(result) {
                 if (result == "ok") {
-                    linkTo('general/Etapa/index');
+                   linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
 
                 } else {
                     alert('Ups! algo salio mal');
