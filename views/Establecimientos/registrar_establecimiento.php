@@ -563,7 +563,7 @@
 
             function obtenerEstablecimientos() {
 
-              $("#cargar_tabla").load("<?php echo base_url(); ?>index.php/general/Establecimiento/Lista_establecimientos");
+              $("#cargar_tabla").load("<?php echo base_url(PRD) ?>general/Establecimiento/Lista_establecimientos");
 
             }
 
@@ -580,7 +580,7 @@
                   data: {
                     datos
                   },
-                  url: "general/Establecimiento/guardar",
+                  url: "<?php echo base_url(PRD)?>general/Establecimiento/guardar",
                   success: function(r) {
                     obtenerEstablecimientos();
                     alert('Guardado con Éxito');

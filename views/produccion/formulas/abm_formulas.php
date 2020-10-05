@@ -1,7 +1,7 @@
 <div class="box box-primary">
 	<div class="box-header with-border">
 		<h4 class="box-title">Fórmulas</h4><br>
-		<button class="btn btn-primary" onclick="linkTo('general/Formula/agregarFormula')" style="margin-top:10px;">Nueva fórmula</button>
+		<button class="btn btn-primary" onclick="linkTo('<?php echo base_url(PRD) ?>general/Formula/agregarFormula')" style="margin-top:10px;">Nueva fórmula</button>
 	</div>
 
 	<div class="box-body table-scroll table-responsive">
@@ -83,7 +83,7 @@
 			return;
 		}
 		// wo();
-		linkTo('general/Formula/modificarFormula/' + tipo + '/' + id);
+		linkTo('<?php echo base_url(PRD) ?>general/Formula/modificarFormula/' + tipo + '/' + id);
 	}
 
 	function verDetalles(id) {
@@ -118,7 +118,7 @@
 		wo();
 		$.ajax({
 			type: "GET",
-			url: "general/Formula/deleteFormula/" + id,
+			url: "<?php echo base_url(PRD)?>general/Formula/deleteFormula/" + id,
 			success: function(rsp) {
 				alert("Fórmula eliminada!");
 				// $('#tbl-formulas tr').each(function() {
@@ -128,7 +128,7 @@
 				// 		$(this).remove();
 				// 	}
 				// });
-				linkTo('general/Formula');
+				linkTo('<?php echo base_url(PRD) ?>general/Formula');
 				// $(this).parents("tr").remove();
 
 			},

@@ -58,7 +58,7 @@ $this->load->view('camion/modal_cargarcamion');
               echo '\''.$fila->patente.'\')" ><i class="fa fa-fw fa-truck text-red ml-1" style="cursor: pointer;" title="Salida camion" ></i></a>';
               echo '</td>';
 
-            //   onclick="salidaCamiones('.$fila->patente.')" class="link" href="#" data-link="general/Camion/salidaCamion"
+        
 
               echo '<td width="5%" class="text-center">';
               echo '<i class="fa fa-fw fa-truck text-light-blue ml-1" style="cursor: pointer;" title="Ver" data-toggle="modal" data-target="#modal_cargacamion" onclick="rellenarDetalles(this)"></i>';

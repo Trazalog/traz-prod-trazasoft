@@ -1,6 +1,6 @@
 <?php
 
-require APPPATH . "/libraries/koolreport/core/autoload.php";
+require  APPPATH . "/modules/".PRD. "/libraries/koolreport/core/autoload.php";
 
 //Specify some data processes that will be used to process
 // use \koolreport\processes\Group;

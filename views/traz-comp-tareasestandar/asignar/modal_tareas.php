@@ -30,7 +30,7 @@
       $.ajax({
       type: 'POST',
       data: { idtarea:tarea[0].id, idetapa:idetapa },
-      url: 'tareas/Tarea/insertaTarea', 
+      url: '<?php echo base_url(TST) ?>tareas/Tarea/insertaTarea', 
       success: function(result){
       tarea[0].id = result;
       tarea[0].asignado = "Sin Asignar";

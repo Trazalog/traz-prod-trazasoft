@@ -271,14 +271,14 @@
 		wo();
 		$.ajax({
 			type: "POST",
-			url: "general/Formula/setFormula",
+			url: "<?php echo base_url(PRD)?>general/Formula/setFormula",
 			data: {
 				datosFormula: datosFormula,
 				articulos: articulos
 			},
 			success: function(rsp) {
 				alert("Fórmula creada correctamente.");
-				linkTo('general/Formula');
+				linkTo('<?php echo base_url(PRD) ?>general/Formula');
 			},
 			error: function() {
 				alert("Se produjo un error al crear la fórmula.");

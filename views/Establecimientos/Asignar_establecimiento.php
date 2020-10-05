@@ -611,7 +611,7 @@
     wo();
     $.ajax({
       type: "POST",
-      url: "general/Establecimiento/guardarTodo",
+      url: "<?php echo base_url(PRD)?>general/Establecimiento/guardarTodo",
       data: {
         recipientes: recipientes
       },
@@ -648,7 +648,7 @@
     wo();
     $.ajax({
       type: "GET",
-      url: "general/Recipiente/deleteRecipiente/" + id,
+      url: "<?php echo base_url(PRD)?>general/Recipiente/deleteRecipiente/" + id,
       dataType: "JSON",
       success: function(rsp) {
         alert("Recipiente eliminado!");
@@ -698,7 +698,7 @@
         'reci_nombre': nombre
       },
       dataType: "JSON",
-      url: "general/Recipiente/editarRecipiente/",
+      url: "<?php echo base_url(PRD)?>general/Recipiente/editarRecipiente/",
       success: function(rsp) {
         alert("Recipiente modificado!");
        linkTo('<?php echo base_url(PRD) ?>general/Establecimiento/asignarAEstablecimiento');

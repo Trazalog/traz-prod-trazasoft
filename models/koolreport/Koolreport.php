@@ -16,7 +16,7 @@ class Koolreport extends CI_Model
     if ($rsp['status']) {
       $json = json_decode($rsp['data']);
     }
-    log_message('DEBUG', '#TRAZA| #KOOLREPORT.PHP|#KOOLREPORT|#DEPURARJSON| #JSON: >>' . $json);
+    log_message('DEBUG', '#TRAZA| #KOOLREPORT.PHP|#KOOLREPORT|#DEPURARJSON| #JSON: >>' . json_encode($json));
     return $json;
   }
 }

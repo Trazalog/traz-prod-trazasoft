@@ -34,7 +34,7 @@
       type: 'POST',
       async: false,
       data: { idtarea:fila.id, idetapa:idetapa },
-      url: 'tareas/Tarea/insertaTarea', 
+      url: '<?php echo base_url(TST) ?>tareas/Tarea/insertaTarea', 
       success: function(result){
       fila.id = result;
       fila.asignado = "Sin Asignar";

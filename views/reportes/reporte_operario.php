@@ -128,7 +128,7 @@ function guardar() {
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
-        url: 'index.php/Test/guardar',
+        url: '<?php echo base_url(PRD) ?>Test/guardar',
         data: {
             data
         },

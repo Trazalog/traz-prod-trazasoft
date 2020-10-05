@@ -16,6 +16,6 @@
 <script>
 	function reporte(id) {
 
-		linkTo('general/Reporte/crearReporte/' + id);
+		linkTo('<?php echo base_url(PRD) ?>general/Reporte/crearReporte/' + id);
 	}
 </script>

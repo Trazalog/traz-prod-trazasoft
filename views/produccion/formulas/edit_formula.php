@@ -175,7 +175,7 @@
 							</button>';
 			}
 			echo
-				'<button type="submit" class="btn btn-default pull-right" onclick="linkTo(' . "'general/Formula'" . ')" style="margin-top: 20px; margin-right: 10px;">Cerrar
+				'<button type="submit" class="btn btn-default pull-right" onclick="linkTo(\'' .base_url(PRD).'general/Formula\')" style="margin-top: 20px; margin-right: 10px;">Cerrar
 							</button>';
 
 			?>
@@ -326,14 +326,14 @@
 		wo();
 		$.ajax({
 			type: "POST",
-			url: "general/Formula/setFormula/" + form_id,
+			url: "<?php echo base_url(PRD)?>general/Formula/setFormula/" + form_id,
 			data: {
 				datosFormula: datosFormula,
 				articulos: articulos
 			},
 			success: function(rsp) {
 				alert("Fórmula editada correctamente.");
-				linkTo('general/Formula');
+				linkTo('<?php echo base_url(PRD) ?>general/Formula');
 			},
 			error: function() {
 				alert("Se produjo un error al crear la fórmula.");

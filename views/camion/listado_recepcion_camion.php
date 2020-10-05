@@ -11,7 +11,7 @@ $this->load->view('camion/modal_recepcioncamion');
 <div class="box box-primary">
     <div class="box-header with-border">
         <h4 class="box-title">Listado Recepción Camión</h4><br>
-        <button class="btn btn-primary" onclick="linkTo('general/Camion/entradaCamion')" style="margin-top:10px;">Nueva Carga | Recepción</button>
+        <button class="btn btn-primary" onclick="linkTo('<?php echo base_url(PRD) ?>general/Camion/entradaCamion')" style="margin-top:10px;">Nueva Carga | Recepción</button>
     </div>
     <div class="box-body hidden">
         <!--________________________________________________________________________-->

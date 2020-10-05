@@ -323,7 +323,7 @@ use \koolreport\widgets\google\ColumnChart;
         data: {
           data
         },
-        url: 'Reportes/' + url,
+        url: '<?php echo base_url(PRD) ?>Reportes/' + url,
         success: function(result) {
           $('#reportContent').empty();
           $('#reportContent').html(result);
@@ -353,7 +353,7 @@ use \koolreport\widgets\google\ColumnChart;
       $.ajax({
         type: "GET",
         dataType: "JSON",
-        url: "Reportes/filtroSalidas",
+        url: "<?php echo base_url(PRD) ?>Reportes/filtroSalidas",
         success: function(rsp) {
           var html_trans = '<option selected disabled>Seleccione transportista</option>';
           // debugger;

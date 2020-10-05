@@ -105,7 +105,7 @@ function obtenerUM() {
     $.ajax({
         type: 'GET',
         dataType: 'JSON',
-        url: 'index.php/traz-comp/Parametro/obtener?tabla=unidades_medida',
+        url: '<?php echo base_url(ALM) ?>traz-comp/Parametro/obtener?tabla=unidades_medida',
         success: function(rsp) {
 
             if (!rsp.status) {

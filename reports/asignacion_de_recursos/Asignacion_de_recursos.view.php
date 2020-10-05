@@ -248,7 +248,7 @@ use \koolreport\widgets\google\ColumnChart;
         data: {
           data
         },
-        url: 'Reportes/' + url,
+        url: '<?php echo base_url(PRD) ?>Reportes/' + url,
         success: function(result) {
           $('#reportContent').empty();
           $('#reportContent').html(result);
@@ -279,7 +279,7 @@ use \koolreport\widgets\google\ColumnChart;
       $.ajax({
         type: "GET",
         dataType: "JSON",
-        url: "Reportes/filtroAsignacionDeRecursos",
+        url: "<?php echo base_url(PRD) ?>Reportes/filtroAsignacionDeRecursos",
         success: function(rsp) {
           var html_lote = '<option selected disabled>Seleccione lote</option>';
           // debugger;

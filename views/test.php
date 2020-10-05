@@ -161,7 +161,7 @@ function agregar() {
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Producto:</label>
-                                <?php  echo componente('articulos-salida','general/etapa/obtenerProductosSalida') ?>
+                                <?php  echo componente('articulos-salida',base_url(PRD).'general/etapa/obtenerProductosSalida') ?>
                             </div>
                         </div>
                         <div class="col-md-12">

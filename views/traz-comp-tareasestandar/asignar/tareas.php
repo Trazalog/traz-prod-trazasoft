@@ -128,7 +128,7 @@ $("#inputtarea").on('change', function () {
       $.ajax({
       type: 'POST',
       data: { idtarea:tarea.id, idetapa:idetapa },
-      url: 'tareas/Tarea/insertaTarea', 
+      url: '<?php echo base_url(TST) ?>tareas/Tarea/insertaTarea', 
       success: function(result){
       tarea.id = result;
       tarea.asignado = "Sin Asignar";
@@ -173,7 +173,7 @@ $("#inputtemplate").on('change', function () {
       type: 'POST',
         async:false,
       data: { idtarea:fila.id, idetapa:idetapa },
-      url: 'tareas/Tarea/insertaTarea', 
+      url: '<?php echo base_url(TST) ?>tareas/Tarea/insertaTarea', 
       success: function(result){
       fila.id = result;
       fila.asignado = "Sin Asignar";
@@ -214,7 +214,7 @@ $(document).off('click', '.tabla_tareas_asignadas_recursos').on('click', '.tabla
    $.ajax({
       type: 'POST',
       data: { idtarea:idtarea, idetapa:idetapa },
-      url: 'tareas/Tarea/listarRecursosMateriales', 
+      url: '<?php echo base_url(TST) ?>tareas/Tarea/listarRecursosMateriales', 
       success: function(result){
         if(result != "")
         {
@@ -243,7 +243,7 @@ $(document).off('click', '.tabla_tareas_asignadas_recursos').on('click', '.tabla
    $.ajax({
       type: 'POST',
       data: { idtarea:idtarea, idetapa:idetapa },
-      url: 'tareas/Tarea/listarRecursosTrabajo', 
+      url: '<?php echo base_url(TST) ?>tareas/Tarea/listarRecursosTrabajo', 
       success: function(result){
         if(result != "")
         {

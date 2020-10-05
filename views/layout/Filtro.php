@@ -163,7 +163,7 @@
             data: {
                 data
             },
-            url: 'Reportes/' + url,
+            url: '<?php echo base_url(PRD) ?>Reportes/' + url,
             success: function(result) {
                 // $('#reportContent').remove();
                 // $('#reportContent').add('reportContentFiltrado');
