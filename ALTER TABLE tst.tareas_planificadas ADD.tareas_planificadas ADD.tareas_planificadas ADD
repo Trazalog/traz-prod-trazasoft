@@ -1,3 +1,0 @@
-ALTER TABLE tst.tareas_planificadas ADD estado varchar NOT NULL DEFAULT 'creada';
-ALTER TABLE tst.tareas_planificadas ADD fec_inicio timestamp NULL;
-ALTER TABLE tst.tareas_planificadas ADD fec_fin timestamp NULL;
