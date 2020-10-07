@@ -14,7 +14,7 @@ class Reportes extends CI_Controller
   {
     parent::__construct();
     $this->load->model(PRD.'koolreport/Koolreport');
-    $this->load->model(PRD.'koolreport/Opciones_Filtros');
+    $this->load->model(PRD.'koolreport/Opcionesfiltros');
   }
 
   public function produccion()
