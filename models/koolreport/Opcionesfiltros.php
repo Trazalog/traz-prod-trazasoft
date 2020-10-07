@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Opciones_Filtros extends CI_Model
+class Opcionesfiltros extends CI_Model
 {
 
   function __construct()

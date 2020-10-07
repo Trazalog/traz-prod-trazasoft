@@ -90,7 +90,7 @@ class Reportes extends CI_Controller
     // $valores['unidades_medida'] = $this->Koolreport->depurarJson($url['unidades_medida'])->unidades->unidad;
     $valores['etapas'] = $this->Koolreport->depurarJson($url['etapas'])->etapas->etapa;
 
-    $data['filtro'] = $this->Opciones_Filtros->filtrosProduccion($valores);
+    $data['filtro'] = $this->Opcionesfiltros->filtrosProduccion($valores);
 
     $data['calendarioDesde'] = true;
     $data['calendarioHasta'] = true;
@@ -112,7 +112,7 @@ class Reportes extends CI_Controller
     // $valores['unidades_medida'] = $this->Koolreport->depurarJson($url['unidades_medida'])->unidades->unidad;
     $valores['etapas'] = $this->Koolreport->depurarJson($url['etapas'])->etapas->etapa;
 
-    $data['filtro'] = $this->Opciones_Filtros->filtrosProdResponsable($valores);
+    $data['filtro'] = $this->Opcionesfiltros->filtrosProdResponsable($valores);
 
     $data['calendarioDesde'] = true;
     $data['calendarioHasta'] = true;
@@ -125,7 +125,7 @@ class Reportes extends CI_Controller
   {
     log_message('INFO', '#TRAZA| #REPORTES|#INGRESOS| #INGRESO');
     $data = $this->input->post('data');
-    $json = $this->Opciones_Filtros->getIngresos($data);
+    $json = $this->Opcionesfiltros->getIngresos($data);
     $reporte = new Ingresos($json);
     $reporte->run()->render();
   }
@@ -134,16 +134,16 @@ class Reportes extends CI_Controller
   {
     log_message('INFO', '#TRAZA| #REPORTES|#CANTIDADINGRESOS| #INGRESO');
     $data = $this->input->post('data');
-    $rsp = $this->Opciones_Filtros->getCantidadIngresos($data);
+    $rsp = $this->Opcionesfiltros->getCantidadIngresos($data);
     echo json_encode($rsp);
   }
 
   public function filtroIngresos()
   {
     log_message('INFO', '#TRAZA| #REPORTES|#FILTROINGRESOS| #INGRESO');
-    $rsp['proveedores'] = $this->Opciones_Filtros->getProveedores();
-    $rsp['transportista'] = $this->Opciones_Filtros->getTransportistas();
-    $rsp['productos'] = $this->Opciones_Filtros->getProductos();
+    $rsp['proveedores'] = $this->Opcionesfiltros->getProveedores();
+    $rsp['transportista'] = $this->Opcionesfiltros->getTransportistas();
+    $rsp['productos'] = $this->Opcionesfiltros->getProductos();
     echo json_encode($rsp);
   }
 
@@ -151,7 +151,7 @@ class Reportes extends CI_Controller
   {
     log_message('INFO', '#TRAZA| #REPORTES|#ASIGNACIONDERECURSOS| #INGRESO');
     $data = $this->input->post('data');
-    $json = $this->Opciones_Filtros->asignacionDeRecursos($data);
+    $json = $this->Opcionesfiltros->asignacionDeRecursos($data);
     $reporte = new Asignacion_de_recursos($json);
     $reporte->run()->render();
   }
@@ -159,7 +159,7 @@ class Reportes extends CI_Controller
   public function filtroAsignacionDeRecursos()
   {
     log_message('INFO', '#TRAZA| #REPORTES|#FILTROASIGNACIONDERECURSOS| #INGRESO');
-    $rsp['lote'] = $this->Opciones_Filtros->getLotes();
+    $rsp['lote'] = $this->Opcionesfiltros->getLotes();
     echo json_encode($rsp);
   }
 
@@ -167,7 +167,7 @@ class Reportes extends CI_Controller
   {
     log_message('INFO', '#TRAZA| #REPORTES|#SALIDAS| #INGRESO');
     $data = $this->input->post('data');
-    $json = $this->Opciones_Filtros->getSalidas($data);
+    $json = $this->Opcionesfiltros->getSalidas($data);
     $reporte = new Salidas($json);
     $reporte->run()->render();
   }
@@ -175,8 +175,8 @@ class Reportes extends CI_Controller
   public function filtroSalidas()
   {
     log_message('INFO', '#TRAZA| #REPORTES|#FILTROSALIDAS| #INGRESO');
-    $rsp['clientes'] = $this->Opciones_Filtros->getClientes();
-    $rsp['transportista'] = $this->Opciones_Filtros->getTransportistas();
+    $rsp['clientes'] = $this->Opcionesfiltros->getClientes();
+    $rsp['transportista'] = $this->Opcionesfiltros->getTransportistas();
     echo json_encode($rsp);
   }
 }

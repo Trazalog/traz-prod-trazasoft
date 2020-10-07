@@ -6,7 +6,7 @@ if (!function_exists('bolita')) {
     return "<span data-toggle='tooltip' title='$detalle' class='badge bg-$color estado'>$texto </span>";
   }
 
-  function estadoPedido($estado)
+  function xestadoPedido($estado)
   {
     switch ($estado) {
       case 'Creada':
