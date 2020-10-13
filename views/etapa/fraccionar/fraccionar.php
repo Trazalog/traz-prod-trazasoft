@@ -554,4 +554,4 @@ $(document).off('click', '.tablaproductos_borrar').on('click', '.tablaproductos_
     idrecipiente: 'productosasignados',
     idbandera: 'productoexiste'
 }, remover);
-</script>
+</script>   

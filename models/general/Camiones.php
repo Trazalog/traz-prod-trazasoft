@@ -40,7 +40,7 @@ class Camiones extends CI_Model
         log_message('DEBUG', '#CAMIONES > guardarCarga | #DATA: ' . json_encode($data));
 
         $this->load->model(ALM . '/Lotes');
-        $this->load->model('general/Recipientes');
+        $this->load->model(PRD . 'general/Recipientes');
 
         $array = [];
 
@@ -79,7 +79,7 @@ class Camiones extends CI_Model
         log_message('DEBUG','#Camiones/actualizarEstado | DATA: '.json_encode($data));
 
         $aux['post_camion_estado']['data'] = $data;
-        $url = RESTPT . "camion/estado_batch_req";
+        $url = REST_PRD . "camion/estado_batch_req";
         $rsp = $this->rest->callApi('PUT', $url, $aux);
 
         log_message('DEBUG', '#Camiones/actualizarEstado | RSP: ' . json_encode($rsp));

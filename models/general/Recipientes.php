@@ -74,7 +74,7 @@ class Recipientes extends CI_Model
             'empr_id' => strval(empresa()),
         );
 
-        $url = RESTPT.'recipientes';
+        $url = REST_PRD.'/recipientes';
         $rsp =  $this->rest->callApi('POST', $url, ['post_recipientes'=>$aux]);
         if(!$rsp['status']) return $rsp;
         $rsp['data'] = json_decode($rsp['data'])->resultado->reci_id;

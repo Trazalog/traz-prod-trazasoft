@@ -50,6 +50,12 @@ class Etapa extends CI_Controller
         $data['accion'] = 'Nuevo';
         $data['op'] = $data['etapa']->titulo;
 
+        if($data['op'] == 'Fraccionamiento')
+        {
+            $this->fraccionar();
+            return;
+        }
+
         $this->load->model(ALM . 'Articulos');
         #$data['materias'] = $this->Articulos->obtenerXTipos(array('Proceso', 'Final', 'Materia Prima'));
         $data['productos'] = $this->Articulos->obtenerXTipos(array('Proceso', 'Producto'));
