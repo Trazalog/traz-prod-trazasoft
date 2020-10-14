@@ -26,7 +26,9 @@
     line-height: 1.42857;
   }
 </style>
-
+<?php
+    $this->load->view('layout/mycss');
+?>
 
 <div class="box table-responsive">
   <div class="box-header">
