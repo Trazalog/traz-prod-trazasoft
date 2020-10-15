@@ -110,6 +110,13 @@
   </div>
   <!-- /.box-footer-->
 </div>
+    <div class="box">
+        <div class="col-md-12" style="display:none">
+                <?php 
+            $this->load->view('NoConsumible/SalidaNoConsumible');
+                    ?>
+        </div>
+    </div>
 <script>
   // $('.select2').select2()
 

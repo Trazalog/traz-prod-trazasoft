@@ -56,6 +56,19 @@
       <li><a href="#" class="link" data-link="Reportes/salidas"><i class="fa fa-fw fa-genderless"></i>Salidas</a></li>
       <!-- <li><a href="#" class="link" data-link="Reportes/tarjetas"><i class="fa fa-fw fa-genderless"></i>Tarjetas</a></li> -->
     </ul>
+  </li><!-- K_Varchar -->
+  <li class="treeview">
+    <a href="#">
+      <i class="fa fa-caret-square-o-down"></i> <span>No Consumibles</span>
+      <span class="pull-right-container">
+        <i class="fa fa-angle-left pull-right"></i>
+      </span>
+    </a>
+    <ul class="treeview-menu" style="display: none;">
+      <!-- <li><a href="#" class="link" data-link="Reportes/index"><i class="fa fa-fw fa-genderless"></i>Ejemplo</a></li> -->
+      <li><a href="#" class="link" data-link="general/NoConsumible"><i class="fa fa-fw fa-genderless"></i>Listar ABM No Consumibles</a></li>
+      <!-- <li><a href="#" class="link" data-link="Reportes/tarjetas"><i class="fa fa-fw fa-genderless"></i>Tarjetas</a></li> -->
+    </ul>
   </li>
   <!-- <li><a class="link" href="#" data-link="general/CodigoQR/generarQR"><i class="fa fa-qrcode"></i>Código QR</a>
 	</li> -->

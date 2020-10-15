@@ -71,10 +71,36 @@ defined('BASEPATH') or exit('No direct script access allowed');
 | the query builder class.
  */
 
+// $active_group = 'default';
+// $query_builder = true;
+// $db['default'] = array(
+//     'hostname' => '10.142.0.3',
+//     'username' => 'postgres',
+//     'password' => '!Password00',
+//     'database' =>  'tools_prod_t',
+//     'dbdriver' => 'pdo', //mysqli
+//     'dbprefix' => '',
+//     'pconnect' => false,
+//     'db_debug' => (ENVIRONMENT !== 'production'),
+//     'cache_on' => false,
+//     'cachedir' => '',
+//     'char_set' => 'utf8',
+//     'dbcollat' => 'utf8_general_ci',
+//     'swap_pre' => '',
+//     'encrypt' => false,
+//     'compress' => false,
+//     'stricton' => false,
+//     'failover' => array(),
+//     'save_queries' => true,
+//     'port' => '5432',
+//     'dsn' => 'pgsql:host=10.142.0.3;port=5432;dbname=tools_prod_t'
+// );
+
+
 $active_group = 'default';
 $query_builder = true;
 $db['default'] = array(
-    'hostname' => '10.142.0.3',
+    'hostname' => '10.142.0.7',
     'username' => 'postgres',
     'password' => '!Password00',
     'database' =>  'tools_prod_t',
@@ -93,6 +119,6 @@ $db['default'] = array(
     'failover' => array(),
     'save_queries' => true,
     'port' => '5432',
-    'dsn' => 'pgsql:host=10.142.0.3;port=5432;dbname=tools_prod_t'
+    'dsn' => 'pgsql:host=10.142.0.7;port=5432;dbname=tools_prod_t'
 );
 

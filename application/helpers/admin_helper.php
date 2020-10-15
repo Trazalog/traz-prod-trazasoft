@@ -80,4 +80,51 @@ if (!function_exists('bolita')) {
         break;
     }
   }
+
+
+  function estadoNoCon($estado)
+  {
+    #   $estado =  trim($estado);
+
+    switch ($estado) {
+
+      case 'ALTA':
+        return bolita('ALTA', 'blue');
+        break;
+      case 'VENCIDO':
+        return bolita('VENCIDO', 'red');
+        break;
+
+        //Estado Camiones
+      case 'ACTIVO':
+        return bolita('Asignado', 'green');
+        break;
+      case 'EN_TRANSITO':
+        return bolita('En Trancito', 'info');
+        break;
+      case 'EN_REPARACION':
+        return bolita('En Reparacion', 'yellow');
+        break;
+
+        //Estado Etapas
+      case 'En Curso':
+        return bolita('En Curso', 'green');
+        break;
+
+      case 'PLANIFICADO':
+        return bolita('Planificado', 'blue');
+        break;
+
+      case 'FINALIZADO':
+        return bolita('Finalizado', 'yellow');
+        break;
+
+        //Estado por Defecto
+      default:
+        return bolita('S/E', '');
+        break;
+    }
+  }
+
+
 }
