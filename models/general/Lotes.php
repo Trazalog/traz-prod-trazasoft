@@ -25,17 +25,9 @@ class Lotes extends CI_Model
     }
     public function listarPorEstablecimientoConSalida($establecimiento, $salida = false)
     {
-        $resource = 'lotes_establecimiento/' . $establecimiento;
-        $url = RESTPT . $resource;
-        $array = file_get_contents($url, false, http('GET'));
-        log_message('DEBUG', '#REST #LOTES > listarPorEstablecimientoConSalida | #RSP-DATA:' . $array);
-        $rsp = rsp($http_response_header);
-        if (!$rsp['status']) {
-            return $rsp;
-        }
-
-        $rsp['data'] = json_decode($array)->lotes->lote;
-        return $rsp;
+        $resource = "/lotes_establecimiento/$establecimiento";
+        $url = REST_PRD_LOTE . $resource;
+        return wso2($url);
     }
     public function listarPorCamion($camion)
     {
@@ -63,17 +55,9 @@ class Lotes extends CI_Model
 
     public function obtenerLotesCamion($patente)
     {
-        $resource = 'camion/lotes/' . $patente;
-        $url = RESTPT . $resource;
-        $array = file_get_contents($url, false, http('GET'));
-        $rsp = rsp($http_response_header);
-        
-        if (!$rsp['status']) {
-            return $rsp;
-        }
-
-        $rsp['data'] = json_decode($array)->lotes->lote;
-        return $rsp;
+        $resource = "camion/lotes/$patente";
+        $url = REST_LOG . $resource;
+        return wso2($url);
     }
 
     public function obtenerLote($lote)

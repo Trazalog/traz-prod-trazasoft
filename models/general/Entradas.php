@@ -16,7 +16,7 @@ class Entradas extends CI_Model
 
         $data['proveedor'] = strval(PROVEEDOR_INTERNO);
         log_message('DEBUG', '#ENTRADAS > guardar | #DATA-POST: ' . json_encode($data));
-        $url = RESTPT . 'entradas';
+        $url = REST_LOG . '/entradas';
         $rsp = $this->rest->callApi('POST', $url, ['post_entradas' => $data]);
         return $rsp;
     }

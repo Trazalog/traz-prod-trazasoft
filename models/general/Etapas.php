@@ -304,8 +304,9 @@ class Etapas extends CI_Model
 
 	public function getUsers()
 	{
+        #REST?
 		log_message('DEBUG', 'Etapas/getUsers');
-		$resource = 'users';
+		$resource = 'users/'.empresa();
 		$url = RESTPT . $resource;
 		$array = $this->rest->callAPI("GET", $url);
 		return json_decode($array['data']);
@@ -314,8 +315,8 @@ class Etapas extends CI_Model
 	public function getTurnosProd()
 	{
 		log_message('DEBUG', 'Etapas/getTurnosProd');
-		$resource = 'getTurnosProd';
-		$url = RESTPT . $resource;
+		$resource = '/getTurnosProd/'.empresa();
+		$url = REST_PRD_ETAPAS . $resource;
 		$array = $this->rest->callAPI("GET", $url);
 		return json_decode($array['data']);
 	}
@@ -323,8 +324,8 @@ class Etapas extends CI_Model
 	public function setUserLote($data)
 	{
 		log_message('DEBUG', 'Etapas/setUserLote $data: >> ' . json_encode($data));
-		$resource = 'setUserLote_batch_req';
-		$url = RESTPT . $resource;
+		$resource = '/setUserLote_batch_req';
+		$url = REST_PRD_LOTE . $resource;
 		$array = $this->rest->callAPI("POST", $url, $data);
 		return json_decode($array['code']);
 	}
@@ -333,8 +334,8 @@ class Etapas extends CI_Model
 	{
 		$data['responsable']['batch_id'] = $batch_id;
 		log_message('DEBUG', 'Etapas/deleteUserLote $data: >> ' . json_encode($data));
-		$resource = 'deleteUserLote';
-		$url = RESTPT . $resource;
+		$resource = '/deleteUserLote';
+		$url = REST_PRD_LOTE . $resource;
 		$array = $this->rest->callAPI('DELETE', $url, $data);
 		return json_decode($array['code']);
 	}
@@ -342,8 +343,8 @@ class Etapas extends CI_Model
 	public function getUserLote($batch_id)
 	{
 		log_message('DEBUG', 'Etapas/getUserLote $data: >> ' . json_encode($batch_id));
-		$resource = 'getUserLote/' . $batch_id;
-		$url = RESTPT . $resource;
+		$resource = '/getUserLote/' . $batch_id;
+		$url = REST_PRD_LOTE . $resource;
 		$array = $this->rest->callAPI("GET", $url);
 		return json_decode($array['data']);
     }
