@@ -1,5 +1,5 @@
 <div class="box box-primary tag-descarga" id="bloque_descarga">
-    <div class="box-header">
+    <div class="box-header with-border">
         <i class="fa fa-sign-in"></i>
         <h3 class="box-title"> Ingreso <span id="origen"></span></h3>
     </div>

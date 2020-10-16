@@ -1,5 +1,5 @@
 <div class="box">
-    <div class="box-header">
+    <div class="box-header with-border">
         <h3>Código QR</h3>
         <br>
         <div class="form-group">

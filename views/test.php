@@ -44,8 +44,8 @@ img {
 <?php
     $this->load->view('etapa\modal_unificacion_lote');
 ?>
-<div class="box box-primary">
-    <div class="box-header text-center">
+<div class="box">
+    <div class="box-header text-center with-border">
         <h3>Tareas</h3>
     </div>
     <div class="xbox-body">

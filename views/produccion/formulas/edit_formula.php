@@ -13,7 +13,7 @@
 	<div class="row">
 		<div class="col-md-6">
 			<div class="box box-primary">
-				<div class="box-header">
+				<div class="box-header with-border">
 					<h3 class="box-title">
 						<font style="vertical-align: inherit;">
 							<font style="vertical-align: inherit;">Datos de la fórmula</font>
@@ -76,7 +76,7 @@
 		</div>
 		<div class="col-md-6">
 			<div class="box box-warning">
-				<div class="box-header">
+				<div class="box-header with-border">
 					<h3 class="box-title">
 						<font style="vertical-align: inherit;">
 							<font style="vertical-align: inherit;">Artículos de la fórmula</font>

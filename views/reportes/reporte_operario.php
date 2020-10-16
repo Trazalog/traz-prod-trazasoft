@@ -19,7 +19,7 @@ option {
 </style>
 
 <div class="box box-primary" style="font-size:140%;">
-    <div class="box-header">
+    <div class="box-header with-border">
         <h2 class="box-title" style="font-size:140%"> Producción </h2>
     </div>
     <div class="box-body">

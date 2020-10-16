@@ -1,5 +1,5 @@
 <?php $this->load->view('camion/modal_lotes')?>
-<div class="box box-primary">
+<div class="box">
     <div class="box-header with-border">
         <h3 class="box-title">Carga Camión</h3>
         <div class="box-tools pull-right">
@@ -33,7 +33,7 @@
 </div>
 </div>
 <div class="box box-primary">
-    <div class="box-header">
+    <div class="box-header with-border">
         <h3 class="box-title">Datos Camión</h3>
     </div>
     <div class="box-body">
@@ -68,7 +68,7 @@
     </div>
 </div>
 <div class="box box-primary">
-    <div class="box-header">
+    <div class="box-header with-border">
         <h3 class="box-title">Datos de Carga</h3>
     </div>
     <div class="box-body">

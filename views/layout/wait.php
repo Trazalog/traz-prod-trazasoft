@@ -8,7 +8,7 @@
             <br>
             <br>
             <br>
-            <div class="box-header">
+            <div class="box-header with-border">
                 <h3 class="box-title" id="waitingText">Cargando...</h3>
             </div>
             <!-- Loading (remove the following to stop the loading)-->

@@ -1,5 +1,5 @@
 <div class="box box-primary tag-descarga">
-    <div class="box-header">
+    <div class="box-header with-border">
         <i class="fa fa-sign-in"></i>
         <h3 class="box-title"> Destino</h3>
     </div>

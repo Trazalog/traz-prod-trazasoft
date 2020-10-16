@@ -1,5 +1,5 @@
 <div class="box box-primary">
-    <div class="box-header">
+    <div class="box-header with-border">
         <h3 class="box-title">Salida Camión</h3>
     </div>
     <div class="box-body">
@@ -196,7 +196,9 @@ function obtenerInfoCamion(patente) {
 
 function validarSalida(){
 
-    if(!$('#destino_esta_id').val()) conf(guardarSalida, false, 'No se ha seleccionado destino','El camión se pondrá en estado finalizado');
+    if(!$('#destino_esta_id').val()) conf(guardarSalida, false, 'No se ha seleccionado destino','El camión se pondrá en estado finalizado');else{
+        guardarSalida();
+    }
 
 }
 

@@ -1,5 +1,5 @@
 <div class="box box-primary">
-	<div class="box-header">
+	<div class="box-header with-border">
 		<h2 class="box-title">Producción de Lotes</h2>
 	</div>
 	<div class="box-body">

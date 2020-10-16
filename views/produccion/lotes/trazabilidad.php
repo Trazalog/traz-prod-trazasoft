@@ -15,7 +15,7 @@
 <section class="content">
   <div class="row">
     <div class="box box-primary">
-      <div class="box-header">
+      <div class="box-header with-border">
         <h3>Informe de Trazabilidad</h3>
       </div>
       <div class="box-body">
@@ -35,7 +35,7 @@
   </div>
   <div class="row" hidden>
     <div class="box box-warning">
-      <div class="box-header">
+      <div class="box-header with-border">
         <a class="btn btn-social-icon btn-vk pull-left" onclick="print('tree')"><i class="fa fa-print"></i></a>
         <h3 class="box-title"></h3>
         <div class="box-tools pull-right">
@@ -54,7 +54,7 @@
   </div>
   <div class="row" hidden>
     <div class="box box-default">
-      <div class="box-header">
+      <div class="box-header with-border">
         <a class="btn btn-social-icon btn-vk pull-left" onclick="print('tabla')"><i class="fa fa-print"></i></a>
         <h3 class="box-title"></h3>
         <div class="box-tools pull-right">

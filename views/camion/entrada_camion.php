@@ -76,7 +76,7 @@ foreach ($establecimientos as $fila) {
     </div>
 </div>
 <div class="box panel-req" style="display:none">
-    <div class="box-header">
+    <div class="box-header with-border">
         <h3 class="box-title">Datos Camión</h3>
     </div>
     <div class="box-body">
@@ -181,7 +181,7 @@ $('#patente').keyup(function(e) {
         $.ajax({
             type: 'POST',
             dataType: 'JSON',
-            url: '<?php echo base_url(PRD) ?>general/Lote/obtenerLotesCamion',
+            url: '<?php echo base_url(PRD) ?>general/Lote/obtenerLotesCamion/true',
             data:{patente},
             success: function(rsp) {
 

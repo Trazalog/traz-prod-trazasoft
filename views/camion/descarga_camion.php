@@ -34,7 +34,7 @@
 </div>
 </div>
 <div class="box">
-    <div class="box-header">
+    <div class="box-header with-border">
         <h4>Datos camion</h4>
     </div>
     <div class="box-body">
@@ -69,7 +69,7 @@
     </div>
 </div>
 <div class="box">
-    <div class="box-header">
+    <div class="box-header with-border">
         <h4>Datos de Descarga</h4>
     </div>
     <div class="box-body">
