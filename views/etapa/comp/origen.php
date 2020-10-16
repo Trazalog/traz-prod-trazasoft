@@ -1,8 +1,8 @@
 <?php $this->load->view('etapa/modal_detalleTarea'); ?>
 <!-- Origen -->
 <div class="box box-primary">
-    <div class="box-header">
-        <h4 class="box-title">Origen</h4>
+    <div class="box-header with-border">
+        <h4 class="box-title">Materia Prima</h4>
         <span>
             <button type="button" class="btn btn-warning btn-xs pull-right" data-toggle="modal"
                 data-target="#modal_detalleTarea">Detalle tarea</button>

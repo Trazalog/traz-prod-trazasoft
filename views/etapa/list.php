@@ -32,8 +32,8 @@
 
 <div class="box table-responsive">
   <div class="box-header with-border">
-    <h4 class="box-title" style="margin-bottom: 20px;">Etapas</h4>
-    <div class="row" style="width:900px;">
+    <h4 class="box-title">Etapas</h4></div>
+    <div class="row" style="width:900px; margin-top:5px;">
       <div class="col-xs-10">
         <?php
 
@@ -47,7 +47,7 @@
         ?>
         <button class="btn btn-primary outline" onclick='muestra(`todas`,`<?php echo json_encode($list); ?>`)'>
           Todas</button>
-      </div>
+      
       <div class="flotante">
         <button style="background: #1D976C;  /* fallback for old browsers */
 background: -webkit-linear-gradient(to bottom, #93F9B9, #1D976C);  /* Chrome 10-25, Safari 5.1-6 */
