@@ -112,15 +112,16 @@ class Camiones extends CI_Model
 
     public function finalizarSalida($data)
     {
+        unset($data['patente']);
         $aux['update_camion'] = $data;
-        $url = RESTPT . "camiones/salida";
+        $url = REST_LOG . "/camiones/salida";
         $rsp = $this->rest->callApi('PUT', $url, $aux);
         return $rsp;
     }
 
     public function obtenerInfo($patente = null)
     {
-        $url = RESTPT . "camiones/" . $patente;
+        $url = REST_LOG . "/camiones/" . $patente;
         // $url = 'http://localhost:3000/camiones';
         $rsp = $this->rest->callApi('GET', $url);
         if ($rsp['status']) {
@@ -208,7 +209,7 @@ class Camiones extends CI_Model
     {
         $post['_put_camiones_salida'] = array(
             'motr_id' => strval($data['motr_id']),
-            'patente' => $data['patente'],
+            //'patente' => $data['patente'],
             'estado' => isset($data['destino_esta_id'])?'TRANSITO':'FINALIZADO',
             'bruto' => strval($data['bruto']),
             'neto' => strval($data['neto'])

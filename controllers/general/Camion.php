@@ -144,7 +144,7 @@ class Camion extends CI_Controller
     public function guardarSalida()
     {
         $data = $this->input->post();
-        $this->Camiones->guardarSalida($data);
-        echo json_encode($data);
+        $res = $this->Camiones->guardarSalida($data);
+        echo json_encode($res);
     }
 }

@@ -130,6 +130,7 @@ $('#patente').keyup(function(e) {
 });
 
 function obtenerLotesCamion(patente) {
+    $tLotes.empty();
     wo();
     $.ajax({
         type: 'POST',
@@ -139,7 +140,6 @@ function obtenerLotesCamion(patente) {
             patente
         },
         success: function(rsp) {
-            console.log(rsp);
             if (!rsp.data) {
                 alert('No existen Lotes Asociados');
                 return;
@@ -206,11 +206,15 @@ var guardarSalida = function() {
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
-        url: '<?php echo base_url() ?>general/camion/guardarSalida',
+        url: '<?php echo base_url(PRD) ?>general/camion/guardarSalida',
         data,
         success: function(res) {
             console.log(res);
-            hecho();
+            if(res.status){
+                hecho();linkTo();
+            }else{
+                error();
+            }
         },
         error: function(res) {
             error();
