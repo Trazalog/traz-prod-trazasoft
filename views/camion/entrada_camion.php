@@ -8,13 +8,13 @@
             <input type="hidden" id="accioncamion">
             <div class="col-md-6 col-xs-12">
                 <div id="cargacamion" onclick="cargacamion();">
-                    <img src="<?php echo base_url('icon/truck.png'); ?>" alt="Smiley face" height="42" width="42">
+                    <img src="<?php echo base_url('lib/icon/truck.png'); ?>" alt="Smiley face" height="42" width="42">
                     <label for="">CARGA</label>
                 </div>
             </div>
             <div class="col-md-6 col-xs-12">
                 <div id="descargacamion" onclick="descargacamion()">
-                    <img src="<?php echo base_url('icon/order.png'); ?>" alt="Smiley face" height="42" width="42">
+                    <img src="<?php echo base_url('lib/icon/order.png'); ?>" alt="Smiley face" height="42" width="42">
                     <label for="">RECEPCIÓN</label>
                 </div>
             </div>

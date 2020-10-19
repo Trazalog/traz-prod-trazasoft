@@ -293,6 +293,12 @@ class Etapas extends CI_Model
         }
     }
 
+    function obtenerPedidoXBatch($batchId)
+    {
+        $url = REST_ALM."pedidos/batch/$batchId";
+        return wso2($url);
+    }
+
     public function asociarFormulario($batch_id, $info_id)
     {
         $rec = '_put_lote_instancia_formulario';

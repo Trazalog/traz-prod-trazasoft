@@ -191,37 +191,44 @@ class Etapa extends CI_Controller
             return;
         }
 
-        ////////////// INSERTAR CABECERA NOTA PEDIDO   ///
-        $arrayPost['fecha'] = $post_data['fecha'];
-        $arrayPost['empr_id'] = (string) empresa();
-        $arrayPost['batch_id'] = $batch_id;
+        $pedido = $this->Etapas->obtenerPedidoXBatch($batch_id)['data'];
+        if($pedido)
+        {
+           $pedido = reset($pedido);
+           $pema_id = $pedido->pema_id;
+        }else{
+             ////////////// INSERTAR CABECERA NOTA PEDIDO   ///
+             $arrayPost['fecha'] = $post_data['fecha'];
+             $arrayPost['empr_id'] = (string) empresa();
+             $arrayPost['batch_id'] = $batch_id;
+ 
+             $cab['_post_notapedido'] = $arrayPost;
+             $response = $this->Etapas->setCabeceraNP($cab);
+             $pema_id = $response->nota_id->pedido_id;
 
-        $cab['_post_notapedido'] = $arrayPost;
-        $response = $this->Etapas->setCabeceraNP($cab);
-        $pema_id = $response->nota_id->pedido_id;
-
-        if (!$pema_id) {
-            log_message('ERROR', 'Error en generación de Cabecera Pedido Materiales. pema_id: >>' . $pema_id);
-            echo ("Error en generacion de Cabecera Pedido Materiales");
-            return;
-        }
-
-        $materia = $post_data['materia'];
-        foreach ($materia as $o) {
-            if ($cantidad !== "") {
-                $det['pema_id'] = $pema_id;
-                $det['arti_id'] = (string) $o['id_materia'];
-                $det['cantidad'] = $o['cantidad'];
-                $detalle['_post_notapedido_detalle'][] = $det;
+             if (!$pema_id) {
+                log_message('ERROR', 'Error en generación de Cabecera Pedido Materiales. pema_id: >>' . $pema_id);
+                echo ("Error en generacion de Cabecera Pedido Materiales");
+                return;
             }
-        }
-        $arrayDeta['_post_notapedido_detalle_batch_req'] = $detalle;
-        $respDetalle = $this->Etapas->setDetaNP($arrayDeta);
-
-        if ($respDetalle >= 300) {
-            log_message('ERROR', 'Error en generacion de Detalle Pedido Materiales. respDetalle: >>' . $respDetalle);
-            echo ("Error en generacion de Detalle Pedido Materiales");
-            return;
+    
+            $materia = $post_data['materia'];
+            foreach ($materia as $o) {
+                if ($cantidad !== "") {
+                    $det['pema_id'] = $pema_id;
+                    $det['arti_id'] = (string) $o['id_materia'];
+                    $det['cantidad'] = $o['cantidad'];
+                    $detalle['_post_notapedido_detalle'][] = $det;
+                }
+            }
+            $arrayDeta['_post_notapedido_detalle_batch_req'] = $detalle;
+            $respDetalle = $this->Etapas->setDetaNP($arrayDeta);
+    
+            if ($respDetalle >= 300) {
+                log_message('ERROR', 'Error en generacion de Detalle Pedido Materiales. respDetalle: >>' . $respDetalle);
+                echo ("Error en generacion de Detalle Pedido Materiales");
+                return;
+            }
         }
 
         if ($nuevo == 'iniciar') {
