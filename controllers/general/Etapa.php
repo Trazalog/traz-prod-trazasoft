@@ -11,7 +11,7 @@ class Etapa extends CI_Controller
         $this->load->model('general/Establecimientos');
         $this->load->model('general/Recipientes');
         $this->load->model('general/Materias');
-       # $this->load->model(TAREAS_ASIGNAR . '/Tareas');
+        # $this->load->model(TAREAS_ASIGNAR . '/Tareas');
         #$this->load->model(TAREAS_ASIGNAR . '/Templates');
         #$this->load->model(TAREAS_ASIGNAR . '/Recursos_Materiales');
         $this->load->model('general/Recursos');
@@ -32,7 +32,7 @@ class Etapa extends CI_Controller
                 $value->link = $urlComp;
             }
         }
-		$data['etapas'] = $temp;
+        $data['etapas'] = $temp;
         $this->load->view('etapa/list', $data);
     }
     // Llama a etapas para una nueva Etapa
@@ -50,8 +50,7 @@ class Etapa extends CI_Controller
         $data['accion'] = 'Nuevo';
         $data['op'] = $data['etapa']->titulo;
 
-        if($data['op'] == 'Fraccionamiento')
-        {
+        if ($data['op'] == 'Fraccionamiento') {
             $this->fraccionar();
             return;
         }
@@ -90,14 +89,14 @@ class Etapa extends CI_Controller
         $datosCab['lote_id'] = (string) $post_data['lote'];
         $datosCab['prov_id'] = (string) PROVEEDOR_INTERNO;
         $datosCab['batch_id_padre'] = (string) 0;
-        $datosCab['cantidad'] = (string) $post_data['cantidad']?$post_data['cantidad']:"0";
+        $datosCab['cantidad'] = (string) $post_data['cantidad'] ? $post_data['cantidad'] : "0";
         $datosCab['cantidad_padre'] = (string) 0;
         $datosCab['num_orden_prod'] = (string) $post_data['op'];
         $datosCab['reci_id'] = (string) $post_data['recipiente'];
         $datosCab['etap_id'] = (string) $post_data['idetapa'];
         $datosCab['usuario_app'] = userNick();
         $datosCab['empr_id'] = (string) empresa();
-        $datosCab['forzar_agregar'] = ($nuevo == 'guardar')? 'false':$post_data['forzar'];
+        $datosCab['forzar_agregar'] = ($nuevo == 'guardar') ? 'false' : $post_data['forzar'];
         $datosCab['fec_vencimiento'] = FEC_VEN;
         $datosCab['recu_id'] = "0";
         $datosCab['tipo_recurso'] = "";
@@ -106,11 +105,11 @@ class Etapa extends CI_Controller
         $datosCab['batch_id'] = $batch_id; // SI LO MANDA VACIO LO CREA SINO LO EDITAR
         $estado = $post_data['estadoEtapa']; //mbustos
 
-        $datosCab['planificado'] = ($nuevo == 'guardar')?'true':"false";
+        $datosCab['planificado'] = ($nuevo == 'guardar') ? 'true' : "false";
         $data['_post_lote'] = $datosCab;
 
         $rsp = $this->Etapas->SetNuevoBatch($data);
-        
+
         if (!$rsp['status']) {
             echo json_encode($rsp);
             return;
@@ -124,7 +123,9 @@ class Etapa extends CI_Controller
         log_message('DEBUG', 'ETAPA >> guardar | FIN');
 
         $res = $this->guardarParte2($post_data, $datosCab, $batch_id);
-        if(!$res) return;
+        if (!$res) {
+            return;
+        }
 
         $this->guardarParte3($post_data, $batch_id, $nuevo, $estado);
 
@@ -140,9 +141,9 @@ class Etapa extends CI_Controller
 
         // busca id recurso por id articulo
         $recu_id = false;
-        if($datosCab['arti_id'] != "0"){
+        if ($datosCab['arti_id'] != "0") {
             $recu_id = $this->Etapas->getRecursoId($datosCab['arti_id']);
-            if(!$recu_id){
+            if (!$recu_id) {
                 log_message('ERROR', 'ETAPA/guardarParte2 >> Error al traer ID Rercurso');
                 return false;
             }
@@ -150,7 +151,10 @@ class Etapa extends CI_Controller
 
         $arrayTemp1 = array();
         $arrayTemp1['request_box']['_delete_recurso_lote']['batch_id'] = $batch_id;
-        if($recu_id) $arrayTemp1['request_box']['_post_recurso_lote'][] = $this->Etapas->setRecursosLotesProd($batch_id, $recu_id, $datosCab['cantidad']);
+        if ($recu_id) {
+            $arrayTemp1['request_box']['_post_recurso_lote'][] = $this->Etapas->setRecursosLotesProd($batch_id, $recu_id, $datosCab['cantidad']);
+        }
+
         foreach ($materia as $o) {
             if ($cantidad !== "") {
                 $recurso_id = $this->Etapas->getRecursoId($o['id_materia']);
@@ -168,7 +172,7 @@ class Etapa extends CI_Controller
 
         log_message('DEBUG', 'JSON request_box: >> ' . json_encode($arrayTemp1));
         $rspRequestBox = $this->Etapas->setRecursosLotes_requestBox($arrayTemp1);
-      
+
         if (!$rspRequestBox['status']) {
             log_message('ERROR', 'setRecursosLotes_requestBox(): >> ' . json_encode($rspRequestBox));
             echo ("Error al guardar las materias primas. ");
@@ -192,43 +196,31 @@ class Etapa extends CI_Controller
         }
 
         $pedido = $this->Etapas->obtenerPedidoXBatch($batch_id)['data'];
-        if($pedido)
-        {
-           $pedido = reset($pedido);
-           $pema_id = $pedido->pema_id;
-        }else{
-             ////////////// INSERTAR CABECERA NOTA PEDIDO   ///
-             $arrayPost['fecha'] = $post_data['fecha'];
-             $arrayPost['empr_id'] = (string) empresa();
-             $arrayPost['batch_id'] = $batch_id;
- 
-             $cab['_post_notapedido'] = $arrayPost;
-             $response = $this->Etapas->setCabeceraNP($cab);
-             $pema_id = $response->nota_id->pedido_id;
+        if ($pedido) {
+            $pedido = reset($pedido);
+            $pema_id = $pedido->pema_id;
+            if ($nuevo == 'guardar') {
+                $this->Etapas->eliminarDetallePedido($pema_id);
+                $respDetalle = $this->guardarDetallePedido($pema_id, $post_data);
+            }
 
-             if (!$pema_id) {
+        } else {
+            ////////////// INSERTAR CABECERA NOTA PEDIDO   ///
+            $arrayPost['fecha'] = $post_data['fecha'];
+            $arrayPost['empr_id'] = (string) empresa();
+            $arrayPost['batch_id'] = $batch_id;
+
+            $cab['_post_notapedido'] = $arrayPost;
+            $response = $this->Etapas->setCabeceraNP($cab);
+            $pema_id = $response->nota_id->pedido_id;
+
+            if (!$pema_id) {
                 log_message('ERROR', 'Error en generación de Cabecera Pedido Materiales. pema_id: >>' . $pema_id);
                 echo ("Error en generacion de Cabecera Pedido Materiales");
                 return;
             }
-    
-            $materia = $post_data['materia'];
-            foreach ($materia as $o) {
-                if ($cantidad !== "") {
-                    $det['pema_id'] = $pema_id;
-                    $det['arti_id'] = (string) $o['id_materia'];
-                    $det['cantidad'] = $o['cantidad'];
-                    $detalle['_post_notapedido_detalle'][] = $det;
-                }
-            }
-            $arrayDeta['_post_notapedido_detalle_batch_req'] = $detalle;
-            $respDetalle = $this->Etapas->setDetaNP($arrayDeta);
-    
-            if ($respDetalle >= 300) {
-                log_message('ERROR', 'Error en generacion de Detalle Pedido Materiales. respDetalle: >>' . $respDetalle);
-                echo ("Error en generacion de Detalle Pedido Materiales");
-                return;
-            }
+
+            $respDetalle = $this->guardarDetallePedido($pema_id, $post_data);
         }
 
         if ($nuevo == 'iniciar') {
@@ -237,6 +229,29 @@ class Etapa extends CI_Controller
 
         log_message('DEBUG', 'ETAPA >> guardarParte3 | FIN');
 
+    }
+
+    public function guardarDetallePedido($pema_id, $post_data)
+    {
+        $materia = $post_data['materia'];
+        if($materia){
+        foreach ($materia as $o) {
+            if ($cantidad !== "") {
+                $det['pema_id'] = $pema_id;
+                $det['arti_id'] = (string) $o['id_materia'];
+                $det['cantidad'] = $o['cantidad'];
+                $detalle['_post_notapedido_detalle'][] = $det;
+            }
+        }
+        $arrayDeta['_post_notapedido_detalle_batch_req'] = $detalle;
+        $respDetalle = $this->Etapas->setDetaNP($arrayDeta);
+        }
+        if ($respDetalle >= 300) {
+            log_message('ERROR', 'Error en generacion de Detalle Pedido Materiales. respDetalle: >>' . $respDetalle);
+            echo ("Error en generacion de Detalle Pedido Materiales");
+            return false;
+        }
+        return true;
     }
 
     public function lanzarPedidoEtapa($pema_id)
@@ -287,30 +302,26 @@ class Etapa extends CI_Controller
 
         $data['tarea'] = $this->Etapas->validarPedidoMaterial($id);
 
-
         $this->load->model(ALM . 'Articulos');
-        $data['articulos'] = $this->Articulos->obtenerXTipos(array('Proceso','Final'));
+        $data['articulos'] = $this->Articulos->obtenerXTipos(array('Proceso', 'Final'));
 
         $data['accion'] = 'Editar';
         $data['etapa'] = $this->Etapas->buscar($id)->etapa;
         $data['idetapa'] = $data['etapa']->id;
 
-
         #$data['materias'] = $this->Articulos->obtenerXTipos(array('Proceso', 'Final', 'Materia Prima'));
         $data['productos'] = $this->Articulos->obtenerXTipos(array('Proceso', 'Producto'));
-  
 
         // trae tablita de materia prima Origen y producto
         $data['matPrimas'] = $this->Etapas->getRecursosOrigen($id, MATERIA_PRIMA)->recursos->recurso;
-        
+
         #Obtener Articulos por Etapa
         $data['productos_etapa'] = $this->Etapas->obtenerArticulos($data['etapa']->etap_id)['data'];
 
         $data['productos_salida_etapa'] = $this->Etapas->getSalidaEtapa($data['etapa']->etap_id)['data'];
         $data['productos_entrada_etapa'] = $this->Etapas->getEntradaEtapa($data['etapa']->etap_id)['data'];
-        
+
         $data['producto'] = $this->Etapas->getRecursosOrigen($id, PRODUCTO)->recursos->recurso;
-        
 
         $data['op'] = $data['etapa']->titulo;
         $data['lang'] = lang_get('spanish', 4);
@@ -319,11 +330,11 @@ class Etapa extends CI_Controller
         $data['fecha'] = $data['etapa']->fecha;
 
         if ($data['op'] == 'Fraccionamiento') {
-            // trae lotes segun entrega de materiales de almacen.(81) 
+            // trae lotes segun entrega de materiales de almacen.(81)
             $data['recipientes'] = $this->Recipientes->obtener('DEPOSITO', 'TODOS', $data['etapa']->esta_id)['data'];
             $data['lotesFracc'] = $this->Etapas->getLotesaFraccionar($id)->lotes->lote;
             $data['ordenProd'] = $data['etapa']->orden;
-            $data['articulos_fraccionar'] =  $this->Articulos->obtenerXTipo('Proceso')['data'];
+            $data['articulos_fraccionar'] = $this->Articulos->obtenerXTipo('Proceso')['data'];
 
             $this->load->view('etapa/fraccionar/fraccionar', $data);
         } else {
@@ -364,7 +375,7 @@ class Etapa extends CI_Controller
         //guarda batch nuevo (tabla lotes)
         $respServ = $this->Etapas->SetNuevoBatch($data);
 
-        if(!$respServ['status']){
+        if (!$respServ['status']) {
             echo json_encode($respServ);
             return;
         }
@@ -427,17 +438,17 @@ class Etapa extends CI_Controller
                         'pIdPedidoMaterial' => $pema_id,
                     ];
                     $rsp = $this->bpm->lanzarProceso(BPM_PROCESS_ID_PEDIDOS_NORMALES, $contract);
-                    if($rsp['status']){
+                    if ($rsp['status']) {
                         $case_id = strval($rsp['data']['caseId']);
                         $this->load->model(ALM . 'Notapedidos');
                         $this->Notapedidos->setCaseId($pema_id, $case_id);
-                         // AVANZA PROCESO A TAREA SIGUIENTE
+                        // AVANZA PROCESO A TAREA SIGUIENTE
                         if (PLANIF_AVANZA_TAREA) {
 
                             $this->aceptarPedidoMateriales($case_id);
 
                         }
-                        
+
                     }
                     echo json_encode($rsp);
                 } else {
@@ -450,13 +461,13 @@ class Etapa extends CI_Controller
     }
 
     public function pedidoEnvases($envases)
-    { 
-        if(false){ //HAY FORMULA
+    {
+        if (false) { //HAY FORMULA
 
-        }else{
-          
+        } else {
+
             $detalle['_post_notapedido_detalle_batch_req']['_post_notapedido_detalle'] = $envases;
-            
+
             $rsp = $this->Etapas->setDetaNP($detalle);
 
             return $rsp;
@@ -494,7 +505,7 @@ class Etapa extends CI_Controller
 
         $rsp = $this->Etapas->finalizarEtapa($arrayDatos);
 
-        if($rsp['status']){
+        if ($rsp['status']) {
 
             $rsp['data'] = $this->Etapas->buscar($batch_id_padre)->etapa;
         }
@@ -532,12 +543,12 @@ class Etapa extends CI_Controller
         }
 
         $rsp = $this->Etapas->finalizarEtapa($arrayDatos);
-        if($rsp['status']){
+        if ($rsp['status']) {
 
             $rsp = $this->Etapas->buscar($batch_id_padre)->etapa;
         }
 
-        echo json_encode($rsp);             
+        echo json_encode($rsp);
     }
     // Levanta pantalla abm fraccionar
     public function fraccionar()
@@ -555,7 +566,7 @@ class Etapa extends CI_Controller
         //    $data['lang'] = lang_get('spanish',5);
         $data['establecimientos'] = $this->Establecimientos->listarTodo()->establecimientos->establecimiento;
         $data['empaques'] = $this->Recipientes->listarEmpaques()->empaques->empaque;
-        $data['articulos_fraccionar'] =  $this->Articulos->obtenerXTipo('Proceso')['data'];
+        $data['articulos_fraccionar'] = $this->Articulos->obtenerXTipo('Proceso')['data'];
         //$data['materias'] = $this->Materias->listar()->materias->materia;
         $this->load->view('etapa/fraccionar/fraccionar', $data);
     }
@@ -573,57 +584,58 @@ class Etapa extends CI_Controller
         echo json_encode($rsp);
     }
 
- 
-
     public function getUsers()
     {
-      // $usuarios = $this->bpm->getUsuariosBPM();//usuarios bonita
-      $usuarios = $this->Etapas->getUsers()->users->user; //usuarios seg.users
-      echo json_encode($usuarios);
+        // $usuarios = $this->bpm->getUsuariosBPM();//usuarios bonita
+        $usuarios = $this->Etapas->getUsers()->users->user; //usuarios seg.users
+        echo json_encode($usuarios);
     }
 
     public function getTurnosProd()
     {
-      $turnos = $this->Etapas->getTurnosProd()->turnos->turno;
-      echo json_encode($turnos);
+        $turnos = $this->Etapas->getTurnosProd()->turnos->turno;
+        echo json_encode($turnos);
     }
 
     public function setUserLote()
     {
-      $batch_id = $this->input->post('batch_id');
+        $batch_id = $this->input->post('batch_id');
 
-      //eliminamos los resonsables viejos
-      $delete = $this->Etapas->deleteUserLote($batch_id);
+        //eliminamos los resonsables viejos
+        $delete = $this->Etapas->deleteUserLote($batch_id);
 
-      //cargamos los responsables nuevos
-      $responsables = $this->input->post('responsables');
-      $tableData = stripcslashes($responsables);
-      $tableDataArray['responsable'] = json_decode($tableData, TRUE);
-      foreach ($tableDataArray['responsable'] as $key => $x) {
-        $tableDataArray['responsable'][$key]['batch_id'] = $batch_id;
-        $tableDataArray['responsable'][$key]['user_id'] = strval($tableDataArray['responsable'][$key]['user_id']);
-        $tableDataArray['responsable'][$key]['turn_id'] = strval($tableDataArray['responsable'][$key]['turn_id']);
-      }
-      $responsablesArray['_post_responsable'] = $tableDataArray;
-      $rsp = $this->Etapas->setUserLote($responsablesArray);
-      if ($rsp == '202') {
-        echo 'Responsables cargados correctamente.';
-      } else return;
+        //cargamos los responsables nuevos
+        $responsables = $this->input->post('responsables');
+        $tableData = stripcslashes($responsables);
+        $tableDataArray['responsable'] = json_decode($tableData, true);
+        foreach ($tableDataArray['responsable'] as $key => $x) {
+            $tableDataArray['responsable'][$key]['batch_id'] = $batch_id;
+            $tableDataArray['responsable'][$key]['user_id'] = strval($tableDataArray['responsable'][$key]['user_id']);
+            $tableDataArray['responsable'][$key]['turn_id'] = strval($tableDataArray['responsable'][$key]['turn_id']);
+        }
+        $responsablesArray['_post_responsable'] = $tableDataArray;
+        $rsp = $this->Etapas->setUserLote($responsablesArray);
+        if ($rsp == '202') {
+            echo 'Responsables cargados correctamente.';
+        } else {
+            return;
+        }
+
     }
 
     public function getUserLote($batch_id)
     {
-      $user = $this->Etapas->getUserLote($batch_id)->users->user;
-      echo json_encode($user);
+        $user = $this->Etapas->getUserLote($batch_id)->users->user;
+        echo json_encode($user);
     }
 
     public function validarFormularioCalidad($orta_id)
     {
         $res = $this->Etapas->validarFormularioCalidad($orta_id);
-        echo json_encode(['status'=>$res]);
+        echo json_encode(['status' => $res]);
     }
 
-    function obtenerProductosSalida($etapId)
+    public function obtenerProductosSalida($etapId)
     {
         $productos_salida_etapa = $this->Etapas->getSalidaEtapa($etapId)['data'];
         echo selectBusquedaAvanzada('inputproducto', 'id', $productos_salida_etapa, 'arti_id', 'descripcion');

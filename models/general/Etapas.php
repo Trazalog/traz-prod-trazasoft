@@ -159,6 +159,12 @@ class Etapas extends CI_Model
         return json_decode($array['code']);
     }
 
+    public function eliminarDetallePedido($pemaId){
+        $url = REST_ALM . 'pedidos/detalle';
+        $data['_delete_pedidos_detalle']['pema_id'] = $pemaId;
+        return wso2($url, 'DELETE', $data);
+    }
+
     public function setCaseIdPedido($pema_id, $case_id)
     {
         $data['_post_pedidosMateriales_case']['pema_id'] = $pema_id;
