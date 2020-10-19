@@ -78,7 +78,7 @@ class Opcionesfiltros extends CI_Model
   public function getLotes()
   {
     // $url = PRD_Lote_DS . 'lotes';
-    $url = 'http://10.142.0.7:8280/services/PRDLoteDataService/lotes';
+    $url = 'http://localhost:8283/services/PRDLoteDataService/lotes';
     return wso2($url)['data'];
   }
 
@@ -111,7 +111,7 @@ class Opcionesfiltros extends CI_Model
     // }';
 
     // $url = PRD_Lote_DS . 'asignaciones/' . $lote_id . '/empresa/' . $empr_id;
-    $url = 'http://10.142.0.7:8280/services/PRDLoteDataService/' . 'asignaciones/' . $lote_id . '/empresa/' . $empr_id; //TODO: comentar y descomentar la linea de arriba
+    $url = 'http://localhost:8283/services/PRDLoteDataService/' . 'asignaciones/' . $lote_id . '/empresa/' . $empr_id; //TODO: comentar y descomentar la linea de arriba
 
     return wso2($url)['data'];
   }
@@ -126,7 +126,7 @@ class Opcionesfiltros extends CI_Model
     $fechasta = (isset($data['datepickerHasta'])) ? date("Y-m-d", strtotime($data['datepickerHasta'])) : '';
 
     // $url = LOG_DS . 'movimientos/cliente/' . $clie_id . '/transporte/' . $cuit . '/producto/' . $arti_id . '/desde/' . $fecdesde . '/hasta/' . $fechasta . '/salidas';
-    $url = 'http://10.142.0.7:8280/services/LOGDataService/' . 'movimientos/cliente/' . $clie_id . '/transporte/' . $cuit . '/producto/' . $arti_id . '/desde/' . $fecdesde . '/hasta/' . $fechasta . '/salidas'; //TODO:comentar y descomentar el de arriba
+    $url = 'http://localhost:8283/services/LOGDataService/' . 'movimientos/cliente/' . $clie_id . '/transporte/' . $cuit . '/producto/' . $arti_id . '/desde/' . $fecdesde . '/hasta/' . $fechasta . '/salidas'; //TODO:comentar y descomentar el de arriba
     return wso2($url)['data'];
   }
 
@@ -140,7 +140,7 @@ class Opcionesfiltros extends CI_Model
     $fechasta = (isset($data['datepickerHasta'])) ? date("Y-m-d", strtotime($data['datepickerHasta'])) : '';
 
     $url = LOG_DS . 'movimientos/proveedor/' . $prov_id . '/transporte/' . $cuit . '/producto/' . $arti_id . '/desde/' . $fecdesde . '/hasta/' . $fechasta . '/ingresos';
-    // $url = 'http://10.142.0.7:8280/services/LOGDataService/' . 'movimientos/cliente/' . $prov_id . '/transporte/' . $cuit . '/producto/' . $arti_id . '/desde/' . $fecdesde . '/hasta/' . $fechasta . '/ingresos'; //TODO:comentar y descomentar el de arriba
+    // $url = 'http://localhost:8283/services/LOGDataService/' . 'movimientos/cliente/' . $prov_id . '/transporte/' . $cuit . '/producto/' . $arti_id . '/desde/' . $fecdesde . '/hasta/' . $fechasta . '/ingresos'; //TODO:comentar y descomentar el de arriba
     return wso2($url)['data'];
   }
 }
