@@ -1,9 +1,15 @@
 <div class="box box-primary tag-descarga">
-    <div class="box-header with-border">
+<div class="box-header with-border">
+<div class="box-tools pull-right">
+    <button type="button" class="btn btn-box-tool" id="minimizar_destino" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
+        <i class="fa fa-minus"></i></button>
+      <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
+        <i class="fa fa-times"></i></button>
+    </div>
         <i class="fa fa-sign-in"></i>
         <h3 class="box-title"> Destino</h3>
     </div>
-    <div class="box-body">
+    <div class="box-body" id="div_destino">
         <form id="frm-destino" class="frm-destino">
             <div class="row">
                 <div class="col-md-12">

@@ -77,9 +77,15 @@ foreach ($establecimientos as $fila) {
 </div>
 <div class="box panel-req" style="display:none">
     <div class="box-header with-border">
+    <div class="box-tools pull-right">
+      <button type="button" class="btn btn-box-tool" id="minimizar_datos_camion" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
+        <i class="fa fa-minus"></i></button>
+      <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
+        <i class="fa fa-times"></i></button>
+    </div>
         <h3 class="box-title">Datos Camión</h3>
     </div>
-    <div class="box-body">
+    <div class="box-body" id="div_datos_camion">
         <form id="frm-camion">
             <div class="row">
                 <div class="col-md-4">
@@ -145,14 +151,37 @@ foreach ($establecimientos as $fila) {
     </div>
     <div class="col-md-12 tag-descarga" style="display:none">
         <?php 
+    $this->load->view('NoConsumible/EntradaNoConsumible');
+            ?>
+    </div>
+    <div class="col-md-12 tag-descarga" style="display:none">
+        <?php 
     $this->load->view('entrada_movilidad/comp/tabla_descarga');
             ?>
     </div>
+    
 </div>
 
 
 
 <script>
+
+$('#minimizar_datos_camion').click(function(){
+	$('#div_datos_camion').toggle(1000);
+});
+$('#minimizar_ingreso').click(function(){
+	$('#div_ingreso').toggle(1000);
+});
+$('#minimizar_destino').click(function(){
+	$('#div_destino').toggle(1000);
+});
+$('#minimizar_vale_entrada').click(function(){
+	$('#div_vale_entrada').toggle(1000);
+});
+
+
+
+
 $('.select').select2();
 $('#frm-camion').on('reset', function() {
     $(this).find('.select').val(null).trigger('change');
@@ -614,6 +643,8 @@ $(document).off('click', '.tabla_productos_asignados_borrar').on('click', '.tabl
     idrecipiente: 'productosasignados',
     idbandera: 'productos_existe'
 }, remover);
+
+
 </script>
 
 <div class="modal" id="unificar_lotes" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

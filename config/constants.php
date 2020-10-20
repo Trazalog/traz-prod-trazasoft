@@ -159,6 +159,13 @@ define('LOG_DS', 'http://10.142.0.7:8280/services/LOGDataService/');
 define('CORE_DS','http://10.142.0.7:8280/services/COREDataService/');
 define('FRM_DS','http://10.142.0.7:8280/services/FRMDataService');
 
+
+#TOOLS-PRD DATASERVICES /*NUEVOS NoCon*/
+define('PRD_NoCon', 'http://10.142.0.7:8280/services/PRDNoConsumiblesDataService');
+define('REST_ALM_NoCon', 'http://10.142.0.7:8280/services/ALMDataService/');
+define('REST_CORE_NoCon', 'http://10.142.0.7:8280/services/COREDataService/');
+
+
 //TODO:AGREGAR AL CONSTANT ORIGINAL
 #RECURSOS_LOTES
 define('MATERIA_PRIMA', 'MATERIA_PRIMA');
