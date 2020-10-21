@@ -32,8 +32,8 @@
 
 <div class="box table-responsive">
   <div class="box-header with-border">
-    <h4 class="box-title">Etapas</h4></div>
-    <div class="row" style="width:900px; margin-top:5px;">
+    <h4 class="box-title" style="margin-bottom: 20px;">Etapas</h4>
+    <div class="row" style="width:900px;">
       <div class="col-xs-10">
         <?php
 

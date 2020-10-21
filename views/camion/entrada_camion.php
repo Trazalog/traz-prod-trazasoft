@@ -77,12 +77,6 @@ foreach ($establecimientos as $fila) {
 </div>
 <div class="box panel-req" style="display:none">
     <div class="box-header with-border">
-    <div class="box-tools pull-right">
-      <button type="button" class="btn btn-box-tool" id="minimizar_datos_camion" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
-        <i class="fa fa-minus"></i></button>
-      <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
-        <i class="fa fa-times"></i></button>
-    </div>
         <h3 class="box-title">Datos Camión</h3>
     </div>
     <div class="box-body" id="div_datos_camion">

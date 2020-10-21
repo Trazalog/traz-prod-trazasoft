@@ -27,7 +27,7 @@ use \koolreport\widgets\koolphp\Card;
 
           <div class="box box-primary">
 
-            <div class="box-header">
+            <div class="box-header with-border">
               <h3 class="box-title">
 
                 Reporte de Producción
@@ -116,7 +116,7 @@ use \koolreport\widgets\koolphp\Card;
                 <div class="col-md-6">
 
 
-                  <div class="box-header">
+                  <div class="box-header with-border">
                     <h3 class="box-title center">
                       <i class="fa fa-pie-chart"></i>
                       Cantidad de productos
@@ -159,7 +159,7 @@ use \koolreport\widgets\koolphp\Card;
 
                 <div class="col-md-6">
 
-                  <div class="box-header">
+                  <div class="box-header with-border">
                     <h3 class="box-title">
                       <i class="fa fa-pie-chart"></i>
                       Productos con mayor cantidad

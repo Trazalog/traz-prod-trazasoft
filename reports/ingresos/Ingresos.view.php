@@ -23,7 +23,7 @@ use \koolreport\widgets\google\ColumnChart;
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <div class="box box-solid">
           <div class="box box-primary">
-            <div class="box-header">
+            <div class="box-header with-border">
               <h3 class="box-title">
                 Reporte de Ingresos
               </h3>
@@ -176,7 +176,7 @@ use \koolreport\widgets\google\ColumnChart;
               <div class="col-md-12"> -->
             <!--_________________ CHARTS 1_________________-->
             <!-- <div class="col-md-6">
-              <div class="box-header">
+              <div class="box-header with-border">
                 <h3 class="box-title center">
                   <i class="fa fa-pie-chart"></i>
                   Cantidad de ingresos
