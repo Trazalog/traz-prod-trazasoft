@@ -115,25 +115,29 @@ class Noconsumible extends CI_Controller
 
     $tableData = stripcslashes($datos);
     $tableDataArray['datos'] = json_decode($tableData, TRUE);
+
+
     foreach ($tableDataArray['datos'] as $key => $x) {
       $array['codigo'] = $tableDataArray['datos'][$key]['codigo'];
       $array['estado'] = "ACTIVO";
       $array['usuario_app'] = "rodotest";
-   
-   
-      $array1['estado'] = "ACTIVO";   
+
+
+      $array1['estado'] = "ACTIVO";
       $array1['usuario_app'] = "rodotest";
       $array1['noco_id'] = $tableDataArray['datos'][$key]['codigo'];
       $array1['depo_id'] = $tableDataArray['datos'][$key]['establecimiento'];
       $array1['dest_id'] = $tableDataArray['datos'][$key]['depositos'];
-    
-      $put[]['_put_noconsumible_estado_batch_req'][$key] = $array;
 
-      $put[]['_post_noconsumibles_movimientos_batch_req'][$key] = $array1;
+      $put['_put_noconsumible_estado'][] = $array;
+
+      $post['_post_noconsumibles_movimientos'][] = $array1;
     }
 
 
-    $data =  $this->Noconsumibles->guardarMovimientoEntrada($put);
+
+    $data =  $this->Noconsumibles->guardarMovimientoEntrada($put,$post);
+
     echo json_encode($data);
   }
 

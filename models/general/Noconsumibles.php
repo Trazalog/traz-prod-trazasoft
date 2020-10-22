@@ -88,9 +88,23 @@ public function ListarTrazabilidadNoConsumible($codigo)
 }
 
 // // Guardar Movimiento Entrada No Consumibles
-public function guardarMovimientoEntrada($data)
-{   
-     return  requestBox(PRD_NoCon.'/', $data);
+public function guardarMovimientoEntrada($put,$post)
+{
+
+  $resource_put = "/noConsumible/estado_batch_req";
+
+ $url_put = (PRD_NoCon.$resource_put);
+
+  $rsp =  wso2($url_put, 'PUT', $put);
+
+
+  $resource_post = "/noConsumibles/movimientos_batch_req";
+
+$url_post = (PRD_NoCon.$resource_post);
+
+   $rsp =  wso2($url_post, 'POST', $post);
+
+
 }
 
 
