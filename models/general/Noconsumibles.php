@@ -27,7 +27,6 @@ class Noconsumibles extends CI_Model
 public function tipoEstablecimiento()
 {
     #HARCODE
-    #CAMBIA_CONTANTS .empresa()
      $resource = 'establecimientos/empresa/'.empresa();
      $url = REST_ALM_NoCon . $resource;
     return wso2($url);
@@ -35,12 +34,18 @@ public function tipoEstablecimiento()
 }
 
 
+public function seleccionarDestino()
+{
+  $resource = 'tablas/destinos_no_consumibles';
+  $url = CORE_DS_NoCon . $resource;
+  return wso2($url);
+}
+
 // Listar Tipos de No Consumibles
 public function ListarNoConsumible()
 {
-   #HARCODE .empresa()
-    #CAMBIA_CONTANTS                        
-     $resource = PRD_NoCon . "/noConsumibles/porEmpresa/".empresa();
+   #HARCODE .empresa()                       
+     $resource = PRD_NoCon . "/noConsumibles/porEstado/TODOS/porEmpresa/".empresa();
     $url = $resource;//PRD_NoCon . 
     return wso2($url);
 
@@ -49,13 +54,18 @@ public function ListarNoConsumible()
     
     public function editarNoConsumible($data)
     {
-       #CAMBIA_CONTANTS
       $url = PRD_NoCon . '/noConsumibles';
       $rsp = $this->rest->callApi('PUT', $url, $data);
       return $rsp;
     }
  
-
+    public function guardarDestino($data)
+    {
+      $url = CORE_DS_NoCon . 'tablas';
+      $rsp = $this->rest->callApi('POST', $url, $data);
+      return $rsp;
+    }
+ 
 
     function eliminarNoConsumible($codigo)
 	{
@@ -64,48 +74,32 @@ public function ListarNoConsumible()
      return wso2($url, 'DELETE',$codigo);
     }
 
-    
-    public function guardarTrazabilidadNoConsumible()
-	{   
-        //$resource = 'http://localhost:8080/prueba';
-        //$url = REST . $resource;
-        $url = 'http://localhost:8080/prueba';
-        $rsp = $this->rest->callApi('POST', $url, $data);
-        if ($rsp['status']) {
-            $rsp['data'] = json_decode($rsp['data']);
-          }
-          return $rsp;
-	}  
 
 
 // Listar trazabilidad No Consumibles
 public function ListarTrazabilidadNoConsumible($codigo)
 {
-    #CAMBIA_CONTANTS                    
+                      
     $resource = "/noConsumible/trazabilidad/porCodigo/$codigo";
     $url = PRD_NoCon.$resource;
     return wso2($url);
 }
 
-// // Guardar Movimiento Entrada No Consumibles
-public function guardarMovimientoEntrada($put,$post)
-{
-
-  $resource_put = "/noConsumible/estado_batch_req";
-
- $url_put = (PRD_NoCon.$resource_put);
-
-  $rsp =  wso2($url_put, 'PUT', $put);
-
-
-  $resource_post = "/noConsumibles/movimientos_batch_req";
-
-$url_post = (PRD_NoCon.$resource_post);
-
-   $rsp =  wso2($url_post, 'POST', $post);
-
-
+public function buscarNoConsumible($codigo)
+{              
+    $resource = "/noConsumible/porCodigo/$codigo";
+    $url = PRD_NoCon.$resource;
+    return wso2($url);
 }
+
+
+
+// // Guardar Movimiento Entrada No Consumibles 
+public function guardarMovimientoEntrada($data)
+{   
+      return  requestBox(PRD_NoCon.'/',$data);
+}
+
 
 
 // // Guardar Movimiento Salida No Consumibles
@@ -113,5 +107,6 @@ public function guardarMovimientoSalida($data)
 {   
      return  requestBox(PRD_NoCon.'/', $data);
 }
+
 
 }

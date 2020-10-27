@@ -39,6 +39,7 @@ class Camion extends CI_Controller
     {
         $data['establecimientos'] = $this->Establecimientos->listarTodo()->establecimientos->establecimiento;
         $data['tipoEstablecimiento'] = $this->Noconsumibles->tipoEstablecimiento()['data'];
+        $data['destinoNoConsumible'] = $this->Noconsumibles->seleccionarDestino()['data'];
         $this->load->view('camion/salida_camion', $data);
     }
 

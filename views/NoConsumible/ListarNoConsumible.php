@@ -21,7 +21,7 @@
                     <?php
                     foreach($ListarNoConsumible as $rsp)
                 {   $codigo = $rsp->codigo;
-                    $estadoNoconsumible = $rsp->estadoNoconsumible;
+                    $estadoNoconsumible = $rsp->estado;
                     $tipo = $rsp->tipo;
                     $descripcion = $rsp->descripcion;
                     $fec_alta = $rsp->fec_alta;
@@ -68,19 +68,30 @@
             processData: false,
             success: function(rsp) {
                 if (rsp.status) {
-                    console.log('SI entra');
-                    mdlClose('mdl-NoConsumible');
-                    alert('El registro se Guardo Correctamente');
+               //   mdlClose('mdl-NoConsumible');
+                      $('#mdl-NoConsumible').modal('hide');
+                                Swal.fire(
+                        'Guardado!',
+                        'El registro se Guardo Correctamente',
+                        'success'
+                                       )
                     $('#frm-NoConsumible')[0].reset();
                     linkTo();
                 } else {
-                    console.log('NO entra');
-                    alert('Error Tremendo');
+                    Swal.fire(
+                      'Oops...',
+                        'Algo salio mal!',
+                        'error'
+                              )
                 }
 
             },
             error: function(rsp) {
-                alert('Error: No se pudo Guardar');
+                Swal.fire(
+                      'Oops...',
+                        'Algo salio mal!',
+                        'error'
+                              )
                 console.log(rsp.msj);
             },
             complete: function() {
@@ -105,13 +116,22 @@
             processData: false,
             success: function(rsp) {
                 
-                mdlClose('mdl-EditarNoConsumible');
-                  alert("No Consumible Modificado!");
+               // mdlClose('mdl-EditarNoConsumible');
+                $('#mdl-EditarNoConsumible').modal('hide');
+                        Swal.fire(
+                    'Modificado!',
+                    'La Modificacion se Realizó Correctamente.',
+                    'success'
+                                )
                   $('#frm-EditarNoConsumible')[0].reset();
                 linkTo();
             },
             error: function(rsp) {
-                alert('Error: No se pudo Editar');
+                Swal.fire(
+                      'Oops...',
+                        'Algo salio mal!',
+                        'error'
+                              )
                 console.log(rsp.msj);
             },
             complete: function() {
@@ -210,9 +230,6 @@ function selectEstablecimiento() {
 
 
 
-///////////////////////////////////////
-/////////////////////////////////////////////////////
-
     function ver(e) {
         var json = JSON.parse(JSON.stringify($(e).closest('tr').data('json')));
         Object.keys(json).forEach(function(key, index) {
@@ -245,8 +262,12 @@ function selectEstablecimiento() {
             },
             url: '<?php echo base_url(PRD) ?>general/Noconsumible/eliminarNoConsumible/',
             success: function(data) {
-                console.log('entra por aka');
-                alert("No Consumible Eliminado");
+                Swal.fire(
+            'Eliminado!',
+            'Se Elimino Correctamente.',
+            'success'
+          )
+        
                 linkTo();
             },
             error: function(result) {
@@ -456,35 +477,6 @@ function trazabilidad(e) {
                                             placeholder="" class="form-control input-md"  <?php echo req() ?>>
                                     </div>
                                 </div>
-                                        <br>
-                                <div class="form-group">
-                               
-                                     <label class="col-md-4 control-label" for="">Establecimiento:</label>
-                                        <div class="col-md-8">
-                                        <select class="form-control select2 select2-hidden-accesible" id="establecimiento" name="establecimiento" onchange="selectEstablecimiento()" <?php echo req() ?>>
-                                            <option value="" disabled selected>Seleccionar</option>
-                                            <?php
-                                              if(is_array($tipoEstablecimiento)){
-                                                    foreach ($tipoEstablecimiento as $i) {
-                                                    echo "<option value = $i->esta_id>$i->nombre</option>";
-                                                    }
-                                              }
-                                            ?>
-                                        </select>
-                                        <span id="estabSelected" style="color: forestgreen;"></span>
-                                        </div>
-                                 </div>
-                                 <br>
-                                    <!-- ___________________________________________________ -->
-                                <div class="form-group">  
-                                        <label class="col-md-4 control-label" for="depositos">Depósito:</label>
-                                        <div class="col-md-8">
-                                        <select class="form-control select2 select2-hidden-accesible" id="depositos" name="depositos" onchange="selectDeposito()" <?php echo req() ?>>
-                                        </select>
-                                        <span id="deposSelected" style="color: forestgreen;"></span>
-                                        </div>
-                                    
-                                </div>
                             </fieldset>
                     </form>
                 </div> <!-- /.modal-body -->
@@ -559,35 +551,6 @@ function trazabilidad(e) {
                                         <input id="fec_vencimiento" name="fec_vencimiento" type="text"
                                             placeholder="" class="form-control input-md" readonly>
                                     </div>
-                                </div>
-                                        <br>
-                                <div class="form-group">
-                               
-                                     <label class="col-md-4 control-label" for="">Establecimiento:</label>
-                                        <div class="col-md-8">
-                                        <select class="form-control select2 select2-hidden-accesible" id="establecimiento" name="establecimiento" onchange="selectEstablecimiento()" readonly disabled>
-                                            <option value="" disabled selected>Seleccionar</option>
-                                            <?php
-                                              if(is_array($tipoEstablecimiento)){
-                                                    foreach ($tipoEstablecimiento as $i) {
-                                                    echo "<option value = $i->esta_id>$i->nombre</option>";
-                                                    }
-                                              }
-                                            ?>
-                                        </select>
-                                        <span id="estabSelected" style="color: forestgreen;"></span>
-                                        </div>
-                                 </div>
-                                 <br>
-                                    <!-- ___________________________________________________ -->
-                                <div class="form-group">  
-                                        <label class="col-md-4 control-label" for="depositos">Depósito:</label>
-                                        <div class="col-md-8">
-                                        <select class="form-control select2 select2-hidden-accesible" id="depositos" name="depositos" onchange="selectDeposito()" readonly disabled>
-                                        </select>
-                                        <span id="deposSelected" style="color: forestgreen;"></span>
-                                        </div>
-                                    
                                 </div>
                                 <div class="form-group">
                                      <div class="col-md-6 col-md-offset-6">

@@ -40,8 +40,7 @@
                 <span id="deposSelected" style="color: forestgreen;"></span>
             </div>
             <div class="col-md-1">
-                <button class="btn btn-primary" style="margin-top:23px; float:right;"><i
-                        class="fa fa-plus"  onclick="agregarFilaNoCon()">Agregar</i></button>
+                <button class="btn btn-primary" style="margin-top:23px; float:right;"  onclick="agregarFilaNoCon()">Agregar</button>
             </div>
         </form>
 
@@ -61,11 +60,11 @@
         </table>
         <hr>
 
-        
+<!--         
         <button id="guardarMovimientoEntrada" class="btn btn-primary btn-sm" style="float:right"
-            onclick="guardarR()"></i>Guardar Entrada</button>
+            onclick="guardarEntradaNoCon()"></i>Guardar Entrada</button>
         <button id="guardarMovimientoEntrada" class="btn btn-primary btn-sm" style="float:right" onclick="imprimirMovimientoEntrada()" disabled><i
-                class="fa fa-echo"> </i> Imprimir Vale</button>
+                class="fa fa-echo"> </i> Imprimir Vale</button> -->
 
     </div>
 </div>
@@ -85,22 +84,23 @@ function agregarFilaNoCon() {
 
     datos = new FormData($('frm-MovimientoNoConsumible')[0]);
     datos = formToObject(datos);
-    // console.log('datos: ');
-    // console.table(datosEsta);
-    // console.log('datosReci: ');
-    // console.table(datosReci);
+
+    var objFecha = new Date();
+
+    var dia  = objFecha.getDate();
+    var mes  = objFecha.getMonth();
+    var anio = objFecha.getFullYear();
 
     html = '<tr>' +
       '<td><a type = "button" class = "del pull-right" style = "cursor: pointer;"><i class = "fa fa-times text-danger"></i></a></td>' +
       '<td value=' + codigo + '>' + codigo + '</td>' +
-       '<td></td>' +
-        '<td></td>' +
+      '<td></td>' +
+      '<td>'+  dia + "/" + mes + "/" + anio  +'</td>' +
       '<td value=' + establecimiento + '>' + $('#estabSelected').text() + '</td>' +
       '<td value=' + depositos + '>' + $('#deposSelected').text() + '</td>' +
       '</tr>';
     $('#tablaNoCon tbody').append(html);
-
-   // limpiarCampos();
+    $('#frm-MovimientoNoConsumible')[0].reset();
   }
  //Quitar fila de tabla
  $("#tablaNoCon").on("click", ".del", function() {
@@ -108,8 +108,6 @@ function agregarFilaNoCon() {
   });
 
 
-///////////////////////////
-///////////////////////////////////////////////////
 function selectEstablecimiento() {
     var esta_id = $('#establecimiento').val();
     $('#estabSelected').text('');
@@ -195,12 +193,8 @@ function selectEstablecimiento() {
   }
 
 
-
-///////////////////////////////////////
-
-/////////////////////////////////////////////////////
-function guardarR() {
-    //Datos de la tabla de recipientes
+function guardarEntradaNoCon() {
+    //Datos de la tabla de
     var datosTabla = new Array();
     $('#tablaNoCon tr').each(function(row, tr) {
       datosTabla[row] = {
@@ -221,10 +215,18 @@ function guardarR() {
         datos: datos
       },
       success: function(rsp) {
-        alert("cargados correctamente.");
+           Swal.fire(
+            'Agregado/s!',
+            'El Proceso se Realizó Correctamente.',
+            'success'
+          )
       },
       error: function() {
-        alert("Se produjo un error.");
+        Swal.fire(
+                      'Oops...',
+                        'Algo salio mal!',
+                        'error'
+                              )
       },
       complete: function() {
         wc();
@@ -232,62 +234,4 @@ function guardarR() {
     });
   }
 
-initForm();
-    function guardarMovimientoEntrada() {
-
-        var formData = new FormData($('#frm-MovimientoNoConsumible')[0]);
-        $.ajax({
-            type: 'POST',
-            dataType: 'JSON',
-            url: '<?php echo base_url(PRD) ?>general/Noconsumible/guardarMovimientoEntrada',
-            data: formData,
-            cache: false,
-            contentType: false,
-            processData: false,
-            success: function(rsp) {
-                if (rsp.status) {
-                    console.log('SI entra');
-                    alert('El registro se Guardo Correctamente');
-                    $('#frm-MovimientoNoConsumible')[0].reset();
-                    linkTo();
-                } else {
-                    console.log('NO entra');
-                    alert('Error Tremendo');
-                }
-
-            },
-            error: function(rsp) {
-                alert('Error: No se pudo Guardar');
-                console.log(rsp.msj);
-            },
-            complete: function() {
-                wc();
-            }
-        });
-    }
-
-
-$("#consumible").autocomplete({
-    source: "autocompleta_denunciante.php",
-    minLength: 2,
-    select: function(event, ui) {
-        event.preventDefault();
-        $('#consumible').val(ui.item.dni);
-
-    }
-});
 </script>
-
-<div class="modal fade" id="eliminar_filaNoCon" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog modal-sm" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
-                <h4 class="text-center">¿Desea Eliminar Registro?</h3>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="eliminarFilaNoCon()">Si</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-            </div>
-        </div>
-    </div>
-</div>

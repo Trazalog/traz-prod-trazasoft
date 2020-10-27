@@ -15,7 +15,7 @@
         </table>
         <hr>
         <button id="guardarDescarga" class="btn btn-primary btn-sm" style="float:right"
-            onclick="guardarDescargaOrigen();guardarLoteSistema();" disabled><i class="fa fa-check"></i> Guardar Descarga</button>
+            onclick="guardarEntradaNoCon();guardarDescargaOrigen();guardarLoteSistema();" disabled><i class="fa fa-check"></i> Guardar Descarga</button>
     </div>
 </div>
 

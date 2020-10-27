@@ -164,7 +164,7 @@ define('FRM_DS','http://10.142.0.7:8280/services/FRMDataService');
 define('PRD_NoCon', 'http://10.142.0.7:8280/services/PRDNoConsumiblesDataService');
 define('REST_ALM_NoCon', 'http://10.142.0.7:8280/services/ALMDataService/');
 define('REST_CORE_NoCon', 'http://10.142.0.7:8280/services/COREDataService/');
-
+define('CORE_DS_NoCon','http://10.142.0.7:8280/services/COREDataService/');
 
 //TODO:AGREGAR AL CONSTANT ORIGINAL
 #RECURSOS_LOTES

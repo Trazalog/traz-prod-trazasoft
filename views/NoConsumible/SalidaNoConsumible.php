@@ -1,179 +1,173 @@
 <div class="box box-primary tag-descarga">
-<div class="box-header with-border">
-<div class="box-tools pull-right">
-    <button type="button" class="btn btn-box-tool" id="minimizar_vale_salida" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
-        <i class="fa fa-minus"></i></button>
-      <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
-        <i class="fa fa-times"></i></button>
-    </div>
-<h4 class="box-title">Vale de Salida</h4>
+    <div class="box-header with-border">
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" id="minimizar_vale_entrada" data-widget="collapse"
+                data-toggle="tooltip" title="" data-original-title="Collapse">
+                <i class="fa fa-minus"></i></button>
+            <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title=""
+                data-original-title="Remove">
+                <i class="fa fa-times"></i></button>
+        </div>
+        <h4 class="box-title">Vale de Salida</h4>
     </div>
     <div class="box-body" id="div_vale_entrada">
     <form class="form-horizontal" id="frm-MovimientoNoConsumible">
             <label for="codigo" class="col-md-1">Codigo No Consumible:</label>
             <div class="col-md-2">
-                <input id="codigo" name="codigo" type="text" placeholder="" class="form-control input-md">
+                <input id="codigoNoCon" name="codigoNoCon" type="text" placeholder="" class="form-control input-md">
             </div>
             <label for="" class="col-md-2">Establecimiento:</label>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <select class="form-control select2 select2-hidden-accesible" id="establecimiento"
                     name="establecimiento" onchange="selectEstablecimiento()" <?php echo req() ?>>
-                    <option value="" disabled selected>Seleccionar</option>
+                    <option value="" disabled selected>- Seleccionar - </option>
                     <?php
-        if(is_array($tipoEstablecimiento)){
-        foreach ($tipoEstablecimiento as $i) {
-         echo "<option value = $i->esta_id>$i->nombre</option>";
-         }
-         }
-        ?>
+                      if(is_array($tipoEstablecimiento)){
+                      foreach ($tipoEstablecimiento as $i) {
+                      echo "<option value = $i->esta_id>$i->nombre</option>";
+                           }
+                         }
+                      ?>
                 </select>
                 <span id="estabSelected" style="color: forestgreen;"></span>
             </div>
-
-            <label class="col-md-1 control-label" for="depositos">Depósito:</label>
-            <div class="col-md-2">
-                <select class="form-control select2 select2-hidden-accesible" id="depositos" name="depositos"
-                    onchange="selectDeposito()" <?php echo req() ?>>
-                </select>
-                <span id="deposSelected" style="color: forestgreen;"></span>
+             <label class="col-md-1 control-label" for="destino">Destino:</label>
+                <div class="col-md-2" id='div_destino'>
+                    <select name="destino" id="destino" class="form-control">
+                        <option value="" disabled selected> - Seleccionar - </option>
+                      <?php 
+                          if(is_array($destinoNoConsumible)){
+                          foreach ($destinoNoConsumible as $i) {
+                          echo "<option value = $i->tabl_id>$i->valor</option>";
+                                }                   
+                              }
+                          ?>
+                      </select>
+                  <span id="destinoSelected" style="color: forestgreen;"></span>
+                </div>
+            <div class="col-md-1">
+                <button class="btn btn-primary" style="float:left;" data-toggle="modal" data-target="#mdl-destino" ><i class="fa fa-plus"></i></button>
             </div>
             <div class="col-md-1">
-                <button class="btn btn-primary" style="margin-top:23px; float:right;"><i
-                        class="fa fa-plus"></i></button>
+                <button class="btn btn-primary" style="margin-top:23px; float:right;"  onclick="agregarFilaNoCon()">Agregar</button>
             </div>
         </form>
 
-        <table class="table table-striped table-hover">
+        <table class="table table-striped table-hover"  id="tablaNoCon">
             <br><br>
             <thead>
+                <th></th>
                 <th>Codigo</th>
                 <th>Descripcion</th>
                 <th>Fecha de Salida</th>
-                <th>deposito</th>
+                <th>Establecimiento</th>
+                <th>Destino</th>
             </thead>
-            <tbody id="">
+            <tbody>
 
             </tbody>
         </table>
         <hr>
-
+<!-- 
         
         <button id="guardarMovimientoSalida" class="btn btn-primary btn-sm" style="float:right"
-            onclick="guardarMovimientoSalida()"></i>Guardar Salida</button>
-        <button id="imprimirMovimientoSalida" class="btn btn-primary btn-sm" style="float:right" onclick="imprimirMovimientoSalida()" disabled><i
-                class="fa fa-echo"> </i> Imprimir Vale</button>
+            onclick="guardarSalidaNoCon()"></i>Guardar Salida</button>
+        <button id="guardarMovimientoSalida" class="btn btn-primary btn-sm" style="float:right" onclick="imprimirMovimientoSalida()" disabled><i
+                class="fa fa-echo"> </i> Imprimir Vale</button> -->
 
     </div>
 </div>
 
+
+  <!-- Modal  No Consumible-->
+  <div class="modal fade bd-example-modal-md" tabindex="-1" id="mdl-destino" role="dialog"
+        aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="mdl-titulo">Agregar Destino</h4>
+                </div>
+
+                <div class="modal-body" id="modalBody">
+
+                    <div class="alert alert-danger alert-dismissable" id="error" style="display: none">
+                        <h4><i class="icon fa fa-ban"></i> Error!</h4>
+                        Revise que todos los campos esten completos
+                    </div>
+
+                    <form class="form-horizontal" id="frm-destino">
+                        <fieldset id="read-only">
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label" for="destino">Destino<strong
+                                            class="text-danger">*</strong>:</label>
+                                    <div class="col-md-4">
+                                        <input id="valor" name="valor" type="text" placeholder="Ingrese Destio..."
+                                            class="form-control input-md" required>
+                                    </div>
+                                    <label class="col-md-2 control-label" for="descripcion">Descripcion<strong
+                                            class="text-danger">*</strong>:</label>
+                                    <div class="col-md-4">
+                                    <input id="descripcion" name="descripcion" type="text" placeholder="Ingrese descripcion..."
+                                            class="form-control input-md" required>
+                                    </div>
+                                </div>
+                            </fieldset>
+                    </form>
+                </div> <!-- /.modal-body -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button type="button" id="btn-accion" class="btn btn-primary btn-guardar"
+                        onclick="guardarDestino()">Agregar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
 <script>
-// var fila = null;
-
-// function agregarFila(data) {
-
-//     var lote_origen = $('#new_codigo').hasClass('hidden')?$('#codigo').select2('data')[0].text:$('#new_codigo').val();
-
-//     $('#lotes').append(
-//         `<tr data-json='${JSON.stringify(data)}' class='${loteSistema?'lote-sistema':'lote'}'>
-//             <td class="text-center"><i class="fa fa-times text-danger" onclick="fila = $(this).closest('tr'); $('#eliminar_fila').modal('show');"></i></td>
-//             <td>${lote_origen}</td>
-//             <td>${$('.frm-destino #art-detalle').val()}</td>
-//             <td>${data.destino.cantidad + ' | ' + data.destino.unidad_medida}</td>
-//             <td>${data.destino.lote_id}</td>
-//             <td>${loteSistema?'<i class="fa fa-barcode text-blue" title="Lote Trazable"></i>':''}</td>
-//         </tr>`
-//     );
-
-//     $('#guardarDescarga').attr('disabled', false);
-// }
-
-// function guardarDescargaOrigen() {
-
-//      //Guardar Datos de Camión parametro = FALSE es para NO mostrar el MSJ de Datos Guardados
-//     if($('#lotes tr').length != 0) addCamion(false);
-
-//     var array = [];
-//     $('#lotes tr.lote').each(function() {
-//         array.push(JSON.parse(this.dataset.json));
-//     });
-
-//     if(array.length == 0) return;
 
 
-//     $.ajax({
-//         type: 'POST',
-//         dataType: 'JSON',
-//         url: 'index.php/general/Camion/guardarDescarga',
-//         data: {
-//             array
-//         },
-//         success: function(rsp) {
-//             if(rsp.status){
-//               alert('Hecho');
-//               linkTo();
-//             }else{
-//                 alert('Falla al Guardar Descarga');
-//             }
-//         },
-//         error: function(rsp) {
-//             alert('Error: ' + rsp.msj);
-//             console.log(rsp.msj);
-//         }
-//     });
-// }
+function agregarFilaNoCon() {
+   
 
-// function guardarLoteSistema(){
+    var codigo = $('#codigoNoCon').val();
+    var establecimiento = $('#establecimiento').val();
+    var estabSelected =  $('#estabSelected').text();
+    var destino = $('#destino').val();
+    var destinoSelected = $('#destino').text();
 
-//     var frmCamion = obtenerFormularioCamion();
 
-//     var array = [];
-//     $('#lotes tr.lote-sistema').each(function() {
-//         const e = JSON.parse(this.dataset.json);
-//         e.loteSistema = loteSistemaData;
-//         array.push(e);
-//     });
+    datos = new FormData($('frm-MovimientoNoConsumible')[0]);
+    datos = formToObject(datos);
 
-//     if (array.length == 0) return;
+    var objFecha = new Date();
 
-//     wo();
-//     $.ajax({
-//         type: 'POST',
-//         dataType: 'JSON',
-//         url: 'index.php/general/Camion/guardarLoteSistema',
-//         data: {
-//             array,
-//             frmCamion
-//         },
-//         success: function(rsp) {
-//             if(rsp.status == true){
-//               alert('Hecho');
-//               linkTo();
-//             }else{
-//                 alert('Falla al Guardar Lotes Sistema');
-//             }
-//         },
-//         error: function(rsp) {
-//             alert('Error: ' + rsp.msj);
-//             console.log(rsp.msj);
-//         },
-//         complete:function(){
-//             wc();
-//         }
-//     });
+    var dia  = objFecha.getDate();
+    var mes  = objFecha.getMonth();
+    var anio = objFecha.getFullYear();
 
-// }
+    html = '<tr>' +
+      '<td><a type = "button" class = "del pull-right" style = "cursor: pointer;"><i class = "fa fa-times text-danger"></i></a></td>' +
+      '<td value=' + codigo + '>' + codigo + '</td>' +
+      '<td></td>' +
+      '<td>'+  dia + "/" + mes + "/" + anio  +'</td>' +
+      '<td value=' + establecimiento + '>' + $('#estabSelected').text() + '</td>' +
+      '<td value=' + destino + '>' + destino + '</td>' +
+      '</tr>';
+    $('#tablaNoCon tbody').append(html);
+    $('#frm-MovimientoNoConsumible')[0].reset();
+  }
+ //Quitar fila de tabla
+ $("#tablaNoCon").on("click", ".del", function() {
+    $(this).parents("tr").remove();
+  });
 
-// function eliminarFila() {
-//     var json = getJson($(fila));
-//     if (!json) return;
-//     $('.frm-origen #cantidad').val(parseFloat($('.frm-origen #cantidad').val()) + parseFloat(json.destino.cantidad));
-//     $(fila).remove();
 
-//     $('#guardarDescarga').attr('disabled', $('#lotes tr').length == 0);
-// }
-
-///////////////////////////
-///////////////////////////////////////////////////
 function selectEstablecimiento() {
     var esta_id = $('#establecimiento').val();
     $('#estabSelected').text('');
@@ -244,8 +238,8 @@ function selectEstablecimiento() {
     })
   }
 
-  function selectRecipiente() {
-    selectSearch('tipo_residuo', 'recipSelected');
+  function selectDestino() {
+    selectSearch('destino', 'recipSelected');
   }
 
   /* selectSearch: busca en un select un valor selecionado y lo coloca en el "spanSelected" */
@@ -260,65 +254,93 @@ function selectEstablecimiento() {
 
 
 
-///////////////////////////////////////
-/////////////////////////////////////////////////////
+function guardarSalidaNoCon() {
+    //Datos de la tabla de recipientes
+    var datosTabla = new Array();
+    $('#tablaNoCon tr').each(function(row, tr) {
+      datosTabla[row] = {
+        "codigo": $(tr).find('td:eq(1)').attr('value'),     
+        "establecimiento": $(tr).find('td:eq(4)').attr('value'),
+        "destino": $(tr).find('td:eq(5)').attr('value')
+       
+      }
+    });
+    datosTabla.shift(); //borra encabezado de la tabla o primera fila
+    var datos = JSON.stringify(datosTabla);
+     console.log('datos: ' + datos);
+    wo();
+    $.ajax({
+      type: 'POST',
+      url: '<?php echo base_url(PRD) ?>general/Noconsumible/guardarMovimientoSalida',
+      data: {
+        datos: datos
+      },
+      success: function(rsp) {
+           Swal.fire(
+            'Agregado/s!',
+            'El Proceso se Realizó Correctamente.',
+            'success'
+          )
+      },
+      error: function() {
+        Swal.fire(
+                      'Oops...',
+                        'Algo salio mal!',
+                        'error'
+                              )
+      },
+      complete: function() {
+        wc();
+      }
+    });
+  }
 
-initForm();
-    function guardarMovimientoSalida() {
 
-        var formData = new FormData($('#frm-MovimientoNoConsumible')[0]);
+  initForm();
+    function guardarDestino() {
+
+        var formData = new FormData($('#frm-destino')[0]);
         $.ajax({
             type: 'POST',
             dataType: 'JSON',
-            url: '<?php echo base_url(PRD) ?>general/Noconsumible/guardarMovimientoSalida',
+            url: '<?php echo base_url(PRD) ?>general/Noconsumible/guardarDestino',
             data: formData,
             cache: false,
             contentType: false,
             processData: false,
             success: function(rsp) {
                 if (rsp.status) {
-                    console.log('SI entra');
-                    alert('El registro se Guardo Correctamente');
-                    $('#frm-MovimientoNoConsumible')[0].reset();
-                    linkTo();
+                  //  mdlClose('mdl-destino');
+                $('#mdl-destino').modal('hide');
+                    Swal.fire(
+                        'Guardado!',
+                        'El destino se Guardo Correctamente.',
+                        'success'
+                      );
+                    $('#frm-destino')[0].reset();
+                    $('#destino').load("#destino");
+                  //linkTo();
                 } else {
-                    console.log('NO entra');
-                    alert('Error Tremendo');
+                  Swal.fire(
+                      'Oops...',
+                        'Algo salio mal!',
+                        'error'
+                              )
                 }
 
             },
             error: function(rsp) {
-                alert('Error: No se pudo Guardar');
+              Swal.fire(
+                      'Oops...',
+                        'Algo salio mal!',
+                        'error'
+                              );
+                $('#mdl-destino').modal('hide');
                 console.log(rsp.msj);
             },
             complete: function() {
-                wc();
+             //   wc();
             }
         });
     }
-
-
-$("#consumible").autocomplete({
-    source: "autocompleta_denunciante.php",
-    minLength: 2,
-    select: function(event, ui) {
-        event.preventDefault();
-        $('#consumible').val(ui.item.dni);
-
-    }
-});
 </script>
-
-<div class="modal fade" id="eliminar_fila" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog modal-sm" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
-                <h4 class="text-center">¿Desea Eliminar Registro?</h3>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="eliminarFila()">Si</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-            </div>
-        </div>
-    </div>
-</div>

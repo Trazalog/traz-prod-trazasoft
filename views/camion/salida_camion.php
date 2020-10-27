@@ -105,8 +105,11 @@
             </div>
         </form>
     </div>
+    <?php 
+    $this->load->view('NoConsumible/SalidaNoConsumible');
+            ?>
     <div class="box-footer">
-        <button class="btn btn-success" style="float:right" onclick="validarSalida()">Guardar Salida</button>
+        <button class="btn btn-success" style="float:right" onclick="guardarSalidaNoCon();validarSalida()">Guardar Salida</button>
     </div>
 </div>
 
