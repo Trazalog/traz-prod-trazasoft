@@ -38,6 +38,8 @@ class Etapa extends CI_Controller
     // Llama a etapas para una nueva Etapa
     public function nuevo()
     {
+        $this->load->model(TST.'Tareas');
+        $this->Tareas->eliminarTareasSinOrigen(empresa());
         #Snapshot
         $user = userNick();
         $view = 'etapa/abm';
