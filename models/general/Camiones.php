@@ -10,8 +10,8 @@ class Camiones extends CI_Model
     }
     public function listarPorEstablecimiento($establecimiento)
     {
-        $resource = 'camion_establecimiento/' . $establecimiento;
-        $url = RESTPT . $resource;
+        $resource = '/camion_establecimiento/' . $establecimiento;
+        $url = REST_LOG . $resource;
         $array = file_get_contents($url, false, http('GET'));
         return rsp($http_response_header, false, json_decode($array)->camiones->camion);
     }
@@ -24,13 +24,9 @@ class Camiones extends CI_Model
     }
     public function listarCargados($patente = null)
     {
-        // $estado = "ASIGNADO";
-        // $resource = 'camiones_estado/' . $estado;
-        // $url = RESTPT . $resource;
-        $url = 'http://localhost:3000/camiones/';
-        // $array2 = file_get_contents($url, false, http('GET'));
+        #HARDCODE
+        $url = REST_LOG.'/camiones';
         $array = $this->rest->callApi('GET', $url);
-
         return json_decode($array['data']);
     }
 
@@ -121,13 +117,11 @@ class Camiones extends CI_Model
 
     public function obtenerInfo($patente = null)
     {
-        $url = REST_LOG . "/camiones/" . $patente;
-        // $url = 'http://localhost:3000/camiones';
+        $url = REST_LOG . "/camiones/$patente";
         $rsp = $this->rest->callApi('GET', $url);
         if ($rsp['status']) {
             $rsp['data'] = json_decode($rsp['data'])->camiones->camion;
         }
-        // var_dump($rsp['data']);
         return $rsp;
     }
 

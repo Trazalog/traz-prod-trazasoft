@@ -11,6 +11,7 @@ class CodigosQR extends CI_Model
 
     public function getDatos($codigo = null)
     {
+        #HARDCODE
         // $url = RESTPT . "datosQRs/" . $codigo;
         $url = 'http://localhost:3000/datosQRs';
         $rsp = $this->rest->callApi('GET', $url);

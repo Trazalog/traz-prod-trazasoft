@@ -11,7 +11,7 @@ class Formulas extends CI_Model
 
 	public function getFormulas()
 	{
-		$url = RESTPT . 'getFormulas';
+		$url = REST_PRD_ETAPAS . '/getFormulas/'.empresa();
 		$rsp = $this->rest->callApi('GET', $url);
 		$rsp['data'] = json_decode($rsp['data']);
 		return $rsp['data'];
@@ -21,7 +21,7 @@ class Formulas extends CI_Model
 	{
 		log_message('DEBUG', '#FORMULAS | setFormula: >> ' . json_encode($data));
 
-		$url = RESTPT . 'formula';
+		$url = REST_PRD_ETAPAS . '/formula';
 		$rsp = $this->rest->callApi('POST', $url, $data);
 		return $rsp;
 	}
@@ -30,15 +30,14 @@ class Formulas extends CI_Model
 	{
 		log_message('DEBUG', '#FORMULAS | setArticulosFormula: >> ' . json_encode($data));
 
-		$url = RESTPT . 'formula_articulo_batch_req';
+		$url = REST_PRD_ETAPAS . '/formula_articulo_batch_req';
 		$rsp = $this->rest->callApi('POST', $url, $data);
 		return $rsp;
 	}
 
 	public function getReceta($id)
 	{
-		// $data['form_id'] = $id;
-		$url = RESTPT . 'getRecetaFormula/'  . $id;
+		$url = REST_PRD_ETAPAS . "/getRecetaFormula/$id";
 		$rsp = $this->rest->callApi('GET', $url);
 		$rsp['data'] = json_decode($rsp['data']);
 		return $rsp['data'];
@@ -46,8 +45,7 @@ class Formulas extends CI_Model
 
 	public function getArticulosReceta($id)
 	{
-		// $data['form_id'] = $id;
-		$url = RESTPT . 'getArticulosReceta/' . $id;
+		$url = REST_PRD_ETAPAS . '/getArticulosReceta/' . $id;
 		$rsp = $this->rest->callApi('GET', $url);
 		$rsp['data'] = json_decode($rsp['data']);
 		return $rsp['data'];
@@ -56,7 +54,7 @@ class Formulas extends CI_Model
 	public function deleteFormula($id)
 	{
 		$data['formula']['form_id'] = $id;
-		$url = RESTPT . 'deleteFormula';
+		$url = REST_PRD_ETAPAS . '/deleteFormula';
 		$rsp = $this->rest->callApi('PUT', $url, $data);
 		$rsp['data'] = json_decode($rsp['data']);
 		return $rsp['data'];
@@ -64,8 +62,7 @@ class Formulas extends CI_Model
 
 	public function updateFormula($data)
 	{
-		// $data['formula']['form_id'] = $datosFormula;
-		$url = RESTPT . 'updateFormula';
+		$url = REST_PRD_ETAPAS . '/updateFormula';
 		$rsp = $this->rest->callApi('PUT', $url, $data);
 		$rsp['data'] = json_decode($rsp['data']);
 		return $rsp['data'];
@@ -74,7 +71,7 @@ class Formulas extends CI_Model
 	public function deleteArticulosFormula($id)
 	{
 		$data['formula']['form_id'] = $id;
-		$url = RESTPT . 'deleteArticulosFormula';
+		$url = REST_PRD_ETAPAS . '/deleteArticulosFormula';
 		$rsp = $this->rest->callApi('DELETE', $url, $data);
 		$rsp['data'] = json_decode($rsp['data']);
 		return $rsp['data'];

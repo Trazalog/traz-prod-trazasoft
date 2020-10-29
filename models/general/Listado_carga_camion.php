@@ -9,6 +9,7 @@ class Listado_carga_camion extends CI_Model
 
     public function obtener()
     {
+        #REST?
         $url = RESTPT . 'cargacamion';
         $rsp = $this->rest->callApi('GET', $url);
         if(!$rsp['status']) return $rsp;
