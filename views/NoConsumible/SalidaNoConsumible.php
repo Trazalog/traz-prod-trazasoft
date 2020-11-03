@@ -268,7 +268,7 @@ function guardarSalidaNoCon() {
     datosTabla.shift(); //borra encabezado de la tabla o primera fila
     var datos = JSON.stringify(datosTabla);
      console.log('datos: ' + datos);
-    wo();
+    //wo();
     $.ajax({
       type: 'POST',
       url: '<?php echo base_url(PRD) ?>general/Noconsumible/guardarMovimientoSalida',
@@ -276,11 +276,12 @@ function guardarSalidaNoCon() {
         datos: datos
       },
       success: function(rsp) {
-           Swal.fire(
-            'Agregado/s!',
-            'El Proceso se Realizó Correctamente.',
-            'success'
-          )
+          //  Swal.fire(
+          //   'Agregado/s!',
+          //   'El Proceso se Realizó Correctamente.',
+          //   'success'
+          // )
+          console.log('No consumible guardado.');
       },
       error: function() {
         Swal.fire(

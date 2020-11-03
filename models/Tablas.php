@@ -9,7 +9,7 @@ class Tablas extends CI_Model
 
     public function obtenerTabla($tabla)
     {
-        $url = REST_CORE . "tablas/$tabla";
+        $url = REST_CORE . "/tablas/$tabla";
         return wso2($url);
     }
 

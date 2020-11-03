@@ -41,7 +41,7 @@ class Recipientes extends CI_Model
     {
         log_message('DEBUG', 'Recipientes/listarEmpaques');
         $resource = '/empaques';
-        $url = REST_PRD_ETAPAS.$resource;
+        $url = REST_PRD.$resource;
         $array = $this->rest->callAPI("GET",$url); 	
         wso2Msj($array);
         return json_decode($array['data']);
@@ -66,7 +66,7 @@ class Recipientes extends CI_Model
 
     public function obtener($tipo = 'TODOS', $estado = 'TODOS', $establecimiento = 0)
     {
-        $url  = REST_PRD_ETAPAS. "/recipientes/tipo/$tipo/estado/$estado/establecimiento/$establecimiento";
+        $url  = REST_PRD. "/recipientes/tipo/$tipo/estado/$estado/establecimiento/$establecimiento";
         $rsp = $this->rest->callAPI('GET' , $url);
         $rsp['data'] = json_decode($rsp['data'])->recipientes->recipiente;
         return $rsp;

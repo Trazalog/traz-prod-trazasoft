@@ -40,7 +40,7 @@ class Reportes extends CI_Controller
     } else {
 
       log_message('INFO', '#TRAZA| #REPORTES.PHP|#REPORTES|#PRODUCCION| #INGRESO');
-      $url = REST_TDS . 'productos/etapa//desde//hasta//producto/';
+      $url = REST_TDS . 'productos/etapa//desde//hasta/producto/';
       $json = $this->Koolreport->depurarJson($url)->productos->producto;
       log_message('DEBUG', '#TRAZA| #REPORTES.PHP|#REPORTES|#PRODRESPONSABLE| #JSON: >>' . $json);
       $reporte = new Produccion($json);

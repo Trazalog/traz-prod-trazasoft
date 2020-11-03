@@ -108,7 +108,7 @@
           echo'<table id="tablamateriasasignadas" class="table">';
           echo"<thead>";
         
-          if(estado != 'En Curso'){
+          if($etapa->estado != 'En Curso'){
             echo"<th>Acciones</th>";
           }
           echo"<th>Titulo</th>";

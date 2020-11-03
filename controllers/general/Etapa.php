@@ -270,7 +270,9 @@ class Etapa extends CI_Controller
 
         $this->load->model(ALM . 'Notapedidos');
 
+        $this->load->model(ALM.'new/Pedidosmateriales');
         $this->Notapedidos->setCaseId($pema_id, $rsp['data']['caseId']);
+        $this->Pedidosmateriales->setCaseEmpresa($rsp['data']['caseId']);
 
         // AVANZA PROCESO A TAREA SIGUIENTE
         if (PLANIF_AVANZA_TAREA) {
