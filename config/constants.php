@@ -123,7 +123,6 @@ define('ASP_115', 'Error al Leer Variable');
 
 #COMPONENTE ALMACENES
 define('ALM', 'traz-comp-almacen/');
-define('REST_ALM', 'http://10.142.0.7:8280/services/ALMDataService/');
 define('viewOT', false);
 
 #COMPONENTE FORMULARIOS
@@ -142,22 +141,22 @@ define('CAL','traz-comp-calendar/');
 #REST
 define('TAREAS_ASIGNAR', 'traz-comp-tareasestandar/asignar');
 
-define('REST', 'http://10.142.0.7:8280/services/PRDDataService/');
-define('RESTPT', 'http://10.142.0.7:8280/services/PRDDataService/');
-define('REST_TDS', 'http://10.142.0.7:8280/services/PRDDataService/');
-define('REST2', 'http://10.142.0.7:8280/services/PRDDataService');
-define('REST3', 'http://10.142.0.7:8280/services/PRDDataService');
-define('REST4', 'http://10.142.0.7:8280/services/PRDDataService');
-define('REST_PRD_LOTE', 'http://10.142.0.7:8280/services/PRDLoteDataService');
-define('REST_CORE', 'http://10.142.0.7:8280/services/COREDataService/');
-define('REST_PRD_ETAPA', 'http://10.142.0.7:8280/services/PRDEtapaDataService');
+// define('REST', 'http://10.142.0.7:8280/services/PRDDataService/');
+// define('RESTPT', 'http://10.142.0.7:8280/services/PRDDataService/');
+// define('REST_TDS', 'http://10.142.0.7:8280/services/PRDDataService/');
+// define('REST2', 'http://10.142.0.7:8280/services/PRDDataService');
+// define('REST3', 'http://10.142.0.7:8280/services/PRDDataService');
+// define('REST4', 'http://10.142.0.7:8280/services/PRDDataService');
+// define('REST_PRD_LOTE', 'http://10.142.0.7:8280/services/PRDLoteDataService');
+// define('REST_CORE', 'http://10.142.0.7:8280/services/COREDataService/');
+// define('REST_PRD_ETAPA', 'http://10.142.0.7:8280/services/PRDEtapaDataService');
 
 #TOOLS-PRD DATASERVICES /*NUEVOS*/
-define('PRD_Etapa_DS', 'http://10.142.0.7:8280/services/PRDEtapaDataService/');
-define('PRD_Lote_DS', 'http://10.142.0.7:8280/services/PRDLoteDataService/');
-define('LOG_DS', 'http://10.142.0.7:8280/services/LOGDataService/');
-define('CORE_DS','http://10.142.0.7:8280/services/COREDataService/');
-define('FRM_DS','http://10.142.0.7:8280/services/FRMDataService');
+// define('PRD_Etapa_DS', 'http://10.142.0.7:8280/services/PRDEtapaDataService/');
+// define('PRD_Lote_DS', 'http://10.142.0.7:8280/services/PRDLoteDataService/');
+// define('LOG_DS', 'http://10.142.0.7:8280/services/LOGDataService/');
+// define('CORE_DS','http://10.142.0.7:8280/services/COREDataService/');
+// define('FRM_DS','http://10.142.0.7:8280/services/FRMDataService');
 
 
 #TOOLS-PRD DATASERVICES /*NUEVOS NoCon*/

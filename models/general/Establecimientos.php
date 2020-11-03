@@ -53,7 +53,7 @@ class Establecimientos extends CI_Model
   public function eliminar($id)
   {
     $data['delete_est']['esta_id'] = $id;
-    $url = REST_ALM . "establecimientos";
+    $url = REST_ALM . "/establecimientos";
     $rsp = $this->rest->callApi("DELETE", $url, $data);
     if ($rsp['status']) $rsp['data'] = json_decode($rsp['data']);
     return $rsp;

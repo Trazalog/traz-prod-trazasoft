@@ -171,16 +171,17 @@ $('#bruto').keyup(function() {
 })
 
 function obtenerInfoCamion(patente) {
+    var estado = 'CARGADO|EN CURSO|CARGADO|DESCARGADO';
     wo();
     $.ajax({
-        type: 'GET',
+        type: 'POST',
         dataType: 'JSON',
         url: '<?php echo base_url(PRD) ?>general/Camion/obtenerInfo/' + patente,
+        data:{estado},
         success: function(rsp) {
             console.log(rsp);
-            if (rsp.status && rsp.data && rsp.data.length == 1 && rsp.data[0].esta_id == $('#esta_id')
-                .val()) {
-                fillForm(rsp.data[0]);
+            if (rsp && rsp.esta_id == $('#esta_id').val()) {
+                fillForm(rsp);
                 $('#bruto').val(0);
                 $('#neto').val(0);
                 obtenerLotesCamion(patente)

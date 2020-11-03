@@ -52,13 +52,13 @@ class Opcionesfiltros extends CI_Model
   public function getProductos()
   { //articulos
     // $url = REST_ALM . 'articulos/' . empresa();
-    $url = PRD_Etapa_DS . 'productos/list';
+    $url = PRD_Etapa_DS . '/productos/list';
     return wso2($url)['data'];
   }
 
   public function getProveedores()
   {
-    $url = REST_ALM . 'proveedores/' . empresa();
+    $url = REST_ALM . '/proveedores/' . empresa();
     return wso2($url)['data'];
   }
 

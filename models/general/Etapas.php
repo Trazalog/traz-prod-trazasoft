@@ -160,7 +160,7 @@ class Etapas extends CI_Model
     }
 
     public function eliminarDetallePedido($pemaId){
-        $url = REST_ALM . 'pedidos/detalle';
+        $url = REST_ALM . '/pedidos/detalle';
         $data['_delete_pedidos_detalle']['pema_id'] = $pemaId;
         return wso2($url, 'DELETE', $data);
     }
@@ -281,7 +281,7 @@ class Etapas extends CI_Model
     {
         if (PLANIF_AVANZA_TAREA) { #Pregunta Magica
 
-            $url = REST_ALM . "pedidos/batch/$batch_id";
+            $url = REST_ALM . "/pedidos/batch/$batch_id";
 
             $rsp = wso2($url);
 
@@ -301,7 +301,7 @@ class Etapas extends CI_Model
 
     function obtenerPedidoXBatch($batchId)
     {
-        $url = REST_ALM."pedidos/batch/$batchId";
+        $url = REST_ALM."/pedidos/batch/$batchId";
         return wso2($url);
     }
 

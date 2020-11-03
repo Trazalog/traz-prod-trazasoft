@@ -55,7 +55,7 @@ class Lotes extends CI_Model
 
     public function obtenerLotesCamion($patente)
     {
-        $resource = "camion/lotes/$patente";
+        $resource = "/camion/lotes/$patente";
         $url = REST_LOG . $resource;
         return wso2($url);
     }

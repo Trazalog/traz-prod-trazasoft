@@ -25,7 +25,7 @@ class Camiones extends CI_Model
     public function listarCargados($patente = null)
     {
         #HARDCODE
-        $url = REST_LOG.'/camiones';
+        $url = REST_LOG . '/camiones';
         $array = $this->rest->callApi('GET', $url);
         return json_decode($array['data']);
     }
@@ -57,14 +57,14 @@ class Camiones extends CI_Model
 
             $array[] = $o;
 
-            $camiones[] = array('motr_id' => $o->motr_id, 'estado' => 'ASIGNADO');
+            $camiones[] = array('motr_id' => $o->motr_id, 'estado' => 'CARGADO');
         }
 
         $rsp = $this->Lotes->guardarCargaCamion($array);
 
         if ($rsp['status']) {
 
-            $rsp =  $this->actualizarEstado($camiones);
+            $rsp = $this->actualizarEstado($camiones);
         }
 
         return $rsp;
@@ -72,7 +72,7 @@ class Camiones extends CI_Model
 
     public function actualizarEstado($data)
     {
-        log_message('DEBUG','#Camiones/actualizarEstado | DATA: '.json_encode($data));
+        log_message('DEBUG', '#Camiones/actualizarEstado | DATA: ' . json_encode($data));
 
         $aux['post_camion_estado']['data'] = $data;
         $url = REST_PRD . "/camion/estado_batch_req";
@@ -97,7 +97,7 @@ class Camiones extends CI_Model
                 "cantidad" => $o['destino']['cantidad'],
                 "stock" => $o['origen']['cantidad'],
                 "reci_id" => $o['destino']['reci_id'],
-                "forzar_agregar" => $o['destino']['unificar']
+                "forzar_agregar" => $o['destino']['unificar'],
             );
         }
         $array = json_decode(json_encode($array));
@@ -115,33 +115,49 @@ class Camiones extends CI_Model
         return $rsp;
     }
 
-    public function obtenerInfo($patente = null)
+    public function obtenerInfo($patente, $estado)
     {
         $url = REST_LOG . "/camiones/$patente";
-        $rsp = $this->rest->callApi('GET', $url);
-        if ($rsp['status']) {
-            $rsp['data'] = json_decode($rsp['data'])->camiones->camion;
+        $rsp = wso2($url);
+        if ($estado) {
+            foreach ($rsp['data'] as $o) {
+                if (strpos($estado, $o->estado) !== false) {
+                    return $o;
+                }
+
+            }
         }
-        return $rsp;
+    }
+
+    public function validarCamion($patente, $estado = 'EN CURSO')
+    {
+        log_message('DEBUG', "#TZL | " . __METHOD__ . "| PANTENTE: $pantente | ESTADO: $estado");
+
+        $res = wso2(REST_LOG . "/camiones/$patente")['data'];
+        if ($res) {
+            foreach ($res as $o) {
+
+                if ($o->estado == $estado) {
+                    return true;
+                }
+
+            }
+        }
+        return false;
     }
 
     #RBASAÑES
     public function listaTransporte()
     {
-        $url = REST_TDS . 'transporte/movimiento/list/tipo_movimiento';
-        $rsp =  $this->rest->callApi('GET', $url);
-        if ($rsp['status']) $rsp['data'] = json_decode($rsp['data'])->movimientosTransporte->movimientoTransporte;
-        return $rsp;
+        $url = REST_LOG . '/transporte/movimiento/list/tipo_movimiento/' . empresa();
+        return wso2($url);
     }
     public function listaCargaCTransporte()
     {
-        $url = REST_TDS . 'transporte/movimiento/list/tipo_movimiento';
-        $rsp =  $this->rest->callApi('GET', $url);
-        if ($rsp['status']) $rsp['data'] = json_decode($rsp['data'])->movimientosTransporte->movimientoTransporte;
-        return $rsp;
+        $url = REST_LOG . '/transporte/movimiento/list/tipo_movimiento/' . empresa();
+        return wso2($url);
     }
     #_____________________________________________________________________________________
-
 
     public function guardarLoteSistema($frmCamion, $frmDescarga)
     {
@@ -153,7 +169,7 @@ class Camiones extends CI_Model
         $frmCamion['tara'] = "0";
         $frmCamion['neto'] = "0";
         $frmCamion['establecimiento'] = $frmDescarga['loteSistema'][0]['esta_id'];
-        $frmCamion['estado'] = 'INICIADO';
+        $frmCamion['estado'] = 'EN CURSO';
         $rsp = $this->Entradas->guardar($frmCamion);
         if (!$rsp['status']) {
             $rsp['msj'] = 'Error al Guardar Entrada Camion';
@@ -161,29 +177,28 @@ class Camiones extends CI_Model
         }
 
         #Obtener motr_id
-        $rsp = $this->obtenerInfo($frmCamion['patente']);
-        if(!$rsp['status']){
+        $rsp = $this->obtenerInfo($frmCamion['patente'], 'EN CURSO');
+        if (!$rsp['status']) {
             $rsp['msj'] = 'Error al Obtener MOTR_ID';
             return $rsp;
         }
 
         $motr_id = $rsp['data'][0]->motr_id;
 
-
         #Carga Camion
         $lotes = [];
         foreach ($frmDescarga as $o) {
             $aux = new StdClass();
-        
+
             $aux->patente = $frmCamion['patente'];
             $aux->motr_id = $motr_id;
             $aux->batch_id = $o['loteSistema']['batch_id'];
             $aux->cantidad = $o['loteSistema']['cantidad'];
-            $lotes[] =  $aux;
+            $lotes[] = $aux;
         }
 
         $rsp = $this->guardarCarga($lotes);
-        if(!$rsp['status']){
+        if (!$rsp['status']) {
             $rsp['msj'] = 'Error al Guardar Carga Camion';
             return $rsp;
         }
@@ -191,7 +206,7 @@ class Camiones extends CI_Model
         #Cambio Estado Camion
         $aux1 = array(array(
             'motr_id' => $motr_id,
-            'estado' => 'FINALIZADO'
+            'estado' => 'FINALIZADO',
         ));
 
         $rsp = $this->actualizarEstado($aux1);
@@ -199,15 +214,29 @@ class Camiones extends CI_Model
         return $rsp;
     }
 
-    function  guardarSalida($data)
+    public function guardarSalida($data)
     {
         $post['_put_camiones_salida'] = array(
             'motr_id' => strval($data['motr_id']),
             //'patente' => $data['patente'],
-            'estado' => isset($data['destino_esta_id'])?'TRANSITO':'FINALIZADO',
+            'estado' => isset($data['destino_esta_id']) ? 'TRANSITO' : 'FINALIZADO',
             'bruto' => strval($data['bruto']),
-            'neto' => strval($data['neto'])
+            'neto' => strval($data['neto']),
         );
-        return wso2(LOG_DS.'camiones/salida','PUT', $post);
+        return wso2(REST_LOG . '/camiones/salida', 'PUT', $post);
+    }
+
+    public function estado($patente, $estado, $estadoFinal)
+    {
+        $rsp = $this->obtenerInfo($patente, $estado);
+        if($rsp)
+        {
+            $url = REST_LOG . '/camiones/estado';
+            $data['_put_camiones_estado'] = array(
+                'motr_id' => $rsp->motr_id,
+                'estado' => $estadoFinal
+            );
+            return wso2($url, 'PUT', $data);
+        }
     }
 }
