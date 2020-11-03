@@ -9,7 +9,7 @@ class Snapshots extends CI_Model
 
     public function obtener($key)
     {
-        $url = RESTPT . "snapshots/$key";
+        $url = REST_LOG . "/snapshots/$key";
         $rsp = $this->rest->callApi('GET', $url);
         if($rsp['status']) $rsp['data'] = json_decode($rsp['data'])->data->snapshot[0]->data;
         return $rsp;
@@ -20,7 +20,7 @@ class Snapshots extends CI_Model
         $aux['post_snapshot']['clave'] = $data['key']; unset($data['key']);
         $aux['post_snapshot']['data'] =  json_encode($data);
         
-        $url = RESTPT . 'snapshots';
+        $url = REST_LOG . '/snapshots';
         $rsp = $this->rest->callApi('POST', $url, $aux);
         return $rsp;
     }
@@ -29,7 +29,7 @@ class Snapshots extends CI_Model
 
         $aux['delete_snapshot']['clave'] = $key;
 
-        $url = RESTPT . 'snapshots';
+        $url = REST_LOG . '/snapshots';
         $rsp = $this->rest->callApi('DELETE', $url, $aux);
         return $rsp;
 

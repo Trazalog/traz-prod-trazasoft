@@ -11,17 +11,15 @@ class Establecimientos extends CI_Model
   {
     // log_message('DEBUG', 'Establecimientos/listar (id etapa)-> ' . $etapa);
     $resource = '/establecimiento';
-    $url = REST2 . $resource;
+    $url = REST_ALM . $resource;
     $array = $this->rest->callAPI("GET", $url);
     $resp =  json_decode($array['data']);
     return $resp;
   }
   public function listarTodo($esta_id = null)
   {
-    $resource = 'establecimiento' . ($esta_id ? "/$esta_id" : null);
-    $url = REST . $resource;
-    // $url = 'http://localhost:3000/establecimientos';
-    // $array = file_get_contents($url, false, http('GET'));
+    $resource = '/establecimiento' . ($esta_id ? "/$esta_id" : null);
+    $url = REST_ALM . $resource;
     $array = $this->rest->callApi('GET', $url);
     return json_decode($array['data']);
   }

@@ -17,8 +17,8 @@ class Camiones extends CI_Model
     }
     public function listarProveedores()
     {
-        $resource = 'proveedores/' . empresa();
-        $url = REST . $resource;
+        $resource = '/proveedores/' . empresa();
+        $url = REST_ALM . $resource;
         $array = file_get_contents($url, false, http('GET'));
         return json_decode($array);
     }
