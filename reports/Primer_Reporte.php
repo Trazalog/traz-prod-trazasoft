@@ -29,30 +29,7 @@ class Primer_Reporte extends \koolreport\KoolReport
 
     protected function settings()
     {
-        // Modificar la ruda predeterminada:
-        // return array(
-        //     "assets" => array(
-        //         "url" => "myassets",
-        //         "path" => "../myassets" // or "path"=>"/var/html/CIProject/myassets"
-        //     )
-        // );
-        //El path puede tener la ruta relativa de su informe a la carpeta de activos o puede ser ruta absoluta.
-        // La urlcarpeta es url to assets a la que se puede acceder a través del navegador.
-        // return array(
-        //     "assets" => array(
-        //         "path" => "../../assets",
-        //         "url" => "http://localhost/Trazalog/traz-prod-trazasoft/assets",
-        //     ),
-        //     "dataSources" => array(
-        //         "tools_test" => array(
-        //             "connectionString" => "pgsql:host=dev-trazalog.com.ar;port=5432;dbname=tools_test",
-        //             "username" => "arbolado",
-        //             "password" => "password",
-        //             "charset" => "utf8",
-        //             "port" => '5432'
-        //         )
-        //     )
-        // );
+
 
         $json = $this->params;
         $data = json_encode($json);

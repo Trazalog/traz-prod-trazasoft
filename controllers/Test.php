@@ -21,8 +21,9 @@ class Test extends CI_Controller
         $this->load->view('test', $data);
     }
 
-    public function p(Type $var = null)
+    public function api($model, $function, $p1, $p2)
     {
-        # code...
+        $res = $this->load->model();
+        show($res);
     }
 }

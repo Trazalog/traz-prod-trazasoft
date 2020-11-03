@@ -84,24 +84,8 @@ defined('EXIT_DATABASE') or define('EXIT_DATABASE', 8); // database error
 defined('EXIT__AUTO_MIN') or define('EXIT__AUTO_MIN', 9); // lowest automatically-assigned error code
 defined('EXIT__AUTO_MAX') or define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
 
-# DNATO
-define('LOGIN', true);
-define('DNATO', 'http://localhost/traz-comp-dnato/');
-
 #TRAZ-COMP-BPM
 define('BPM', 'traz-comp-bpm/');
-
-define('BONITA_URL', 'http://10.142.0.7:8080/bonita/');
-
-define('BPM_PROCESS_ID_PEDIDOS_NORMALES', '8803232493891311406');
-
-define('BPM_PROCESS_ID_PEDIDOS_EXTRAORDINARIOS', '6013058915384903051');
-
-define('BPM_PROCESS_ID_TAREAS', '7148440093058377088');
-
-define('BPM_ADMIN_USER', 'almacen.tools');
-define('BPM_ADMIN_PASS', 'bpm');
-define('BPM_USER_PASS', 'bpm');
 
 #ERRORES DE BONITA
 define('ASP_100', 'Fallo Conexión BPM');
@@ -123,7 +107,6 @@ define('ASP_115', 'Error al Leer Variable');
 
 #COMPONENTE ALMACENES
 define('ALM', 'traz-comp-almacen/');
-define('REST_ALM', 'http://10.142.0.7:8280/services/ALMDataService/');
 define('viewOT', false);
 
 #COMPONENTE FORMULARIOS
@@ -135,36 +118,11 @@ define('TSK', 'traz-comp-tareas/');
 
 #COMPONENTE TAREASSESTANDAR
 define('TST', 'traz-comp-tareasestandar/');
-define('REST_TST', 'http://10.142.0.7:8280/services/TareasSTD/');
 define('CAL','traz-comp-calendar/');
 
 
 #REST
 define('TAREAS_ASIGNAR', 'traz-comp-tareasestandar/asignar');
-
-define('REST', 'http://10.142.0.7:8280/services/PRDDataService/');
-define('RESTPT', 'http://10.142.0.7:8280/services/PRDDataService/');
-define('REST_TDS', 'http://10.142.0.7:8280/services/PRDDataService/');
-define('REST2', 'http://10.142.0.7:8280/services/PRDDataService');
-define('REST3', 'http://10.142.0.7:8280/services/PRDDataService');
-define('REST4', 'http://10.142.0.7:8280/services/PRDDataService');
-define('REST_PRD_LOTE', 'http://10.142.0.7:8280/services/PRDLoteDataService');
-define('REST_CORE', 'http://10.142.0.7:8280/services/COREDataService/');
-define('REST_PRD_ETAPA', 'http://10.142.0.7:8280/services/PRDEtapaDataService');
-
-#TOOLS-PRD DATASERVICES /*NUEVOS*/
-define('PRD_Etapa_DS', 'http://10.142.0.7:8280/services/PRDEtapaDataService/');
-define('PRD_Lote_DS', 'http://10.142.0.7:8280/services/PRDLoteDataService/');
-define('LOG_DS', 'http://10.142.0.7:8280/services/LOGDataService/');
-define('CORE_DS','http://10.142.0.7:8280/services/COREDataService/');
-define('FRM_DS','http://10.142.0.7:8280/services/FRMDataService');
-
-
-#TOOLS-PRD DATASERVICES /*NUEVOS NoCon*/
-define('PRD_NoCon', 'http://10.142.0.7:8280/services/PRDNoConsumiblesDataService');
-define('REST_ALM_NoCon', 'http://10.142.0.7:8280/services/ALMDataService/');
-define('REST_CORE_NoCon', 'http://10.142.0.7:8280/services/COREDataService/');
-define('CORE_DS_NoCon','http://10.142.0.7:8280/services/COREDataService/');
 
 //TODO:AGREGAR AL CONSTANT ORIGINAL
 #RECURSOS_LOTES
@@ -175,11 +133,6 @@ define('RECURSO_HUMANO', 'HUMANO');
 define('RECURSO_CONSUMO', 'CONSUMO');
 
 # >> Proyecto
-# Default View
-#define('DEFAULT_VIEW', 'general/Etapa');
-define('DEFAULT_VIEW', 'Test');
-#define('DEFAULT_VIEW', TST.'Tarea/planificar');
-
 #TRAZASOFT
 define('PROVEEDOR_INTERNO', 1000);
 define('FEC_VEN', '01-01-3000');
@@ -203,13 +156,3 @@ define('RSP_LOTE', [
   "TOOLSERROR:RECI_NO_VACIO_IGUAL_ART_LOTE" => "El recipiente contiene los mismos lotes y artículos"
 ]);
 
-
-
-define('BPM_PROCESS', json_encode(array(
-   BPM_PROCESS_ID_PEDIDOS_NORMALES => ['nombre' => 'Ped. Materiales', 'color' => '#F39C12', 'proyecto' => ALM, 'model' => 'ALM_Tareas'],
-  '6013058915384903051' => ['nombre' => 'Ped. Materiales Ext', 'color' => '#F39C12', 'proyecto' => ALM, 'model' => 'ALM_Tareas'],
-  '8664799170016058315' => ['nombre' => 'Proc. Mantenimiento', 'color' => '#00A65A', 'proyecto' => 'traz-comp-mantenimiento/', 'model' => 'MAN_Tareas'],
-   BPM_PROCESS_ID_TAREAS => ['nombre' => 'Proc. Tareas', 'color' => '#ff7701', 'proyecto' => TST, 'model' => 'TST_Tareas']
-)));
-
-define('REST_API_BPM', 'http://10.142.0.7:8280/tools/bpm/proceso/instancia');

@@ -15,7 +15,8 @@
         </table>
         <hr>
         <button id="guardarDescarga" class="btn btn-primary btn-sm" style="float:right"
-            onclick="guardarEntradaNoCon();guardarDescargaOrigen();guardarLoteSistema();" disabled><i class="fa fa-check"></i> Guardar Descarga</button>
+            onclick="guardarEntradaNoCon();guardarDescargaOrigen();guardarLoteSistema();" disabled><i
+                class="fa fa-check"></i> Guardar Descarga</button>
     </div>
 </div>
 
@@ -24,7 +25,8 @@ var fila = null;
 
 function agregarFila(data) {
 
-    var lote_origen = $('#new_codigo').hasClass('hidden')?$('#codigo').select2('data')[0].text:$('#new_codigo').val();
+    var lote_origen = $('#new_codigo').hasClass('hidden') ? $('#codigo').select2('data')[0].text : $('#new_codigo')
+    .val();
 
     $('#lotes').append(
         `<tr data-json='${JSON.stringify(data)}' class='${loteSistema?'lote-sistema':'lote'}'>
@@ -42,15 +44,20 @@ function agregarFila(data) {
 
 function guardarDescargaOrigen() {
 
-     //Guardar Datos de Camión parametro = FALSE es para NO mostrar el MSJ de Datos Guardados
-    if($('#lotes tr').length != 0) addCamion(false);
+    //Guardar Datos de Camión parametro = FALSE es para NO mostrar el MSJ de Datos Guardados
+    if ($('#lotes tr').length != 0 && $('#codigo').find('option').length ==
+        0) // SI EL USUARIO REGISTRO LOTES  Y SI NO HAY LOTES CARGADOS EN EL CAMION EN TRANSITO
+    {
+        addCamion(false);
+    }
+
 
     var array = [];
     $('#lotes tr.lote').each(function() {
         array.push(JSON.parse(this.dataset.json));
     });
 
-    if(array.length == 0) return;
+    if (array.length == 0) return;
 
 
     $.ajax({
@@ -61,10 +68,11 @@ function guardarDescargaOrigen() {
             array
         },
         success: function(rsp) {
-            if(rsp.status){
-              alert('Hecho');
-              linkTo();
-            }else{
+            if (rsp.status) {
+                actualizarEstadoCamion($('#patente').val());
+                alert('Hecho');
+                linkTo();
+            } else {
                 alert('Falla al Guardar Descarga');
             }
         },
@@ -75,8 +83,8 @@ function guardarDescargaOrigen() {
     });
 }
 
-function guardarLoteSistema(){
-    
+function guardarLoteSistema() {
+
     var frmCamion = obtenerFormularioCamion();
 
     var array = [];
@@ -85,9 +93,9 @@ function guardarLoteSistema(){
         e.loteSistema = loteSistemaData;
         array.push(e);
     });
-    
+
     if (array.length == 0) return;
-  
+
     wo();
     $.ajax({
         type: 'POST',
@@ -98,18 +106,20 @@ function guardarLoteSistema(){
             frmCamion
         },
         success: function(rsp) {
-            if(rsp.status == true){
-              alert('Hecho');
-              linkTo();
-            }else{
+            if (rsp.status == true) {
+                actualizarEstadoCamion($('#patente').val());
+                alert('Hecho');
+                linkTo();
+            } else {
                 alert('Falla al Guardar Lotes Sistema');
             }
+            
         },
         error: function(rsp) {
             alert('Error: ' + rsp.msj);
             console.log(rsp.msj);
         },
-        complete:function(){
+        complete: function() {
             wc();
         }
     });
@@ -123,6 +133,27 @@ function eliminarFila() {
     $(fila).remove();
 
     $('#guardarDescarga').attr('disabled', $('#lotes tr').length == 0);
+}
+
+function actualizarEstadoCamion(patente) {
+    var estado = 'TRANSITO|EN CURSO';
+    var estadoFinal = 'DESCARGADO';
+    wo();
+    $.ajax({
+        type: 'POST',
+        dataType: 'JSON',
+        url: '<?php echo base_url(PRD) ?>general/camion/estado',
+        data: {patente, estado, estadoFinal},
+        success: function(res) {
+            hecho();
+        },
+        error: function(res) {
+            error();
+        },
+        complete: function() {
+            wc();
+        }
+    });
 }
 </script>
 

@@ -131,9 +131,10 @@ class Camion extends CI_Controller
     }
     #_____________________________________________________________________________________
 
-    public function obtenerInfo($patente = null)
+    public function obtenerInfo($patente)
     {
-        $rsp = $this->Camiones->obtenerInfo($patente);
+        $estado = $this->input->post('estado');
+        $rsp = $this->Camiones->obtenerInfo($patente, $estado);
         echo json_encode($rsp);
     }
 
@@ -152,5 +153,12 @@ class Camion extends CI_Controller
         $data = $this->input->post();
         $res = $this->Camiones->guardarSalida($data);
         echo json_encode($res);
+    }
+
+    public function estado()
+    {
+        $post = $this->input->post();
+        $rsp = $this->Camiones->estado($post['patente'], $post['estado'], $post['estadoFinal']);
+        echo json_encode($rsp);
     }
 }
