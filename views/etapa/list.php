@@ -212,11 +212,13 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
       '<th>Acciones</th>' +
       '<th>Etapa</th>' +
       '<th>Lote</th>' +
-      '<th>Producto Origen</th>' +
+      '<th>Producto</th>' +
       '<th>Cantidad</th>' +
       '<th>Establecimiento</th>' +
       '<th>Recipiente</th>' +
       '<th>OP</th>' +
+      '<th>Fecha</th>' +
+      '<th>Estado</th>' +
       '</tr>' +
       '</thead>' +
       '<tbody>';
@@ -225,9 +227,10 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
 
       for (var i = 0; i < etapas.length; i++) {
         html = html + '<tr  id="' + etapas[i].id + '" ><td>' +
-          '<i class="fa fa-fw fa-pencil text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Editar" onclick=linkTo("<?php echo base_url(PRD) ?>general/Etapa/editar?id=' +
+          `<i data-toggle='modal' data-target='#modal-asignarResponsable' class='fa fa-fw fa-user-plus text-green ml-1' style='cursor: pointer;' title='Asignar responsable' onclick='asignarResponsable(${etapas[i].id}'></i>`+
+          '<i class="fa fa-fw fa-cogs text-light-blue" style="cursor: pointer;" title="Editar" onclick=linkTo("<?php echo base_url(PRD) ?>general/Etapa/editar?id=' +
           etapas[i].id + '")></i>' +
-          '<i class="fa fa-fw fa-times-circle text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Eliminar" onclick="seleccionar(this)"></i>' +
+          '<i class="fa fa-fw fa-times-circle text-red style="cursor: pointer;" title="Eliminar" onclick="seleccionar(this)"></i>' +
           '</td>' +
           '<td>' + etapas[i].titulo + '</td>' +
           '<td>' + etapas[i].lote + ' </td>' +
@@ -236,15 +239,18 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
           '<td>' + etapas[i].establecimiento + '</td>' +
           '<td>' + etapas[i].recipiente + '</td>' +
           '<td>' + etapas[i].orden + '</td>' +
+          '<td>' + etapas[i].fecha + '</td>' +
+          '<td>' + etapas[i].estado + '</td>' +
           '</tr>';
       }
     } else {
       for (var i = 0; i < etapas.length; i++) {
         if (etapas[i].titulo === op) {
           html = html + '<tr  id="' + etapas[i].id + '" ><td>' +
-            '<i class="fa fa-fw fa-pencil text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Editar" onclick=linkTo("<?php echo base_url(PRD) ?>general/Etapa/editar?id=' +
+          `<i data-toggle='modal' data-target='#modal-asignarResponsable' class='fa fa-fw fa-user-plus text-green ml-1' style='cursor: pointer;' title='Asignar responsable' onclick='asignarResponsable(${etapas[i].id}'></i>`+
+            '<i class="fa fa-fw fa-cogs text-light-blue" style="cursor: pointer;" title="Editar" onclick=linkTo("<?php echo base_url(PRD) ?>general/Etapa/editar?id=' +
             etapas[i].id + '")></i>' +
-            '<i class="fa fa-fw fa-times-circle text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Eliminar" onclick="seleccionar(this)"></i>' +
+            '<i class="fa fa-fw fa-times-circle text-red" style="cursor: pointer;" title="Eliminar" onclick="seleccionar(this)"></i>' +
             '</td>' +
             '<td>' + etapas[i].titulo + '</td>' +
             '<td>' + etapas[i].lote + ' </td>' +
@@ -253,6 +259,8 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
             '<td>' + etapas[i].establecimiento + '</td>' +
             '<td>' + etapas[i].recipiente + '</td>' +
             '<td>' + etapas[i].orden + '</td>' +
+            '<td>' + etapas[i].fecha + '</td>' +
+            '<td>' + etapas[i].estado + '</td>' +
             '</tr>';
         }
       }
