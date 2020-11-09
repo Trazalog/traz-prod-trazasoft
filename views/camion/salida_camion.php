@@ -180,7 +180,7 @@ function obtenerInfoCamion(patente) {
         data:{estado},
         success: function(rsp) {
             console.log(rsp);
-            if (rsp && rsp.esta_id == $('#esta_id').val()) {
+            if (rsp) {
                 fillForm(rsp);
                 $('#bruto').val(0);
                 $('#neto').val(0);
