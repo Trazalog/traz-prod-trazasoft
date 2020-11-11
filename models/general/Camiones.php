@@ -239,4 +239,11 @@ class Camiones extends CI_Model
             return wso2($url, 'PUT', $data);
         }
     }
+
+    public function actualiarEstablecimiento($motrId, $estaId)
+    {
+        $url = REST_LOG.'/camiones/establecimiento';
+        $data['_put_camiones_establecimiento'] = array('motr_id' => "$motrId", 'esta_id' => "$estaId");
+        return wso2($url, 'PUT', $data);
+    }
 }

@@ -324,7 +324,7 @@ function obtenerFormularioCamion() {
 }
 
 function validarFormulario() {
-
+    console.log('Validar Form');
     var ban = true;
     $('#frm-info').find('.form-control').each(function() {
         if (this.id != 'proveedor' && this.id != 'nombreproveedor') {
@@ -338,7 +338,8 @@ function validarFormulario() {
     })
 
     $('#frm-camion').find('.form-control').each(function() {
-        if (this.value == "") {
+      //  console.log($(this).attr('name') + ' ' + this.value);
+        if (this.value == "" || this.value=="Seleccionar") {
             ban = ban && false;
             return;
         }
@@ -359,6 +360,7 @@ function addCamion(msj = true) {
     var dataForm = mergeFD(frmInfo, frmCamion);
     dataForm.append('estado', 'EN CURSO');
     showFD(dataForm);
+
     wo();
     $.ajax({
         type: 'POST',
