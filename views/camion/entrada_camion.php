@@ -351,8 +351,6 @@ function validarFormulario() {
 }
 
 function addCamion(msj = true) {
-
-
     if (!validarFormulario()) return;
 
     var frmCamion = new FormData($('#frm-camion')[0]);
