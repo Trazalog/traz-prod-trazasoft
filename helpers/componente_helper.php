@@ -67,7 +67,7 @@ if (!function_exists('selectBusquedaAvanzada')) {
     }
 }
 
-function selectFromCore($name, $placeholder, $tabla)
+function selectFromCore($name, $placeholder, $tabla, $req = false)
 {
     $url = REST_CORE."/tablas/$tabla";
     $rsp = wso2($url);
@@ -75,17 +75,17 @@ function selectFromCore($name, $placeholder, $tabla)
     foreach ($rsp['data'] as $o) {
         $opt .= "<option value='$o->valor'>$o->descripcion</option>";
     }
-    return "<select id='$name' name='$name' class='form-control' style='width: 100%;'><option value='0' disabled selected> - $placeholder - </option>$opt</select>";   
+    return "<select id='$name' name='$name' class='form-control frm-select' style='width: 100%;' ".($req?req():'')."><option value='0' disabled selected> - $placeholder - </option>$opt</select>";   
 }
 
-function selectFromFont($name, $placeholder, $url, $mapValues)
+function selectFromFont($name, $placeholder, $url, $mapValues, $req = false)
 {
     $rsp = wso2($url);
     $opt = '';
     foreach ($rsp['data'] as $o) {
         $opt .= "<option value='".($o->{$mapValues['value']})."'>".($o->{$mapValues['descripcion']})."</option>";
     }
-    return "<select id='$name' name='$name' class='form-control' style='width: 100%;'><option value='0' disabled selected> - $placeholder - </option>$opt</select>";
+    return "<select id='$name' name='$name' class='form-control frm-select' style='width: 100%;' ".($req?req():'')."><option value='0' disabled selected> - $placeholder - </option>$opt</select>";
 }
 
 
