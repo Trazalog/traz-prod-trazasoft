@@ -74,7 +74,7 @@ class Establecimientos extends CI_Model
 
   public function guardarTodo($datos)
   {
-    $resource = '_post_recipientes_batch_req';
+    $resource = '/_post_recipientes_batch_req';
     $url = REST_ALM . $resource;
     $rsp = $this->rest->callApi("POST", $url, $datos);
     if ($rsp['status']) $rsp['data'] = json_decode($rsp['data']);
