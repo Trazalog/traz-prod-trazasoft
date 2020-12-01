@@ -140,12 +140,13 @@ function eliminarFila() {
 function actualizarEstadoCamion(patente) {
     var estado = 'TRANSITO|EN CURSO';
     var estadoFinal = 'DESCARGADO';
+    var proveedor = $('#proveedor').val();
     wo();
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
         url: '<?php echo base_url(PRD) ?>general/camion/estado',
-        data: {patente, estado, estadoFinal},
+        data: {patente, estado, estadoFinal, proveedor},
         success: function(res) {
             hecho();
         },

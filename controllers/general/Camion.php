@@ -159,6 +159,8 @@ class Camion extends CI_Controller
     {
         $post = $this->input->post();
         $rsp = $this->Camiones->estado($post['patente'], $post['estado'], $post['estadoFinal']);
+        if($rsp['status'] && $post['estadoFinal'] == 'DESCARGADO')
+            $this->Camiones->actualizarProveedor($post['patente'], $post['estadoFinal'], $post['proveedor']);
         echo json_encode($rsp);
     }
 }

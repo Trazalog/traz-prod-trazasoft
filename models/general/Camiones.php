@@ -246,4 +246,16 @@ class Camiones extends CI_Model
         $data['_put_camiones_establecimiento'] = array('motr_id' => "$motrId", 'esta_id' => "$estaId");
         return wso2($url, 'PUT', $data);
     }
+
+    public function actualizarProveedor($patente, $estado, $proveedor)
+    {
+        $data['_put_camiones_proveedor'] = array(
+            'patente' => $patente,
+            'estado' => $estado,
+            'prov_id' => "$proveedor"
+        );
+
+        $url = REST_LOG."/camiones/proveedor";
+        return wso2($url, 'PUT', $data);
+    }
 }
