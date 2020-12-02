@@ -12,8 +12,7 @@ $this->load->view('camion/modal_recepcioncamion');
     <div class="box-header with-border">
         <h4 class="box-title">Listado Recepción Camión</h4><br>      
     </div>
-    <button class="btn btn-primary" onclick="linkTo('<?php echo base_url(PRD) ?>general/Camion/entradaCamion')" style="margin-top:10px;">Nueva Carga | Recepción</button>
-   <br><br>
+
     <div class="box-body hidden">
         <!--________________________________________________________________________-->
 
@@ -76,6 +75,10 @@ $this->load->view('camion/modal_recepcioncamion');
     </div> -->
     <!--________________________________________________________________________-->
     <div class="box-body table-scroll table-responsive">
+
+    		<button class="btn btn-primary" onclick="linkTo('<?php echo base_url(PRD) ?>general/Camion/entradaCamion')" style="margin-top:10px;">Nueva Entrada | Recepción MP</button>
+   			<br><br>
+
         <table id="tbl-camiones" class="table table-striped table-hover">
             <!--Cabecera del datatable-->
             <thead>

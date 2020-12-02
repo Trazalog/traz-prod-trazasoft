@@ -1,4 +1,7 @@
 <div class="box box-primary tag-descarga">
+		<div class="box-header with-border">
+        <h3 class="box-title">Listado de Recepcion MP<span id="origen"></span></h3>
+    </div>
     <div class="box-body">
         <table class="table table-striped table-hover">
             <thead>
