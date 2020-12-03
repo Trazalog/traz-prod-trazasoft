@@ -16,12 +16,12 @@
   <div class="row">
     <div class="box box-primary">
       <div class="box-header with-border">
-        <h3>Informe de Trazabilidad</h3>
+        <h4>Informe de Trazabilidad</h4>
       </div>
       <div class="box-body">
         <div class=" form-group col-sm-5">
           <div class="col-sm-2">
-            <h4>Lote</h4>
+            <h5>Lote</h5>
           </div>
           <div class="col-sm-7">
             <input type="text" class="form-control" id="batch" name="batch" placeholder="Ingrese código de batch">
