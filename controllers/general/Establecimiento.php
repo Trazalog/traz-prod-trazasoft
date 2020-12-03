@@ -75,7 +75,7 @@ class Establecimiento extends CI_Controller
     foreach ($tableDataArray['recipientes'] as $key => $x) {
       $array['tipo'] = $tableDataArray['recipientes'][$key]['reci_tipo'];
       $array['patente'] = $tableDataArray['recipientes'][$key]['reci_nombre'];
-      $array['empr_id'] = "1";
+      $array['empr_id'] = empresa();
       $array['depo_id'] = $tableDataArray['recipientes'][$key]['depo_id'];
       // $array['motr_id'] = null;
       $pinchila['_post_recipientes'][$key] = $array;
