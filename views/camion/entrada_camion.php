@@ -1,7 +1,7 @@
 <?php $this->load->view('camion/modal_productos')?>
 <div class="box">
     <div class="box-header with-border">
-        <h3 class="box-title">Carga | Recepción</h3>
+        <h3 class="box-title">Entrada | Recepción MP</h3>
     </div>
     <div class="box-body">
         <div class="row">
@@ -9,13 +9,13 @@
             <div class="col-md-6 col-xs-12">
                 <div id="cargacamion" onclick="cargacamion();">
                     <img src="<?php echo base_url('lib/icon/truck.png'); ?>" alt="Smiley face" height="42" width="42">
-                    <label for="">CARGA</label>
+                    <label for="">ENTRADA</label>
                 </div>
             </div>
             <div class="col-md-6 col-xs-12">
                 <div id="descargacamion" onclick="descargacamion()">
                     <img src="<?php echo base_url('lib/icon/order.png'); ?>" alt="Smiley face" height="42" width="42">
-                    <label for="">RECEPCIÓN</label>
+                    <label for="">RECEPCIÓN MP</label>
                 </div>
             </div>
         </div>
@@ -153,23 +153,24 @@ foreach ($establecimientos as $fila) {
     $this->load->view('entrada_movilidad/comp/tabla_descarga');
             ?>
     </div>
-
+    
 </div>
 
 
 
 <script>
-$('#minimizar_datos_camion').click(function() {
-    $('#div_datos_camion').toggle(1000);
+
+$('#minimizar_datos_camion').click(function(){
+	$('#div_datos_camion').toggle(1000);
 });
-$('#minimizar_ingreso').click(function() {
-    $('#div_ingreso').toggle(1000);
+$('#minimizar_ingreso').click(function(){
+	$('#div_ingreso').toggle(1000);
 });
-$('#minimizar_destino').click(function() {
-    $('#div_destino').toggle(1000);
+$('#minimizar_destino').click(function(){
+	$('#div_destino').toggle(1000);
 });
-$('#minimizar_vale_entrada').click(function() {
-    $('#div_vale_entrada').toggle(1000);
+$('#minimizar_vale_entrada').click(function(){
+	$('#div_vale_entrada').toggle(1000);
 });
 
 
@@ -190,75 +191,59 @@ function reset() {
 }
 var recipienteSelect = null;
 $('#patente').keyup(function(e) {
+    
     if ($('#accioncamion').val() != 'descarga') return;
-    this.value = this.value.replace(' ', '');
+    this.value =  this.value.replace(' ','');
     if (e.keyCode === 13) {
         console.log('Obtener Lotes Patentes');
 
         if (this.value == null || this.value == '') return;
-
+    
         var patente = this.value;
+        wo();
+        $.ajax({
+            type: 'POST',
+            dataType: 'JSON',
+            url: '<?php echo base_url(PRD) ?>general/Lote/obtenerLotesCamion/true',
+            data:{patente},
+            success: function(rsp) {
 
-        obtenerInfoCamion(patente);
+                if (!rsp.data) {
+                    alert('No existen Lotes Asociados');
+                    return;
+                }
+
+                $('#codigo').attr('disabled', false).next(".select2-container").show();
+                $('#new_codigo').addClass('hidden').attr('disabled', true);
+
+                obtenerInfoCamion(patente);
+
+
+                fillSelect("#codigo", rsp.data);
+
+                alert('Lotes Encontrados: ' + (parseInt($('#codigo').find('option').length) - 1));
+
+            },
+            error: function(rsp) {
+                alert('No hay Lotes Asociados');
+            },
+            complete: function() {
+                wc();
+            }
+        });
     }
 });
 
-function obtenerLotesCamion(patente) {
-    wo();
-    $.ajax({
-        type: 'POST',
-        dataType: 'JSON',
-        url: '<?php echo base_url(PRD) ?>general/Lote/obtenerLotesCamion/true',
-        data: {
-            patente
-        },
-        success: function(rsp) {
-
-            if (!rsp.data) {
-                alert('No existen Lotes Asociados');
-                return;
-            }
-
-            $('#codigo').attr('disabled', false).next(".select2-container").show();
-            $('#new_codigo').addClass('hidden').attr('disabled', true);
-
-            fillSelect("#codigo", rsp.data);
-
-            alert('Lotes Encontrados: ' + (parseInt($('#codigo').find('option').length) - 1));
-
-        },
-        error: function(rsp) {
-            alert('No hay Lotes Asociados');
-        },
-        complete: function() {
-            wc();
-        }
-    });
-}
-
 function obtenerInfoCamion(patente) {
-    var estado = 'TRANSITO';
-    wo();
     $.ajax({
-        type: 'POST',
+        type: 'GET',
         dataType: 'JSON',
-        data: {
-            estado
-        },
-        url: `<?php echo base_url(PRD) ?>general/Camion/obtenerInfo/${patente}`,
+        url: '<?php echo base_url(PRD) ?>general/Camion/obtenerInfo/'+patente,
         success: function(rsp) {
-            if (rsp){
-                fillForm(rsp);
-                obtenerLotesCamion(patente); 
-            }else{
-                alert('Camion no registrado.')
-            }
+            fillForm(rsp.data[0]);
         },
         error: function(rsp) {
             alert('Error');
-        },
-        complete: function(){
-            wc();
         }
     });
 }
@@ -279,7 +264,7 @@ function unificarLote() {
 
 }
 
-// NO SE LLAMA EN NINGUNA PARTE
+
 function guardarDecarga() {
     console.log('Guardar Descarga');
     var array = [];
@@ -315,7 +300,7 @@ function guardarDecarga() {
     });
 }
 
-function obtenerFormularioCamion() {
+function obtenerFormularioCamion(){
     var frmCamion = new FormData($('#frm-camion')[0]);
     var frmInfo = new FormData($('#frm-info')[0]);
     var dataForm = mergeFD(frmInfo, frmCamion);
@@ -323,28 +308,26 @@ function obtenerFormularioCamion() {
     return formToObject(dataForm);
 }
 
-function validarFormulario() {
+function validarFormulario(){
 
-    var ban = true;
+    var ban =  true;
     $('#frm-info').find('.form-control').each(function() {
-        if (this.id != 'proveedor' && this.id != 'nombreproveedor') {
+        if(this.id !='proveedor' && this.id != 'nombreproveedor'){
             console.log(this.id + ' = ' + this.value);
-            if (this.value == "") {
-
-                ban = ban && false;
-                return;
+            if(this.value == ""){
+                
+                ban =  ban && false; return;
             }
         }
     })
-
-    $('#frm-camion').find('.form-control').each(function() {
-        if (this.value == "") {
-            ban = ban && false;
-            return;
+    
+    $('#frm-camion').find('.form-control').each(function(){
+        if(this.value == ""){
+            ban =  ban && false; return;
         }
     });
-
-    if (!ban) alert('Complete los campos obligatorios(*)');
+    
+    if(!ban) alert('Complete los campos obligatorios(*)');
 
     return ban;
 }
@@ -352,8 +335,8 @@ function validarFormulario() {
 function addCamion(msj = true) {
 
 
-    if (!validarFormulario()) return;
-
+    if(!validarFormulario()) return;
+    
     var frmCamion = new FormData($('#frm-camion')[0]);
     var frmInfo = new FormData($('#frm-info')[0]);
     var dataForm = mergeFD(frmInfo, frmCamion);
@@ -370,13 +353,13 @@ function addCamion(msj = true) {
         data: dataForm,
         success: function(rsp) {
             if (rsp.status) {
-                if ($('#bloque_descarga:visible').length == 0) {
+                if($('#bloque_descarga:visible').length == 0){
                     $('#frm-camion')[0].reset();
                     $('#frm-info')[0].reset();
                 }
                 if (msj) alert('Datos Guardados con Éxito');
             } else {
-                if (rsp.msj) alert(rsp.msj)
+                if(rsp.msj) alert(rsp.msj)
                 else alert('Fallo al Guardar Datos del Camión');
             }
         },
@@ -393,7 +376,7 @@ function addCamion(msj = true) {
 
 <script>
 function checkTabla(idtabla, idrecipiente, json, acciones) {
-    lenguaje = <?php echo json_encode($lang) ?>;
+    lenguaje = <?php echo json_encode($lang) ?> ;
     if (document.getElementById(idtabla) == null) {
         armaTabla(idtabla, idrecipiente, json, lenguaje, acciones);
     }
@@ -595,7 +578,7 @@ function Guardar() {
             url: '<?php echo base_url(PRD) ?>general/Camion/GuardarEntrada',
             success: function(result) {
                 if (result == 'ok') {
-                    linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
+                   linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
                 } else {
                     alert('Ups');
                 }
@@ -654,6 +637,8 @@ $(document).off('click', '.tabla_productos_asignados_borrar').on('click', '.tabl
     idrecipiente: 'productosasignados',
     idbandera: 'productos_existe'
 }, remover);
+
+
 </script>
 
 <div class="modal" id="unificar_lotes" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
