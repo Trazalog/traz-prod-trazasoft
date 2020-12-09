@@ -11,7 +11,7 @@ class Recipientes extends CI_Model
 				// TODO: DESHARCODEAR EL RESOURCE		
         log_message('DEBUG', 'Recipientes/listarPorEstablecimiento (idEstablecimiento)-> '.$establecimiento);              
         $resource = '/lote/'.$establecimiento;	 	
-        $url = REST2.$resource;      
+        $url = REST_ALM.$resource;      
         $array = $this->rest->callAPI("GET",$url); 		           
         log_message('DEBUG', 'Recipientes/listarPorEstablecimiento (resp del servicio)-> '.json_encode($array['data']));				       
 		return json_decode($array['data']);    
@@ -19,7 +19,7 @@ class Recipientes extends CI_Model
 
    public function obtenerContenido($reci_id)
    {
-        $url = RESTPT."recipientes/contenido/$reci_id";
+        $url = REST_ALM."/recipientes/contenido/$reci_id";
         $rsp = $this->rest->callApi('GET', $url);
         if($rsp['status']){
             $rsp['data'] = json_decode($rsp['data'])->batches->batch;
@@ -29,19 +29,9 @@ class Recipientes extends CI_Model
 
 
     public function listarTodosDeposito(){
-
-      // $parametros["http"]["method"] = "GET";		 
-      // $parametros["http"]["header"] = "Accept: application/json";
-      // $param = stream_context_create($parametros);      
-      // $resource = '/lote/todos/deposito';      
-      // // TODO: DESHARCODEAR EL RESOURCE     
-      // $url = REST2.$resource;
-      // $array = file_get_contents($url, false, $param);
-      // return json_decode($array);
-
       log_message('DEBUG', 'Recipientes/listarTodosDeposito');
       $resource = '/lote/todos/deposito';
-      $url = REST2.$resource;
+      $url = REST_PRD.$resource;
       $array = $this->rest->callAPI("GET",$url); 	
       wso2Msj($array);
       return json_decode($array['data']);
@@ -49,16 +39,9 @@ class Recipientes extends CI_Model
 
     public function listarEmpaques()
     {
-        // $parametros["http"]["method"] = "GET";		 
-        // $param = stream_context_create($parametros);
-        // $resource="empaques";
-        // $url = REST.$resource;
-        // $array = file_get_contents($url, false, $param);
-        // return json_decode($array);
-
         log_message('DEBUG', 'Recipientes/listarEmpaques');
         $resource = '/empaques';
-        $url = REST2.$resource;
+        $url = REST_PRD.$resource;
         $array = $this->rest->callAPI("GET",$url); 	
         wso2Msj($array);
         return json_decode($array['data']);
@@ -83,7 +66,7 @@ class Recipientes extends CI_Model
 
     public function obtener($tipo = 'TODOS', $estado = 'TODOS', $establecimiento = 0)
     {
-        $url  = RESTPT . "recipientes/tipo/$tipo/estado/$estado/establecimiento/$establecimiento";
+        $url  = REST_PRD. "/recipientes/tipo/$tipo/estado/$estado/establecimiento/$establecimiento";
         $rsp = $this->rest->callAPI('GET' , $url);
         $rsp['data'] = json_decode($rsp['data'])->recipientes->recipiente;
         return $rsp;
@@ -91,7 +74,7 @@ class Recipientes extends CI_Model
 
   public function obtenerTodosRecipientes()
   {
-    $url  = RESTPT . "getAllRecipientes";
+    $url  = REST_ALM. "/getAllRecipientes";
     $rsp = $this->rest->callAPI('GET', $url);
     $rsp['data'] = json_decode($rsp['data'])->recipientes->recipiente;
     return $rsp['data'];
@@ -100,14 +83,14 @@ class Recipientes extends CI_Model
   public function deleteRecipiente($id)
   {
     $data['recipiente']['reci_id'] = $id;
-    $url  = RESTPT . "deleteRecipiente";
+    $url  = REST_ALM . "/deleteRecipiente";
     $rsp = $this->rest->callApi('PUT', $url, $data);
     return $rsp;
   }
 
   public function editarRecipiente($data)
   {
-    $url  = RESTPT . "updateRecipiente";
+    $url  = REST_ALM . "/updateRecipiente";
     $rsp = $this->rest->callApi('PUT', $url, $data);
     return $rsp;
   }

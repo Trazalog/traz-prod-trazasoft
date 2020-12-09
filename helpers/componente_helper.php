@@ -69,7 +69,7 @@ if (!function_exists('selectBusquedaAvanzada')) {
 
 function selectFromCore($name, $placeholder, $tabla)
 {
-    $url = REST_CORE."tablas/$tabla";
+    $url = REST_CORE."/tablas/$tabla";
     $rsp = wso2($url);
     $opt = '';
     foreach ($rsp['data'] as $o) {

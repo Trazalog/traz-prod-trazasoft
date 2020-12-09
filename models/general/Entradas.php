@@ -10,28 +10,30 @@ class Entradas extends CI_Model
 
     public function guardar($data)
     {
-        if(!$this->validarCamion($data['patente'])){  
+        if($this->validarCamion($data['patente'])){  
             return array('status'=>false, 'msj'=>'El Camion ya se encuentra en el establecimiento');
         }
 
         $data['proveedor'] = strval(PROVEEDOR_INTERNO);
+        $data['empr_id'] = strval(empresa());
         log_message('DEBUG', '#ENTRADAS > guardar | #DATA-POST: ' . json_encode($data));
-        $url = RESTPT . 'entradas';
+        $url = REST_LOG . '/entradas';
         $rsp = $this->rest->callApi('POST', $url, ['post_entradas' => $data]);
         return $rsp;
     }
 
-    public function validarCamion($patente)
+    public function validarCamion($patente, $estado = 'EN CURSO')
     {
-        $res = wso2(REST. "camiones/$patente");
+        log_message('DEBUG',"#TZL | ".__METHOD__."| PANTENTE: $pantente | ESTADO: $estado");
+
+        $res = wso2(REST_LOG. "/camiones/$patente")['data'];
         if($res){
             foreach($res as $o) {
                 
-                if($o->estado = 'EN CURSO') return true;
+                if($o->estado == $estado) return true;
 
             }
         }
-
         return false;
     }
 }

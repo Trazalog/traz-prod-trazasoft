@@ -7,6 +7,7 @@ class Camion extends CI_Controller
     public function __construct()
     {
         parent::__construct();
+        $this->load->model('general/Noconsumibles');
         $this->load->model('general/Establecimientos');
         $this->load->model('general/Camiones');
         $this->load->model('general/Materias');
@@ -21,6 +22,7 @@ class Camion extends CI_Controller
         $data['fecha'] = date('Y-m-d');
         $data['lang'] = lang_get('spanish', 4);
         $data['establecimientos'] = $this->Establecimientos->listarTodo()->establecimientos->establecimiento;
+        $data['tipoEstablecimiento'] = $this->Noconsumibles->tipoEstablecimiento()['data'];
         $this->load->view('camion/carga_camion', $data);
     }
 
@@ -29,12 +31,15 @@ class Camion extends CI_Controller
         $data['fecha'] = date('Y-m-d');
         $data['lang'] = lang_get('spanish', 4);
         $data['establecimientos'] = $this->Establecimientos->listarTodo()->establecimientos->establecimiento;
+        $data['tipoEstablecimiento'] = $this->Noconsumibles->tipoEstablecimiento()['data'];
         $this->load->view('camion/descarga_camion', $data);
     }
 
     public function salidaCamion($patente = false)
     {
         $data['establecimientos'] = $this->Establecimientos->listarTodo()->establecimientos->establecimiento;
+        $data['tipoEstablecimiento'] = $this->Noconsumibles->tipoEstablecimiento()['data'];
+        $data['destinoNoConsumible'] = $this->Noconsumibles->seleccionarDestino()['data'];
         $this->load->view('camion/salida_camion', $data);
     }
 
@@ -93,6 +98,7 @@ class Camion extends CI_Controller
         $data['fecha'] = date('Y-m-d');
         $data['lang'] = lang_get('spanish', 4);
         $data['establecimientos'] = $this->Establecimientos->listarTodo()->establecimientos->establecimiento;
+        $data['tipoEstablecimiento'] = $this->Noconsumibles->tipoEstablecimiento()['data'];
         $data['proveedores'] = $this->Camiones->listarProveedores()->proveedores->proveedor;
         $data['materias'] = $this->Materias->listar()->materias->materia;
         $data['empaques'] = $this->Recipientes->listarEmpaques()->empaques->empaque;
@@ -125,9 +131,10 @@ class Camion extends CI_Controller
     }
     #_____________________________________________________________________________________
 
-    public function obtenerInfo($patente = null)
+    public function obtenerInfo($patente)
     {
-        $rsp = $this->Camiones->obtenerInfo($patente);
+        $estado = $this->input->post('estado');
+        $rsp = $this->Camiones->obtenerInfo($patente, $estado);
         echo json_encode($rsp);
     }
 
@@ -146,5 +153,12 @@ class Camion extends CI_Controller
         $data = $this->input->post();
         $res = $this->Camiones->guardarSalida($data);
         echo json_encode($res);
+    }
+
+    public function estado()
+    {
+        $post = $this->input->post();
+        $rsp = $this->Camiones->estado($post['patente'], $post['estado'], $post['estadoFinal']);
+        echo json_encode($rsp);
     }
 }

@@ -23,7 +23,7 @@ use \koolreport\widgets\google\ColumnChart;
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <div class="box box-solid">
           <div class="box box-primary">
-            <div class="box-header">
+            <div class="box-header with-border">
               <h3 class="box-title">
                 Reporte de Salidas
               </h3>
@@ -396,8 +396,8 @@ use \koolreport\widgets\google\ColumnChart;
         var color = '';
         // debugger;
         switch (estado.trim()) {
-          case 'ASIGNADO':
-            estado = 'Asignado';
+          case 'CARGADO':
+            estado = 'Cargado';
             color = 'blue';
             break;
           case 'EN CURSO':

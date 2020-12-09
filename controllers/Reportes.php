@@ -32,7 +32,7 @@ class Reportes extends CI_Controller
       $hasta = ($hasta) ? date("d-m-Y", strtotime($hasta)) : null;
       // var_dump('Desde: ' . $desde . '  Hasta: ' . $hasta);
       log_message('INFO', '#TRAZA| #REPORTES.PHP|#REPORTES|#PRODUCCION| #ETAPA: >>' . $etapa . '#DESDE: >>' . $desde . '#HASTA: >>' . $hasta);
-      $url = REST_TDS . 'productos/etapa/' . $etapa . '/desde/' . $desde . '/hasta/' . $hasta . '/producto/' . $producto;
+      $url = REST_TDS . '/productos/etapa/' . $etapa . '/desde/' . $desde . '/hasta/' . $hasta . '/producto/' . $producto;
       $json = $this->Koolreport->depurarJson($url)->productos->producto;
       $reporte = new Produccion($json);
       $reporte->run()->render();
@@ -40,7 +40,7 @@ class Reportes extends CI_Controller
     } else {
 
       log_message('INFO', '#TRAZA| #REPORTES.PHP|#REPORTES|#PRODUCCION| #INGRESO');
-      $url = REST_TDS . 'productos/etapa//desde//hasta//producto/';
+      $url = REST_TDS . 'productos/etapa//desde//hasta/producto/';
       $json = $this->Koolreport->depurarJson($url)->productos->producto;
       log_message('DEBUG', '#TRAZA| #REPORTES.PHP|#REPORTES|#PRODRESPONSABLE| #JSON: >>' . $json);
       $reporte = new Produccion($json);

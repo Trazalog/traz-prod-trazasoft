@@ -3,7 +3,7 @@
         <i class="fa fa-sign-in"></i>
         <h3 class="box-title"> Ingreso <span id="origen"></span></h3>
     </div>
-    <div class="box-body">
+    <div class="box-body" id="div_ingreso">
         <form id="frm-origen" class="frm-origen">
             <div class="row">
                 <div class="col-md-12">
