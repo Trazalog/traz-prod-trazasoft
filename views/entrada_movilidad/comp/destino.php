@@ -151,19 +151,46 @@ function validarRecipiente(json) {
 
     var arti_id = $('.frm-destino #articulo').attr('data-id');
     var lote_id = $('.frm-destino #codigo').val();
+    wo();
+    $.ajax({
+        type: 'GET',
+        dataType: 'JSON',
+        url: `<?php echo base_url(PRD.'general/recipiente/obtenerContenido/')?>${json.reci_id}`,
+        success: function(res) {
+            console.log(res);
+            if(res.status){
+                res.data.forEach(function(e){
+                    if (e.arti_id != arti_id || e.lote_id != lote_id) {
+                        alert('No se pueden mezclar Distintos Articulos y Distintos Lotes en un mismo Recipiente');
+                        $('#recipiente').val('');
+                        $('#recipiente').select2().trigger('change');
+                        return;
+                    }
 
-    if (json.arti_id != arti_id || json.lote_id != lote_id) {
-        alert('No se pueden mezclar Distintos Articulos y Distintos Lotes en un mismo Recipiente');
-        $('#recipiente').val('');
-        return;
-    }
+                    if (confirm('¿Desea mezclar los Artículos en el Recipiente?') != true) {
+                        $('#recipiente').val('');
+                        $('#recipiente').select2().trigger('change');
+                        return;
+                    }
 
-    if (confirm('¿Desea mezclar los Artículos en el Recipiente?') != true) {
-        $('#recipiente').val('');
-        return;
-    }
+                    if (confirm('¿Desea mezclar los Artículos en el Recipiente?') != true) {
+                        $('#recipiente').val('');
+                        $('#recipiente').select2().trigger('change');
+                        return;
+                    }
 
-    $('#unificar').val(true);
-
+                    $('#unificar').val(true);
+                })
+            }else{
+                alert('Error al traer contenido del recipiente');
+            }
+        },
+        error: function(res) {
+            error();
+        },
+        complete: function() {
+            wc(); 
+        }
+    });
 }
 </script>
