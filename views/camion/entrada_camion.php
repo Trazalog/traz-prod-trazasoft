@@ -84,7 +84,7 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label>Transportista: </label>
+                        <label>Transportista <?php hreq() ?>:</label>
                         <select class="form-control select select2" id="transportista" name="cuit">
                             <option disabled selected>Seleccionar</option>
                             <?php 
@@ -101,23 +101,23 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-1 col-xs-12"><label class="form-label">Patente*:</label></div>
+                <div class="col-md-1 col-xs-12"><label class="form-label">Patente<?php hreq() ?>:</label></div>
                 <div class="col-md-2 col-xs-12"><input type="text" class="form-control" id="patente" name="patente">
                 </div>
                 <div class="col-md-1 col-xs-12"><label class="form-label">Acoplado:</label></div>
                 <div class="col-md-2 col-xs-12"><input type="text" class="form-control" id="acoplado" name="acoplado">
                 </div>
-                <div class="col-md-1 col-xs-12"><label class="form-label">Conductor*:</label></div>
+                <div class="col-md-1 col-xs-12"><label class="form-label">Conductor<?php hreq() ?>:</label></div>
                 <div class="col-md-2 col-xs-12"><input type="text" class="form-control" id="conductor" name="conductor">
                 </div>
-                <div class="col-md-1 col-xs-12"><label class="form-label">Tipo*:</label></div>
+                <div class="col-md-1 col-xs-12"><label class="form-label">Tipo<?php hreq() ?>:</label></div>
                 <div class="col-md-2 col-xs-12"><input type="text" class="form-control" id="tipo" name="tipo"></div>
             </div>
             <div class="row" style="margin-top:40px">
-                <div class="col-md-1 col-xs-12"><label class="form-label">Bruto*:</label></div>
+                <div class="col-md-1 col-xs-12"><label class="form-label">Bruto<?php hreq() ?>:</label></div>
                 <div class="col-md-3 col-xs-12"><input type="number" class="form-control" onkeyup="actualizaNeto()"
                         id="bruto" name="bruto"></div>
-                <div class="col-md-1 col-xs-12"><label class="form-label">Tara*:</label></div>
+                <div class="col-md-1 col-xs-12"><label class="form-label">Tara<?php hreq() ?>:</label></div>
                 <div class="col-md-3 col-xs-12"><input type="number" class="form-control" id="tara"
                         onkeyup="actualizaNeto()" name="tara"></div>
                 <div class="col-md-1 col-xs-12"><label class="form-label">Neto:</label></div>

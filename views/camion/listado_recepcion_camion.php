@@ -10,7 +10,7 @@ $this->load->view('camion/modal_recepcioncamion');
 <!--Pantalla "LISTADO RECEPCION DE CAMION"-->
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h4 class="box-title">Listado Recepción Camión</h4><br>      
+        <h4 class="box-title">Listado Recepción Camión</h4><br>
     </div>
 
     <div class="box-body hidden">
@@ -76,8 +76,9 @@ $this->load->view('camion/modal_recepcioncamion');
     <!--________________________________________________________________________-->
     <div class="box-body table-scroll table-responsive">
 
-    		<button class="btn btn-primary" onclick="linkTo('<?php echo base_url(PRD) ?>general/Camion/entradaCamion')" style="margin-top:10px;">Nueva Entrada | Recepción MP</button>
-   			<br><br>
+        <button class="btn btn-primary" onclick="linkTo('<?php echo base_url(PRD) ?>general/Camion/entradaCamion')"
+            style="margin-top:10px;">Nueva Entrada | Recepción MP</button>
+        <br><br>
 
         <table id="tbl-camiones" class="table table-striped table-hover">
             <!--Cabecera del datatable-->
@@ -100,9 +101,12 @@ $this->load->view('camion/modal_recepcioncamion');
                 <?php
         foreach($movimientosTransporte as $fila)
         {
+          if($fila->estado == 'Finalizado') continue;
           $id=$fila->id;
           echo "<tr  id='$id' data-json='".json_encode($fila->articulos)."'>";
           echo '<td width="5%" class="text-center" style="font-weight: lighter;">';
+          echo "<a class='mr-2' onclick='salidaCamiones(\"$fila->patente\")'><i class='fa fa-fw fa-truck text-red ml-1' style='cursor: pointer;' title='Salida camion'></i></a>";
+
           echo '<i class="fa fa-fw fa-truck text-light-blue" style="cursor: pointer;" title="Ver Lotes"  onclick="rellenarDetalles(this)"></i>';
           echo '</td>';
           echo "<th><b>".(strtoupper($fila->accion))."</b></th>";
@@ -134,14 +138,14 @@ function rellenarDetalles(e) {
 
     var data = $(e).closest('tr').attr('data-json');
     data = JSON.parse(data);
-    if (!data) {
+
+    if (!data.articulo) {
         alert('Sin Detalles a Mostrar');
         return;
     }
     var tabla = $('#tbl-articulos').find('tbody');
     $(tabla).empty();
     data.articulo.forEach(function(e) {
-
         tabla.append(
             `<tr>
         <td style="font-weight: lighter;">${e.articulo}</td>
@@ -153,6 +157,12 @@ function rellenarDetalles(e) {
     });
 
     $('#modal_recepcioncamion').modal('show');
+}
+
+function salidaCamiones(patente) {
+    wo();
+    linkTo('<?php echo base_url(PRD) ?>general/Camion/salidaCamion/' + patente);
+    wc();
 }
 </script>
 <!--________________________________________________________________________-->
