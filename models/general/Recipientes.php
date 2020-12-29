@@ -17,14 +17,10 @@ class Recipientes extends CI_Model
 		return json_decode($array['data']);    
     }
 
-   public function obtenerContenido($reci_id)
+   public function obtenerContenido($reciId)
    {
-        $url = REST_ALM."/recipientes/contenido/$reci_id";
-        $rsp = $this->rest->callApi('GET', $url);
-        if($rsp['status']){
-            $rsp['data'] = json_decode($rsp['data'])->batches->batch;
-        }
-        return $rsp;
+        $url = REST_PRD."/recipientes/contenido/$reciId";
+        return wso2($url);
    }
 
 
@@ -94,5 +90,4 @@ class Recipientes extends CI_Model
     $rsp = $this->rest->callApi('PUT', $url, $data);
     return $rsp;
   }
-
 }

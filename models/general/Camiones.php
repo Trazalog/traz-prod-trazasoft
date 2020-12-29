@@ -19,8 +19,7 @@ class Camiones extends CI_Model
     {
         $resource = '/proveedores/' . empresa();
         $url = REST_ALM . $resource;
-        $array = file_get_contents($url, false, http('GET'));
-        return json_decode($array);
+        return wso2($url);
     }
     public function listarCargados($patente = null)
     {

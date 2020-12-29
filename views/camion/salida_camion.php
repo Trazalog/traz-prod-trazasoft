@@ -186,6 +186,7 @@ function obtenerInfoCamion(patente) {
                     $('#bruto').val(0);
                     $('#neto').val(0);
                  }
+                $('#bruto').attr('readonly', rsp.estado == 'DESCARGADO');
                 obtenerLotesCamion(patente)
             } else {
                 alert('Camión no registrado')
