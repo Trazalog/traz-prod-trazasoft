@@ -644,4 +644,10 @@ class Etapa extends CI_Controller
         $productos_salida_etapa = $this->Etapas->getSalidaEtapa($etapId)['data'];
         echo selectBusquedaAvanzada('inputproducto', 'id', $productos_salida_etapa, 'arti_id', 'descripcion');
     }
+
+    public function eliminarEtapa($batchId)
+    {
+        $rsp = $this->Etapas->eliminarEtapa($batchId);
+        echo json_encode($rsp);
+    }
 }

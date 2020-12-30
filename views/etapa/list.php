@@ -96,14 +96,16 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
             <?php
 
             foreach ($list as $fila) {
-
+              if($fila->estado == 'ANULADO') continue;
               $id = $fila->id;
               echo '<tr  id="' . $id . '" data-json=\'' . json_encode($fila) . '\'>';
 
               echo '<td width="6%" class="text-center">';
               echo "<i data-toggle='modal' data-target='#modal-asignarResponsable' class='fa fa-fw fa-user-plus text-green ml-1' style='cursor: pointer;' title='Asignar responsable' onclick='asignarResponsable($id)'></i>";
               echo '<i class="fa fa-fw fa-cogs text-light-blue ml-1" style="cursor: pointer;" title="Editar" onclick=linkTo("'.base_url(PRD).'general/Etapa/editar?id=' . $id . '")></i>';
-              echo '<i class="fa fa-fw fa-times-circle text-red ml-1" style="cursor: pointer;" title="Eliminar" onclick="seleccionar(this)"></i>';
+             
+              if($fila->estado == 'PLANIFICADO')
+              echo "<i class='fa fa-fw fa-times-circle text-red ml-1' style='cursor: pointer;' title='Eliminar' onclick='conf(eliminarEtapa,\"$id\")'></i>";
               echo '</td>';
 
               echo '<td>' . $fila->titulo . '</td>';
@@ -437,5 +439,28 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
         $('#modal-asignarResponsable').modal('hide')
       }
     });
+  }
+
+ var eliminarEtapa =  function(id) {
+    wo();
+     $.ajax({
+            type:'POST',
+            dataType:'JSON',
+            url:`<?php echo base_url(PRD) ?>general/etapa/eliminarEtapa/${id}`,
+            success:function(res){
+                if(res.status){
+                  $('tr#'+id).remove();
+                  hecho();
+                }else{
+                  error();
+                }
+            },
+            error:function(res){
+                error();
+            },
+            complete:function(){
+              wc();
+            }
+        });
   }
 </script>
