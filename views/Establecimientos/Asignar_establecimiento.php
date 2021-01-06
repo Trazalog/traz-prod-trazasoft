@@ -19,7 +19,7 @@
 <div class="box box-primary animated bounceInDown" id="boxDatos" hidden>
   <div class="box-header with-border">
     <div class="box-tittle">
-      <h5>Informacion</h5>
+      <h4>Informacion</h4>
     </div>
     <div class="box-tools pull-right">
       <button type="button" id="btnclose" title="cerrar" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
@@ -152,7 +152,7 @@
 <div class="box box-primary animated bounceInDown" id="boxRecipientesCargados" style="display: block;">
   <div class="box-header with-border">
     <div class="box-tittle">
-      <h3>Recipientes cargados</h3>
+      <h4>Recipientes cargados</h4>
     </div>
   </div>
   <!--_________________________________________________-->
@@ -602,7 +602,7 @@
         // "esta_id": $(tr).find('td:eq(1)').attr('value'),
         "depo_id": $(tr).find('td:eq(2)').attr('value'),
         "reci_tipo": $(tr).find('td:eq(3)').attr('value'),
-        "reci_nombre": $(tr).find('td:eq(4)').attr('value')
+        "reci_nombre": $(tr).find('td:eq(4)').html()
       }
     });
     datosTabla.shift(); //borra encabezado de la tabla o primera fila

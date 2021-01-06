@@ -19,8 +19,7 @@ class Camiones extends CI_Model
     {
         $resource = '/proveedores/' . empresa();
         $url = REST_ALM . $resource;
-        $array = file_get_contents($url, false, http('GET'));
-        return json_decode($array);
+        return wso2($url);
     }
     public function listarCargados($patente = null)
     {
@@ -238,5 +237,24 @@ class Camiones extends CI_Model
             );
             return wso2($url, 'PUT', $data);
         }
+    }
+
+    public function actualiarEstablecimiento($motrId, $estaId)
+    {
+        $url = REST_LOG.'/camiones/establecimiento';
+        $data['_put_camiones_establecimiento'] = array('motr_id' => "$motrId", 'esta_id' => "$estaId");
+        return wso2($url, 'PUT', $data);
+    }
+
+    public function actualizarProveedor($patente, $estado, $proveedor)
+    {
+        $data['_put_camiones_proveedor'] = array(
+            'patente' => $patente,
+            'estado' => $estado,
+            'prov_id' => "$proveedor"
+        );
+
+        $url = REST_LOG."/camiones/proveedor";
+        return wso2($url, 'PUT', $data);
     }
 }

@@ -67,4 +67,10 @@ class Recipiente extends CI_Controller
       echo "Se produjo un error al editar el recipiente.";
     }
   }
+
+  public function obtenerContenido($reciId)
+  {
+    $rsp = $this->Recipientes->obtenerContenido($reciId);
+    echo json_encode($rsp);
+  }
 }

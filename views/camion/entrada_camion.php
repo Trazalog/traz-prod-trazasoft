@@ -1,7 +1,7 @@
 <?php $this->load->view('camion/modal_productos')?>
 <div class="box">
     <div class="box-header with-border">
-        <h3 class="box-title">Entrada | Recepción MP</h3>
+        <h3 class="box-title">Carga | Recepción MP</h3>
     </div>
     <div class="box-body">
         <div class="row">
@@ -40,10 +40,10 @@
                         name="establecimiento">
                         <option value="" disabled selected>-Seleccione Establecimiento-</option>
                         <?php
-foreach ($establecimientos as $fila) {
-    echo '<option value="' . $fila->esta_id . '" >' . $fila->nombre . '</option>';
-}
-?>
+													foreach ($establecimientos as $fila) {
+															echo '<option value="' . $fila->esta_id . '" >' . $fila->nombre . '</option>';
+													}
+												?>
                     </select>
                 </div>
                 <div class="col-md-1 col-xs-12">
@@ -84,7 +84,7 @@ foreach ($establecimientos as $fila) {
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label>Transportista: </label>
+                        <label>Transportista <?php hreq() ?>:</label>
                         <select class="form-control select select2" id="transportista" name="cuit">
                             <option disabled selected>Seleccionar</option>
                             <?php 
@@ -101,23 +101,23 @@ foreach ($establecimientos as $fila) {
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-1 col-xs-12"><label class="form-label">Patente*:</label></div>
+                <div class="col-md-1 col-xs-12"><label class="form-label">Patente<?php hreq() ?>:</label></div>
                 <div class="col-md-2 col-xs-12"><input type="text" class="form-control" id="patente" name="patente">
                 </div>
-                <div class="col-md-1 col-xs-12"><label class="form-label">Acoplado*:</label></div>
+                <div class="col-md-1 col-xs-12"><label class="form-label">Acoplado:</label></div>
                 <div class="col-md-2 col-xs-12"><input type="text" class="form-control" id="acoplado" name="acoplado">
                 </div>
-                <div class="col-md-1 col-xs-12"><label class="form-label">Conductor*:</label></div>
+                <div class="col-md-1 col-xs-12"><label class="form-label">Conductor<?php hreq() ?>:</label></div>
                 <div class="col-md-2 col-xs-12"><input type="text" class="form-control" id="conductor" name="conductor">
                 </div>
-                <div class="col-md-1 col-xs-12"><label class="form-label">Tipo*:</label></div>
+                <div class="col-md-1 col-xs-12"><label class="form-label">Tipo<?php hreq() ?>:</label></div>
                 <div class="col-md-2 col-xs-12"><input type="text" class="form-control" id="tipo" name="tipo"></div>
             </div>
             <div class="row" style="margin-top:40px">
-                <div class="col-md-1 col-xs-12"><label class="form-label">Bruto*:</label></div>
+                <div class="col-md-1 col-xs-12"><label class="form-label">Bruto<?php hreq() ?>:</label></div>
                 <div class="col-md-3 col-xs-12"><input type="number" class="form-control" onkeyup="actualizaNeto()"
                         id="bruto" name="bruto"></div>
-                <div class="col-md-1 col-xs-12"><label class="form-label">Tara*:</label></div>
+                <div class="col-md-1 col-xs-12"><label class="form-label">Tara<?php hreq() ?>:</label></div>
                 <div class="col-md-3 col-xs-12"><input type="number" class="form-control" id="tara"
                         onkeyup="actualizaNeto()" name="tara"></div>
                 <div class="col-md-1 col-xs-12"><label class="form-label">Neto:</label></div>
@@ -143,15 +143,17 @@ foreach ($establecimientos as $fila) {
         $this->load->view('entrada_movilidad/comp/destino');
         ?>
     </div>
+    
     <div class="col-md-12 tag-descarga" style="display:none">
         <?php 
-    $this->load->view('NoConsumible/EntradaNoConsumible');
-            ?>
+    			$this->load->view('entrada_movilidad/comp/tabla_descarga');
+        ?>
     </div>
-    <div class="col-md-12 tag-descarga" style="display:none">
-        <?php 
-    $this->load->view('entrada_movilidad/comp/tabla_descarga');
-            ?>
+
+		<div class="col-md-12 tag-descarga" style="display:none">
+        <?php
+    			$this->load->view('NoConsumible/EntradaNoConsumible');
+        ?>
     </div>
     
 </div>
@@ -308,9 +310,9 @@ function obtenerFormularioCamion(){
     return formToObject(dataForm);
 }
 
-function validarFormulario(){
-
-    var ban =  true;
+function validarFormulario() {
+    console.log('Validar Form');
+    var ban = true;
     $('#frm-info').find('.form-control').each(function() {
         if(this.id !='proveedor' && this.id != 'nombreproveedor'){
             console.log(this.id + ' = ' + this.value);
@@ -320,28 +322,33 @@ function validarFormulario(){
             }
         }
     })
-    
-    $('#frm-camion').find('.form-control').each(function(){
-        if(this.value == ""){
-            ban =  ban && false; return;
+
+    $('#frm-camion').find('.form-control').each(function() {
+      //  console.log($(this).attr('name') + ' ' + this.value);
+        if (this.value == "" || this.value=="Seleccionar") {
+
+						if(this.id != "acoplado"){
+							ban = ban && false;
+            	return;
+						}
         }
     });
     
     if(!ban) alert('Complete los campos obligatorios(*)');
 
+    if (!ban) alert('Complete los campos obligatorios(*)');
     return ban;
 }
 
 function addCamion(msj = true) {
+    if (!validarFormulario()) return;
 
-
-    if(!validarFormulario()) return;
-    
     var frmCamion = new FormData($('#frm-camion')[0]);
     var frmInfo = new FormData($('#frm-info')[0]);
     var dataForm = mergeFD(frmInfo, frmCamion);
     dataForm.append('estado', 'EN CURSO');
     showFD(dataForm);
+
     wo();
     $.ajax({
         type: 'POST',

@@ -99,7 +99,7 @@ class Camion extends CI_Controller
         $data['lang'] = lang_get('spanish', 4);
         $data['establecimientos'] = $this->Establecimientos->listarTodo()->establecimientos->establecimiento;
         $data['tipoEstablecimiento'] = $this->Noconsumibles->tipoEstablecimiento()['data'];
-        $data['proveedores'] = $this->Camiones->listarProveedores()->proveedores->proveedor;
+        $data['proveedores'] = $this->Camiones->listarProveedores()['data'];
         $data['materias'] = $this->Materias->listar()->materias->materia;
         $data['empaques'] = $this->Recipientes->listarEmpaques()->empaques->empaque;
         $data['transportistas'] = $this->Transportistas->obtener()['data'];
@@ -159,6 +159,8 @@ class Camion extends CI_Controller
     {
         $post = $this->input->post();
         $rsp = $this->Camiones->estado($post['patente'], $post['estado'], $post['estadoFinal']);
+        if($rsp['status'] && $post['estadoFinal'] == 'DESCARGADO')
+            $this->Camiones->actualizarProveedor($post['patente'], $post['estadoFinal'], $post['proveedor']);
         echo json_encode($rsp);
     }
 }

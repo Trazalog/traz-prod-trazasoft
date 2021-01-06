@@ -1,4 +1,7 @@
 <div class="box box-primary tag-descarga">
+		<div class="box-header with-border">
+        <h3 class="box-title">Listado de Recepcion MP<span id="origen"></span></h3>
+    </div>
     <div class="box-body">
         <table class="table table-striped table-hover">
             <thead>
@@ -22,7 +25,9 @@
 
 <script>
 var fila = null;
-
+var rmFila = function(e){
+    $(e).closest('tr').remove()
+}
 function agregarFila(data) {
 
     var lote_origen = $('#new_codigo').hasClass('hidden') ? $('#codigo').select2('data')[0].text : $('#new_codigo')
@@ -30,7 +35,7 @@ function agregarFila(data) {
 
     $('#lotes').append(
         `<tr data-json='${JSON.stringify(data)}' class='${loteSistema?'lote-sistema':'lote'}'>
-            <td class="text-center"><i class="fa fa-times text-danger" onclick="fila = (this).closest('tr')$; $('#eliminar_fila').modal('show');"></i></td>
+            <td class="text-center"><i class="fa fa-times text-danger" onclick="conf(rmFila, this)"></i></td>
             <td>${lote_origen}</td>
             <td>${$('.frm-destino #art-detalle').val()}</td>
             <td>${data.destino.cantidad + ' | ' + data.destino.unidad_medida}</td>
@@ -138,12 +143,13 @@ function eliminarFila() {
 function actualizarEstadoCamion(patente) {
     var estado = 'TRANSITO|EN CURSO';
     var estadoFinal = 'DESCARGADO';
+    var proveedor = $('#proveedor').val();
     wo();
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
         url: '<?php echo base_url(PRD) ?>general/camion/estado',
-        data: {patente, estado, estadoFinal},
+        data: {patente, estado, estadoFinal, proveedor},
         success: function(res) {
             hecho();
         },

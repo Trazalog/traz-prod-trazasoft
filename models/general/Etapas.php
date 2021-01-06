@@ -369,4 +369,14 @@ class Etapas extends CI_Model
             if($o->variable == 'QC_OK' && $o->valor == 'true') return true;
         }
     }
+
+    public function eliminarEtapa($batchId)
+    {
+        $url = REST_PRD_ETAPAS."/etapas/estado";
+        $data['_put_etapas_estado'] = array(
+            'estado' => 'ANULADO',
+            'batch_id' => $batchId
+        );
+        return wso2($url, 'PUT', $data);
+    }
 }
