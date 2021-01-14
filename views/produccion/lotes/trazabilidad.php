@@ -16,7 +16,7 @@
     <div class="row">
         <div class="box box-primary">
             <div class="box-header with-border">
-                <h4>Informe de Trazabilidad</h4>
+                <h4>Trazabilidad de Bloques</h4>
             </div>
             <div class="box-body">
                 <div class=" form-group col-sm-5">
