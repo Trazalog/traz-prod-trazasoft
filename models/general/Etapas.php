@@ -17,7 +17,7 @@ class Etapas extends CI_Model
     // trae listado de etapas con sus datos (Tabla)
     public function listar()
     {
-        $resource = '/lotes';
+        $resource = '/lotes/'.empresa();
         $url = REST_PRD_LOTE . $resource;
         $rsp = $this->rest->callApi('GET', $url);
         if ($rsp['status']) {
@@ -29,7 +29,7 @@ class Etapas extends CI_Model
     public function listarEtapas()
     {
         log_message('DEBUG', 'Etapas/listarEtapas');
-        $resource = '/etapas';
+        $resource = '/etapas/'.empresa();
         $url = REST_PRD . $resource;
         $array = $this->rest->callAPI("GET", $url);
         $resp = json_decode($array['data']);

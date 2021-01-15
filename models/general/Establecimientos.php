@@ -10,7 +10,7 @@ class Establecimientos extends CI_Model
   public function listar()
   {
     // log_message('DEBUG', 'Establecimientos/listar (id etapa)-> ' . $etapa);
-    $resource = '/establecimiento';
+    $resource = '/establecimientos/empresa/'.empresa();
     $url = REST_ALM . $resource;
     $array = $this->rest->callAPI("GET", $url);
     $resp =  json_decode($array['data']);
@@ -83,6 +83,7 @@ class Establecimientos extends CI_Model
 
   public function obtenerRecipientesDeposito($data = null)
   {
+    #HARDCODE
     $rsp = '{
       "tipos":{
         "tipo":[
