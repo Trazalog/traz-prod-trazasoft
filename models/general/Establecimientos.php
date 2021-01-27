@@ -16,9 +16,9 @@ class Establecimientos extends CI_Model
     $resp =  json_decode($array['data']);
     return $resp;
   }
-  public function listarTodo($esta_id = null)
+  public function listarTodo()
   {
-    $resource = '/establecimiento' . ($esta_id ? "/$esta_id" : null);
+    $resource = '/establecimientos/empresa/'.empresa();
     $url = REST_ALM . $resource;
     $array = $this->rest->callApi('GET', $url);
     return json_decode($array['data']);

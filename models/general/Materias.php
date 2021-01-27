@@ -10,7 +10,7 @@ class Materias extends CI_Model
   function listar()
   {    
     //TODO: DESHARDCODEAR LA URL
-      $resource = '/articulos/busquedaavanzada';	 	
+      $resource = '/articulos/busquedaavanzada/'.empresa();	 	
       $url = REST_ALM.$resource;
       $array = $this->rest->callAPI("GET",$url,  $id); 		
       return json_decode($array['data']);
