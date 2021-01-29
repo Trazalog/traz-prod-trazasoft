@@ -1,0 +1,145 @@
+<data enableBatchRequests="true" enableBoxcarring="true" name="PRDNoConsumiblesDataService" transports="http https local">
+   <config enableOData="false" id="ToolsDataSource">
+      <property name="carbon_datasource_name">ToolsDataSource</property>
+   </config>
+   <query id="noConsumiblesSet" useConfig="ToolsDataSource">
+      <sql>insert&#xd;	into&#xd;	nco.no_consumibles (codigo,&#xd;	descripcion,&#xd;	fec_vencimiento,&#xd;	usuario_app,&#xd;	tinc_id,&#xd;	empr_id)&#xd;values(:codigo,&#xd;:descripcion,&#xd;TO_DATE(:fec_vencimiento,'YYYY-MM-DD'),&#xd;:usuario_app,&#xd;:tinc_id,&#xd;cast(:empr_id as integer)) returning codigo;</sql>
+      <result outputType="json">{"resultado":{&#xd; "codigo": "$codigo"&#xd;}}</result>
+      <param name="codigo" sqlType="STRING"/>
+      <param name="descripcion" sqlType="STRING"/>
+      <param name="fec_vencimiento" sqlType="STRING"/>
+      <param name="usuario_app" sqlType="STRING"/>
+      <param name="tinc_id" sqlType="STRING"/>
+      <param name="empr_id" sqlType="STRING"/>
+   </query>
+   <query id="movimientosNoConsumiblesSet" useConfig="ToolsDataSource">
+      <sql>insert&#xd;	into&#xd;	nco.movimientos_no_consumibles (estado,&#xd;	usuario_app,&#xd;	noco_id,&#xd;        depo_id,&#xd;        dest_id)&#xd;select :estado,&#xd;:usuario_app,&#xd;:noco_id,&#xd;case when dep.depo_id is null or dep.depo_id = '' then null else cast(dep.depo_id as integer) end,&#xd;case when dep.dest_id is null or dep.dest_id ='' then null else dep.dest_id end&#xd;from (select :depo_id depo_id,:dest_id dest_id ) dep &#xd;returning monc_id;</sql>
+      <result outputType="json">{"respuesta":{"monc_id":"$monc_id"}}</result>
+      <param name="estado" sqlType="STRING"/>
+      <param name="noco_id" sqlType="STRING"/>
+      <param name="usuario_app" sqlType="STRING"/>
+      <param name="dest_id" sqlType="STRING"/>
+      <param name="depo_id" sqlType="STRING"/>
+   </query>
+   <query id="noConsumiblesGet" useConfig="ToolsDataSource">
+      <sql>SELECT nc.* , t.valor tipo&#xd;FROM nco.no_consumibles nc&#xd;     ,core.tablas t&#xd;where nc.codigo = :codigo&#xd;and nc.tinc_id = t.tabl_id ;</sql>
+      <result outputType="json">{&#xd;   "noConsumible":{&#xd;            "codigo":"$codigo",&#xd;            "descripcion":"$descripcion",&#xd;            "estado":"$estado",&#xd;            "fec_vencimiento":"$fec_vencimiento",&#xd;            "fec_alta":"$fec_alta",&#xd;            "usuario_app":"$usuario_app",&#xd;            "tipo":"$tipo",&#xd;            "empr_id":"$empr_id",&#xd;            "eliminado":"$eliminado"&#xd;   }&#xd;}</result>
+      <param name="codigo" sqlType="STRING"/>
+   </query>
+   <query id="noConsumiblesNoEliminadosGet" useConfig="ToolsDataSource">
+      <sql>SELECT nc.* , t.valor tipo&#xd;FROM nco.no_consumibles nc&#xd;     ,core.tablas t,&#xd;     (select :estado estado) est&#xd;where nc.tinc_id = t.tabl_id  and nc.empr_id= cast(:empr_id as integer) &#xd;and nc.eliminado = false&#xd;and nc.estado = case when est.estado = 'TODOS' then nc.estado else est.estado end&#xd;order by nc.codigo ASC;</sql>
+      <result outputType="json">{&#xd;   "noConsumibles":{&#xd;      "noConsumible":[&#xd;         {&#xd;            "codigo":"$codigo",&#xd;            "descripcion":"$descripcion",&#xd;            "estado":"$estado",&#xd;            "fec_vencimiento":"$fec_vencimiento",&#xd;            "fec_alta":"$fec_alta",&#xd;            "usuario_app":"$usuario_app",&#xd;            "tipo":"$tipo",&#xd;            "empr_id":"$empr_id"&#xd;         }&#xd;      ]&#xd;   }&#xd;}</result>
+      <param name="empr_id" sqlType="STRING"/>
+      <param name="estado" sqlType="STRING"/>
+   </query>
+   <query id="trazabilidadNoConsumibleGet" useConfig="ToolsDataSource">
+      <sql>select&#xd;	nc.codigo,&#xd;	t.valor tipo,&#xd;	nc.descripcion ,&#xd;	case&#xd;		when mnc.depo_id is not null then dep.descripcion&#xd;		else t2.valor end deposito,&#xd;		mnc.fec_alta ,&#xd;		mnc.usuario_app responsable,&#xd;		mnc.estado&#xd;	from&#xd;		nco.movimientos_no_consumibles mnc&#xd;	left join alm.alm_depositos dep on&#xd;		dep.depo_id = mnc.depo_id&#xd;	left join core.tablas t2 on&#xd;		t2.tabl_id = mnc.dest_id ,&#xd;		nco.no_consumibles nc ,&#xd;		core.tablas t&#xd;	where&#xd;		nc.codigo = :codigo&#xd;                and mnc.noco_id = nc.codigo&#xd;		and nc.tinc_id = t.tabl_id;</sql>
+      <result outputType="json">{&#xd;   "movimientosNoConsumible":{&#xd;      "movimientoNoConsumible":[&#xd;         {&#xd;            "codigo":"$codigo",&#xd;            "tipo":"$tipo",&#xd;            "descripcion":"$descripcion",&#xd;            "deposito":"$deposito",&#xd;            "fecAlta":"$fec_alta",&#xd;            "responsable":"$responsable",&#xd;            "estado":"$estado"&#xd;         }&#xd;      ]&#xd;   }&#xd;}</result>
+      <param name="codigo" sqlType="STRING"/>
+   </query>
+   <query id="noConsumiblesUpdate" useConfig="ToolsDataSource">
+      <sql>update nco.no_consumibles &#xd;set descripcion = :descripcion &#xd;, tinc_id  = :tinc_id &#xd;, fec_vencimiento = to_date(:fec_vencimiento , 'YYYY-MM-DD')&#xd;, usuario_app = :usuario_app&#xd;where codigo = :codigo</sql>
+      <param name="descripcion" sqlType="STRING"/>
+      <param name="tinc_id" sqlType="STRING"/>
+      <param name="fec_vencimiento" sqlType="STRING"/>
+      <param name="codigo" sqlType="STRING"/>
+      <param name="usuario_app" sqlType="STRING"/>
+   </query>
+   <query id="noConsumiblesDelete" useConfig="ToolsDataSource">
+      <sql>update nco.no_consumibles &#xd;set eliminado = true &#xd;,usuario_app = :usuario_app&#xd;where codigo = :codigo</sql>
+      <param name="usuario_app" sqlType="STRING"/>
+      <param name="codigo" sqlType="STRING"/>
+   </query>
+   <query id="noConsumibleCambiarEstadoUpdate" useConfig="ToolsDataSource">
+      <sql>update nco.no_consumibles &#xd;set estado = :estado &#xd;,usuario_app = :usuario_app&#xd;where codigo = :codigo</sql>
+      <param name="estado" sqlType="STRING"/>
+      <param name="usuario_app" sqlType="STRING"/>
+      <param name="codigo" sqlType="STRING"/>
+   </query>
+   <query id="noConsumiblesAsocLoteSet" useConfig="ToolsDataSource">
+      <sql>INSERT INTO nco.no_consumibles_lotes&#xd;(noco_id, batch_id, usuario_app)&#xd;VALUES(:noco_id,cast( :batch_id as integer), :usuario_app);</sql>
+      <param name="noco_id" sqlType="STRING"/>
+      <param name="batch_id" sqlType="STRING"/>
+      <param name="usuario_app" sqlType="STRING"/>
+   </query>
+   <query id="noConsumibleLoteLiberarUpdate" useConfig="ToolsDataSource">
+      <sql>UPDATE nco.no_consumibles_lotes&#xd;SET usuario_app=:usuario_app &#xd;,fec_liberacion=TO_TIMESTAMP(:fec_liberacion,'YYYY-MM-DD HH24:MI')&#xd;WHERE noco_id=:noco_id&#xd;AND batch_id= cast(:batch_id as integer) &#xd;AND fec_liberacion is null</sql>
+      <param name="usuario_app" sqlType="STRING"/>
+      <param name="noco_id" sqlType="STRING"/>
+      <param name="batch_id" sqlType="STRING"/>
+      <param name="fec_liberacion" sqlType="STRING"/>
+   </query>
+   <resource method="POST" path="/noConsumibles">
+      <call-query href="noConsumiblesSet">
+         <with-param name="codigo" query-param="codigo"/>
+         <with-param name="descripcion" query-param="descripcion"/>
+         <with-param name="fec_vencimiento" query-param="fec_vencimiento"/>
+         <with-param name="usuario_app" query-param="usuario_app"/>
+         <with-param name="tinc_id" query-param="tinc_id"/>
+         <with-param name="empr_id" query-param="empr_id"/>
+      </call-query>
+   </resource>
+   <resource method="POST" path="/noConsumibles/movimientos">
+      <call-query href="movimientosNoConsumiblesSet">
+         <with-param name="estado" query-param="estado"/>
+         <with-param name="noco_id" query-param="noco_id"/>
+         <with-param name="usuario_app" query-param="usuario_app"/>
+         <with-param name="dest_id" query-param="dest_id"/>
+         <with-param name="depo_id" query-param="depo_id"/>
+      </call-query>
+   </resource>
+   <resource method="GET" path="/noConsumible/porCodigo/{codigo}">
+      <call-query href="noConsumiblesGet">
+         <with-param name="codigo" query-param="codigo"/>
+      </call-query>
+   </resource>
+   <resource method="GET" path="/noConsumibles/porEstado/{estado}/porEmpresa/{empr_id}">
+      <call-query href="noConsumiblesNoEliminadosGet">
+         <with-param name="empr_id" query-param="empr_id"/>
+         <with-param name="estado" query-param="estado"/>
+      </call-query>
+   </resource>
+   <resource method="GET" path="/noConsumible/trazabilidad/porCodigo/{codigo}">
+      <call-query href="trazabilidadNoConsumibleGet">
+         <with-param name="codigo" query-param="codigo"/>
+      </call-query>
+   </resource>
+   <resource method="PUT" path="/noConsumibles">
+      <call-query href="noConsumiblesUpdate">
+         <with-param name="descripcion" query-param="descripcion"/>
+         <with-param name="tinc_id" query-param="tinc_id"/>
+         <with-param name="fec_vencimiento" query-param="fec_vencimiento"/>
+         <with-param name="codigo" query-param="codigo"/>
+         <with-param name="usuario_app" query-param="usuario_app"/>
+      </call-query>
+   </resource>
+   <resource method="PUT" path="/noConsumible/estado">
+      <call-query href="noConsumibleCambiarEstadoUpdate">
+         <with-param name="estado" query-param="estado"/>
+         <with-param name="usuario_app" query-param="usuario_app"/>
+         <with-param name="codigo" query-param="codigo"/>
+      </call-query>
+   </resource>
+   <resource method="DELETE" path="/noConsumible">
+      <call-query href="noConsumiblesDelete">
+         <with-param name="usuario_app" query-param="usuario_app"/>
+         <with-param name="codigo" query-param="codigo"/>
+      </call-query>
+   </resource>
+   <resource method="POST" path="/noConsumible/lote/asociar">
+      <call-query href="noConsumiblesAsocLoteSet">
+         <with-param name="noco_id" query-param="noco_id"/>
+         <with-param name="batch_id" query-param="batch_id"/>
+         <with-param name="usuario_app" query-param="usuario_app"/>
+      </call-query>
+   </resource>
+   <resource method="PUT" path="/noConsumible/lote/liberar">
+      <call-query href="noConsumibleLoteLiberarUpdate">
+         <with-param name="usuario_app" query-param="usuario_app"/>
+         <with-param name="noco_id" query-param="noco_id"/>
+         <with-param name="batch_id" query-param="batch_id"/>
+         <with-param name="fec_liberacion" query-param="fec_liberacion"/>
+      </call-query>
+   </resource>
+</data>
+
