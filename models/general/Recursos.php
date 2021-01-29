@@ -9,7 +9,7 @@ class Recursos extends CI_Model
 
     public function obtenerXTipo($tipo)
     {
-        $url = RESTPT . "recursos/$tipo";
+        $url = REST_PRD_ETAPAS . "/recursos/$tipo/".empresa();
         $rsp = $this->rest->callApi('GET', $url);
         if(!$rsp['status']) return $rsp;
         $rsp['data'] = json_decode($rsp['data'])->recursos->recurso;

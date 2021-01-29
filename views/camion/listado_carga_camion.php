@@ -3,6 +3,7 @@
 <!--Muestra la ventana modal de la pantalla carga de camion-->
 <!--/////////////////Articulos, Cantidad, Codigo de Lote y UM/////////////////-->
 <?php 
+$this->load->view('camion/modal_recepcioncamion');
 $this->load->view('camion/modal_cargarcamion');
 ?>
 <!--________________________________________________________________________-->
@@ -61,8 +62,7 @@ $this->load->view('camion/modal_cargarcamion');
         
 
               echo '<td width="5%" class="text-center">';
-              echo '<i class="fa fa-fw fa-truck text-light-blue ml-1" style="cursor: pointer;" title="Ver" data-toggle="modal" data-target="#modal_cargacamion" onclick="rellenarDetalles(this)"></i>';
-              //echo '<i class="fa fa-fw fa-times-circle text-light-blue ml-1" style="cursor: pointer;" title="Eliminar" onclick="seleccionar(this)"></i>';
+              echo '<i class="fa fa-fw fa-truck text-light-blue ml-1" style="cursor: pointer;" title="Ver" onclick="rellenarDetalles(this)"></i>';
               echo '</td>';
 
               echo '<td style="font-weight: lighter;">'.$fila->boleta.'</td>';
@@ -91,27 +91,33 @@ $this->load->view('camion/modal_cargarcamion');
     DataTable('#tbl-articulos');
 
     function rellenarDetalles(e) {
+
         var data = $(e).closest('tr').attr('data-json');
         data = JSON.parse(data);
-        if (!data.articulo) return;
+
+        if (!data.articulo) {
+            alert('Sin Detalles a Mostrar');
+            return;
+        }
         var tabla = $('#tbl-articulos').find('tbody');
         $(tabla).empty();
         data.articulo.forEach(function(e) {
-
             tabla.append(
                 `<tr>
-      <td>${e.articulo}</td>
-      <td>${e.cantidad}</td>
-      <td>${e.codigo_lote}</td>
-      <td>${e.um}</td>
-    </tr>`
+                    <td style="font-weight: lighter;">${e.articulo}</td>
+                    <td style="font-weight: lighter;">${e.cantidad}</td>
+                    <td style="font-weight: lighter;">${e.codigo_lote}</td>
+                    <td style="font-weight: lighter;">${e.um}</td>
+                </tr>`
             );
         });
+
+        $('#modal_recepcioncamion').modal('show');
     }
-    
-    function salidaCamiones(patente){
+
+    function salidaCamiones(patente) {
         wo();
-       linkTo('<?php echo base_url(PRD) ?>general/Camion/salidaCamion/' + patente);
+        linkTo('<?php echo base_url(PRD) ?>general/Camion/salidaCamion/' + patente);
         wc();
     }
     </script>

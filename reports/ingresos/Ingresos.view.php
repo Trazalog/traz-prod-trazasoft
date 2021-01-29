@@ -346,8 +346,8 @@ use \koolreport\widgets\google\ColumnChart;
         var estado = $(this).find('td:eq(8)').text();
         var color = '';
         switch (estado.trim()) {
-          case 'ASIGNADO':
-            estado = 'Asignado';
+          case 'CARGADO':
+            estado = 'Cargado';
             color = 'blue';
             break;
           case 'EN CURSO':

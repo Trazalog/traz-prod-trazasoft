@@ -31,6 +31,7 @@ class Formula extends CI_Controller
 	public function setFormula($form_id = null)
 	{
 		$datosFormula['formula'] = $this->input->post('datosFormula');
+		$datosFormula['formula']['empr_id'] = empresa();
 		if (isset($form_id)) {
 			$datosFormula['formula']['form_id'] = $form_id;
 			$this->Formulas->deleteArticulosFormula($form_id);

@@ -86,33 +86,38 @@
 $('#frm-destino').on('submit', function(e) {
     e.preventDefault();
 
+    console.log('prov_id:' + $('#proveedor').val());
+
     if (!validar($('#frm-destino'))) {
         alert('Complete los Campos Obligatorios');
         return;
     }
 
-    var fo = new FormData($('#frm-origen')[0]);
-    var fd = new FormData($('#frm-destino')[0]);
+    var json = getJson($('#recipiente'));
+    if ($('#recipiente').value == '0' || !json) return;
+    validarRecipiente(json);
 
-    origen = formToObject(fo);
-    destino = formToObject(fd);
+    if (vacio || $('#unificar').val() == "true") {
+        var fo = new FormData($('#frm-origen')[0]);
+        var fd = new FormData($('#frm-destino')[0]);
 
-    origen.prov_id = $('#proveedor').val();
-    origen.batch_id = batch;
+        origen = formToObject(fo);
+        destino = formToObject(fd);
 
-    console.log(origen);
-    console.log(destino);
+        origen.prov_id = $('#proveedor').val();
+        origen.batch_id = batch;
 
-    if (parseFloat(origen.cantidad) <= 0 || parseFloat(destino.cantidad) > parseFloat(origen.cantidad)) {
-        alert('La Cantidad Supera la Cantidad del Lote Origen');
-        return;
+        if (parseFloat(origen.cantidad) <= 0 || parseFloat(destino.cantidad) > parseFloat(origen.cantidad)) {
+            alert('La Cantidad Supera la Cantidad del Lote Origen');
+            return;
+        }
+        $('.frm-origen #cantidad').val(origen.cantidad - destino.cantidad);
+        var res = {
+            origen,
+            destino
+        };
+        agregarFila(res);
     }
-    $('.frm-origen #cantidad').val(origen.cantidad - destino.cantidad);
-    var res = {
-        origen,
-        destino
-    };
-    agregarFila(res);
 });
 
 
@@ -139,31 +144,61 @@ function obtenerRecipientes() {
         }
     });
 }
-$('#recipiente').on('change', function() {
-    var json = getJson(this);
-    if (!json) return;
-    validarRecipiente(json);
-});
+// $('#recipiente').on('change', function() {
+//     var json = getJson(this);
+//     if (this.value == '0' || !json) return;
+//     validarRecipiente(json);
+// });
 
+var vacio = false;
 function validarRecipiente(json) {
 
-    if (json.estado == 'VACIO') return;
+    if (json.estado == 'VACIO'){
+        $('#unificar').val(false);
+        vacio = true;
+        return;
+    }
+    vacio = false; 
 
     var arti_id = $('.frm-destino #articulo').attr('data-id');
     var lote_id = $('.frm-destino #codigo').val();
+    wo();
+    $.ajax({
+        type: 'GET',
+        dataType: 'JSON',
+        async: false,
+        url: `<?php echo base_url(PRD.'general/recipiente/obtenerContenido/')?>${json.reci_id}`,
+        success: function(res) {
+            console.log(res);
+            if (res.status) {
+                var ban = true;
+                res.data.forEach(function(e) {
+                    if (e.arti_id != arti_id || e.lote_id != lote_id) {
+                        ban = false;
+                    }
+                })
 
-    if (json.arti_id != arti_id || json.lote_id != lote_id) {
-        alert('No se pueden mezclar Distintos Articulos y Distintos Lotes en un mismo Recipiente');
-        $('#recipiente').val('');
-        return;
-    }
+                if (!ban) {
+                    alert(
+                        'No se pueden mezclar Distintos Articulos y Distintos Lotes en un mismo Recipiente');
+                    $('#unificar').val(false);
+                    return;
+                }
 
-    if (confirm('¿Desea mezclar los Artículos en el Recipiente?') != true) {
-        $('#recipiente').val('');
-        return;
-    }
 
-    $('#unificar').val(true);
+                $('#unificar').val(confirm('¿Desea mezclar los Artículos en el Recipiente?'));
 
+            } else {
+                alert('Error al traer contenido del recipiente');
+                $('#unificar').val(false);
+            }
+        },
+        error: function(res) {
+            error();
+        },
+        complete: function() {
+            wc();
+        }
+    });
 }
 </script>

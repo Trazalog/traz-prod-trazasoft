@@ -19,7 +19,7 @@
             <div class="col-xs-12">
                 <div class="row form-group">
                     <div class="col-md-3 col-xs-6">
-                        <label for="template" class="form-label">Materia:</label>
+                        <label for="template" class="form-label">Materia <?php echo hreq() ?>:</label>
 
                     </div>
                     <div class="col-md-6 col-xs-12 input-group ba">
@@ -45,7 +45,7 @@
             <div class="col-xs-12">
                 <div class="row form-group">
                     <div class="col-md-3 col-xs-6">
-                        <label for="template" class="form-label">Cantidad:</label>
+                        <label for="template" class="form-label">Cantidad <?php echo hreq() ?>:</label>
                     </div>
                     <div class="col-md-6 col-xs-12 input-group">
                         <input type="number" class="form-control" placeholder="Inserte Cantidad" id="cantidadmateria"
@@ -108,7 +108,7 @@
           echo'<table id="tablamateriasasignadas" class="table">';
           echo"<thead>";
         
-          if(estado != 'En Curso'){
+          if($etapa->estado != 'En Curso'){
             echo"<th>Acciones</th>";
           }
           echo"<th>Titulo</th>";

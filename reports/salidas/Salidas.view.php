@@ -396,8 +396,8 @@ use \koolreport\widgets\google\ColumnChart;
         var color = '';
         // debugger;
         switch (estado.trim()) {
-          case 'ASIGNADO':
-            estado = 'Asignado';
+          case 'CARGADO':
+            estado = 'Cargado';
             color = 'blue';
             break;
           case 'EN CURSO':

@@ -38,6 +38,8 @@ class Etapa extends CI_Controller
     // Llama a etapas para una nueva Etapa
     public function nuevo()
     {
+        $this->load->model(TST.'Tareas');
+        $this->Tareas->eliminarTareasSinOrigen(empresa());
         #Snapshot
         $user = userNick();
         $view = 'etapa/abm';
@@ -268,7 +270,9 @@ class Etapa extends CI_Controller
 
         $this->load->model(ALM . 'Notapedidos');
 
+        $this->load->model(ALM.'new/Pedidosmateriales');
         $this->Notapedidos->setCaseId($pema_id, $rsp['data']['caseId']);
+        $this->Pedidosmateriales->setCaseEmpresa($rsp['data']['caseId']);
 
         // AVANZA PROCESO A TAREA SIGUIENTE
         if (PLANIF_AVANZA_TAREA) {
@@ -639,5 +643,11 @@ class Etapa extends CI_Controller
     {
         $productos_salida_etapa = $this->Etapas->getSalidaEtapa($etapId)['data'];
         echo selectBusquedaAvanzada('inputproducto', 'id', $productos_salida_etapa, 'arti_id', 'descripcion');
+    }
+
+    public function eliminarEtapa($batchId)
+    {
+        $rsp = $this->Etapas->eliminarEtapa($batchId);
+        echo json_encode($rsp);
     }
 }

@@ -20,13 +20,13 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Establecimiento Origen:</label>
-                                <?php echo selectFromFont('esta_id', 'Seleccionar', REST2."/establecimiento", array('value'=>'esta_id', 'descripcion'=>'nombre')) ?>
+                                <?php echo selectFromFont('esta_id', 'Seleccionar', REST_ALM."/establecimiento", array('value'=>'esta_id', 'descripcion'=>'nombre')) ?>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Establecimiento Destino:</label>
-                                <?php echo selectFromFont('destino_esta_id', 'Seleccionar', REST2."/establecimiento", array('value'=>'esta_id', 'descripcion'=>'nombre')) ?>
+                                <?php echo selectFromFont('destino_esta_id', 'Seleccionar', REST_ALM."/establecimiento", array('value'=>'esta_id', 'descripcion'=>'nombre')) ?>
                             </div>
                         </div>
                     </div>
@@ -171,18 +171,22 @@ $('#bruto').keyup(function() {
 })
 
 function obtenerInfoCamion(patente) {
+    var estado = 'CARGADO|EN CURSO|CARGADO|DESCARGADO';
     wo();
     $.ajax({
-        type: 'GET',
+        type: 'POST',
         dataType: 'JSON',
         url: '<?php echo base_url(PRD) ?>general/Camion/obtenerInfo/' + patente,
+        data:{estado},
         success: function(rsp) {
             console.log(rsp);
-            if (rsp.status && rsp.data && rsp.data.length == 1 && rsp.data[0].esta_id == $('#esta_id')
-                .val()) {
-                fillForm(rsp.data[0]);
-                $('#bruto').val(0);
-                $('#neto').val(0);
+            if (rsp) {
+                fillForm(rsp);
+                if(rsp.estado == 'CARGADO'){
+                    $('#bruto').val(0);
+                    $('#neto').val(0);
+                 }
+                $('#bruto').attr('readonly', rsp.estado == 'DESCARGADO');
                 obtenerLotesCamion(patente)
             } else {
                 alert('Camión no registrado')

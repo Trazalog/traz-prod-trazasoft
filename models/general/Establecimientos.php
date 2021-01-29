@@ -10,47 +10,40 @@ class Establecimientos extends CI_Model
   public function listar()
   {
     // log_message('DEBUG', 'Establecimientos/listar (id etapa)-> ' . $etapa);
-    $resource = '/establecimiento';
-    $url = REST2 . $resource;
+    $resource = '/establecimientos/empresa/'.empresa();
+    $url = REST_ALM . $resource;
     $array = $this->rest->callAPI("GET", $url);
     $resp =  json_decode($array['data']);
     return $resp;
   }
-  public function listarTodo($esta_id = null)
+  public function listarTodo()
   {
-    $resource = 'establecimiento' . ($esta_id ? "/$esta_id" : null);
-    $url = REST . $resource;
-    // $url = 'http://localhost:3000/establecimientos';
-    // $array = file_get_contents($url, false, http('GET'));
+    $resource = '/establecimientos/empresa/'.empresa();
+    $url = REST_ALM . $resource;
     $array = $this->rest->callApi('GET', $url);
     return json_decode($array['data']);
   }
   public function obtenerDepositos($esta_id)
   {
-    $resource = 'depositos_establecimiento/' . $esta_id;
-    $url = RESTPT . $resource;
+    $resource = "/depositos_establecimiento/$esta_id";
+    $url = REST_ALM . $resource;
     $rsp = $this->rest->callApi('GET', $url);
     return json_decode($rsp['data']);
   }
 
   public function getEstablecimiento($esta_id = null)
   {
-    $resource = 'establecimiento/' . $esta_id;
-    $url = RESTPT . $resource;
-    $rsp = $this->rest->callApi('GET', $url);
-    if ($rsp['status']) {
-      $rsp['data'] = json_decode($rsp['data'])->establecimientos->establecimiento;
-    }
-    return $rsp;
+    $resource = "/establecimiento/$esta_id" ;
+    $url = REST_ALM . $resource;
+    return wso2($url);
   }
 
   public function guardar($data)
   {
     $data['empr_id'] = (string) empresa();
     $data['usuario'] = userNick();
-    #log_message('DEBUG','#Establecimientos/guardar | DATA: '.json_encode($data));
     $post['post_establecimiento'] = $data;
-    $url = RESTPT . "establecimientos";
+    $url = REST_ALM . "/establecimientos";
     $rsp = $this->rest->callApi('POST', $url, $post);
     return $rsp;
   }
@@ -58,7 +51,7 @@ class Establecimientos extends CI_Model
   public function eliminar($id)
   {
     $data['delete_est']['esta_id'] = $id;
-    $url = RESTPT . "establecimientos";
+    $url = REST_ALM . "/establecimientos";
     $rsp = $this->rest->callApi("DELETE", $url, $data);
     if ($rsp['status']) $rsp['data'] = json_decode($rsp['data']);
     return $rsp;
@@ -73,7 +66,7 @@ class Establecimientos extends CI_Model
 
   public function editar($data)
   {
-    $url = RESTPT . "establecimientos";
+    $url = REST_ALM . "/establecimientos";
     $rsp = $this->rest->callApi("PUT", $url, $data);
     if ($rsp['status']) $rsp['data'] = json_decode($rsp['data']);
     return $rsp;
@@ -81,7 +74,7 @@ class Establecimientos extends CI_Model
 
   public function guardarTodo($datos)
   {
-    $resource = '_post_recipientes_batch_req';
+    $resource = '/_post_recipientes_batch_req';
     $url = REST_ALM . $resource;
     $rsp = $this->rest->callApi("POST", $url, $datos);
     if ($rsp['status']) $rsp['data'] = json_decode($rsp['data']);
@@ -90,6 +83,7 @@ class Establecimientos extends CI_Model
 
   public function obtenerRecipientesDeposito($data = null)
   {
+    #HARDCODE
     $rsp = '{
       "tipos":{
         "tipo":[
