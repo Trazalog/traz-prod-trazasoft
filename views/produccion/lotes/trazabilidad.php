@@ -115,15 +115,7 @@ function buscarBatch() {
             // console.log(rsp.data);
             var aux = [];
             if (rsp.data) {
-                rsp.data.forEach(function(e) {
-                    if (!aux[e.batch_id_padre]) aux[e.batch_id_padre] = [];
-                    aux[e.batch_id_padre].push(e);
-                    // console.log(e);
-                });
-
-                var reducido = reduceDatos(rsp.data, aux);
-                nodos = formarJson(rsp.data, reducido);
-                crearArbol(nodos);
+                crearArbol(rsp.arbol_json);
                 crearTabla(rsp.data);
             } else {
                 alert('No hay datos para mostrar')
@@ -165,81 +157,7 @@ function crearArbol(nodos) {
         }
     });
 
-    // $("#tree").jHTree({
-    //   callType: 'obj',
-    //   structureObj: nodos,
-    //   zoomer: true
-    // });
     return;
-}
-
-function reduceDatos(data, aux) {
-    var array = [data.length];
-    // console.table(array);
-    for (let i = 0; i < data.length; i++) {
-        array[i] = new Array();
-        array[i]['head'] = data[i].lote_id;
-        array[i]['id'] = data[i].batch_id;
-        array[i]['contents'] = "Estado: " + data[i].lote_estado + "<br>Alta: " + data[i].lote_fec_alta + "<br>Etapa: " +
-            data[i].etap_nombre + "<br>Recipiente: " + data[i].reci_nombre + "<br>Tipo: " + data[i].reci_tipo;
-        array[i]['children'] = aux[data[i].batch_id];
-    }
-    var aux2 = [];
-    array.forEach(function(e) {
-        if (!(!e.children || e.children == null || e.children == '' || e.children == 'undefined')) {
-            aux2[e.id] = [];
-            var aux3 = [];
-            var h = 0;
-            e.children.forEach(function(o) {
-                aux3[h] = [];
-                aux3[h]['head'] = o.lote_id;
-                aux3[h]['id'] = o.batch_id;
-                aux3[h]['contents'] = "Estado: " + o.lote_estado + "<br>Alta: " + o.lote_fec_alta +
-                    "<br>Etapa: " + o.etap_nombre + "<br>Recipiente: " + o.reci_nombre + "<br>Tipo: " +
-                    o.reci_tipo;
-                h++;
-            })
-        }
-    });
-    // console.log(aux2);
-    for (let i = 0; i < data.length; i++) {
-        var id = array[i]['id'];
-        array[i]['children'] = aux2[id];
-    }
-
-    // console.log('array:');
-    // console.log(array);
-    return array;
-}
-
-function formarJson(entero, reducido) {
-    for (let i = entero.length - 2; i >= 0; i--) {
-        // console.log("reducido[i]['children']: ");
-        // console.log(reducido[i]['children']);
-        for (let j = i + 1; j < entero.length; j++) {
-            if (entero[i].batch_id == entero[j].batch_id_padre) {
-                var o = Object.assign({}, reducido[j])
-                reducido[i]['children'].push(o);
-            }
-        }
-    }
-    var data = Object.assign({}, reducido[0]);
-    // console.log('data: ');
-    // console.log(data);
-    // console.table(data);
-    var rsp = JSON.stringify(reducido[0]);
-    // console.log('rsp: ');
-    // console.log(rsp);
-    // console.table(rsp);
-
-    var array = [];
-    array.push(data);
-    // console.log('array');
-    // console.log(array);
-    var json = JSON.stringify(array);
-    // console.log('json');
-    // console.log(json);
-    return array;
 }
 
 function format(d) { //child row
@@ -248,6 +166,10 @@ function format(d) { //child row
         '<tr>' +
         '<td><b>Artículo: </b></td>' +
         '<td>' + d.arti_descripcion + '</td>' +
+        '</tr>' +
+        '<tr>' +
+        '<td><b>Cantidad: </b></td>' +
+        '<td>' + d.cantidad + '</td>' +
         '</tr>' +
         '<tr>' +
         '<td><b>Path: </b></td>' +
