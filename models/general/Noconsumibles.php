@@ -99,4 +99,8 @@ class Noconsumibles extends CI_Model
         return requestBox(REST_PRD_NOCON . '/', $data);
     }
 
+    public function obtenerXEstado($emprId, $estado)
+    {
+        return wso2(REST_PRD_NOCON."/noConsumibles/porEstado/$estado/porEmpresa/$emprId");
+    }
 }

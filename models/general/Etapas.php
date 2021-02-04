@@ -201,7 +201,7 @@ class Etapas extends CI_Model
     public function finalizarEtapa($arrayDatos)
     {
         log_message('DEBUG', 'Etapas/finalizarEtapa(datos)-> ' . json_encode($arrayDatos));
-        $resource = '/_post_lote_list_batch_req';
+        $resource = '/_post_lote_noconsumibles_list_batch_req';
         $url = REST_PRD_LOTE . $resource;
         $rsp = $this->rest->callAPI("POST", $url, $arrayDatos);
         if (!$rsp['status']) {
@@ -317,8 +317,8 @@ class Etapas extends CI_Model
 	{
         #REST?
 		log_message('DEBUG', 'Etapas/getUsers');
-		$resource = 'users/'.empresa();
-		$url = RESTPT . $resource;
+		$resource = '/users/'.empresa();
+		$url = REST_CORE . $resource;
 		$array = $this->rest->callAPI("GET", $url);
 		return json_decode($array['data']);
 	}
@@ -326,7 +326,7 @@ class Etapas extends CI_Model
 	public function getTurnosProd()
 	{
 		log_message('DEBUG', 'Etapas/getTurnosProd');
-		$resource = '/getTurnosProd/'.empresa();
+		$resource = '/getTurnosProd';
 		$url = REST_PRD_ETAPAS . $resource;
 		$array = $this->rest->callAPI("GET", $url);
 		return json_decode($array['data']);

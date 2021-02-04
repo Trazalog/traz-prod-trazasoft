@@ -504,7 +504,8 @@ class Etapa extends CI_Controller
             $arrayPost["tipo_recurso"] = $value->tipo_recurso;
             $arrayPost['batch_id'] = "0";
             $arrayPost['planificado'] = "false";
-            $arrayDatos['_post_lote_list_batch_req']['_post_lote_list'][] = $arrayPost;
+            $arrayPost['noco_list'] = isset($value->nocos)?implode(';',$value->nocos):'';
+            $arrayDatos['_post_lote_noconsumibles_list_batch_req']['_post_lote_noconsumibles_list'][] = $arrayPost;
         }
 
         $rsp = $this->Etapas->finalizarEtapa($arrayDatos);
@@ -643,6 +644,15 @@ class Etapa extends CI_Controller
     {
         $productos_salida_etapa = $this->Etapas->getSalidaEtapa($etapId)['data'];
         echo selectBusquedaAvanzada('inputproducto', 'id', $productos_salida_etapa, 'arti_id', 'descripcion');
+    }
+
+    public function obtenerNoConsumibles()
+    {
+        $this->load->model('general/Noconsumibles');
+        $rsp = $this->Noconsumibles->obtenerXEstado(empresa(), 'ACTIVO');
+        if($rsp['status']){
+            echo selectBusquedaAvanzada('noco_id', 'noco_id', $rsp['data'], 'codigo', 'codigo');
+        }else echo 'S/N';
     }
 
     public function eliminarEtapa($batchId)

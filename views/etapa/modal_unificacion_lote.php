@@ -23,7 +23,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                 <?php
-                    if($etapa->estado == "En Curso"){
+                    if(!$etapa || $etapa->estado == "En Curso"){
                         echo '<button type="button" class="btn btn-primary" onclick="FinalizarEtapa()">Unificar</button>';
                     }else{
                         echo '<button type="button" class="btn btn-primary" onclick="guardarForzado(bak_data)">Unificar</button>';
