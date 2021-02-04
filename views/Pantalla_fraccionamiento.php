@@ -4,7 +4,7 @@
         z-index: 999999999 !important;
     }
 </style>
-<div class="box">
+<div class="box box-primary">
     <div class="box-header with-border">
         <h3 class="box-title">Fraccionamiento</h3>
     </div>
