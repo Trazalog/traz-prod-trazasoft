@@ -13,62 +13,75 @@
 }
 </style>
 <section class="content">
-  <div class="row">
-    <div class="box box-primary">
-      <div class="box-header with-border">
-        <h3>Informe de Trazabilidad</h3>
-      </div>
-      <div class="box-body">
-        <div class=" form-group col-sm-5">
-          <div class="col-sm-2">
-            <h4>Lote</h4>
-          </div>
-          <div class="col-sm-7">
-            <input type="text" class="form-control" id="batch" name="batch" placeholder="Ingrese código de batch">
-          </div>
-          <div class="col-sm-3">
-            <button type="button" class="btn btn-block btn-primary btn-flat" onclick="buscarBatch()">Buscar</button>
-          </div>
+    <div class="row">
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h4>Trazabilidad de Bloques</h4>
+            </div>
+            <div class="box-body">
+                <div class=" form-group col-sm-5">
+                    <div class="col-sm-2">
+                        <h5>Lote</h5>
+                    </div>
+                    <div class="col-sm-7">
+                        <input type="text" class="form-control" id="batch" name="batch"
+                            placeholder="Ingrese código de batch">
+                    </div>
+                    <div class="col-sm-3">
+                        <button type="button" class="btn btn-block btn-primary btn-flat"
+                            onclick="buscarBatch()">Buscar</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-  </div>
-  <div class="row" hidden>
-    <div class="box box-warning">
-      <div class="box-header with-border">
-        <a class="btn btn-social-icon btn-vk pull-left" onclick="print('tree')"><i class="fa fa-print"></i></a>
-        <h3 class="box-title"></h3>
-        <div class="box-tools pull-right">
-          <button type="button" class="btn btn-box-tool" data-toggle="collapse" data-target="#boxTree" aria-expanded="true" aria-controls="collapseOne"><i class="fa fa-minus"></i>
-          </button>
+    <div class="row" hidden>
+        <div class="box box-warning">
+            <div class="box-header with-border">
+                <a class="btn btn-social-icon btn-vk pull-left" onclick="print('tree')"><i class="fa fa-print"></i></a>
+                <h3 class="box-title"></h3>
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-toggle="collapse" data-target="#boxTree"
+                        aria-expanded="true" aria-controls="collapseOne"><i class="fa fa-minus"></i>
+                    </button>
+                </div>
+                <!-- /.box-tools -->
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body panel-collapse collapse in" id="boxTree" aria-expanded="true">
+                <div id="tree" class="scrolls">
+                </div>
+            </div>
+            <!-- /.box-body -->
         </div>
     </div>
-  </div>
-  <div class="row" hidden>
-    <div class="box box-default">
-      <div class="box-header with-border">
-        <a class="btn btn-social-icon btn-vk pull-left" onclick="print('tabla')"><i class="fa fa-print"></i></a>
-        <h3 class="box-title"></h3>
-        <div class="box-tools pull-right">
-          <button type="button" class="btn btn-box-tool" data-toggle="collapse" data-target="#boxTabla" aria-expanded="true" aria-controls="collapseOne"><i class="fa fa-minus"></i>
-          </button>
-        </div>
-        <!-- /.box-tools -->
-      </div>
-      <!-- /.box-header -->
-      <div class="box-body panel-collapse collapse in" id="boxTabla" aria-expanded="true">
-        <table id="tabla" class="table table-bordered table-striped table-hover display">
-          <thead>
-            <tr>
-              <th style="width: 1%;"></th>
-              <th style="width: 8%;">Cod. Lote</th>
-              <th style="width: 9%;">Estado</th>
-              <th style="width: 10%;">N° Orden</th>
-              <th style="width: 8%;">Etapa</th>
-              <th style="width: 10%;">Recipiente</th>
-              <!-- <th>Articulo</th> -->
-              <!-- <th style="width: 19%;">Path</th> -->
-              <th style="width: 10%;">Alta lote</th>
-              <!-- <th type="hidden">Articulo</th>
+    <div class="row" hidden>
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <a class="btn btn-social-icon btn-vk pull-left" onclick="print('tabla')"><i class="fa fa-print"></i></a>
+                <h3 class="box-title"></h3>
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-toggle="collapse" data-target="#boxTabla"
+                        aria-expanded="true" aria-controls="collapseOne"><i class="fa fa-minus"></i>
+                    </button>
+                </div>
+                <!-- /.box-tools -->
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body panel-collapse collapse in" id="boxTabla" aria-expanded="true">
+                <table id="tabla" class="table table-bordered table-striped table-hover display">
+                    <thead>
+                        <tr>
+                            <th style="width: 1%;"></th>
+                            <th style="width: 8%;">Cod. Lote</th>
+                            <th style="width: 9%;">Estado</th>
+                            <th style="width: 10%;">N° Orden</th>
+                            <th style="width: 8%;">Etapa</th>
+                            <th style="width: 10%;">Recipiente</th>
+                            <!-- <th>Articulo</th> -->
+                            <!-- <th style="width: 19%;">Path</th> -->
+                            <th style="width: 10%;">Alta lote</th>
+                            <!-- <th type="hidden">Articulo</th>
               <th style="width: 19%;" type="hidden">Path</th> -->
                         </tr>
                     </thead>
@@ -113,11 +126,6 @@ function buscarBatch() {
             $('.zmrcntr').empty();
             $('#tabla').empty();
 
-            // if (!_isset(table)) {
-            //   console.log('entra');
-            //   table = $('#tabla').dataTable().fnDestroy();
-            // }
-            // alert("¡Batch no se encontrado! Intente nuevamente.");
             Swal.fire({
                 icon: 'error',
                 title: rsp.responseText

@@ -68,6 +68,7 @@ class Lote extends CI_Controller
       $data = $rsp['data'];
       $arbol = array();
 
+      #NO TOCAR PLIS
       foreach ($data as $key => $o) {
           if($o->batch_id_padre){
               #TIENE PADRE Y ESTA METIDO EN EL ARBOL
@@ -83,6 +84,7 @@ class Lote extends CI_Controller
       }
       $e = reset($arbol);
       $rsp['arbol_json'] = [nodo($e, $e->hijos)];
+      #END NO TOCAR PLIS
       echo json_encode($rsp);
     } else echo "¡Batch no encontrado! Intente nuevamente.";
   }
