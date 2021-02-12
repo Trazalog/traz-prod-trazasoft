@@ -103,4 +103,55 @@ class Noconsumibles extends CI_Model
     {
         return wso2(REST_PRD_NOCON."/noConsumibles/porEstado/$estado/porEmpresa/$emprId");
     }
+
+    /**
+    * Consulta info de un NO consumible
+    * @param string codigo de no consumible
+    * @return array con info de no consumible
+    */
+    function consultarInfo($codigo){
+        log_message('DEBUG','#TRAZA|TRAZ-PROD-TRAZASOFT|NOCONSUMIBLES  $codigo >> '.json_encode($codigo));
+        $url = REST_PRD_NOCON.'/noConsumible/porCodigo/'.$codigo;
+        $aux = $this->rest->callAPI("GET",$url);
+        $aux =json_decode($aux["data"]);
+        return $aux->noConsumible;
+    }
+
+    /**
+		* Libera No consumibles
+		* @param array con datos de los no consumibles a liberar
+		* @return array respuesta seguns servicio
+		*/
+		function liberarNoConsumible($noCons)
+    {
+        $hoy = 	date('Y-m-d H:i:s');
+        $user = userNick();
+
+        foreach ($noCons as $key => $value) {
+
+            $noCons[$key]['fec_liberacion'] = $hoy;
+            $noCons[$key]['usuario_app'] = $user;
+            $resp = $this->updateTabla($noCons[$key]);
+            if (!$resp) {
+                log_message('ERROR','#TRAZA|TRAZ-PROD-TRRAZASOFT|NOCONSUMIBLES|liberarNoConsumible($noCons) >> ERROR en update de tabla');
+                return $resp;
+            }
+        }
+
+        return $resp;
+    }
+
+    /**
+    * Invoca servicio de actualizacion tabla
+    * @param array con datos a actualizar
+    * @return boolean true  alse respuesta del servicio
+    */
+    function updateTabla($noCons){
+
+        $put["_put_noconsumible_lote_liberar"] = $noCons;
+        $url = $url = REST_PRD_NOCON.'/noConsumible/lote/liberar';
+        $aux = $this->rest->callAPI("PUT",$url, $put);
+        $aux =json_decode($aux["status"]);
+        return $aux;
+    }
 }

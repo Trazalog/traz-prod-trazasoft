@@ -183,5 +183,42 @@ class Noconsumible extends CI_Controller
         echo json_encode($rsp);
     }
 
+    /**
+    * Levanta pantalla recepcion no consumible
+    * @param 
+    * @return 
+    */
+    public function recepcionNoConsumible()
+    {
 
+      $this->load->view('NoConsumible/recepcionNoConsumible');
+    }
+
+    /**
+    * Consulta info de un NO consumible
+    * @param string codigo de no consumible
+    * @return array con info de no consumible
+    */
+    function consultarInfo()
+    {
+      $codigo = $this->input->post('codigo');
+      log_message('INFO','#TRAZA|| >> ');
+      $info = $this->Noconsumibles->consultarInfo($codigo);
+      echo json_encode($info);
+    }
+
+    /**
+    * Libera No consumibles
+    * @param array con datos de los no consumibles a liberar
+    * @return array respuesta seguns servicio
+    */
+    function liberarNoConsumible()
+    {
+      $noCons = $this->input->post('datos');
+      log_message('DEBUG','#TRAZA|TRA-PROD-TRAZASOFT|NOCONSUMIBLE|liberarNoConsumible() $noCons>> '.json_encode($noCons));
+
+      $resp = $this->Noconsumibles->liberarNoConsumible($noCons);
+
+      echo json_encode($resp);
+    }
 }
