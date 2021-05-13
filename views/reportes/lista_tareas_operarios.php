@@ -46,7 +46,7 @@ img {
 </style>
 
 <?php
-    $this->load->view('etapa\modal_unificacion_lote');
+    $this->load->view('etapa/modal_unificacion_lote');
 ?>
 <div class="box">
     <div class="box-header text-center with-border">
