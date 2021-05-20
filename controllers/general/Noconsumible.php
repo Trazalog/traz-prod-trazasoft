@@ -13,10 +13,10 @@ class Noconsumible extends CI_Controller
 
     public function index()
     {
-   $data['tipoNoConsumible'] = $this->Noconsumibles->tipoNoConsumible()['data'];
-   $data['tipoEstablecimiento'] = $this->Noconsumibles->tipoEstablecimiento()['data'];
-   $data['ListarNoConsumible'] = $this->Noconsumibles->ListarNoConsumible()['data'];
-   $this->load->view('NoConsumible/ListarNoConsumible',$data);
+      $data['tipoNoConsumible'] = $this->Noconsumibles->tipoNoConsumible()['data'];
+      $data['tipoEstablecimiento'] = $this->Noconsumibles->tipoEstablecimiento()['data'];
+      $data['ListarNoConsumible'] = $this->Noconsumibles->ListarNoConsumible()['data'];
+      $this->load->view('NoConsumible/ListarNoConsumible',$data);
     }
 
 
@@ -40,11 +40,11 @@ class Noconsumible extends CI_Controller
           'noco_id' => $this->input->post('codigo'),
           'depo_id' => $this->input->post('depositos'),
           'dest_id' => ''
-                    
+
                   );
         
         $data =  $this->Noconsumibles->guardarNoConsumible($data);
-         echo json_encode($data);
+         echo json_encode($data['status']);
     }
   
 
@@ -52,18 +52,16 @@ class Noconsumible extends CI_Controller
 
     public function editarNoConsumible()
     {
-   $data['_put_noconsumibles'] = array(
+        $data['_put_noconsumibles'] = array(
+                    'codigo' => $this->input->post('codigo'),
+                    'descripcion' => $this->input->post('descripcion'),
+                    'fec_vencimiento' => $this->input->post('fec_vencimiento'),
+                    'usuario_app' => 'rodotest',
+                    'tinc_id' => $this->input->post('tinc_id')
+                  );
 
-    'codigo' => $this->input->post('codigo'),
-    'descripcion' => $this->input->post('descripcion'), 
-    'fec_vencimiento' => $this->input->post('fec_vencimiento'),
-    'usuario_app' => 'rodotest', 
-    'tinc_id' => $this->input->post('tipo_no_consumible')
-   
-             );
-
-      $data = $this->Noconsumibles->editarNoConsumible($data);
-      echo json_encode($data);
+        $data = $this->Noconsumibles->editarNoConsumible($data);
+        echo json_encode($data);
     }
 
 
