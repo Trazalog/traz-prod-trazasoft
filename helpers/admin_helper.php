@@ -89,10 +89,10 @@ if (!function_exists('bolita')) {
         switch ($estado) {
 
             case 'ALTA':
-                return bolita('ALTA', 'blue');
+                return bolita('Alta', 'blue');
                 break;
             case 'VENCIDO':
-                return bolita('VENCIDO', 'red');
+                return bolita('Vencido', 'red');
                 break;
 
             //Estado Camiones
@@ -100,7 +100,7 @@ if (!function_exists('bolita')) {
                 return bolita('Asignado', 'green');
                 break;
             case 'EN_TRANSITO':
-                return bolita('En Trancito', 'info');
+                return bolita('En Tránsito', 'info');
                 break;
             case 'EN_REPARACION':
                 return bolita('En Reparacion', 'yellow');
