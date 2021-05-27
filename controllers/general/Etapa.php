@@ -661,3 +661,4 @@ class Etapa extends CI_Controller
         echo json_encode($rsp);
     }
 }
+log_message('DEBUG','#TRAZA|| >> '.json_encode());
