@@ -649,6 +649,7 @@ class Etapa extends CI_Controller
     public function obtenerNoConsumibles()
     {
         $this->load->model('general/Noconsumibles');
+				$emp = empresa();
         $rsp = $this->Noconsumibles->obtenerXEstado(empresa(), 'ACTIVO');
         if($rsp['status']){
             echo selectBusquedaAvanzada('noco_id', 'noco_id', $rsp['data'], 'codigo', 'codigo');
