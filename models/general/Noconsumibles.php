@@ -169,5 +169,37 @@ class Noconsumibles extends CI_Model
 		return $aux;
 	}
 
+	/**
+	* Asocia Noconsumible con lote
+	* @param array con info de no consumibles
+	* @return json respùesta del servicio
+	*/
+	function asociarConLote($data)
+	{
+		$post['_post_noconsumible_lote_asociar_batch_req'] = $data;
+		log_message('DEBUG','#TRAZA|TRAZASOFT|NOCONSUMIBLES|asociarConLote($data) >> $post: '.json_encode($post));
+		$aux = $this->rest->callAPI("POST",REST_PRD_NOCON."/_post_noconsumible_lote_asociar_batch_req", $post);
+		$aux =json_decode($aux["status"]);
+		return $aux;
+
+
+	}
+
+	/**
+	* Cambia estado por batch
+	* @param array con info de noconsumibles
+	* @return bool respuesta de servicio
+	*/
+	function cambioEstadoXBatchReq($data)
+	{
+		log_message('DEBUG','#TRAZA|TRAZASOFT|NOCONSUMIBLES|cambioEstadoXBatchReq($data) >> $data: '.json_encode($data));
+		$aux = $this->rest->callAPI("PUT",REST_PRD_NOCON."/_put_noconsumible_estado_batch_req", $data);
+		$aux = json_decode($aux["status"]);
+		return $aux;
+
+	}
+
+
+
 
 }

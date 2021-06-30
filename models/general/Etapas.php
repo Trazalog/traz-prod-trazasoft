@@ -258,6 +258,7 @@ class Etapas extends CI_Model
 
     public function finalizarLote($id)
     {
+
         $post['_put_lote_finalizar']['batch_id'] = $id;
         $url = REST_PRD_ETAPAS . "/lote/finalizar";
         $rsp = $this->rest->callApi('PUT', $url, $post);

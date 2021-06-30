@@ -222,5 +222,74 @@ class Noconsumible extends CI_Controller
     echo json_encode($resp);
 	}
 
+  /**
+  * Da por finalozado el lote y Asocia no consumibles a lotes
+  * @param
+  * @return
+  */
+  function asociarConLote()
+  {
+    /// Da por finalizado el lote cambiando estado
+      $batch_id = $this->input->post('batch');
+      $this->load->model('general/Etapas');
+      $resFinalizar = $this->Etapas->finalizarLote($batch_id['batch_id']);
+
+      if (!$resFinalizar['status']) {
+        log_message('ERROR','TRAZA|TRAZASOFT|NOCONUMIBLE|asociarConLote() >> ERROR: NO SE PUDO FINALIZAR LOTE');
+        echo json_encode(array("resultado"=>"Error...", "mensaje"=>"No se pudo finalizar Lotes"));
+        return;
+      }
+
+    /// Asociar No Consumibles con Lotes
+      $nocons = $this->input->post('data');
+      //agrego usuario a array para asociar noconsm a lote
+      for ($i=0; $i < count($nocons); $i++) {
+          $nocons[$i]['usuario_app'] = userNick();
+      }
+      $data['_post_noconsumible_lote_asociar'] = $nocons;
+      $response = $this->Noconsumibles->asociarConLote($data);
+
+      // si se asociaron correctamente los lotes y no consumibles
+      if ($response) {
+
+        //armo array para batchrequest cambio de estado de noconsum
+          $arrayBatch = $this->arrayCambEstadoxBatch($nocons);
+          // cambio estados a no consumibles
+          $resp = $this->Noconsumibles->cambioEstadoXBatchReq($arrayBatch);
+          if ($resp) {
+            echo json_encode(array("resultado"=>"OK", "mensaje"=>"Guardado Exitoso..."));
+          } else {
+            log_message('ERROR','#TRAZA|TRAZASOFT|NOCONUMIBLE|asociarConLote() >> ERROR: NO SE PUDO CAMBIAR ESTADO DE LOTES POR BATCHREQUEST');
+            echo json_encode(array("resultado"=>"Error...", "mensaje"=>"No se pudo cambiar el Estado de NoConsumibles"));
+          }
+
+      } else {
+          log_message('ERROR','TRAZA|TRAZASOFT|NOCONUMIBLE|asociarConLote() >> ERROR: NO SE PUDO ASOCIAR LOTE CON NO CONSUMIBLES BATCHREQUEST ');
+          echo json_encode(array("resultado"=>"Error...", "mensaje"=>"No se pudo asociar Lotes con NoConsumibles"));
+      }
+  }
+
+  /**
+  * Cambia estado a los noconsumibles
+  * @param array con info de noconsumibles
+  * @return bool respuesta de servicio
+  */
+  function arrayCambEstadoxBatch($nocons)
+  {
+
+      for ($i=0; $i < count($nocons); $i++) {
+
+        $dato[$i]['usuario_app'] = userNick();
+        $dato[$i]['codigo'] = $nocons[$i]['noco_id'];
+        $dato[$i]['estado'] = "EN_TRANSITO";
+        $dato[$i]['empr_id'] = empresa();
+      }
+
+      $data['_put_noconsumible_estado_batch_req'] = $dato;
+      $arrayBatch['_put_noconsumible_estado'] = $data;
+      return $arrayBatch;
+
+  }
+
 
 }

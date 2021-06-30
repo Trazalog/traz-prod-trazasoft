@@ -9,6 +9,11 @@ class Reporte extends CI_Controller
         $this->load->model('general/Etapas');
     }
 
+		/**
+		* Pantalla listado de Tareas (Produccion Lotes|Operario)
+		* @param 
+		* @return 
+		*/
     public function tareasOperario()
     {
         $this->load->model('general/Etapas');

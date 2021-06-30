@@ -92,6 +92,7 @@ option {
 </div>
 
 <script>
+// Agrega a tabla temporal de reporte
 function agregar() {
     $('#box-tabla').show();
 
