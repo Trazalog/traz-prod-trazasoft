@@ -154,4 +154,18 @@ class Noconsumibles extends CI_Model
         $aux =json_decode($aux["status"]);
         return $aux;
     }
+
+		/**
+		* Actualiza estado
+		* @param array con datos a actualizar
+		* @return boolean respuesta de servicio
+		*/
+		function cambioEstado($data)
+		{
+			$post['_put_noconsumible_estado'] = $data;
+			log_message('DEBUG','#TRAZA|NOSCONSUMIBLES|cambioEstado($data) >> $data: '.json_encode($data));
+			$aux = $this->rest->callAPI("PUT", REST_PRD_NOCON."/noConsumible/estado", $post);
+			$aux =json_decode($aux["status"]);
+			return $aux;
+		}
 }

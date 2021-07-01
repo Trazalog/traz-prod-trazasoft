@@ -167,7 +167,7 @@ class Noconsumible extends CI_Controller
         $data[]['_post_noconsumibles_movimientos'] = array(
   
           'estado' => 'EN_TRANSITO',
-          'usuario_app' => 'rodotest', 
+          'usuario_app' => 'rodotest',
           'noco_id' => $tableDataArray['datos'][$key]['codigo'],
           'depo_id' => $tableDataArray['datos'][$key]['establecimiento'],
           'dest_id' => $tableDataArray['datos'][$key]['destino']
@@ -217,6 +217,21 @@ class Noconsumible extends CI_Controller
 
       $resp = $this->Noconsumibles->liberarNoConsumible($noCons);
 
+      echo json_encode($resp);
+    }
+
+    /**
+    * Actualiza estado
+    * @param array con datos a actualizar
+    * @return boolean respuesta de servicio
+    */
+    function cambioEstado()
+    {
+      log_message('INFO','#TRAZA|| >> ');
+      $data = $this->input->post('data');
+      $data['usuario_app'] = userNick();
+      $data['empr_id'] = empresa();
+      $resp = $this->Noconsumibles->cambioEstado($data);
       echo json_encode($resp);
     }
 }
