@@ -76,6 +76,7 @@
 	</div>
 <!-- FIN LISTADO TAREAS -->
 
+
 <script>
 	var $mdl = $('#modal_finalizar');
 	var s_batchId = false;
@@ -90,6 +91,7 @@
 			$('#num_orden_prod').val(data.orden);
 			$('#batch_id_padre').val(data.id);
 			$('#cant_origen').val(data.cantidad);
+			$('#depo_id').val(data.depo_id);
 			obtenerDepositos(data.esta_id);
 			reload('#articulos-salida', data.etap_id);
 			reload('#pnl-noco');
@@ -148,7 +150,7 @@
 </script>
 
 
-
+<!-- MODALES -->
 	<div class="modal modal-fade" id="modal_finalizar">
 
 			<!-- Modal Reporte de Produccion -->
@@ -167,6 +169,7 @@
 									<form id="frm-etapa">
 											<input type="text" class="hidden" id="num_orden_prod">
 											<input type="text" class="hidden" id="batch_id_padre">
+											<input type="text" class="hidden" id="depo_id">
 											<div class="row">
 													<div class="col-md-12">
 															<div class="form-group">
@@ -281,140 +284,148 @@
 				<!-- Modal Asociar no consumibles -->
 			</div>
 	</div>
+<!-- FIN MODALES -->
+
 
 <script>
-$('#modal_finalizar').on('hidden.bs.modal', function() {
-    $tblRep.empty();
-    $('#frm-etapa').find('form-control').val('');
-    $('.select2').trigger('change');
-    s_batchId = false;
-});
+	$('#modal_finalizar').on('hidden.bs.modal', function() {
+			$tblRep.empty();
+			$('#frm-etapa').find('form-control').val('');
+			$('.select2').trigger('change');
+			s_batchId = false;
+	});
 
-var unificar_lote = false;
-// Genera Informe de Etapa
-var FinalizarEtapa = function() {
+	var unificar_lote = false;
+	// Genera Informe de Etapa
+	var FinalizarEtapa = function() {
 
-    var productos = [];
-    $tblRep.find('tr').each(function() {
-        var json = getJson2(this);
-        if (unificar_lote && unificar_lote == json.destino && this.dataset.forzar == 'false') {
-            this.dataset.forzar = "true";
-            unificar_lote = false;
-        }
-        json.lotedestino = $('#codigo_lote').val();
-        json.forzar = this.dataset.forzar;
-        productos.push(json);
-    });
+			var productos = [];
+			$tblRep.find('tr').each(function() {
+					var json = getJson2(this);
+					if (unificar_lote && unificar_lote == json.destino && this.dataset.forzar == 'false') {
+							this.dataset.forzar = "true";
+							unificar_lote = false;
+					}
+					json.lotedestino = $('#codigo_lote').val();
+					json.forzar = this.dataset.forzar;
+					productos.push(json);
+			});
 
-    productos = JSON.stringify(productos);
-    cantidad_padre = '0';
-    num_orden_prod = $('#num_orden_prod').val();
-    batch_id_padre = $('#batch_id_padre').val();
-    destino = $('#productodestino').val();
+			productos = JSON.stringify(productos);
+			cantidad_padre = '0';
+			num_orden_prod = $('#num_orden_prod').val();
+			batch_id_padre = $('#batch_id_padre').val();
+			destino = $('#productodestino').val();
+			depo_id = $('#depo_id').val();
+			noConsumAsociar = true;
+			estado = 'EN_TRANSITO';
+			wo();
+			$.ajax({
+					type: 'POST',
+					dataType: 'JSON',
+					async: false,
+					data: {
+							productos,
+							cantidad_padre,
+							num_orden_prod,
+							destino,
+							batch_id_padre,
+							depo_id,
+							noConsumAsociar,
+							estado
+					},
+					url: '<?php echo base_url(PRD) ?>general/Etapa/Finalizar',
+					success: function(rsp) {
+						wc();
+							console.log(rsp);
+							if (rsp.status) {
+									$('#modal_finalizar').modal('hide');
+									$('#mdl-unificacion').modal('hide');
+									hecho('Se genero el Reporte de Producción correctamente.');
+							} else {
+									if (rsp.msj) {
+											unificar_lote = rsp.reci_id;
+											getContenidoRecipiente(unificar_lote);
 
-    wo();
-    $.ajax({
-        type: 'POST',
-        dataType: 'JSON',
-        async: false,
-        data: {
-            productos,
-            cantidad_padre,
-            num_orden_prod,
-            destino,
-            batch_id_padre
-        },
-        url: '<?php echo base_url(PRD) ?>general/Etapa/Finalizar',
-        success: function(rsp) {
-            console.log(rsp);
-            if (rsp.status) {
-                $('#modal_finalizar').modal('hide');
-                $('#mdl-unificacion').modal('hide');
-                hecho('Se genero el Reporte de Producción correctamente.');
-            } else {
-                if (rsp.msj) {
-                    unificar_lote = rsp.reci_id;
-                    getContenidoRecipiente(unificar_lote);
+									} else {
+											alert('Fallo al generar Reporte Producción');
+									}
+							}
+					},
+					complete: function() {
+							wc();
+					}
+			});
+	}
 
-                } else {
-                    alert('Fallo al generar Reporte Producción');
-                }
-            }
-        },
-        complete: function() {
-            wc();
-        }
-    });
-}
+	var btnFinalizar = function() {
+			wo();
+			$.ajax({
+					type: 'POST',
+					dataType: 'JSON',
+					url: '<?php echo base_url(PRD) ?>general/Etapa/finalizarLote',
+					data: {
+							batch_id: s_batchId
+					},
+					success: function(res) {
+							if (res.status) {
+									$('#' + s_batchId).remove();
+									hecho('Etapa finalizada exitosamente');
+							}
+					},
+					error: function(res) {
+							error();
+					},
+					complete: function() {
+							wc();
+					}
+			});
+	}
 
-var btnFinalizar = function() {
-    wo();
-    $.ajax({
-        type: 'POST',
-        dataType: 'JSON',
-        url: '<?php echo base_url(PRD) ?>general/Etapa/finalizarLote',
-        data: {
-            batch_id: s_batchId
-        },
-        success: function(res) {
-            if (res.status) {
-                $('#' + s_batchId).remove();
-                hecho('Etapa finalizada exitosamente');
-            }
-        },
-        error: function(res) {
-            error();
-        },
-        complete: function() {
-            wc();
-        }
-    });
-}
+	function agregarNoco(e) {
+			if(!e){
+					alert('Seleccionar un No Consumible antes de agregar a la lista');
+					return;
+			}
+			$('#tbl-noco tfoot').hide();
+			if ($('#tbl-noco tbody').find(`.${e.codigo}`).length > 0) {
+					alert('El item a agregar ya se encuentra en la lista');
+					return;
+			}
+			$('#tbl-noco tbody').append(`
+					<tr class='${e.codigo}' data-json='${JSON.stringify(e)}'>
+							<td>${e.codigo}</td>
+							<td>${e.descripcion}</td>
+							<td><button class="btn btn-link" onclick="$(this).closest('tr').remove()"><i class="fa fa-times text-danger"></i></button></td>
+					</tr>
+			`)
+			$('#noco_id').val('');
+	}
 
-function agregarNoco(e) {
-    if(!e){
-        alert('Seleccionar un No Consumible antes de agregar a la lista');
-        return;
-    }
-    $('#tbl-noco tfoot').hide();
-    if ($('#tbl-noco tbody').find(`.${e.codigo}`).length > 0) {
-        alert('El item a agregar ya se encuentra en la lista');
-        return;
-    }
-    $('#tbl-noco tbody').append(`
-        <tr class='${e.codigo}' data-json='${JSON.stringify(e)}'>
-            <td>${e.codigo}</td>
-            <td>${e.descripcion}</td>
-            <td><button class="btn btn-link" onclick="$(this).closest('tr').remove()"><i class="fa fa-times text-danger"></i></button></td>
-        </tr>
-    `)
-    $('#noco_id').val('');
-}
+	function asociarNocos() {
+			var data = [];
+			$('#tbl-noco tbody  tr').each(function(){
+					data.push(getJson(this).codigo);
+			});
+			setAttr($(`.batch-${s_batchId}`), 'nocos', data);
+			resetNoco();
+	}
 
-function asociarNocos() {
-    var data = [];
-    $('#tbl-noco tbody  tr').each(function(){
-        data.push(getJson(this).codigo);
-    });
-    setAttr($(`.batch-${s_batchId}`), 'nocos', data);
-    resetNoco();
-}
+	function resetNoco(){
+			$('#tbl-noco tbody').empty();
+			$('#tbl-noco tfoot').show();
+			switchPane()
+	}
 
-function resetNoco(){
-    $('#tbl-noco tbody').empty();
-    $('#tbl-noco tfoot').show();
-    switchPane()
-}
-
-function switchPane(){
-    if($('#pnl-1').hasClass('hidden')){
-        $('#pnl-1').removeClass('hidden');
-        $('#pnl-2').addClass('hidden');
-    }else{
-        $('#pnl-2').removeClass('hidden');
-        $('#pnl-1').addClass('hidden');
-    }
-}
+	function switchPane(){
+			if($('#pnl-1').hasClass('hidden')){
+					$('#pnl-1').removeClass('hidden');
+					$('#pnl-2').addClass('hidden');
+			}else{
+					$('#pnl-2').removeClass('hidden');
+					$('#pnl-1').addClass('hidden');
+			}
+	}
 
 
 </script>

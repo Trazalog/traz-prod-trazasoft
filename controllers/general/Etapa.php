@@ -484,7 +484,7 @@ class Etapa extends CI_Controller
         $cantidad_padre = $this->input->post('cantidad_padre');
         $num_orden_prod = $this->input->post('num_orden_prod');
         $batch_id_padre = $this->input->post('batch_id_padre');
-
+        $depo_id = $this->input->post('depo_id');
         foreach ($productos as $key => $value) {
 
             $arrayPost["lote_id"] = $value->lotedestino; // lote origen
@@ -504,16 +504,29 @@ class Etapa extends CI_Controller
             $arrayPost["tipo_recurso"] = $value->tipo_recurso;
             $arrayPost['batch_id'] = "0";
             $arrayPost['planificado'] = "false";
-            $arrayPost['noco_list'] = isset($value->nocos)?implode(';',$value->nocos):'';
+            //$arrayPost['noco_list'] = isset($value->nocos)?implode(';',$value->nocos):'';
+						$noco_list = isset($value->nocos)? $value->nocos:'';
             $arrayDatos['_post_lote_noconsumibles_list_batch_req']['_post_lote_noconsumibles_list'][] = $arrayPost;
         }
 
-        $rsp = $this->Etapas->finalizarEtapa($arrayDatos);
+        //$rsp = $this->Etapas->finalizarEtapa($arrayDatos);
 
-        if ($rsp['status']) {
 
-            $rsp['data'] = $this->Etapas->buscar($batch_id_padre)->etapa;
-        }
+				// Si hay que asociar Noconsmibles
+				if ($this->input->post('noConsumAsociar')) {
+					$this->load->model('general/Noconsumibles');
+					$depo_id = $this->input->post('depo_id');
+					$estado = $this->input->post('estado');
+
+					$respNoco = $this->Noconsumibles->movimientoNoConsumibles($noco_list, $depo_id, $estado);
+				}
+
+
+
+        // if ($rsp['status']) {
+
+        //     $rsp['data'] = $this->Etapas->buscar($batch_id_padre)->etapa;
+        // }
 
         echo json_encode($rsp);
     }

@@ -26,23 +26,23 @@ class Noconsumible extends CI_Controller
       $data[]['_post_noconsumibles'] = array(
 
           'codigo' => $this->input->post('codigo'),
-          'descripcion' => $this->input->post('descripcion'), 
+          'descripcion' => $this->input->post('descripcion'),
           'fec_vencimiento' => $this->input->post('fec_vencimiento'),
-          'usuario_app' => 'rodotest', 
+          'usuario_app' => userNick(),
           'tinc_id' => $this->input->post('tipo_no_consumible'),
-          'empr_id' => '1'
+          'empr_id' => empresa()
                    );
 
         $data[]['_post_noconsumibles_movimientos'] = array(
 
           'estado' => 'ALTA',
-          'usuario_app' => 'rodotest', 
+          'usuario_app' => userNick(),
           'noco_id' => $this->input->post('codigo'),
           'depo_id' => $this->input->post('depositos'),
           'dest_id' => ''
 
                   );
-        
+
         $data =  $this->Noconsumibles->guardarNoConsumible($data);
          echo json_encode($data['status']);
     }
@@ -105,7 +105,7 @@ class Noconsumible extends CI_Controller
       $codigo =  $this->input->post('codigoNoCon');
         $data['buscarNoConsumible'] =  $this->Noconsumibles->buscarNoConsumible($codigo)['data'];
         $this->load->view('NoConsumible/buscar', $data);
-      }
+    }
     
 
 
@@ -118,14 +118,14 @@ class Noconsumible extends CI_Controller
 
 
       foreach ($tableDataArray['datos'] as $key => $x) {
-  
+        //FIXME: ACA FATA EMPR_ID
         $data[]['_put_noconsumible_estado'] = array(
   
           'codigo' => $tableDataArray['datos'][$key]['codigo'],
           'estado' => 'ACTIVO',
           'usuario_app' => 'rodotest'
                    );
-  
+
         $data[]['_post_noconsumibles_movimientos'] = array(
   
           'estado' => 'ACTIVO',
@@ -158,7 +158,7 @@ class Noconsumible extends CI_Controller
       foreach ($tableDataArray['datos'] as $key => $x) {
   
         $data[]['_put_noconsumible_estado'] = array(
-  
+           //FIXME: ACA FATA EMPR_ID
           'codigo' => $tableDataArray['datos'][$key]['codigo'],
           'estado' => 'EN_TRANSITO',
           'usuario_app' => 'rodotest'
@@ -171,9 +171,9 @@ class Noconsumible extends CI_Controller
           'noco_id' => $tableDataArray['datos'][$key]['codigo'],
           'depo_id' => $tableDataArray['datos'][$key]['establecimiento'],
           'dest_id' => $tableDataArray['datos'][$key]['destino']
-       
+
                   );
-                 
+
           $rsp =  $this->Noconsumibles->guardarMovimientoSalida($data);
           $data = [];
 
@@ -221,7 +221,7 @@ class Noconsumible extends CI_Controller
     }
 
     /**
-    * Actualiza estado
+    * Actualiza estado PANTALLA ABM NO CONSUMIBLES
     * @param array con datos a actualizar
     * @return boolean respuesta de servicio
     */
@@ -234,4 +234,7 @@ class Noconsumible extends CI_Controller
       $resp = $this->Noconsumibles->cambioEstado($data);
       echo json_encode($resp);
     }
+
+
+
 }

@@ -168,4 +168,45 @@ class Noconsumibles extends CI_Model
 			$aux =json_decode($aux["status"]);
 			return $aux;
 		}
+
+		/**
+		* Guardar Movimiento No consmible Generico
+		* (guarda movimiento de ASOCIACIÓN/ENTRADA/SALIDA)
+		* guarda trazabilidad de no cons y cambia estado
+		* segun lo enviado en array y variable estado
+		* @param
+		* @return
+		*/
+		function movimientoNoConsumibles($noco_list, $depo_id, $estado)
+		{
+
+			$datos = [];
+
+      foreach ($noco_list as $nc) {
+
+        $data['_put_noconsumible_estado'] = array(
+
+							'estado' => $estado,
+							'usuario_app' => userNick(),
+							'codigo' => $nc,
+							'empr_id' => empresa()
+        );
+  
+        $data['_post_noconsumibles_movimientos'] = array(
+  
+							'estado' => $estado,
+							'noco_id' => $nc,
+							'usuario_app' => userNick(),
+							'dest_id' => '',
+							'depo_id' => $depo_id
+				);
+
+				$datos['request_box'][] = $data;
+      }
+
+			$json = json_encode($datos);
+
+			$respuestarest = requestBox(REST_PRD_NOCON . '/', $datos);
+			return $respuestarest;
+		}
 }

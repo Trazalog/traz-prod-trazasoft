@@ -201,7 +201,7 @@ function guardarEntradaNoCon() {
         "codigo": $(tr).find('td:eq(1)').attr('value'),     
         "establecimiento": $(tr).find('td:eq(4)').attr('value'),
         "depositos": $(tr).find('td:eq(5)').attr('value')
-       
+
       }
     });
     datosTabla.shift(); //borra encabezado de la tabla o primera fila
