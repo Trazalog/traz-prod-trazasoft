@@ -408,14 +408,15 @@
 					data.push(getJson(this).codigo);
 			});
 			setAttr($(`.batch-${s_batchId}`), 'nocos', data);
-			resetNoco();
+			//resetNoco();
+			switchPane();
 	}
 
-	function resetNoco(){
-			$('#tbl-noco tbody').empty();
-			$('#tbl-noco tfoot').show();
-			switchPane()
-	}
+	// function resetNoco(){
+	// 		$('#tbl-noco tbody').empty();
+	// 		$('#tbl-noco tfoot').show();
+	// 		switchPane()
+	// }
 
 	function switchPane(){
 			if($('#pnl-1').hasClass('hidden')){

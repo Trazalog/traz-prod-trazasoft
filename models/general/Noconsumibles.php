@@ -180,33 +180,42 @@ class Noconsumibles extends CI_Model
 		function movimientoNoConsumibles($noco_list, $depo_id, $estado)
 		{
 
-			$datos = [];
-
       foreach ($noco_list as $nc) {
 
-        $data['_put_noconsumible_estado'] = array(
+					$data['_put_noconsumible_estado'] = array(
 
-							'estado' => $estado,
-							'usuario_app' => userNick(),
-							'codigo' => $nc,
-							'empr_id' => empresa()
-        );
-  
-        $data['_post_noconsumibles_movimientos'] = array(
-  
-							'estado' => $estado,
-							'noco_id' => $nc,
-							'usuario_app' => userNick(),
-							'dest_id' => '',
-							'depo_id' => $depo_id
-				);
+								'estado' => $estado,
+								'usuario_app' => userNick(),
+								'codigo' => $nc,
+								'empr_id' => empresa()
+					);
+					$data['_post_noconsumibles_movimientos'] = array(
 
-				$datos['request_box'][] = $data;
+								'estado' => $estado,
+								'noco_id' => $nc,
+								'usuario_app' => userNick(),
+								'dest_id' => '',
+								'depo_id' => $depo_id,
+								'empr_id' => empresa()
+					);
+					$datos['request_box'][] = $data;
+
+					log_message('DEBUG','#TRAZA|TRAZASOFT|GENERAL|NOCONSUMIBLES|movimientoNoConsumibles($noco_list, $depo_id, $estado) $datos:  >> '.$datos);
+
+					$aux = $this->rest->callAPI("POST", REST_PRD_NOCON ."/request_box", $datos);
+					$aux =json_decode($aux["data"]);
+					$monc_id = $aux->DATA_SERVICE_REQUEST_BOX_RESPONSE->respuesta->monc_id;
+
+					if ($monc_id == null) {
+						return;
+					}
+
+					unset($datos);
+					$datos = array();
       }
 
-			$json = json_encode($datos);
 
-			$respuestarest = requestBox(REST_PRD_NOCON . '/', $datos);
+
 			return $respuestarest;
 		}
 }

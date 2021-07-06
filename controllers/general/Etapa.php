@@ -514,14 +514,19 @@ class Etapa extends CI_Controller
 
 				// Si hay que asociar Noconsmibles
 				if ($this->input->post('noConsumAsociar')) {
-					$this->load->model('general/Noconsumibles');
-					$depo_id = $this->input->post('depo_id');
-					$estado = $this->input->post('estado');
+						$this->load->model('general/Noconsumibles');
+						$depo_id = $this->input->post('depo_id');
+						$estado = $this->input->post('estado');
 
-					$respNoco = $this->Noconsumibles->movimientoNoConsumibles($noco_list, $depo_id, $estado);
+						$respNoco = $this->Noconsumibles->movimientoNoConsumibles($noco_list, $depo_id, $estado);
+
+						if (!$respNoco) {
+							# si la respuesta es negativa corto la ejecucion
+							log_message('ERROR','#TRAZA|TRAZ-PROD-TRAZASOFT|ETAPA|Finalizar() >> ERROR: NO SE PUDO ASOCIAR LOS NO CONSMIBLES.');
+							echo json_encode($rsp = array('mensNoCons'=>'No sepudieron asociar los No Consumibles'));
+							return;
+						}
 				}
-
-
 
         // if ($rsp['status']) {
 
