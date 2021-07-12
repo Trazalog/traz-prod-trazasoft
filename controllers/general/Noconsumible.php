@@ -193,7 +193,7 @@ class Noconsumible extends CI_Controller
     }
 
     /**
-    * Consulta info de un NO consumible
+    * Consulta info de un NO consumible (pantalla recepcion no consm)
     * @param string codigo de no consumible
     * @return array con info de no consumible
     */
@@ -212,12 +212,37 @@ class Noconsumible extends CI_Controller
     */
     function liberarNoConsumible()
     {
-      $noCons = $this->input->post('datos');
-      log_message('DEBUG','#TRAZA|TRA-PROD-TRAZASOFT|NOCONSUMIBLE|liberarNoConsumible() $noCons>> '.json_encode($noCons));
+        $noCons = $this->input->post('datos');
+        log_message('DEBUG','#TRAZA|TRA-PROD-TRAZASOFT|NOCONSUMIBLE|liberarNoConsumible() $noCons>> '.json_encode($noCons));
+        // libera en tabla noconsumibles_lotes
+        //$resp = $this->Noconsumibles->liberarNoConsumible($noCons);
 
-      $resp = $this->Noconsumibles->liberarNoConsumible($noCons);
+        // si es exitoso llama a insertar movimiento y cambio de estado en noconsum
+        // if (!$resp) {
+        //     log_message('ERROR','#TRAZA|TRAZ-PROD-TRAZASOFT|NOCONSUMIBLE|liberarNoConsumible() >> ERROR: FALLO LIBERACION EN TABLA NOCONSUMIBLES_LOTES ');
+        //     echo json_encode($resp);
+        //     return;
+        // } else {
+            // procesa array para guardar
+            $noco_list = $this->armaArray($noCons);
+            //FIXME: AVERIGUANDO EL DEPO_ID QUEDARIA LISTO
+          // llamar a movimientos lotes
+            $respNoCons = $this->Noconsumibles->movimientoNoConsumibles($noco_list, 'ACTIVO', $depo_id);
+            echo json_encode($respNoCons);
+        //}
+    }
 
-      echo json_encode($resp);
+    /**
+    * Arma array para guardar movimiento no consumibles
+    * @param array con datos
+    * @return array con datos mapeados
+    */
+    function armaArray($noCons)
+    {
+      foreach ($noCons as $key => $value) {
+        $noco_list[$key] = $noCons[$key]['noco_id'];
+      }
+      return $noco_list;
     }
 
     /**

@@ -45,7 +45,7 @@ class Noconsumibles extends CI_Model
     {
         #HARCODE .empresa()
         $resource = REST_PRD_NOCON . "/noConsumibles/porEstado/TODOS/porEmpresa/" . empresa();
-        $url = $resource; //REST_PRD_NOCON .
+        $url = $resource;
         return wso2($url);
 
     }
@@ -63,7 +63,7 @@ class Noconsumibles extends CI_Model
         $rsp = $this->rest->callApi('POST', $url, $data);
         return $rsp;
     }
-
+	//TODO: PREGUNTAR ESTE METODO A RDO NO ESTA EN LA LISTA QUE ME PASO
     public function eliminarNoConsumible($codigo)
     {
 
@@ -74,25 +74,26 @@ class Noconsumibles extends CI_Model
 // Listar trazabilidad No Consumibles
     public function ListarTrazabilidadNoConsumible($codigo)
     {
-
-        $resource = "/noConsumible/trazabilidad/porCodigo/$codigo";
+				$empr_id = empresa();
+        $resource = '/noConsumible/trazabilidad/porCodigo/'.$codigo.'/porEmpresa/'.$empr_id;
         $url = REST_PRD_NOCON . $resource;
         return wso2($url);
     }
 
     public function buscarNoConsumible($codigo)
     {
-        $resource = "/noConsumible/porCodigo/$codigo";
+				$empr_id = empresa();
+        $resource = '/noConsumible/porCodigo/'.$codigo.'/porEmpresa/'.$empr_id;
         $url = REST_PRD_NOCON . $resource;
         return wso2($url);
     }
-
+//FIXME: ACA MANDAR A GUARDAR A movimientoNoConsumibles()
 // // Guardar Movimiento Entrada No Consumibles
     public function guardarMovimientoEntrada($data)
     {
         return requestBox(REST_PRD_NOCON . '/', $data);
     }
-
+//FIXME: ACA MANDAR A GUARDAR A movimientoNoConsumibles()
 // // Guardar Movimiento Salida No Consumibles
     public function guardarMovimientoSalida($data)
     {
@@ -111,12 +112,17 @@ class Noconsumibles extends CI_Model
     */
     function consultarInfo($codigo){
         log_message('DEBUG','#TRAZA|TRAZ-PROD-TRAZASOFT|NOCONSUMIBLES  $codigo >> '.json_encode($codigo));
-        $url = REST_PRD_NOCON.'/noConsumible/porCodigo/'.$codigo;
+				$empr_id = empresa();
+				$url = REST_PRD_NOCON.'/noConsumible/porCodigo/'.$codigo.'/porEmpresa/'.$empr_id;
         $aux = $this->rest->callAPI("GET",$url);
         $aux =json_decode($aux["data"]);
         return $aux->noConsumible;
     }
 
+		//FIXME: FALTA ARREGA ESTO
+		// actualizar estado en nco.no_consumibles
+		// insertar movimiento en nco.movimientos_no_consumibles
+		// poner la fecha de liberación en nco.no_consumibles_lotes usando /noConsumible/lote/liberar
     /**
 		* Libera No consumibles
 		* @param array con datos de los no consumibles a liberar
@@ -131,6 +137,7 @@ class Noconsumibles extends CI_Model
 
             $noCons[$key]['fec_liberacion'] = $hoy;
             $noCons[$key]['usuario_app'] = $user;
+						$noCons[$key]['empr_id'] = empresa();
             $resp = $this->updateTabla($noCons[$key]);
             if (!$resp) {
                 log_message('ERROR','#TRAZA|TRAZ-PROD-TRRAZASOFT|NOCONSUMIBLES|liberarNoConsumible($noCons) >> ERROR en update de tabla');
@@ -140,7 +147,7 @@ class Noconsumibles extends CI_Model
 
         return $resp;
     }
-
+// FIXME: VER AGREGAR EMPR_ID, PREGUNTAR SI HAY QUE HACER ALGO EN MOVIMIENTOS NO CONSUMIBLES
     /**
     * Invoca servicio de actualizacion tabla
     * @param array con datos a actualizar
@@ -177,9 +184,8 @@ class Noconsumibles extends CI_Model
 		* @param
 		* @return
 		*/
-		function movimientoNoConsumibles($noco_list, $depo_id, $estado)
+		function movimientoNoConsumibles($noco_list, $estado, $depo_id)
 		{
-
       foreach ($noco_list as $nc) {
 
 					$data['_put_noconsumible_estado'] = array(
@@ -207,15 +213,14 @@ class Noconsumibles extends CI_Model
 					$monc_id = $aux->DATA_SERVICE_REQUEST_BOX_RESPONSE->respuesta->monc_id;
 
 					if ($monc_id == null) {
-						return;
+						log_message('ERROR','#TRAZA|TRAZASOFT|GENERAL|NOCONSUMIBLES|movimientoNoConsumibles($noco_list, $depo_id, $estado) >> ERROR NO SE PUDO ASOCIAR NO CONSUMIBLES');
+						break 1;
 					}
 
 					unset($datos);
 					$datos = array();
       }
 
-
-
-			return $respuestarest;
+			return $monc_id;
 		}
 }

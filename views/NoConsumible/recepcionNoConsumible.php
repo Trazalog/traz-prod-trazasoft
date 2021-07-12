@@ -35,7 +35,7 @@
       </div>
 
       <div class="col-md-12">
-        <button class="btn btn-primary pull-right" onclick="guardar()">Agregar</button>
+        <button class="btn btn-primary pull-right" onclick="guardar()">Guardar</button>
       </div>
 
     </div>
@@ -137,7 +137,7 @@
             },
             error: function(result){
               wc();
-              alertify.error("Error en liberando No Consumibles");
+              alertify.error("Error liberando No Consumibles");
             },
             complete: function(){
               wc();

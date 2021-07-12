@@ -132,7 +132,7 @@
 <script>
 
 
-function agregarFilaNoCon() {
+  function agregarFilaNoCon() {
    
 
     var codigo = $('#codigoNoCon').val();
@@ -162,13 +162,13 @@ function agregarFilaNoCon() {
     $('#tablaNoCon tbody').append(html);
     $('#frm-MovimientoNoConsumible')[0].reset();
   }
- //Quitar fila de tabla
- $("#tablaNoCon").on("click", ".del", function() {
+  //Quitar fila de tabla
+  $("#tablaNoCon").on("click", ".del", function() {
     $(this).parents("tr").remove();
   });
 
 
-function selectEstablecimiento() {
+  function selectEstablecimiento() {
     var esta_id = $('#establecimiento').val();
     $('#estabSelected').text('');
     $('#deposSelected').text('');
@@ -254,94 +254,94 @@ function selectEstablecimiento() {
 
 
 
-function guardarSalidaNoCon() {
-    //Datos de la tabla de recipientes
-    var datosTabla = new Array();
-    $('#tablaNoCon tr').each(function(row, tr) {
-      datosTabla[row] = {
-        "codigo": $(tr).find('td:eq(1)').attr('value'),     
-        "establecimiento": $(tr).find('td:eq(4)').attr('value'),
-        "destino": $(tr).find('td:eq(5)').attr('value')
-       
-      }
-    });
-    datosTabla.shift(); //borra encabezado de la tabla o primera fila
-    var datos = JSON.stringify(datosTabla);
-     console.log('datos: ' + datos);
-    //wo();
-    $.ajax({
-      type: 'POST',
-      url: '<?php echo base_url(PRD) ?>general/Noconsumible/guardarMovimientoSalida',
-      data: {
-        datos: datos
-      },
-      success: function(rsp) {
-          //  Swal.fire(
-          //   'Agregado/s!',
-          //   'El Proceso se Realizó Correctamente.',
-          //   'success'
-          // )
-          console.log('No consumible guardado.');
-      },
-      error: function() {
-        Swal.fire(
-                      'Oops...',
-                        'Algo salio mal!',
-                        'error'
-                              )
-      },
-      complete: function() {
-        wc();
-      }
-    });
+  function guardarSalidaNoCon() {
+      //Datos de la tabla de recipientes
+      var datosTabla = new Array();
+      $('#tablaNoCon tr').each(function(row, tr) {
+        datosTabla[row] = {
+          "codigo": $(tr).find('td:eq(1)').attr('value'),
+          "establecimiento": $(tr).find('td:eq(4)').attr('value'),
+          "destino": $(tr).find('td:eq(5)').attr('value')
+        
+        }
+      });
+      datosTabla.shift(); //borra encabezado de la tabla o primera fila
+      var datos = JSON.stringify(datosTabla);
+      console.log('datos: ' + datos);
+      //wo();
+      $.ajax({
+        type: 'POST',
+        url: '<?php echo base_url(PRD) ?>general/Noconsumible/guardarMovimientoSalida',
+        data: {
+          datos: datos
+        },
+        success: function(rsp) {
+            //  Swal.fire(
+            //   'Agregado/s!',
+            //   'El Proceso se Realizó Correctamente.',
+            //   'success'
+            // )
+            console.log('No consumible guardado.');
+        },
+        error: function() {
+          Swal.fire(
+                        'Oops...',
+                          'Algo salio mal!',
+                          'error'
+                                )
+        },
+        complete: function() {
+          wc();
+        }
+      });
   }
 
 
   initForm();
-    function guardarDestino() {
+  function guardarDestino() {
 
-        var formData = new FormData($('#frm-destino')[0]);
-        $.ajax({
-            type: 'POST',
-            dataType: 'JSON',
-            url: '<?php echo base_url(PRD) ?>general/Noconsumible/guardarDestino',
-            data: formData,
-            cache: false,
-            contentType: false,
-            processData: false,
-            success: function(rsp) {
-                if (rsp.status) {
-                  //  mdlClose('mdl-destino');
-                $('#mdl-destino').modal('hide');
-                    Swal.fire(
-                        'Guardado!',
-                        'El destino se Guardo Correctamente.',
-                        'success'
-                      );
-                    $('#frm-destino')[0].reset();
-                    $('#destino').load("#destino");
-                  //linkTo();
-                } else {
+      var formData = new FormData($('#frm-destino')[0]);
+      $.ajax({
+          type: 'POST',
+          dataType: 'JSON',
+          url: '<?php echo base_url(PRD) ?>general/Noconsumible/guardarDestino',
+          data: formData,
+          cache: false,
+          contentType: false,
+          processData: false,
+          success: function(rsp) {
+              if (rsp.status) {
+                //  mdlClose('mdl-destino');
+              $('#mdl-destino').modal('hide');
                   Swal.fire(
-                      'Oops...',
-                        'Algo salio mal!',
-                        'error'
-                              )
-                }
+                      'Guardado!',
+                      'El destino se Guardo Correctamente.',
+                      'success'
+                    );
+                  $('#frm-destino')[0].reset();
+                  $('#destino').load("#destino");
+                //linkTo();
+              } else {
+                Swal.fire(
+                    'Oops...',
+                      'Algo salio mal!',
+                      'error'
+                            )
+              }
 
-            },
-            error: function(rsp) {
-              Swal.fire(
-                      'Oops...',
-                        'Algo salio mal!',
-                        'error'
-                              );
-                $('#mdl-destino').modal('hide');
-                console.log(rsp.msj);
-            },
-            complete: function() {
-             //   wc();
-            }
-        });
-    }
+          },
+          error: function(rsp) {
+            Swal.fire(
+                    'Oops...',
+                      'Algo salio mal!',
+                      'error'
+                            );
+              $('#mdl-destino').modal('hide');
+              console.log(rsp.msj);
+          },
+          complete: function() {
+            //   wc();
+          }
+      });
+  }
 </script>

@@ -83,7 +83,7 @@
 
 	// levanta modal de Reporte de Produccion
 	function verReporte(e) {
-		debugger;
+
 			var data = getJson2(e);
 			s_batchId = data.id;
 			$mdl.modal("show");
@@ -151,13 +151,14 @@
 
 
 <!-- MODALES -->
-	<div class="modal modal-fade" id="modal_finalizar">
+	<div class="modal modal-fade" data-keyboard="false" data-backdrop="static" id="modal_finalizar">
 
-			<!-- Modal Reporte de Produccion -->
+
 			<div class="overlay">
 					<i class="fa fa-refresh fa-spin"></i>
 			</div>
 			<div class="modal-dialog modal-lm">
+				<!-- Modal Reporte de Produccion -->
 					<div id="pnl-1" class="modal-content">
 							<!-- Modal Header -->
 							<div class="modal-header">
@@ -288,15 +289,16 @@
 
 
 <script>
+	// Al cerrar modal
 	$('#modal_finalizar').on('hidden.bs.modal', function() {
 			$tblRep.empty();
 			$('#frm-etapa').find('form-control').val('');
 			$('.select2').trigger('change');
 			s_batchId = false;
+			$('#tbl-noco tbody tr').remove();
 	});
-
+	// Genera Informe de Etapa (BTN Guardar Reporte)
 	var unificar_lote = false;
-	// Genera Informe de Etapa
 	var FinalizarEtapa = function() {
 
 			var productos = [];
@@ -357,7 +359,54 @@
 					}
 			});
 	}
+	// Agrega los NOcons a tabla en modal asignar
+	function agregarNoco(e) {
+			if(!e){
+					alert('Seleccionar un No Consumible antes de agregar a la lista');
+					return;
+			}
+			$('#tbl-noco tfoot').hide();
+			if ($('#tbl-noco tbody').find(`.${e.codigo}`).length > 0) {
+					alert('El item a agregar ya se encuentra en la lista');
+					return;
+			}
+			$('#tbl-noco tbody').append(`
+					<tr class='${e.codigo}' data-json='${JSON.stringify(e)}'>
+							<td>${e.codigo}</td>
+							<td>${e.descripcion}</td>
+							<td><button class="btn btn-link" onclick="$(this).closest('tr').remove()"><i class="fa fa-times text-danger"></i></button></td>
+					</tr>
+			`)
+			$('#noco_id').val('');
+	}
+	//
+	function asociarNocos() {
+			var data = [];
+			$('#tbl-noco tbody  tr').each(function(){
+					data.push(getJson(this).codigo);
+			});
+			setAttr($(`.batch-${s_batchId}`), 'nocos', data);
+			//resetNoco();
+			switchPane();
+	}
+	// Limpia tabla nocons y abre modal padre
+	function resetNoco(){
+			$('#tbl-noco tbody').empty();
+			$('#tbl-noco tfoot').show();
+			switchPane()
+	}
+	// Alterna entre modales
+	function switchPane(){
+			if($('#pnl-1').hasClass('hidden')){
+					$('#pnl-1').removeClass('hidden');
+					$('#pnl-2').addClass('hidden');
+			}else{
+					$('#pnl-2').removeClass('hidden');
+					$('#pnl-1').addClass('hidden');
+			}
+	}
 
+	// Funcion que no se usa en esta pantalla
 	var btnFinalizar = function() {
 			wo();
 			$.ajax({
@@ -381,52 +430,5 @@
 					}
 			});
 	}
-
-	function agregarNoco(e) {
-			if(!e){
-					alert('Seleccionar un No Consumible antes de agregar a la lista');
-					return;
-			}
-			$('#tbl-noco tfoot').hide();
-			if ($('#tbl-noco tbody').find(`.${e.codigo}`).length > 0) {
-					alert('El item a agregar ya se encuentra en la lista');
-					return;
-			}
-			$('#tbl-noco tbody').append(`
-					<tr class='${e.codigo}' data-json='${JSON.stringify(e)}'>
-							<td>${e.codigo}</td>
-							<td>${e.descripcion}</td>
-							<td><button class="btn btn-link" onclick="$(this).closest('tr').remove()"><i class="fa fa-times text-danger"></i></button></td>
-					</tr>
-			`)
-			$('#noco_id').val('');
-	}
-
-	function asociarNocos() {
-			var data = [];
-			$('#tbl-noco tbody  tr').each(function(){
-					data.push(getJson(this).codigo);
-			});
-			setAttr($(`.batch-${s_batchId}`), 'nocos', data);
-			//resetNoco();
-			switchPane();
-	}
-
-	// function resetNoco(){
-	// 		$('#tbl-noco tbody').empty();
-	// 		$('#tbl-noco tfoot').show();
-	// 		switchPane()
-	// }
-
-	function switchPane(){
-			if($('#pnl-1').hasClass('hidden')){
-					$('#pnl-1').removeClass('hidden');
-					$('#pnl-2').addClass('hidden');
-			}else{
-					$('#pnl-2').removeClass('hidden');
-					$('#pnl-1').addClass('hidden');
-			}
-	}
-
 
 </script>
