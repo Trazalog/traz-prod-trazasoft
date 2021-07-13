@@ -106,7 +106,7 @@ class Noconsumible extends CI_Controller
         $data['buscarNoConsumible'] =  $this->Noconsumibles->buscarNoConsumible($codigo)['data'];
         $this->load->view('NoConsumible/buscar', $data);
     }
-    
+
 
 
     public function guardarMovimientoEntrada()
@@ -149,7 +149,15 @@ class Noconsumible extends CI_Controller
 
     public function guardarMovimientoSalida()
     {
-      $datos = $this->input->post('datos');
+      $data = json_decode($this->input->post('datos'));
+
+
+      foreach ($data as $value) {
+       
+        $rsp =  $this->Noconsumibles->movimientoNoConsumibles($value['codigo'], 'EN_TRANSITO', null, $value['desti_id']);
+      }
+
+      return;
 
     $tableData = stripcslashes($datos);
     $tableDataArray['datos'] = json_decode($tableData, TRUE);
@@ -161,13 +169,13 @@ class Noconsumible extends CI_Controller
            //FIXME: ACA FATA EMPR_ID
           'codigo' => $tableDataArray['datos'][$key]['codigo'],
           'estado' => 'EN_TRANSITO',
-          'usuario_app' => 'rodotest'
+          'usuario_app' => userNick()
                    );
-  
+
         $data[]['_post_noconsumibles_movimientos'] = array(
-  
+
           'estado' => 'EN_TRANSITO',
-          'usuario_app' => 'rodotest',
+          'usuario_app' => userNick(),
           'noco_id' => $tableDataArray['datos'][$key]['codigo'],
           'depo_id' => $tableDataArray['datos'][$key]['establecimiento'],
           'dest_id' => $tableDataArray['datos'][$key]['destino']
@@ -183,8 +191,8 @@ class Noconsumible extends CI_Controller
 
     /**
     * Levanta pantalla recepcion no consumible
-    * @param 
-    * @return 
+    * @param
+    * @return
     */
     public function recepcionNoConsumible()
     {

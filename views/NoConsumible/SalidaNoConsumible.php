@@ -16,21 +16,21 @@
             <div class="col-md-2">
                 <input id="codigoNoCon" name="codigoNoCon" type="text" placeholder="" class="form-control input-md">
             </div>
-            <label for="" class="col-md-2">Establecimiento:</label>
+            <!-- <label for="" class="col-md-2">Establecimiento:</label>
             <div class="col-md-2">
                 <select class="form-control select2 select2-hidden-accesible" id="establecimiento"
-                    name="establecimiento" onchange="selectEstablecimiento()" <?php echo req() ?>>
+                    name="establecimiento" onchange="selectEstablecimiento()" <?php //echo req() ?>>
                     <option value="" disabled selected>- Seleccionar - </option>
                     <?php
-                      if(is_array($tipoEstablecimiento)){
-                      foreach ($tipoEstablecimiento as $i) {
-                      echo "<option value = $i->esta_id>$i->nombre</option>";
-                           }
-                         }
+                      //if(is_array($tipoEstablecimiento)){
+                      //foreach ($tipoEstablecimiento as $i) {
+                      //echo "<option value = $i->esta_id>$i->nombre</option>";
+                        //   }
+                        // }
                       ?>
                 </select>
                 <span id="estabSelected" style="color: forestgreen;"></span>
-            </div>
+            </div> -->
              <label class="col-md-1 control-label" for="destino">Destino:</label>
                 <div class="col-md-2" id='div_destino'>
                     <select name="destino" id="destino" class="form-control">
@@ -58,9 +58,9 @@
             <thead>
                 <th></th>
                 <th>Codigo</th>
-                <th>Descripcion</th>
+                <!-- <th>Descripcion</th> -->
                 <th>Fecha de Salida</th>
-                <th>Establecimiento</th>
+                <!-- <th>Establecimiento</th> -->
                 <th>Destino</th>
             </thead>
             <tbody>
@@ -136,29 +136,34 @@
    
 
     var codigo = $('#codigoNoCon').val();
-    var establecimiento = $('#establecimiento').val();
-    var estabSelected =  $('#estabSelected').text();
+    //var establecimiento = $('#establecimiento').val();
+    //var estabSelected =  $('#estabSelected').text();
     var destino = $('#destino').val();
-    var destinoSelected = $('#destino').text();
-
+    var destinoSelected = $('#destino option:selected').text();
 
     datos = new FormData($('frm-MovimientoNoConsumible')[0]);
     datos = formToObject(datos);
 
     var objFecha = new Date();
-
     var dia  = objFecha.getDate();
     var mes  = objFecha.getMonth();
     var anio = objFecha.getFullYear();
 
-    html = '<tr>' +
-      '<td><a type = "button" class = "del pull-right" style = "cursor: pointer;"><i class = "fa fa-times text-danger"></i></a></td>' +
-      '<td value=' + codigo + '>' + codigo + '</td>' +
-      '<td></td>' +
-      '<td>'+  dia + "/" + mes + "/" + anio  +'</td>' +
-      '<td value=' + establecimiento + '>' + $('#estabSelected').text() + '</td>' +
-      '<td value=' + destino + '>' + destino + '</td>' +
-      '</tr>';
+    // html = '<tr>' +
+    //           '<td><a type = "button" class = "del pull-right" style = "cursor: pointer;"><i class = "fa fa-times text-danger"></i></a></td>' +
+    //           '<td value=' + codigo + '>' + codigo + '</td>' +
+    //           '<td></td>' +
+    //           '<td>'+  dia + "/" + mes + "/" + anio  +'</td>' +
+    //           '<td value=' + establecimiento + '>' + $('#estabSelected').text() + '</td>' +
+    //           '<td value=' + destino + '>' + destinoSelected + '</td>' +
+    //        '</tr>';
+           html = '<tr>' +
+              '<td><a type = "button" class = "del pull-right" style = "cursor: pointer;"><i class = "fa fa-times text-danger"></i></a></td>' +
+              '<td value=' + codigo + '>' + codigo + '</td>' +
+              '<td>'+  dia + "/" + mes + "/" + anio  +'</td>' +
+              '<td value=' + destino + '>' + destinoSelected + '</td>' +
+           '</tr>';
+
     $('#tablaNoCon tbody').append(html);
     $('#frm-MovimientoNoConsumible')[0].reset();
   }
@@ -260,8 +265,8 @@
       $('#tablaNoCon tr').each(function(row, tr) {
         datosTabla[row] = {
           "codigo": $(tr).find('td:eq(1)').attr('value'),
-          "establecimiento": $(tr).find('td:eq(4)').attr('value'),
-          "destino": $(tr).find('td:eq(5)').attr('value')
+          //"establecimiento": $(tr).find('td:eq(4)').attr('value'),
+          "destino": $(tr).find('td:eq(3)').attr('value')
         
         }
       });

@@ -204,7 +204,7 @@ function obtenerInfoCamion(patente) {
 function validarSalida(){
 
     if(!$('#destino_esta_id').val()) conf(guardarSalida, false, 'No se ha seleccionado destino','El camión se pondrá en estado finalizado');else{
-        guardarSalida();
+      //  guardarSalida();
     }
 
 }

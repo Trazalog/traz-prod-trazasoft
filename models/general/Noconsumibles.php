@@ -147,7 +147,7 @@ class Noconsumibles extends CI_Model
 
         return $resp;
     }
-// FIXME: VER AGREGAR EMPR_ID, PREGUNTAR SI HAY QUE HACER ALGO EN MOVIMIENTOS NO CONSUMIBLES
+		// FIXME: VER AGREGAR EMPR_ID, PREGUNTAR SI HAY QUE HACER ALGO EN MOVIMIENTOS NO CONSUMIBLES
     /**
     * Invoca servicio de actualizacion tabla
     * @param array con datos a actualizar
@@ -184,8 +184,9 @@ class Noconsumibles extends CI_Model
 		* @param
 		* @return
 		*/
-		function movimientoNoConsumibles($noco_list, $estado, $depo_id)
+		function movimientoNoConsumibles($noco_list, $estado, $depo_id = null, $dest_id = null)
 		{
+			$algo = json_decode($noco_list);
       foreach ($noco_list as $nc) {
 
 					$data['_put_noconsumible_estado'] = array(
