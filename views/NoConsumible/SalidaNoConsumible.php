@@ -39,7 +39,7 @@
                           if(is_array($destinoNoConsumible)){
                           foreach ($destinoNoConsumible as $i) {
                           echo "<option value = $i->tabl_id>$i->valor</option>";
-                                }                   
+                                }
                               }
                           ?>
                       </select>
@@ -131,13 +131,9 @@
 
 <script>
 
-
   function agregarFilaNoCon() {
-   
 
     var codigo = $('#codigoNoCon').val();
-    //var establecimiento = $('#establecimiento').val();
-    //var estabSelected =  $('#estabSelected').text();
     var destino = $('#destino').val();
     var destinoSelected = $('#destino option:selected').text();
 
@@ -149,20 +145,12 @@
     var mes  = objFecha.getMonth();
     var anio = objFecha.getFullYear();
 
-    // html = '<tr>' +
-    //           '<td><a type = "button" class = "del pull-right" style = "cursor: pointer;"><i class = "fa fa-times text-danger"></i></a></td>' +
-    //           '<td value=' + codigo + '>' + codigo + '</td>' +
-    //           '<td></td>' +
-    //           '<td>'+  dia + "/" + mes + "/" + anio  +'</td>' +
-    //           '<td value=' + establecimiento + '>' + $('#estabSelected').text() + '</td>' +
-    //           '<td value=' + destino + '>' + destinoSelected + '</td>' +
-    //        '</tr>';
-           html = '<tr>' +
-              '<td><a type = "button" class = "del pull-right" style = "cursor: pointer;"><i class = "fa fa-times text-danger"></i></a></td>' +
-              '<td value=' + codigo + '>' + codigo + '</td>' +
-              '<td>'+  dia + "/" + mes + "/" + anio  +'</td>' +
-              '<td value=' + destino + '>' + destinoSelected + '</td>' +
-           '</tr>';
+    html = '<tr>' +
+      '<td><a type = "button" class = "del pull-right" style = "cursor: pointer;"><i class = "fa fa-times text-danger"></i></a></td>' +
+      '<td value=' + codigo + '>' + codigo + '</td>' +
+      '<td>'+  dia + "/" + mes + "/" + anio  +'</td>' +
+      '<td value=' + destino + '>' + destinoSelected + '</td>' +
+    '</tr>';
 
     $('#tablaNoCon tbody').append(html);
     $('#frm-MovimientoNoConsumible')[0].reset();
@@ -243,68 +231,66 @@
     })
   }
 
-  function selectDestino() {
-    selectSearch('destino', 'recipSelected');
-  }
+  // function selectDestino() {
+  //   selectSearch('destino', 'recipSelected');
+  // }
 
   /* selectSearch: busca en un select un valor selecionado y lo coloca en el "spanSelected" */
-  function selectSearch(select, span) {
-    var option = $('#' + select).val();
-    $('#' + select).find('option').each(function() {
-      if ($(this).val() == option) {
-        $('#' + span).text($(this).text());
-      }
-    });
-  }
+  // function selectSearch(select, span) {
+    //   var option = $('#' + select).val();
+    //   $('#' + select).find('option').each(function() {
+    //     if ($(this).val() == option) {
+    //       $('#' + span).text($(this).text());
+    //     }
+    //   });
+  // }
 
 
 
-  function guardarSalidaNoCon() {
-      //Datos de la tabla de recipientes
-      var datosTabla = new Array();
-      $('#tablaNoCon tr').each(function(row, tr) {
-        datosTabla[row] = {
-          "codigo": $(tr).find('td:eq(1)').attr('value'),
-          //"establecimiento": $(tr).find('td:eq(4)').attr('value'),
-          "destino": $(tr).find('td:eq(3)').attr('value')
-        
-        }
-      });
-      datosTabla.shift(); //borra encabezado de la tabla o primera fila
-      var datos = JSON.stringify(datosTabla);
-      console.log('datos: ' + datos);
-      //wo();
-      $.ajax({
-        type: 'POST',
-        url: '<?php echo base_url(PRD) ?>general/Noconsumible/guardarMovimientoSalida',
-        data: {
-          datos: datos
-        },
-        success: function(rsp) {
-            //  Swal.fire(
-            //   'Agregado/s!',
-            //   'El Proceso se Realizó Correctamente.',
-            //   'success'
-            // )
-            console.log('No consumible guardado.');
-        },
-        error: function() {
-          Swal.fire(
-                        'Oops...',
-                          'Algo salio mal!',
-                          'error'
-                                )
-        },
-        complete: function() {
-          wc();
-        }
-      });
-  }
+  // function guardarSalidaNoCon() {
+      //     //Datos de la tabla de recipientes
+      //     var datosTabla = new Array();
+      //     $('#tablaNoCon tr').each(function(row, tr) {
+      //       datosTabla[row] = {
+      //         "codigo": $(tr).find('td:eq(1)').attr('value'),
+      //         //"establecimiento": $(tr).find('td:eq(4)').attr('value'),
+      //         "destino": $(tr).find('td:eq(3)').attr('value')
+      //       }
+      //     });
+
+      //     console.log('datos: ' + datos);
+      //     //wo();
+      //     $.ajax({
+      //       type: 'POST',
+      //       url: '<?php //echo base_url(PRD) ?>general/Noconsumible/guardarMovimientoSalida',
+      //       data: {
+      //         datosTabla
+      //       },
+      //       success: function(rsp) {
+      //           //  Swal.fire(
+      //           //   'Agregado/s!',
+      //           //   'El Proceso se Realizó Correctamente.',
+      //           //   'success'
+      //           // )
+      //           console.log('No consumible guardado.');
+      //       },
+      //       error: function() {
+      //         Swal.fire(
+      //                       'Oops...',
+      //                         'Algo salio mal!',
+      //                         'error'
+      //                               )
+      //       },
+      //       complete: function() {
+      //         wc();
+      //       }
+      //     });
+  // }
 
 
   initForm();
+  // guarda nevo destino externo
   function guardarDestino() {
-
       var formData = new FormData($('#frm-destino')[0]);
       $.ajax({
           type: 'POST',
@@ -315,30 +301,60 @@
           contentType: false,
           processData: false,
           success: function(rsp) {
-              if (rsp.status) {
-                //  mdlClose('mdl-destino');
-              $('#mdl-destino').modal('hide');
-                  Swal.fire(
-                      'Guardado!',
-                      'El destino se Guardo Correctamente.',
-                      'success'
-                    );
-                  $('#frm-destino')[0].reset();
-                  $('#destino').load("#destino");
-                //linkTo();
-              } else {
-                Swal.fire(
-                    'Oops...',
-                      'Algo salio mal!',
-                      'error'
-                            )
-              }
 
+                    if (rsp.status) {
+
+                      $('#mdl-destino').modal('hide');
+                        Swal.fire(
+                            'Guardado!',
+                            'El destino se Guardo Correctamente.',
+                            'success'
+                          );
+                        $('#frm-destino')[0].reset();
+                        destinoExterno();
+                    } else {
+                      Swal.fire(
+                          'Oops...',
+                            'Algo salio mal!',
+                            'error'
+                          )
+                    }
+          },
+          error: function(rsp) {
+                    Swal.fire(
+                            'Error...',
+                              'Hubo un error al guardar el nuevo destino...',
+                              'error'
+                                    );
+                      $('#mdl-destino').modal('hide');
+                      console.log(rsp.msj);
+          },
+          complete: function() {
+            //   wc();
+          }
+      });
+  }
+
+  // recarga select de destinos externos
+  function destinoExterno() {
+    $.ajax({
+          type: 'POST',
+          dataType: 'JSON',
+          url: '<?php echo base_url(PRD) ?>general/Noconsumible/seleccionarDestino',
+          data:{},
+          success: function(resp) {
+
+                $('#destino').empty();
+                $('#destino').append('<option value="" disabled selected>-Seleccione opcion-</option>');
+                for(var i=0; i<resp.length; i++)
+                {
+                    $('#destino').append("<option value='" + resp[i].tabl_id + "'>" +resp[i].valor+"</option");
+                }
           },
           error: function(rsp) {
             Swal.fire(
-                    'Oops...',
-                      'Algo salio mal!',
+                    'Error ...',
+                      'Hubo un error alguardar el nuevo destino...',
                       'error'
                             );
               $('#mdl-destino').modal('hide');
@@ -349,4 +365,5 @@
           }
       });
   }
+  
 </script>

@@ -148,10 +148,29 @@ class Camion extends CI_Controller
         echo json_encode($rsp);
     }
 
+		/**
+		* Guarda salida de camion a algun deposito interno o Salida al exterior
+		* @param array con datos de salida
+		* @return array con respuesta de servicio
+		*/
     public function guardarSalida()
     {
-        $data = $this->input->post();
+        $data = $this->input->post('data');
+				$noco = $this->input->post('datosTabla');
         $res = $this->Camiones->guardarSalida($data);
+				$res['status'] = true;
+				if ($res['status']) {
+
+						foreach ($noco as $value) {
+							$codigo[0] = $value['codigo'];
+							$destino = $value['destino'];
+							$depo_id = "";
+							$rsp =  $this->Noconsumibles->movimientoNoConsumibles($codigo, 'EN_TRANSITO', $depo_id, $destino);
+						}
+				}else{
+						log_message('ERROR','#TRAZA|TRAZASOFT|CAMION|guardarSalida() >> ERROR: fallo el guardarSalida($data)');
+				}
+
         echo json_encode($res);
     }
 

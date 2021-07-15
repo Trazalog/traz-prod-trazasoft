@@ -212,7 +212,11 @@ class Camiones extends CI_Model
 
         return $rsp;
     }
-
+		/**
+		* Guarda salida de camion a algun deposito interno o Salida al exterior
+		* @param array con datos de salida
+		* @return array con respuesta de servicio
+		*/
     public function guardarSalida($data)
     {
         $post['_put_camiones_salida'] = array(
@@ -222,7 +226,7 @@ class Camiones extends CI_Model
             'bruto' => strval($data['bruto']),
             'neto' => strval($data['neto']),
         );
-        return wso2(REST_LOG . '/camiones/salida', 'PUT', $post);
+        //return wso2(REST_LOG . '/camiones/salida', 'PUT', $post);
     }
 
     public function estado($patente, $estado, $estadoFinal)

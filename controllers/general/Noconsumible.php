@@ -75,7 +75,7 @@ class Noconsumible extends CI_Controller
      
     }
     
-    
+
     public function guardarDestino()
     {
 
@@ -110,7 +110,7 @@ class Noconsumible extends CI_Controller
 
 
     public function guardarMovimientoEntrada()
-  { 
+  {
     $datos = $this->input->post('datos');
 
     $tableData = stripcslashes($datos);
@@ -120,7 +120,7 @@ class Noconsumible extends CI_Controller
       foreach ($tableDataArray['datos'] as $key => $x) {
         //FIXME: ACA FATA EMPR_ID
         $data[]['_put_noconsumible_estado'] = array(
-  
+
           'codigo' => $tableDataArray['datos'][$key]['codigo'],
           'estado' => 'ACTIVO',
           'usuario_app' => 'rodotest'
@@ -147,47 +147,51 @@ class Noconsumible extends CI_Controller
 
 
 
-    public function guardarMovimientoSalida()
-    {
-      $data = json_decode($this->input->post('datos'));
+    // public function guardarMovimientoSalida()
+      // {
+      //   $data = $this->input->post('datosTabla');
+      //   //$data = json_decode($this->input->post('datosTabla'));
+
+      //   foreach ($data as $value) {
+      //     $codigo[0] = $value['codigo'];
+      //     $destino = $value['destino'];
+      //     $depo_id = "";
+      //     $rsp =  $this->Noconsumibles->movimientoNoConsumibles($codigo, 'EN_TRANSITO', $depo_id, $destino);
+      //   }
+
+      //   return;
+
+      //   $tableData = stripcslashes($datos);
+      //   $tableDataArray['datos'] = json_decode($tableData, TRUE);
 
 
-      foreach ($data as $value) {
-       
-        $rsp =  $this->Noconsumibles->movimientoNoConsumibles($value['codigo'], 'EN_TRANSITO', null, $value['desti_id']);
-      }
+      //   foreach ($tableDataArray['datos'] as $key => $x) {
+    
+      //     $data[]['_put_noconsumible_estado'] = array(
+      //        //FIXME: ACA FATA EMPR_ID
+      //       'codigo' => $tableDataArray['datos'][$key]['codigo'],
+      //       'estado' => 'EN_TRANSITO',
+      //       'usuario_app' => userNick()
+      //                );
 
-      return;
+      //     $data[]['_post_noconsumibles_movimientos'] = array(
 
-    $tableData = stripcslashes($datos);
-    $tableDataArray['datos'] = json_decode($tableData, TRUE);
+      //       'estado' => 'EN_TRANSITO',
+      //       'usuario_app' => userNick(),
+      //       'noco_id' => $tableDataArray['datos'][$key]['codigo'],
+      //       'depo_id' => $tableDataArray['datos'][$key]['establecimiento'],
+      //       'dest_id' => $tableDataArray['datos'][$key]['destino']
+
+      //               );
+
+      //       $rsp =  $this->Noconsumibles->guardarMovimientoSalida($data);
+      //       $data = [];
+
+      //     }
+      //     echo json_encode($rsp);
+    // }
 
 
-      foreach ($tableDataArray['datos'] as $key => $x) {
-  
-        $data[]['_put_noconsumible_estado'] = array(
-           //FIXME: ACA FATA EMPR_ID
-          'codigo' => $tableDataArray['datos'][$key]['codigo'],
-          'estado' => 'EN_TRANSITO',
-          'usuario_app' => userNick()
-                   );
-
-        $data[]['_post_noconsumibles_movimientos'] = array(
-
-          'estado' => 'EN_TRANSITO',
-          'usuario_app' => userNick(),
-          'noco_id' => $tableDataArray['datos'][$key]['codigo'],
-          'depo_id' => $tableDataArray['datos'][$key]['establecimiento'],
-          'dest_id' => $tableDataArray['datos'][$key]['destino']
-
-                  );
-
-          $rsp =  $this->Noconsumibles->guardarMovimientoSalida($data);
-          $data = [];
-
-        }
-        echo json_encode($rsp);
-    }
 
     /**
     * Levanta pantalla recepcion no consumible
@@ -269,5 +273,13 @@ class Noconsumible extends CI_Controller
     }
 
 
-
+    /**
+    * Trae listado de Destinos Externos para llenar selectores
+    * @param
+    * @return array con listado de destinos externos
+    */
+    function seleccionarDestino(){
+        $resp = $this->Noconsumibles->seleccionarDestino()['data'];
+        echo json_encode($resp);
+    }
 }

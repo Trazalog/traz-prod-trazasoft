@@ -32,7 +32,11 @@ class Noconsumibles extends CI_Model
         return wso2($url);
 
     }
-
+		/**
+		* Devuelve listado de Destinos externos
+		* @param
+		* @return 
+		*/
     public function seleccionarDestino()
     {
         $resource = '/tablas/destinos_no_consumibles';
@@ -43,11 +47,9 @@ class Noconsumibles extends CI_Model
 // Listar Tipos de No Consumibles
     public function ListarNoConsumible()
     {
-        #HARCODE .empresa()
         $resource = REST_PRD_NOCON . "/noConsumibles/porEstado/TODOS/porEmpresa/" . empresa();
         $url = $resource;
         return wso2($url);
-
     }
 
     public function editarNoConsumible($data)
@@ -56,7 +58,11 @@ class Noconsumibles extends CI_Model
         $rsp = $this->rest->callApi('PUT', $url, $data);
         return $rsp;
     }
-
+		/**
+		* Guarda destino externo nuevo
+		* @param array con datos del nuevo destino esterno
+		* @return array respuesta de servicio
+		*/
     public function guardarDestino($data)
     {
         $url = REST_CORE . '/tablas';
@@ -93,12 +99,12 @@ class Noconsumibles extends CI_Model
     {
         return requestBox(REST_PRD_NOCON . '/', $data);
     }
-//FIXME: ACA MANDAR A GUARDAR A movimientoNoConsumibles()
+//FIXME: BORRAR...! ACA MANDA A GUARDAR A movimientoNoConsumibles()
 // // Guardar Movimiento Salida No Consumibles
-    public function guardarMovimientoSalida($data)
-    {
-        return requestBox(REST_PRD_NOCON . '/', $data);
-    }
+    // public function guardarMovimientoSalida($data)
+    // {
+    //     return requestBox(REST_PRD_NOCON . '/', $data);
+    // }
 
     public function obtenerXEstado($emprId, $estado)
     {
@@ -184,9 +190,9 @@ class Noconsumibles extends CI_Model
 		* @param
 		* @return
 		*/
-		function movimientoNoConsumibles($noco_list, $estado, $depo_id = null, $dest_id = null)
+		function movimientoNoConsumibles($noco_list, $estado, $depo_id, $destino)
 		{
-			$algo = json_decode($noco_list);
+
       foreach ($noco_list as $nc) {
 
 					$data['_put_noconsumible_estado'] = array(
@@ -201,7 +207,7 @@ class Noconsumibles extends CI_Model
 								'estado' => $estado,
 								'noco_id' => $nc,
 								'usuario_app' => userNick(),
-								'dest_id' => '',
+								'dest_id' => $destino,
 								'depo_id' => $depo_id,
 								'empr_id' => empresa()
 					);
@@ -209,19 +215,20 @@ class Noconsumibles extends CI_Model
 
 					log_message('DEBUG','#TRAZA|TRAZASOFT|GENERAL|NOCONSUMIBLES|movimientoNoConsumibles($noco_list, $depo_id, $estado) $datos:  >> '.$datos);
 
-					$aux = $this->rest->callAPI("POST", REST_PRD_NOCON ."/request_box", $datos);
-					$aux =json_decode($aux["data"]);
-					$monc_id = $aux->DATA_SERVICE_REQUEST_BOX_RESPONSE->respuesta->monc_id;
+					// $aux = $this->rest->callAPI("POST", REST_PRD_NOCON ."/request_box", $datos);
+					// $aux =json_decode($aux["data"]);
+					// $monc_id = $aux->DATA_SERVICE_REQUEST_BOX_RESPONSE->respuesta->monc_id;
 
 					if ($monc_id == null) {
 						log_message('ERROR','#TRAZA|TRAZASOFT|GENERAL|NOCONSUMIBLES|movimientoNoConsumibles($noco_list, $depo_id, $estado) >> ERROR NO SE PUDO ASOCIAR NO CONSUMIBLES');
 						break 1;
 					}
-
+					// limpio array para reutilizar
 					unset($datos);
 					$datos = array();
       }
 
 			return $monc_id;
 		}
+
 }

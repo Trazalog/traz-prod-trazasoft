@@ -521,8 +521,9 @@ class Etapa extends CI_Controller
 								$this->load->model('general/Noconsumibles');
 								$depo_id = $this->input->post('depo_id');
 								$estado = $this->input->post('estado');
+								$destino = "";
 
-								$respNoco = $this->Noconsumibles->movimientoNoConsumibles($noco_list, $estado, $depo_id);
+								$respNoco = $this->Noconsumibles->movimientoNoConsumibles($noco_list, $estado, $depo_id, $destino);
 
 								if ($respNoco == null) {
 										# si la respuesta es negativa corto la ejecucion
@@ -685,4 +686,3 @@ class Etapa extends CI_Controller
         echo json_encode($rsp);
     }
 }
-log_message('DEBUG','#TRAZA|| >> '.json_encode());
