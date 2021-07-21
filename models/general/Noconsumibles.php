@@ -9,13 +9,13 @@ class Noconsumibles extends CI_Model
         parent::__construct();
     }
 
-    // Guardar No Consumibles
+    // Guardar No Consumibles nuevos
     public function guardarNoConsumible($data)
     {
         return requestBox(REST_PRD_NOCON . '/', $data);
     }
 
-// // Listar No Consumibles
+ 		// Listar No Consumibles
     public function tipoNoConsumible()
     {
         $resource = '/tablas/tipos_no_consumibles';
@@ -23,16 +23,23 @@ class Noconsumibles extends CI_Model
         return wso2($url);
     }
 
-// Listar Establecimiento
+		/**
+		* Devuelve listado de Establecimientos por Empresa
+		* @param
+		* @return array respuesta de servicio
+		*/
     public function tipoEstablecimiento()
     {
-        #HARCODE
         $resource = '/establecimientos/empresa/' . empresa();
         $url = REST_ALM . $resource;
         return wso2($url);
-
     }
 
+		/**
+		* Devuelve listado de Destinos externos
+		* @param
+		* @return array con listado de destinos externos
+		*/
     public function seleccionarDestino()
     {
         $resource = '/tablas/destinos_no_consumibles';
@@ -40,14 +47,12 @@ class Noconsumibles extends CI_Model
         return wso2($url);
     }
 
-// Listar Tipos de No Consumibles
+		// Listar Tipos de No Consumibles
     public function ListarNoConsumible()
     {
-        #HARCODE .empresa()
         $resource = REST_PRD_NOCON . "/noConsumibles/porEstado/TODOS/porEmpresa/" . empresa();
-        $url = $resource; //REST_PRD_NOCON .
+        $url = $resource;
         return wso2($url);
-
     }
 
     public function editarNoConsumible($data)
@@ -56,7 +61,11 @@ class Noconsumibles extends CI_Model
         $rsp = $this->rest->callApi('PUT', $url, $data);
         return $rsp;
     }
-
+		/**
+		* Guarda destino externo nuevo
+		* @param array con datos del nuevo destino externo
+		* @return array respuesta de servicio
+		*/
     public function guardarDestino($data)
     {
         $url = REST_CORE . '/tablas';
@@ -71,32 +80,21 @@ class Noconsumibles extends CI_Model
         return wso2($url, 'DELETE', $codigo);
     }
 
-// Listar trazabilidad No Consumibles
+		// Listar trazabilidad No Consumibles
     public function ListarTrazabilidadNoConsumible($codigo)
     {
-
-        $resource = "/noConsumible/trazabilidad/porCodigo/$codigo";
+				$empr_id = empresa();
+        $resource = '/noConsumible/trazabilidad/porCodigo/'.$codigo.'/porEmpresa/'.$empr_id;
         $url = REST_PRD_NOCON . $resource;
         return wso2($url);
     }
 
     public function buscarNoConsumible($codigo)
     {
-        $resource = "/noConsumible/porCodigo/$codigo";
+				$empr_id = empresa();
+        $resource = '/noConsumible/porCodigo/'.$codigo.'/porEmpresa/'.$empr_id;
         $url = REST_PRD_NOCON . $resource;
         return wso2($url);
-    }
-
-// // Guardar Movimiento Entrada No Consumibles
-    public function guardarMovimientoEntrada($data)
-    {
-        return requestBox(REST_PRD_NOCON . '/', $data);
-    }
-
-// // Guardar Movimiento Salida No Consumibles
-    public function guardarMovimientoSalida($data)
-    {
-        return requestBox(REST_PRD_NOCON . '/', $data);
     }
 
     public function obtenerXEstado($emprId, $estado)
@@ -111,12 +109,18 @@ class Noconsumibles extends CI_Model
     */
     function consultarInfo($codigo){
         log_message('DEBUG','#TRAZA|TRAZ-PROD-TRAZASOFT|NOCONSUMIBLES  $codigo >> '.json_encode($codigo));
-        $url = REST_PRD_NOCON.'/noConsumible/porCodigo/'.$codigo;
-        $aux = $this->rest->callAPI("GET",$url);
+				$empr_id = empresa();
+				$codigo = urlencode($codigo);
+				$url = REST_PRD_NOCON.'/noConsumible/porCodigo/'.$codigo.'/porEmpresa/'.$empr_id;
+
+				$aux = $this->rest->callAPI("GET",$url);
         $aux =json_decode($aux["data"]);
         return $aux->noConsumible;
     }
 
+		// actualizar estado en nco.no_consumibles
+		// insertar movimiento en nco.movimientos_no_consumibles
+		// poner la fecha de liberación en nco.no_consumibles_lotes usando /noConsumible/lote/liberar
     /**
 		* Libera No consumibles
 		* @param array con datos de los no consumibles a liberar
@@ -131,9 +135,10 @@ class Noconsumibles extends CI_Model
 
             $noCons[$key]['fec_liberacion'] = $hoy;
             $noCons[$key]['usuario_app'] = $user;
+						$noCons[$key]['empr_id'] = empresa();
             $resp = $this->updateTabla($noCons[$key]);
             if (!$resp) {
-                log_message('ERROR','#TRAZA|TRAZ-PROD-TRRAZASOFT|NOCONSUMIBLES|liberarNoConsumible($noCons) >> ERROR en update de tabla');
+                log_message('ERROR','#TRAZA|TRAZ-PROD-TRAZASOFT|GENERAL|NOCONSUMIBLES|liberarNoConsumible($noCons) >> ERROR en update de tabla');
                 return $resp;
             }
         }
@@ -144,7 +149,7 @@ class Noconsumibles extends CI_Model
     /**
     * Invoca servicio de actualizacion tabla
     * @param array con datos a actualizar
-    * @return boolean true  alse respuesta del servicio
+    * @return boolean true - false respuesta del servicio
     */
     function updateTabla($noCons){
 
@@ -154,4 +159,65 @@ class Noconsumibles extends CI_Model
         $aux =json_decode($aux["status"]);
         return $aux;
     }
+
+		/**
+		* Actualiza estado
+		* @param array con datos a actualizar
+		* @return boolean respuesta de servicio
+		*/
+		function cambioEstado($data)
+		{
+			$post['_put_noconsumible_estado'] = $data;
+			log_message('DEBUG','#TRAZA|NOSCONSUMIBLES|cambioEstado($data) >> $data: '.json_encode($data));
+			$aux = $this->rest->callAPI("PUT", REST_PRD_NOCON."/noConsumible/estado", $post);
+			$aux =json_decode($aux["status"]);
+			return $aux;
+		}
+
+		/**
+		* Guardar Movimiento No consmible Generico
+		* (guarda movimiento de ASOCIACIÓN/ENTRADA/SALIDA)
+		* guarda trazabilidad de no cons y cambia estado
+		* segun lo enviado en array y variable estado
+		* @param
+		* @return
+		*/
+		function movimientoNoConsumibles($noco_list, $estado, $depo_id, $destino)
+		{
+      foreach ($noco_list as $nc) {
+
+					$data['_put_noconsumible_estado'] = array(
+								'estado' => $estado,
+								'usuario_app' => userNick(),
+								'codigo' => $nc,
+								'empr_id' => empresa()
+					);
+					$data['_post_noconsumibles_movimientos'] = array(
+								'estado' => $estado,
+								'noco_id' => $nc,
+								'usuario_app' => userNick(),
+								'dest_id' => $destino,
+								'depo_id' => $depo_id,
+								'empr_id' => empresa()
+					);
+					$datos['request_box'][] = $data;
+
+					log_message('DEBUG','#TRAZA|TRAZASOFT|GENERAL|NOCONSUMIBLES|movimientoNoConsumibles($noco_list, $depo_id, $estado) $datos:  >> '.$datos);
+
+					$aux = $this->rest->callAPI("POST", REST_PRD_NOCON ."/request_box", $datos);
+					$aux =json_decode($aux["data"]);
+					$monc_id = $aux->DATA_SERVICE_REQUEST_BOX_RESPONSE->respuesta->monc_id;
+
+					if ($monc_id == null) {
+						log_message('ERROR','#TRAZA|TRAZASOFT|GENERAL|NOCONSUMIBLES|movimientoNoConsumibles($noco_list, $depo_id, $estado) >> ERROR NO SE PUDO ASOCIAR NO CONSUMIBLES');
+						break 1;
+					}
+					// limpio array para reutilizar
+					unset($datos);
+					$datos = array();
+      }
+
+			return $monc_id;
+		}
+
 }

@@ -1,14 +1,14 @@
 <div class="box box-primary tag-descarga">
     <div class="box-header with-border">
-        <div class="box-tools pull-right">
+        <!-- <div class="box-tools pull-right">
             <button type="button" class="btn btn-box-tool" id="minimizar_vale_entrada" data-widget="collapse"
                 data-toggle="tooltip" title="" data-original-title="Collapse">
                 <i class="fa fa-minus"></i></button>
             <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title=""
                 data-original-title="Remove">
                 <i class="fa fa-times"></i></button>
-        </div>
-        <h4 class="box-title">Vale de Salida</h4>
+        </div> -->
+        <h4 class="box-title">Salida No Consumibles</h4>
     </div>
     <div class="box-body" id="div_vale_entrada">
     <form class="form-horizontal" id="frm-MovimientoNoConsumible">
@@ -16,21 +16,21 @@
             <div class="col-md-2">
                 <input id="codigoNoCon" name="codigoNoCon" type="text" placeholder="" class="form-control input-md">
             </div>
-            <label for="" class="col-md-2">Establecimiento:</label>
+            <!-- <label for="" class="col-md-2">Establecimiento:</label>
             <div class="col-md-2">
                 <select class="form-control select2 select2-hidden-accesible" id="establecimiento"
-                    name="establecimiento" onchange="selectEstablecimiento()" <?php echo req() ?>>
+                    name="establecimiento" onchange="selectEstablecimiento()" <?php //echo req() ?>>
                     <option value="" disabled selected>- Seleccionar - </option>
                     <?php
-                      if(is_array($tipoEstablecimiento)){
-                      foreach ($tipoEstablecimiento as $i) {
-                      echo "<option value = $i->esta_id>$i->nombre</option>";
-                           }
-                         }
+                      //if(is_array($tipoEstablecimiento)){
+                      //foreach ($tipoEstablecimiento as $i) {
+                      //echo "<option value = $i->esta_id>$i->nombre</option>";
+                        //   }
+                        // }
                       ?>
                 </select>
                 <span id="estabSelected" style="color: forestgreen;"></span>
-            </div>
+            </div> -->
              <label class="col-md-1 control-label" for="destino">Destino:</label>
                 <div class="col-md-2" id='div_destino'>
                     <select name="destino" id="destino" class="form-control">
@@ -38,8 +38,8 @@
                       <?php 
                           if(is_array($destinoNoConsumible)){
                           foreach ($destinoNoConsumible as $i) {
-                          echo "<option value = $i->tabl_id>$i->valor</option>";
-                                }                   
+                          echo "<option value ='".$i->tabl_id."' > $i->valor </option>";
+                                }
                               }
                           ?>
                       </select>
@@ -58,9 +58,9 @@
             <thead>
                 <th></th>
                 <th>Codigo</th>
-                <th>Descripcion</th>
+                <!-- <th>Descripcion</th> -->
                 <th>Fecha de Salida</th>
-                <th>Establecimiento</th>
+                <!-- <th>Establecimiento</th> -->
                 <th>Destino</th>
             </thead>
             <tbody>
@@ -131,44 +131,37 @@
 
 <script>
 
-
-function agregarFilaNoCon() {
-   
-
+  function agregarFilaNoCon() {
+    debugger;
     var codigo = $('#codigoNoCon').val();
-    var establecimiento = $('#establecimiento').val();
-    var estabSelected =  $('#estabSelected').text();
     var destino = $('#destino').val();
-    var destinoSelected = $('#destino').text();
-
+    var destinoSelected = $('#destino option:selected').text();
 
     datos = new FormData($('frm-MovimientoNoConsumible')[0]);
     datos = formToObject(datos);
 
     var objFecha = new Date();
-
     var dia  = objFecha.getDate();
     var mes  = objFecha.getMonth();
     var anio = objFecha.getFullYear();
 
     html = '<tr>' +
-      '<td><a type = "button" class = "del pull-right" style = "cursor: pointer;"><i class = "fa fa-times text-danger"></i></a></td>' +
-      '<td value=' + codigo + '>' + codigo + '</td>' +
-      '<td></td>' +
+      '<td><i class = "fa fa-times text-danger"></i></td>' +
+      '<td value="' + codigo + '">' + codigo + '</td>' +
       '<td>'+  dia + "/" + mes + "/" + anio  +'</td>' +
-      '<td value=' + establecimiento + '>' + $('#estabSelected').text() + '</td>' +
-      '<td value=' + destino + '>' + destino + '</td>' +
-      '</tr>';
+      '<td value="' + destino + '">' + destinoSelected + '</td>' +
+    '</tr>';
+
     $('#tablaNoCon tbody').append(html);
     $('#frm-MovimientoNoConsumible')[0].reset();
   }
- //Quitar fila de tabla
- $("#tablaNoCon").on("click", ".del", function() {
+  //Quitar fila de tabla
+  $("#tablaNoCon").on("click", ".del", function() {
     $(this).parents("tr").remove();
   });
 
 
-function selectEstablecimiento() {
+  function selectEstablecimiento() {
     var esta_id = $('#establecimiento').val();
     $('#estabSelected').text('');
     $('#deposSelected').text('');
@@ -238,110 +231,139 @@ function selectEstablecimiento() {
     })
   }
 
-  function selectDestino() {
-    selectSearch('destino', 'recipSelected');
-  }
+  // function selectDestino() {
+  //   selectSearch('destino', 'recipSelected');
+  // }
 
   /* selectSearch: busca en un select un valor selecionado y lo coloca en el "spanSelected" */
-  function selectSearch(select, span) {
-    var option = $('#' + select).val();
-    $('#' + select).find('option').each(function() {
-      if ($(this).val() == option) {
-        $('#' + span).text($(this).text());
-      }
-    });
-  }
+  // function selectSearch(select, span) {
+    //   var option = $('#' + select).val();
+    //   $('#' + select).find('option').each(function() {
+    //     if ($(this).val() == option) {
+    //       $('#' + span).text($(this).text());
+    //     }
+    //   });
+  // }
 
 
 
-function guardarSalidaNoCon() {
-    //Datos de la tabla de recipientes
-    var datosTabla = new Array();
-    $('#tablaNoCon tr').each(function(row, tr) {
-      datosTabla[row] = {
-        "codigo": $(tr).find('td:eq(1)').attr('value'),     
-        "establecimiento": $(tr).find('td:eq(4)').attr('value'),
-        "destino": $(tr).find('td:eq(5)').attr('value')
-       
-      }
-    });
-    datosTabla.shift(); //borra encabezado de la tabla o primera fila
-    var datos = JSON.stringify(datosTabla);
-     console.log('datos: ' + datos);
-    //wo();
-    $.ajax({
-      type: 'POST',
-      url: '<?php echo base_url(PRD) ?>general/Noconsumible/guardarMovimientoSalida',
-      data: {
-        datos: datos
-      },
-      success: function(rsp) {
-          //  Swal.fire(
-          //   'Agregado/s!',
-          //   'El Proceso se Realizó Correctamente.',
-          //   'success'
-          // )
-          console.log('No consumible guardado.');
-      },
-      error: function() {
-        Swal.fire(
-                      'Oops...',
-                        'Algo salio mal!',
-                        'error'
-                              )
-      },
-      complete: function() {
-        wc();
-      }
-    });
-  }
+  // function guardarSalidaNoCon() {
+      //     //Datos de la tabla de recipientes
+      //     var datosTabla = new Array();
+      //     $('#tablaNoCon tr').each(function(row, tr) {
+      //       datosTabla[row] = {
+      //         "codigo": $(tr).find('td:eq(1)').attr('value'),
+      //         //"establecimiento": $(tr).find('td:eq(4)').attr('value'),
+      //         "destino": $(tr).find('td:eq(3)').attr('value')
+      //       }
+      //     });
+
+      //     console.log('datos: ' + datos);
+      //     //wo();
+      //     $.ajax({
+      //       type: 'POST',
+      //       url: '<?php //echo base_url(PRD) ?>general/Noconsumible/guardarMovimientoSalida',
+      //       data: {
+      //         datosTabla
+      //       },
+      //       success: function(rsp) {
+      //           //  Swal.fire(
+      //           //   'Agregado/s!',
+      //           //   'El Proceso se Realizó Correctamente.',
+      //           //   'success'
+      //           // )
+      //           console.log('No consumible guardado.');
+      //       },
+      //       error: function() {
+      //         Swal.fire(
+      //                       'Oops...',
+      //                         'Algo salio mal!',
+      //                         'error'
+      //                               )
+      //       },
+      //       complete: function() {
+      //         wc();
+      //       }
+      //     });
+  // }
 
 
   initForm();
-    function guardarDestino() {
+  // guarda nevo destino externo
+  function guardarDestino() {
+      var formData = new FormData($('#frm-destino')[0]);
+      $.ajax({
+          type: 'POST',
+          dataType: 'JSON',
+          url: '<?php echo base_url(PRD) ?>general/Noconsumible/guardarDestino',
+          data: formData,
+          cache: false,
+          contentType: false,
+          processData: false,
+          success: function(rsp) {
 
-        var formData = new FormData($('#frm-destino')[0]);
-        $.ajax({
-            type: 'POST',
-            dataType: 'JSON',
-            url: '<?php echo base_url(PRD) ?>general/Noconsumible/guardarDestino',
-            data: formData,
-            cache: false,
-            contentType: false,
-            processData: false,
-            success: function(rsp) {
-                if (rsp.status) {
-                  //  mdlClose('mdl-destino');
-                $('#mdl-destino').modal('hide');
+                    if (rsp.status) {
+
+                      $('#mdl-destino').modal('hide');
+                        Swal.fire(
+                            'Guardado!',
+                            'El destino se Guardo Correctamente.',
+                            'success'
+                          );
+                        $('#frm-destino')[0].reset();
+                        destinoExterno();
+                    } else {
+                      Swal.fire(
+                          'Oops...',
+                            'Algo salio mal!',
+                            'error'
+                          )
+                    }
+          },
+          error: function(rsp) {
                     Swal.fire(
-                        'Guardado!',
-                        'El destino se Guardo Correctamente.',
-                        'success'
-                      );
-                    $('#frm-destino')[0].reset();
-                    $('#destino').load("#destino");
-                  //linkTo();
-                } else {
-                  Swal.fire(
-                      'Oops...',
-                        'Algo salio mal!',
-                        'error'
-                              )
-                }
+                            'Error...',
+                              'Hubo un error al guardar el nuevo destino...',
+                              'error'
+                                    );
+                      $('#mdl-destino').modal('hide');
+                      console.log(rsp.msj);
+          },
+          complete: function() {
+            //   wc();
+          }
+      });
+  }
 
-            },
-            error: function(rsp) {
-              Swal.fire(
-                      'Oops...',
-                        'Algo salio mal!',
-                        'error'
-                              );
-                $('#mdl-destino').modal('hide');
-                console.log(rsp.msj);
-            },
-            complete: function() {
-             //   wc();
-            }
-        });
-    }
+  // recarga select de destinos externos
+  function destinoExterno() {
+    $.ajax({
+          type: 'POST',
+          dataType: 'JSON',
+          url: '<?php echo base_url(PRD) ?>general/Noconsumible/seleccionarDestino',
+          data:{},
+          success: function(resp) {
+
+                $('#destino').empty();
+                $('#destino').append('<option value="" disabled selected>-Seleccione opcion-</option>');
+                for(var i=0; i<resp.length; i++)
+                {
+                    $('#destino').append("<option value='" + resp[i].tabl_id + "'>" +resp[i].valor+"</option");
+                }
+          },
+          error: function(rsp) {
+            Swal.fire(
+                    'Error ...',
+                      'Hubo un error alguardar el nuevo destino...',
+                      'error'
+                            );
+              $('#mdl-destino').modal('hide');
+              console.log(rsp.msj);
+          },
+          complete: function() {
+            //   wc();
+          }
+      });
+  }
+  
 </script>

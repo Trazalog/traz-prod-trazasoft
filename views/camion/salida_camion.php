@@ -97,140 +97,159 @@
                         <tbody>
                         </tbody>
                     </table>
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label>Obsevación:</label>
                         <textarea class='form-control' rows='3' placeholder='Ingrese Texto...'></textarea>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </form>
     </div>
     <?php 
-    $this->load->view('NoConsumible/SalidaNoConsumible');
-            ?>
+    	$this->load->view('NoConsumible/SalidaNoConsumible');
+    ?>
     <div class="box-footer">
-        <button class="btn btn-success" style="float:right" onclick="guardarSalidaNoCon();validarSalida()">Guardar Salida</button>
+				<button class="btn btn-success" style="float:right" onclick="validarSalida()">Guardar</button>
     </div>
 </div>
 
-<!-- </div> -->
+
 <script>
-var $tLotes = $('#tbl-lotes').find('tbody');
-$('.date').datepicker({
-    dateFormat: 'dd-mm-yy'
-});
-$('#patente').keyup(function(e) {
-    this.value = this.value.replace(' ', '');
-    if (e.keyCode === 13) {
-        if (this.value == null || this.value == '') return;
-        var patente = this.value;
-        console.log($('#esta_id').val());
-        if ($('#esta_id').val() && $('#esta_id').val() != "0") obtenerInfoCamion(patente);
-        else {
-            alert('Debes seleccionar un establecimineto origen');
-        }
-    }
-});
+	var $tLotes = $('#tbl-lotes').find('tbody');
+	$('.date').datepicker({
+			dateFormat: 'dd-mm-yy'
+	});
+	// al ingresar patente busca info de camion ingresado (obtenerInfoCamion(patente))
+		$('#patente').keyup(function(e) {
+				this.value = this.value.replace(' ', '');
+				if (e.keyCode === 13) {
+						if (this.value == null || this.value == '') return;
+						var patente = this.value;
+						console.log($('#esta_id').val());
+						if ($('#esta_id').val() && $('#esta_id').val() != "0") obtenerInfoCamion(patente);
+						else {
+								alert('Debes seleccionar un establecimineto origen');
+						}
+				}
+		});
+	// obtiene los lotes cargados en camion seleccionado
+		function obtenerLotesCamion(patente) {
+				$tLotes.empty();
+				wo();
+				$.ajax({
+						type: 'POST',
+						dataType: 'JSON',
+						url: '<?php echo base_url(PRD) ?>general/Lote/obtenerLotesCamion/false',
+						data: {
+								patente
+						},
+						success: function(rsp) {
+								if (!rsp.data) {
+										alert('No existen Lotes Asociados');
+										return;
+								}
+								rsp.data.forEach(function(e) {
+										$tLotes.append(
+												`<tr><td>${e.barcode}<br><cite>${e.descripcion}</cite></td><td>${e.cantidad}(${e.um})</td></tr>`
+												);
+								});
+						},
+						error: function(rsp) {
+								alert('No hay Lotes Asociados');
+						},
+						complete: function() {
+								wc();
+						}
+				});
+		}
+	// suma tara con peso neto de carga
+		$('#bruto').keyup(function() {
+				if (!this.value || this.value == "" || (parseFloat(this.value) <= parseFloat($('#tara').val()))) {
+						$('#neto').val(0);
+						return;
+				}
+				$('#neto').val(parseFloat(this.value) - parseFloat($('#tara').val()));
+		})
+	// busca info del camion y llama a buscar los lotes cargados (obtenerLotesCamion(patente))
+	function obtenerInfoCamion(patente) {
+			var estado = 'CARGADO|EN CURSO|CARGADO|DESCARGADO';
+			wo();
+			$.ajax({
+					type: 'POST',
+					dataType: 'JSON',
+					url: '<?php echo base_url(PRD) ?>general/Camion/obtenerInfo/' + patente,
+					data:{estado},
+					success: function(rsp) {
+							console.log(rsp);
+							if (rsp) {
+									fillForm(rsp);
+									if(rsp.estado == 'CARGADO'){
+											$('#bruto').val(0);
+											$('#neto').val(0);
+									}
+									$('#bruto').attr('readonly', rsp.estado == 'DESCARGADO');
+									obtenerLotesCamion(patente)
+							} else {
+									alert('Camión no registrado')
+							}
+					},
+					error: function(rsp) {
+							alert('Error');
+					},
+					complete: function() {
+							wc();
+					}
+			});
+	}
+	// valida campos vacios y llama a guardar la salida
+	function validarSalida(){
 
-function obtenerLotesCamion(patente) {
-    $tLotes.empty();
-    wo();
-    $.ajax({
-        type: 'POST',
-        dataType: 'JSON',
-        url: '<?php echo base_url(PRD) ?>general/Lote/obtenerLotesCamion/false',
-        data: {
-            patente
-        },
-        success: function(rsp) {
-            if (!rsp.data) {
-                alert('No existen Lotes Asociados');
-                return;
-            }
-            rsp.data.forEach(function(e) {
-                $tLotes.append(
-                    `<tr><td>${e.barcode}<br><cite>${e.descripcion}</cite></td><td>${e.cantidad}(${e.um})</td></tr>`
-                    );
-            });
-        },
-        error: function(rsp) {
-            alert('No hay Lotes Asociados');
-        },
-        complete: function() {
-            wc();
-        }
-    });
-}
+			if(!$('#destino_esta_id').val()){
+				conf(guardarSalida, false, 'No se ha seleccionado destino','El camión se pondrá en estado finalizado');
+			}else{
+					guardarSalida();
+			}
 
-$('#bruto').keyup(function() {
-    if (!this.value || this.value == "" || (parseFloat(this.value) <= parseFloat($('#tara').val()))) {
-        $('#neto').val(0);
-        return;
-    }
-    $('#neto').val(parseFloat(this.value) - parseFloat($('#tara').val()));
-})
+	}
+	// guarda la salida de camion y los no consumibles asociados
+	var guardarSalida = function() {
 
-function obtenerInfoCamion(patente) {
-    var estado = 'CARGADO|EN CURSO|CARGADO|DESCARGADO';
-    wo();
-    $.ajax({
-        type: 'POST',
-        dataType: 'JSON',
-        url: '<?php echo base_url(PRD) ?>general/Camion/obtenerInfo/' + patente,
-        data:{estado},
-        success: function(rsp) {
-            console.log(rsp);
-            if (rsp) {
-                fillForm(rsp);
-                if(rsp.estado == 'CARGADO'){
-                    $('#bruto').val(0);
-                    $('#neto').val(0);
-                 }
-                $('#bruto').attr('readonly', rsp.estado == 'DESCARGADO');
-                obtenerLotesCamion(patente)
-            } else {
-                alert('Camión no registrado')
-            }
-        },
-        error: function(rsp) {
-            alert('Error');
-        },
-        complete: function() {
-            wc();
-        }
-    });
-}
+			// Noconsumibles
+				var datosTabla = new Array();
+				$('#tablaNoCon tr').each(function(row, tr) {
+					datosTabla[row] = {
+						"codigo": $(tr).find('td:eq(1)').attr('value'),
+						//"establecimiento": $(tr).find('td:eq(4)').attr('value'),
+						"destino": $(tr).find('td:eq(3)').attr('value')
+					}
+				});
 
-function validarSalida(){
+			// datos salida camion
+				var data = getForm('#frm-salida-camion');
 
-    if(!$('#destino_esta_id').val()) conf(guardarSalida, false, 'No se ha seleccionado destino','El camión se pondrá en estado finalizado');else{
-        guardarSalida();
-    }
+			wo();
+			$.ajax({
+					type: 'POST',
+					dataType: 'JSON',
+					url: '<?php echo base_url(PRD) ?>general/camion/guardarSalida',
+					data:{datosTabla, data},
+					success: function(res) {
 
-}
-
-var guardarSalida = function() {
-    var data = getForm('#frm-salida-camion');
-    wo();
-    $.ajax({
-        type: 'POST',
-        dataType: 'JSON',
-        url: '<?php echo base_url(PRD) ?>general/camion/guardarSalida',
-        data,
-        success: function(res) {
-            console.log(res);
-            if(res.status){
-                hecho();linkTo();
-            }else{
-                error();
-            }
-        },
-        error: function(res) {
-            error();
-        },
-        complete: function() {
-            wc();
-        }
-    });
-}
+							wc();
+							console.log(res);
+							if(res.status){
+									hecho();linkTo();
+							}else{
+									error();
+							}
+					},
+					error: function(res) {
+						wc();
+							error();
+					},
+					complete: function() {
+							wc();
+					}
+			});
+	}
 </script>
