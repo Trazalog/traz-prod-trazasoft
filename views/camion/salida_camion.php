@@ -97,24 +97,23 @@
                         <tbody>
                         </tbody>
                     </table>
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label>Obsevación:</label>
                         <textarea class='form-control' rows='3' placeholder='Ingrese Texto...'></textarea>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </form>
     </div>
     <?php 
-    $this->load->view('NoConsumible/SalidaNoConsumible');
-            ?>
+    	$this->load->view('NoConsumible/SalidaNoConsumible');
+    ?>
     <div class="box-footer">
-        <!-- <button class="btn btn-success" style="float:right" onclick="guardarSalidaNoCon();validarSalida()">Guardar Salida</button> -->
-				<button class="btn btn-success" style="float:right" onclick="validarSalida()">Guardar Salida</button>
+				<button class="btn btn-success" style="float:right" onclick="validarSalida()">Guardar</button>
     </div>
 </div>
 
-<!-- </div> -->
+
 <script>
 	var $tLotes = $('#tbl-lotes').find('tbody');
 	$('.date').datepicker({
@@ -227,6 +226,7 @@
 
 			// datos salida camion
 				var data = getForm('#frm-salida-camion');
+
 			wo();
 			$.ajax({
 					type: 'POST',
@@ -234,6 +234,8 @@
 					url: '<?php echo base_url(PRD) ?>general/camion/guardarSalida',
 					data:{datosTabla, data},
 					success: function(res) {
+
+							wc();
 							console.log(res);
 							if(res.status){
 									hecho();linkTo();
@@ -242,6 +244,7 @@
 							}
 					},
 					error: function(res) {
+						wc();
 							error();
 					},
 					complete: function() {

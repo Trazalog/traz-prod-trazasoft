@@ -528,7 +528,7 @@ class Etapa extends CI_Controller
 								if ($respNoco == null) {
 										# si la respuesta es negativa corto la ejecucion
 										log_message('ERROR','#TRAZA|TRAZ-PROD-TRAZASOFT|ETAPA|Finalizar() >> ERROR: NO SE PUDO ASOCIAR LOS NO CONSMIBLES.');
-										echo json_encode($rsp = array('mensNoCons'=>'No sepudieron asociar los No Consumibles'));
+										echo json_encode($rsp = array('mensNoCons'=>'No se pudieron asociar los No Consumibles'));
 										return;
 								}
 						}

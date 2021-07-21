@@ -64,6 +64,7 @@
 	function guardarNoConsumible() {
 
 			var formData = new FormData($('#frm-NoConsumible')[0]);
+			wo();
 			$.ajax({
 					type: 'POST',
 					dataType: 'JSON',
@@ -74,8 +75,8 @@
 					processData: false,
 					success: function(rsp) {
 						debugger;
-
-							$("#mdl-NoConsumible").modal("hide");
+						wc();
+						$("#mdl-NoConsumible").modal('hide');
 
 							if (rsp) {
 
@@ -97,6 +98,7 @@
 
 					},
 					error: function(rsp) {
+						wc();
 						$("#mdl-NoConsumible").modal('hide');
 
 							Swal.fire(

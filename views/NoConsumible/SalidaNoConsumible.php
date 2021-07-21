@@ -1,14 +1,14 @@
 <div class="box box-primary tag-descarga">
     <div class="box-header with-border">
-        <div class="box-tools pull-right">
+        <!-- <div class="box-tools pull-right">
             <button type="button" class="btn btn-box-tool" id="minimizar_vale_entrada" data-widget="collapse"
                 data-toggle="tooltip" title="" data-original-title="Collapse">
                 <i class="fa fa-minus"></i></button>
             <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title=""
                 data-original-title="Remove">
                 <i class="fa fa-times"></i></button>
-        </div>
-        <h4 class="box-title">Vale de Salida</h4>
+        </div> -->
+        <h4 class="box-title">Salida No Consumibles</h4>
     </div>
     <div class="box-body" id="div_vale_entrada">
     <form class="form-horizontal" id="frm-MovimientoNoConsumible">
@@ -38,7 +38,7 @@
                       <?php 
                           if(is_array($destinoNoConsumible)){
                           foreach ($destinoNoConsumible as $i) {
-                          echo "<option value = $i->tabl_id>$i->valor</option>";
+                          echo "<option value ='".$i->tabl_id."' > $i->valor </option>";
                                 }
                               }
                           ?>
@@ -132,7 +132,7 @@
 <script>
 
   function agregarFilaNoCon() {
-
+    debugger;
     var codigo = $('#codigoNoCon').val();
     var destino = $('#destino').val();
     var destinoSelected = $('#destino option:selected').text();
@@ -146,10 +146,10 @@
     var anio = objFecha.getFullYear();
 
     html = '<tr>' +
-      '<td><a type = "button" class = "del pull-right" style = "cursor: pointer;"><i class = "fa fa-times text-danger"></i></a></td>' +
-      '<td value=' + codigo + '>' + codigo + '</td>' +
+      '<td><i class = "fa fa-times text-danger"></i></td>' +
+      '<td value="' + codigo + '">' + codigo + '</td>' +
       '<td>'+  dia + "/" + mes + "/" + anio  +'</td>' +
-      '<td value=' + destino + '>' + destinoSelected + '</td>' +
+      '<td value="' + destino + '">' + destinoSelected + '</td>' +
     '</tr>';
 
     $('#tablaNoCon tbody').append(html);

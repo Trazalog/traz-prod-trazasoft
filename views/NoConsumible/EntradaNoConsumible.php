@@ -1,14 +1,14 @@
 <div class="box box-primary tag-descarga">
     <div class="box-header with-border">
-        <div class="box-tools pull-right">
+        <!-- <div class="box-tools pull-right">
             <button type="button" class="btn btn-box-tool" id="minimizar_vale_entrada" data-widget="collapse"
                 data-toggle="tooltip" title="" data-original-title="Collapse">
                 <i class="fa fa-minus"></i></button>
             <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title=""
                 data-original-title="Remove">
                 <i class="fa fa-times"></i></button>
-        </div>
-        <h4 class="box-title">Vale de Entrada</h4>
+        </div> -->
+        <h4 class="box-title">Entrada No Consumibles</h4>
     </div>
     <div class="box-body" id="div_vale_entrada">
     <form class="form-horizontal" id="frm-MovimientoNoConsumible">
@@ -22,12 +22,12 @@
                     name="establecimiento" onchange="selectEstablecimiento()" <?php echo req() ?>>
                     <option value="" disabled selected>Seleccionar</option>
                     <?php
-        if(is_array($tipoEstablecimiento)){
-        foreach ($tipoEstablecimiento as $i) {
-         echo "<option value = $i->esta_id>$i->nombre</option>";
-         }
-         }
-        ?>
+                    if(is_array($tipoEstablecimiento)){
+                        foreach ($tipoEstablecimiento as $i) {
+                          echo "<option value = $i->esta_id>$i->nombre</option>";
+                        }
+                      }
+                    ?>
                 </select>
                 <span id="estabSelected" style="color: forestgreen;"></span>
             </div>
@@ -40,16 +40,15 @@
                 <span id="deposSelected" style="color: forestgreen;"></span>
             </div>
             <div class="col-md-1">
-                <button class="btn btn-primary" style="margin-top:23px; float:right;"  onclick="agregarFilaNoCon()">Agregar</button>
+                <button type="button" class="btn btn-primary" style="margin-top:23px; float:right;"  onclick="agregarFilaNoCon()">Agregar</button>
             </div>
         </form>
 
         <table class="table table-striped table-hover"  id="tablaNoCon">
             <br><br>
             <thead>
-                <th></th>
+                <th>Quitar</th>
                 <th>Codigo</th>
-                <th>Descripcion</th>
                 <th>Fecha de Salida</th>
                 <th>Establecimiento</th>
                 <th>Deposito</th>
@@ -71,9 +70,9 @@
 
 <script>
 
+  // Agrega fila en tabla temporal para guardar
+  function agregarFilaNoCon() {
 
-function agregarFilaNoCon() {
-   
 
     var codigo = $('#codigoNoCon').val();
     var establecimiento = $('#establecimiento').val();
@@ -92,9 +91,8 @@ function agregarFilaNoCon() {
     var anio = objFecha.getFullYear();
 
     html = '<tr>' +
-      '<td><a type = "button" class = "del pull-right" style = "cursor: pointer;"><i class = "fa fa-times text-danger"></i></a></td>' +
+      '<td><i class = "fa fa-times text-danger"></i></td>' +
       '<td value=' + codigo + '>' + codigo + '</td>' +
-      '<td></td>' +
       '<td>'+  dia + "/" + mes + "/" + anio  +'</td>' +
       '<td value=' + establecimiento + '>' + $('#estabSelected').text() + '</td>' +
       '<td value=' + depositos + '>' + $('#deposSelected').text() + '</td>' +
@@ -102,13 +100,13 @@ function agregarFilaNoCon() {
     $('#tablaNoCon tbody').append(html);
     $('#frm-MovimientoNoConsumible')[0].reset();
   }
- //Quitar fila de tabla
- $("#tablaNoCon").on("click", ".del", function() {
-    $(this).parents("tr").remove();
-  });
+  //Quitar fila de tabla
+  $("#tablaNoCon").on("click", ".text-danger", function() {
+      $(this).parents("tr").remove();
+    });
 
-
-function selectEstablecimiento() {
+  // Al seleccionar establecimiento, busca los depositos
+  function selectEstablecimiento() {
     var esta_id = $('#establecimiento').val();
     $('#estabSelected').text('');
     $('#deposSelected').text('');
@@ -142,46 +140,13 @@ function selectEstablecimiento() {
       },
     })
   }
-
+  // Al seleccionar depositos lo indica bajo el select
   function selectDeposito() {
-    var esta_id = $('#establecimiento').val();
-    var depo_id = $('#depositos').val();
-    $('#deposSelected').text('');
-    $('#recipSelected').text('');
-    wo();
-    $.ajax({
-      type: 'GET',
-      data: {
-        esta_id: esta_id,
-        depo_id: depo_id
-      },
-      dataType: 'JSON',
-      url: '<?php echo base_url(PRD) ?>general/Establecimiento/obtenerRecipientesDeposito/',
-      success: function(rsp) {
-        var datos = "<option value='' disabled selected>Seleccionar</option>";
-        for (let i = 0; i < rsp.length; i++) {
-          datos += "<option value=" + rsp[i].nombre + ">" + rsp[i].nombre + "</option>";
-        }
-        selectSearch('depositos', 'deposSelected');
-        $('#tipo_residuo').html(datos);
-      },
-      error: function(rsp) {
-        if (rsp) {
-          alert(rsp.responseText);
-        } else {
-          alert("No se pudieron cargar los recipientes.");
-        }
-      },
-      complete: function(rsp) {
-        wc();
-      },
-    })
+    selectSearch('depositos', 'deposSelected');
   }
-
-  function selectRecipiente() {
-    selectSearch('tipo_residuo', 'recipSelected');
-  }
-
+  // function selectRecipiente() {
+   //   selectSearch('tipo_residuo', 'recipSelected');
+  // }
   /* selectSearch: busca en un select un valor selecionado y lo coloca en el "spanSelected" */
   function selectSearch(select, span) {
     var option = $('#' + select).val();
@@ -191,17 +156,15 @@ function selectEstablecimiento() {
       }
     });
   }
-
-
-function guardarEntradaNoCon() {
+  // Guarada el ingreso de no consumible
+  function guardarEntradaNoCon() {
     //Datos de la tabla de
     var datosTabla = new Array();
     $('#tablaNoCon tr').each(function(row, tr) {
       datosTabla[row] = {
-        "codigo": $(tr).find('td:eq(1)').attr('value'),     
-        "establecimiento": $(tr).find('td:eq(4)').attr('value'),
-        "depositos": $(tr).find('td:eq(5)').attr('value')
-
+        "noco_id": $(tr).find('td:eq(1)').attr('value'),
+        "establecimiento": $(tr).find('td:eq(3)').attr('value'),
+        "depositos": $(tr).find('td:eq(4)').attr('value')
       }
     });
     datosTabla.shift(); //borra encabezado de la tabla o primera fila

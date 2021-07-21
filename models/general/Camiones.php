@@ -29,6 +29,11 @@ class Camiones extends CI_Model
         return json_decode($array['data']);
     }
 
+    /**
+    * Guarda la carga de camion(pantalla carga camion)
+    * @param 
+    * @return 
+    */
     public function guardarCarga($data)
     {
 
@@ -145,18 +150,22 @@ class Camiones extends CI_Model
         return false;
     }
 
-    #RBASAÑES
+    /**
+		* Listado de Movimientos de Transporte (Listado Recepción Camión)
+		* @param
+		* @return array con respuesta de servicio
+		*/
     public function listaTransporte()
     {
         $url = REST_LOG . '/transporte/movimiento/list/tipo_movimiento/' . empresa();
         return wso2($url);
     }
+
     public function listaCargaCTransporte()
     {
         $url = REST_LOG . '/transporte/movimiento/list/tipo_movimiento/' . empresa();
         return wso2($url);
     }
-    #_____________________________________________________________________________________
 
     public function guardarLoteSistema($frmCamion, $frmDescarga)
     {
@@ -212,6 +221,7 @@ class Camiones extends CI_Model
 
         return $rsp;
     }
+
 		/**
 		* Guarda salida de camion a algun deposito interno o Salida al exterior
 		* @param array con datos de salida
@@ -226,7 +236,7 @@ class Camiones extends CI_Model
             'bruto' => strval($data['bruto']),
             'neto' => strval($data['neto']),
         );
-        //return wso2(REST_LOG . '/camiones/salida', 'PUT', $post);
+        return wso2(REST_LOG . '/camiones/salida', 'PUT', $post);
     }
 
     public function estado($patente, $estado, $estadoFinal)
