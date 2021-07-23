@@ -3,7 +3,7 @@
 <!-- Bloque Carga|recepcion MP -->
 	<div class="box">
 			<div class="box-header with-border">
-					<h3 class="box-title">Carga | Recepción MP</h3>
+					<h3 class="box-title">Entrada | Recepción MP</h3>
 			</div>
 			<div class="box-body">
 					<div class="row">
@@ -11,7 +11,7 @@
 							<div class="col-md-6 col-xs-12">
 									<div id="cargacamion" onclick="cargacamion();">
 											<img src="<?php echo base_url('lib/icon/truck.png'); ?>" alt="Smiley face" height="42" width="42">
-											<label for="">CARGA</label>
+											<label for="">Entrada</label>
 									</div>
 							</div>
 							<div class="col-md-6 col-xs-12">
@@ -173,18 +173,18 @@
 
 
 <script>
-$('#minimizar_datos_camion').click(function() {
-    $('#div_datos_camion').toggle(1000);
-});
-$('#minimizar_ingreso').click(function() {
-    $('#div_ingreso').toggle(1000);
-});
-$('#minimizar_destino').click(function() {
-    $('#div_destino').toggle(1000);
-});
-$('#minimizar_vale_entrada').click(function() {
-    $('#div_vale_entrada').toggle(1000);
-});
+	$('#minimizar_datos_camion').click(function() {
+			$('#div_datos_camion').toggle(1000);
+	});
+	$('#minimizar_ingreso').click(function() {
+			$('#div_ingreso').toggle(1000);
+	});
+	$('#minimizar_destino').click(function() {
+			$('#div_destino').toggle(1000);
+	});
+	$('#minimizar_vale_entrada').click(function() {
+			$('#div_vale_entrada').toggle(1000);
+	});
 
 
 

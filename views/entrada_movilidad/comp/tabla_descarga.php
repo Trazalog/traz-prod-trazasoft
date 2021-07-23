@@ -17,12 +17,12 @@
             </tbody>
         </table>
         <hr>
-        <!-- <button id="guardarDescarga" class="btn btn-primary btn-sm" style="float:right"
+        <button id="guardarDescarga" class="btn btn-primary btn-sm" style="float:right"
             onclick="guardarEntradaNoCon();guardarDescargaOrigen();guardarLoteSistema();" disabled><i
-                class="fa fa-check"></i> Guardar Descarga</button> -->
-								<button id="guardarDescarga" class="btn btn-primary btn-sm" style="float:right"
-            onclick="guardarEntradaNoCon()"><i
                 class="fa fa-check"></i> Guardar Descarga</button>
+								<!-- <button id="guardarDescarga" class="btn btn-primary btn-sm" style="float:right"
+            onclick="guardarEntradaNoCon()"><i
+                class="fa fa-check"></i> Guardar Descarga</button> -->
     </div>
 </div>
 
