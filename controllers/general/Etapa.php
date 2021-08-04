@@ -15,6 +15,8 @@ class Etapa extends CI_Controller
         #$this->load->model(TAREAS_ASIGNAR . '/Templates');
         #$this->load->model(TAREAS_ASIGNAR . '/Recursos_Materiales');
         $this->load->model('general/Recursos');
+        $this->load->model('general/Procesos');
+        $this->load->model(FRM . 'Forms');
     }
 
     // Muestra listado de etapas
@@ -660,5 +662,62 @@ class Etapa extends CI_Controller
         $rsp = $this->Etapas->eliminarEtapa($batchId);
         echo json_encode($rsp);
     }
+
+    public function abmEtapa()
+    {
+        $data['listarProcesos'] = $this->Procesos->listarProcesos()->procesos->proceso;
+        $data['listarTipos'] = $this->Etapas->listarTipos()->tablas->tabla;
+        $data['listarFormularios'] = $this->Forms->listarFormularios()->formularios->formulario;        
+        $data['listarEtapasProductivas'] = $this->Etapas->listarEtapasProductivas()->etapas_productivas->etapa_productiva;
+        $this->load->view('etapa/abm_etapa/view_',$data);
+    }
+
+    public function listarEtapas()
+	{
+		log_message('INFO','#TRAZA|| >> ');
+		$data['listarEtapasProductivas'] = $this->Etapas->listarEtapasProductivas()->etapas_productivas->etapa_productiva;
+		$this->load->view('etapa/abm_etapa/listar', $data);
+	}
+
+    public function guardarEtapa()
+	{
+		$etapa = $this->input->post('datos');
+		$etapa['empr_id'] = empresa();
+		$resp = $this->Etapas->guardarEtapa($etapa);
+		if ($resp != null) {
+			return json_encode(true);
+		} else {
+			return json_encode(false);
+		}
+	}
+
+    function editarEtapa()
+	{
+		$etapa = $this->input->post('datos');
+		$etapa['empr_id'] = empresa();
+		$resp = $this->Etapas->editarEtapa($etapa);
+		echo json_encode($resp);
+	}
+
+    public function borrarEtapa()
+	{
+		log_message('INFO','#TRAZA|TRAZ-PROD-TRAZASOFT|ETAPAS|BORRARETAPAS >> ');
+		$etap_id = $this->input->post('etap_id');
+		$result = $this->Etapas->borrarEtapa($etap_id);
+		echo json_encode($result);
+	}
+
+    public function listarArticulosYTipos()
+    {
+        $etap_id = $this->input->get('etap_id');
+        $empr_id = empresa();
+        $resp =  $this->Etapas->listarArticulosYTipos($etap_id,$empr_id);
+        if ($resp != null) {
+			echo json_encode($resp);            
+		} else {
+			echo json_encode($resp);
+		}
+    }
+
 }
 log_message('DEBUG','#TRAZA|| >> '.json_encode());
