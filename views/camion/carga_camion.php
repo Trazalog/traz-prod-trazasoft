@@ -382,6 +382,7 @@ function ModalLotes() {
     });
 }
 
+// Guarda la Carga de Camion
 function FinalizarCarga() {
     existe = document.getElementById('existe_tabla').value;
     if (existe == "no") {

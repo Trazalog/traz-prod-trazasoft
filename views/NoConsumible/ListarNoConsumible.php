@@ -28,19 +28,19 @@
 								$fec_alta = $rsp->fec_alta;
 								$fec_vencimiento = $rsp->fec_vencimiento;
 								echo "<tr id='$codigo' data-json='" . json_encode($rsp) . "'>";
-
-								echo "<td class='text-center text-light-blue'>";
-								echo '<i class="fa fa-search" style="cursor: pointer;margin: 3px;" title="Ver Detalles" onclick="verInfo(this)"></i>';
-								echo '<i class="fa fa-fw fa-pencil " style="cursor: pointer; margin: 3px;" title="Editar" onclick="editarInfo(this)"></i>';
-								echo '<i class="fa fa-fw fa-times-circle eliminar" style="cursor: pointer;margin: 3px;" title="Eliminar" onclick="eliminar(this)"></i>';
-								echo '<i class="fa fa-undo" style="cursor: pointer;margin: 3px;" title="Trazabilidad" onclick="trazabilidad(this)"></i>';
-								echo "</td>";
-								echo '<td>'.$codigo.'</td>';
-								//echo '<td>'.$tipo.'</td>';
-								echo '<td>'.$descripcion.'</td>';
-								echo '<td>'.formatFechaPG($fec_alta).'</td>';
-								echo '<td>'.formatFechaPG($fec_vencimiento).'</td>';
-								echo '<td>'.estadoNoCon($estadoNoconsumible).'</td>';
+									echo "<td class='text-center text-light-blue'>";
+									echo '<i class="fa fa-search" style="cursor: pointer;margin: 3px;" title="Ver Detalles" onclick="verInfo(this)"></i>';
+									echo '<i class="fa fa-fw fa-pencil " style="cursor: pointer; margin: 3px;" title="Editar" onclick="editarInfo(this)"></i>';
+									echo '<i class="fa fa-fw fa-times-circle eliminar" style="cursor: pointer;margin: 3px;" title="Eliminar" onclick="eliminar(this)"></i>';
+									echo '<i class="fa fa-undo" style="cursor: pointer;margin: 3px;" title="Trazabilidad" onclick="trazabilidad(this)"></i>';
+									echo '<i class="'.($estadoNoconsumible == 'ALTA' ? 'fa fa-fw fa-toggle-on text-light-blue': "fa fa-fw fa-toggle-off text-light-blue").' " title="Habilitar" style="cursor: pointer; margin-left: 15px;" onclick="cambioEstado(this)"></i>';
+									echo "</td>";
+									echo '<td>'.$codigo.'</td>';
+									//echo '<td>'.$tipo.'</td>';
+									echo '<td>'.$descripcion.'</td>';
+									echo '<td>'.formatFechaPG($fec_alta).'</td>';
+									echo '<td>'.formatFechaPG($fec_vencimiento).'</td>';
+									echo '<td>'.estadoNoCon($estadoNoconsumible).'</td>';
 								echo '</tr>';
 						}
 						?>
@@ -64,6 +64,7 @@
 	function guardarNoConsumible() {
 
 			var formData = new FormData($('#frm-NoConsumible')[0]);
+			wo();
 			$.ajax({
 					type: 'POST',
 					dataType: 'JSON',
@@ -74,8 +75,8 @@
 					processData: false,
 					success: function(rsp) {
 						debugger;
-
-							$("#mdl-NoConsumible").modal("hide");
+						wc();
+						$("#mdl-NoConsumible").modal('hide');
 
 							if (rsp) {
 
@@ -97,6 +98,7 @@
 
 					},
 					error: function(rsp) {
+						wc();
 						$("#mdl-NoConsumible").modal('hide');
 
 							Swal.fire(
@@ -231,6 +233,7 @@
     });
   }
 
+
 ////// Bloque ver y editar
 	function verInfo(data){
 		blockEdicion();
@@ -260,30 +263,79 @@
 
 	function llenarCampos(e) {
 
-			var json = JSON.parse(JSON.stringify($(e).closest('tr').data('json')));
+		var json = JSON.parse(JSON.stringify($(e).closest('tr').data('json')));
 
-			Object.keys(json).forEach(function(key, index) {
-					$('[name="' + key + '"]').val(json[key]);
-			});
-debugger;
-			var fecha = json['fec_alta'].slice(0, 10)
-			Date.prototype.toDateInputVal = (function() {
-				var fechaAlta = new Date(fecha);
-				return fechaAlta.toJSON().slice(0, 10);
-			});
-			$("#fec_alta").val(new Date().toDateInputVal());
+		Object.keys(json).forEach(function(key, index) {
+				$('[name="' + key + '"]').val(json[key]);
+		});
+		debugger;
+		var fecha = json['fec_alta'].slice(0, 10)
+		Date.prototype.toDateInputVal = (function() {
+			var fechaAlta = new Date(fecha);
+			return fechaAlta.toJSON().slice(0, 10);
+		});
+		$("#fec_alta").val(new Date().toDateInputVal());
 
-			var fecha = json['fec_vencimiento'].slice(0, 10)
-			Date.prototype.toDateInputValue = (function() {
-				var fechaVto = new Date(fecha);
-				return fechaVto.toJSON().slice(0, 10);
-			});
-			$("#fec_vencimiento_Edit").val(new Date().toDateInputValue());
+		var fecha = json['fec_vencimiento'].slice(0, 10)
+		Date.prototype.toDateInputValue = (function() {
+			var fechaVto = new Date(fecha);
+			return fechaVto.toJSON().slice(0, 10);
+		});
+		$("#fec_vencimiento_Edit").val(new Date().toDateInputValue());
 
-			$('[name="tinc_id"]').val(json['tinc_id']);
+		$('[name="tinc_id"]').val(json['tinc_id']);
 
 	}
 ////// Fin Bloque ver y editar
+
+////// Cambio de Estado
+	function cambioEstado(row){
+
+		var json = JSON.parse(JSON.stringify($(row).closest('tr').data('json')));
+		//alert(json['estado']);
+		var data = {};
+		data.codigo = json['codigo'];
+
+		if ( (json['estado'] == 'ALTA') || (json['estado'] == 'ACTIVO') ) {
+
+				if (json['estado'] == 'ALTA'){
+					data.estado = 'ACTIVO';
+				}else{
+					data.estado = 'ALTA';
+				}
+		} else {
+			Swal.fire({
+					icon: 'error',
+					title: 'Cambio de estado bloqueado',
+					text: 'No es posible cambiar el estado del No Consumible'
+			});
+			return;
+		}
+		wo();
+		$.ajax({
+				type: 'POST',
+				dataType: 'JSON',
+				data:{data},
+				url: '<?php echo base_url(PRD) ?>general/Noconsumible/cambioEstado',
+				success: function(result) {
+							wc();
+							linkTo('<?php echo base_url(PRD) ?>general/Noconsumible/index');
+				},
+				error: function(result){
+					wc();
+					Swal.fire({
+							icon: 'error',
+							title: 'Error en Cambio de estado'
+					});
+				},
+				complete: function(){
+					wc();
+				}
+		});
+
+
+	}
+////// Fin Cambio de Estado
 
 ////// Eliminar No Consumible
 	var selected = null;
