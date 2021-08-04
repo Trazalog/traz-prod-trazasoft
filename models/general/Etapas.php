@@ -398,11 +398,6 @@ class Etapas extends CI_Model
         return json_decode($array['data']);
     }
 
-    /**
-    * guarda herramienta en pañol
-    * @param array con info de herramienta
-    * @return bool resultado de servicio de guardado
-    */
     function guardarEtapa($etapa)
     {
         $post['_post_etapas'] = $etapa;
