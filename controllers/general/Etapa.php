@@ -274,7 +274,6 @@ class Etapa extends CI_Controller
 
         $this->load->model(ALM.'new/Pedidosmateriales');
         $this->Notapedidos->setCaseId($pema_id, $rsp['data']['caseId']);
-        $this->Pedidosmateriales->setCaseEmpresa($rsp['data']['caseId']);
 
         // AVANZA PROCESO A TAREA SIGUIENTE
         if (PLANIF_AVANZA_TAREA) {
@@ -597,8 +596,7 @@ class Etapa extends CI_Controller
         //    $data['lang'] = lang_get('spanish',5);
         $data['establecimientos'] = $this->Establecimientos->listarTodo()->establecimientos->establecimiento;
         $data['empaques'] = $this->Recipientes->listarEmpaques()->empaques->empaque;
-        $data['articulos_fraccionar'] = $this->Articulos->obtenerXTipo('Proceso')['data'];
-        //$data['materias'] = $this->Materias->listar()->materias->materia;
+        $data['articulos_fraccionar'] = $this->Articulos->obtenerXTipo('Final')['data'];
         $this->load->view('etapa/fraccionar/fraccionar', $data);
     }
 
