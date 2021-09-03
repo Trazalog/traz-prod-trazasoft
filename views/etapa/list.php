@@ -304,7 +304,8 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
         rsp = JSON.parse(rsp);
         for (let i = 0; i < rsp.length; i++) {
           // htmlUser += '<option value="' + rsp[i].id + '" >' + rsp[i].lastname + ', ' + rsp[i].firstname + '</option>'; //bonita
-          htmlUser += '<option value="' + rsp[i].id_user + '" >' + rsp[i].last_name_user + ', ' + rsp[i].first_name_user + '</option>'; //seg.users
+          // htmlUser += '<option value="' + rsp[i].id_user + '" >' + rsp[i].last_name_user + ', ' + rsp[i].first_name_user + '</option>'; //seg.users
+          htmlUser += '<option value="' + rsp[i].id + '" >' + rsp[i].last_name + ', ' + rsp[i].first_name + '</option>'; //seg.users
         }
         $('#modal-asignarResponsable').find('#user').html(htmlUser);
       },
