@@ -616,7 +616,7 @@ class Etapa extends CI_Controller
     public function getUsers()
     {
         // $usuarios = $this->bpm->getUsuariosBPM();//usuarios bonita
-        $usuarios = $this->Etapas->getUsers()->users->user; //usuarios seg.users
+        $usuarios = $this->Etapas->getUsers()->usuarios->usuario; //usuarios seg.users
         echo json_encode($usuarios);
     }
 
