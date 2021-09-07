@@ -744,4 +744,24 @@ class Etapa extends CI_Controller
 		}
     }
 
+    public function borrarArticuloDeEtapa()
+    {
+        log_message('INFO','#TRAZA | ETAPAS | borrarValor() >> ');
+		$arti_id = $this->input->post('arti_id');
+        $tipo = $this->input->post('tipo');
+        switch ($tipo) {
+            case 'Entrada':
+                $result = $this->Etapas->borrarArticuloEntrada($arti_id);
+                break;
+            case 'Producto':
+                $result = $this->Etapas->borrarArticuloProducto($arti_id);
+                break;
+            case 'Salida':
+                $result = $this->Etapas->borrarArticuloSalida($arti_id);
+                break;
+        };
+		// $result = $this->Etapas->borrarArticuloDeEtapa($arti_id, $tipo);
+		echo json_encode($result);
+    }
+
 }

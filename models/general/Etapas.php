@@ -435,7 +435,38 @@ class Etapas extends CI_Model
         if ($rsp['status']) {
             $rsp = json_decode($rsp['data']);
         }
-        return $rsp;
+        $valores = $rsp->articulos->articulo;
+        return $valores;
+    }
+
+    function borrarArticuloEntrada($arti_id)
+    {
+      $post['_delete_valor'] = array("arti_id" => $arti_id);
+      log_message('DEBUG','#TRAZA | TRAZ-TOOLS | ETAPAS | borrarArticuloEntrada() $post: >> '.json_encode($post));
+      $aux = $this->rest->callAPI("DELETE",REST_PRD_ETAPAS."/deleteArticuloEntrada", $post);
+      $aux = json_decode($aux["status"]);
+      return $aux;
+    }
+
+    function borrarArticuloProducto($arti_id)
+    {
+      $post['_delete_valor'] = array("arti_id" => $arti_id);
+      log_message('DEBUG','#TRAZA | TRAZ-TOOLS | ETAPAS | borrarArticuloProducto() $post: >> '.json_encode($post));
+      $aux = $this->rest->callAPI("DELETE",REST_PRD_ETAPAS."/deleteArticuloProducto", $post);
+      $aux = json_decode($aux["status"]);
+      return $aux;
+    }
+
+    function borrarArticuloSalida($arti_id)
+    {
+      $post['_delete_valor'] = array("arti_id" => $arti_id);
+      log_message('DEBUG','#TRAZA | TRAZ-TOOLS | ETAPAS | borrarArticuloSalida() $post: >> '.json_encode($post));
+    //   $aux = $this->rest->callAPI("DELETE",REST_PRD_ETAPAS."/deleteArticuloSalida", $arti_id);
+      $resource = '/deleteArticuloSalida';
+      $url = REST_PRD_ETAPAS . $resource;
+      $rsp = $this->rest->callAPI("DELETE", $url, $post);
+      $aux = json_decode($aux["status"]);
+      return $aux;
     }
     
 }
