@@ -20,6 +20,9 @@
         <button id="guardarDescarga" class="btn btn-primary btn-sm" style="float:right"
             onclick="guardarEntradaNoCon();guardarDescargaOrigen();guardarLoteSistema();" disabled><i
                 class="fa fa-check"></i> Guardar Descarga</button>
+								<!-- <button id="guardarDescarga" class="btn btn-primary btn-sm" style="float:right"
+            onclick="guardarEntradaNoCon()"><i
+                class="fa fa-check"></i> Guardar Descarga</button> -->
     </div>
 </div>
 
@@ -50,12 +53,10 @@ function agregarFila(data) {
 function guardarDescargaOrigen() {
 
     //Guardar Datos de Camión parametro = FALSE es para NO mostrar el MSJ de Datos Guardados
-    if ($('#lotes tr').length != 0 && $('#codigo').find('option').length ==
-        0) // SI EL USUARIO REGISTRO LOTES  Y SI NO HAY LOTES CARGADOS EN EL CAMION EN TRANSITO
+    if ($('#lotes tr').length != 0 && $('#codigo').find('option').length == 0) // SI EL USUARIO REGISTRO LOTES  Y SI NO HAY LOTES CARGADOS EN EL CAMION EN TRANSITO
     {
         addCamion(false);
     }
-
 
     var array = [];
     $('#lotes tr.lote').each(function() {
@@ -63,7 +64,6 @@ function guardarDescargaOrigen() {
     });
 
     if (array.length == 0) return;
-
 
     $.ajax({
         type: 'POST',

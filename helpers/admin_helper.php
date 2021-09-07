@@ -89,35 +89,35 @@ if (!function_exists('bolita')) {
         switch ($estado) {
 
             case 'ALTA':
-                return bolita('ALTA', 'blue');
+                return bolita('Alta', 'blue');
                 break;
             case 'VENCIDO':
-                return bolita('VENCIDO', 'red');
+                return bolita('Vencido', 'red');
                 break;
 
             //Estado Camiones
             case 'ACTIVO':
-                return bolita('Asignado', 'green');
+                return bolita('Activo', 'green');
                 break;
             case 'EN_TRANSITO':
-                return bolita('En Trancito', 'info');
+                return bolita('En Tránsito', 'warning');
                 break;
-            case 'EN_REPARACION':
-                return bolita('En Reparacion', 'yellow');
-                break;
+            // case 'EN_REPARACION':
+            //     return bolita('En Reparacion', 'yellow');
+            //     break;
 
-            //Estado Etapas
-            case 'En Curso':
-                return bolita('En Curso', 'green');
-                break;
+            // //Estado Etapas
+            // case 'En Curso':
+            //     return bolita('En Curso', 'green');
+            //     break;
 
-            case 'PLANIFICADO':
-                return bolita('Planificado', 'blue');
-                break;
+            // case 'PLANIFICADO':
+            //     return bolita('Planificado', 'blue');
+            //     break;
 
-            case 'FINALIZADO':
-                return bolita('Finalizado', 'yellow');
-                break;
+            // case 'FINALIZADO':
+            //     return bolita('Finalizado', 'yellow');
+            //     break;
 
             //Estado por Defecto
             default:

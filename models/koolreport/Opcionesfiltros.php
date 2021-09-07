@@ -44,7 +44,7 @@ class Opcionesfiltros extends CI_Model
 
   public function getTransportistas()
   {
-    $url = REST_LOG . '/transportistas';
+    $url = REST_LOG . '/transportistas/'.empresa();
     return wso2($url)['data'];
   }
 
@@ -75,13 +75,13 @@ class Opcionesfiltros extends CI_Model
 
   public function getLotes()
   {
-    $url = REST_PRD_LOTE . '/lotes';
+    $url = REST_PRD_LOTE . '/lotes/'.empresa();
     return wso2($url)['data'];
   }
 
   public function getClientes()
   {
-    $url = REST_CORE . '/clientes';
+    $url = REST_CORE . '/clientes/porEmpresa/'.empresa().'/porEstado/ACTIVO';
     return wso2($url)['data'];
   }
 
@@ -89,7 +89,7 @@ class Opcionesfiltros extends CI_Model
   {
     log_message('DEBUG', '#TRAZA| #REPORTES|#ASIGNACIONDERECURSOS| #INGRESO: >>' . json_encode($data));
     $empr_id = empresa();
-    $lote_id = (isset($data['lote_id'])) ? $data['lote_id'] : '';
+    $lote_id = (isset($data['lote_id'])) ? $data['lote_id'] : '0';
     $empr_id = (isset($empr_id)) ? $empr_id : '';
 
     $url = REST_PRD_LOTE . '/asignaciones/' . $lote_id . '/empresa/' . $empr_id; //TODO: comentar y descomentar la linea de arriba

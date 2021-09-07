@@ -16,7 +16,11 @@ class Camion extends CI_Controller
         $this->load->model('general/Listado_carga_camion');
         $this->load->model('general/Listado_recepcion_camion');
     }
-
+		/**
+		* Levanta pantalla Carga Camión
+		* @param 
+		* @return
+		*/	
     public function cargarCamion()
     {
         $data['fecha'] = date('Y-m-d');
@@ -50,7 +54,11 @@ class Camion extends CI_Controller
         echo json_encode($res['data']);
     }
 
-    #RBASAÑES
+    /**
+		* Levanta pantalla Entrada|Recepcion Camion
+		* @param 
+		* @return 
+		*/
     public function recepcionCamion()
     {
         $data['movimientosTransporte'] = $this->Camiones->listaTransporte()['data'];
@@ -64,8 +72,12 @@ class Camion extends CI_Controller
 
         $this->load->view('camion/listado_carga_camion', $data);
     }
-    #_____________________________________________________________________________________
 
+		/**
+		* Guarda la Carga de camión(pantalla carga camion)
+		* @param array con datos
+		* @return array con respuesta del servicio
+		*/	
     public function finalizarCarga()
     {
         $lotes = json_decode($this->input->post('lotes'));
@@ -148,10 +160,37 @@ class Camion extends CI_Controller
         echo json_encode($rsp);
     }
 
+		/**
+		* Guarda salida de camion a algun deposito interno o Salida al exterior
+		* @param array con datos de salida
+		* @return array con respuesta de servicio
+		*/
     public function guardarSalida()
     {
-        $data = $this->input->post();
+        $data = $this->input->post('data');
+				$noco = $this->input->post('datosTabla');
         $res = $this->Camiones->guardarSalida($data);
+
+				if ($res['status']) {
+
+						// si hay no consumibles se guardan aca
+						if (isset($noco)) {
+							foreach ($noco as $value) {
+								$codigo[0] = $value['codigo'];
+								$destino = $value['destino'];
+								$depo_id = "";
+								$rsp =  $this->Noconsumibles->movimientoNoConsumibles($codigo, 'EN_TRANSITO', $depo_id, $destino);
+								if ($rsp == null) {
+									log_message('ERROR','#TRAZA|TRAZASOFT|GENERAL|CAMION|guardarSalida() >> ERROR: no se pudo guardar el movimiento del Noconsumible ');
+									$res = false;
+									break 1;
+								}
+							}
+						}
+				}else{
+						log_message('ERROR','#TRAZA|TRAZASOFT|CAMION|guardarSalida() >> ERROR: fallo el guardarSalida($data)');
+				}
+
         echo json_encode($res);
     }
 

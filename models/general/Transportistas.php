@@ -9,7 +9,7 @@ class Transportistas extends CI_Model
 
     public function obtener()
     {
-        $url = REST_LOG . '/transportistas';
+        $url = REST_LOG . '/transportistas/'.empresa();
         return wso2($url);
     }
     
