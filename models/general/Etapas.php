@@ -379,4 +379,63 @@ class Etapas extends CI_Model
         );
         return wso2($url, 'PUT', $data);
     }
+
+    public function listarEtapasProductivas()
+    {
+        log_message('DEBUG', 'Etapas/getEtapasProductivas');
+        $resource = '/etapasProductivas/list/empresa/'.empresa();
+        $url = REST_PRD_ETAPAS . $resource;
+        $array = $this->rest->callApi('GET', $url);
+        return json_decode($array['data']);
+    }
+
+    public function listarTipos()
+    {
+        log_message('DEBUG', 'Core/getTabla');
+        $resource = '/tablas/prd_tipos_etapa';
+        $url = REST_CORE . $resource;
+        $array = $this->rest->callApi('GET', $url);
+        return json_decode($array['data']);
+    }
+
+    function guardarEtapa($etapa)
+    {
+        $post['_post_etapas'] = $etapa;
+        log_message('DEBUG','#TRAZA|TRAZA-COMP-PRD|ETAPAS|GUARDAR  $post: >> '.json_encode($post));
+        $aux = $this->rest->callAPI("POST",REST_PRD_ETAPAS."/etapasProductivas/insertar", $post);
+        $aux = json_decode($aux["data"]);
+        return $aux->respuesta->etap_id;
+    }
+
+    function editarEtapa($etapa)
+    {
+        $post['_put_etapas'] = $etapa;
+        log_message('DEBUG','#TRAZA|TRAZA-COMP-PRD|ETAPAS   |EDITAR $post: >> '.json_encode($post));
+        $aux = $this->rest->callAPI("PUT",REST_PRD_ETAPAS."/etapasProductivas/actualizar", $post);
+        $aux =json_decode($aux["status"]);
+        return $aux;
+    }
+
+    function borrarEtapa($etap_id)
+    {
+        $post['_put_etapas_borrar'] = array("etap_id"=> $etap_id);
+        log_message('DEBUG','#TRAZA|TRAZ-COMP-PRD|ETAPAS $post: >> '.json_encode($post));
+        $aux = $this->rest->callAPI("PUT",REST_PRD_ETAPAS."/etapasProductivas/borrar", $post);
+        $aux =json_decode($aux["status"]);
+        return $aux;
+    }
+
+    function listarArticulosYTipos($etap_id,$empr_id)
+    {
+        log_message('DEBUG', 'Etapas/listarArticulosYTipos(etap_id)-> ' . $etap_id);
+        log_message('DEBUG', 'Etapas/listarArticulosYTipos(empr_id)-> ' . $empr_id);
+        $resource = '/articulos/etapa/' . $etap_id . '/empresa/' . $empr_id;
+        $url = REST_ALM . $resource;
+        $rsp = $this->rest->callAPI("GET", $url);
+        if ($rsp['status']) {
+            $rsp = json_decode($rsp['data']);
+        }
+        return $rsp;
+    }
+    
 }
