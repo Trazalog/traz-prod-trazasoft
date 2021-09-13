@@ -128,7 +128,7 @@ class Noconsumibles extends CI_Model
 		*/
 		function liberarNoConsumible($noCons)
     {
-        $hoy = 	date('Y-m-d H:i:s');
+        $hoy = 	date('Y-m-d H:i');
         $user = userNick();
 
         foreach ($noCons as $key => $value) {
