@@ -254,7 +254,7 @@
           </div>
           <div class="row">            
             <div class="col-sm-12 table-scroll">
-            <button class="btn btn-block btn-primary" style="width: 100px; margin-top: 10px;" onclick="nuevoNCmodal()">Agregar</button>
+            <button class="btn btn-block btn-primary" style="width: 100px; margin-top: 10px;" onclick="agregarArticulo()">Agregar</button>
               <table id="tabla_articulos" class="table table-bordered table-striped">
                 <thead class="thead-dark" bgcolor="#eeeeee">
                   <th>Acción</th>
@@ -282,6 +282,65 @@
   </div>  
 </div>
 <!---///////--- FIN MODAL ARTICULOS ---///////--->
+
+<!---///////--- MODAL AGREGAR ARTICULO ---///////--->
+<div class="modal fade bs-example-modal-lg" id="modalAgregarArticulo" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-blue">
+        <button type="button" class="close close_modal_edit" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" style="color:white;">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body ">
+          <div class="form-horizontal">
+            <div class="row">
+              <form class="frmArticulo" id="frmArticulo">
+                <div class="col-sm-6">
+                <input type="text" class="form-control habilitar hidden" name="etap_id" id="etapa_id">
+                  <!--_____________ Artículo _____________-->
+                  <div class="form-group">
+                      <label for="articulo_id" class="col-sm-4 control-label">Artículo:</label>
+                      <div class="col-sm-8">
+                        <select class="form-control select2 select2-hidden-accesible habilitar requerido" name="arti_id" id="articulo_id">
+                          <option value="" disabled selected>-Seleccione opción-</option>	
+                          <?php
+                            foreach ($listarArticulos as $articulo) {
+                              echo '<option  value="'.$articulo->arti_id.'">'.$articulo->descripcion.' - Stock: '.$articulo->stock.'</option>';
+                            }
+                          ?>
+                        </select>
+                      </div>
+                    </div>
+                  <!--__________________________-->   
+                  <!--_____________ Tipo _____________-->
+                  <div class="form-group">
+                      <label for="tipo_id" class="col-sm-4 control-label">Tipo:</label>
+                      <div class="col-sm-8">
+                        <select class="form-control select2 select2-hidden-accesible habilitar requerido" name="tipo_id" id="tipo_id">
+                          <option value="" disabled selected>-Seleccione opción-</option>	
+                          <option value="1">Entrada</option>	
+                          <option value="2">Producto</option>	
+                          <option value="3">Salida</option>
+                        </select>
+                      </div>
+                    </div>
+                  <!--__________________________-->   
+                </div>
+              </form>
+            </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+          <div class="form-group text-right">
+              <button type="" class="btn btn-primary habilitar" data-dismiss="modal" id="btnsave_edit" onclick="guardarArticulo()">Guardar</button>
+              <button type="" class="btn btn-default cerrarModalEdit" id="" data-dismiss="modal">Cerrar</button>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!---///////--- FIN MODAL AGREGAR ARTICULO ---///////--->
 
 <script>
   // carga tabla genaral de circuitos
@@ -407,6 +466,48 @@
       error: function(result){
         wc();
         alertify.error("Error agregando Etapa");
+      }
+    });
+  }
+
+  function agregarArticulo() {
+    $(".modal-header h4").remove();
+    //guardo el tipo de operacion en el modal
+    $("#operacion").val("Edit");
+    //pongo titulo al modal
+    $(".modal-header").append('<h4 class="modal-title"  id="myModalLabel"><span id="modalAction" class="fa fa-fw fa-pencil"></span> Agregar Artículo</h4>');
+    $("#modalarticulos").modal('hide');
+    $('#modalAgregarArticulo').modal('show');
+    var etap_id = $("#id_etap").val();
+    // guardo etap_id en modal para usar en funcion agregar articulo
+    $("#etapa_id").val(etap_id);
+  }
+
+  function guardarArticulo () {
+    if( !validarCampos('frmArticulo') ){
+      return;
+    }
+    var recurso = "";
+    var form = $('#frmArticulo')[0];
+    var datos = new FormData(form);
+    var datos = formToObject(datos);
+    recurso = 'index.php/<?php echo PRD ?>general/Etapa/guardarArticulo';
+    wo();
+    $.ajax({
+      type: 'POST',
+      data:{ datos },
+      dataType: 'JSON',
+      url: recurso,
+      success: function(result) {
+        $("#cargar_tabla").load("<?php echo base_url(PRD); ?>general/Etapa/listarEtapas");
+        wc();
+        $("#modalAgregarArticulo").hide(500);
+        form.reset();
+        alertify.success("Artículo agregado con éxito");
+      },
+      error: function(result){
+        wc();
+        alertify.error("Error agregando Artículo");
       }
     });
   }
