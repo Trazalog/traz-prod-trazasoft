@@ -167,9 +167,10 @@
         data:{etap_id: etap_id},
         url: 'index.php/<?php echo PRD ?>general/Etapa/borrarEtapa',
         success: function(result) {
-              $("#cargar_tabla").load("<?php echo base_url(PRD); ?>general/Etapa/listarEtapas");
-              wc();
-              $("#modalaviso").modal('hide');
+          $("#cargar_tabla").load("<?php echo base_url(PRD); ?>general/Etapa/listarEtapas");
+          wc();
+          $("#modalaviso").modal('hide');
+          alertify.success("Etapa Productiva eliminada con éxito");
         },
         error: function(result){
           wc();
@@ -180,35 +181,41 @@
   }
 
   function eliminarArticulo(e) {
-        var data = JSON.parse($(e).closest('tr').attr('data-json'));
-        var arti_id = data.arti_id;
-        var tipo = data.tipo;
-        $('#arti_id').val(data.arti_id);
-        $('#tipo').val(data.tipo);
-        $(".modal-header h4").remove();
-        //pongo titulo al modal
-        $(".modal-header").append('<h4 class="modal-title"  id="myModalLabel"><span id="modalAction" class="fa fa-fw fa-pencil"></span> Eliminar Artículo </h4>');
-        $("#modalarticulos").modal('hide');
-        $('#modalAvisoArticulo').modal('show');
+    var data = JSON.parse($(e).closest('tr').attr('data-json'));
+    var arti_id = data.arti_id;
+    var tipo = data.tipo;
+    // var etap_id = data.etap_id;
+    var etap_id = $("#id_etap").val();
+    $('#arti_id').val(data.arti_id);
+    $('#tipo').val(data.tipo);
+    $("#id_etapa").val(etap_id);
+    $(".modal-header h4").remove();
+    //pongo titulo al modal
+    $(".modal-header").append('<h4 class="modal-title"  id="myModalLabel"><span id="modalAction" class="fa fa-fw fa-pencil"></span> Eliminar Artículo </h4>');
+    $("#modalarticulos").modal('hide');
+    $('#modalAvisoArticulo').modal('show');
 	}
 
   function eliminarArticuloDeEtapa() {
         var arti_id = $("#arti_id").val();
         var tipo = $("#tipo").val();
+        var etap_id = $("#id_etapa").val();
         wo();
         $.ajax({
             type: 'POST',
-            data:{arti_id: arti_id, tipo: tipo},
+            data:{arti_id: arti_id, tipo: tipo, etap_id: etap_id},
             url: 'index.php/<?php echo PRD ?>general/Etapa/borrarArticuloDeEtapa',
             success: function(result) {
-                // seleccionTabla(arti_id)
-                wc();
-                $("#modalAvisoArticulo").modal('hide');
+              // seleccionTabla(arti_id)
+              $("#cargar_tabla").load("<?php echo base_url(PRD); ?>general/Etapa/listarEtapas");
+              wc();
+              $("#modalAvisoArticulo").modal('hide');
+              alertify.success("Artículo eliminado con éxito");
             },
             error: function(result){
-            wc();
-            $("#modalAvisoArticulo").modal('hide');
-            alertify.error('Error en eliminado de Valor...');
+              wc();
+              $("#modalAvisoArticulo").modal('hide');
+              alertify.error('Error en eliminado de Artículo...');
             }
         });        
     }
@@ -256,6 +263,7 @@
               <h4>¿Desea realmente eliminar el artículo de la etapa productiva?</h4>
               <input type="text" id="arti_id" class="hidden">
               <input type="text" id="tipo" class="hidden">
+              <input type="text" id="id_etapa" class="hidden">
             </div>
           </div>
         </div>
