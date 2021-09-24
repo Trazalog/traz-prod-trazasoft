@@ -15,6 +15,8 @@ class Etapa extends CI_Controller
         #$this->load->model(TAREAS_ASIGNAR . '/Templates');
         #$this->load->model(TAREAS_ASIGNAR . '/Recursos_Materiales');
         $this->load->model('general/Recursos');
+        $this->load->model('general/Procesos');
+        $this->load->model(FRM . 'Forms');
     }
 
     // Muestra listado de etapas
@@ -272,7 +274,6 @@ class Etapa extends CI_Controller
 
         $this->load->model(ALM.'new/Pedidosmateriales');
         $this->Notapedidos->setCaseId($pema_id, $rsp['data']['caseId']);
-        $this->Pedidosmateriales->setCaseEmpresa($rsp['data']['caseId']);
 
         // AVANZA PROCESO A TAREA SIGUIENTE
         if (PLANIF_AVANZA_TAREA) {
@@ -484,6 +485,7 @@ class Etapa extends CI_Controller
         $cantidad_padre = $this->input->post('cantidad_padre');
         $num_orden_prod = $this->input->post('num_orden_prod');
         $batch_id_padre = $this->input->post('batch_id_padre');
+        $depo_id = $this->input->post('depo_id');
 
         foreach ($productos as $key => $value) {
 
@@ -492,7 +494,7 @@ class Etapa extends CI_Controller
             $arrayPost["prov_id"] = (string) PROVEEDOR_INTERNO;
             $arrayPost["batch_id_padre"] = $batch_id_padre; // bacth actual
             $arrayPost["cantidad"] = $value->cantidad; // art seleccionado en lista
-            $arrayPost["cantidad_padre"] = strval($key == (sizeof($productos) - 1) ? $cantidad_padre : 0); //cantida padre esl lo que descuenta del batch actual
+            $arrayPost["cantidad_padre"] = strval($key == (sizeof($productos) - 1) ? $cantidad_padre : 0); //cantida padre es lo que descuenta del batch actual
             $arrayPost["num_orden_prod"] = $num_orden_prod;
             $arrayPost["reci_id"] = $value->destino; //reci_id destino del nuevo batch
             $arrayPost["etap_id"] = (string) ETAPA_DEPOSITO;
@@ -504,10 +506,35 @@ class Etapa extends CI_Controller
             $arrayPost["tipo_recurso"] = $value->tipo_recurso;
             $arrayPost['batch_id'] = "0";
             $arrayPost['planificado'] = "false";
-            $arrayDatos['_post_lote_list_batch_req']['_post_lote_list'][] = $arrayPost;
+            $arrayPost['noco_list'] = isset($value->nocos)?implode(';',$value->nocos):'';
+            $arrayDatos['_post_lote_noconsumibles_list_batch_req']['_post_lote_noconsumibles_list'][] = $arrayPost;
+						$noco_list = isset($value->nocos)? $value->nocos:'';
         }
+			// se crean lotes nuevos a traves de un store procedure
+            $rsp = $this->Etapas->finalizarEtapa($arrayDatos);
 
-        $rsp = $this->Etapas->finalizarEtapa($arrayDatos);
+				// si tiene asociado no consumibles se guarda el movimiento y el nuevo estado
+				if ($rsp['status']){
+
+						// Si hay que asociar Noconsmibles
+						if ($this->input->post('noConsumAsociar')) {
+
+								$this->load->model('general/Noconsumibles');
+								$depo_id = $this->input->post('depo_id');
+								$estado = $this->input->post('estado');
+								$destino = "";
+                                if ($noco_list !='' and $noco_list != null ){
+                                    $respNoco = $this->Noconsumibles->movimientoNoConsumibles($noco_list, $estado, $depo_id, $destino);
+
+                                    if ($respNoco == null) {
+                                            # si la respuesta es negativa corto la ejecucion
+                                            log_message('ERROR','#TRAZA|TRAZ-PROD-TRAZASOFT|ETAPA|Finalizar() >> ERROR: NO SE PUDO ASOCIAR LOS NO CONSMIBLES.');
+                                            echo json_encode($rsp = array('mensNoCons'=>'No se pudieron asociar los No Consumibles'));
+                                            return;
+                                    }
+                                }
+						}
+				}
 
         if ($rsp['status']) {
 
@@ -547,8 +574,8 @@ class Etapa extends CI_Controller
         }
 
         $rsp = $this->Etapas->finalizarEtapa($arrayDatos);
-        if ($rsp['status']) {
 
+        if ($rsp['status']) {
             $rsp = $this->Etapas->buscar($batch_id_padre)->etapa;
         }
 
@@ -570,8 +597,7 @@ class Etapa extends CI_Controller
         //    $data['lang'] = lang_get('spanish',5);
         $data['establecimientos'] = $this->Establecimientos->listarTodo()->establecimientos->establecimiento;
         $data['empaques'] = $this->Recipientes->listarEmpaques()->empaques->empaque;
-        $data['articulos_fraccionar'] = $this->Articulos->obtenerXTipo('Proceso')['data'];
-        //$data['materias'] = $this->Materias->listar()->materias->materia;
+        $data['articulos_fraccionar'] = $this->Articulos->obtenerXTipo('Final')['data'];
         $this->load->view('etapa/fraccionar/fraccionar', $data);
     }
 
@@ -591,7 +617,7 @@ class Etapa extends CI_Controller
     public function getUsers()
     {
         // $usuarios = $this->bpm->getUsuariosBPM();//usuarios bonita
-        $usuarios = $this->Etapas->getUsers()->users->user; //usuarios seg.users
+        $usuarios = $this->Etapas->getUsers()->usuarios->usuario; //usuarios seg.users
         echo json_encode($usuarios);
     }
 
@@ -645,9 +671,96 @@ class Etapa extends CI_Controller
         echo selectBusquedaAvanzada('inputproducto', 'id', $productos_salida_etapa, 'arti_id', 'descripcion');
     }
 
+    public function obtenerNoConsumibles()
+    {
+        $this->load->model('general/Noconsumibles');
+				$emp = empresa();
+        $rsp = $this->Noconsumibles->obtenerXEstado($emp, 'ACTIVO');
+        if($rsp['status']){
+            echo selectBusquedaAvanzada('noco_id', 'noco_id', $rsp['data'], 'codigo', 'codigo');
+        }else echo 'S/N';
+    }
+
     public function eliminarEtapa($batchId)
     {
         $rsp = $this->Etapas->eliminarEtapa($batchId);
         echo json_encode($rsp);
     }
+
+    public function abmEtapa()
+    {
+        $data['listarProcesos'] = $this->Procesos->listarProcesos()->procesos->proceso;
+        $data['listarTipos'] = $this->Etapas->listarTipos()->tablas->tabla;
+        $data['listarFormularios'] = $this->Forms->listarFormularios()->formularios->formulario;        
+        $data['listarEtapasProductivas'] = $this->Etapas->listarEtapasProductivas()->etapas_productivas->etapa_productiva;
+        $this->load->view('etapa/abm_etapa/view_',$data);
+    }
+
+    public function listarEtapas()
+	{
+		log_message('INFO','#TRAZA|| >> ');
+		$data['listarEtapasProductivas'] = $this->Etapas->listarEtapasProductivas()->etapas_productivas->etapa_productiva;
+		$this->load->view('etapa/abm_etapa/listar', $data);
+	}
+
+    public function guardarEtapa()
+	{
+		$etapa = $this->input->post('datos');
+		$etapa['empr_id'] = empresa();
+		$resp = $this->Etapas->guardarEtapa($etapa);
+		if ($resp != null) {
+			return json_encode(true);
+		} else {
+			return json_encode(false);
+		}
+	}
+
+    function editarEtapa()
+	{
+		$etapa = $this->input->post('datos');
+		$etapa['empr_id'] = empresa();
+		$resp = $this->Etapas->editarEtapa($etapa);
+		echo json_encode($resp);
+	}
+
+    public function borrarEtapa()
+	{
+		log_message('INFO','#TRAZA|TRAZ-PROD-TRAZASOFT|ETAPAS|BORRARETAPAS >> ');
+		$etap_id = $this->input->post('etap_id');
+		$result = $this->Etapas->borrarEtapa($etap_id);
+		echo json_encode($result);
+	}
+
+    public function listarArticulosYTipos()
+    {
+        $etap_id = $this->input->get('etap_id');
+        $empr_id = empresa();
+        $resp =  $this->Etapas->listarArticulosYTipos($etap_id,$empr_id);
+        if ($resp != null) {
+			echo json_encode($resp);            
+		} else {
+			echo json_encode($resp);
+		}
+    }
+
+    public function borrarArticuloDeEtapa()
+    {
+        log_message('INFO','#TRAZA | ETAPAS | borrarValor() >> ');
+		$arti_id = $this->input->post('arti_id');
+        $tipo = $this->input->post('tipo');
+        switch ($tipo) {
+            case 'Entrada':
+                $result = $this->Etapas->borrarArticuloEntrada($arti_id);
+                break;
+            case 'Producto':
+                $result = $this->Etapas->borrarArticuloProducto($arti_id);
+                break;
+            case 'Salida':
+                $result = $this->Etapas->borrarArticuloSalida($arti_id);
+                break;
+        };
+		// $result = $this->Etapas->borrarArticuloDeEtapa($arti_id, $tipo);
+		echo json_encode($result);
+    }
+
 }

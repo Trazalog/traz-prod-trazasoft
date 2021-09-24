@@ -65,6 +65,26 @@ class Lote extends CI_Controller
     $batch_id = $this->Lotes->getBatchIdLote($lote_id)['data'][0]->batch_id;
     if (isset($batch_id)) {
       $rsp = $this->Lotes->trazabilidadBatch($batch_id);
+      $data = $rsp['data'];
+      $arbol = array();
+
+      #NO TOCAR PLIS
+      foreach ($data as $key => $o) {
+          if($o->batch_id_padre){
+              #TIENE PADRE Y ESTA METIDO EN EL ARBOL
+            if(isset($arbol[$o->batch_id])){
+                $arbol[$o->batch_id]  = $arbol[$o->batch_id];
+            }else{
+                $o->hijos = $arbol;
+                $arbol = array("$o->batch_id" => $o);
+            }
+          }else{
+              $arbol[$o->batch_id] = $o;
+          }
+      }
+      $e = reset($arbol);
+      $rsp['arbol_json'] = [nodo($e, $e->hijos)];
+      #END NO TOCAR PLIS
       echo json_encode($rsp);
     } else echo "¡Batch no encontrado! Intente nuevamente.";
   }

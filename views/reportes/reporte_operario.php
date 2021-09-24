@@ -6,16 +6,16 @@
         value="<?php echo $producto[0]->stock.' ('.$producto[0]->uni_med.')';?>" disabled>
 </div>
 <style>
-input,
-select {
-    font-size: 140% !important;
-    height: 105%;
-    border-radius: 5px !important;
-}
+    input,
+    select {
+        font-size: 140% !important;
+        height: 105%;
+        border-radius: 5px !important;
+    }
 
-option {
-    font-size: 180% !important;
-}
+    option {
+        font-size: 180% !important;
+    }
 </style>
 
 <div class="box box-primary" style="font-size:140%;">

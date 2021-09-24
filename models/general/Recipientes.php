@@ -36,7 +36,7 @@ class Recipientes extends CI_Model
     public function listarEmpaques()
     {
         log_message('DEBUG', 'Recipientes/listarEmpaques');
-        $resource = '/empaques';
+        $resource = '/empaques/'.empresa();
         $url = REST_PRD.$resource;
         $array = $this->rest->callAPI("GET",$url); 	
         wso2Msj($array);
@@ -62,7 +62,7 @@ class Recipientes extends CI_Model
 
     public function obtener($tipo = 'TODOS', $estado = 'TODOS', $establecimiento = 0)
     {
-        $url  = REST_PRD. "/recipientes/tipo/$tipo/estado/$estado/establecimiento/$establecimiento";
+        $url  = REST_PRD. "/recipientes/tipo/$tipo/estado/$estado/establecimiento/$establecimiento/".empresa();
         $rsp = $this->rest->callAPI('GET' , $url);
         $rsp['data'] = json_decode($rsp['data'])->recipientes->recipiente;
         return $rsp;

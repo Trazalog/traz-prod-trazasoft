@@ -82,7 +82,7 @@
 								<?php
 								foreach ($articulos as $key) {
 									echo "
-										<option value='$key->id' data-um='$key->unidad_medida' >$key->descripcion</option>
+										<option value='$key->arti_id' data-um='$key->unidad_medida' >$key->descripcion</option>
 										";
 								}
 								?>

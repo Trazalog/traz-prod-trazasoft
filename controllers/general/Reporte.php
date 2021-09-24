@@ -11,7 +11,11 @@ class Reporte extends CI_Controller
 
     public function tareasOperario()
     {
-        $data['list'] =$this->Etapas->listar()->etapas->etapa;
+        $this->load->model('general/Etapas');
+        $this->load->model('general/Recursos');
+        $data['rec_trabajo'] = $this->Recursos->obtenerXTipo('TRABAJO')['data'];
+        $this->load->model('general/Etapas');
+        $data['lotes'] = $this->Etapas->listar()->etapas->etapa;
         $this->load->view('reportes/lista_tareas_operarios', $data);
     }
 

@@ -17,7 +17,7 @@ class Etapas extends CI_Model
     // trae listado de etapas con sus datos (Tabla)
     public function listar()
     {
-        $resource = '/lotes';
+        $resource = '/lotes/'.empresa();
         $url = REST_PRD_LOTE . $resource;
         $rsp = $this->rest->callApi('GET', $url);
         if ($rsp['status']) {
@@ -29,7 +29,7 @@ class Etapas extends CI_Model
     public function listarEtapas()
     {
         log_message('DEBUG', 'Etapas/listarEtapas');
-        $resource = '/etapas';
+        $resource = '/etapas/'.empresa();
         $url = REST_PRD . $resource;
         $array = $this->rest->callAPI("GET", $url);
         $resp = json_decode($array['data']);
@@ -201,7 +201,7 @@ class Etapas extends CI_Model
     public function finalizarEtapa($arrayDatos)
     {
         log_message('DEBUG', 'Etapas/finalizarEtapa(datos)-> ' . json_encode($arrayDatos));
-        $resource = '/_post_lote_list_batch_req';
+        $resource = '/_post_lote_noconsumibles_list_batch_req';
         $url = REST_PRD_LOTE . $resource;
         $rsp = $this->rest->callAPI("POST", $url, $arrayDatos);
         if (!$rsp['status']) {
@@ -317,8 +317,8 @@ class Etapas extends CI_Model
 	{
         #REST?
 		log_message('DEBUG', 'Etapas/getUsers');
-		$resource = 'users/'.empresa();
-		$url = RESTPT . $resource;
+		$resource = '/users/'.empresa();
+		$url = REST_CORE . $resource;
 		$array = $this->rest->callAPI("GET", $url);
 		return json_decode($array['data']);
 	}
@@ -326,7 +326,7 @@ class Etapas extends CI_Model
 	public function getTurnosProd()
 	{
 		log_message('DEBUG', 'Etapas/getTurnosProd');
-		$resource = '/getTurnosProd/'.empresa();
+		$resource = '/getTurnosProd';
 		$url = REST_PRD_ETAPAS . $resource;
 		$array = $this->rest->callAPI("GET", $url);
 		return json_decode($array['data']);
@@ -379,4 +379,94 @@ class Etapas extends CI_Model
         );
         return wso2($url, 'PUT', $data);
     }
+
+    public function listarEtapasProductivas()
+    {
+        log_message('DEBUG', 'Etapas/getEtapasProductivas');
+        $resource = '/etapasProductivas/list/empresa/'.empresa();
+        $url = REST_PRD_ETAPAS . $resource;
+        $array = $this->rest->callApi('GET', $url);
+        return json_decode($array['data']);
+    }
+
+    public function listarTipos()
+    {
+        log_message('DEBUG', 'Core/getTabla');
+        $resource = '/tablas/prd_tipos_etapa';
+        $url = REST_CORE . $resource;
+        $array = $this->rest->callApi('GET', $url);
+        return json_decode($array['data']);
+    }
+
+    function guardarEtapa($etapa)
+    {
+        $post['_post_etapas'] = $etapa;
+        log_message('DEBUG','#TRAZA|TRAZA-COMP-PRD|ETAPAS|GUARDAR  $post: >> '.json_encode($post));
+        $aux = $this->rest->callAPI("POST",REST_PRD_ETAPAS."/etapasProductivas/insertar", $post);
+        $aux = json_decode($aux["data"]);
+        return $aux->respuesta->etap_id;
+    }
+
+    function editarEtapa($etapa)
+    {
+        $post['_put_etapas'] = $etapa;
+        log_message('DEBUG','#TRAZA|TRAZA-COMP-PRD|ETAPAS   |EDITAR $post: >> '.json_encode($post));
+        $aux = $this->rest->callAPI("PUT",REST_PRD_ETAPAS."/etapasProductivas/actualizar", $post);
+        $aux =json_decode($aux["status"]);
+        return $aux;
+    }
+
+    function borrarEtapa($etap_id)
+    {
+        $post['_put_etapas_borrar'] = array("etap_id"=> $etap_id);
+        log_message('DEBUG','#TRAZA|TRAZ-COMP-PRD|ETAPAS $post: >> '.json_encode($post));
+        $aux = $this->rest->callAPI("PUT",REST_PRD_ETAPAS."/etapasProductivas/borrar", $post);
+        $aux =json_decode($aux["status"]);
+        return $aux;
+    }
+
+    function listarArticulosYTipos($etap_id,$empr_id)
+    {
+        log_message('DEBUG', 'Etapas/listarArticulosYTipos(etap_id)-> ' . $etap_id);
+        log_message('DEBUG', 'Etapas/listarArticulosYTipos(empr_id)-> ' . $empr_id);
+        $resource = '/articulos/etapa/' . $etap_id . '/empresa/' . $empr_id;
+        $url = REST_ALM . $resource;
+        $rsp = $this->rest->callAPI("GET", $url);
+        if ($rsp['status']) {
+            $rsp = json_decode($rsp['data']);
+        }
+        $valores = $rsp->articulos->articulo;
+        return $valores;
+    }
+
+    function borrarArticuloEntrada($arti_id)
+    {
+      $post['_delete_valor'] = array("arti_id" => $arti_id);
+      log_message('DEBUG','#TRAZA | TRAZ-TOOLS | ETAPAS | borrarArticuloEntrada() $post: >> '.json_encode($post));
+      $aux = $this->rest->callAPI("DELETE",REST_PRD_ETAPAS."/deleteArticuloEntrada", $post);
+      $aux = json_decode($aux["status"]);
+      return $aux;
+    }
+
+    function borrarArticuloProducto($arti_id)
+    {
+      $post['_delete_valor'] = array("arti_id" => $arti_id);
+      log_message('DEBUG','#TRAZA | TRAZ-TOOLS | ETAPAS | borrarArticuloProducto() $post: >> '.json_encode($post));
+      $aux = $this->rest->callAPI("DELETE",REST_PRD_ETAPAS."/deleteArticuloProducto", $post);
+      $aux = json_decode($aux["status"]);
+      return $aux;
+    }
+
+    function borrarArticuloSalida($arti_id)
+    {
+      $post['_delete_valor'] = array("arti_id" => $arti_id);
+      log_message('DEBUG','#TRAZA | TRAZ-TOOLS | ETAPAS | borrarArticuloSalida() $post: >> '.json_encode($post));
+    //   $aux = $this->rest->callAPI("DELETE",REST_PRD_ETAPAS."/deleteArticuloSalida", $arti_id);
+      $resource = '/deleteArticuloSalida';
+      $url = REST_PRD_ETAPAS . $resource;
+      $rsp = $this->rest->callAPI("DELETE", $url, $post);
+      $aux = json_decode($aux["status"]);
+      return $aux;
+    }
+    
 }
