@@ -1,115 +1,116 @@
 <!-- /// ---- HEADER ----- /// -->
 <div class="box box-primary animated fadeInLeft">
-			<div class="box-header with-border">
-					<h4>Etapas Productivas</h4>
-			</div>
-			<div class="box-body">
-					<div class="row">
-							<div class="col-md-2 col-lg-1 col-xs-12">
-									<button type="button" id="botonAgregar" class="btn btn-primary" aria-label="Left Align">
-											Agregar
-									</button><br>
-							</div>
-							<div class="col-md-10 col-lg-11 col-xs-12"></div>
-					</div>
-			</div>
-	</div>
+  <div class="box-header with-border">
+    <h4>Etapas Productivas</h4>
+  </div>
+  <div class="box-body">
+    <div class="row">
+      <div class="col-md-2 col-lg-1 col-xs-12">
+        <button type="button" id="botonAgregar" class="btn btn-primary" aria-label="Left Align">
+          Agregar
+        </button><br>
+      </div>
+      <div class="col-md-10 col-lg-11 col-xs-12">
+      </div>
+    </div>
+  </div>
+</div>
 <!-- /// ----- HEADER -----/// -->
 
 <!---///--- BOX 1 NUEVO ---///----->
 <div class="box box-primary animated bounceInDown" id="boxDatos" hidden>
-    <div class="box-header with-border">
-        <div class="box-tittle">
-            <h4>Detalle Etapa Productiva</h4>
-        </div>
-        <div class="box-tools pull-right border ">
-            <button type="button" id="btnclose" title="cerrar" class="btn btn-box-tool" data-widget="remove"
-                data-toggle="tooltip" title="" data-original-title="Remove">
-                <i class="fa fa-times"></i>
-            </button>
-        </div>
+  <div class="box-header with-border">
+    <div class="box-tittle">
+      <h4>Nueva Etapa Productiva</h4>
     </div>
-    <!--_____________________________________________-->
-    <div class="box-body">
-      <form class="formEtapas" id="formEtapas">
-        <!--Nombre-->
-        <div class="col-md-6 col-sm-6 col-xs-12">
-          <div class="form-group">
-            <label for="nombre">Nombre <strong style="color: #dd4b39">*</strong>:</label>
-            <input type="text" id="nombre" name="nombre" class="form-control requerido" placeholder="Ingrese Nombre...">
-          </div>
+    <div class="box-tools pull-right border ">
+      <button type="button" id="btnclose" title="cerrar" class="btn btn-box-tool" data-widget="remove"
+          data-toggle="tooltip" title="" data-original-title="Remove">
+        <i class="fa fa-times"></i>
+      </button>
+    </div>
+  </div>
+  <!--_____________________________________________-->
+  <div class="box-body">
+    <form class="formEtapas" id="formEtapas">
+      <!--Nombre-->
+      <div class="col-md-6 col-sm-6 col-xs-12">
+        <div class="form-group">
+          <label for="nombre">Nombre <strong style="color: #dd4b39">*</strong>:</label>
+          <input type="text" id="nombre" name="nombre" class="form-control requerido" placeholder="Ingrese Nombre...">
         </div>
-        <!--________________-->
-        <!--Proceso Productivo-->
-        <div class="col-md-6 col-sm-6 col-xs-12">
-          <div class="form-group">
-            <label for="proc_id">Proceso Productivo<strong style="color: #dd4b39">*</strong>:</label>
-            <select type="text" id="proc_id" name="proc_id" class="form-control selec_habilitar requerido" >
-              <option value="-1" disabled selected>-Seleccione opción-</option>
-              <?php
-                foreach ($listarProcesos as $proceso) {
-                    echo '<option  value="'.$proceso->proc_id.'">'.$proceso->nombre.'</option>';
-                }
-              ?>
-            </select>
-          </div>
+      </div>
+      <!--________________-->
+      <!--Proceso Productivo-->
+      <div class="col-md-6 col-sm-6 col-xs-12">
+        <div class="form-group">
+          <label for="proc_id">Proceso Productivo<strong style="color: #dd4b39">*</strong>:</label>
+          <select type="text" id="proc_id" name="proc_id" class="form-control selec_habilitar requerido" >
+            <option value="-1" disabled selected>-Seleccione opción-</option>
+            <?php
+              foreach ($listarProcesos as $proceso) {
+                echo '<option  value="'.$proceso->proc_id.'">'.$proceso->nombre.'</option>';
+              }
+            ?>
+          </select>
         </div>
-        <!--________________-->
-        <!--Tipo-->
-        <div class="col-md-6 col-sm-6 col-xs-12">
-          <div class="form-group">
-            <label for="tiet_id">Tipo<strong style="color: #dd4b39">*</strong>:</label>
-            <select type="text" id="tiet_id" name="tiet_id" class="form-control selec_habilitar requerido" >
-              <option value="-1" disabled selected>-Seleccione opción-</option>
-              <?php
-                foreach ($listarTipos as $tipo) {
-                    echo '<option value="'.$tipo->tabl_id.'">'.$tipo->valor.'</option>';
-                }
-              ?>
-            </select>
-          </div>
+      </div>
+      <!--________________-->
+      <!--Tipo-->
+      <div class="col-md-6 col-sm-6 col-xs-12">
+        <div class="form-group">
+          <label for="tiet_id">Tipo<strong style="color: #dd4b39">*</strong>:</label>
+          <select type="text" id="tiet_id" name="tiet_id" class="form-control selec_habilitar requerido" >
+            <option value="-1" disabled selected>-Seleccione opción-</option>
+            <?php
+              foreach ($listarTipos as $tipo) {
+                echo '<option value="'.$tipo->tabl_id.'">'.$tipo->valor.'</option>';
+              }
+            ?>
+          </select>
         </div>
-        <!--________________-->
-        <!--Recipiente-->
-        <div class="col-md-6 col-sm-6 col-xs-12">
-            <div class="form-group">
-              <label for="nom_recipiente">Recipiente <strong style="color: #dd4b39">*</strong>:</label>
-              <input type="text" id="nom_recipiente" name="nom_recipiente" class="form-control requerido" placeholder="Ingrese Codigo...">
-            </div>
+      </div>
+      <!--________________-->
+      <!--Recipiente-->
+      <div class="col-md-6 col-sm-6 col-xs-12">
+        <div class="form-group">
+          <label for="nom_recipiente">Recipiente <strong style="color: #dd4b39">*</strong>:</label>
+          <input type="text" id="nom_recipiente" name="nom_recipiente" class="form-control requerido" placeholder="Ingrese Codigo...">
         </div>
-        <!--________________-->
-        <!--Orden-->
-        <div class="col-md-6 col-sm-6 col-xs-12">
-          <div class="form-group">
-            <label for="orden">Orden <strong style="color: #dd4b39">*</strong>:</label>
-            <input type="number" id="orden" name="orden" class="form-control requerido" placeholder="Ingrese Orden...">
-          </div>
+      </div>
+      <!--________________-->
+      <!--Orden-->
+      <div class="col-md-6 col-sm-6 col-xs-12">
+        <div class="form-group">
+          <label for="orden">Orden <strong style="color: #dd4b39">*</strong>:</label>
+          <input type="number" id="orden" name="orden" class="form-control requerido" placeholder="Ingrese Orden...">
         </div>
-        <!--________________-->
-        <!--Formulario-->
-        <div class="col-md-6 col-sm-6 col-xs-12">
-          <div class="form-group">
+      </div>
+      <!--________________-->
+      <!--Formulario-->
+      <div class="col-md-6 col-sm-6 col-xs-12">
+        <div class="form-group">
           <label for="form_id">Formulario :</label>
-            <select type="text" id="form_id" name="form_id" class="form-control selec_habilitar requerido" >
-              <option value="-1" disabled selected>-Seleccione opción-</option>
-              <?php
-                foreach ($listarFormularios as $formulario) {
-                    echo '<option  value="'.$formulario->form_id.'">'.$formulario->nombre.'</option>';
-                }
-              ?>
-            </select>
-          </div>
+          <select type="text" id="form_id" name="form_id" class="form-control selec_habilitar requerido" >
+            <option value="-1" disabled selected>-Seleccione opción-</option>
+            <?php
+              foreach ($listarFormularios as $formulario) {
+                echo '<option  value="'.$formulario->form_id.'">'.$formulario->nombre.'</option>';
+              }
+            ?>
+          </select>
         </div>
-        <!--________________-->
-      </form>
-    </div>
-      <!--_________________ GUARDAR_________________-->
-      <div class="modal-footer">
-        <div class="form-group text-right">
-        <button type="button" class="btn btn-primary" onclick="guardar('nueva')" >Guardar</button>
-      </div>                
-      <!--__________________________________-->
-    </div>
+      </div>
+      <!--________________-->
+    </form>
+  </div>
+  <!--_________________ GUARDAR_________________-->
+  <div class="modal-footer">
+    <div class="form-group text-right">
+      <button type="button" class="btn btn-primary" onclick="guardar('nueva')" >Guardar</button>
+    </div>                
+  </div>
+  <!--__________________________________-->
 </div>
 <!---///--- FIN BOX NUEVO ---///----->
 
@@ -120,11 +121,11 @@
       <div class="row">
         <div class="col-sm-6"></div>
         <div class="col-sm-6"></div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 table-scroll" id="cargar_tabla">
         </div>
-        <div class="row">
-          <div class="col-sm-12 table-scroll" id="cargar_tabla">
-          </div>
-        </div>						
+      </div>						
     </div>
   </div>
 </div>
@@ -226,8 +227,8 @@
       </div>
       <div class="modal-footer">
         <div class="form-group text-right">
-            <button type="" class="btn btn-primary habilitar" data-dismiss="modal" id="btnsave_edit" onclick="guardar('editar')">Guardar</button>
-            <button type="button" class="btn btn-default cerrarModalEdit" data-dismiss="modal">Cerrar</button>
+          <button type="" class="btn btn-primary habilitar" data-dismiss="modal" id="btnsave_edit" onclick="guardar('editar')">Guardar</button>
+          <button type="button" class="btn btn-default cerrarModalEdit" data-dismiss="modal">Cerrar</button>
         </div>
       </div>
     </div>
@@ -250,26 +251,26 @@
           <div class="row">
             <div class="col-sm-6"></div>
             <div class="col-sm-6"></div>
+          </div>
+          <div class="row">            
+            <div class="col-sm-12 table-scroll">
+            <button class="btn btn-block btn-primary" style="width: 100px; margin-top: 10px;" onclick="agregarArticulo()">Agregar</button>
+              <table id="tabla_articulos" class="table table-bordered table-striped">
+                <thead class="thead-dark" bgcolor="#eeeeee">
+                  <th>Acción</th>
+                  <th>Código</th>
+                  <th>Nombre</th>								
+                  <th>Tipo</th>
+                  <th>Unidad Medida</th>
+                  <th>Es caja</th>
+                  <th>Cant. x Caja</th>
+                </thead>
+                <tbody >
+                  <!--TABLE BODY -->
+                </tbody>
+              </table>
             </div>
-            <div class="row">            
-              <div class="col-sm-12 table-scroll">
-              <button class="btn btn-block btn-primary" style="width: 100px; margin-top: 10px;" onclick="nuevoNCmodal()">Agregar</button>
-                <table id="tabla_articulos" class="table table-bordered table-striped">
-                  <thead class="thead-dark" bgcolor="#eeeeee">
-                    <th>Acción</th>
-                    <th>Código</th>
-                    <th>Nombre</th>								
-                    <th>Tipo</th>
-                    <th>Unidad Medida</th>
-                    <th>Es caja</th>
-                    <th>Cant. x Caja</th>
-                  </thead>
-                  <tbody >
-                    <!--TABLE BODY -->
-                  </tbody>
-                </table>
-              </div>
-            </div>						
+          </div>						
         </div>
       </div>
       <div class="modal-footer">
@@ -282,6 +283,65 @@
 </div>
 <!---///////--- FIN MODAL ARTICULOS ---///////--->
 
+<!---///////--- MODAL AGREGAR ARTICULO ---///////--->
+<div class="modal fade bs-example-modal-lg" id="modalAgregarArticulo" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-blue">
+        <button type="button" class="close close_modal_edit" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" style="color:white;">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body ">
+          <div class="form-horizontal">
+            <div class="row">
+              <form class="frmArticulo" id="frmArticulo">
+                <div class="col-sm-6">
+                <input type="text" class="form-control habilitar hidden" name="etap_id" id="etapa_id">
+                  <!--_____________ Artículo _____________-->
+                  <div class="form-group">
+                      <label for="articulo_id" class="col-sm-4 control-label">Artículo:</label>
+                      <div class="col-sm-8">
+                        <select class="form-control select2 select2-hidden-accesible habilitar requerido" name="arti_id" id="articulo_id">
+                          <option value="" disabled selected>-Seleccione opción-</option>	
+                          <?php
+                            foreach ($listarArticulos as $articulo) {
+                              echo '<option  value="'.$articulo->arti_id.'">'.$articulo->descripcion.' - Stock: '.$articulo->stock.'</option>';
+                            }
+                          ?>
+                        </select>
+                      </div>
+                    </div>
+                  <!--__________________________-->   
+                  <!--_____________ Tipo _____________-->
+                  <div class="form-group">
+                      <label for="tipo_id" class="col-sm-4 control-label">Tipo:</label>
+                      <div class="col-sm-8">
+                        <select class="form-control select2 select2-hidden-accesible habilitar requerido" name="tipo_id" id="tipo_id">
+                          <option value="" disabled selected>-Seleccione opción-</option>	
+                          <option value="1">Entrada</option>	
+                          <option value="2">Producto</option>	
+                          <option value="3">Salida</option>
+                        </select>
+                      </div>
+                    </div>
+                  <!--__________________________-->   
+                </div>
+              </form>
+            </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+          <div class="form-group text-right">
+              <button type="" class="btn btn-primary habilitar" data-dismiss="modal" id="btnsave_edit" onclick="guardarArticulo()">Guardar</button>
+              <button type="" class="btn btn-default cerrarModalEdit" id="" data-dismiss="modal">Cerrar</button>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!---///////--- FIN MODAL AGREGAR ARTICULO ---///////--->
+
 <script>
   // carga tabla genaral de circuitos
   $("#cargar_tabla").load("<?php echo base_url(PRD); ?>/general/Etapa/listarEtapas");
@@ -290,86 +350,76 @@
 
   // muestra box de datos al dar click en boton agregar
   $("#botonAgregar").on("click", function() {
-
-      $("#botonAgregar").attr("disabled", "");
-      //$("#boxDatos").removeAttr("hidden");
-      $("#boxDatos").focus();
-      $("#boxDatos").show();
+    $("#botonAgregar").attr("disabled", "");
+    //$("#boxDatos").removeAttr("hidden");
+    $("#boxDatos").focus();
+    $("#boxDatos").show();
   });
 
 	// muestra box de datos al dar click en X
 	$("#btnclose").on("click", function() {
-
-      $("#boxDatos").hide(500);
-      $("#botonAgregar").removeAttr("disabled");
-      //$('#formDatos').data('bootstrapValidator').resetForm();
-      $("#formDatos")[0].reset();
+    $("#boxDatos").hide(500);
+    $("#botonAgregar").removeAttr("disabled");
+    //$('#formDatos').data('bootstrapValidator').resetForm();
+    $("#formDatos")[0].reset();
   });
 
   // al cambiar de establecimiento llena select con pañoles
   $("#esta_id").change(function(){
-
-      wo();
-      //limpia las opciones de pañol
-      $('#pano_id').empty();
-      var esta_id = $(this).val();
-
-      $.ajax({
-          type: 'POST',
-          data:{esta_id:esta_id },
-          url: 'index.php/<?php echo PRD ?>Etapa/obtenerPanoles',
-          success: function(result) {
-
-            $('#pano_id').empty();
-            panol = JSON.parse(result);
-            var html = "";
-
-            if (panol == null) {
-
-              html = html + '<option value="-1" disabled selected>- El Establecimiento no tiene Pañol Asociado -</option>';
-            }else{
-
-              html = html + '<option value="-1" disabled selected>-Seleccione Pañol-</option>';
-              $.each(panol, function(i,h){
-                html = html + "<option data-json= '" + JSON.stringify(h) + "'value='" + h.pano_id + "'>" + h.descripcion + "</option>";
-              });
-            }
-            $('#pano_id').append(html);
-            wc();
-          },
-          error: function(result){
-
-                wc();
-                alert('No hay Pañoles asociados a este Establecimiento...');
-          }
-      });
+    wo();
+    //limpia las opciones de pañol
+    $('#pano_id').empty();
+    var esta_id = $(this).val();
+    $.ajax({
+      type: 'POST',
+      data:{esta_id:esta_id },
+      url: 'index.php/<?php echo PRD ?>Etapa/obtenerPanoles',
+      success: function(result) {
+        $('#pano_id').empty();
+        panol = JSON.parse(result);
+        var html = "";
+        if (panol == null) {
+          html = html + '<option value="-1" disabled selected>- El Establecimiento no tiene Pañol Asociado -</option>';
+        }else{
+          html = html + '<option value="-1" disabled selected>-Seleccione Pañol-</option>';
+          $.each(panol, function(i,h){
+            html = html + "<option data-json= '" + JSON.stringify(h) + "'value='" + h.pano_id + "'>" + h.descripcion + "</option>";
+          });
+        }
+        $('#pano_id').append(html);
+        wc();
+      },
+      error: function(result){
+        wc();
+        alert('No hay Pañoles asociados a este Establecimiento...');
+      }
+    });
   });
 
   // valida campos obligatorios
   function validarCampos(form){
-
     var mensaje = "";
     var ban = true;
     $('#' + form).find('.requerido').each(function() {
       if (this.value == "" || this.value=="-1") {
-          ban = ban && false;
-          return;
+        ban = ban && false;
+        return;
       }
     });
     if (!ban){
-        if(!alertify.errorAlert){
-          alertify.dialog('errorAlert',function factory(){
-            return{
-                    build:function(){
-                        var errorHeader = '<span class="fa fa-times-circle fa-2x" '
-                        +    'style="vertical-align:middle;color:#e10000;">'
-                        + '</span>Error...!!';
-                        this.setHeader(errorHeader);
-                    }
-                };
-            },true,'alert');
-        }
-        alertify.errorAlert("Por favor complete los campos Obligatorios(*)..." );
+      if(!alertify.errorAlert){
+        alertify.dialog('errorAlert',function factory(){
+          return{
+            build:function(){
+              var errorHeader = '<span class="fa fa-times-circle fa-2x" '
+              +    'style="vertical-align:middle;color:#e10000;">'
+              + '</span>Error...!!';
+              this.setHeader(errorHeader);
+            }
+          };
+        },true,'alert');
+      }
+      alertify.errorAlert("Por favor complete los campos Obligatorios(*)..." );
     }
     return ban;
   }
@@ -379,7 +429,6 @@
 
     var recurso = "";
     if (operacion == "editar") {
-
       if( !validarCampos('formEdicion') ){
         return;
       }
@@ -388,7 +437,6 @@
       var datos = formToObject(datos);
       recurso = 'index.php/<?php echo PRD ?>general/Etapa/editarEtapa';
     } else {
-
       // if( !validarCampos('formEtapas') ){
       //   return;
       // }
@@ -399,29 +447,69 @@
     }
     wo();
     $.ajax({
-        type: 'POST',
-        data:{ datos },
-        //dataType: 'JSON',
-        url: recurso,
-        success: function(result) {
-
-          $("#cargar_tabla").load("<?php echo base_url(PRD); ?>general/Etapa/listarEtapas");
-          wc();
-          $("#boxDatos").hide(500);
-          $("#formEtapas")[0].reset();
-          $("#botonAgregar").removeAttr("disabled");
-          if (operacion == "editar") {
-            alertify.success("Etapa Editada Exitosamente");
-          }else{
-            alertify.success("Etapa Agregada con Exito");
-          }
-        },
-        error: function(result){
-          wc();
-          alertify.error("Error agregando Etapa");
+      type: 'POST',
+      data:{ datos },
+      //dataType: 'JSON',
+      url: recurso,
+      success: function(result) {
+        $("#cargar_tabla").load("<?php echo base_url(PRD); ?>general/Etapa/listarEtapas");
+        wc();
+        $("#boxDatos").hide(500);
+        $("#formEtapas")[0].reset();
+        $("#botonAgregar").removeAttr("disabled");
+        if (operacion == "editar") {
+          alertify.success("Etapa Editada Exitosamente");
+        }else{
+          alertify.success("Etapa Agregada con Exito");
         }
+      },
+      error: function(result){
+        wc();
+        alertify.error("Error agregando Etapa");
+      }
     });
+  }
 
+  function agregarArticulo() {
+    $(".modal-header h4").remove();
+    //guardo el tipo de operacion en el modal
+    $("#operacion").val("Edit");
+    //pongo titulo al modal
+    $(".modal-header").append('<h4 class="modal-title"  id="myModalLabel"><span id="modalAction" class="fa fa-fw fa-pencil"></span> Agregar Artículo</h4>');
+    $("#modalarticulos").modal('hide');
+    $('#modalAgregarArticulo').modal('show');
+    var etap_id = $("#id_etap").val();
+    // guardo etap_id en modal para usar en funcion agregar articulo
+    $("#etapa_id").val(etap_id);
+  }
+
+  function guardarArticulo () {
+    if( !validarCampos('frmArticulo') ){
+      return;
+    }
+    var recurso = "";
+    var form = $('#frmArticulo')[0];
+    var datos = new FormData(form);
+    var datos = formToObject(datos);
+    recurso = 'index.php/<?php echo PRD ?>general/Etapa/guardarArticulo';
+    wo();
+    $.ajax({
+      type: 'POST',
+      data:{ datos },
+      dataType: 'JSON',
+      url: recurso,
+      success: function(result) {
+        $("#cargar_tabla").load("<?php echo base_url(PRD); ?>general/Etapa/listarEtapas");
+        wc();
+        $("#modalAgregarArticulo").hide(500);
+        form.reset();
+        alertify.success("Artículo agregado con éxito");
+      },
+      error: function(result){
+        wc();
+        alertify.error("Error agregando Artículo");
+      }
+    });
   }
 
 </script>
