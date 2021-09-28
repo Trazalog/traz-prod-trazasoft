@@ -274,7 +274,6 @@ class Etapa extends CI_Controller
 
         $this->load->model(ALM.'new/Pedidosmateriales');
         $this->Notapedidos->setCaseId($pema_id, $rsp['data']['caseId']);
-        $this->Pedidosmateriales->setCaseEmpresa($rsp['data']['caseId']);
 
         // AVANZA PROCESO A TAREA SIGUIENTE
         if (PLANIF_AVANZA_TAREA) {
@@ -507,12 +506,12 @@ class Etapa extends CI_Controller
             $arrayPost["tipo_recurso"] = $value->tipo_recurso;
             $arrayPost['batch_id'] = "0";
             $arrayPost['planificado'] = "false";
-             $arrayPost['noco_list'] = isset($value->nocos)?implode(';',$value->nocos):'';
+            $arrayPost['noco_list'] = isset($value->nocos)?implode(';',$value->nocos):'';
             $arrayDatos['_post_lote_noconsumibles_list_batch_req']['_post_lote_noconsumibles_list'][] = $arrayPost;
 						$noco_list = isset($value->nocos)? $value->nocos:'';
         }
-				// se crean lotes nuevos a traves de un store procedure
-        $rsp = $this->Etapas->finalizarEtapa($arrayDatos);
+			// se crean lotes nuevos a traves de un store procedure
+            $rsp = $this->Etapas->finalizarEtapa($arrayDatos);
 
 				// si tiene asociado no consumibles se guarda el movimiento y el nuevo estado
 				if ($rsp['status']){
@@ -524,15 +523,16 @@ class Etapa extends CI_Controller
 								$depo_id = $this->input->post('depo_id');
 								$estado = $this->input->post('estado');
 								$destino = "";
+                                if ($noco_list !='' and $noco_list != null ){
+                                    $respNoco = $this->Noconsumibles->movimientoNoConsumibles($noco_list, $estado, $depo_id, $destino);
 
-								$respNoco = $this->Noconsumibles->movimientoNoConsumibles($noco_list, $estado, $depo_id, $destino);
-
-								if ($respNoco == null) {
-										# si la respuesta es negativa corto la ejecucion
-										log_message('ERROR','#TRAZA|TRAZ-PROD-TRAZASOFT|ETAPA|Finalizar() >> ERROR: NO SE PUDO ASOCIAR LOS NO CONSMIBLES.');
-										echo json_encode($rsp = array('mensNoCons'=>'No se pudieron asociar los No Consumibles'));
-										return;
-								}
+                                    if ($respNoco == null) {
+                                            # si la respuesta es negativa corto la ejecucion
+                                            log_message('ERROR','#TRAZA|TRAZ-PROD-TRAZASOFT|ETAPA|Finalizar() >> ERROR: NO SE PUDO ASOCIAR LOS NO CONSMIBLES.');
+                                            echo json_encode($rsp = array('mensNoCons'=>'No se pudieron asociar los No Consumibles'));
+                                            return;
+                                    }
+                                }
 						}
 				}
 
@@ -597,8 +597,7 @@ class Etapa extends CI_Controller
         //    $data['lang'] = lang_get('spanish',5);
         $data['establecimientos'] = $this->Establecimientos->listarTodo()->establecimientos->establecimiento;
         $data['empaques'] = $this->Recipientes->listarEmpaques()->empaques->empaque;
-        $data['articulos_fraccionar'] = $this->Articulos->obtenerXTipo('Proceso')['data'];
-        //$data['materias'] = $this->Materias->listar()->materias->materia;
+        $data['articulos_fraccionar'] = $this->Articulos->obtenerXTipo('Final')['data'];
         $this->load->view('etapa/fraccionar/fraccionar', $data);
     }
 
@@ -618,7 +617,7 @@ class Etapa extends CI_Controller
     public function getUsers()
     {
         // $usuarios = $this->bpm->getUsuariosBPM();//usuarios bonita
-        $usuarios = $this->Etapas->getUsers()->users->user; //usuarios seg.users
+        $usuarios = $this->Etapas->getUsers()->usuarios->usuario; //usuarios seg.users
         echo json_encode($usuarios);
     }
 
@@ -694,6 +693,7 @@ class Etapa extends CI_Controller
         $data['listarTipos'] = $this->Etapas->listarTipos()->tablas->tabla;
         $data['listarFormularios'] = $this->Forms->listarFormularios()->formularios->formulario;        
         $data['listarEtapasProductivas'] = $this->Etapas->listarEtapasProductivas()->etapas_productivas->etapa_productiva;
+        $data['listarArticulos'] = $this->Etapas->listarArticulos()->articulos->articulo;
         $this->load->view('etapa/abm_etapa/view_',$data);
     }
 
@@ -749,19 +749,27 @@ class Etapa extends CI_Controller
         log_message('INFO','#TRAZA | ETAPAS | borrarValor() >> ');
 		$arti_id = $this->input->post('arti_id');
         $tipo = $this->input->post('tipo');
+        $etap_id = $this->input->post('etap_id');
         switch ($tipo) {
             case 'Entrada':
-                $result = $this->Etapas->borrarArticuloEntrada($arti_id);
+                $result = $this->Etapas->borrarArticuloEntrada($arti_id, $etap_id);
                 break;
             case 'Producto':
-                $result = $this->Etapas->borrarArticuloProducto($arti_id);
+                $result = $this->Etapas->borrarArticuloProducto($arti_id, $etap_id);
                 break;
             case 'Salida':
-                $result = $this->Etapas->borrarArticuloSalida($arti_id);
+                $result = $this->Etapas->borrarArticuloSalida($arti_id, $etap_id);
                 break;
         };
 		// $result = $this->Etapas->borrarArticuloDeEtapa($arti_id, $tipo);
 		echo json_encode($result);
     }
+
+    public function guardarArticulo()
+	{
+        $data = $this->input->post('datos');
+		$resp = $this->Etapas->guardarArticulo($data);
+        echo json_encode($resp);
+	}
 
 }

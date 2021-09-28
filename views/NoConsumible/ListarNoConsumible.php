@@ -8,13 +8,14 @@
 				<table id="tbl-NoConsumibles" class="table table-striped table-hover">
 					<thead>
 							<tr>
-									<th>Acciones</th>
-									<th>Código</th>
-									<!-- <th>Tipo</th> -->
-									<th>Descripción</th>
-									<th>Fecha de Alta</th>
-									<th>Fecha de Vencimiento</th>
-									<th width="10%">Estado</th>
+								<th width="15%">Acciones</th>
+								<th>Código</th>
+								<!-- <th>Tipo</th> -->
+								<th width="25%">Descripción</th>
+								<th>Fecha de Alta</th>
+								<th>Fecha de Vencimiento</th>
+								<th width="20%">Lotes</th>
+								<th width="10%">Estado</th>
 							</tr>
 					</thead>
 					<tbody>
@@ -27,19 +28,20 @@
 								$descripcion = $rsp->descripcion;
 								$fec_alta = $rsp->fec_alta;
 								$fec_vencimiento = $rsp->fec_vencimiento;
+								$lotes = $rsp->lotes;
 								echo "<tr id='$codigo' data-json='" . json_encode($rsp) . "'>";
 									echo "<td class='text-center text-light-blue'>";
 									echo '<i class="fa fa-search" style="cursor: pointer;margin: 3px;" title="Ver Detalles" onclick="verInfo(this)"></i>';
 									echo '<i class="fa fa-fw fa-pencil " style="cursor: pointer; margin: 3px;" title="Editar" onclick="editarInfo(this)"></i>';
 									echo '<i class="fa fa-fw fa-times-circle eliminar" style="cursor: pointer;margin: 3px;" title="Eliminar" onclick="eliminar(this)"></i>';
 									echo '<i class="fa fa-undo" style="cursor: pointer;margin: 3px;" title="Trazabilidad" onclick="trazabilidad(this)"></i>';
-									echo '<i class="'.($estadoNoconsumible == 'ALTA' ? 'fa fa-fw fa-toggle-on text-light-blue': "fa fa-fw fa-toggle-off text-light-blue").' " title="Habilitar" style="cursor: pointer; margin-left: 15px;" onclick="cambioEstado(this)"></i>';
-									echo "</td>";
+									echo '<i class="'.($estadoNoconsumible == 'ALTA' ? 'fa fa-fw fa-toggle-off text-light-blue': "fa fa-fw fa-toggle-on text-light-blue").' " title="Habilitar" style="cursor: pointer; margin-left: 15px;" onclick="cambioEstado(this)"></i>';									echo "</td>";
 									echo '<td>'.$codigo.'</td>';
 									//echo '<td>'.$tipo.'</td>';
 									echo '<td>'.$descripcion.'</td>';
 									echo '<td>'.formatFechaPG($fec_alta).'</td>';
 									echo '<td>'.formatFechaPG($fec_vencimiento).'</td>';
+									echo '<td>'.$lotes.'</td>';
 									echo '<td>'.estadoNoCon($estadoNoconsumible).'</td>';
 								echo '</tr>';
 						}
