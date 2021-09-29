@@ -10,10 +10,9 @@ $this->load->view('camion/modal_recepcioncamion');
 <!--Pantalla "LISTADO RECEPCION DE CAMION"-->
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h4 class="box-title">Entrada Recepción MP</h4><br>      
+        <h4 class="box-title">Listado Recepción Camión</h4><br>
     </div>
-    <button class="btn btn-primary" onclick="linkTo('<?php echo base_url(PRD) ?>general/Camion/entradaCamion')" style="margin-top:10px;">Nueva Entrada | Recepción MP</button>
-   <br><br>
+
     <div class="box-body hidden">
         <!--________________________________________________________________________-->
 
@@ -85,10 +84,10 @@ $this->load->view('camion/modal_recepcioncamion');
             <!--Cabecera del datatable-->
             <thead>
                 <th></th>
+                <th>Accion</th>
                 <th>N° Boleta</th>
                 <th>Proveedor</th>
                 <th>Transportista</th>
-                <th>CUIT</th>
                 <th>Fecha</th>
                 <th>Patente - Acoplado</th>
                 <th>Neto</th>
@@ -105,17 +104,16 @@ $this->load->view('camion/modal_recepcioncamion');
           if($fila->estado == 'Finalizado') continue;
           $id=$fila->id;
           echo "<tr  id='$id' data-json='".json_encode($fila->articulos)."'>";
-
           echo '<td width="5%" class="text-center" style="font-weight: lighter;">';
           echo "<a class='mr-2' onclick='salidaCamiones(\"$fila->patente\")'><i class='fa fa-fw fa-truck text-red ml-1' style='cursor: pointer;' title='Salida camion'></i></a>";
 
           echo '<i class="fa fa-fw fa-truck text-light-blue" style="cursor: pointer;" title="Ver Lotes"  onclick="rellenarDetalles(this)"></i>';
           echo '</td>';
+          echo "<th><b>".(strtoupper($fila->accion))."</b></th>";
 
           echo '<td style="font-weight: lighter;">'.$fila->boleta.'</td>';
           echo '<td style="font-weight: lighter;">'.$fila->proveedor.'</td>';
-          echo '<td style="font-weight: lighter;">'.$fila->transportista.'</td>';
-          echo '<td style="font-weight: lighter;">'.$fila->cuit.'</td>';
+          echo '<td style="font-weight: lighter;">'.$fila->transportista.' | <b>CUIT: </b>'.$fila->cuit.'</td>';
           echo '<td style="font-weight: lighter;">'.$fila->fecha_entrada.'</td>';
           echo '<td style="font-weight: lighter;">'.$fila->patente .' | '.$fila->acoplado.'</td>';
           echo '<td style="font-weight: lighter;">'.$fila->neto.'</td>';
