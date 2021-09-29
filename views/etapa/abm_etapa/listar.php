@@ -72,6 +72,7 @@
     ///FIXME: LIMPIAR LOS CAMPOS Y SELECTS
   });
   $(".btnArticulos").on("click", function(e) {
+    $("#modalarticulos td").remove();
     $(".modal-header h4").remove();
     //guardo el tipo de operacion en el modal
     $("#operacion").val("Articulos");
@@ -86,21 +87,29 @@
         type: 'GET',
         url: 'index.php/<?php echo PRD ?>general/Etapa/listarArticulosYTipos?etap_id='+etap_id,
         success: function(result) {
+          if (result) {
             var tabla = $('#modalarticulos table');    
             $(tabla).find('tbody').html('');
             result.forEach(e => {
+                if (e.es_caja == true){
+                  e.es_caja = "SI";
+                }else{
+                  e.es_caja = "NO";
+                };
                 $(tabla).append(
-                    '<tr>' +
-                    '<td>' + e.barcode + '</td>' +
-                    '<td>' + e.descripcion + '</td>' +
-                    '<td>' + e.tipo + '</td>' +
-                    '<td>' + e.unidad_medida + '</td>' +
-                    '<td>' + e.es_caja + '</td>' +
-                    '<td class="text-center">' + e.cantidad_caja + '</td>' +
-                    '</tr>'
+                  "<tr data-json= ' "+ JSON.stringify(e) +" '>" +
+                    "<td><button type='button' title='Eliminar Artículo' class='btn btn-primary btn-circle btnEliminar' onclick='eliminarArticulo(this)' id='btnBorrar'><span class='glyphicon glyphicon-trash' aria-hidden='true' ></span></button>" +
+                    "<td>" + e.barcode + "</td>" +
+                    "<td>" + e.descripcion + "</td>" +
+                    "<td>" + e.tipo + "</td>" +
+                    "<td>" + e.unidad_medida + "</td>" +
+                    "<td>" + e.es_caja + "</td>" +
+                    "<td class='text-center'>" + e.cantidad_caja + "</td>" +
+                  "</tr>"
                 );
-            });         
-            $('#modalarticulos').modal('show');           
+            });            
+          };
+          $('#modalarticulos').modal('show'); 
         },
         error: function(result) {
             alert('Error');
@@ -159,9 +168,10 @@
         data:{etap_id: etap_id},
         url: 'index.php/<?php echo PRD ?>general/Etapa/borrarEtapa',
         success: function(result) {
-              $("#cargar_tabla").load("<?php echo base_url(PRD); ?>general/Etapa/listarEtapas");
-              wc();
-              $("#modalaviso").modal('hide');
+          $("#cargar_tabla").load("<?php echo base_url(PRD); ?>general/Etapa/listarEtapas");
+          wc();
+          $("#modalaviso").modal('hide');
+          alertify.success("Etapa Productiva eliminada con éxito");
         },
         error: function(result){
           wc();
@@ -170,11 +180,12 @@
         }
     });
   }
+
   // Config Tabla
   DataTable($('#tabla_etapas_productivas'));
 </script>
 
-<!-- Modal aviso eliminar -->
+<!-- Modal aviso eliminar etapa productiva-->
 <div class="modal fade" id="modalaviso">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -198,5 +209,3 @@
     </div>
 </div>
 <!-- /  Modal aviso eliminar -->
-
-
