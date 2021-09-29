@@ -693,7 +693,6 @@ class Etapa extends CI_Controller
         $data['listarTipos'] = $this->Etapas->listarTipos()->tablas->tabla;
         $data['listarFormularios'] = $this->Forms->listarFormularios()->formularios->formulario;        
         $data['listarEtapasProductivas'] = $this->Etapas->listarEtapasProductivas()->etapas_productivas->etapa_productiva;
-        $data['listarArticulos'] = $this->Etapas->listarArticulos()->articulos->articulo;
         $this->load->view('etapa/abm_etapa/view_',$data);
     }
 
@@ -743,33 +742,5 @@ class Etapa extends CI_Controller
 			echo json_encode($resp);
 		}
     }
-
-    public function borrarArticuloDeEtapa()
-    {
-        log_message('INFO','#TRAZA | ETAPAS | borrarValor() >> ');
-		$arti_id = $this->input->post('arti_id');
-        $tipo = $this->input->post('tipo');
-        $etap_id = $this->input->post('etap_id');
-        switch ($tipo) {
-            case 'Entrada':
-                $result = $this->Etapas->borrarArticuloEntrada($arti_id, $etap_id);
-                break;
-            case 'Producto':
-                $result = $this->Etapas->borrarArticuloProducto($arti_id, $etap_id);
-                break;
-            case 'Salida':
-                $result = $this->Etapas->borrarArticuloSalida($arti_id, $etap_id);
-                break;
-        };
-		// $result = $this->Etapas->borrarArticuloDeEtapa($arti_id, $tipo);
-		echo json_encode($result);
-    }
-
-    public function guardarArticulo()
-	{
-        $data = $this->input->post('datos');
-		$resp = $this->Etapas->guardarArticulo($data);
-        echo json_encode($resp);
-	}
 
 }

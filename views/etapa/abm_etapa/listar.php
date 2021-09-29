@@ -86,29 +86,21 @@
         type: 'GET',
         url: 'index.php/<?php echo PRD ?>general/Etapa/listarArticulosYTipos?etap_id='+etap_id,
         success: function(result) {
-          if (result) {
             var tabla = $('#modalarticulos table');    
             $(tabla).find('tbody').html('');
             result.forEach(e => {
-                if (e.es_caja == true){
-                  e.es_caja = "SI";
-                }else{
-                  e.es_caja = "NO";
-                };
                 $(tabla).append(
-                  "<tr data-json= ' "+ JSON.stringify(e) +" '>" +
-                    "<td><button type='button' title='Eliminar Artículo' class='btn btn-primary btn-circle btnEliminar' onclick='eliminarArticulo(this)' id='btnBorrar'><span class='glyphicon glyphicon-trash' aria-hidden='true' ></span></button>" +
-                    "<td>" + e.barcode + "</td>" +
-                    "<td>" + e.descripcion + "</td>" +
-                    "<td>" + e.tipo + "</td>" +
-                    "<td>" + e.unidad_medida + "</td>" +
-                    "<td>" + e.es_caja + "</td>" +
-                    "<td class='text-center'>" + e.cantidad_caja + "</td>" +
-                  "</tr>"
+                    '<tr>' +
+                    '<td>' + e.barcode + '</td>' +
+                    '<td>' + e.descripcion + '</td>' +
+                    '<td>' + e.tipo + '</td>' +
+                    '<td>' + e.unidad_medida + '</td>' +
+                    '<td>' + e.es_caja + '</td>' +
+                    '<td class="text-center">' + e.cantidad_caja + '</td>' +
+                    '</tr>'
                 );
-            });            
-          };
-          $('#modalarticulos').modal('show'); 
+            });         
+            $('#modalarticulos').modal('show');           
         },
         error: function(result) {
             alert('Error');
@@ -167,10 +159,9 @@
         data:{etap_id: etap_id},
         url: 'index.php/<?php echo PRD ?>general/Etapa/borrarEtapa',
         success: function(result) {
-          $("#cargar_tabla").load("<?php echo base_url(PRD); ?>general/Etapa/listarEtapas");
-          wc();
-          $("#modalaviso").modal('hide');
-          alertify.success("Etapa Productiva eliminada con éxito");
+              $("#cargar_tabla").load("<?php echo base_url(PRD); ?>general/Etapa/listarEtapas");
+              wc();
+              $("#modalaviso").modal('hide');
         },
         error: function(result){
           wc();
@@ -179,52 +170,11 @@
         }
     });
   }
-
-  function eliminarArticulo(e) {
-    var data = JSON.parse($(e).closest('tr').attr('data-json'));
-    var arti_id = data.arti_id;
-    var tipo = data.tipo;
-    // var etap_id = data.etap_id;
-    var etap_id = $("#id_etap").val();
-    $('#arti_id').val(data.arti_id);
-    $('#tipo').val(data.tipo);
-    $("#id_etapa").val(etap_id);
-    $(".modal-header h4").remove();
-    //pongo titulo al modal
-    $(".modal-header").append('<h4 class="modal-title"  id="myModalLabel"><span id="modalAction" class="fa fa-fw fa-pencil"></span> Eliminar Artículo </h4>');
-    $("#modalarticulos").modal('hide');
-    $('#modalAvisoArticulo').modal('show');
-	}
-
-  function eliminarArticuloDeEtapa() {
-        var arti_id = $("#arti_id").val();
-        var tipo = $("#tipo").val();
-        var etap_id = $("#id_etapa").val();
-        wo();
-        $.ajax({
-            type: 'POST',
-            data:{arti_id: arti_id, tipo: tipo, etap_id: etap_id},
-            url: 'index.php/<?php echo PRD ?>general/Etapa/borrarArticuloDeEtapa',
-            success: function(result) {
-              // seleccionTabla(arti_id)
-              $("#cargar_tabla").load("<?php echo base_url(PRD); ?>general/Etapa/listarEtapas");
-              wc();
-              $("#modalAvisoArticulo").modal('hide');
-              alertify.success("Artículo eliminado con éxito");
-            },
-            error: function(result){
-              wc();
-              $("#modalAvisoArticulo").modal('hide');
-              alertify.error('Error en eliminado de Artículo...');
-            }
-        });        
-    }
-
   // Config Tabla
   DataTable($('#tabla_etapas_productivas'));
 </script>
 
-<!-- Modal aviso eliminar etapa productiva-->
+<!-- Modal aviso eliminar -->
 <div class="modal fade" id="modalaviso">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -249,29 +199,4 @@
 </div>
 <!-- /  Modal aviso eliminar -->
 
-<!-- Modal aviso eliminar articulo-->
-<div class="modal fade" id="modalAvisoArticulo">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header bg-blue">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title"  id="myModalLabel"><span id="modalAction" class="fa fa-trash text-light-blue"></span> Eliminar Artículo</h4>
-        </div>
-        <div class="modal-body">
-          <div class="row">
-            <div class="col-xs-12">
-              <h4>¿Desea realmente eliminar el artículo de la etapa productiva?</h4>
-              <input type="text" id="arti_id" class="hidden">
-              <input type="text" id="tipo" class="hidden">
-              <input type="text" id="id_etapa" class="hidden">
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="eliminarArticuloDeEtapa()">Aceptar</button>
-        </div>
-      </div>
-    </div>
-</div>
-<!-- /  Modal aviso eliminar -->
+
