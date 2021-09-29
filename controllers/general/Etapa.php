@@ -708,6 +708,9 @@ class Etapa extends CI_Controller
 	{
 		$etapa = $this->input->post('datos');
 		$etapa['empr_id'] = empresa();
+        if (!$etapa['form_id']) {
+            $etapa['form_id'] = "";
+        }
 		$resp = $this->Etapas->guardarEtapa($etapa);
 		if ($resp != null) {
 			return json_encode(true);
@@ -716,7 +719,7 @@ class Etapa extends CI_Controller
 		}
 	}
 
-    function editarEtapa()
+    public function editarEtapa()
 	{
 		$etapa = $this->input->post('datos');
 		$etapa['empr_id'] = empresa();
