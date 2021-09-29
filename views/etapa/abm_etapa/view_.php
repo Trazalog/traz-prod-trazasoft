@@ -91,7 +91,7 @@
       <div class="col-md-6 col-sm-6 col-xs-12">
         <div class="form-group">
           <label for="form_id">Formulario :</label>
-          <select type="text" id="form_id" name="form_id" class="form-control selec_habilitar requerido" >
+          <select type="text" id="form_id" name="form_id" class="form-control selec_habilitar" >
             <option value="-1" disabled selected>-Seleccione opción-</option>
             <?php
               foreach ($listarFormularios as $formulario) {
@@ -243,7 +243,6 @@
       <div class="modal-header bg-blue">
         <button type="button" class="close close_modal_edit" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true" style="color:white;">&times;</span>
-          <input type="text" id="id_etap" class="hidden">
         </button>
       </div>
       <div class="modal-body ">
@@ -254,6 +253,7 @@
           </div>
           <div class="row">            
             <div class="col-sm-12 table-scroll">
+              <input type="text" id="id_etap" class="hidden">
             <button class="btn btn-block btn-primary" style="width: 100px; margin-top: 10px;" onclick="agregarArticulo()">Agregar</button>
               <table id="tabla_articulos" class="table table-bordered table-striped">
                 <thead class="thead-dark" bgcolor="#eeeeee">
@@ -361,39 +361,7 @@
     $("#boxDatos").hide(500);
     $("#botonAgregar").removeAttr("disabled");
     //$('#formDatos').data('bootstrapValidator').resetForm();
-    $("#formDatos")[0].reset();
-  });
-
-  // al cambiar de establecimiento llena select con pañoles
-  $("#esta_id").change(function(){
-    wo();
-    //limpia las opciones de pañol
-    $('#pano_id').empty();
-    var esta_id = $(this).val();
-    $.ajax({
-      type: 'POST',
-      data:{esta_id:esta_id },
-      url: 'index.php/<?php echo PRD ?>Etapa/obtenerPanoles',
-      success: function(result) {
-        $('#pano_id').empty();
-        panol = JSON.parse(result);
-        var html = "";
-        if (panol == null) {
-          html = html + '<option value="-1" disabled selected>- El Establecimiento no tiene Pañol Asociado -</option>';
-        }else{
-          html = html + '<option value="-1" disabled selected>-Seleccione Pañol-</option>';
-          $.each(panol, function(i,h){
-            html = html + "<option data-json= '" + JSON.stringify(h) + "'value='" + h.pano_id + "'>" + h.descripcion + "</option>";
-          });
-        }
-        $('#pano_id').append(html);
-        wc();
-      },
-      error: function(result){
-        wc();
-        alert('No hay Pañoles asociados a este Establecimiento...');
-      }
-    });
+    $("#formEtapas")[0].reset();
   });
 
   // valida campos obligatorios
@@ -426,7 +394,6 @@
 
   // Da de alta una herramienta nueva en pañol
   function guardar(operacion){
-
     var recurso = "";
     if (operacion == "editar") {
       if( !validarCampos('formEdicion') ){
@@ -437,9 +404,9 @@
       var datos = formToObject(datos);
       recurso = 'index.php/<?php echo PRD ?>general/Etapa/editarEtapa';
     } else {
-      // if( !validarCampos('formEtapas') ){
-      //   return;
-      // }
+      if( !validarCampos('formEtapas') ){
+        return;
+      }
       var form = $('#formEtapas')[0];
       var datos = new FormData(form);
       var datos = formToObject(datos);
@@ -471,6 +438,8 @@
   }
 
   function agregarArticulo() {
+    var form = $('#frmArticulo')[0];
+    form.reset();
     $(".modal-header h4").remove();
     //guardo el tipo de operacion en el modal
     $("#operacion").val("Edit");
@@ -478,8 +447,8 @@
     $(".modal-header").append('<h4 class="modal-title"  id="myModalLabel"><span id="modalAction" class="fa fa-fw fa-pencil"></span> Agregar Artículo</h4>');
     $("#modalarticulos").modal('hide');
     $('#modalAgregarArticulo').modal('show');
-    var etap_id = $("#id_etap").val();
     // guardo etap_id en modal para usar en funcion agregar articulo
+    var etap_id = $("#id_etap").val();
     $("#etapa_id").val(etap_id);
   }
 
@@ -500,10 +469,12 @@
       url: recurso,
       success: function(result) {
         $("#cargar_tabla").load("<?php echo base_url(PRD); ?>general/Etapa/listarEtapas");
-        wc();
+        setTimeout(function(){ 
+          wc();
+          alertify.success("Artículo agregado con éxito");
+        }, 3000);
         $("#modalAgregarArticulo").hide(500);
-        form.reset();
-        alertify.success("Artículo agregado con éxito");
+        // form.reset();
       },
       error: function(result){
         wc();
@@ -512,4 +483,76 @@
     });
   }
 
+  function eliminarArticulo(e) {
+    var data = JSON.parse($(e).closest('tr').attr('data-json'));
+    var arti_id = data.arti_id;
+    var tipo = data.tipo;
+    // var etap_id = data.etap_id;
+    $('#arti_id').val(data.arti_id);
+    $('#tipo').val(data.tipo);
+    var etap_id = $("#id_etap").val();
+    // var etap_id = $("#etapa_id").val();
+    $("#id_etapa_borrar").val(etap_id);
+
+    $(".modal-header h4").remove();
+    //pongo titulo al modal
+    $(".modal-header").append('<h4 class="modal-title"  id="myModalLabel"><span id="modalAction" class="fa fa-fw fa-pencil"></span> Eliminar Artículo </h4>');
+    $("#modalarticulos").modal('hide');
+    $('#modalAvisoArticulo').modal('show');
+	}
+
+  function eliminarArticuloDeEtapa() {
+        var arti_id = $("#arti_id").val();
+        var tipo = $("#tipo").val();
+        var etap_id = $("#id_etap").val();
+        // var etap_id = $("#id_etapa_borrar").val();
+        wo();
+        $.ajax({
+            type: 'POST',
+            data:{arti_id: arti_id, tipo: tipo, etap_id: etap_id},
+            url: 'index.php/<?php echo PRD ?>general/Etapa/borrarArticuloDeEtapa',
+            success: function(result) {
+              $("#cargar_tabla").load("<?php echo base_url(PRD); ?>general/Etapa/listarEtapas");
+              setTimeout(function(){ 
+                alertify.success("Artículo eliminado con éxito");
+                wc();
+                // alert("Hello"); 
+              }, 3000);
+              $("#modalAvisoArticulo").modal('hide');
+            },
+            error: function(result){
+              wc();
+              $("#modalAvisoArticulo").modal('hide');
+              alertify.error('Error en eliminado de Artículo...');
+            }
+        });        
+    }
+
 </script>
+
+<!-- Modal aviso eliminar articulo-->
+<div class="modal fade" id="modalAvisoArticulo">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header bg-blue">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title"  id="myModalLabel"><span id="modalAction" class="fa fa-trash text-light-blue"></span> Eliminar Artículo</h4>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-xs-12">
+              <h4>¿Desea realmente eliminar el artículo de la etapa productiva?</h4>
+              <input type="text" id="arti_id" class="hidden">
+              <input type="text" id="tipo" class="hidden">
+              <input type="text" id="id_etapa_borrar" class="hidden">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="eliminarArticuloDeEtapa()">Aceptar</button>
+        </div>
+      </div>
+    </div>
+</div>
+<!-- /  Modal aviso eliminar -->
