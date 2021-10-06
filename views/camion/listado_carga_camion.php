@@ -11,7 +11,7 @@ $this->load->view('camion/modal_cargarcamion');
 <!--Pantalla "LISTADO CARGA DE CAMION"-->
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h4 class="box-title">Listado Carga Camión</h4>
+        <h4 class="box-title">Listado Camiones</h4>
     </div>
     <div class="box-body">
         <!--________________________________________________________________________-->
