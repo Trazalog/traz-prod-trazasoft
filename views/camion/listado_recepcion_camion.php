@@ -10,7 +10,7 @@ $this->load->view('camion/modal_recepcioncamion');
 <!--Pantalla "LISTADO RECEPCION DE CAMION"-->
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h4 class="box-title">Listado Recepción Camión</h4><br>
+        <h4 class="box-title">Entrada Recepción MP</h4><br> 
     </div>
 
     <div class="box-body hidden">
@@ -88,6 +88,7 @@ $this->load->view('camion/modal_recepcioncamion');
                 <th>N° Boleta</th>
                 <th>Proveedor</th>
                 <th>Transportista</th>
+                <th>CUIT</th>
                 <th>Fecha</th>
                 <th>Patente - Acoplado</th>
                 <th>Neto</th>
@@ -113,7 +114,8 @@ $this->load->view('camion/modal_recepcioncamion');
 
           echo '<td style="font-weight: lighter;">'.$fila->boleta.'</td>';
           echo '<td style="font-weight: lighter;">'.$fila->proveedor.'</td>';
-          echo '<td style="font-weight: lighter;">'.$fila->transportista.' | <b>CUIT: </b>'.$fila->cuit.'</td>';
+          echo '<td style="font-weight: lighter;">'.$fila->transportista.'</td>';
+          echo '<td style="font-weight: lighter;">'.$fila->cuit.'</td>';
           echo '<td style="font-weight: lighter;">'.$fila->fecha_entrada.'</td>';
           echo '<td style="font-weight: lighter;">'.$fila->patente .' | '.$fila->acoplado.'</td>';
           echo '<td style="font-weight: lighter;">'.$fila->neto.'</td>';
