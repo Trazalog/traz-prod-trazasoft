@@ -7,7 +7,7 @@
       <div class="row">
 
         <div class="col-md-3">
-          <label for="">Establecimiento:</label>
+          <label for="">Establecimiento(<?php hreq() ?>):</label>
             <select class="form-control select2 select2-hidden-accesible" id="establecimiento" name="establecimiento" onchange="selectEstablecimiento()" <?php echo req() ?>>
                 <option value="" disabled selected>Seleccionar</option>
                 <?php
@@ -22,7 +22,7 @@
         </div>
 
         <div class="col-md-3">
-          <label class="control-label" for="depositos">Depósito:</label>
+          <label class="control-label" for="depositos">Depósito(<?php hreq() ?>):</label>
             <select class="form-control select2 select2-hidden-accesible" id="depositos" name="depositos"
                 onchange="selectDeposito()" <?php echo req() ?>>
             </select>

@@ -173,7 +173,7 @@
     });
     datosTabla.shift(); //borra encabezado de la tabla o primera fila
     var datos = JSON.stringify(datosTabla);
-     console.log('datos: ' + datos);
+    
     wo();
     $.ajax({
       type: 'POST',
@@ -182,16 +182,12 @@
         datos: datos
       },
       success: function(rsp) {
-           Swal.fire(
-            'Agregado/s!',
-            'El Proceso se Realizó Correctamente.',
-            'success'
-          )
+        console.log('Entrada no consumibles se realizó correctamente');
       },
       error: function() {
         Swal.fire(
           'Oops...',
-          'Algo salio mal!',
+          'Se produjo un error al realizar la entrada de no consumibles',
           'error'
         )
       },
