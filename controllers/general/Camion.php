@@ -116,13 +116,6 @@ class Camion extends CI_Controller
         $data['empaques'] = $this->Recipientes->listarEmpaques()->empaques->empaque;
         $data['transportistas'] = $this->Transportistas->obtener()['data'];
         $this->load->view('camion/entrada_camion', $data);
-    }   
-
-    public function GuardarEntrada()
-    {
-        $entrada = json_decode($this->input->post('entrada'));
-        var_dump($entrada);
-        echo 'ok';
     }
 
     #FLEIVA

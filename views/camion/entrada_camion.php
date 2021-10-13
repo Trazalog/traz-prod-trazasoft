@@ -25,44 +25,42 @@
 							<input type="text" name="accion" id="accion" class="hidden">
 							<div class="row" style="margin-top: 40px">
 									<div class="col-md-1 col-xs-12">
-											<label class="form-label">Boleta*:</label>
+											<label class="form-label">Boleta<?php hreq() ?>:</label>
 									</div>
 									<div class="col-md-6 col-xs-12">
-											<input type="text" class="form-control" placeholder="Inserte Numero de Boleta" name="boleta">
+											<input id="boleta" type="text" class="form-control" placeholder="Inserte Numero de Boleta" name="boleta">
 									</div>
 									<div class="col-md-5">
 									</div>
 							</div>
 							<div class="row" style="margin-top:40px">
 									<div class="col-md-2 col-xs-12">
-											<label for="establecimientos" class="form-label">Establecimiento*:</label>
+                                        <label for="establecimientos" class="form-label">Establecimiento<?php hreq() ?>:</label>
 									</div>
 									<div class="col-md-4 col-xs-12">
-											<select class="form-control select2 select2-hidden-accesible" id="establecimientos"
-													name="establecimiento" onchange="selectEstablecimiento()" <?php echo req() ?>>
-													<option value="" disabled selected>-Seleccione Establecimiento-</option>
-													<?php
-														foreach ($establecimientos as $fila) {
-																echo '<option value="' . $fila->esta_id . '" >' . $fila->nombre . '</option>';
-														}
-													?>
-											</select>
+                                        <select class="form-control select2 select2-hidden-accesible" id="establecimientos" name="establecimiento" onchange="selectEstablecimiento()" <?php echo req() ?>>
+                                                <option value="" disabled selected>-Seleccione Establecimiento-</option>
+                                                <?php
+                                                    foreach ($establecimientos as $fila) {
+                                                            echo '<option value="' . $fila->esta_id . '" >' . $fila->nombre . '</option>';
+                                                    }
+                                                ?>
+                                        </select>
 									</div>
 									<div class="col-md-1 col-xs-12">
-											<label for="fecha" class="form-label">Fecha*:</label>
+                                        <label for="fecha" class="form-label">Fecha<?php hreq() ?>:</label>
 									</div>
 									<div class="col-md-3 col-xs-12">
-											<input type="date" id="fecha" value="<?php echo $fecha; ?>" class="form-control" name="fecha">
+                                        <input type="date" id="fecha" value="<?php echo $fecha; ?>" class="form-control" name="fecha">
 									</div>
 									<div class="col-md-2"></div>
 							</div>
 							<div class="row" style="margin-top:40px">
 									<div class="col-md-1 col-xs-12">
-											<label class="form-label tag-descarga">Proveedor*:</label>
+                                        <label class="form-label tag-descarga">Proveedor<?php hreq() ?>:</label>
 									</div>
 									<div class="col-md-3 col-xs-12">
-											<input list="proveedores" class="form-control tag-descarga" id="proveedor" name="proveedor"
-													autocomplete="off">
+											<input list="proveedores" class="form-control tag-descarga" id="proveedor" name="proveedor" autocomplete="off">
 											<datalist id="proveedores">
 													<?php foreach ($proveedores as $fila) {
 													echo "<option data-json='" . json_encode($fila) . "' value='" . $fila->id . "'>" . $fila->titulo . "</option>";
@@ -70,8 +68,8 @@
 											?>
 											</datalist>
 									</div>
-									<div class="col-md-5 col-xs-12"><input type="text" disabled id="nombreproveedor"
-													class="form-control tag-descarga">
+									<div class="col-md-5 col-xs-12">
+                                        <input type="text" disabled id="nombreproveedor" class="form-control tag-descarga">
 									</div>
 							</div>
 					</form>
@@ -334,39 +332,43 @@ function obtenerFormularioCamion() {
     dataForm.append('estado', 'EN CURSO');
     return formToObject(dataForm);
 }
+// Valida ambos formularios tanto ENTRADA como RECEPCION MP
+// Cuando valida RECEPCION MP se muestran mas campos en frm-info
+// el parametro 'msj' me permite saber si es ENTRADA o RECEPCION MP
+function validarFormulario(msj) {
 
-function validarFormulario() {
-    console.log('Validar Form');
     var ban = true;
-    $('#frm-info').find('.form-control').each(function() {
-        if (this.id != 'proveedor' && this.id != 'nombreproveedor') {
-            console.log(this.id + ' = ' + this.value);
-            if (this.value == "") {
-
-                ban = ban && false;
-                return;
+    if(msj){
+        $('#frm-info').find('.form-control').each(function() {
+            if(this.id != 'proveedor' && this.id != 'nombreproveedor'){
+                if (this.value == "") {
+                    ban = false;
+                }
             }
-        }
-    })
+        });
+    }else{
+        $('#frm-info').find('.form-control').each(function() {
+            if (this.value == "") {
+                ban = false;
+            }
+        });
+    }
 
     $('#frm-camion').find('.form-control').each(function() {
-      //  console.log($(this).attr('name') + ' ' + this.value);
         if (this.value == "" || this.value=="Seleccionar") {
-
-						if(this.id != "acoplado"){
-							ban = ban && false;
-            	return;
-						}
+            if(this.id != "acoplado"){
+                ban = false;
+            }
         }
     });
 
-    if (!ban) alert('Complete los campos obligatorios(*)');
+    if (!ban) Swal.fire('Error..','Complete los campos obligatorios(*)','error');
     return ban;
 }
 
 // Guarda Entrada de Camión
 function addCamion(msj = true) {
-    if (!validarFormulario()) return;
+    if (!validarFormulario(msj)) return;
 
     var frmCamion = new FormData($('#frm-camion')[0]);
     var frmInfo = new FormData($('#frm-info')[0]);
@@ -389,14 +391,14 @@ function addCamion(msj = true) {
                     $('#frm-camion')[0].reset();
                     $('#frm-info')[0].reset();
                 }
-                if (msj) alert('Datos Guardados con Éxito');
+                if (msj) Swal.fire('Correcto','Datos guardados con éxito','success');
             } else {
                 if (rsp.msj) alert(rsp.msj)
-                else alert('Fallo al Guardar Datos del Camión');
+                else alert('Fallo al guardar datos del camión');
             }
         },
         error: function(rsp) {
-            alert('Error al Guardar Datos del Camion');
+            alert('Error al guardar datos del camión');
         },
         complete: function() {
             wc();
@@ -534,91 +536,6 @@ function ActualizaPesoEstimado() {
     cantidad = document.getElementById('cantidad').value;
     calc = empaque.volumen * cantidad;
     document.getElementById('pesoestimado').value = calc + empaque.unidad;
-}
-
-function Guardar() {
-    entrada = {};
-    ban = true;
-    msj = "";
-    entrada.idestablecimiento = $("#establecimientos option:selected").attr('value');
-    if (entrada.idestablecimiento == "") {
-        ban = false;
-        msj += "No selecciono establecimiento \n";
-    } else {
-        entrada.tituloestablecimiento = $("#establecimientos option:selected").text();
-    }
-    entrada.fecha = document.getElementById('fecha').value;
-    if (entrada.fecha == "") {
-        ban = false;
-        msj += "No selecciono fecha \n";
-    }
-    entrada.proveedor = document.getElementById('proveedor').value;
-    if (entrada.proveedor == "") {
-        ban = false;
-        msj += "No selecciono proveedor \n";
-    }
-    entrada.patente = document.getElementById('patente').value;
-    if (entrada.patente == "") {
-        ban = false;
-        msj += "No ingreso patente \n";
-    }
-    entrada.acoplado = document.getElementById('acoplado').value;
-    if (entrada.acoplado == "") {
-        ban = false;
-        msj += "No ingreso acoplado \n";
-    }
-    entrada.conductor = document.getElementById('conductor').value;
-    if (entrada.conductor == "") {
-        ban = false;
-        msj += "No ingreso conductor \n";
-    }
-    entrada.tipo = document.getElementById('tipo').value;
-    if (entrada.tipo == "") {
-        ban = false;
-        msj += "No selecciono tipo \n";
-    }
-    entrada.bruto = document.getElementById('bruto').value;
-    if (entrada.bruto == "") {
-        ban = false;
-        msj += "No Ingreso peso bruto \n";
-    }
-    entrada.tara = document.getElementById('tara').value;
-    if (entrada.tara == "") {
-        ban = false;
-        msj += "No ingreso tara \n";
-    }
-    entrada.neto = document.getElementById('neto').value;
-    if (entrada.neto == "") {
-        ban = false;
-        msj += "No ingreso neto \n";
-    }
-    if (document.getElementById('productos_existe').value == 'no') {
-        ban = false;
-        msj += "No ingreso ningun producto \n";
-    }
-    if (!ban) {
-        alert(msj);
-    } else {
-        entrada.productos = recuperarDatos('tabla_productos_asignados');
-        entrada = JSON.stringify(entrada);
-        $.ajax({
-            type: 'POST',
-            async: false,
-            data: {
-                entrada: entrada
-            },
-            url: '<?php echo base_url(PRD) ?>general/Camion/GuardarEntrada',
-            success: function(result) {
-                if (result == 'ok') {
-                    linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
-                } else {
-                    alert('Ups');
-                }
-            }
-
-        });
-    }
-
 }
 
 function cargacamion() {

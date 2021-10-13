@@ -75,10 +75,10 @@ function guardarDescargaOrigen() {
         success: function(rsp) {
             if (rsp.status) {
                 actualizarEstadoCamion($('#patente').val());
-                alert('Hecho');
+                console.log('Listado de Recepciones MP se realizó correctamente');
                 linkTo();
             } else {
-                alert('Falla al Guardar Descarga');
+                alert('Fallo al guardar el listado de Recepciones MP');
             }
         },
         error: function(rsp) {
@@ -113,10 +113,10 @@ function guardarLoteSistema() {
         success: function(rsp) {
             if (rsp.status == true) {
                 actualizarEstadoCamion($('#patente').val());
-                alert('Hecho');
+                Swal.fire('Correcto','Datos guardados con éxito','success');
                 linkTo();
             } else {
-                alert('Falla al Guardar Lotes Sistema');
+                alert('Error al guardar lotes del sistema');
             }
             
         },
