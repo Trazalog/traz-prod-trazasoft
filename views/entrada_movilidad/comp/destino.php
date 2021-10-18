@@ -170,7 +170,7 @@ function validarRecipiente(json) {
         url: `<?php echo base_url(PRD.'general/recipiente/obtenerContenido/')?>${json.reci_id}`,
         success: function(res) {
             console.log(res);
-            if (res.status) {
+            if (res.status && res.data) {
                 var ban = true;
                 res.data.forEach(function(e) {
                     if (e.arti_id != arti_id || e.lote_id != lote_id) {
@@ -179,8 +179,7 @@ function validarRecipiente(json) {
                 })
 
                 if (!ban) {
-                    alert(
-                        'No se pueden mezclar Distintos Articulos y Distintos Lotes en un mismo Recipiente');
+                    alert('No se pueden mezclar distintos artículos y distintos lotes en un mismo recipiente');
                     $('#unificar').val(false);
                     return;
                 }

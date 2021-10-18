@@ -16,7 +16,7 @@ class Entradas extends CI_Model
 
         $data['proveedor'] = strval(PROVEEDOR_INTERNO);
         $data['empr_id'] = strval(empresa());
-        log_message('DEBUG', '#ENTRADAS > guardar | #DATA-POST: ' . json_encode($data));
+        log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | Entradas | guardar() | #DATA-POST: ' . json_encode($data));
         $url = REST_LOG . '/entradas';
         $rsp = $this->rest->callApi('POST', $url, ['post_entradas' => $data]);
         return $rsp;
@@ -24,7 +24,7 @@ class Entradas extends CI_Model
 
     public function validarCamion($patente, $estado = 'EN CURSO')
     {
-        log_message('DEBUG',"#TZL | ".__METHOD__."| PANTENTE: $pantente | ESTADO: $estado");
+        log_message('DEBUG',"#TRAZA | #TRAZ-PROD-TRAZASOFT | MÉTODO: ".__METHOD__."| PANTENTE: $patente | ESTADO: $estado");
 
         $res = wso2(REST_LOG. "/camiones/$patente")['data'];
         if($res){

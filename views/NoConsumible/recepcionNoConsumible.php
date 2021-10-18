@@ -3,13 +3,12 @@
         <h4 class="box-title">Recepción de un No Consumible</h4>
     </div>
     <div class="box-body">
-    <br>
+      <br>
       <div class="row">
 
-        <label for="" class="col-md-2">Establecimiento:</label>
         <div class="col-md-3">
-            <select class="form-control select2 select2-hidden-accesible" id="establecimiento"
-                name="establecimiento" onchange="selectEstablecimiento()" <?php echo req() ?>>
+          <label for="">Establecimiento(<?php hreq() ?>):</label>
+            <select class="form-control select2 select2-hidden-accesible" id="establecimiento" name="establecimiento" onchange="selectEstablecimiento()" <?php echo req() ?>>
                 <option value="" disabled selected>Seleccionar</option>
                 <?php
                     if(is_array($tipoEstablecimiento)){
@@ -22,21 +21,16 @@
             <span id="estabSelected" style="color: forestgreen;"></span>
         </div>
 
-        <label class="col-md-1 control-label" for="depositos">Depósito:</label>
-        <div class="col-md-2">
+        <div class="col-md-3">
+          <label class="control-label" for="depositos">Depósito(<?php hreq() ?>):</label>
             <select class="form-control select2 select2-hidden-accesible" id="depositos" name="depositos"
                 onchange="selectDeposito()" <?php echo req() ?>>
             </select>
             <span id="deposSelected" style="color: forestgreen;"></span>
         </div>
 
-      </div>
-
-      <br>
-
-      <div class="row">
         <div class="col-md-4">
-          <label>Escanear No Consmible</label>
+          <label>Escanear No Consumible</label>
           <div class="input-group">
             <input id="codigo" class="form-control" placeholder="Busque Código..." autocomplete="off" onchange="consultar()">
             <span class="input-group-btn">
@@ -136,8 +130,9 @@
           data:{codigo: codigo },
           url: '<?php echo base_url(PRD) ?>general/Noconsumible/consultarInfo',
           success: function(result) {
-              wc();
-              var lotes = result.lotes;
+            wc();
+            var lotes = result.lotes;
+            if(!$.isEmptyObject(result)){
 
               if(Object.entries(lotes).length === 0){
                 $("#codigo").val("");
@@ -145,6 +140,10 @@
               }else{
                 agregar(result);
               }
+
+            }else{
+              alertify.error('El recipiente escaneado no se encuentra cargado...');
+            }
           },
           error: function(result){
               wc();
@@ -157,9 +156,6 @@
 
   // Agrega registro en tabla temporal
   function agregar(info){
-
-      $("#establecimiento").prop('disabled', 'disabled');
-      $("#depositos").prop('disabled', 'disabled');
 
       var lotes = info.lotes.lote;
       var datos = {};
@@ -179,7 +175,7 @@
 
       var table = $('#tbl_NoConsumibles').DataTable();
       var row = `<tr data-json='${JSON.stringify(datos)}'>
-              <td> <i class='fa fa-fw fa-minus text-light-blue' style='cursor: pointer; margin-left: 15px;'></i> </td>
+              <td> <i class='fa fa-fw fa-minus text-light-blue btn' style='cursor: pointer; margin-left: 15px;'></i> </td>
               <td>${info.codigo}</td>
               <td>${info.descripcion}</td>
           </tr>`;
@@ -191,44 +187,43 @@
   // guarda la recepcion
   function guardar() {
 
-    if($("#tbl_NoConsumibles tbody tr td").length <= 1){
-
-        alert('Por agregue datos a la tabla');
-        return;
-    }else{
-
-        var datos = [];
-        var rows = $('#tbl_NoConsumibles tbody tr');
-        $.each(rows, function(i,e) {
-            var datajson = $(this).attr("data-json");
-            var data = JSON.parse( datajson );
-            datos.push(data);
-        });
-
-        var deposito = {};
-        deposito = $('#depositos').val();
-
-        wo("Liberando...");
-        $.ajax({
-              type: 'POST',
-              data:{datos,deposito},
-              dataType: 'json',
-              url: '<?php echo base_url(PRD) ?>general/Noconsumible/liberarNoConsumible',
-              success: function(result) {
-                    wc();
-                    $('#tbl_NoConsumibles tbody tr').remove().draw();
-                    $('#btn_guardar').attr("disabled", "");
-                    alertify.success("No Consumibles Liberados Exitosamente....!");
-              },
-              error: function(result){
-                    wc();
-                    alertify.error("Error liberando No Consumibles");
-              },
-              complete: function(){
-                    wc();
-              }
-        });
+    validacion = validar();
+    if(valida != ''){
+      Swal.fire('Error..',validacion,'error');
+      return;
     }
+
+    var datos = [];
+    var rows = $('#tbl_NoConsumibles tbody tr');
+    $.each(rows, function(i,e) {
+        var datajson = $(this).attr("data-json");
+        var data = JSON.parse( datajson );
+        datos.push(data);
+    });
+
+    var deposito = {};
+    deposito = $('#depositos').val();
+
+    wo("Liberando...");
+    $.ajax({
+          type: 'POST',
+          data:{datos,deposito},
+          dataType: 'json',
+          url: '<?php echo base_url(PRD) ?>general/Noconsumible/liberarNoConsumible',
+          success: function(result) {
+                wc();
+                $('#tbl_NoConsumibles').DataTable().clear().draw();
+                $('#btn_guardar').attr("disabled", "");
+                alertify.success("No consumibles liberados exitosamente!");
+          },
+          error: function(result){
+                wc();
+                alertify.error("Error liberando No Consumibles");
+          },
+          complete: function(){
+                wc();
+          }
+    });
   }
 
   // Remueve fila de tabla temporal
@@ -236,15 +231,23 @@
 
     $('#tbl_NoConsumibles').DataTable().row( $(this).closest('tr') ).remove().draw();
 
-      if($("#tbl_NoConsumibles tbody tr td").length <= 1){
-        $("#establecimiento").prop('disabled', false);
-        $("#depositos").prop('disabled', false);
-      }
-
-      if( tabla.data().any() ) {
-        $("#establecimiento").prop('disabled', false);
-        $("#depositos").prop('disabled', false);
-      }
 	});
 
+  function validar(){
+    valida = '';
+    //Tabla Vacia
+    tabla = $('#tbl_NoConsumibles').DataTable(); 
+    if ( ! tabla.data().any() ) {
+      valida = 'No se agregaron no consumibles a la tabla';
+    }
+    //Establecimiento
+    if($("#establecimiento").val() == null){
+      valida = "No se selecciono un establecimiento";
+    }
+    //Deposito
+    if($("#depositos").val() == null){
+      valida = "No se selecciono un depósito";
+    }
+    return valida;
+  }
 </script>
