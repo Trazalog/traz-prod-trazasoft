@@ -52,11 +52,18 @@
     </div>
 
 <script>
+	//Limpio formulario al cierre de los modales
+	$("#mdl-NoConsumible").on("hidden.bs.modal", function () {
+  		$('#frm-NoConsumible')[0].reset();
+	});
+	$("#mdl-VerNoConsumible").on("hidden.bs.modal", function () {
+  		$('#frm-NoConsumible')[0].reset();
+	});
 
 	DataTable('#tbl-NoConsumibles');
 	DataTable('#tbl-trazabilidad');
 
-  initForm();
+  	initForm();
 
 	function nuevoNCmodal(){
 
@@ -65,89 +72,107 @@
 
 	function guardarNoConsumible() {
 
-			var formData = new FormData($('#frm-NoConsumible')[0]);
-			wo();
-			$.ajax({
-					type: 'POST',
-					dataType: 'JSON',
-					url: '<?php echo base_url(PRD) ?>general/Noconsumible/guardarNoConsumible',
-					data: formData,
-					cache: false,
-					contentType: false,
-					processData: false,
-					success: function(rsp) {
-						debugger;
-						wc();
-						$("#mdl-NoConsumible").modal('hide');
-
-							if (rsp) {
-
-								// Swal.fire(
-								// 	'Guardado!',
-								// 	'El registro se Guardo Correctamente',
-								// 	'success'
-								// );
-
-								linkTo('<?php echo base_url(PRD) ?>general/Noconsumible/index');
-							} else {
-								wc();
-								Swal.fire(
-									'Error...',
-										'No pudo darse de alta el No consumible!',
-										'error'
-								);
-							}
-
+		var formData = new FormData($('#frm-NoConsumible')[0]);
+		wo();
+		
+		$.ajax({
+			type: 'POST',
+			dataType: 'JSON',
+			url: '<?php echo base_url(PRD) ?>general/Noconsumible/guardarNoConsumible',
+			data: formData,
+			cache: false,
+			contentType: false,
+			processData: false,
+			success: function(rsp) {
+				wc();
+				$("#mdl-NoConsumible").modal('hide');
+				const confirm = Swal.mixin({
+					customClass: {
+						confirmButton: 'btn btn-primary'
 					},
-					error: function(rsp) {
-						wc();
-						$("#mdl-NoConsumible").modal('hide');
+					buttonsStyling: false
+				});
 
-							Swal.fire(
-										'Error...',
-											'No pudo darse de alta el No consumible!',
-											'error'
-														)
-							console.log(rsp.msj);
-					}
-			});
+				if (rsp) {
+					confirm.fire({
+						title: 'Correcto',
+						text: "No consumible dado de alta correctamente!",
+						type: 'success',
+						showCancelButton: false,
+						confirmButtonText: 'Ok'
+					}).then((result) => {
+						
+						linkTo('<?php echo base_url(PRD) ?>general/Noconsumible/index');
+						
+					});
+				} else {
+					wc();
+					Swal.fire(
+						'Error...',
+						'No pudo darse de alta el No consumible!',
+						'error'
+					);
+				}
+			},
+			error: function(rsp) {
+				wc();
+				$("#mdl-NoConsumible").modal('hide');
+
+				Swal.fire(
+					'Error...',
+					'No pudo darse de alta el No consumible!',
+					'error'
+				)
+				console.log(rsp.msj);
+			}
+		});
 	}
 
 	function editarNoConsumible() {
+		wo();
+		var formData = new FormData($('#frm-NoConsumible_Editar')[0]);
+		
+		$.ajax({
+			type: 'POST',
+			dataType: 'JSON',
+			url: '<?php echo base_url(PRD) ?>general/Noconsumible/editarNoConsumible',
+			data: formData,
+			cache: false,
+			contentType: false,
+			processData: false,
+			success: function(rsp) {
 
-			var formData = new FormData($('#frm-NoConsumible_Editar')[0]);
-			debugger;
-			$.ajax({
-					type: 'POST',
-					dataType: 'JSON',
-					url: '<?php echo base_url(PRD) ?>general/Noconsumible/editarNoConsumible',
-					data: formData,
-					cache: false,
-					contentType: false,
-					processData: false,
-					success: function(rsp) {
-
-							$('#mdl-EditarNoConsumible').modal('hide');
-											Swal.fire(
-									'Modificado!',
-									'La Modificacion se Realizó Correctamente.',
-									'success'
-															)
-								$('#frm-NoConsumible')[0].reset();
-							linkTo();
+				const confirm = Swal.mixin({
+					customClass: {
+						confirmButton: 'btn btn-primary'
 					},
-					error: function(rsp) {
-							Swal.fire(
-										'Oops...',
-											'Algo salio mal!',
-											'error'
-														)
-							console.log(rsp.msj);
-					},
-					complete: function() {
-							wc();
-					}
-			});
+					buttonsStyling: false
+				});
+				$('#mdl-VerNoConsumible').modal('hide');
+				confirm.fire({
+					title: 'Correcto',
+					text: "Se edito no consumible correctamente!",
+					type: 'success',
+					showCancelButton: false,
+					confirmButtonText: 'Ok'
+				}).then((result) => {
+					
+					linkTo('<?php echo base_url(PRD) ?>general/Noconsumible/index');
+					
+				});
+			},
+			error: function(rsp) {
+				Swal.fire(
+					'Oops...',
+						'Algo salio mal!',
+						'error'
+				)
+				console.log(rsp.msj);
+			},
+			complete: function() {
+				wc();
+			}
+		});
 	}
 
 	function selectEstablecimiento() {
@@ -254,12 +279,14 @@
 	function blockEdicion(){
 		$("select.habilitar").prop("disabled", true);
 		$(".habilitar").attr("readonly","readonly");
+		$('.deshabilitar').attr("readonly","readonly");//codigo
 		$('#btnsave').hide();
 	}
 
 	function habilitarEdicion(){
 		$("select.habilitar").prop("disabled", false);
 		$('.habilitar').removeAttr("readonly");
+		$('.deshabilitar').attr("readonly","readonly");//codigo
 		$('#btnsave').show();
 	}
 
@@ -270,7 +297,7 @@
 		Object.keys(json).forEach(function(key, index) {
 				$('[name="' + key + '"]').val(json[key]);
 		});
-		debugger;
+		
 		var fecha = json['fec_alta'].slice(0, 10)
 		Date.prototype.toDateInputVal = (function() {
 			var fechaAlta = new Date(fecha);
@@ -348,27 +375,41 @@
 	}
 
 	function eliminarNoConsumible() {
-			$.ajax({
-					type: 'POST',
-					data: {
-							codigo: selected
+		wo();
+		$.ajax({
+			type: 'POST',
+			data: {
+					codigo: selected
+			},
+			url: '<?php echo base_url(PRD) ?>general/Noconsumible/eliminarNoConsumible/',
+			success: function(data) {
+				const confirm = Swal.mixin({
+					customClass: {
+						confirmButton: 'btn btn-primary'
 					},
-					url: '<?php echo base_url(PRD) ?>general/Noconsumible/eliminarNoConsumible/',
-					success: function(data) {
-							Swal.fire(
-					'Eliminado!',
-					'Se Elimino Correctamente.',
-					'success'
-				)
-			
-							linkTo();
-					},
-					error: function(result) {
-							console.log('entra por el error');
-							console.log(result);
-					}
-
-			});
+					buttonsStyling: false
+				});
+				$('#mdl-eliminar').modal('hide');
+				confirm.fire({
+					title: 'Correcto',
+					text: "Se eliminó no consumible correctamente!",
+					type: 'success',
+					showCancelButton: false,
+					confirmButtonText: 'Ok'
+				}).then((result) => {
+					
+					linkTo('<?php echo base_url(PRD) ?>general/Noconsumible/index');
+					
+				});
+			},
+			error: function(result) {
+					console.log('entra por el error');
+					console.log(result);
+			},
+			complete: function(result){
+				wc();
+			}
+		});
 	}
 ////// Fin Eliminar No Consumible
 
@@ -501,9 +542,8 @@
 					</form>
 				</div> <!-- /.modal-body -->
 				<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-						<button type="button" id="btn-accion" class="btn btn-primary btn-guardar"
-								onclick="guardarNoConsumible()">Guardar</button>
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+						<button type="button" id="btn-accion" class="btn btn-success btn-guardar" onclick="guardarNoConsumible()">Guardar</button>
 				</div>
 			</div>
 		</div>
@@ -512,93 +552,87 @@
 
 
 <!-- Modal  Ver/Editar No Consumible-->
-	<div class="modal fade bd-example-modal-md" tabindex="-1" id="mdl-VerNoConsumible" role="dialog"
-			aria-labelledby="myLargeModalLabel" aria-hidden="true">
-			<div class="modal-dialog modal-md">
-				<div class="modal-content">
+	<div class="modal fade bd-example-modal-md" tabindex="-1" id="mdl-VerNoConsumible" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-md">
+			<div class="modal-content">
 
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-										aria-hidden="true">&times;</span></button>
-						<h4 class="modal-title" id="mdl-titulo">Detalle No Consumibles</h4>
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+									aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="mdl-titulo">Detalle No Consumibles</h4>
+				</div>
+
+				<div class="modal-body" id="modalBody">
+					<div class="alert alert-danger alert-dismissable" id="error" style="display: none">
+							<h4><i class="icon fa fa-ban"></i> Error!</h4>
+							Revise que todos los campos esten completos
 					</div>
 
-					<div class="modal-body" id="modalBody">
-							<div class="alert alert-danger alert-dismissable" id="error" style="display: none">
-									<h4><i class="icon fa fa-ban"></i> Error!</h4>
-									Revise que todos los campos esten completos
+					<form class="form-horizontal" id="frm-NoConsumible_Editar">
+						<div class="form-group">
+							<label class="col-md-2 control-label" for="codigo">Código<strong class="text-danger">*</strong>:</label>
+							<div class="col-md-4">
+								<input id="codigo" name="codigo" type="text" placeholder="Ingrese código..." class="form-control input-md deshabilitar" >
 							</div>
 
-							<form class="form-horizontal" id="frm-NoConsumible_Editar">
+							<label class="col-md-2 control-label" for="tipo">Tipo No Consumible<strong class="text-danger">*</strong>:</label>
 
-									<div class="form-group">
+							<div class="col-md-4">
+								<select name="tinc_id" class="form-control habilitar"  <?php echo req() ?>>
+									<option value="0"> - Seleccionar - </option>
+									<?php
+										if(is_array($tipoNoConsumible)){
+											foreach ($tipoNoConsumible as $i) {
+													echo "<option value = $i->tabl_id>$i->valor</option>";
+												}
+										}
+									?>
+								</select>
+							</div>
+						</div>
 
-											<label class="col-md-2 control-label" for="codigo">Código<strong
-															class="text-danger">*</strong>:</label>
-											<div class="col-md-4">
-													<input id="codigo" name="codigo" type="text" placeholder="Ingrese código..."
-															class="form-control input-md habilitar" >
-											</div>
+						<div class="form-group">
+								<label class="col-md-2 control-label" for="descripcion">Descripción<strong
+												class="text-danger">*</strong>:</label>
+								<div class="col-md-10">
+										<textarea class="form-control habilitar" id="descripcion" name="descripcion"
+											></textarea>
+								</div>
+						</div>
 
-											<label class="col-md-2 control-label" for="tipo">Tipo No Consumible<strong
-															class="text-danger">*</strong>:</label>
-											<div class="col-md-4">
-												<select name="tinc_id" class="form-control habilitar"  <?php echo req() ?>>
-													<option value="0"> - Seleccionar - </option>
-														<?php
-															if(is_array($tipoNoConsumible)){
-																foreach ($tipoNoConsumible as $i) {
-																		echo "<option value = $i->tabl_id>$i->valor</option>";
-																	}
-															}
-														?>
-												</select>
-											</div>
-									</div>
-
-									<div class="form-group">
-											<label class="col-md-2 control-label" for="descripcion">Descripción<strong
-															class="text-danger">*</strong>:</label>
-											<div class="col-md-10">
-													<textarea class="form-control habilitar" id="descripcion" name="descripcion"
-														></textarea>
-											</div>
-									</div>
-
-									<div class="form-group bloq_fec_alta">
-											<label class="col-md-4 control-label" for="fec_alta">Fecha de
-													alta<strong class="text-danger">*</strong>:</label>
-											<div class="col-md-8">
-													<input id="fec_alta" name="fec_alta" type="date"
-															placeholder="" class="form-control input-md habilitar" >
-											</div>
-									</div>
-											<br>
-									<div class="form-group">
-											<label class="col-md-4 control-label" for="fec_vencimiento">Fecha de
-													vencimiento<strong class="text-danger">*</strong>:</label>
-											<div class="col-md-8">
-													<input id="fec_vencimiento_Edit" name="fec_vencimiento" type="date"
-															placeholder="" class="form-control input-md habilitar" >
-											</div>
-									</div>
-									<!-- <div class="form-group">
-											<div class="col-md-6 col-md-offset-6">
-												<button id="btn-generar_qr" name="btn-generar_qr" class="btn btn-primary">Generar	QR</button>
-													<br> <br>
-												<button id="btn-imprimir_qr" name="btn-imprimir_qr" class="btn btn-primary">Imprimir QR</button>
-											</div>
-									</div> -->
-
-							</form>
-					</div> <!-- /.modal-body -->
-					<div class="modal-footer">
-							<button type="button" id="btnsave" class="btn btn-primary btn-guardar"	onclick="editarNoConsumible()">Guardar</button>
-							<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-					</div>
-
+						<div class="form-group bloq_fec_alta">
+								<label class="col-md-4 control-label" for="fec_alta">Fecha de
+										alta<strong class="text-danger">*</strong>:</label>
+								<div class="col-md-8">
+										<input id="fec_alta" name="fec_alta" type="date"
+												placeholder="" class="form-control input-md habilitar" >
+								</div>
+						</div>
+								<br>
+						<div class="form-group">
+								<label class="col-md-4 control-label" for="fec_vencimiento">Fecha de
+										vencimiento<strong class="text-danger">*</strong>:</label>
+								<div class="col-md-8">
+										<input id="fec_vencimiento_Edit" name="fec_vencimiento" type="date"
+												placeholder="" class="form-control input-md habilitar" >
+								</div>
+						</div>
+						<!-- <div class="form-group">
+								<div class="col-md-6 col-md-offset-6">
+									<button id="btn-generar_qr" name="btn-generar_qr" class="btn btn-primary">Generar	QR</button>
+										<br> <br>
+									<button id="btn-imprimir_qr" name="btn-imprimir_qr" class="btn btn-primary">Imprimir QR</button>
+								</div>
+						</div> -->
+					</form>
+				</div> <!-- /.modal-body -->
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+					<button type="button" id="btnsave" class="btn btn-success btn-guardar"	onclick="editarNoConsumible()">Guardar</button>
 				</div>
+
 			</div>
+		</div>
 	</div>
 <!-------------------------------------------------------->
 
@@ -652,27 +686,24 @@
 
 <!-- Modal eliminar-->
 	<div class="modal" id="mdl-eliminar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-			<div class="modal-dialog" role="document">
-					<div class="modal-content">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
 
-							<div class="modal-header">
-									<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-													aria-hidden="true">&times;</span></button>
-									<h4 class="modal-title" id="myModalLabel"><span id="modalAction"
-													class="fa fa-fw fa-times-circle text-light-blue"></span> Eliminar Artículo</h4>
-							</div> <!-- /.modal-header  -->
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="myModalLabel"><span id="modalAction" class="fa fa-fw fa-times-circle text-light-blue"></span> Eliminar Artículo</h4>
+				</div> <!-- /.modal-header  -->
 
-							<div class="modal-body" id="modalBodyArticle">
-									<p>¿Realmente desea ELIMINAR el No Consumible? </p>
-							</div> <!-- /.modal-body -->
+				<div class="modal-body" id="modalBodyArticle">
+					<p>¿Realmente desea ELIMINAR el No Consumible? </p>
+				</div> <!-- /.modal-body -->
 
-							<div class="modal-footer">
-									<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-									<button type="button" class="btn btn-primary" id="btnSave" data-dismiss="modal"
-											onclick="eliminarNoConsumible()">Eliminar</button>
-							</div> <!-- /.modal footer -->
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+					<button type="button" class="btn btn-success" id="btnSave" data-dismiss="modal" onclick="eliminarNoConsumible()">Eliminar</button>
+				</div> <!-- /.modal footer -->
 
-					</div> <!-- /.modal-content -->
-			</div> <!-- /.modal-dialog modal-lg -->
+			</div> <!-- /.modal-content -->
+		</div> <!-- /.modal-dialog modal-lg -->
 	</div> <!-- /.modal fade -->
 <!-- / Modal -->
