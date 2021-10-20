@@ -59,16 +59,10 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
 
           foreach ($etapas as $fila) {
             echo "<li  data-value='" . $fila->id . "'><a data-json='" . json_encode($fila) . "'><i class='fa fa-chevron-circle-right text-info'></i>" . $fila->titulo . "</a></li>";
-
             //var_dump($etapas);
           }
           ?>
-
           <!-- <li  data-value="1"><a data-json="">"siembra"</a></li> -->
-
-
-
-
         </ul>
       </div>
     </div>
@@ -79,7 +73,6 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
         <h4 class="box-title" style="margin-bottom: 20px; margin-top: 0px;">Producción de Lotes</h4>
         <table id="etapas" class="table table-bordered table-hover">
           <thead class="thead-dark">
-
             <th width="6%">Acciones</th>
             <th>Etapa</th>
             <th>Lote</th>
@@ -90,41 +83,33 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
             <th>OP</th>
             <th>Fecha</th>
             <th>Estado</th>
-
           </thead>
           <tbody>
             <?php
-
             foreach ($list as $fila) {
               if($fila->estado == 'ANULADO') continue;
               $id = $fila->id;
               echo '<tr  id="' . $id . '" data-json=\'' . json_encode($fila) . '\'>';
-
-              echo '<td width="6%" class="text-center">';
-              echo "<i data-toggle='modal' data-target='#modal-asignarResponsable' class='fa fa-fw fa-user-plus text-green ml-1' style='cursor: pointer;' title='Asignar responsable' onclick='asignarResponsable($id)'></i>";
-              echo '<i class="fa fa-fw fa-cogs text-light-blue ml-1" style="cursor: pointer;" title="Editar" onclick=linkTo("'.base_url(PRD).'general/Etapa/editar?id=' . $id . '")></i>';
-             
-              if($fila->estado == 'PLANIFICADO')
-              echo "<i class='fa fa-fw fa-times-circle text-red ml-1' style='cursor: pointer;' title='Eliminar' onclick='conf(eliminarEtapa,\"$id\")'></i>";
-              echo '</td>';
-
-              echo '<td>' . $fila->titulo . '</td>';
-              echo "<td>$fila->lote</td>";
-              echo '<td>' . $fila->producto . '</td>';
-              echo '<td>' . $fila->cantidad . ' ' . $fila->unidad . '</td>';
-              echo '<td>' . $fila->establecimiento . '</td>';
-              echo '<td>' . $fila->recipiente . '</td>';
-              echo '<td>' . $fila->orden . '</td>';
-              echo  "<td>" . formatFechaPG($fila->fecha) . "</td>";
-              echo '<td>' . estado($fila->estado) . '</td>';
+                echo '<td width="6%" class="text-center">';
+                echo "<i data-toggle='modal' data-target='#modal-asignarResponsable' class='fa fa-fw fa-user-plus text-green ml-1' style='cursor: pointer;' title='Asignar responsable' onclick='asignarResponsable($id)'></i>";
+                echo '<i class="fa fa-fw fa-cogs text-light-blue ml-1" style="cursor: pointer;" title="Editar" onclick=linkTo("'.base_url(PRD).'general/Etapa/editar?id=' . $id . '")></i>';             
+                if($fila->estado == 'PLANIFICADO')
+                echo "<i class='fa fa-fw fa-times-circle text-red ml-1' style='cursor: pointer;' title='Eliminar' onclick='conf(eliminarEtapa,\"$id\")'></i>";
+                echo '</td>';
+                echo '<td>' . $fila->titulo . '</td>';
+                echo "<td>$fila->lote</td>";
+                echo '<td>' . $fila->producto . '</td>';
+                echo '<td>' . $fila->cantidad . ' ' . $fila->unidad . '</td>';
+                echo '<td>' . $fila->establecimiento . '</td>';
+                echo '<td>' . $fila->recipiente . '</td>';
+                echo '<td>' . $fila->orden . '</td>';
+                echo  "<td>" . formatFechaPG($fila->fecha) . "</td>";
+                echo '<td>' . estado($fila->estado) . '</td>';
               echo '</tr>';
             }
-
             ?>
           </tbody>
         </table>
-
-
       </div><!-- /.box-body -->
     </div><!-- /.box -->
   </div><!-- /.col -->
@@ -226,14 +211,15 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
       '<tbody>';
 
     if (op === 'todas') {
-
       for (var i = 0; i < etapas.length; i++) {
         html = html + '<tr  id="' + etapas[i].id + '" ><td>' +
           `<i data-toggle='modal' data-target='#modal-asignarResponsable' class='fa fa-fw fa-user-plus text-green ml-1' style='cursor: pointer;' title='Asignar responsable' onclick='asignarResponsable(${etapas[i].id}'></i>`+
           '<i class="fa fa-fw fa-cogs text-light-blue" style="cursor: pointer;" title="Editar" onclick=linkTo("<?php echo base_url(PRD) ?>general/Etapa/editar?id=' +
-          etapas[i].id + '")></i>' +
-          '<i class="fa fa-fw fa-times-circle text-red style="cursor: pointer;" title="Eliminar" onclick="seleccionar(this)"></i>' +
-          '</td>' +
+          etapas[i].id + '")></i>';
+        if (etapas[i].estado == 'PLANIFICADO') {
+          html = html + '<i class="fa fa-fw fa-times-circle text-red style="cursor: pointer;" title="Eliminar" onclick="seleccionar(this)"></i>';
+        }
+        html = html + '</td>' +
           '<td>' + etapas[i].titulo + '</td>' +
           '<td>' + etapas[i].lote + ' </td>' +
           '<td>' + etapas[i].producto + '</td>' +
@@ -241,8 +227,41 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
           '<td>' + etapas[i].establecimiento + '</td>' +
           '<td>' + etapas[i].recipiente + '</td>' +
           '<td>' + etapas[i].orden + '</td>' +
-          '<td>' + etapas[i].fecha + '</td>' +
-          '<td>' + etapas[i].estado + '</td>' +
+          '<td>' + etapas[i].fecha.substr(0,10) + '</td>' +
+          '<td>';
+          switch (etapas[i].estado) {
+            case 'AC':
+                html = html + '<span data-toggle="tooltip" class="badge bg-green estado">Activo</span>';
+                break;
+            case 'IN':
+                 html = html + '<span data-toggle="tooltip" class="badge bg-red estado">Inactivo</span>';
+                break;
+            case 'CARGADO':
+                 html = html + '<span data-toggle="tooltip" class="badge bg-yellow estado">Cargado</span>';
+                break;
+            case 'EN CURSO':
+                 html = html + '<span data-toggle="tooltip" class="badge bg-green estado">En Curso</span>';
+                break;
+            case 'DESCARGADO':
+                 html = html + '<span data-toggle="tooltip" class="badge bg-yellow estado">Descargado</span>';
+                break;
+            case 'TRANSITO':
+                 html = html + '<span data-toggle="tooltip" class="badge bg-orange estado">En Transito</span>';
+                break;
+            case 'FINALIZADO':
+                 html = html + '<span data-toggle="tooltip" class="badge bg-red estado">Finalizado</span>';
+                break;
+            case 'En Curso':
+                 html = html + '<span data-toggle="tooltip" class="badge bg-green estado">En Curso</span>';
+                break;
+            case 'PLANIFICADO':
+                 html = html + '<span data-toggle="tooltip" class="badge bg-blue estado">Planificado</span>';
+                break;
+            default:
+                 html = html + '<span data-toggle="tooltip" class="badge bg- estado">S/E</span>';
+                break;
+            }
+          html = html + '</td>' +
           '</tr>';
       }
     } else {
@@ -251,9 +270,11 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
           html = html + '<tr  id="' + etapas[i].id + '" ><td>' +
           `<i data-toggle='modal' data-target='#modal-asignarResponsable' class='fa fa-fw fa-user-plus text-green ml-1' style='cursor: pointer;' title='Asignar responsable' onclick='asignarResponsable(${etapas[i].id}'></i>`+
             '<i class="fa fa-fw fa-cogs text-light-blue" style="cursor: pointer;" title="Editar" onclick=linkTo("<?php echo base_url(PRD) ?>general/Etapa/editar?id=' +
-            etapas[i].id + '")></i>' +
-            '<i class="fa fa-fw fa-times-circle text-red" style="cursor: pointer;" title="Eliminar" onclick="seleccionar(this)"></i>' +
-            '</td>' +
+            etapas[i].id + '")></i>';
+        if (etapas[i].estado == 'PLANIFICADO') {
+          html = html + '<i class="fa fa-fw fa-times-circle text-red style="cursor: pointer;" title="Eliminar" onclick="seleccionar(this)"></i>';
+        }
+        html = html + '</td>' +
             '<td>' + etapas[i].titulo + '</td>' +
             '<td>' + etapas[i].lote + ' </td>' +
             '<td>' + etapas[i].producto + '</td>' +
@@ -261,8 +282,41 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
             '<td>' + etapas[i].establecimiento + '</td>' +
             '<td>' + etapas[i].recipiente + '</td>' +
             '<td>' + etapas[i].orden + '</td>' +
-            '<td>' + etapas[i].fecha + '</td>' +
-            '<td>' + etapas[i].estado + '</td>' +
+            '<td>' + etapas[i].fecha.substr(0,10) + '</td>' +
+            '<td>';
+            switch (etapas[i].estado) {
+              case 'AC':
+                  html = html + '<span data-toggle="tooltip" class="badge bg-green estado">Activo</span>';
+                  break;
+              case 'IN':
+                  html = html + '<span data-toggle="tooltip" class="badge bg-red estado">Inactivo</span>';
+                  break;
+              case 'CARGADO':
+                  html = html + '<span data-toggle="tooltip" class="badge bg-yellow estado">Cargado</span>';
+                  break;
+              case 'EN CURSO':
+                  html = html + '<span data-toggle="tooltip" class="badge bg-green estado">En Curso</span>';
+                  break;
+              case 'DESCARGADO':
+                  html = html + '<span data-toggle="tooltip" class="badge bg-yellow estado">Descargado</span>';
+                  break;
+              case 'TRANSITO':
+                  html = html + '<span data-toggle="tooltip" class="badge bg-orange estado">En Transito</span>';
+                  break;
+              case 'FINALIZADO':
+                  html = html + '<span data-toggle="tooltip" class="badge bg-red estado">Finalizado</span>';
+                  break;
+              case 'En Curso':
+                  html = html + '<span data-toggle="tooltip" class="badge bg-green estado">En Curso</span>';
+                  break;
+              case 'PLANIFICADO':
+                  html = html + '<span data-toggle="tooltip" class="badge bg-blue estado">Planificado</span>';
+                  break;
+              default:
+                  html = html + '<span data-toggle="tooltip" class="badge bg- estado">S/E</span>';
+                  break;
+              }
+            html = html + '</td>' +
             '</tr>';
         }
       }
@@ -450,7 +504,8 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
             url:`<?php echo base_url(PRD) ?>general/etapa/eliminarEtapa/${id}`,
             success:function(res){
                 if(res.status){
-                  $('tr#'+id).remove();
+                  // $('tr#'+id).remove();
+                  linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
                   hecho();
                 }else{
                   error();
@@ -460,7 +515,9 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
                 error();
             },
             complete:function(){
-              wc();
+              setTimeout(() => {
+                  wc();                  
+                }, 2000);
             }
         });
   }
