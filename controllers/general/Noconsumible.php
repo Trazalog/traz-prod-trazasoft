@@ -48,12 +48,13 @@ class Noconsumible extends CI_Controller
     public function editarNoConsumible()
     {
         $data['_put_noconsumibles'] = array(
-                    'codigo' => $this->input->post('codigo'),
-                    'descripcion' => $this->input->post('descripcion'),
-                    'fec_vencimiento' => $this->input->post('fec_vencimiento'),
-                    'usuario_app' => 'rodotest',
-                    'tinc_id' => $this->input->post('tinc_id')
-                  );
+          'codigo' => $this->input->post('codigo'),
+          'descripcion' => $this->input->post('descripcion'),
+          'fec_vencimiento' => $this->input->post('fec_vencimiento'),
+          'usuario_app' => userNick(),
+          'tinc_id' => $this->input->post('tinc_id'),
+          'empr_id' => empresa()
+        );
 
         $data = $this->Noconsumibles->editarNoConsumible($data);
         echo json_encode($data);
@@ -63,7 +64,8 @@ class Noconsumible extends CI_Controller
     {
       $data['_delete_noconsumible'] = array(
         'codigo' => $this->input->post('codigo'),
-        'usuario_app' => 'rodotest'
+        'usuario_app' => userNick(),
+        'empr_id' => empresa()
       );
       $data = $this->Noconsumibles->eliminarNoConsumible($data);
      
