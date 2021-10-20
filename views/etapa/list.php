@@ -227,7 +227,7 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
           '<td>' + etapas[i].establecimiento + '</td>' +
           '<td>' + etapas[i].recipiente + '</td>' +
           '<td>' + etapas[i].orden + '</td>' +
-          '<td>' + etapas[i].fecha.substr(0,10) + '</td>' +
+          '<td>' + etapas[i].fecha.substr(0,10).split(/[-/]/).reverse().join("/") + '</td>' +
           '<td>';
           switch (etapas[i].estado) {
             case 'AC':
@@ -282,7 +282,7 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
             '<td>' + etapas[i].establecimiento + '</td>' +
             '<td>' + etapas[i].recipiente + '</td>' +
             '<td>' + etapas[i].orden + '</td>' +
-            '<td>' + etapas[i].fecha.substr(0,10) + '</td>' +
+            '<td>' + etapas[i].fecha.substr(0,10).split(/[-/]/).reverse().join("/") + '</td>' +
             '<td>';
             switch (etapas[i].estado) {
               case 'AC':
