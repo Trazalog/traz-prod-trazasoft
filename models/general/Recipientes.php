@@ -70,7 +70,7 @@ class Recipientes extends CI_Model
 
   public function obtenerTodosRecipientes()
   {
-    $url  = REST_ALM. "/getAllRecipientes";
+    $url  = REST_ALM. "/recipientes/empresa/".empresa();
     $rsp = $this->rest->callAPI('GET', $url);
     $rsp['data'] = json_decode($rsp['data'])->recipientes->recipiente;
     return $rsp['data'];
