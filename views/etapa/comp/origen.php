@@ -3,10 +3,10 @@
 <div class="box box-primary">
     <div class="box-header with-border">
         <h4 class="box-title">Materia Prima</h4>
-        <span>
+        <!-- <span>
             <button type="button" class="btn btn-warning btn-xs pull-right" data-toggle="modal"
                 data-target="#modal_detalleTarea">Detalle tarea</button>
-        </span>
+        </span> -->
     </div>
     <!-- /.box-header -->
 
@@ -111,7 +111,7 @@
           if($etapa->estado != 'En Curso'){
             echo"<th>Acciones</th>";
           }
-          echo"<th>Titulo</th>";
+          echo"<th>Título</th>";
           echo"<th>Stock Actual</th>";
           echo"<th>Cantidad</th>";
           echo'</thead>';

@@ -26,7 +26,7 @@
 <div class="box box-primary animated bounceInDown" id="boxDatos" hidden>
   <div class="box-header with-border">
     <div class="box-tittle">
-      <h5>Informacion</h5>
+      <h5>Información</h5>
     </div>
     <div class="box-tools pull-right">
       <button type="button" id="btnclose" title="cerrar" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
@@ -71,7 +71,7 @@
           <input type="text" class="form-control" id="Localidad" name="localidad">
         </div>
         <div class="form-group">
-          <label for="Pais">Pais:</label>
+          <label for="Pais">País:</label>
           <input type="text" class="form-control" id="Pais" name="pais">
         </div>
 
@@ -264,7 +264,7 @@
                       <!--Pais-->
 
                       <div class="form-group">
-                        <label for="Pais">Pais:</label>
+                        <label for="Pais">País:</label>
                         <input type="text" class="form-control" id="Pais" name="pais">
                       </div>
 
@@ -432,7 +432,7 @@
                         <!--Pais-->
 
                         <div class="form-group">
-                          <label for="Pais">Pais:</label>
+                          <label for="Pais">País:</label>
                           <input type="text" class="form-control" id="Pais" name="pais" readonly>
                         </div>
 

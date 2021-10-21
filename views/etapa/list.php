@@ -92,7 +92,7 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
               echo '<tr  id="' . $id . '" data-json=\'' . json_encode($fila) . '\'>';
                 echo '<td width="6%" class="text-center">';
                 echo "<i data-toggle='modal' data-target='#modal-asignarResponsable' class='fa fa-fw fa-user-plus text-green ml-1' style='cursor: pointer;' title='Asignar responsable' onclick='asignarResponsable($id)'></i>";
-                echo '<i class="fa fa-fw fa-cogs text-light-blue ml-1" style="cursor: pointer;" title="Editar" onclick=linkTo("'.base_url(PRD).'general/Etapa/editar?id=' . $id . '")></i>';             
+                echo '<i class="fa fa-fw fa-cogs text-light-blue ml-1" style="cursor: pointer;" title="Gestionar" onclick=linkTo("'.base_url(PRD).'general/Etapa/editar?id=' . $id . '")></i>';             
                 if($fila->estado == 'PLANIFICADO')
                 echo "<i class='fa fa-fw fa-times-circle text-red ml-1' style='cursor: pointer;' title='Eliminar' onclick='conf(eliminarEtapa,\"$id\")'></i>";
                 echo '</td>';
@@ -214,7 +214,7 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
       for (var i = 0; i < etapas.length; i++) {
         html = html + '<tr  id="' + etapas[i].id + '" ><td>' +
           `<i data-toggle='modal' data-target='#modal-asignarResponsable' class='fa fa-fw fa-user-plus text-green ml-1' style='cursor: pointer;' title='Asignar responsable' onclick='asignarResponsable(${etapas[i].id}'></i>`+
-          '<i class="fa fa-fw fa-cogs text-light-blue" style="cursor: pointer;" title="Editar" onclick=linkTo("<?php echo base_url(PRD) ?>general/Etapa/editar?id=' +
+          '<i class="fa fa-fw fa-cogs text-light-blue" style="cursor: pointer;" title="Gestionar" onclick=linkTo("<?php echo base_url(PRD) ?>general/Etapa/editar?id=' +
           etapas[i].id + '")></i>';
         if (etapas[i].estado == 'PLANIFICADO') {
           html = html + '<i class="fa fa-fw fa-times-circle text-red style="cursor: pointer;" title="Eliminar" onclick="seleccionar(this)"></i>';
@@ -269,7 +269,7 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
         if (etapas[i].titulo === op) {
           html = html + '<tr  id="' + etapas[i].id + '" ><td>' +
           `<i data-toggle='modal' data-target='#modal-asignarResponsable' class='fa fa-fw fa-user-plus text-green ml-1' style='cursor: pointer;' title='Asignar responsable' onclick='asignarResponsable(${etapas[i].id}'></i>`+
-            '<i class="fa fa-fw fa-cogs text-light-blue" style="cursor: pointer;" title="Editar" onclick=linkTo("<?php echo base_url(PRD) ?>general/Etapa/editar?id=' +
+            '<i class="fa fa-fw fa-cogs text-light-blue" style="cursor: pointer;" title="Gestionar" onclick=linkTo("<?php echo base_url(PRD) ?>general/Etapa/editar?id=' +
             etapas[i].id + '")></i>';
         if (etapas[i].estado == 'PLANIFICADO') {
           html = html + '<i class="fa fa-fw fa-times-circle text-red style="cursor: pointer;" title="Eliminar" onclick="seleccionar(this)"></i>';
