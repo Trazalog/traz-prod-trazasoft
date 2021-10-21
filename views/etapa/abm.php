@@ -15,7 +15,7 @@
             <h3 class="box-title">
                 <?php echo $accion . ' ' . $etapa->titulo ?>
             </h3>
-            <button class="btn btn-success btn-xs pull-right" onclick="deleteSnapshot()">Limpiar Campos</button>
+            <!-- <button class="btn btn-success btn-xs pull-right" onclick="deleteSnapshot()">Limpiar Campos</button> -->
         </div>
         <!-- /.box-header -->
         <div class="box-body">
