@@ -22,7 +22,7 @@
             <div class="row">
                 <input type="hidden" value="0" id="batch_id" name="batch_id">
                 <div class="col-md-1 col-xs-12">
-                    <label for="Lote" class="form-label">Codigo Lote:*</label>
+                    <label for="Lote" class="form-label">Código Lote:*</label>
                 </div>
                 <div class="col-md-5 col-xs-12">
                     <input name="vcode" type="text" id="Lote" <?php if ($accion == 'Editar') {
@@ -97,7 +97,7 @@
             </div>
             <div class="row" style="margin-top: 50px">
                 <div class="col-md-2 col-xs-12">
-                    <label for="op" class="form-label">Orden de Produccion:</label>
+                    <label for="op" class="form-label">Orden de Producción:</label>
                 </div>
                 <div class="col-md-4 col-xs-12">
 
