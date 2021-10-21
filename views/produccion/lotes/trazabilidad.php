@@ -73,9 +73,10 @@
                     <thead>
                         <tr>
                             <th style="width: 1%;"></th>
-                            <th style="width: 8%;">Cod. Lote</th>
+                            <th style="width: 9%;">Cod. Lote</th>
+                            <th style="width: 4%;">Batch id</th>
                             <th style="width: 9%;">Estado</th>
-                            <th style="width: 10%;">N° Orden</th>
+                            <th style="width: 5%;">N° Orden</th>
                             <th style="width: 8%;">Etapa</th>
                             <th style="width: 10%;">Recipiente</th>
                             <!-- <th>Articulo</th> -->
@@ -112,7 +113,6 @@ function buscarBatch() {
         success: function(rsp) {
             $('#tree').parents('div .row').prop('hidden', '');
             $('#tabla').parents('div .row').prop('hidden', '');
-            // console.log(rsp.data);
             var aux = [];
             if (rsp.data) {
                 crearArbol(rsp.arbol_json);
@@ -167,55 +167,19 @@ function format(d) { //child row
         '<td>' + d.cantidad + '</td>' +
         '</tr>' +
         '<tr>' +
-        '<td><b>Path: </b></td>' +
+        '<td><b>Camino: </b></td>' +
         '<td>' + d.path_lote_id + '</td>' +
         '</tr>' +
         '</table>';
 }
 
 function crearTabla(data) {
-    // dataGlobal = data;
-    // var datosTabla = '';
-    // for (let i = 0; i < data.length; i++) {
-    //   datosTabla += "<tr>" +
-    //     "<td></td>" +
-    //     "<td>" + data[i].lote_id + "</td>" +
-    //     "<td>" + data[i].lote_estado + "</td>" +
-    //     "<td>" + data[i].lote_num_orden_prod + "</td>" +
-    //     "<td>" + data[i].etap_nombre + "</td>" +
-    //     "<td>" + data[i].reci_nombre + "</td>" +
-    //     // "<td>" + data[i].arti_descripcion + "</td>" +
-    //     // "<td>" + data[i].path_lote_id + "</td>" +
-    //     "<td>" + data[i].lote_fec_alta + "</td>" +
-    //     "</tr>" +
-    //     //child row
-    //     '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
-    //     '<tr>' +
-    //     '<td>Artículo:</td>' +
-    //     '<td>' + data[i].arti_descripcion + '</td>' +
-    //     '</tr>' +
-    //     '<tr>' +
-    //     '<td>Path:</td>' +
-    //     '<td>' + data[i].path_lote_id + '</td>' +
-    //     '</tr>' +
-    //     '</table>';
-    // }
-    // console.log('datosTabla');
-    // console.log(data);
-    // $('#tbodyTabla').html(datosTabla);
-    // $('#tabla').dataTable();
-    // DataTable('#tabla');
-    // var data = {
-    //   "data": data
-    // }
-    // console.log(data);
-    // table = DataTable('#tabla') {
 
     if (!_isset(table)) {
         console.log('entra');
         // table = $('#tabla').dataTable().fnDestroy();
     }
-
+    
     table = $('#tabla').DataTable({
         "bDestroy": true,
         "data": data,
@@ -227,6 +191,9 @@ function crearTabla(data) {
             },
             {
                 "data": "lote_id"
+            },
+            {
+                "data": "batch_id"
             },
             {
                 "data": "lote_estado"
@@ -246,6 +213,22 @@ function crearTabla(data) {
         ]
     });
 }
+
+// //limpio arreglo para que no repita batchs
+// function uniq_fast(a) {
+//     var seen = {};
+//     var out = [];
+//     var len = a.length;
+//     var j = 0;
+//     for(var i = 0; i < len; i++) {
+//          var item = a[i].batch_id;
+//          if(seen[item] !== 1) {
+//                seen[item] = 1;
+//                out[j++] = item;
+//          }
+//     }
+//     return out;
+// }
 
 // Add event listener for opening and closing details
 $('#tabla').on('click', 'td.details-control', function() {

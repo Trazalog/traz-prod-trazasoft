@@ -67,9 +67,25 @@ class Lote extends CI_Controller
       $rsp = $this->Lotes->trazabilidadBatch($batch_id);
       $data = $rsp['data'];
       $arbol = array();
+      $visto = array();
+      $data_filtrada=array();
+      $i=0;
 
+      //Verifico si ya esta repetido para no mostrarlo en listado debajo de gráfico
+      foreach($data as $key => $o){
+          if(!$visto[$o->batch_id]){
+            $visto[$o->batch_id]=1;
+            $data_filtrada[$i]=$o;
+            $i=$i+1;
+          }else{
+            log_message('DEBUG','#TRAZA | #JSON_TRAZABILIDAD >> batch ya repetido '.$o->batch_id);
+            }
+      }
+      
+      //Genero estructura de objetos para gráfico de Trazabilidad
       #NO TOCAR PLIS
       foreach ($data as $key => $o) {
+
           if($o->batch_id_padre){
               #TIENE PADRE Y ESTA METIDO EN EL ARBOL
             if(isset($arbol[$o->batch_id])){
@@ -81,11 +97,17 @@ class Lote extends CI_Controller
           }else{
               $arbol[$o->batch_id] = $o;
           }
+
       }
       $e = reset($arbol);
-      $rsp['arbol_json'] = [nodo($e, $e->hijos)];
-      #END NO TOCAR PLIS
-      echo json_encode($rsp);
+      $respuesta['arbol_json'] = [nodo($e, $e->hijos)];
+      $respuesta['data']=$data_filtrada;
+
+      log_message('DEBUG','#TRAZA | #JSON_TRAZABILIDAD >>'. json_encode($respuesta));
+
+      echo json_encode($respuesta);
+      
+
     } else echo "¡Batch no encontrado! Intente nuevamente.";
   }
 }
