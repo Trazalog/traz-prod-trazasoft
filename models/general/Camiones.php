@@ -89,7 +89,7 @@ class Camiones extends CI_Model
 
     public function guardarDescarga($data)
     {
-        log_message('DEBUG', '#CAMION > guardarDescarga | #DATA: ' . json_encode($data));
+        log_message('DEBUG', '#TRAZA | TRAZASOFT | GENERAL | CAMIONES | guardarDescarga() | #DATA: ' . json_encode($data));
 
         $array = [];
         foreach ($data as $key => $o) {
