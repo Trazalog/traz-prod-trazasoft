@@ -10,6 +10,7 @@
                 <th>Producto</th>
                 <th>Cantidad</th>
                 <th>Cod. Destino</th>
+                <th>Recipiente</th>
                 <th></th>
             </thead>
             <tbody id="lotes">
@@ -43,6 +44,7 @@ function agregarFila(data) {
             <td>${$('.frm-destino #art-detalle').val()}</td>
             <td>${data.destino.cantidad + ' | ' + data.destino.unidad_medida}</td>
             <td>${data.destino.lote_id}</td>
+            <td>${data.destino.recipiente}</td>
             <td>${loteSistema?'<i class="fa fa-barcode text-blue" title="Lote Trazable"></i>':''}</td>
         </tr>`
     );
