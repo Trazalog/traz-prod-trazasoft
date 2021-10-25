@@ -41,6 +41,8 @@ class Camion extends CI_Controller
 
     public function salidaCamion($patente = false)
     {
+        log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT | Lote | salidaCamion()");
+
         $data['establecimientos'] = $this->Establecimientos->listarTodo()->establecimientos->establecimiento;
         $data['tipoEstablecimiento'] = $this->Noconsumibles->tipoEstablecimiento()['data'];
         $data['destinoNoConsumible'] = $this->Noconsumibles->seleccionarDestino()['data'];
