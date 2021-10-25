@@ -101,7 +101,7 @@
 							</div>
 							<div class="row">
 									<div class="col-md-1 col-xs-12"><label class="form-label">Patente<?php hreq() ?>:</label></div>
-									<div class="col-md-2 col-xs-12"><input type="text" class="form-control" id="patente" name="patente">
+									<div class="col-md-2 col-xs-12"><input type="text" class="form-control" id="patente" name="patente" onchange="validaPatente()">
 									</div>
 									<div class="col-md-1 col-xs-12"><label class="form-label">Acoplado:</label></div>
 									<div class="col-md-2 col-xs-12"><input type="text" class="form-control" id="acoplado" name="acoplado">
@@ -198,6 +198,8 @@ function reset() {
     $('#frm-origen')[0].reset();
     $('#frm-destino')[0].reset();
     $('.inp-descarga').attr('readonly', false);
+    $("#frm-info")[0].reset();
+    $("#frm-camion")[0].reset();
     $('#lotes').empty();
 }
 var recipienteSelect = null;
@@ -360,6 +362,12 @@ function validarFormulario(msj) {
                 ban = false;
             }
         }
+    });
+    //Valida PATENTE camión que no este en TRÁNSITO
+    validaPatente().then((result) => {
+        ban = result;
+    }).catch((err) => {
+        ban = false;
     });
 
     if (!ban) Swal.fire('Error..','Complete los campos obligatorios(*)','error');
@@ -550,6 +558,8 @@ function cargacamion() {
     $('#add-camion').show();
     //$('.btn-cargar').hide();
     $('.tag-descarga').hide();
+    //Reseteo todos los formularios
+    reset();
 }
 
 function descargacamion() {
@@ -564,6 +574,7 @@ function descargacamion() {
     $('#add-camion').hide();
     //$('.btn-cargar').show();
     $('.tag-descarga').show();
+    reset();
 }
 
 function actualizaNeto() {
@@ -586,6 +597,45 @@ $(document).off('click', '.tabla_productos_asignados_borrar').on('click', '.tabl
     idrecipiente: 'productosasignados',
     idbandera: 'productos_existe'
 }, remover);
+
+async function validaPatente(){
+
+    flag = true;
+    patente =  $("#patente").val();
+    wo();
+    validacion = new Promise((resolve, reject) => {
+        
+        $.ajax({
+            type: 'POST',
+            dataType: 'JSON',
+            url: '<?php echo base_url(PRD) ?>general/Lote/buscaCamion',
+            data: {
+                patente
+            },
+            success: function(rsp) {
+                if(rsp){
+                    if (rsp[0].estado == "TRANSITO") {
+                        Swal.fire('Error..','La patente ingresada se encuentra en TRÁNSITO','error');
+                        resolve(false);
+                    }else{
+                        resolve(true);
+                    }
+                }else{
+                    resolve(true);
+                }
+            },
+            error: function(rsp) {
+                resolve(false);
+                Swal.fire('Error..','Se produjo un error al validar la patente','error');
+            },
+            complete: function() {
+                wc();
+            }
+        });
+    });
+
+    return await validacion;
+}
 </script>
 
 <div class="modal" id="unificar_lotes" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
