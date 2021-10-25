@@ -30,7 +30,7 @@
 					echo '<td style="font-weight: lighter;">' . $fila->descripcion . '</td>';
 					echo '<td style="font-weight: lighter;">' . $fila->unme_id . '</td>';
 					echo '<td style="font-weight: lighter;">' . $fila->cantidad . '</td>';
-					echo '<td style="font-weight: lighter;">' . $fila->fec_alta . '</td>';
+					echo '<td style="font-weight: lighter;">' . formatFechaPG($fila->fec_alta) . '</td>';
 					// echo '<td style="font-weight: lighter;">' . $fila->archivo . '</td>';
 
 					echo '<td width="15%" class="text-center" style="font-weight: lighter;">';
