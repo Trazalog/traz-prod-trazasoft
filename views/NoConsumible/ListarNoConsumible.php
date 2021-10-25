@@ -72,6 +72,11 @@
 
 	function guardarNoConsumible() {
 
+		if(!frm_validar('#frm-NoConsumible')){
+			alertify.error('Debes completar los campos obligatorios (*)');
+        	wc();
+        	return;
+    	}
 		var formData = new FormData($('#frm-NoConsumible')[0]);
 		wo();
 		
@@ -190,6 +195,9 @@
 				dataType: 'JSON',
 				url: '<?php echo base_url(PRD) ?>general/Establecimiento/obtenerDepositos/',
 				success: function(rsp) {
+
+					$('#depositos').empty();
+
 					var datos = "<option value='' disabled selected>Seleccionar</option>";
 					for (let i = 0; i < rsp.length; i++) {
 						datos += "<option value=" + rsp[i].depo_id + ">" + rsp[i].descripcion + "</option>";
@@ -199,8 +207,10 @@
 				},
 				error: function(rsp) {
 					if (rsp) {
+						$('#depositos').empty();
 						alert(rsp.responseText);
 					} else {
+						$('#depositos').empty();
 						alert("No se pudieron cargar los depositos del establecimiento seleccionado.");
 					}
 				},
@@ -470,14 +480,12 @@
 							<fieldset id="read-only">
 								<fieldset>
 									<div class="form-group">
-											<label class="col-md-2 control-label" for="codigo">Código<strong
-															class="text-danger">*</strong>:</label>
+											<label class="col-md-2 control-label" for="codigo">Código<?php echo hreq() ?>:</label>
 											<div class="col-md-4">
 													<input id="codigo" name="codigo" type="text" placeholder="Ingrese código..."
 															class="form-control input-md" required>
 											</div>
-											<label class="col-md-2 control-label" for="tipo_no_consumible">Tipo No Consumible<strong
-															class="text-danger">*</strong>:</label>
+											<label class="col-md-2 control-label" for="tipo_no_consumible">Tipo No Consumible<?php echo hreq() ?>:</label>
 											<div class="col-md-4">
 												<select name="tipo_no_consumible" class="form-control">
 													<option value="0"> - Seleccionar - </option>
@@ -493,8 +501,7 @@
 									</div>
 
 									<div class="form-group">
-											<label class="col-md-2 control-label" for="descripcion">Descripción<strong
-															class="text-danger">*</strong>:</label>
+											<label class="col-md-2 control-label" for="descripcion">Descripción<?php echo hreq() ?>:</label>
 											<div class="col-md-10">
 													<textarea class="form-control" id="descripcion" name="descripcion"
 													<?php echo req() ?>></textarea>
@@ -504,7 +511,7 @@
 									<div class="form-group">
 										
 											<label class="col-md-4 control-label" for="fecha_vencimiento">Fecha de
-													vencimiento<strong class="text-danger">*</strong>:</label>
+													vencimiento<?php echo hreq() ?>:</label>
 											<div class="col-md-8">
 													<input id="fec_vencimiento" name="fec_vencimiento" type="date"
 															placeholder="" class="form-control input-md"  <?php echo req() ?>>
@@ -512,7 +519,7 @@
 									</div>
 									<div class="form-group">
 									
-												<label class="col-md-4 control-label" for="">Establecimiento:</label>
+												<label class="col-md-4 control-label" for="">Establecimiento<?php echo hreq() ?>:</label>
 													<div class="col-md-8">
 													<select class="form-control select2 select2-hidden-accesible" id="establecimiento" name="establecimiento" onchange="selectEstablecimiento()" <?php echo req() ?>>
 															<option value="" disabled selected>Seleccionar</option>
@@ -530,7 +537,7 @@
 										<br>
 											<!-- ___________________________________________________ -->
 									<div class="form-group">
-													<label class="col-md-4 control-label" for="depositos">Depósito:</label>
+													<label class="col-md-4 control-label" for="depositos">Depósito<?php echo hreq() ?>:</label>
 													<div class="col-md-8">
 													<select class="form-control select2 select2-hidden-accesible" id="depositos" name="depositos" onchange="selectDeposito()" <?php echo req() ?>>
 													</select>

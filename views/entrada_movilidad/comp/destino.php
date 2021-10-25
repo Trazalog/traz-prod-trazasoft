@@ -107,6 +107,8 @@ $('#frm-destino').on('submit', function(e) {
         origen.prov_id = $('#proveedor').val();
         origen.batch_id = batch;
 
+        destino.recipiente = $("#recipiente").find(':selected').text();
+        
         if (parseFloat(origen.cantidad) <= 0 || parseFloat(destino.cantidad) > parseFloat(origen.cantidad)) {
             alert('La Cantidad Supera la Cantidad del Lote Origen');
             return;
