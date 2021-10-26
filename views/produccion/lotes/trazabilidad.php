@@ -72,16 +72,16 @@
                 <table id="tabla" class="table table-bordered table-striped table-hover display">
                     <thead>
                         <tr>
-                            <th style="width: 1%;"></th>
-                            <th style="width: 9%;">Cod. Lote</th>
+                            <th style="width: 0%;"></th>
+                            <th style="width: 4%;">Cod. Lote</th>
                             <th style="width: 4%;">Batch id</th>
-                            <th style="width: 9%;">Estado</th>
-                            <th style="width: 5%;">N° Orden</th>
-                            <th style="width: 8%;">Etapa</th>
-                            <th style="width: 10%;">Recipiente</th>
+                            <th style="width: 5%;">Estado</th>
+                            <th style="width: 4%;">N° Orden</th>
+                            <th style="width: 4%;">Etapa</th>
+                            <th style="width: 8%;">Recipiente</th>
                             <!-- <th>Articulo</th> -->
                             <!-- <th style="width: 19%;">Path</th> -->
-                            <th style="width: 10%;">Alta lote</th>
+                            <th style="width: 7%;">Alta lote</th>
                             <!-- <th type="hidden">Articulo</th>
               <th style="width: 19%;" type="hidden">Path</th> -->
                         </tr>
@@ -96,7 +96,17 @@
     </div>
 </section>
 
+
+
 <script>
+/*Presiona Enter y llame a la funcion buscarBatch*/
+$('#batch').on('keypress', function (e) {
+         if(e.which === 13){
+            buscarBatch();
+         }
+   });
+/** Fin del KeyPress */
+
 var table = '';
 
 function buscarBatch() {
@@ -249,4 +259,5 @@ $('#tabla').on('click', 'td.details-control', function() {
             "<i class ='fa fa-fw fa-minus-circle' style='color: #e60000; cursor: pointer;'></i>");
     }
 });
+
 </script>
