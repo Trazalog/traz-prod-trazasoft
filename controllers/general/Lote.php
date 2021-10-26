@@ -71,6 +71,8 @@ class Lote extends CI_Controller
       $data_filtrada=array();
       $i=0;
 
+      log_message('DEBUG','#TRAZA | trazabilidadBatch() >>  $rsp[data]'.$data);
+
       //Verifico si ya esta repetido para no mostrarlo en listado debajo de gráfico
       foreach($data as $key => $o){
           if(!$visto[$o->batch_id]){
@@ -109,5 +111,19 @@ class Lote extends CI_Controller
       
 
     } else echo "¡Batch no encontrado! Intente nuevamente.";
+  }
+  /**
+	* Busca camion por patente 
+	* @param string patente
+	* @return array con datos camion si coincidiera la patente
+	*/
+  public function buscaCamion(){
+    log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT | Lote | buscaCamion()");
+        
+    $patente = $this->input->post("patente");
+    $resp = $this->Lotes->buscaCamion($patente);
+
+    echo json_encode($resp);
+		
   }
 }
