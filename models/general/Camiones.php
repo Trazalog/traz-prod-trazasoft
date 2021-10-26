@@ -271,4 +271,20 @@ class Camiones extends CI_Model
         $url = REST_LOG."/camiones/proveedor";
         return wso2($url, 'PUT', $data);
     }
+    /**
+	* Busca camion por patente en prd.movimiento_transporte
+	* @param string patente
+	* @return array datos de camion en prd.movimientos_transportes
+	*/
+    public function getMovimientoTransporte($patente){
+        
+        $url = REST_LOG."/transporte/movimiento/patente/".$patente."/".empresa();
+
+        $aux = $this->rest->callAPI("GET",$url);
+        $resp = json_decode($aux['data']);
+
+        log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT| Camiones | getMovimientoTransporte()  resp: >> " . json_encode($resp));
+
+        return $resp->movimiento;
+    }
 }

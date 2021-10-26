@@ -163,7 +163,7 @@ function rellenarDetalles(e) {
 
 function salidaCamiones(patente) {
     wo();
-    linkTo('<?php echo base_url(PRD) ?>general/Camion/salidaCamion/' + patente);
+    linkTo('<?php echo base_url(PRD) ?>general/Camion/salidaCamion?patente=' + patente);
     wc();
 }
 </script>
