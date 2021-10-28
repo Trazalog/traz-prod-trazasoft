@@ -371,9 +371,9 @@ function guardar(boton) {
                 }
             }
         },
-        // error: function() {
-        //     alert('Error al iniciar etapa');
-        // },
+        error: function() {
+            alert('Error al iniciar etapa');
+        },
         complete: function() {
             wc();
         }
