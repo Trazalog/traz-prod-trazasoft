@@ -38,7 +38,7 @@ use \koolreport\widgets\google\ColumnChart;
                   <div class="form-group col-xs-12 col-sm-3 col-md-3 col-lg-3">
                     <label style="padding-left: 20%;">Desde</label>
                     <div class="input-group date">
-                      <a class="input-group-addon" id="daterange-btn" title="Más fechas">
+                      <a class="input-group-addon daterange-btn" id="daterangeDesde" title="Más fechas">
                         <i class="fa fa-magic"></i>
                         <span></span>
                       </a>
@@ -49,7 +49,11 @@ use \koolreport\widgets\google\ColumnChart;
                   <!-- <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6"> -->
                   <div class="form-group col-xs-12 col-sm-3 col-md-3 col-lg-3">
                     <label>Hasta</label>
-                    <div class="input-group">
+                    <div class="input-group date">
+                      <a class="input-group-addon daterange-btn" id="daterangeHasta" title="Más fechas">
+                        <i class="fa fa-magic"></i>
+                        <span></span>
+                      </a>
                       <input type="date" class="form-control" id="datepickerHasta" name="datepickerHasta" placeholder="Hasta">
                       <a class="input-group-addon" style="cursor: pointer;" onclick="filtro()" title="Más filtros">
                         <i class="fa fa-filter"></i>
@@ -282,6 +286,60 @@ use \koolreport\widgets\google\ColumnChart;
     cantidadIngresos();
     fechaMagic();
 
+  //Funcion de datatable para extencion de botones exportar
+  //excel, pdf, copiado portapapeles e impresion
+  $(document).ready(function() {
+    $('.dataTable').DataTable({
+      responsive: true,
+      language: {
+      url: '<?php base_url() ?>lib/bower_components/datatables.net/js/es-ar.json' //Ubicacion del archivo con el json del idioma.
+      },
+      dom: 'lBfrtip',
+      buttons: [{
+      //Botón para Excel
+      extend: 'excel',
+      exportOptions: {
+      columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+      },
+      footer: true,
+      title: 'Salidas',
+      filename: 'salidas',
+      //Aquí es donde generas el botón personalizado
+        text: '<button class="btn btn-success ml-2 mb-2 mb-2 mt-3">Exportar a Excel <i class="fa fa-file-excel-o"></i></button>'
+      },
+      // //Botón para PDF
+      {
+        extend: 'pdf',
+        exportOptions: {
+            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+        },
+        footer: true,
+        title: 'Salidas',
+        filename: 'salidas',
+        text: '<button class="btn btn-danger ml-2 mb-2 mb-2 mt-3">Exportar a PDF <i class="fa fa-file-pdf-o mr-1"></i></button>'
+      },
+      {
+        extend: 'copy',
+        exportOptions: {
+            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+        },
+        footer: true,
+        title: 'Salidas',
+        filename: 'salidas',
+        text: '<button class="btn btn-primary ml-2 mb-2 mb-2 mt-3">Copiar <i class="fa fa-file-text-o mr-1"></i></button>'
+      },
+      {
+        extend: 'print',
+        exportOptions: {
+            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+        },
+        footer: true,
+        title: 'Salidas',
+        filename: 'salidas',
+        text: '<button class="btn btn-default ml-2 mb-2 mb-2 mt-3">Imprimir <i class="fa fa-print mr-1"></i></button>'
+      }]
+    });
+  });
     $('tr > td').each(function() {
       if ($(this).text() == 0) {
         $(this).text('-');
@@ -290,10 +348,10 @@ use \koolreport\widgets\google\ColumnChart;
     });
 
     // DataTable($('.dataTable'));
-    $('.dataTable').dataTable();
+    // $('.dataTable').dataTable();
 
     function fechaMagic() {
-      $('#daterange-btn').daterangepicker({
+      $('.daterange-btn').daterangepicker({
           ranges: {
             'Hoy': [moment(), moment()],
             'Ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
