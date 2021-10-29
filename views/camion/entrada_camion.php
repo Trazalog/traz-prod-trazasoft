@@ -88,7 +88,7 @@
 									<div class="col-md-4">
 											<div class="form-group">
 													<label>Transportista <?php hreq() ?>:</label>
-													<select class="form-control select select2" id="transportista" name="cuit">
+													<select style="width: 50%" class="form-control select select2" id="transportista" name="cuit">
 															<option disabled selected>Seleccionar</option>
 															<?php
 																	foreach ($transportistas as $o) {
