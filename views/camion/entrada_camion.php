@@ -88,7 +88,7 @@
 									<div class="col-md-4">
 											<div class="form-group">
 													<label>Transportista <?php hreq() ?>:</label>
-													<select class="form-control select select2" id="transportista" name="cuit">
+													<select style="width: 50%" class="form-control select select2" id="transportista" name="cuit">
 															<option disabled selected>Seleccionar</option>
 															<?php
 																	foreach ($transportistas as $o) {
@@ -113,14 +113,23 @@
 									<div class="col-md-2 col-xs-12"><input type="text" class="form-control" id="tipo" name="tipo"></div>
 							</div>
 							<div class="row" style="margin-top:40px">
-									<div class="col-md-1 col-xs-12"><label class="form-label">Bruto<?php hreq() ?>:</label></div>
-									<div class="col-md-3 col-xs-12"><input type="number" class="form-control" onkeyup="actualizaNeto()"
-													id="bruto" name="bruto"></div>
-									<div class="col-md-1 col-xs-12"><label class="form-label">Tara<?php hreq() ?>:</label></div>
-									<div class="col-md-3 col-xs-12"><input type="number" class="form-control" id="tara"
-													onkeyup="actualizaNeto()" name="tara"></div>
-									<div class="col-md-1 col-xs-12"><label class="form-label">Neto:</label></div>
-									<div class="col-md-3 col-xs-12"><input type="text" class="form-control" id="neto" name="neto" readonly>
+									<div class="col-md-1 col-xs-12">
+                                        <label class="form-label">Bruto<?php hreq() ?>:</label>
+                                    </div>
+									<div class="col-md-3 col-xs-12">
+                                        <input type="number" class="form-control" id="bruto" name="bruto" onchange="calculaNeto()">
+                                    </div>
+									<div class="col-md-1 col-xs-12">
+                                        <label class="form-label">Tara<?php hreq() ?>:</label>
+                                    </div>
+									<div class="col-md-3 col-xs-12">
+                                        <input type="number" class="form-control" id="tara" name="tara" onchange="calculaNeto()">
+                                    </div>
+									<div class="col-md-1 col-xs-12">
+                                        <label class="form-label">Neto:</label>
+                                    </div>
+									<div class="col-md-3 col-xs-12">
+                                        <input type="text" class="form-control" id="neto" name="neto" readonly>
 									</div>
 							</div>
 					</form>
@@ -576,7 +585,9 @@ function descargacamion() {
     $('.tag-descarga').show();
     reset();
 }
-
+//Se pidio que se remueva esta condicion onkeyup="actualizarNeto" sobre bruto y tara
+//El camion puede esta vacío es decir BRUTO = 0
+//se utiliza funcion actualizaNeto()
 function actualizaNeto() {
     bruto = document.getElementById('bruto').value;
     tara = document.getElementById('tara').value;
@@ -592,6 +603,16 @@ function actualizaNeto() {
         }
     }
 }
+// suma tara con peso neto de carga
+function calculaNeto(){
+    if (!_isset($('#bruto').val()) || (parseFloat($('#bruto').val()) <= parseFloat($('#tara').val()))) {
+        $('#neto').val(0);
+        return;
+    }else{
+        $('#neto').val(parseFloat($('#bruto').val()) - parseFloat($('#tara').val()));
+    }
+}
+
 $(document).off('click', '.tabla_productos_asignados_borrar').on('click', '.tabla_productos_asignados_borrar', {
     idtabla: 'tabla_productos_asignados',
     idrecipiente: 'productosasignados',

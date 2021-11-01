@@ -36,7 +36,7 @@
                     <h3 class="panel-title">Datos Camión</h3>
                 </div>
                 <div class="panel-body">
-                    <input name="motr_id" class="hidden">
+                    <input name="motr_id" class="hidden" value="<?php echo isset($datosCamion->motr_id) ? $datosCamion->motr_id : '' ?>">
                     <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
@@ -65,7 +65,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Peso Bruto:</label>
-                                <input id="bruto" type="number" name="bruto" class="form-control" value="<?php echo isset($datosCamion->bruto) ? $datosCamion->bruto : '' ?>">
+                                <input id="bruto" type="number" name="bruto" class="form-control" value="<?php echo isset($datosCamion->bruto) ? $datosCamion->bruto : '' ?>" onchange="calculaNeto()">
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -94,6 +94,13 @@
                             <th width="20%">Cantidad</th>
                         </thead>
                         <tbody>
+							<?php foreach ($datosCamion->articulos->articulo as $fila) {
+								echo "<tr  data-json='".json_encode($fila)."'>";
+								echo '<td style="font-weight: lighter;">'.$fila->articulo.'</td>';
+								echo '<td style="font-weight: lighter;">'.$fila->cantidad.'</td>';
+								echo '</tr>';
+							}
+							?>
                         </tbody>
                     </table>
                     <!-- <div class="form-group">
@@ -168,13 +175,14 @@
 				});
 		}
 	// suma tara con peso neto de carga
-		$('#bruto').keyup(function() {
-				if (!this.value || this.value == "" || (parseFloat(this.value) <= parseFloat($('#tara').val()))) {
-						$('#neto').val(0);
-						return;
-				}
-				$('#neto').val(parseFloat(this.value) - parseFloat($('#tara').val()));
-		})
+	function calculaNeto(){
+		if (!_isset($('#bruto').val()) || (parseFloat($('#bruto').val()) <= parseFloat($('#tara').val()))) {
+			$('#neto').val(0);
+			return;
+		}else{
+			$('#neto').val(parseFloat($('#bruto').val()) - parseFloat($('#tara').val()));
+		}
+	}
 	// busca info del camion y llama a buscar los lotes cargados (obtenerLotesCamion(patente))
 	function obtenerInfoCamion(patente) {
 			var estado = 'CARGADO|EN CURSO|CARGADO|DESCARGADO';
@@ -243,7 +251,7 @@
 							wc();
 							console.log(res);
 							if(res.status){
-									hecho();linkTo();
+									hecho();linkTo('<?php echo PRD ?>general/Camion/recepcionCamion');
 							}else{
 									error();
 							}

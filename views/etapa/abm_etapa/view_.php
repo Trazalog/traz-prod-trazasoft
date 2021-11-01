@@ -297,13 +297,12 @@
           <div class="form-horizontal">
             <div class="row">
               <form class="frmArticulo" id="frmArticulo">
-                <div class="col-sm-6">
                 <input type="text" class="form-control habilitar hidden" name="etap_id" id="etapa_id">
                   <!--_____________ Artículo _____________-->
                   <div class="form-group">
                       <label for="articulo_id" class="col-sm-4 control-label">Artículo:</label>
-                      <div class="col-sm-8">
-                        <select class="form-control select2 select2-hidden-accesible habilitar requerido" name="arti_id" id="articulo_id">
+                      <div class="col-sm-12 col-md-8 col-lg-8">
+                        <select style="width: 60%" class="form-control s2MdlAgregar select2-hidden-accesible habilitar requerido" name="arti_id" id="articulo_id">
                           <option value="" disabled selected>-Seleccione opción-</option>	
                           <?php
                             foreach ($listarArticulos as $articulo) {
@@ -317,8 +316,8 @@
                   <!--_____________ Tipo _____________-->
                   <div class="form-group">
                       <label for="tipo_id" class="col-sm-4 control-label">Tipo:</label>
-                      <div class="col-sm-8">
-                        <select class="form-control select2 select2-hidden-accesible habilitar requerido" name="tipo_id" id="tipo_id">
+                      <div class="col-sm-12 col-md-8 col-lg-8">
+                        <select style="width: 60%" class="form-control s2MdlAgregar select2-hidden-accesible habilitar requerido" name="tipo_id" id="tipo_id">
                           <option value="" disabled selected>-Seleccione opción-</option>	
                           <option value="1">Entrada</option>	
                           <option value="2">Producto</option>	
@@ -327,7 +326,6 @@
                       </div>
                     </div>
                   <!--__________________________-->   
-                </div>
               </form>
             </div>
           </div>
@@ -344,6 +342,12 @@
 <!---///////--- FIN MODAL AGREGAR ARTICULO ---///////--->
 
 <script>
+  $(document).ready(function () {
+    $(".s2MdlAgregar").select2({
+      tags: true,
+      dropdownParent: $("#modalAgregarArticulo")
+    });
+  });
   // carga tabla genaral de circuitos
   $("#cargar_tabla").load("<?php echo base_url(PRD); ?>/general/Etapa/listarEtapas");
   // Config Tabla

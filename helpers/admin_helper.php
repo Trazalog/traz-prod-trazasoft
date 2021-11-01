@@ -61,7 +61,7 @@ if (!function_exists('bolita')) {
                 return bolita('Descargado', 'yellow');
                 break;
             case 'TRANSITO':
-                return bolita('En Transito', 'orange');
+                return bolita('En Tránsito', 'orange');
                 break;
             case 'FINALIZADO':
                 return bolita('Finalizado', 'red');
