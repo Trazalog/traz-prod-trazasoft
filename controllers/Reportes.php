@@ -99,13 +99,14 @@ class Reportes extends CI_Controller
     // $valores['unidades_medida'] = $this->Koolreport->depurarJson($url['unidades_medida'])->unidades->unidad;
     $valores['etapas'] = $this->Koolreport->depurarJson($url['etapas'])->etapas->etapa;
 
-    $data['filtro'] = $this->Opcionesfiltros->filtrosProduccion($valores);
+    // $data['filtro'] = $this->Opcionesfiltros->filtrosProduccion($valores);
 
-    $data['calendarioDesde'] = true;
-    $data['calendarioHasta'] = true;
-    $data['op'] = "produccion";
+    // $data['calendarioDesde'] = true;
+    // $data['calendarioHasta'] = true;
+    // $data['op'] = "produccion";
 
-    $this->load->view(PRD.'layout/Filtro', $data);
+    // $this->load->view(PRD.'layout/Filtro', $data);
+    echo json_encode($valores);
   }
 
   public function filtroProdResponsable()
