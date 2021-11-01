@@ -1,200 +1,194 @@
 <?php $this->load->view('camion/modal_productos')?>
 
 <!-- Bloque Carga|recepcion MP -->
-	<div class="box">
-			<div class="box-header with-border">
-					<h3 class="box-title">Entrada | Recepción MP</h3>
-			</div>
-			<div class="box-body">
-					<div class="row">
-							<input type="hidden" id="accioncamion">
-							<div class="col-md-6 col-xs-12">
-									<div id="cargacamion" onclick="cargacamion();">
-											<img src="<?php echo base_url('lib/icon/truck.png'); ?>" alt="Smiley face" height="42" width="42">
-											<label for="">Entrada</label>
-									</div>
-							</div>
-							<div class="col-md-6 col-xs-12">
-									<div id="descargacamion" onclick="descargacamion()">
-											<img src="<?php echo base_url('lib/icon/order.png'); ?>" alt="Smiley face" height="42" width="42">
-											<label for="">RECEPCIÓN MP</label>
-									</div>
-							</div>
-					</div>
-					<form id="frm-info">
-							<input type="text" name="accion" id="accion" class="hidden">
-							<div class="row" style="margin-top: 40px">
-									<div class="col-md-1 col-xs-12">
-											<label class="form-label">Boleta<?php hreq() ?>:</label>
-									</div>
-									<div class="col-md-6 col-xs-12">
-											<input id="boleta" type="text" class="form-control" placeholder="Inserte Numero de Boleta" name="boleta">
-									</div>
-									<div class="col-md-5">
-									</div>
-							</div>
-							<div class="row" style="margin-top:40px">
-									<div class="col-md-2 col-xs-12">
-                                        <label for="establecimientos" class="form-label">Establecimiento<?php hreq() ?>:</label>
-									</div>
-									<div class="col-md-4 col-xs-12">
-                                        <select class="form-control select2 select2-hidden-accesible" id="establecimientos" name="establecimiento" onchange="selectEstablecimiento()" <?php echo req() ?>>
-                                                <option value="" disabled selected>-Seleccione Establecimiento-</option>
-                                                <?php
-                                                    foreach ($establecimientos as $fila) {
-                                                            echo '<option value="' . $fila->esta_id . '" >' . $fila->nombre . '</option>';
-                                                    }
-                                                ?>
-                                        </select>
-									</div>
-									<div class="col-md-1 col-xs-12">
-                                        <label for="fecha" class="form-label">Fecha<?php hreq() ?>:</label>
-									</div>
-									<div class="col-md-3 col-xs-12">
-                                        <input type="date" id="fecha" value="<?php echo $fecha; ?>" class="form-control" name="fecha">
-									</div>
-									<div class="col-md-2"></div>
-							</div>
-							<div class="row" style="margin-top:40px">
-									<div class="col-md-1 col-xs-12">
-                                        <label class="form-label tag-descarga">Proveedor<?php hreq() ?>:</label>
-									</div>
-									<div class="col-md-3 col-xs-12">
-											<input list="proveedores" class="form-control tag-descarga" id="proveedor" name="proveedor" autocomplete="off">
-											<datalist id="proveedores">
-													<?php foreach ($proveedores as $fila) {
-													echo "<option data-json='" . json_encode($fila) . "' value='" . $fila->id . "'>" . $fila->titulo . "</option>";
-											}
-											?>
-											</datalist>
-									</div>
-									<div class="col-md-5 col-xs-12">
-                                        <input type="text" disabled id="nombreproveedor" class="form-control tag-descarga">
-									</div>
-							</div>
-					</form>
-			</div>
-	</div>
+<div class="box">
+    <div class="box-header with-border">
+        <h3 class="box-title">Entrada | Recepción MP</h3>
+    </div>
+    <div class="box-body">
+        <div class="row">
+            <input type="hidden" id="accioncamion">
+            <div class="col-md-6 col-xs-12">
+                <div id="cargacamion" onclick="cargacamion();">
+                    <img src="<?php echo base_url('lib/icon/truck.png'); ?>" alt="Smiley face" height="42" width="42">
+                    <label for="">Entrada</label>
+                </div>
+            </div>
+            <div class="col-md-6 col-xs-12">
+                <div id="descargacamion" onclick="descargacamion()">
+                    <img src="<?php echo base_url('lib/icon/order.png'); ?>" alt="Smiley face" height="42" width="42">
+                    <label for="">RECEPCIÓN MP</label>
+                </div>
+            </div>
+        </div>
+        <form id="frm-info">
+                <input type="text" name="accion" id="accion" class="hidden">
+                <div class="row" style="margin-top: 40px">
+                        <div class="col-md-1 col-xs-12">
+                                <label class="form-label">Boleta<?php hreq() ?>:</label>
+                        </div>
+                        <div class="col-md-6 col-xs-12">
+                                <input id="boleta" type="text" class="form-control" placeholder="Inserte Numero de Boleta" name="boleta">
+                        </div>
+                        <div class="col-md-5">
+                        </div>
+                </div>
+                <div class="row" style="margin-top:40px">
+                        <div class="col-md-2 col-xs-12">
+                            <label for="establecimientos" class="form-label">Establecimiento<?php hreq() ?>:</label>
+                        </div>
+                        <div class="col-md-4 col-xs-12">
+                            <select class="form-control select2 select2-hidden-accesible" id="establecimientos" name="establecimiento" onchange="selectEstablecimiento()" <?php echo req() ?>>
+                                    <option value="" disabled selected>-Seleccione Establecimiento-</option>
+                                    <?php
+                                        foreach ($establecimientos as $fila) {
+                                                echo '<option value="' . $fila->esta_id . '" >' . $fila->nombre . '</option>';
+                                        }
+                                    ?>
+                            </select>
+                        </div>
+                        <div class="col-md-1 col-xs-12">
+                            <label for="fecha" class="form-label">Fecha<?php hreq() ?>:</label>
+                        </div>
+                        <div class="col-md-3 col-xs-12">
+                            <input type="date" id="fecha" value="<?php echo $fecha; ?>" class="form-control" name="fecha">
+                        </div>
+                        <div class="col-md-2"></div>
+                </div>
+                <div class="row" style="margin-top:40px">
+                        <div class="col-md-1 col-xs-12">
+                            <label class="form-label tag-descarga">Proveedor<?php hreq() ?>:</label>
+                        </div>
+                        <div class="col-md-3 col-xs-12">
+                                <input list="proveedores" class="form-control tag-descarga" id="proveedor" name="proveedor" autocomplete="off">
+                                <datalist id="proveedores">
+                                        <?php foreach ($proveedores as $fila) {
+                                        echo "<option data-json='" . json_encode($fila) . "' value='" . $fila->id . "'>" . $fila->titulo . "</option>";
+                                }
+                                ?>
+                                </datalist>
+                        </div>
+                        <div class="col-md-5 col-xs-12">
+                            <input type="text" disabled id="nombreproveedor" class="form-control tag-descarga">
+                        </div>
+                </div>
+        </form>
+    </div>
+</div>
 <!-- / Bloque Carga|recepcion MP -->
 
 <!-- Bloque Datos Camión (en las 2 opciones) -->
-	<div class="box panel-req" style="display:none">
-			<div class="box-header with-border">
-					<h3 class="box-title">Datos Camión</h3>
-			</div>
-			<div class="box-body" id="div_datos_camion">
-					<form id="frm-camion">
-							<div class="row">
-									<div class="col-md-4">
-											<div class="form-group">
-													<label>Transportista <?php hreq() ?>:</label>
-													<select style="width: 50%" class="form-control select select2" id="transportista" name="cuit">
-															<option disabled selected>Seleccionar</option>
-															<?php
-																	foreach ($transportistas as $o) {
-																			echo "<option value='$o->cuit'>$o->razon_social</option>";
-																	}
-															?>
-													</select>
-											</div>
-									</div>
-							</div>
-							<div class="row">
-									<div class="col-md-1 col-xs-12"><label class="form-label">Patente<?php hreq() ?>:</label></div>
-									<div class="col-md-2 col-xs-12"><input type="text" class="form-control" id="patente" name="patente" onchange="validaPatente()">
-									</div>
-									<div class="col-md-1 col-xs-12"><label class="form-label">Acoplado:</label></div>
-									<div class="col-md-2 col-xs-12"><input type="text" class="form-control" id="acoplado" name="acoplado">
-									</div>
-									<div class="col-md-1 col-xs-12"><label class="form-label">Conductor<?php hreq() ?>:</label></div>
-									<div class="col-md-2 col-xs-12"><input type="text" class="form-control" id="conductor" name="conductor">
-									</div>
-									<div class="col-md-1 col-xs-12"><label class="form-label">Tipo<?php hreq() ?>:</label></div>
-									<div class="col-md-2 col-xs-12"><input type="text" class="form-control" id="tipo" name="tipo"></div>
-							</div>
-							<div class="row" style="margin-top:40px">
-									<div class="col-md-1 col-xs-12">
-                                        <label class="form-label">Bruto<?php hreq() ?>:</label>
-                                    </div>
-									<div class="col-md-3 col-xs-12">
-                                        <input type="number" class="form-control" id="bruto" name="bruto" onchange="calculaNeto()">
-                                    </div>
-									<div class="col-md-1 col-xs-12">
-                                        <label class="form-label">Tara<?php hreq() ?>:</label>
-                                    </div>
-									<div class="col-md-3 col-xs-12">
-                                        <input type="number" class="form-control" id="tara" name="tara" onchange="calculaNeto()">
-                                    </div>
-									<div class="col-md-1 col-xs-12">
-                                        <label class="form-label">Neto:</label>
-                                    </div>
-									<div class="col-md-3 col-xs-12">
-                                        <input type="text" class="form-control" id="neto" name="neto" readonly>
-									</div>
-							</div>
-					</form>
+<div class="box panel-req" style="display:none">
+    <div class="box-header with-border">
+        <h3 class="box-title">Datos Camión</h3>
+    </div>
+    <div class="box-body" id="div_datos_camion">
+        <form id="frm-camion">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Transportista <?php hreq() ?>:</label>
+                        <select style="width: 50%" class="form-control select select2" id="transportista" name="cuit">
+                            <option disabled selected>Seleccionar</option>
+                            <?php
+                                foreach ($transportistas as $o) {
+                                        echo "<option value='$o->cuit'>$o->razon_social</option>";
+                                }
+                            ?>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-1 col-xs-12"><label class="form-label">Patente<?php hreq() ?>:</label></div>
+                <div class="col-md-2 col-xs-12"><input type="text" class="form-control" id="patente" name="patente" onchange="validaPatente()">
+                </div>
+                <div class="col-md-1 col-xs-12"><label class="form-label">Acoplado:</label></div>
+                <div class="col-md-2 col-xs-12"><input type="text" class="form-control" id="acoplado" name="acoplado">
+                </div>
+                <div class="col-md-1 col-xs-12"><label class="form-label">Conductor<?php hreq() ?>:</label></div>
+                <div class="col-md-2 col-xs-12"><input type="text" class="form-control" id="conductor" name="conductor">
+                </div>
+                <div class="col-md-1 col-xs-12"><label class="form-label">Tipo<?php hreq() ?>:</label></div>
+                <div class="col-md-2 col-xs-12"><input type="text" class="form-control" id="tipo" name="tipo"></div>
+            </div>
+            <div class="row" style="margin-top:40px">
+                <div class="col-md-1 col-xs-12">
+                    <label class="form-label">Bruto<?php hreq() ?>:</label>
+                </div>
+                <div class="col-md-3 col-xs-12">
+                    <input type="number" class="form-control" id="bruto" name="bruto" onchange="calculaNeto()">
+                </div>
+                <div class="col-md-1 col-xs-12">
+                    <label class="form-label">Tara<?php hreq() ?>:</label>
+                </div>
+                <div class="col-md-3 col-xs-12">
+                    <input type="number" class="form-control" id="tara" name="tara" onchange="calculaNeto()">
+                </div>
+                <div class="col-md-1 col-xs-12">
+                    <label class="form-label">Neto:</label>
+                </div>
+                <div class="col-md-3 col-xs-12">
+                    <input type="text" class="form-control" id="neto" name="neto" readonly>
+                </div>
+            </div>
+        </form>
 
-					<hr>
-					<button id="add-camion" class="btn btn-primary btn-sm" style="float:right" onclick="addCamion()"><i class="fa fa-plus"></i> Agregar</button>
-			</div>
-	</div>
+        <hr>
+        <button id="add-camion" class="btn btn-primary btn-sm" style="float:right" onclick="addCamion()"><i class="fa fa-plus"></i> Agregar</button>
+    </div>
+</div>
 <!-- / Bloque Datos Camión (en las 2 opciones) -->
 
 <!-- Solo opcion RECEPCIÓN MP -->
-	<div class="row">
+<div class="row">
+    <!-- Bloque Ingreso -->
+    <div class="col-md-6 tag-descarga" style="display:none">
+        <?php
+            $this->load->view('entrada_movilidad/comp/origen');
+        ?>
+    </div>
+    <!-- / Bloque Ingreso -->
 
-		<!-- Bloque Ingreso -->
-			<div class="col-md-6 tag-descarga" style="display:none">
-					<?php
-							$this->load->view('entrada_movilidad/comp/origen');
-					?>
-			</div>
-		<!-- / Bloque Ingreso -->
+    <!-- Bloque Destino -->
+    <div class="col-md-6 tag-descarga" style="display:none">
+        <?php
+            $this->load->view('entrada_movilidad/comp/destino');
+        ?>
+    </div>
+    <!-- / Bloque Destino -->
 
-		<!-- Bloque Destino -->
-			<div class="col-md-6 tag-descarga" style="display:none">
-					<?php
-					$this->load->view('entrada_movilidad/comp/destino');
-					?>
-			</div>
-		<!-- / Bloque Destino -->
+    <!-- Bloque Listado de Recepcion MP -->
+    <div class="col-md-12 tag-descarga" style="display:none">
+        <?php 
+            $this->load->view('entrada_movilidad/comp/tabla_descarga');
+        ?>
+    </div>
+    <!-- / Bloque Listado de Recepcion MP -->
 
-		<!-- Bloque Listado de Recepcion MP -->
-			<div class="col-md-12 tag-descarga" style="display:none">
-					<?php 
-						$this->load->view('entrada_movilidad/comp/tabla_descarga');
-					?>
-			</div>
-		<!-- / Bloque Listado de Recepcion MP -->
-
-		<!-- Bloque Entrada No Consumibles -->
-			<div class="col-md-12 tag-descarga" style="display:none">
-					<?php
-						$this->load->view('NoConsumible/EntradaNoConsumible');
-					?>
-			</div>
-		<!-- / Bloque Entrada No Consumibles -->
-
-	</div>
+    <!-- Bloque Entrada No Consumibles -->
+    <div class="col-md-12 tag-descarga" style="display:none">
+        <?php
+            $this->load->view('NoConsumible/EntradaNoConsumible');
+        ?>
+    </div>
+    <!-- / Bloque Entrada No Consumibles -->
+</div>
 <!-- Solo opcion RECEPCIÓN MP -->
 
-
 <script>
-	$('#minimizar_datos_camion').click(function() {
-			$('#div_datos_camion').toggle(1000);
-	});
-	$('#minimizar_ingreso').click(function() {
-			$('#div_ingreso').toggle(1000);
-	});
-	$('#minimizar_destino').click(function() {
-			$('#div_destino').toggle(1000);
-	});
-	$('#minimizar_vale_entrada').click(function() {
-			$('#div_vale_entrada').toggle(1000);
-	});
-
-
-
+$('#minimizar_datos_camion').click(function() {
+        $('#div_datos_camion').toggle(1000);
+});
+$('#minimizar_ingreso').click(function() {
+        $('#div_ingreso').toggle(1000);
+});
+$('#minimizar_destino').click(function() {
+        $('#div_destino').toggle(1000);
+});
+$('#minimizar_vale_entrada').click(function() {
+        $('#div_vale_entrada').toggle(1000);
+});
 
 $('.select').select2();
 $('#frm-camion').on('reset', function() {
@@ -284,20 +278,15 @@ function obtenerInfoCamion(patente) {
     });
 }
 
-
 // $('#establecimientos').on('change', function() {
 //     obtenerRecipientes();
 // });
 
-
-
 function unificarLote() {
-
     var rese = $(recipienteSelect).val();
     $('.recipiente').each(function() {
         if (this.value == rese) this.dataset.unificar = true;
     });
-
 }
 
 // NO SE LLAMA EN NINGUNA PARTE
@@ -311,9 +300,7 @@ function guardarDecarga() {
         item.unificar = this.dataset.unificar;
         array.push(item);
     });
-
     array = JSON.stringify(array);
-
     wo();
     $.ajax({
         type: 'POST',
@@ -347,7 +334,6 @@ function obtenerFormularioCamion() {
 // Cuando valida RECEPCION MP se muestran mas campos en frm-info
 // el parametro 'msj' me permite saber si es ENTRADA o RECEPCION MP
 function validarFormulario(msj) {
-
     var ban = true;
     if(msj){
         $('#frm-info').find('.form-control').each(function() {
@@ -364,7 +350,6 @@ function validarFormulario(msj) {
             }
         });
     }
-
     $('#frm-camion').find('.form-control').each(function() {
         if (this.value == "" || this.value=="Seleccionar") {
             if(this.id != "acoplado"){
@@ -386,13 +371,11 @@ function validarFormulario(msj) {
 // Guarda Entrada de Camión
 function addCamion(msj = true) {
     if (!validarFormulario(msj)) return;
-
     var frmCamion = new FormData($('#frm-camion')[0]);
     var frmInfo = new FormData($('#frm-info')[0]);
     var dataForm = mergeFD(frmInfo, frmCamion);
     dataForm.append('estado', 'EN CURSO');
     showFD(dataForm);
-
     wo();
     $.ajax({
         type: 'POST',
@@ -423,8 +406,6 @@ function addCamion(msj = true) {
     });
 }
 </script>
-
-
 <script>
 function checkTabla(idtabla, idrecipiente, json, acciones) {
     lenguaje = <?php echo json_encode($lang) ?>;
@@ -620,12 +601,10 @@ $(document).off('click', '.tabla_productos_asignados_borrar').on('click', '.tabl
 }, remover);
 
 async function validaPatente(){
-
     flag = true;
     patente =  $("#patente").val();
     wo();
-    validacion = new Promise((resolve, reject) => {
-        
+    validacion = new Promise((resolve, reject) => {        
         $.ajax({
             type: 'POST',
             dataType: 'JSON',
@@ -654,11 +633,9 @@ async function validaPatente(){
             }
         });
     });
-
     return await validacion;
 }
 </script>
-
 <div class="modal" id="unificar_lotes" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
