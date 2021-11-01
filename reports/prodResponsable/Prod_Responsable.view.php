@@ -17,7 +17,7 @@ use \koolreport\widgets\google\PieChart;
                 <div class="box-header with-border">
                     <h3 class="box-title">
                         <i class="fa fa-list"></i>
-                        Reportes
+                        Reporte producción responsable
                     </h3>
                 </div>
                 <br><br>
@@ -32,7 +32,7 @@ use \koolreport\widgets\google\PieChart;
                                     <i class="fa fa-magic"></i>
                                     <span></span>
                                 </a>
-                                <input type="date" class="form-control pull-right" id="datepickerDesde" name="fec_desde" placeholder="Desde">
+                                <input type="date" class="form-control pull-right" id="datepickerDesde" name="datepickerDesde" placeholder="Desde">
                             </div>
                         </div>
                     </div>
@@ -42,7 +42,7 @@ use \koolreport\widgets\google\PieChart;
                     <div class="col-xs-12 col-sm-12 col-md-4 col-lg-3">
                         <div class="form-group">
                             <label>Hasta</label>
-                            <input type="date" class="form-control" id="datepickerHasta" name="fec_hasta" placeholder="Hasta">
+                            <input type="date" class="form-control" id="datepickerHasta" name="datepickerHasta" placeholder="Hasta">
                         </div>
                     </div>
                     <!-- /HASTA -->
@@ -52,7 +52,6 @@ use \koolreport\widgets\google\PieChart;
                         <div class="form-group">
                             <label>Responsable</label>
                             <select class="form-control" id="responsable" name="responsable">
-                                <option value="" selected>Seleccione responsable</option>
                             </select>
                         </div>
                     </div>
@@ -63,7 +62,6 @@ use \koolreport\widgets\google\PieChart;
                         <div class="form-group">
                             <label>Etapas</label>
                             <select class="form-control" id="etapa" name="etapa">
-                                <option value="" selected>Seleccione Etapas</option>
                             </select>
                         </div>
                     </div>
@@ -73,8 +71,7 @@ use \koolreport\widgets\google\PieChart;
                     <div class="col-xs-12 col-sm-12 col-md-8 col-lg-7">
                         <div class="form-group">
                             <label>Producto</label>
-                            <select class="form-control" id="producto" name="producto">
-                                <option value="" selected>Seleccione producto</option>
+                            <select class="form-control select2" id="producto" name="producto">
                             </select>
                         </div>
                     </div>
@@ -276,56 +273,57 @@ use \koolreport\widgets\google\PieChart;
     //Funcion de datatable para extencion de botones exportar
     //excel, pdf, copiado portapapeles e impresion
     $(document).ready(function() {
-      $('.dataTable').DataTable({
-        responsive: true,
-        language: {
-        url: '<?php base_url() ?>lib/bower_components/datatables.net/js/es-ar.json' //Ubicacion del archivo con el json del idioma.
-        },
-        dom: 'lBfrtip',
-        buttons: [{
-          //Botón para Excel
-          extend: 'excel',
-          exportOptions: {
-          columns: [0, 1, 2, 3, 4, 5]
-          },
-          footer: true,
-          title: 'Producción por recurso',
-          filename: 'produccion_recurso',
-          //Aquí es donde generas el botón personalizado
-          text: '<button class="btn btn-success ml-2 mb-2 mb-2 mt-3">Exportar a Excel <i class="fa fa-file-excel-o"></i></button>'
-        },
-        // //Botón para PDF
-        {
-          extend: 'pdf',
-          exportOptions: {
-              columns: [0, 1, 2, 3, 4, 5]
-          },
-          footer: true,
-          title: 'Producción por recurso',
-          filename: 'produccion_recurso',
-          text: '<button class="btn btn-danger ml-2 mb-2 mb-2 mt-3">Exportar a PDF <i class="fa fa-file-pdf-o mr-1"></i></button>'
-        },
-        {
-          extend: 'copy',
-          exportOptions: {
-              columns: [0, 1, 2, 3, 4, 5]
-          },
-          footer: true,
-          title: 'Producción por recurso',
-          filename: 'produccion_recurso',
-          text: '<button class="btn btn-primary ml-2 mb-2 mb-2 mt-3">Copiar <i class="fa fa-file-text-o mr-1"></i></button>'
-        },
-        {
-          extend: 'print',
-          exportOptions: {
-              columns: [0, 1, 2, 3, 4, 5]
-          },
-          footer: true,
-          title: 'Producción por recurso',
-          filename: 'produccion_recurso',
-          text: '<button class="btn btn-default ml-2 mb-2 mb-2 mt-3">Imprimir <i class="fa fa-print mr-1"></i></button>'
-        }]
-      });
+        $('.select2').select2();
+        $('.dataTable').DataTable({
+            responsive: true,
+            language: {
+            url: '<?php base_url() ?>lib/bower_components/datatables.net/js/es-ar.json' //Ubicacion del archivo con el json del idioma.
+            },
+            dom: 'lBfrtip',
+            buttons: [{
+            //Botón para Excel
+            extend: 'excel',
+            exportOptions: {
+            columns: [0, 1, 2, 3, 4, 5]
+            },
+            footer: true,
+            title: 'Producción responsable',
+            filename: 'produccion_responsable',
+            //Aquí es donde generas el botón personalizado
+            text: '<button class="btn btn-success ml-2 mb-2 mb-2 mt-3">Exportar a Excel <i class="fa fa-file-excel-o"></i></button>'
+            },
+            // //Botón para PDF
+            {
+            extend: 'pdf',
+            exportOptions: {
+                columns: [0, 1, 2, 3, 4, 5]
+            },
+            footer: true,
+            title: 'Producción responsable',
+            filename: 'produccion_responsable',
+            text: '<button class="btn btn-danger ml-2 mb-2 mb-2 mt-3">Exportar a PDF <i class="fa fa-file-pdf-o mr-1"></i></button>'
+            },
+            {
+            extend: 'copy',
+            exportOptions: {
+                columns: [0, 1, 2, 3, 4, 5]
+            },
+            footer: true,
+            title: 'Producción responsable',
+            filename: 'produccion_responsable',
+            text: '<button class="btn btn-primary ml-2 mb-2 mb-2 mt-3">Copiar <i class="fa fa-file-text-o mr-1"></i></button>'
+            },
+            {
+            extend: 'print',
+            exportOptions: {
+                columns: [0, 1, 2, 3, 4, 5]
+            },
+            footer: true,
+            title: 'Producción por recurso',
+            filename: 'produccion_recurso',
+            text: '<button class="btn btn-default ml-2 mb-2 mb-2 mt-3">Imprimir <i class="fa fa-print mr-1"></i></button>'
+            }]
+        });
     });
 
     $('tr > td').each(function() {
@@ -337,10 +335,9 @@ use \koolreport\widgets\google\PieChart;
     //Panel_Derecho.php mostraria los filtros
     // $('#panel-derecho-body').load('<?php echo base_url(PRD) ?>Reportes/filtroProdResponsable');
 
-    // DataTable($('.dataTable'))
-
     $('.flt-clear').click(function() {
       $('#frm-filtros')[0].reset();
+      $('#producto').val(null).trigger('change');
     });
 
     function fechaMagic() {
@@ -371,7 +368,7 @@ use \koolreport\widgets\google\PieChart;
         success: function(rsp) {
           
           if (_isset(rsp.responsables)) {
-            var opcResponsables = '';
+            var opcResponsables = '<option value="" selected>TODOS</option>';
 
             rsp.responsables.forEach(element => {
                 opcResponsables += "<option value=" + element.nombre + ">" + element.nombre + "</option>";
@@ -381,7 +378,7 @@ use \koolreport\widgets\google\PieChart;
           }
 
           if (_isset(rsp.productos)) {
-            var opcProductos = '';
+            var opcProductos = '<option value="" selected>TODOS</option>';
 
             rsp.productos.forEach(element => {
                 opcProductos += "<option value=" + element.id + ">" + element.nombre + "</option>";
@@ -391,7 +388,7 @@ use \koolreport\widgets\google\PieChart;
           }
 
           if (_isset(rsp.etapas)) {
-            var opcEtapas = '';
+            var opcEtapas = '<option value="" selected>TODOS</option>';
 
             rsp.etapas.forEach(element => {
                 opcEtapas += "<option value=" + element.nombre + ">" + element.nombre + "</option>";
@@ -408,5 +405,30 @@ use \koolreport\widgets\google\PieChart;
           wc();
         }
       })
+    }
+
+    function filtrar() {
+      var data = new FormData($('#frm-filtros')[0]);
+      data = formToObject(data);
+      wo();
+      var url = 'prodResponsable';
+      $.ajax({
+        type: 'POST',
+
+        data: {
+          data
+        },
+        url: '<?php echo base_url(PRD) ?>Reportes/' + url,
+        success: function(result) {
+          $('#reportContent').empty();
+          $('#reportContent').html(result);
+        },
+        error: function() {
+          alert('Error');
+        },
+        complete: function(result) {
+          wc();
+        }
+      });
     }
     </script>
