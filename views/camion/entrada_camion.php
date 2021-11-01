@@ -537,6 +537,8 @@ function ActualizaPesoEstimado() {
 }
 
 function cargacamion() {
+    //Reseteo todos los formularios
+    reset();
     $('#accion').val('carga');
     $('.panel-req').show();
 
@@ -548,11 +550,10 @@ function cargacamion() {
     $('#add-camion').show();
     //$('.btn-cargar').hide();
     $('.tag-descarga').hide();
-    //Reseteo todos los formularios
-    reset();
 }
 
 function descargacamion() {
+    reset();
     $('#accion').val('descarga');
     $('.panel-req').show();
 
@@ -564,7 +565,6 @@ function descargacamion() {
     $('#add-camion').hide();
     //$('.btn-cargar').show();
     $('.tag-descarga').show();
-    reset();
 }
 //Se pidio que se remueva esta condicion onkeyup="actualizarNeto" sobre bruto y tara
 //El camion puede esta vacío es decir BRUTO = 0
