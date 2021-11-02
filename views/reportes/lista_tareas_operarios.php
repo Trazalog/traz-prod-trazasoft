@@ -49,31 +49,31 @@
     $this->load->view('etapa/modal_unificacion_lote');
 ?>
 <!-- LISTADO TAREAS -->
-	<div class="box">
-			<div class="box-header text-center with-border">
-					<h3>Tareas</h3>
-			</div>
-			<div class="xbox-body">
-					<table class="table">
-							<tbody>
-									<?php
-											foreach ($lotes as $o) {
-												# if($o->estado == 'FINALIZADO' || $o->user_id != userId()) continue;
-													if($o->estado == 'FINALIZADO') continue;
-													echo "<tr id='$o->id' class='data-json' onclick='verReporte(this)' data-json='".json_encode($o)."'>";
-													echo "<td width='80px'><div class='profileImage ". strtolower($o->titulo)."'>". substr($o->titulo,0,($o->titulo == 'Fraccionamiento' || $o->titulo == "Preclasificado"?2:1)) ."</div></td>";
-													echo "<td class='". strtolower($o->titulo)."'>";
-													echo "<b>LOTE:</b> $o->lote<br>";
-													echo "<b>ESTABLECIMIENTO:</b> <cite>$o->establecimiento</cite><br>";
-													echo "<b>FECHA:</b> ".formatFechaPG($o->fecha);
-													echo "</td>";
-													echo "</tr>";
-											}
-									?>
-							</tbody>
-					</table>
-			</div>
+<div class="box">
+	<div class="box-header text-center with-border">
+		<h3>Tareas</h3>
 	</div>
+	<div class="xbox-body">
+		<table class="table">
+			<tbody>
+				<?php
+					foreach ($lotes as $o) {
+						# if($o->estado == 'FINALIZADO' || $o->user_id != userId()) continue;
+						if($o->estado == 'FINALIZADO') continue;
+						echo "<tr id='$o->id' class='data-json' onclick='verReporte(this)' data-json='".json_encode($o)."'>";
+						echo "<td width='80px'><div class='profileImage ". strtolower($o->titulo)."'>". substr($o->titulo,0,($o->titulo == 'Fraccionamiento' || $o->titulo == "Preclasificado"?2:1)) ."</div></td>";
+						echo "<td class='". strtolower($o->titulo)."'>";
+						echo "<b>LOTE:</b> $o->lote<br>";
+						echo "<b>ESTABLECIMIENTO:</b> <cite>$o->establecimiento</cite><br>";
+						echo "<b>FECHA:</b> ".formatFechaPG($o->fecha);
+						echo "</td>";
+						echo "</tr>";
+					}
+				?>
+			</tbody>
+		</table>
+	</div>
+</div>
 <!-- FIN LISTADO TAREAS -->
 
 
@@ -174,7 +174,7 @@
 											<div class="row">
 													<div class="col-md-12">
 															<div class="form-group">
-																	<label>Codigo Lote:</label>
+																	<label>Código Lote:</label>
 																	<input type="text" id="codigo_lote" class='form-control' readonly>
 															</div>
 													</div>
@@ -209,19 +209,16 @@
 													</div>
 											</div>
 									</form>
-									<button class="btn btn-success" style="float: right;" onclick="agregar()"><i class="fa fa-plus"></i>
-											Agregar</button>
+									<button class="btn btn-success" style="float: right;" onclick="agregar()"><i class="fa fa-plus"></i>Agregar</button>
 									<table id="tbl-reportes" class="table table-hover table-striped">
-											<thead>
-													<th>
-															Registro de reportes
-													</th>
-													<th>Destino</th>
-													<th width="5%"></th>
-											</thead>
-											<tbody>
+										<thead>
+											<th>Registro de reportes</th>
+											<th>Destino</th>
+											<th width="5%"></th>
+										</thead>
+										<tbody>
 
-											</tbody>
+										</tbody>
 									</table>
 							</div>
 
@@ -298,66 +295,73 @@
 			$('#tbl-noco tbody tr').remove();
 	});
 	// Genera Informe de Etapa (BTN Guardar Reporte)
-	var unificar_lote = false;
-	var FinalizarEtapa = function() {
+	var FinalizarEtapa = function(unificar_lote = false) {
 
-			var productos = [];
-			$tblRep.find('tr').each(function() {
-					var json = getJson2(this);
-					if (unificar_lote && unificar_lote == json.destino && this.dataset.forzar == 'false') {
-							this.dataset.forzar = "true";
-							unificar_lote = false;
+		var productos = [];
+
+		$tblRep.find('tr').each(function() {
+
+			var json = getJson2(this);
+			
+			if (unificar_lote && this.dataset.forzar == 'false') {
+				this.dataset.forzar = "true";
+				unificar_lote = false;
+			}
+
+			json.lotedestino = $('#codigo_lote').val();
+			json.forzar = this.dataset.forzar;
+			productos.push(json);
+		});
+
+		productos = JSON.stringify(productos);
+		cantidad_padre = '0';
+		num_orden_prod = $('#num_orden_prod').val();
+		batch_id_padre = $('#batch_id_padre').val();
+		destino = $('#productodestino').val();
+		depo_id = $('#depo_id').val();
+		noConsumAsociar = true;
+		estado = 'EN_TRANSITO';
+
+		wo();
+
+		$.ajax({
+			type: 'POST',
+			dataType: 'JSON',
+			async: false,
+			data: {
+				productos,
+				cantidad_padre,
+				num_orden_prod,
+				destino,
+				batch_id_padre,
+				depo_id,
+				noConsumAsociar,
+				estado
+			},
+			url: '<?php echo base_url(PRD) ?>general/Etapa/Finalizar',
+			success: function(rsp) {
+				wc();
+
+				if (rsp.status) {
+					
+					$('#modal_finalizar').modal('hide');
+					$('#mdl-unificacion').modal('hide');
+					hecho('Se genero el Reporte de Producción correctamente.');
+				} else {
+					
+					if (rsp.msj) {
+						reci_id = rsp.reci_id;
+						getContenidoRecipiente(reci_id);
+
+					} else {
+						alert('Fallo al generar Reporte Producción');
 					}
-					json.lotedestino = $('#codigo_lote').val();
-					json.forzar = this.dataset.forzar;
-					productos.push(json);
-			});
-
-			productos = JSON.stringify(productos);
-			cantidad_padre = '0';
-			num_orden_prod = $('#num_orden_prod').val();
-			batch_id_padre = $('#batch_id_padre').val();
-			destino = $('#productodestino').val();
-			depo_id = $('#depo_id').val();
-			noConsumAsociar = true;
-			estado = 'EN_TRANSITO';
-			wo();
-			$.ajax({
-					type: 'POST',
-					dataType: 'JSON',
-					async: false,
-					data: {
-							productos,
-							cantidad_padre,
-							num_orden_prod,
-							destino,
-							batch_id_padre,
-							depo_id,
-							noConsumAsociar,
-							estado
-					},
-					url: '<?php echo base_url(PRD) ?>general/Etapa/Finalizar',
-					success: function(rsp) {
-						wc();
-							console.log(rsp);
-							if (rsp.status) {
-									$('#modal_finalizar').modal('hide');
-									$('#mdl-unificacion').modal('hide');
-									hecho('Se genero el Reporte de Producción correctamente.');
-							} else {
-									if (rsp.msj) {
-											unificar_lote = rsp.reci_id;
-											getContenidoRecipiente(unificar_lote);
-
-									} else {
-											alert('Fallo al generar Reporte Producción');
-									}
-							}
-					},
-					complete: function() {
-							wc();
-					}
-			});
+				}
+			},
+			complete: function() {
+				wc();
+			}
+		});
 	}
 	// Agrega los NOcons a tabla en modal asignar
 	function agregarNoco(e) {
@@ -408,27 +412,28 @@
 
 	// Funcion que no se usa en esta pantalla
 	var btnFinalizar = function() {
-			wo();
-			$.ajax({
-					type: 'POST',
-					dataType: 'JSON',
-					url: '<?php echo base_url(PRD) ?>general/Etapa/finalizarLote',
-					data: {
-							batch_id: s_batchId
-					},
-					success: function(res) {
-							if (res.status) {
-									$('#' + s_batchId).remove();
-									hecho('Etapa finalizada exitosamente');
-							}
-					},
-					error: function(res) {
-							error();
-					},
-					complete: function() {
-							wc();
-					}
-			});
+		wo();
+
+		$.ajax({
+			type: 'POST',
+			dataType: 'JSON',
+			url: '<?php echo base_url(PRD) ?>general/Etapa/finalizarLote',
+			data: {
+				batch_id: s_batchId
+			},
+			success: function(res) {
+				if (res.status) {
+					$('#' + s_batchId).remove();
+					hecho('Etapa finalizada exitosamente');
+				}
+			},
+			error: function(res) {
+				error();
+			},
+			complete: function() {
+				wc();
+			}
+		});
 	}
 
 </script>

@@ -37,7 +37,7 @@ class Camiones extends CI_Model
     public function guardarCarga($data)
     {
 
-        log_message('DEBUG', '#CAMIONES > guardarCarga | #DATA: ' . json_encode($data));
+        log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | CAMIONES | guardarCarga() | #DATA: ' . json_encode($data));
 
         $this->load->model(ALM . '/Lotes');
         $this->load->model(PRD . 'general/Recipientes');
@@ -50,7 +50,7 @@ class Camiones extends CI_Model
 
             #CREAR NUEVO RECIPIENTE
             $rsp = $this->Recipientes->crear($o);
-            log_message('DEBUG', '#CAMIONES > guardarCarga | #NEW RECIPIENTE: ' . json_encode($rsp));
+            log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | CAMIONES | guardarCarga() | #NEW RECIPIENTE: ' . json_encode($rsp));
             if (!$rsp['status']) {
                 break;
             }
@@ -76,7 +76,7 @@ class Camiones extends CI_Model
 
     public function actualizarEstado($data)
     {
-        log_message('DEBUG', '#Camiones/actualizarEstado | DATA: ' . json_encode($data));
+        log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | CAMIONES | actualizarEstado() | DATA: ' . json_encode($data));
 
         $aux['post_camion_estado']['data'] = $data;
         $url = REST_PRD . "/camion/estado_batch_req";
@@ -89,7 +89,7 @@ class Camiones extends CI_Model
 
     public function guardarDescarga($data)
     {
-        log_message('DEBUG', '#CAMION > guardarDescarga | #DATA: ' . json_encode($data));
+        log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | CAMIONES | guardarDescarga() | #DATA: ' . json_encode($data));
 
         $array = [];
         foreach ($data as $key => $o) {
@@ -270,5 +270,21 @@ class Camiones extends CI_Model
 
         $url = REST_LOG."/camiones/proveedor";
         return wso2($url, 'PUT', $data);
+    }
+    /**
+	* Busca camion por patente en prd.movimiento_transporte
+	* @param string patente
+	* @return array datos de camion en prd.movimientos_transportes
+	*/
+    public function getMovimientoTransporte($patente){
+        
+        $url = REST_LOG."/transporte/movimiento/patente/".$patente."/".empresa();
+
+        $aux = $this->rest->callAPI("GET",$url);
+        $resp = json_decode($aux['data']);
+
+        log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT| Camiones | getMovimientoTransporte()  resp: >> " . json_encode($resp));
+
+        return $resp->movimiento;
     }
 }

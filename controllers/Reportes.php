@@ -30,22 +30,26 @@ class Reportes extends CI_Controller
     if ($producto || $etapa || $desde || $hasta) {
       $desde = ($desde) ? date("d-m-Y", strtotime($desde)) : null;
       $hasta = ($hasta) ? date("d-m-Y", strtotime($hasta)) : null;
-      // var_dump('Desde: ' . $desde . '  Hasta: ' . $hasta);
-      log_message('INFO', '#TRAZA| #REPORTES.PHP|#REPORTES|#PRODUCCION| #ETAPA: >>' . $etapa . '#DESDE: >>' . $desde . '#HASTA: >>' . $hasta);
+      
+      log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | #REPORTES | produccion() | #ETAPA: >>' . $etapa . '#DESDE: >>' . $desde . '#HASTA: >>' . $hasta);
+
       $url = REST_TDS . '/productos/etapa/' . $etapa . '/desde/' . $desde . '/hasta/' . $hasta . '/producto/' . $producto;
       $json = $this->Koolreport->depurarJson($url)->productos->producto;
       $reporte = new Produccion($json);
       $reporte->run()->render();
-      //echo json_encode(["fals"=>$etapa]);
+      
     } else {
 
-      log_message('INFO', '#TRAZA| #REPORTES.PHP|#REPORTES|#PRODUCCION| #INGRESO');
+      log_message('INFO', '#TRAZA | #TRAZ-PROD-TRAZASOFT | #REPORTES | produccion() | #INGRESO');
+      
       $url = REST_TDS . '/productos/etapa//desde//hasta//producto/';
       $json = $this->Koolreport->depurarJson($url)->productos->producto;
-      log_message('DEBUG', '#TRAZA| #REPORTES.PHP|#REPORTES|#PRODRESPONSABLE| #JSON: >>' . $json);
+
+      log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | #REPORTES | produccion() | #JSON: >>' . $json);
+
       $reporte = new Produccion($json);
       $reporte->run()->render();
-      //echo json_encode(["hola"=>$etapa]);
+      
     }
   }
 
@@ -61,16 +65,21 @@ class Reportes extends CI_Controller
     if ($responsable || $producto || $etapa || $desde || $hasta) {
       $desde = ($desde) ? date("d-m-Y", strtotime($desde)) : null;
       $hasta = ($hasta) ? date("d-m-Y", strtotime($hasta)) : null;
-      log_message('INFO', '#TRAZA| #REPORTES.PHP|#REPORTES|#PRODRESPONSABLE| #ETAPA: >>' . $etapa . '#DESDE: >>' . $desde . '#HASTA: >>' . $hasta . '#PRODUCTO: >>' . $producto);
+
+      log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | #REPORTES | prodResponsable() | #ETAPA: >>' . $etapa . '#DESDE: >>' . $desde . '#HASTA: >>' . $hasta . '#PRODUCTO: >>' . $producto);
+
       $url = REST_TDS . '/productos/recurso/' . $responsable . '/etapa/' . $etapa . '/desde/' . $desde . '/hasta/' . $hasta . '/producto/' . $producto;
       $json = $this->Koolreport->depurarJson($url)->productos->producto;
       $reporte = new Prod_Responsable($json);
       $reporte->run()->render();
+
     } else {
-      log_message('INFO', '#TRAZA| #REPORTES.PHP|#REPORTES|#PRODRESPONSABLE| #INGRESO');
+      log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | #REPORTES | prodResponsable() | #INGRESO');
+
       $url = REST_TDS . '/productos/recurso//etapa//desde//hasta//producto/';
       $json = $this->Koolreport->depurarJson($url)->productos->producto;
-      log_message('DEBUG', '#TRAZA| #REPORTES.PHP|#REPORTES|#PRODRESPONSABLE| #JSON: >>' . $json);
+
+      log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | #REPORTES | prodResponsable() | #JSON: >>' . $json);
       $reporte = new Prod_Responsable($json);
       $reporte->run()->render();
     }
@@ -79,7 +88,7 @@ class Reportes extends CI_Controller
 
   public function filtroProduccion()
   {
-    log_message('INFO', '#TRAZA| #REPORTES.PHP|#REPORTES|#FILTROPRODUCCION| #INGRESO');
+    log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | #REPORTES | filtroProduccion() | #INGRESO');
     // $url['responsables'] = '';
     $url['productos'] = REST_TDS . '/productos/list';
     // $url['unidades_medida'] = '';
@@ -90,18 +99,19 @@ class Reportes extends CI_Controller
     // $valores['unidades_medida'] = $this->Koolreport->depurarJson($url['unidades_medida'])->unidades->unidad;
     $valores['etapas'] = $this->Koolreport->depurarJson($url['etapas'])->etapas->etapa;
 
-    $data['filtro'] = $this->Opcionesfiltros->filtrosProduccion($valores);
+    // $data['filtro'] = $this->Opcionesfiltros->filtrosProduccion($valores);
 
-    $data['calendarioDesde'] = true;
-    $data['calendarioHasta'] = true;
-    $data['op'] = "produccion";
+    // $data['calendarioDesde'] = true;
+    // $data['calendarioHasta'] = true;
+    // $data['op'] = "produccion";
 
-    $this->load->view(PRD.'layout/Filtro', $data);
+    // $this->load->view(PRD.'layout/Filtro', $data);
+    echo json_encode($valores);
   }
 
   public function filtroProdResponsable()
   {
-    log_message('INFO', '#TRAZA| #REPORTES.PHP|#REPORTES|#FILTROPRODRESPONSABLE| #INGRESO');
+    log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | #REPORTES | filtroProdResponsable() | #INGRESO');
     $url['responsables'] = REST_TDS . '/recursos/list';
     $url['productos'] = REST_TDS . '/productos/list';
     // $url['unidades_medida'] = '';
@@ -112,18 +122,19 @@ class Reportes extends CI_Controller
     // $valores['unidades_medida'] = $this->Koolreport->depurarJson($url['unidades_medida'])->unidades->unidad;
     $valores['etapas'] = $this->Koolreport->depurarJson($url['etapas'])->etapas->etapa;
 
-    $data['filtro'] = $this->Opcionesfiltros->filtrosProdResponsable($valores);
+    // $data['filtro'] = $this->Opcionesfiltros->filtrosProdResponsable($valores);
 
-    $data['calendarioDesde'] = true;
-    $data['calendarioHasta'] = true;
-    $data['op'] = 'prodResponsable';
+    // $data['calendarioDesde'] = true;
+    // $data['calendarioHasta'] = true;
+    // $data['op'] = 'prodResponsable';
 
-    $this->load->view(PRD.'layout/Filtro', $data);
+    // $this->load->view(PRD.'layout/Filtro', $data);
+    echo json_encode($valores);
   }
 
   public function ingresos()
   {
-    log_message('INFO', '#TRAZA| #REPORTES|#INGRESOS| #INGRESO');
+    log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | #REPORTES | ingresos() | #INGRESO');
     $data = $this->input->post('data');
     $json = $this->Opcionesfiltros->getIngresos($data);
     $reporte = new Ingresos($json);
@@ -132,7 +143,7 @@ class Reportes extends CI_Controller
 
   public function cantidadIngresos()
   {
-    log_message('INFO', '#TRAZA| #REPORTES|#CANTIDADINGRESOS| #INGRESO');
+    log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | #REPORTES | cantidadIngresos() | #INGRESO');
     $data = $this->input->post('data');
     $rsp = $this->Opcionesfiltros->getCantidadIngresos($data);
     echo json_encode($rsp);
@@ -140,7 +151,7 @@ class Reportes extends CI_Controller
 
   public function filtroIngresos()
   {
-    log_message('INFO', '#TRAZA| #REPORTES|#FILTROINGRESOS| #INGRESO');
+    log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | #REPORTES | filtroIngresos() | #INGRESO');
     $rsp['proveedores'] = $this->Opcionesfiltros->getProveedores();
     $rsp['transportista'] = $this->Opcionesfiltros->getTransportistas();
     $rsp['productos'] = $this->Opcionesfiltros->getProductos();
@@ -149,7 +160,7 @@ class Reportes extends CI_Controller
 
   public function asignacionDeRecursos()
   {
-    log_message('INFO', '#TRAZA| #REPORTES|#ASIGNACIONDERECURSOS| #INGRESO');
+    log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | #REPORTES | asignacionDeRecursos | #INGRESO');
     $data = $this->input->post('data');
     $json = $this->Opcionesfiltros->asignacionDeRecursos($data);
     $reporte = new Asignacion_de_recursos($json);
@@ -158,14 +169,14 @@ class Reportes extends CI_Controller
 
   public function filtroAsignacionDeRecursos()
   {
-    log_message('INFO', '#TRAZA| #REPORTES|#FILTROASIGNACIONDERECURSOS| #INGRESO');
+    log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | #REPORTES | filtroAsignacionDeRecursos() | #INGRESO');
     $rsp['lote'] = $this->Opcionesfiltros->getLotes();
     echo json_encode($rsp);
   }
 
   public function salidas()
   {
-    log_message('INFO', '#TRAZA| #REPORTES|#SALIDAS| #INGRESO');
+    log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | #REPORTES | salidas() | #INGRESO');
     $data = $this->input->post('data');
     $json = $this->Opcionesfiltros->getSalidas($data);
     $reporte = new Salidas($json);
@@ -174,7 +185,7 @@ class Reportes extends CI_Controller
 
   public function filtroSalidas()
   {
-    log_message('INFO', '#TRAZA| #REPORTES|#FILTROSALIDAS| #INGRESO');
+    log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | #REPORTES | filtroSalidas() | #INGRESO');
     $rsp['clientes'] = $this->Opcionesfiltros->getClientes();
     $rsp['transportista'] = $this->Opcionesfiltros->getTransportistas();
     echo json_encode($rsp);

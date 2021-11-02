@@ -4,7 +4,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">¿Desea Unificar Lotes?</h4>
+                <h4 class="modal-title">¿Desea unificar lotes?</h4>
             </div>
 
             <div class="modal-body">
@@ -24,7 +24,7 @@
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                 <?php
                     if(!$etapa || $etapa->estado == "En Curso"){
-                        echo '<button type="button" class="btn btn-primary" onclick="FinalizarEtapa()">Unificar</button>';
+                        echo '<button type="button" class="btn btn-primary" onclick="FinalizarEtapa(true)">Unificar</button>';
                     }else{
                         echo '<button type="button" class="btn btn-primary" onclick="guardarForzado(bak_data)">Unificar</button>';
                     }
@@ -44,7 +44,7 @@ function getContenidoRecipiente(reci_id) {
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
-        url: '<?php echo base_url(PRD) ?>/Recipiente/obtenerContenido/' + reci_id,
+        url: '<?php echo base_url(PRD) ?>Recipiente/obtenerContenido/' + reci_id,
         success: function(result) {
             
             if (result.status) {
@@ -62,7 +62,7 @@ function getContenidoRecipiente(reci_id) {
                 }
                 $('#mdl-unificacion').modal('show');
             }else{
-            alert('Fallo al obtener contenido del recipiente');  
+                alert('Fallo al obtener contenido del recipiente');  
             }
         },
         error: function() {

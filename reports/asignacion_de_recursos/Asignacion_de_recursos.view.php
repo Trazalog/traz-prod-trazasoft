@@ -17,7 +17,7 @@ use \koolreport\widgets\google\ColumnChart;
           <div class="box box-primary">
             <div class="box-header with-border">
               <h3 class="box-title">
-                Reporte de Asignación de recursos
+                Reporte de asignación de recursos
               </h3>
             </div>
             <br><br>
@@ -27,27 +27,24 @@ use \koolreport\widgets\google\ColumnChart;
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                   <!-- <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6"> -->
                   <!-- <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6"> -->
-                  <!-- <div class="form-group col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                  <div class="form-group col-xs-12 col-sm-3 col-md-3 col-lg-3">
                     <label style="padding-left: 20%;">Desde</label>
                     <div class="input-group date">
                       <a class="input-group-addon" id="daterange-btn" title="Más fechas">
                         <i class="fa fa-magic"></i>
                         <span></span>
                       </a>
-                      <input type="date" class="form-control pull-right" id="datepickerDesde" name="datepickerDesde" placeholder="Desde">
+                      <input type="date" class="form-control pull-right" id="datepickerDesde" name="fec_desde" placeholder="Desde">
                     </div>
-                  </div> -->
+                  </div>
                   <!-- /.form-group -->
                   <!-- <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6"> -->
-                  <!-- <div class="form-group col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                  <div class="form-group col-xs-12 col-sm-3 col-md-3 col-lg-3">
                     <label>Hasta</label>
-                    <div class="input-group">
-                      <input type="date" class="form-control" id="datepickerHasta" name="datepickerHasta" placeholder="Hasta">
-                      <a class="input-group-addon" style="cursor: pointer;" onclick="filtro()" title="Más filtros">
-                        <i class="fa fa-filter"></i>
-                      </a>
+                    <div class="form-group">
+                      <input type="date" class="form-control" id="datepickerHasta" name="fec_hasta" placeholder="Hasta">
                     </div>
-                  </div> -->
+                  </div>
                   <div class="form-group col-xs-12 col-sm-3 col-md-3 col-lg-3">
                     <label>Lote</label>
                     <select class="form-control" id="lote_id" name="lote_id">
@@ -81,8 +78,14 @@ use \koolreport\widgets\google\ColumnChart;
                   // ), // Para desactivar encabezado reemplazar "headers" por "showHeader"=>false
                   // "showHeader" => false,
                   "columns" => array(
-                    "fecha" => array(
-                      "label" => "Fecha"
+                    array(
+                      "label" => "Fecha",
+                      "value" => function($row) {
+                        $aux = explode("T",$row["fecha"]);
+                        $row["fecha"] = date("d-m-Y",strtotime($aux[0]));
+                        return $row["fecha"];
+                      },
+                      "type" => "date"
                     ),
                     "tarea" => array(
                       "label" => "Tarea"
@@ -226,7 +229,61 @@ use \koolreport\widgets\google\ColumnChart;
   </div>
   <script>
     filtroAsignacionDeRecursos();
-    // fechaMagic();
+    fechaMagic();
+    //Funcion de datatable para extencion de botones exportar
+    //excel, pdf, copiado portapapeles e impresion
+    $(document).ready(function() {
+      $('.dataTable').DataTable({
+        responsive: true,
+        language: {
+        url: '<?php base_url() ?>lib/bower_components/datatables.net/js/es-ar.json' //Ubicacion del archivo con el json del idioma.
+        },
+        dom: 'lBfrtip',
+        buttons: [{
+          //Botón para Excel
+          extend: 'excel',
+          exportOptions: {
+          columns: [0, 1, 2, 3, 4, 5]
+          },
+          footer: true,
+          title: 'Asignación de recursos',
+          filename: 'asignacion_recursos',
+          //Aquí es donde generas el botón personalizado
+          text: '<button class="btn btn-success ml-2 mb-2 mb-2 mt-3">Exportar a Excel <i class="fa fa-file-excel-o"></i></button>'
+        },
+        // //Botón para PDF
+        {
+          extend: 'pdf',
+          exportOptions: {
+              columns: [0, 1, 2, 3, 4, 5]
+          },
+          footer: true,
+          title: 'Asignación de recursos',
+          filename: 'asignacion_recursos',
+          text: '<button class="btn btn-danger ml-2 mb-2 mb-2 mt-3">Exportar a PDF <i class="fa fa-file-pdf-o mr-1"></i></button>'
+        },
+        {
+          extend: 'copy',
+          exportOptions: {
+              columns: [0, 1, 2, 3, 4, 5]
+          },
+          footer: true,
+          title: 'Asignación de recursos',
+          filename: 'asignacion_recursos',
+          text: '<button class="btn btn-primary ml-2 mb-2 mb-2 mt-3">Copiar <i class="fa fa-file-text-o mr-1"></i></button>'
+        },
+        {
+          extend: 'print',
+          exportOptions: {
+              columns: [0, 1, 2, 3, 4, 5]
+          },
+          footer: true,
+          title: 'Asignación de recursos',
+          filename: 'asignacion_recursos',
+          text: '<button class="btn btn-default ml-2 mb-2 mb-2 mt-3">Imprimir <i class="fa fa-print mr-1"></i></button>'
+        }]
+      });
+    });
 
     $('tr > td').each(function() {
       if ($(this).text() == 0) {
@@ -236,7 +293,7 @@ use \koolreport\widgets\google\ColumnChart;
     });
 
     // DataTable($('.dataTable'));
-    $('.dataTable').dataTable();
+    // $('.dataTable').dataTable();
 
     function filtrar() {
       var data = new FormData($('#frm-filtros')[0]);
@@ -302,5 +359,25 @@ use \koolreport\widgets\google\ColumnChart;
     $('.flt-clear').click(function() {
       $('#frm-filtros')[0].reset();
     });
+
+    function fechaMagic() {
+      $('#daterange-btn').daterangepicker({
+          ranges: {
+            'Hoy': [moment(), moment()],
+            'Ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'Últimos 7 días': [moment().subtract(6, 'days'), moment()],
+            'Últimos 30 días': [moment().subtract(29, 'days'), moment()],
+            'Este mes': [moment().startOf('month'), moment().endOf('month')],
+            'Último mes': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+          },
+          startDate: moment().subtract(29, 'days'),
+          endDate: moment()
+        },
+        function(start, end) {
+          $('#datepickerDesde').val(start.format('YYYY-MM-DD'));
+          $('#datepickerHasta').val(end.format('YYYY-MM-DD'));
+        }
+      );
+    }
   </script>
 </body>

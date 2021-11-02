@@ -19,7 +19,7 @@
 <div class="box box-primary animated bounceInDown" id="boxDatos" hidden>
   <div class="box-header with-border">
     <div class="box-tittle">
-      <h4>Informacion</h4>
+      <h4>Información</h4>
     </div>
     <div class="box-tools pull-right">
       <button type="button" id="btnclose" title="cerrar" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
@@ -187,7 +187,7 @@
                         <td value = '$r->reci_tipo'>$r->reci_tipo</td>
                         <td value = '$r->depo_id'>$r->depo_descripcion</td>
                         <td value = '$r->esta_id'>$r->esta_nombre</td>
-                        <td value = '$r->reci_fec_alta'>$r->reci_fec_alta</td>
+                        <td value = '$r->reci_fec_alta'> " . formatFechaPG($r->reci_fec_alta) . "</td>
                       </tr>";
               }
               ?>
