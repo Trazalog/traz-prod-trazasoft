@@ -90,7 +90,7 @@ class Lotes extends CI_Model
   }
 
     /**
-        * Busca camion por patente 
+        * Busca camion por patente en la tabla de movimientos_transportes
         * @param string patente
         * @return array con datos camion si coincidiera la patente
 	*/

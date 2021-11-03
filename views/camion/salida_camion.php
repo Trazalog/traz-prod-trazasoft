@@ -1,3 +1,13 @@
+<style>
+	.input-group-addon:hover{
+    cursor: pointer;
+    background-color: #04d61d !important;
+	}
+	.input-group-addon{
+		background-color: #05b513 !important;
+		color: white;
+	}
+</style>
 <div class="box box-primary">
     <div class="box-header with-border">
         <h3 class="box-title">Salida Camión</h3>
@@ -13,7 +23,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Fecha:</label>
-                                <input type="text" name="fecha_salida" class="form-control date" value="<?php echo date('d-m-Y', strtotime($datosCamion->fecha_entrada))?>">
+                                <input id="fecha_salida" type="text" name="fecha_salida" class="form-control date" value="<?php echo isset($datosCamion->fecha_entrada) ? date('d-m-Y', strtotime($datosCamion->fecha_entrada)) : '' ?>">
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -36,30 +46,33 @@
                     <h3 class="panel-title">Datos Camión</h3>
                 </div>
                 <div class="panel-body">
-                    <input name="motr_id" class="hidden" value="<?php echo isset($datosCamion->motr_id) ? $datosCamion->motr_id : '' ?>">
+                    <input id="motr_id" name="motr_id" class="hidden" value="<?php echo isset($datosCamion->motr_id) ? $datosCamion->motr_id : '' ?>">
                     <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>Patente:</label>
-                                <input id="patente" name="patente" class="form-control" value="<?php echo isset($datosCamion->patente) ? $datosCamion->patente : '' ?>">
-                            </div>
+								<div class="input-group">
+                                	<input id="patente" name="patente" class="form-control" value="<?php echo isset($datosCamion->patente) ? $datosCamion->patente : '' ?>">
+									<span id="btn-buscaPatente" class="input-group-addon" onclick="buscaPatente()"><i class="fa fa-search"></i></span>
+								</div>
+							</div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>Acoplado:</label>
-                                <input type="text" name="acoplado" class="form-control" value="<?php echo isset($datosCamion->acoplado) ? $datosCamion->acoplado : '' ?>" readonly>
+                                <input id="acoplado" type="text" name="acoplado" class="form-control" value="<?php echo isset($datosCamion->acoplado) ? $datosCamion->acoplado : '' ?>" readonly>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>Conductor:</label>
-                                <input type="text" name="conductor" class="form-control" value="<?php echo isset($datosCamion->conductor) ? $datosCamion->conductor : '' ?>" readonly>
+                                <input id="conductor" type="text" name="conductor" class="form-control" value="<?php echo isset($datosCamion->conductor) ? $datosCamion->conductor : '' ?>" readonly>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>Tipo:</label>
-                                <input type="text" name="tipo" class="form-control" value="<?php echo isset($datosCamion->tipo) ? $datosCamion->tipo : '' ?>" readonly>
+                                <input id="tipo" type="text" name="tipo" class="form-control" value="<?php echo isset($datosCamion->tipo) ? $datosCamion->tipo : '' ?>" readonly>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -264,5 +277,67 @@
 							wc();
 					}
 			});
+	}
+	//Busco los datos del camión por patente
+	//onclick en id="btn-buscaPatente"
+	function buscaPatente(){
+
+		patente =  $("#patente").val();
+
+		if(!_isset($("#patente").val())){
+			alertify.error('No se cargó una patente');
+			return;
+		}
+
+		wo();
+
+		$.ajax({
+			type: 'POST',
+			dataType: 'JSON',
+			url: '<?php echo base_url(PRD) ?>general/Camion/getMovimientoCamion',
+			data: {
+				patente
+			},
+			success: function(rsp) {
+
+				if(!$.isEmptyObject(rsp)){
+					if (rsp.estado == "TRANSITO") {
+						Swal.fire('Error..','La patente ingresada se encuentra en TRÁNSITO','error');
+						
+					}else{
+						//SI se encontro data de camion y no esta en TRÁNSITO
+						$("#acoplado").val(rsp.acoplado);
+						$("#bruto").val(rsp.bruto);
+						$("#conductor").val(rsp.conductor);
+						if(rsp.esta_id != ''){
+							$("#esta_id").val(rsp.esta_id);
+						}
+						$("#estado").val(rsp.estado);
+						$("#motr_id").val(rsp.motr_id);
+						$("#neto").val(rsp.neto);
+						$("#tara").val(rsp.tara);
+						$("#tipo").val(rsp.tipo);
+						$("#fecha_salida").val(rsp.fecha_entrada);
+						
+						$.each(rsp.articulos.articulo, function (i, value) { 
+							$('#tbl-lotes').append('<tr><td>' + value.articulo + '</td><td>' + value.cantidad + '</td></tr>');
+						});
+					}
+				}else{
+					$('#frm-salida-camion')[0].reset();
+					$("#tbl-lotes tbody tr").remove();
+					Swal.fire('Error..','No se encontro información para la patente ingresada','error');
+				}
+			},
+			error: function(rsp) {
+				$('#frm-salida-camion')[0].reset();
+				$("#tbl-lotes tbody tr").remove();
+				Swal.fire('Error..','Se produjo un error al validar la patente','error');
+			},
+			complete: function() {
+				wc();
+			}
+		});
+		
 	}
 </script>
