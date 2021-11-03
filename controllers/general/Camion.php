@@ -200,4 +200,19 @@ class Camion extends CI_Controller
             $this->Camiones->actualizarProveedor($post['patente'], $post['estadoFinal'], $post['proveedor']);
         echo json_encode($rsp);
     }
+    
+    /**
+		* Busca en la tabla movimientos_transportes query:getMovimientoTransporte los datos por patente de camion
+		* @param string patente
+		* @return array con datos del camion
+    */
+    public function getMovimientoCamion(){
+        
+        log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT | Camion | getMovimientoCamion()");
+        
+        $patente = $this->input->post("patente");
+        $resp = $this->Camiones->getMovimientoTransporte($patente);
+
+        echo json_encode($resp);
+    }
 }
