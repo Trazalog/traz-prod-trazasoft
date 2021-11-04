@@ -37,7 +37,7 @@ class Etapa extends CI_Controller
         $data['etapas'] = $temp;
         $this->load->view('etapa/list', $data);
     }
-    // Llama a etapas para una nueva Etapa
+    // Llama a etapas para una nueva Etapav 
     public function nuevo()
     {
         $this->load->model(TST.'Tareas');
@@ -54,7 +54,8 @@ class Etapa extends CI_Controller
         $data['accion'] = 'Nuevo';
         $data['op'] = $data['etapa']->titulo;
 
-        if ($data['op'] == 'Fraccionamiento') {
+        // si el tipo etapa es Fraccionamiento, paso el control al metodo fraccionar
+        if ($data['etapa']->tiet_id == 'prd_tipos_etapaFraccionamiento') {
             $this->fraccionar();
             return;
         }
@@ -334,7 +335,8 @@ class Etapa extends CI_Controller
         $data['establecimientos'] = $this->Establecimientos->listar()->establecimientos->establecimiento;
         $data['fecha'] = $data['etapa']->fecha;
 
-        if ($data['op'] == 'Fraccionamiento') {
+        // si la etapa es de tipo Fraccionamiento, va al editar propio de este tipo de etapa
+        if ($data['etapa']->tiet_id == 'prd_tipos_etapaFraccionamiento') {
             // trae lotes segun entrega de materiales de almacen.(81)
             $data['recipientes'] = $this->Recipientes->obtener('DEPOSITO', 'TODOS', $data['etapa']->esta_id)['data'];
             $data['lotesFracc'] = $this->Etapas->getLotesaFraccionar($id)->lotes->lote;
