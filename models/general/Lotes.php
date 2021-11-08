@@ -88,21 +88,4 @@ class Lotes extends CI_Model
     }
     return $rsp;
   }
-
-    /**
-        * Busca camion por patente en la tabla de movimientos_transportes
-        * @param string patente
-        * @return array con datos camion si coincidiera la patente
-	*/
-    public function buscaCamion($patente){
-        
-        $url = REST_LOG."/camiones/".$patente;
-    
-        $aux = $this->rest->callAPI("GET",$url);
-        $resp = json_decode($aux['data']);
-    
-        log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT | Lotes | buscaCamion()  resp: >> " . json_encode($resp));
-    
-        return $resp->camiones->camion;
-    }
 }

@@ -112,18 +112,4 @@ class Lote extends CI_Controller
 
     } else echo "¡Batch no encontrado! Intente nuevamente.";
   }
-  /**
-	* Busca camion por patente 
-	* @param string patente
-	* @return array con datos camion si coincidiera la patente
-	*/
-  public function buscaCamion(){
-    log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT | Lote | buscaCamion()");
-        
-    $patente = $this->input->post("patente");
-    $resp = $this->Lotes->buscaCamion($patente);
-
-    echo json_encode($resp);
-		
-  }
 }
