@@ -121,14 +121,32 @@ class Camiones extends CI_Model
 
     public function obtenerInfo($patente, $estado)
     {
-        $url = REST_LOG . "/camiones/$patente";
+        $url = REST_LOG . "/camiones/$patente/".empresa();
         $rsp = wso2($url);
         if ($estado) {
             foreach ($rsp['data'] as $o) {
                 if (strpos($estado, $o->estado) !== false) {
+                    log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT| Camiones | obtenerInfo()  resp: >> " . json_encode($o));
                     return $o;
                 }
 
+            }
+        }
+    }
+    /**
+		* Recibo todo los movimientos por patente y loopeo sobre ellos para buscar movimientos que no se encuentren en estado FINALIZADO
+		* @param $patente
+		* @return array con datos de movimiento que no se encuentre en FINALIZADO, null en caso contrario.
+    */
+    public function getEstadosFinalizadosCamion($patente)
+    {
+        $url = REST_LOG . "/camiones/$patente/".empresa();
+        $rsp = wso2($url);
+    
+        foreach ($rsp['data'] as $o) {
+            if ($o->estado !== 'FINALIZADO') {
+                log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT| Camiones | getEstadosFinalizadosCamion()  resp: >> " . json_encode($o));
+                return $o;
             }
         }
     }
@@ -272,13 +290,13 @@ class Camiones extends CI_Model
         return wso2($url, 'PUT', $data);
     }
     /**
-	* Busca camion por patente en prd.movimiento_transporte
-	* @param string patente
+	* Busca datos del movimiento de transporte (camion) por motr_id en prd.movimiento_transporte
+	* @param string motr_id
 	* @return array datos de camion en prd.movimientos_transportes
 	*/
-    public function getMovimientoTransporte($patente){
+    public function getMovimientoTransporte($motr_id){
         
-        $url = REST_LOG."/transporte/movimiento/patente/".$patente."/".empresa();
+        $url = REST_LOG."/transporte/movimiento/motr_id/".$motr_id."/".empresa();
 
         $aux = $this->rest->callAPI("GET",$url);
         $resp = json_decode($aux['data']);
