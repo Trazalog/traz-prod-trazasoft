@@ -23,8 +23,29 @@ class Etapas extends CI_Model
         if ($rsp['status']) {
             $rsp = json_decode($rsp['data']);
         }
+
         return $rsp;
     }
+
+    public function listarResponsables($user_id,$bacth_id){
+
+        $this->db->select('*');
+        $this->db->from('prd.lotes_responsables as lr');
+        $this->db->join('seg.users as us', 'us.id = lr.user_id');
+        if($bacth_id != null){
+            $this->db->where('bacth_id', $bacth_id);
+        }
+        //$this->db->where('user_id', $user_id);
+        $query = $this->db->get();
+
+        if($query->result() > 0){
+            return $query->result();
+        }else{
+              return false;
+        }
+
+    }
+
     // Listado de etapas estandar para seleccionar
     public function listarEtapas()
     {
