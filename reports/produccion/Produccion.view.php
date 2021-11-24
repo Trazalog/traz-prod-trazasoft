@@ -103,8 +103,14 @@ use \koolreport\widgets\koolphp\Card;
                     )
                   ), // Para desactivar encabezado reemplazar "headers" por "showHeader"=>false
                   "columns" => array(
-                    "fecha" => array(
-                      "label" => "Fecha"
+                    array(
+                      "label" => "Fecha",
+                      "value" => function($row) {
+                        $aux = explode("+",$row["fecha"]);
+                        $row["fecha"] = date("d-m-Y",strtotime($aux[0]));
+                        return $row["fecha"];
+                      },
+                      "type" => "date"
                     ),
                     "producto" => array(
                       "label" => "Producto"
@@ -118,7 +124,7 @@ use \koolreport\widgets\koolphp\Card;
                     "etapa" => array(
                       "label" => "Etapa"
                     ),
-                    "recurso" => array(
+                    "responsable" => array(
                       "label" => "Responsable"
                     )
                   ),
@@ -384,7 +390,7 @@ use \koolreport\widgets\koolphp\Card;
             var opcEtapas = '<option value="" selected>TODOS</option>';
 
             rsp.etapas.forEach(element => {
-                opcEtapas += "<option value=" + element.nombre + ">" + element.nombre + "</option>";
+                opcEtapas += "<option value=" + element.id + ">" + element.titulo + "</option>";
             });
 
             $('#etapa').html(opcEtapas);
