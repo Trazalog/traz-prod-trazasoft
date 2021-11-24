@@ -49,6 +49,7 @@
     $this->load->view('etapa/modal_unificacion_lote');
 ?>
 <!-- LISTADO TAREAS -->
+<<<<<<< HEAD
 	<div class="box">
 			<div class="box-header text-center with-border">
 					<h3>Tareas</h3>
@@ -94,7 +95,33 @@
 							</tbody>
 					</table>
 			</div>
+=======
+<div class="box">
+	<div class="box-header text-center with-border">
+		<h3>Tareas</h3>
 	</div>
+	<div class="xbox-body">
+		<table class="table">
+			<tbody>
+				<?php
+					foreach ($lotes as $o) {
+						# if($o->estado == 'FINALIZADO' || $o->user_id != userId()) continue;
+						if($o->estado == 'FINALIZADO') continue;
+						echo "<tr id='$o->id' class='data-json' onclick='verReporte(this)' data-json='".json_encode($o)."'>";
+						echo "<td width='80px'><div class='profileImage ". strtolower($o->titulo)."'>". substr($o->titulo,0,($o->titulo == 'Fraccionamiento' || $o->titulo == "Preclasificado"?2:1)) ."</div></td>";
+						echo "<td class='". strtolower($o->titulo)."'>";
+						echo "<b>LOTE:</b> $o->lote<br>";
+						echo "<b>ESTABLECIMIENTO:</b> <cite>$o->establecimiento</cite><br>";
+						echo "<b>FECHA:</b> ".formatFechaPG($o->fecha);
+						echo "</td>";
+						echo "</tr>";
+					}
+				?>
+			</tbody>
+		</table>
+>>>>>>> develop
+	</div>
+</div>
 <!-- FIN LISTADO TAREAS -->
 
 

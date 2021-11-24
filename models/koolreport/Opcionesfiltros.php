@@ -27,7 +27,7 @@ class Opcionesfiltros extends CI_Model
     $res->etapa = $valores['etapas'];
     // $res->responsable = $valores['responsables'];
 
-    log_message('DEBUG', '#TRAZA| #OPCIONES_FILTROS.PHP|#OPCIONES_FILTROS|#FILTROSPRODUCCION| #PRODUCTOS: >>' . $res->producto . '#ETAPAS: >>' . $res->etapa);
+    log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | #OPCIONES_FILTROS | filtrosProduccion() | #PRODUCTOS: >>' . $res->producto . '#ETAPAS: >>' . $res->etapa);
     return $res;
   }
 
@@ -38,7 +38,7 @@ class Opcionesfiltros extends CI_Model
     $res->producto = $valores['productos'];
     $res->etapa = $valores['etapas'];
 
-    log_message('DEBUG', '#TRAZA| #OPCIONES_FILTROS.PHP|#OPCIONES_FILTROS|#FILTROSPRODRESPONSABLE| #REPONSABLES: >>' . $res->responsable . '#PRODUCTOS: >>' . $res->producto . '#ETAPAS: >>' . $res->etapa);
+    log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | #OPCIONES_FILTROS | filtrosProdResponsable() | #REPONSABLES: >>' . $res->responsable . '#PRODUCTOS: >>' . $res->producto . '#ETAPAS: >>' . $res->etapa);
     return $res;
   }
 
@@ -62,7 +62,7 @@ class Opcionesfiltros extends CI_Model
 
   public function getCantidadIngresos($data)
   {
-    log_message('DEBUG', '#TRAZA| #REPORTES|#GETCANTIDADINGRESOS| #INGRESO: >>' . json_encode($data));
+    log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | #REPORTES | getCantidadIngresos() | #INGRESO: >>' . json_encode($data));
     $arti_id = (isset($data['arti_id'])) ? $data['arti_id'] : '';
     $prov_id = (isset($data['prov_id'])) ? $data['prov_id'] : '';
     $cuit = (isset($data['tran_id'])) ? $data['tran_id'] : '';
@@ -87,19 +87,21 @@ class Opcionesfiltros extends CI_Model
 
   public function asignacionDeRecursos($data)
   {
-    log_message('DEBUG', '#TRAZA| #REPORTES|#ASIGNACIONDERECURSOS| #INGRESO: >>' . json_encode($data));
-    $empr_id = empresa();
-    $lote_id = (isset($data['lote_id'])) ? $data['lote_id'] : '0';
-    $empr_id = (isset($empr_id)) ? $empr_id : '';
+    log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | #REPORTES | asignacionDeRecursos() | #INGRESO: >>' . json_encode($data));
 
-    $url = REST_PRD_LOTE . '/asignaciones/' . $lote_id . '/empresa/' . $empr_id; //TODO: comentar y descomentar la linea de arriba
+    $empr_id = empresa();
+    $lote_id = (isset($data['lote_id'])) ? $data['lote_id'] : '';
+    $desde = (isset($data['fec_desde'])) ? $data['fec_desde'] : '';
+    $hasta = (isset($data['fec_hasta'])) ? $data['fec_hasta'] : '';
+
+    $url = REST_PRD_LOTE . '/asignaciones/' . $lote_id . '/empresa/' . $empr_id . '/desde/'. $desde . '/hasta/' . $hasta; 
 
     return wso2($url)['data'];
   }
 
   public function getSalidas($data)
   {
-    log_message('DEBUG', '#TRAZA| #REPORTES|#GETSALIDAS| #INGRESO: >>' . json_encode($data));
+    log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | #REPORTES | getSalidas() | #INGRESO: >>' . json_encode($data));
     $arti_id = (isset($data['arti_id'])) ? $data['arti_id'] : '';
     $clie_id = (isset($data['clie_id'])) ? $data['clie_id'] : '';
     $cuit = (isset($data['tran_id'])) ? $data['tran_id'] : '';
@@ -112,7 +114,7 @@ class Opcionesfiltros extends CI_Model
 
   public function getIngresos($data)
   {
-    log_message('DEBUG', '#TRAZA| #REPORTES|#GETINGRESOS| #INGRESO: >>' . json_encode($data));
+    log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | #REPORTES | gerIngresos() | #INGRESO: >>' . json_encode($data));
     $arti_id = (isset($data['arti_id'])) ? $data['arti_id'] : '';
     $prov_id = (isset($data['prov_id'])) ? $data['prov_id'] : '';
     $cuit = (isset($data['tran_id'])) ? $data['tran_id'] : '';

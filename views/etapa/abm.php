@@ -276,7 +276,7 @@ var guardarForzado = function(data) {
                 alert('Fallo al iniciar la etapa');
             }
         },
-        error: function(rsp) {
+        error: function() {
             alert('Error al iniciar etapa');
         },
         complete: function() {
@@ -371,7 +371,7 @@ function guardar(boton) {
                 }
             }
         },
-        error: function(rsp) {
+        error: function() {
             alert('Error al iniciar etapa');
         },
         complete: function() {
