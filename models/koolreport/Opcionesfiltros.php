@@ -60,6 +60,12 @@ class Opcionesfiltros extends CI_Model
     return wso2($url)['data'];
   }
 
+  public function getMedidas()
+  {
+    $url =  REST_CORE . '/tabla/unidades_medida/empresa/'.empresa();
+    return wso2($url)['data'];
+  }
+
   public function getCantidadIngresos($data)
   {
     log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | #REPORTES | getCantidadIngresos() | #INGRESO: >>' . json_encode($data));

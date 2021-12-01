@@ -155,6 +155,8 @@ class Reportes extends CI_Controller
     $rsp['proveedores'] = $this->Opcionesfiltros->getProveedores();
     $rsp['transportista'] = $this->Opcionesfiltros->getTransportistas();
     $rsp['productos'] = $this->Opcionesfiltros->getProductos();
+    $rsp['u_medidas'] = $this->Opcionesfiltros->getMedidas();
+    
     echo json_encode($rsp);
   }
 
