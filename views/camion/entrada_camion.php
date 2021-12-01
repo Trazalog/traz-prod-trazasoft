@@ -1,5 +1,14 @@
 <?php $this->load->view('camion/modal_productos')?>
-
+<style>
+	.input-group-addon:hover{
+    cursor: pointer;
+    background-color: #04d61d !important;
+	}
+	.input-group-addon{
+		background-color: #05b513 !important;
+		color: white;
+	}
+</style>
 <!-- Bloque Carga|recepcion MP -->
 <div class="box">
     <div class="box-header with-border">
@@ -88,7 +97,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Transportista <?php hreq() ?>:</label>
-                        <select style="width: 50%" class="form-control select select2" id="transportista" name="cuit">
+                        <select style="width: 50%" class="form-control select select2" id="transportista" name="cuit" required>
                             <option disabled selected>Seleccionar</option>
                             <?php
                                 foreach ($transportistas as $o) {
@@ -101,29 +110,38 @@
             </div>
             <div class="row">
                 <div class="col-md-1 col-xs-12"><label class="form-label">Patente<?php hreq() ?>:</label></div>
-                <div class="col-md-2 col-xs-12"><input type="text" class="form-control" id="patente" name="patente" onchange="validaPatente()">
+                <div id="patenteRecepcion" class="col-md-2 col-xs-12">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="patente" name="patente" required>
+                        <span id="btn-buscaPatente" class="input-group-addon" onclick="ejecutarEnter()"><i class="fa fa-search"></i></span>
+                    </div>
+                </div>
+                <div id="patenteEntrada" class="col-md-2 col-xs-12">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="patEntrada" name="patente" onchange="getEstadoEntradaCamion()" required>
+                    </div>
                 </div>
                 <div class="col-md-1 col-xs-12"><label class="form-label">Acoplado:</label></div>
                 <div class="col-md-2 col-xs-12"><input type="text" class="form-control" id="acoplado" name="acoplado">
                 </div>
                 <div class="col-md-1 col-xs-12"><label class="form-label">Conductor<?php hreq() ?>:</label></div>
-                <div class="col-md-2 col-xs-12"><input type="text" class="form-control" id="conductor" name="conductor">
+                <div class="col-md-2 col-xs-12"><input type="text" class="form-control" id="conductor" name="conductor" required>
                 </div>
                 <div class="col-md-1 col-xs-12"><label class="form-label">Tipo<?php hreq() ?>:</label></div>
-                <div class="col-md-2 col-xs-12"><input type="text" class="form-control" id="tipo" name="tipo"></div>
+                <div class="col-md-2 col-xs-12"><input type="text" class="form-control" id="tipo" name="tipo" required></div>
             </div>
             <div class="row" style="margin-top:40px">
                 <div class="col-md-1 col-xs-12">
                     <label class="form-label">Bruto<?php hreq() ?>:</label>
                 </div>
                 <div class="col-md-3 col-xs-12">
-                    <input type="number" class="form-control" id="bruto" name="bruto" onchange="calculaNeto()">
+                    <input type="number" class="form-control" id="bruto" name="bruto" onchange="calculaNeto()" required>
                 </div>
                 <div class="col-md-1 col-xs-12">
                     <label class="form-label">Tara<?php hreq() ?>:</label>
                 </div>
                 <div class="col-md-3 col-xs-12">
-                    <input type="number" class="form-control" id="tara" name="tara" onchange="calculaNeto()">
+                    <input type="number" class="form-control" id="tara" name="tara" onchange="calculaNeto()" required>
                 </div>
                 <div class="col-md-1 col-xs-12">
                     <label class="form-label">Neto:</label>
@@ -206,6 +224,14 @@ function reset() {
     $('#lotes').empty();
 }
 var recipienteSelect = null;
+
+//Ejecuta la funcion del keyup para obtenerInfoCamion()
+function ejecutarEnter(){
+    e = $.Event('keyup');
+    e.keyCode= 13; // enter
+    $('#patente').trigger(e);
+
+}
 $('#patente').keyup(function(e) {
 
     if ($('#accioncamion').val() != 'descarga') return;
@@ -262,11 +288,15 @@ function obtenerInfoCamion(patente) {
         },
         url: `<?php echo base_url(PRD) ?>general/Camion/obtenerInfo/${patente}`,
         success: function(rsp) {
-            if (rsp){
+            
+            if (!$.isEmptyObject(rsp)){
+                
                 fillForm(rsp);
                 obtenerLotesCamion(patente); 
+        
             }else{
-                alert('Camion no registrado.')
+                $('#frm-camion')[0].reset();
+                $("#patente").val(patente);
             }
         },
         error: function(rsp) {
@@ -350,20 +380,9 @@ function validarFormulario(msj) {
             }
         });
     }
-    $('#frm-camion').find('.form-control').each(function() {
-        if (this.value == "" || this.value=="Seleccionar") {
-            if(this.id != "acoplado"){
-                ban = false;
-            }
-        }
-    });
-    //Valida PATENTE camión que no este en TRÁNSITO
-    validaPatente().then((result) => {
-        ban = result;
-    }).catch((err) => {
-        ban = false;
-    });
-
+    //Valído formulario de Datos Camión IDEM Entrada y Recepcion
+    if(!frm_validar("#frm-camion")){ban = false;}
+    
     if (!ban) Swal.fire('Error..','Complete los campos obligatorios(*)','error');
     return ban;
 }
@@ -537,6 +556,8 @@ function ActualizaPesoEstimado() {
 }
 
 function cargacamion() {
+    //Reseteo todos los formularios
+    reset();
     $('#accion').val('carga');
     $('.panel-req').show();
 
@@ -544,15 +565,17 @@ function cargacamion() {
     document.getElementById('cargacamion').style.borderColor = "blue";
     document.getElementById('descargacamion').style.borderColor = "white";
     document.getElementById('accioncamion').value = "carga";
+    $('#patenteRecepcion').hide();
+    $('#patenteEntrada').show();
     //document.getElementById('boxproductos').hidden = true;
+
     $('#add-camion').show();
     //$('.btn-cargar').hide();
     $('.tag-descarga').hide();
-    //Reseteo todos los formularios
-    reset();
 }
 
 function descargacamion() {
+    reset();
     $('#accion').val('descarga');
     $('.panel-req').show();
 
@@ -563,8 +586,9 @@ function descargacamion() {
     // document.getElementById('boxproductos').hidden = false;
     $('#add-camion').hide();
     //$('.btn-cargar').show();
+    $('#patenteRecepcion').show();
+    $('#patenteEntrada').hide();
     $('.tag-descarga').show();
-    reset();
 }
 //Se pidio que se remueva esta condicion onkeyup="actualizarNeto" sobre bruto y tara
 //El camion puede esta vacío es decir BRUTO = 0
@@ -600,40 +624,37 @@ $(document).off('click', '.tabla_productos_asignados_borrar').on('click', '.tabl
     idbandera: 'productos_existe'
 }, remover);
 
-async function validaPatente(){
-    flag = true;
-    patente =  $("#patente").val();
+//Busco los datos de movimientos no FINALIZADOS del camión por patente
+//onchange id="patEntrada"
+function getEstadosFinalizadosCamion(){
+
+    // var estado = 'TRANSITO';
+    var patente = $("#patEntrada").val();
+    
     wo();
-    validacion = new Promise((resolve, reject) => {        
-        $.ajax({
-            type: 'POST',
-            dataType: 'JSON',
-            url: '<?php echo base_url(PRD) ?>general/Lote/buscaCamion',
-            data: {
-                patente
-            },
-            success: function(rsp) {
-                if(rsp){
-                    if (rsp[0].estado == "TRANSITO") {
-                        Swal.fire('Error..','La patente ingresada se encuentra en TRÁNSITO','error');
-                        resolve(false);
-                    }else{
-                        resolve(true);
-                    }
-                }else{
-                    resolve(true);
-                }
-            },
-            error: function(rsp) {
-                resolve(false);
-                Swal.fire('Error..','Se produjo un error al validar la patente','error');
-            },
-            complete: function() {
-                wc();
+    $.ajax({
+        type: 'POST',
+        dataType: 'JSON',
+        data: {
+            patente
+        },
+        url: `<?php echo base_url(PRD) ?>general/Camion/getEstadosFinalizadosCamion`,
+        success: function(rsp) {
+            
+            if (!$.isEmptyObject(rsp)){
+                
+                Swal.fire('Error..','La patente ingresada se encuentra ACTIVA','error');
+                $("#patente").val('');
             }
-        });
+        },
+        error: function(rsp) {
+            alert('Error');
+        },
+        complete: function(){
+            wc();
+        }
     });
-    return await validacion;
+
 }
 </script>
 <div class="modal" id="unificar_lotes" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

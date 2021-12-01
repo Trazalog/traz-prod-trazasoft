@@ -19,35 +19,72 @@ use \koolreport\widgets\koolphp\Card;
 
   <div id="reportContent" class="report-content">
     <div class="row">
-
       <div class="col-md-12">
-
-
         <div class="box box-solid">
-
           <div class="box box-primary">
-
             <div class="box-header with-border">
               <h3 class="box-title">
-
                 Reporte de Producción
               </h3>
             </div>
-
-            <div class="col-md-12">
-              <hr>
-            </div>
-
+            <br><br>
             <!--_________________FILTRO_________________-->
+            <form id="frm-filtros">
+                <!-- DESDE -->
+                <div class="col-xs-12 col-sm-12 col-md-4 col-lg-3">
+                    <div class="form-group">
+                        <label style="padding-left: 20%;">Desde</label>
+                        <div class="input-group date">
+                            <a class="input-group-addon" id="daterange-btn" title="Más fechas">
+                                <i class="fa fa-magic"></i>
+                                <span></span>
+                            </a>
+                            <input type="date" class="form-control pull-right" id="datepickerDesde" name="datepickerDesde" placeholder="Desde">
+                        </div>
+                    </div>
+                </div>
+                <!-- /DESDE -->
 
+                <!-- HASTA -->
+                <div class="col-xs-12 col-sm-12 col-md-4 col-lg-3">
+                    <div class="form-group">
+                        <label>Hasta</label>
+                        <input type="date" class="form-control" id="datepickerHasta" name="datepickerHasta" placeholder="Hasta">
+                    </div>
+                </div>
+                <!-- /HASTA -->
+                
+                <!-- ETAPAS -->
+                <div class="col-xs-12 col-sm-12 col-md-4 col-lg-3">
+                    <div class="form-group">
+                        <label>Etapas</label>
+                        <select class="form-control" id="etapa" name="etapa">
+                        </select>
+                    </div>
+                </div>
+                <!-- /ETAPAS -->
+
+                <!-- PRODUCTO -->
+                <div class="col-xs-12 col-sm-12 col-md-8 col-lg-7">
+                    <div class="form-group">
+                        <label>Producto</label>
+                        <select class="form-control select2" id="producto" name="producto">
+                        </select>
+                    </div>
+                </div>
+                <!-- PRODUCTO -->
+
+                <div class="col-xs-12 col-sm-12 col-md-3 col-lg-2">
+                    <div style="float:right; padding-top: 24px" class="form-group">
+                        <button type="button" class="btn btn-success btn-flat" onclick="filtrar()">Filtrar</button>
+                        <button style="margin-left: 5px" type="button" class="btn btn-danger btn-flat flt-clear">Limpiar</button>
+                        <input type="hidden" value="<?php echo $op ?>" id="op" hidden="true">
+                    </div>
+                </div>
+            </form>
             <div class="col-md-12">
-              <a href="#" data-toggle="control-sidebar" title="Filtros" id="panelFiltro">
-                <i class="fa fa-fw fa-filter fa-lg text-black pull-left"></i>
-              </a>
+                <hr>
             </div>
-
-            <div class="col-md-12"><br></div>
-
             <!--_________________TABLA_________________-->
 
             <div class="box-body">
@@ -66,8 +103,14 @@ use \koolreport\widgets\koolphp\Card;
                     )
                   ), // Para desactivar encabezado reemplazar "headers" por "showHeader"=>false
                   "columns" => array(
-                    "fecha" => array(
-                      "label" => "Fecha"
+                    array(
+                      "label" => "Fecha",
+                      "value" => function($row) {
+                        $aux = explode("+",$row["fecha"]);
+                        $row["fecha"] = date("d-m-Y",strtotime($aux[0]));
+                        return $row["fecha"];
+                      },
+                      "type" => "date"
                     ),
                     "producto" => array(
                       "label" => "Producto"
@@ -81,7 +124,7 @@ use \koolreport\widgets\koolphp\Card;
                     "etapa" => array(
                       "label" => "Etapa"
                     ),
-                    "recurso" => array(
+                    "responsable" => array(
                       "label" => "Responsable"
                     )
                   ),
@@ -149,25 +192,15 @@ use \koolreport\widgets\koolphp\Card;
                     </div>
                   </div>
                 </div>
-
-
-
-
-
                 <!--_________________ CHARTS 2_________________-->
-
-
                 <div class="col-md-6">
-
                   <div class="box-header with-border">
                     <h3 class="box-title">
                       <i class="fa fa-pie-chart"></i>
                       Productos con mayor cantidad
                     </h3>
                   </div>
-
                   <!--_________________ BODY CHART 2_________________-->
-
                   <div class="box-body">
                     <div style="margin-bottom:50px;">
                       <?php
@@ -193,7 +226,6 @@ use \koolreport\widgets\koolphp\Card;
                     </div>
                   </div>
                 </div>
-
                 <!--_________________ CHARTS 2_________________-->
 
 
@@ -230,144 +262,72 @@ use \koolreport\widgets\koolphp\Card;
                                     </div> -->
                 <!-- </div> -->
               </div>
-
               <!--_________________ FIN CHARTS_________________-->
-
-
-
-
-
-
-
             </div>
-
-
             <!--_________________ FIN BODY REPORTE ____________________________-->
-
           </div>
         </div>
-
       </div>
-
     </div>
   </div>
-  <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script> -->
-
-  <!-- <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.flash.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.print.min.js"></script> -->
-
-  <!-- <script>
-        $('tr > td').each(function() {
-            if ($(this).text() == 0) {
-                $(this).text('-');
-                $(this).css('text-align', 'center');
-            }
-            if ($(this).text()) {
-
-            }
-        });
-
-        $('#panel-derecho-body').load('<?php //echo base_url() 
-                                        ?>index.php/Reportes/filtroProduccion');
-        var id = $('.dataTable').getElementById();
-        var table = DataTable($('.dataTable').getElementById());
-
-        // var table = DataTable($('#DataTables_Table_1'))
-        // var d = new Date();
-        // var date = getFechaHoraFormateada(d);
-        table = DataTable({
-            dom: 'Bfrtip',
-            buttons: [{
-                    extend: 'print',
-                    className: 'btn btn-primary',
-                    text: '<i class="fa fa-print"></i>',
-                    title: function() {
-                        return 'Reporte de Producción'
-                    },
-                    init: function(api, node, config) {
-                        $(node).removeClass('btn-default')
-                    }
-                },
-                {
-                    extend: 'excel',
-                    className: 'btn btn-primary',
-                    text: '<i class="fa fa-download"></i> Excel',
-                    title: function() {
-                        return 'Reporte de Producción'
-                    },
-                    init: function(api, node, config) {
-                        $(node).removeClass('btn-default')
-                    },
-                    filename: function() {
-                        return ' reporte_produccion';
-                    },
-                }
-            ],
-            "columnDefs": [{
-                "targets": [0],
-                "type": "num",
-            }],
-            "order": [
-                [0, "asc"]
-            ],
-        });
-    </script> -->
-
-  <!-- <script>
-        DataTable($('.dataTable'))
-
-        var d = new Date();
-        var date = getFechaHoraFormateada(d);
-        var table = $('.dataTable').DataTable({
-            dom: 'Bfrtip',
-            buttons: [{
-                    extend: 'print',
-                    className: 'btn btn-primary',
-                    text: '<i class="fa fa-print"></i>',
-                    title: function() {
-                        return 'Reporte de Producción'
-                    },
-                    init: function(api, node, config) {
-                        $(node).removeClass('btn-default')
-                    }
-                },
-                {
-                    extend: 'excel',
-                    className: 'btn btn-primary',
-                    text: '<i class="fa fa-download"></i> Excel',
-                    title: function() {
-                        return 'Reporte de Producción'
-                    },
-                    init: function(api, node, config) {
-                        $(node).removeClass('btn-default')
-                    },
-                    filename: function() {
-                        return date + ' reporte_produccion';
-                    },
-                }
-            ],
-            "columnDefs": [{
-                "targets": [0],
-                "type": "num",
-            }],
-            "order": [
-                [0, "asc"]
-            ],
-        });
-    </script> -->
   <script>
-    // $('.report-content').click(function() {
-    //     $('#formulario')[0].reset();
-    // });
+    filtroProduccion();
+    fechaMagic();
+    //Funcion de datatable para extencion de botones exportar
+    //excel, pdf, copiado portapapeles e impresion
+    $(document).ready(function() {
+      $('.select2').select2();
+      $('.dataTable').DataTable({
+        responsive: true,
+        language: {
+        url: '<?php base_url() ?>lib/bower_components/datatables.net/js/es-ar.json' //Ubicacion del archivo con el json del idioma.
+        },
+        dom: 'lBfrtip',
+        buttons: [{
+          //Botón para Excel
+          extend: 'excel',
+          exportOptions: {
+          columns: [0, 1, 2, 3, 4, 5]
+          },
+          footer: true,
+          title: 'Asignación de recursos',
+          filename: 'asignacion_recursos',
+          //Aquí es donde generas el botón personalizado
+          text: '<button class="btn btn-success ml-2 mb-2 mb-2 mt-3">Exportar a Excel <i class="fa fa-file-excel-o"></i></button>'
+        },
+        // //Botón para PDF
+        {
+          extend: 'pdf',
+          exportOptions: {
+              columns: [0, 1, 2, 3, 4, 5]
+          },
+          footer: true,
+          title: 'Asignación de recursos',
+          filename: 'asignacion_recursos',
+          text: '<button class="btn btn-danger ml-2 mb-2 mb-2 mt-3">Exportar a PDF <i class="fa fa-file-pdf-o mr-1"></i></button>'
+        },
+        {
+          extend: 'copy',
+          exportOptions: {
+              columns: [0, 1, 2, 3, 4, 5]
+          },
+          footer: true,
+          title: 'Asignación de recursos',
+          filename: 'asignacion_recursos',
+          text: '<button class="btn btn-primary ml-2 mb-2 mb-2 mt-3">Copiar <i class="fa fa-file-text-o mr-1"></i></button>'
+        },
+        {
+          extend: 'print',
+          exportOptions: {
+              columns: [0, 1, 2, 3, 4, 5]
+          },
+          footer: true,
+          title: 'Asignación de recursos',
+          filename: 'asignacion_recursos',
+          text: '<button class="btn btn-default ml-2 mb-2 mb-2 mt-3">Imprimir <i class="fa fa-print mr-1"></i></button>'
+        }]
+      });
+    });
 
     $('tr > td').each(function() {
       if ($(this).text() == 0) {
@@ -375,11 +335,75 @@ use \koolreport\widgets\koolphp\Card;
         $(this).css('text-align', 'center');
       }
     });
+    
+    // $('#panel-derecho-body').load('<?php echo base_url() ?>index.php/Reportes/filtroProduccion');
 
-    $('#panel-derecho-body').load('<?php echo base_url() ?>index.php/Reportes/filtroProduccion');
-  </script>
+    $('.flt-clear').click(function() {
+      $('#frm-filtros')[0].reset();
+      $('#producto').val(null).trigger('change');
+    });
 
-  <script>
-    DataTable($('.dataTable'))
+    function filtrar() {
+      var data = new FormData($('#frm-filtros')[0]);
+      data = formToObject(data);
+      wo();
+      var url = 'produccion';
+      $.ajax({
+        type: 'POST',
+
+        data: {
+          data
+        },
+        url: '<?php echo base_url(PRD) ?>Reportes/' + url,
+        success: function(result) {
+          $('#reportContent').empty();
+          $('#reportContent').html(result);
+        },
+        error: function() {
+          alert('Error');
+        },
+        complete: function(result) {
+          wc();
+        }
+      });
+    }
+
+    function filtroProduccion() {
+      wo();
+      $.ajax({
+        type: "GET",
+        dataType: "JSON",
+        url: "<?php echo base_url(PRD) ?>Reportes/filtroProduccion",
+        success: function(rsp) {
+
+          if (_isset(rsp.productos)) {
+            var opcProductos = '<option value="" selected>TODOS</option>';
+
+            rsp.productos.forEach(element => {
+                opcProductos += "<option value=" + element.id + ">" + element.nombre + "</option>";
+            });
+            $('#producto').html(opcProductos);
+
+          }
+
+          if (_isset(rsp.etapas)) {
+            var opcEtapas = '<option value="" selected>TODOS</option>';
+
+            rsp.etapas.forEach(element => {
+                opcEtapas += "<option value=" + element.id + ">" + element.titulo + "</option>";
+            });
+
+            $('#etapa').html(opcEtapas);
+          }
+
+        },
+        error: function(rsp) {
+          alert('Error tremendo');
+        },
+        complete: function() {
+          wc();
+        }
+      })
+    }
   </script>
 </body>

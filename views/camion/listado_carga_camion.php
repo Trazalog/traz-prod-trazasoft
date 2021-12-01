@@ -33,8 +33,7 @@ $this->load->view('camion/modal_cargarcamion');
                 <!--Cabecera del datatable-->
                 <thead>
 
-                    <th></th>
-                    <th></th>
+                    <th>Acción</th>
                     <th>N° Boleta</th>
                     <th>Establecimiento</th>
                     <th>Fecha</th-weight:>
@@ -54,15 +53,10 @@ $this->load->view('camion/modal_cargarcamion');
               $id=$fila->id;
               echo "<tr  id='$id' data-json='".json_encode($fila->articulos)."'>";
 
-              echo '<td width="5%" class="text-center">';
+              echo '<td width="7%" class="text-center">';
               echo '<a onclick="salidaCamiones(';
-              echo '\''.$fila->patente.'\')" ><i class="fa fa-fw fa-truck text-red ml-1" style="cursor: pointer;" title="Salida camion" ></i></a>';
-              echo '</td>';
-
-        
-
-              echo '<td width="5%" class="text-center">';
-              echo '<i class="fa fa-fw fa-truck text-light-blue ml-1" style="cursor: pointer;" title="Ver" onclick="rellenarDetalles(this)"></i>';
+              echo '\''.$fila->motr_id.'\')" ><i class="fa fa-fw fa-truck text-red ml-1" style="cursor: pointer;" title="Salida camión" ></i></a>';
+              echo '<i class="fa fa-fw fa-search text-light-blue ml-1" style="cursor: pointer;" title="Ver" onclick="rellenarDetalles(this)"></i>';
               echo '</td>';
 
               echo '<td style="font-weight: lighter;">'.$fila->boleta.'</td>';
@@ -115,9 +109,9 @@ $this->load->view('camion/modal_cargarcamion');
         $('#modal_recepcioncamion').modal('show');
     }
 
-    function salidaCamiones(patente) {
+    function salidaCamiones(motr_id) {
         wo();
-        linkTo('<?php echo base_url(PRD) ?>general/Camion/salidaCamion/' + patente);
+        linkTo('<?php echo base_url(PRD) ?>general/Camion/salidaCamion?motr_id=' + motr_id);
         wc();
     }
     </script>

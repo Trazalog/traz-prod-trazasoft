@@ -33,7 +33,7 @@ class Reportes extends CI_Controller
       
       log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | #REPORTES | produccion() | #ETAPA: >>' . $etapa . '#DESDE: >>' . $desde . '#HASTA: >>' . $hasta);
 
-      $url = REST_TDS . '/productos/etapa/' . $etapa . '/desde/' . $desde . '/hasta/' . $hasta . '/producto/' . $producto;
+      $url = REST_PRD_ETAPAS . '/productos/etapa/' . $etapa . '/desde/' . $desde . '/hasta/' . $hasta . '/producto/' . $producto.'/empr_id/'.empresa();
       $json = $this->Koolreport->depurarJson($url)->productos->producto;
       $reporte = new Produccion($json);
       $reporte->run()->render();
@@ -42,7 +42,7 @@ class Reportes extends CI_Controller
 
       log_message('INFO', '#TRAZA | #TRAZ-PROD-TRAZASOFT | #REPORTES | produccion() | #INGRESO');
       
-      $url = REST_TDS . '/productos/etapa//desde//hasta//producto/';
+      $url = REST_PRD_ETAPAS . '/productos/etapa//desde//hasta//producto//empr_id/'.empresa();
       $json = $this->Koolreport->depurarJson($url)->productos->producto;
 
       log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | #REPORTES | produccion() | #JSON: >>' . $json);
@@ -90,22 +90,23 @@ class Reportes extends CI_Controller
   {
     log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | #REPORTES | filtroProduccion() | #INGRESO');
     // $url['responsables'] = '';
-    $url['productos'] = REST_TDS . '/productos/list';
+    $url['productos'] = REST_PRD_ETAPAS . '/productos/list';
     // $url['unidades_medida'] = '';
-    $url['etapas'] = REST_TDS . '/etapas/all/list';
+    $url['etapas'] = REST_PRD_ETAPAS . '/etapas';
 
     // $valores['responsables'] = $this->Koolreport->depurarJson($url['responsables'])->responsables->responsable;
     $valores['productos'] = $this->Koolreport->depurarJson($url['productos'])->productos->producto;
     // $valores['unidades_medida'] = $this->Koolreport->depurarJson($url['unidades_medida'])->unidades->unidad;
     $valores['etapas'] = $this->Koolreport->depurarJson($url['etapas'])->etapas->etapa;
 
-    $data['filtro'] = $this->Opcionesfiltros->filtrosProduccion($valores);
+    // $data['filtro'] = $this->Opcionesfiltros->filtrosProduccion($valores);
 
-    $data['calendarioDesde'] = true;
-    $data['calendarioHasta'] = true;
-    $data['op'] = "produccion";
+    // $data['calendarioDesde'] = true;
+    // $data['calendarioHasta'] = true;
+    // $data['op'] = "produccion";
 
-    $this->load->view(PRD.'layout/Filtro', $data);
+    // $this->load->view(PRD.'layout/Filtro', $data);
+    echo json_encode($valores);
   }
 
   public function filtroProdResponsable()

@@ -11,12 +11,39 @@ class Reporte extends CI_Controller
 
     public function tareasOperario()
     {
+        $data = $this->session->userdata;
+
         $this->load->model('general/Etapas');
         $this->load->model('general/Recursos');
         $data['rec_trabajo'] = $this->Recursos->obtenerXTipo('TRABAJO')['data'];
         $this->load->model('general/Etapas');
         $data['lotes'] = $this->Etapas->listar()->etapas->etapa;
+
+        $data['lotes_responsable'] = $this->Etapas->listarResponsables($data['id'], null);
+
         $this->load->view('reportes/lista_tareas_operarios', $data);
+    }
+
+    function listarPorEstablecimiento($opciones = false)
+  {
+    $establecimiento = $this->input->post('establecimiento');
+    $tipo = $this->input->post('tipo');
+
+    $res = $this->Recipientes->obtener($tipo, 'TODOS', $establecimiento);
+
+    if ($opciones) $res['data'] = selectBusquedaAvanzada(false, false, $res['data'], 'reci_id', 'nombre', array('Estado:' => 'estado', 'Tipo:' => 'tipo'));
+
+    echo json_encode($res);
+  }
+
+    public function ListarResponsable($bacth_id){
+
+        $this->load->model('general/Etapas');
+
+        $bacth_id = $this->input->post('bacth_id');
+        $rsp = $this->Etapas->listarResponsables(null, $bacth_id);
+
+        echo json_encode($rsp);
     }
 
     public function crearReporte($id)

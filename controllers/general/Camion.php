@@ -39,13 +39,13 @@ class Camion extends CI_Controller
         $this->load->view('camion/descarga_camion', $data);
     }
 
-    public function salidaCamion($patente = false)
+    public function salidaCamion($motr_id = false)
     {
         log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT | Camion | salidaCamion()");
 
-        $patente = $this->input->get('patente');
-        
-        $data['datosCamion'] = $this->Camiones->getMovimientoTransporte($patente);
+        $motr_id =  $this->input->get('motr_id');
+
+        isset($motr_id) ? $data['datosCamion'] = $this->Camiones->getMovimientoTransporte($motr_id) : '';
         $data['establecimientos'] = $this->Establecimientos->listarTodo()->establecimientos->establecimiento;
         $data['tipoEstablecimiento'] = $this->Noconsumibles->tipoEstablecimiento()['data'];
         $data['destinoNoConsumible'] = $this->Noconsumibles->seleccionarDestino()['data'];
@@ -141,10 +141,34 @@ class Camion extends CI_Controller
     }
     #_____________________________________________________________________________________
 
-    public function obtenerInfo($patente)
-    {
+    /**
+		* Obtiene la informacion de un camion por patente
+		* @param array con datos de salida
+		* @return array con respuesta de servicio
+		*/
+    public function obtenerInfo($patente){
+        log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT | Camion | obtenerInfo()");
         $estado = $this->input->post('estado');
         $rsp = $this->Camiones->obtenerInfo($patente, $estado);
+        if(!isset($rsp)){
+            $rsp = $this->getEstadosFinalizadosCamion('recepcion');
+        }
+        echo json_encode($rsp);
+    }
+    /**
+		* Obtiene la informacion con estado no FINALIZADO de un camion por patente
+		* @param array con datos de salida
+		* @return array con respuesta de servicio
+    */
+    public function getEstadosFinalizadosCamion($accion){
+        log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT | Camion | getEstadosFinalizadosCamion()");
+
+        $patente = $this->input->post('patente');
+
+        $rsp = $this->Camiones->getEstadosFinalizadosCamion($patente);
+        if($accion == 'recepcion'){
+            return $rsp;
+        }
         echo json_encode($rsp);
     }
 
@@ -199,5 +223,20 @@ class Camion extends CI_Controller
         if($rsp['status'] && $post['estadoFinal'] == 'DESCARGADO')
             $this->Camiones->actualizarProveedor($post['patente'], $post['estadoFinal'], $post['proveedor']);
         echo json_encode($rsp);
+    }
+    
+    /**
+		* Busca en la tabla movimientos_transportes los datos por motr_id y empr_id
+		* @param string motr_id
+		* @return array con datos de los movimientos de transporte(camion)
+    */
+    public function getMovimientoCamion(){
+        
+        log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT | Camion | getMovimientoCamion()");
+        
+        $motr_id = $this->input->post("motr_id");
+        $resp = $this->Camiones->getMovimientoTransporte($motr_id);
+
+        echo json_encode($resp);
     }
 }
