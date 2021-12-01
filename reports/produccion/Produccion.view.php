@@ -290,8 +290,8 @@ use \koolreport\widgets\koolphp\Card;
           columns: [0, 1, 2, 3, 4, 5]
           },
           footer: true,
-          title: 'Asignación de recursos',
-          filename: 'asignacion_recursos',
+          title: 'Reporte de Producción',
+          filename: 'reporte_produccion',
           //Aquí es donde generas el botón personalizado
           text: '<button class="btn btn-success ml-2 mb-2 mb-2 mt-3">Exportar a Excel <i class="fa fa-file-excel-o"></i></button>'
         },
@@ -302,8 +302,8 @@ use \koolreport\widgets\koolphp\Card;
               columns: [0, 1, 2, 3, 4, 5]
           },
           footer: true,
-          title: 'Asignación de recursos',
-          filename: 'asignacion_recursos',
+          title: 'Reporte de Producción',
+          filename: 'reporte_produccion',
           text: '<button class="btn btn-danger ml-2 mb-2 mb-2 mt-3">Exportar a PDF <i class="fa fa-file-pdf-o mr-1"></i></button>'
         },
         {
@@ -312,8 +312,8 @@ use \koolreport\widgets\koolphp\Card;
               columns: [0, 1, 2, 3, 4, 5]
           },
           footer: true,
-          title: 'Asignación de recursos',
-          filename: 'asignacion_recursos',
+          title: 'Reporte de Producción',
+          filename: 'reporte_produccion',
           text: '<button class="btn btn-primary ml-2 mb-2 mb-2 mt-3">Copiar <i class="fa fa-file-text-o mr-1"></i></button>'
         },
         {
@@ -322,8 +322,8 @@ use \koolreport\widgets\koolphp\Card;
               columns: [0, 1, 2, 3, 4, 5]
           },
           footer: true,
-          title: 'Asignación de recursos',
-          filename: 'asignacion_recursos',
+          title: 'Reporte de Producción',
+          filename: 'reporte_produccion',
           text: '<button class="btn btn-default ml-2 mb-2 mb-2 mt-3">Imprimir <i class="fa fa-print mr-1"></i></button>'
         }]
       });
