@@ -114,14 +114,15 @@ class Opcionesfiltros extends CI_Model
 
   public function getIngresos($data)
   {
-    log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | #REPORTES | gerIngresos() | #INGRESO: >>' . json_encode($data));
+    log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | #REPORTES | getIngresos() | #INGRESO: >>' . json_encode($data));
     $arti_id = (isset($data['arti_id'])) ? $data['arti_id'] : '';
     $prov_id = (isset($data['prov_id'])) ? $data['prov_id'] : '';
     $cuit = (isset($data['tran_id'])) ? $data['tran_id'] : '';
-    $fecdesde = (isset($data['datepickerDesde'])) ? date("Y-m-d", strtotime($data['datepickerDesde'])) : '';
-    $fechasta = (isset($data['datepickerHasta'])) ? date("Y-m-d", strtotime($data['datepickerHasta'])) : '';
+    $u_medida = (isset($data['u_medida'])) ? $data['u_medida'] : '';
+    $fecdesde = (isset($data['datepickerDesde']) && $data['datepickerDesde'] != '') ? date("Y-m-d", strtotime($data['datepickerDesde'])) : '';
+    $fechasta = (isset($data['datepickerHasta']) && $data['datepickerHasta'] != '') ? date("Y-m-d", strtotime($data['datepickerHasta'])) : '';
 
-    $url = REST_LOG . '/movimientos/proveedor/' . $prov_id . '/transporte/' . $cuit . '/producto/' . $arti_id . '/desde/' . $fecdesde . '/hasta/' . $fechasta . '/ingresos';
+    $url = REST_LOG . '/movimientos/proveedor/' . $prov_id . '/transporte/' . $cuit . '/producto/' . $arti_id . '/u_medida/' . $u_medida . '/desde/' . $fecdesde . '/hasta/' . $fechasta . '/ingresos';
     return wso2($url)['data'];
   }
 }

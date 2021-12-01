@@ -104,6 +104,14 @@ use \koolreport\widgets\google\ColumnChart;
                             ?> -->
                     </select>
                   </div>
+                  <div class="form-group col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                    <label>Unidad de Medida</label>
+                    <select class="form-control" id="u_medida" name="u_medida">
+                      <!-- <?php
+                            echo "<option selected disabled>Seleccione medida</option>"
+                            ?> -->
+                    </select>
+                  </div>
                   <!-- </div> -->
                 </div>
               </div>
@@ -147,8 +155,21 @@ use \koolreport\widgets\google\ColumnChart;
                     "descripcion" => array(
                       "label" => "Producto"
                     ),
+                    "unidad_medida" => array(
+                      "label" => "U. Medida"
+                    ),
                     "cantidad" => array(
                       "label" => "Cantidad"
+                    ),
+                    array(
+                      "label" => "Descarga",
+                      "value" => function($row) {
+                        $aux = $row["deposito"] . " | " . $row['recipiente'];
+                        return $aux;
+                      }
+                    ),
+                    "codigo" => array(
+                      "label" => "Lote"
                     ),
                     "estado" => array(
                       "label" => "Estado"

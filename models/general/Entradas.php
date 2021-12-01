@@ -11,12 +11,17 @@ class Entradas extends CI_Model
     public function guardar($data)
     {
         if($this->validarCamion($data['patente'])){  
-            return array('status'=>false, 'msj'=>'El Camion ya se encuentra en el establecimiento');
+            return array('status'=>false, 'msj'=>'El camión ya se encuentra en el establecimiento');
         }
 
-        $data['proveedor'] = strval(PROVEEDOR_INTERNO);
         $data['empr_id'] = strval(empresa());
+
+        if(!isset($data['proveedor']) || $data['proveedor'] == ""){
+            $data['proveedor'] = strval(PROVEEDOR_INTERNO);
+        }
+
         log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | Entradas | guardar() | #DATA-POST: ' . json_encode($data));
+
         $url = REST_LOG . '/entradas';
         $rsp = $this->rest->callApi('POST', $url, ['post_entradas' => $data]);
         return $rsp;

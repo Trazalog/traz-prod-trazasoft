@@ -376,13 +376,13 @@ use \koolreport\widgets\koolphp\Card;
         url: "<?php echo base_url(PRD) ?>Reportes/filtroProduccion",
         success: function(rsp) {
 
-          if (_isset(rsp.productos)) {
-            var opcProductos = '<option value="" selected>TODOS</option>';
+          if (_isset(rsp.articulos)) {
+            var opcArticulos = '<option value="" selected>TODOS</option>';
 
-            rsp.productos.forEach(element => {
-                opcProductos += "<option value=" + element.id + ">" + element.nombre + "</option>";
+            rsp.articulos.forEach(element => {
+                opcArticulos += "<option value=" + element.arti_id + ">" + element.descripcion + "</option>";
             });
-            $('#producto').html(opcProductos);
+            $('#producto').html(opcArticulos);
 
           }
 
