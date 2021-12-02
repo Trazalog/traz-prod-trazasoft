@@ -128,7 +128,7 @@ class Opcionesfiltros extends CI_Model
     $fecdesde = (isset($data['datepickerDesde']) && $data['datepickerDesde'] != '') ? date("Y-m-d", strtotime($data['datepickerDesde'])) : '';
     $fechasta = (isset($data['datepickerHasta']) && $data['datepickerHasta'] != '') ? date("Y-m-d", strtotime($data['datepickerHasta'])) : '';
 
-    $url = REST_LOG . '/movimientos/proveedor/' . $prov_id . '/transporte/' . $cuit . '/producto/' . $arti_id . '/u_medida/' . $u_medida . '/desde/' . $fecdesde . '/hasta/' . $fechasta . '/ingresos';
+    $url = REST_LOG . '/movimientos/proveedor/' . $prov_id . '/transporte/' . $cuit . '/producto/' . $arti_id . '/u_medida/' . $u_medida . '/desde/' . $fecdesde . '/hasta/' . $fechasta . '/empr_id/'. empresa() .'/ingresos';
     return wso2($url)['data'];
   }
 }
