@@ -50,7 +50,7 @@ class Camiones extends CI_Model
 
             #CREAR NUEVO RECIPIENTE
             $rsp = $this->Recipientes->crear($o);
-            log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | CAMIONES | guardarCarga() | #NEW RECIPIENTE: ' . json_encode($rsp));
+            log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | CAMIONES | guardarCarga() | #NEW RECIPIENTE ID: >> reci_id -> ' . json_encode($rsp));
             if (!$rsp['status']) {
                 break;
             }
