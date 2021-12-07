@@ -7,7 +7,11 @@ class Entradas extends CI_Model
         parent::__construct();
         $this->load->model('general/Recipientes');
     }
-
+    /**
+		* Inserta en la tabla de prd.movimientos_transporte el camion
+		* @param array datos del movimiento
+		* @return array con respuesta del servicio
+    */	
     public function guardar($data)
     {
         if($this->validarCamion($data['patente'])){  
@@ -31,7 +35,7 @@ class Entradas extends CI_Model
     {
         log_message('DEBUG',"#TRAZA | #TRAZ-PROD-TRAZASOFT | MÉTODO: ".__METHOD__."| PANTENTE: $patente | ESTADO: $estado");
 
-        $res = wso2(REST_LOG. "/camiones/$patente")['data'];
+        $res = wso2(REST_LOG. "/camiones/$patente/".empresa())['data'];
         if($res){
             foreach($res as $o) {
                 

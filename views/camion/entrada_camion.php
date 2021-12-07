@@ -407,7 +407,7 @@ function addCamion(msj = true) {
         success: function(rsp) {
             if (rsp.status) {
                 if ($('#bloque_descarga:visible').length == 0) {
-                    $('#frm-camion')[0].reset();
+                    // $('#frm-camion')[0].reset();
                     $('#frm-info')[0].reset();
                 }
                 if (msj) Swal.fire('Correcto','Datos guardados con éxito','success');
