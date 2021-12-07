@@ -125,6 +125,9 @@ use \koolreport\widgets\google\ColumnChart;
                   // ), // Para desactivar encabezado reemplazar "headers" por "showHeader"=>false
                   // "showHeader" => false,
                   "columns" => array(
+                    "id" => array(
+                      "label" => "ID"
+                    ),
                     "boleta" => array(
                       "label" => "Nº bol."
                     ),
