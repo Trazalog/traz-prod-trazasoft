@@ -189,7 +189,7 @@ class Camion extends CI_Controller
     {
         log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT | Camion | guardarLoteSistema()");
         $frmCamion = $this->input->post('frmCamion');
-        $frmDescarga = $this->input->post('array');
+        $frmDescarga = $this->input->post('descarga');
 
         $rsp = $this->Camiones->guardarLoteSistema($frmCamion, $frmDescarga);
 

@@ -19,7 +19,7 @@
         </table>
         <hr>
         <button id="guardarDescarga" class="btn btn-primary btn-sm" style="float:right"
-            onclick="guardarEntradaNoCon();guardarDescargaOrigen();guardarLoteSistema();" disabled><i
+            onclick="guardarEntradaNoCon();guardarDescargaOrigen();" disabled><i
                 class="fa fa-check"></i> Guardar Descarga</button>
 								<!-- <button id="guardarDescarga" class="btn btn-primary btn-sm" style="float:right"
             onclick="guardarEntradaNoCon()"><i
@@ -37,14 +37,13 @@ function agregarFila(data) {
     var lote_origen = $('#new_codigo').hasClass('hidden') ? $('#codigo').select2('data')[0].text : $('#new_codigo').val();
 
     $('#lotes').append(
-        `<tr data-json='${JSON.stringify(data)}' class='${loteSistema?'lote-sistema':'lote'}'>
+        `<tr data-json='${JSON.stringify(data)}' class='lote'>
             <td class="text-center"><i class="fa fa-times text-danger" onclick="conf(rmFila, this)"></i></td>
             <td>${lote_origen}</td>
             <td>${$('.frm-destino #art-detalle').val()}</td>
             <td>${data.destino.cantidad + ' | ' + data.destino.unidad_medida}</td>
             <td>${data.destino.lote_id}</td>
             <td>${data.destino.recipiente}</td>
-            <td>${loteSistema?'<i class="fa fa-barcode text-blue" title="Lote Trazable"></i>':''}</td>
         </tr>`
     );
 
@@ -75,8 +74,9 @@ function guardarDescargaOrigen() {
         },
         success: function(rsp) {
             if (rsp.status) {
-                actualizarEstadoCamion($('#patente').val());
+                // actualizarEstadoCamion($('#patente').val());
                 console.log('Listado de Recepciones MP se realizó correctamente');
+                guardarLoteSistema();
                 // linkTo();
             } else {
                 alert('Fallo al guardar el listado de Recepciones MP');
@@ -88,26 +88,26 @@ function guardarDescargaOrigen() {
         }
     });
 }
-
+//Guarda los lotes cargados en la tabla
 function guardarLoteSistema() {
     //Definida en entrada_camion.php, trae el formulario de info y camion juntos agregandole estado = 'EN CURSO'
     var frmCamion = obtenerFormularioCamion();
 
-    var array = [];
-    $('#lotes tr.lote-sistema').each(function() {
+    var descarga = [];
+    $('#lotes tr.lote').each(function() {
         const e = JSON.parse(this.dataset.json);
         e.loteSistema = loteSistemaData;
-        array.push(e);
+        descarga.push(e);
     });
 
-    if (array.length != 0){
+    if (descarga.length != 0){
         wo();
         $.ajax({
             type: 'POST',
             dataType: 'JSON',
             url: '<?php echo base_url(PRD) ?>general/Camion/guardarLoteSistema',
             data: {
-                array,
+                descarga,
                 frmCamion
             },
             success: function(rsp) {

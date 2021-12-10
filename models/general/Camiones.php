@@ -198,16 +198,6 @@ class Camiones extends CI_Model
     {
         #Entrada Camion
         $this->load->model('general/Entradas');
-        $frmCamion['bruto'] = "0";
-        $frmCamion['tara'] = "0";
-        $frmCamion['neto'] = "0";
-        $frmCamion['establecimiento'] = $frmDescarga[0]['loteSistema']['esta_id'];
-        $frmCamion['estado'] = 'EN CURSO';
-        $rsp = $this->Entradas->guardar($frmCamion);
-        if (!$rsp['status']) {
-            $rsp['msj'] = 'Error al Guardar Entrada Camion';
-            return $rsp;
-        }
 
         #Obtener motr_id
         $rsp = $this->obtenerInfo($frmCamion['patente'], 'EN CURSO');
@@ -225,8 +215,14 @@ class Camiones extends CI_Model
 
             $aux->patente = $frmCamion['patente'];
             $aux->motr_id = $motr_id;
-            $aux->batch_id = $o['loteSistema']['batch_id'];
-            $aux->cantidad = $o['loteSistema']['cantidad'];
+            $aux->batch_id = $o['origen']['batch_id'];
+            $aux->cantidad = $o['origen']['cantidad'];
+            $aux->batch_id = $o['origen']['arti_id'];
+            $aux->prov_id = $o['origen']['prov_id'];
+            $aux->reci_id = $o['origen']['reci_id'];
+            $aux->orden_prod = $o['origen']['orden_prod'];
+            $aux->etap_id = ETAPA_TRANSPORTE;
+            $aux->forzar_agregar = $o['destino']['unificar'];
             $lotes[] = $aux;
         }
 

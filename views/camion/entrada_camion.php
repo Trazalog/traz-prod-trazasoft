@@ -319,40 +319,6 @@ function unificarLote() {
     });
 }
 
-// NO SE LLAMA EN NINGUNA PARTE
-function guardarDecarga() {
-    console.log('Guardar Descarga');
-    var array = [];
-    var item = null;
-    $('.recipiente').each(function(e) {
-        item = JSON.parse($(this).closest('tr').attr('data-json'));
-        item.reci_id = this.value;
-        item.unificar = this.dataset.unificar;
-        array.push(item);
-    });
-    array = JSON.stringify(array);
-    wo();
-    $.ajax({
-        type: 'POST',
-        dataType: 'JSON',
-        url: '<?php echo base_url(PRD) ?>general/Camion/guardarDescarga',
-        data: {
-            array
-        },
-        success: function(rsp) {
-            alert('Descarga Guardada');
-            $("#lotes-camion").empty();
-        },
-        error: function(rsp) {
-            alert('Error al Guardar Descarga');
-            console.log(rsp.msj);
-        },
-        complete: function() {
-            wc();
-        }
-    });
-}
-
 function obtenerFormularioCamion() {
     var frmCamion = new FormData($('#frm-camion')[0]);
     var frmInfo = new FormData($('#frm-info')[0]);
