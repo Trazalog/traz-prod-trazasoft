@@ -15,6 +15,14 @@ class Camion extends CI_Controller
         $this->load->model('general/Transportistas');
         $this->load->model('general/Listado_carga_camion');
         $this->load->model('general/Listado_recepcion_camion');
+
+        // si esta vencida la sesion redirige al login
+		$data = $this->session->userdata();
+		// log_message('DEBUG','#Main/login | '.json_encode($data));
+		if(!$data['email']){
+			log_message('DEBUG','#TRAZA|DASH|CONSTRUCT|ERROR  >> Sesion Expirada!!!');
+			redirect(DNATO.'main/login');
+		}
     }
 		/**
 		* Levanta pantalla Carga Camión
@@ -185,13 +193,13 @@ class Camion extends CI_Controller
         echo json_encode($rsp);
     }
 
-    public function guardarLoteSistema()
+    public function guardarCargaCamionExterno()
     {
-        log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT | Camion | guardarLoteSistema()");
+        log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT | Camion | guardarCargaCamionExterno()");
         $frmCamion = $this->input->post('frmCamion');
-        $frmDescarga = $this->input->post('array');
+        $frmDescarga = $this->input->post('cargaCamion');
 
-        $rsp = $this->Camiones->guardarLoteSistema($frmCamion, $frmDescarga);
+        $rsp = $this->Camiones->guardarCargaCamionExterno($frmCamion, $frmDescarga);
 
         echo json_encode($rsp);
     }

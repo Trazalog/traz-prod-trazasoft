@@ -377,7 +377,7 @@ use \koolreport\widgets\google\ColumnChart;
       var count = 0;
       $('.dataTable tbody').children('tr').each(function() {
         count++;
-        var estado = $(this).find('td:eq(11)').text();
+        var estado = $(this).find('td:eq(12)').text();
         var color = '';
         switch (estado.trim()) {
           case 'CARGADO':
@@ -393,12 +393,16 @@ use \koolreport\widgets\google\ColumnChart;
             color = 'yellow';
             break;
 
+          case 'DESCARGADO':
+            estado = 'Descargado';
+            color = 'orange';
+            break
           default:
             estado = 'S/E';
             color = '';
             break;
         }
-        $(this).find('td:eq(11)').html(bolita(estado, color));
+        $(this).find('td:eq(12)').html(bolita(estado, color));
       })
       $('#cant_ingresos').text(count);
     }
