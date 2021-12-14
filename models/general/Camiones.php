@@ -190,49 +190,55 @@ class Camiones extends CI_Model
     }
 
     /**
-		* Esta función hara automáticamente la ENTRADA CAMIÓN y la CARGA CAMIÓN
-		* @param array con datos de salida
+		* Esta función hara las veces de la pantalla CARGA CAMIÓN para proveedores externos
+		* @param array frmCamion formulario de informacion y camion; frmDescarga datos de lotes cargados en listado de Recepciones MP
 		* @return array con respuesta de servicio
     */
-    public function guardarLoteSistema($frmCamion, $frmDescarga)
-    {
-        #Entrada Camion
-        $this->load->model('general/Entradas');
+    public function guardarCargaCamionExterno($frmCamion, $frmDescarga){
 
-        #Obtener motr_id
-        $rsp = $this->obtenerInfo($frmCamion['patente'], 'EN CURSO');
-        if (!isset($rsp->motr_id)) {
-            $rsp['msj'] = 'Error al Obtener MOTR_ID';
-            return $rsp;
-        }
+        log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | CAMIONES | guardarCargaCamionExterno() | #frmCamion: ' . json_encode($frmCamion));
+        log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | CAMIONES | guardarCargaCamionExterno() | #frmDescarga: ' . json_encode($frmDescarga));
 
-        $motr_id = $rsp->motr_id;
-
-        #Carga Camion
+        #Carga Camión
         $lotes = [];
         foreach ($frmDescarga as $o) {
             $aux = new StdClass();
 
             $aux->patente = $frmCamion['patente'];
-            $aux->motr_id = $motr_id;
-            $aux->batch_id = $o['origen']['batch_id'];
-            $aux->cantidad = $o['origen']['cantidad'];
-            $aux->batch_id = $o['origen']['arti_id'];
-            $aux->prov_id = $o['origen']['prov_id'];
-            $aux->reci_id = $o['origen']['reci_id'];
-            $aux->orden_prod = $o['origen']['orden_prod'];
+            $aux->motr_id = $frmCamion['motr_id'];
+            
+            $aux->lote_id_origen = $o['origen']['lote_id'];
+            $aux->lote_id_destino = $o['destino']['lote_id'];
+            $aux->arti_id_origen = $o['origen']['arti_id'];
+            $aux->arti_id_destino = $o['destino']['arti_id'];
+            $aux->prov_id = $frmCamion['proveedor'];
+            $aux->batch_id = !empty($o['origen']['batch_id']) ? $o['origen']['batch_id'] : 0;//Es null para externos
+            $aux->cantidad_origen = $o['origen']['cantidad'];
+            $aux->cantidad_destino = $o['destino']['cantidad'];
+            $aux->num_orden_prod = !empty($o['origen']['orden_prod']) ? $o['origen']['orden_prod'] : '';
+            $aux->reci_id_origen = $o['origen']['reci_id'];
             $aux->etap_id = ETAPA_TRANSPORTE;
-            $aux->forzar_agregar = $o['destino']['unificar'];
+            $aux->usuario_app = userNick();
+            $aux->empre_id = empresa();
+            $aux->forzar_agregar = true;
+            $aux->fec_vencimiento = FEC_VEN;
+
             $lotes[] = $aux;
         }
 
-        $rsp = $this->guardarCarga($lotes);
+        #Guardo carga y descarga de proveedor externo
+        $rsp = $this->guardarCargaDescargaExterna($lotes);
         if (!$rsp['status']) {
-            $rsp['msj'] = 'Error al Guardar Carga Camion';
+            $rsp['msj'] = 'Error al guardar la CARGA del listado de recepciones del camión';
             return $rsp;
         }
-
-        #Cambio Estado Camion
+        #Descarga Camión
+        // $rsp = $this->guardarDescarga($frmDescarga);
+        // if (!$rsp['status']) {
+        //     $rsp['msj'] = 'Error al guardar la DESCARGA del listado de recepciones del camión';
+        //     return $rsp;
+        // }
+        #Cambio Estado Camión
         $aux1 = array(array(
             'motr_id' => $motr_id,
             'estado' => 'FINALIZADO',
@@ -240,6 +246,83 @@ class Camiones extends CI_Model
 
         $rsp = $this->actualizarEstado($aux1);
 
+        return $rsp;
+    }
+
+    /**
+    * Realiza la carga y descarga de un camión desde la RECEPCIÓN MP cuando es perteneciente a un proveedor externo.
+    * Genera los recipientes y crea los lotes.
+    * @param $data lotes cargados en pantalla
+    * @return array $rsp respuesta del service
+    */
+    public function guardarCargaDescargaExterna($data)
+    {
+
+        log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | CAMIONES | guardarCargaDescargaExterna() | #DATA: ' . json_encode($data));
+
+        $this->load->model(ALM . '/Lotes');
+        $this->load->model(PRD . 'general/Recipientes');
+
+        $lotes = [];
+
+        $camiones = [];
+
+        foreach ($data as $key => $o) {
+
+            #CREAR NUEVO RECIPIENTE
+            $rsp = $this->Recipientes->crear($o);
+            log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | CAMIONES | guardarCargaDescargaExterna() | #NEW RECIPIENTE ID: >> reci_id -> ' . json_encode($rsp));
+
+            if (!$rsp['status']) {
+                break;
+            }
+
+            $newReci = $rsp['data'];
+
+            $o->reci_id = $newReci;
+            $o->prov_id = PROVEEDOR_INTERNO;
+
+            #Creo el lote
+            $batch_id_nuevo = $this->Lotes->crearLote($lotes);
+            $o->batch_id = $batch_id_nuevo;
+
+            $lotes[] = $o;
+
+            $camiones[] = array('motr_id' => $o->motr_id, 'estado' => 'CARGADO');
+
+
+        }
+
+        $rsp = $this->guardarDescargaExterna($lotes);
+
+        if ($rsp['status']) {
+
+            $rsp = $this->actualizarEstado($camiones);
+        }
+
+        return $rsp;
+    }
+
+    public function guardarDescargaExterna($data)
+    {
+        log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | CAMIONES | guardarDescarga() | #DATA: ' . json_encode($data));
+
+        $array = [];
+        foreach ($data as $key => $value) {
+            $array[] = array(
+                "id" => $value->lote_id_destino,
+                "producto" => $value->arti_id_origen,
+                "prov_id" => $value->prov_id,
+                "batch_id" => $value->batch_id,
+                "cantidad" => $value->cantidad_destino,
+                "stock" => $value->cantidad_origen,
+                "reci_id" => $value->reci_id,
+                "forzar_agregar" => $value->forzar_agregar
+            );
+        }
+        $array = json_decode(json_encode($array));
+        $this->load->model(ALM . 'Lotes');
+        $rsp = $this->Lotes->crearBatch($array);
         return $rsp;
     }
 

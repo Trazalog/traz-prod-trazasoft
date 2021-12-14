@@ -93,6 +93,8 @@
     </div>
     <div class="box-body" id="div_datos_camion">
         <form id="frm-camion">
+            <input type="hidden" id="esExterno" name="esExterno" value="">
+            <input type="hidden" id="motr_id" name="motr_id" value="">
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
@@ -256,10 +258,11 @@ function obtenerLotesCamion(patente) {
         success: function(rsp) {
 
             if (!rsp.data) {
+                $("#esExterno").val('externo');
                 alert('No existen Lotes Asociados');
                 return;
             }
-
+            $("#esExterno").val('');
             $('#codigo').attr('disabled', false).next(".select2-container").show();
             $('#new_codigo').addClass('hidden').attr('disabled', true);
 
@@ -297,6 +300,7 @@ function obtenerInfoCamion(patente) {
             }else{
                 $('#frm-camion')[0].reset();
                 $("#patente").val(patente);
+                $("#esExterno").val('externo');
             }
         },
         error: function(rsp) {

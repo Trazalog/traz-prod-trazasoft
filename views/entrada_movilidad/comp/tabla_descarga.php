@@ -51,6 +51,7 @@ function agregarFila(data) {
 }
 
 function guardarDescargaOrigen() {
+    cargaCorrecta = true;
 
     //Guardar Datos de Camión parametro = FALSE es para NO mostrar el MSJ de Datos Guardados
     if ($('#lotes tr').length != 0 && $('#codigo').find('option').length == 0) // SI EL USUARIO REGISTRO LOTES  Y SI NO HAY LOTES CARGADOS EN EL CAMION EN TRANSITO
@@ -63,7 +64,12 @@ function guardarDescargaOrigen() {
         array.push(JSON.parse(this.dataset.json));
     });
 
-    if (array.length == 0) return;
+    //Si es externo primero realizo la el guardado de la carga del camion
+    if($("#esExterno") == 'externo'){
+        cargaCorrecta = guardarCargaCamionExterno(array);
+    }
+
+    if (array.length == 0 || !cargaCorrecta) return;
 
     $.ajax({
         type: 'POST',
@@ -74,10 +80,9 @@ function guardarDescargaOrigen() {
         },
         success: function(rsp) {
             if (rsp.status) {
-                // actualizarEstadoCamion($('#patente').val());
                 console.log('Listado de Recepciones MP se realizó correctamente');
-                guardarLoteSistema();
-                // linkTo();
+                actualizarEstadoCamion($('#patente').val());
+                linkTo();
             } else {
                 alert('Fallo al guardar el listado de Recepciones MP');
             }
@@ -88,50 +93,44 @@ function guardarDescargaOrigen() {
         }
     });
 }
-//Guarda los lotes cargados en la tabla
-function guardarLoteSistema() {
+//Realiza el guardado de la carga del camion cuando es externo (haria las veces de la pantalla carga camion)
+// esto quiere decir que no se realizo la carga de los lotes por sistema
+// PARAM 'carga' es un array con los lotes cargados en la tabla de descarga
+function guardarCargaCamionExterno(cargaCamion) {
     //Definida en entrada_camion.php, trae el formulario de info y camion juntos agregandole estado = 'EN CURSO'
     var frmCamion = obtenerFormularioCamion();
 
-    var descarga = [];
-    $('#lotes tr.lote').each(function() {
-        const e = JSON.parse(this.dataset.json);
-        e.loteSistema = loteSistemaData;
-        descarga.push(e);
-    });
+    if (cargaCamion.length != 0) return;
 
-    if (descarga.length != 0){
-        wo();
-        $.ajax({
-            type: 'POST',
-            dataType: 'JSON',
-            url: '<?php echo base_url(PRD) ?>general/Camion/guardarLoteSistema',
-            data: {
-                descarga,
-                frmCamion
-            },
-            success: function(rsp) {
-                if (rsp.status == true) {
-                    actualizarEstadoCamion($('#patente').val());
-                    Swal.fire('Correcto','Datos guardados con éxito','success');
-                    linkTo();
-                } else {
-                    alert('Error al guardar lotes del sistema');
-                }
-                
-            },
-            error: function(rsp) {
-                alert('Error: ' + rsp.msj);
-                console.log(rsp.msj);
-            },
-            complete: function() {
-                wc();
+    wo();
+    $.ajax({
+        type: 'POST',
+        dataType: 'JSON',
+        url: '<?php echo base_url(PRD) ?>general/Camion/guardarCargaCamionExterno',
+        data: {
+            cargaCamion,
+            frmCamion
+        },
+        success: function(rsp) {
+            if (rsp.status) {
+                // actualizarEstadoCamion($('#patente').val());
+                // Swal.fire('Correcto','Datos guardados con éxito','success');
+                // linkTo();
+                return rsp.status:
+            } else {
+                Swal.fire('Error','Error al guardar lotes cargados en la tabla','error');
+                return rsp.status;
             }
-        });
-
-    }else{
-        linkTo();
-    }
+            
+        },
+        error: function(rsp) {
+            alert('Error: ' + rsp.msj);
+            console.log(rsp.msj);
+        },
+        complete: function() {
+            wc();
+        }
+    });
 }
 
 function eliminarFila() {

@@ -5,7 +5,6 @@ class Entradas extends CI_Model
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('general/Recipientes');
     }
     /**
 		* Inserta en la tabla de prd.movimientos_transporte el camion
