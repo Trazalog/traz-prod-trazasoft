@@ -34,8 +34,7 @@ var rmFila = function(e){
 }
 function agregarFila(data) {
 
-    var lote_origen = $('#new_codigo').hasClass('hidden') ? $('#codigo').select2('data')[0].text : $('#new_codigo')
-    .val();
+    var lote_origen = $('#new_codigo').hasClass('hidden') ? $('#codigo').select2('data')[0].text : $('#new_codigo').val();
 
     $('#lotes').append(
         `<tr data-json='${JSON.stringify(data)}' class='${loteSistema?'lote-sistema':'lote'}'>
@@ -78,7 +77,7 @@ function guardarDescargaOrigen() {
             if (rsp.status) {
                 actualizarEstadoCamion($('#patente').val());
                 console.log('Listado de Recepciones MP se realizó correctamente');
-                linkTo();
+                // linkTo();
             } else {
                 alert('Fallo al guardar el listado de Recepciones MP');
             }
@@ -91,7 +90,7 @@ function guardarDescargaOrigen() {
 }
 
 function guardarLoteSistema() {
-
+    //Definida en entrada_camion.php, trae el formulario de info y camion juntos agregandole estado = 'EN CURSO'
     var frmCamion = obtenerFormularioCamion();
 
     var array = [];
@@ -101,36 +100,38 @@ function guardarLoteSistema() {
         array.push(e);
     });
 
-    if (array.length == 0) return;
-
-    wo();
-    $.ajax({
-        type: 'POST',
-        dataType: 'JSON',
-        url: '<?php echo base_url(PRD) ?>general/Camion/guardarLoteSistema',
-        data: {
-            array,
-            frmCamion
-        },
-        success: function(rsp) {
-            if (rsp.status == true) {
-                actualizarEstadoCamion($('#patente').val());
-                Swal.fire('Correcto','Datos guardados con éxito','success');
-                linkTo();
-            } else {
-                alert('Error al guardar lotes del sistema');
+    if (array.length != 0){
+        wo();
+        $.ajax({
+            type: 'POST',
+            dataType: 'JSON',
+            url: '<?php echo base_url(PRD) ?>general/Camion/guardarLoteSistema',
+            data: {
+                array,
+                frmCamion
+            },
+            success: function(rsp) {
+                if (rsp.status == true) {
+                    actualizarEstadoCamion($('#patente').val());
+                    Swal.fire('Correcto','Datos guardados con éxito','success');
+                    linkTo();
+                } else {
+                    alert('Error al guardar lotes del sistema');
+                }
+                
+            },
+            error: function(rsp) {
+                alert('Error: ' + rsp.msj);
+                console.log(rsp.msj);
+            },
+            complete: function() {
+                wc();
             }
-            
-        },
-        error: function(rsp) {
-            alert('Error: ' + rsp.msj);
-            console.log(rsp.msj);
-        },
-        complete: function() {
-            wc();
-        }
-    });
+        });
 
+    }else{
+        linkTo();
+    }
 }
 
 function eliminarFila() {

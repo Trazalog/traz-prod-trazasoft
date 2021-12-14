@@ -69,6 +69,15 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
   </div><!-- /.box-header -->
   <div class="box-body">
     <div class="row">
+      <br><br>
+      <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+        <div class="form-group">
+          <label style="padding-left: 20%;font-size: 16px;">Mostrar Etapas Finalizadas</label>
+          <input type="checkbox" style="width: 16px;height: 16px;margin-left: 15px;" id="etapa_finalizada" name="etapa_finalizada">
+        </div>
+      </div>
+    </div>
+    <div class="row">
       <div class="col-xs-12">
         <h4 class="box-title" style="margin-bottom: 20px; margin-top: 0px;">Producción de Lotes</h4>
         <table id="etapas" class="table table-bordered table-hover">
@@ -339,7 +348,7 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
   var ul = document.getElementById('nuevo');
   ul.onclick = function(event) {
     target = JSON.parse(event.target.getAttribute('data-json'));
-    linkTo(`<?php echo base_url(PRD) ?>general/etapa/nuevo?op=${target.id}`);
+    linkTo(`<?php echo base_url(PRD) ?>${target.link}`);
   }
 
   //carga modal asignación de responsable/usuario/operario
@@ -521,4 +530,13 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
             }
         });
   }
+
+  $('#etapa_finalizada').on( 'click', function () {
+    estado = $('#etapa_finalizada').is(':checked');
+    if(estado){
+      $('#etapas').DataTable().columns(9).search('Finalizado').draw();
+    }else{
+      $('#etapas').DataTable().columns().search('').draw();
+    }
+  });
 </script>

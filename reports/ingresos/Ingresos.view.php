@@ -14,6 +14,10 @@ use \koolreport\widgets\google\ColumnChart;
     padding-top: 4%;
     margin-top: -20%;
   }
+  table.dataTable tbody td {
+    word-break: break-word;
+    vertical-align: top;
+}
 </style>
 
 <body>
@@ -83,32 +87,27 @@ use \koolreport\widgets\google\ColumnChart;
                   <div class="form-group col-xs-12 col-sm-3 col-md-3 col-lg-3">
                     <label>Proveedor</label>
                     <select class="form-control" id="prov_id" name="prov_id">
-                      <!-- <?php
-                            echo "<option selected disabled>Seleccione proveedor</option>"
-                            ?> -->
                     </select>
                   </div>
                   <div class="form-group col-xs-12 col-sm-3 col-md-3 col-lg-3">
                     <label>Transporte</label>
                     <select class="form-control" id="tran_id" name="tran_id">
-                      <!-- <?php
-                            echo "<option selected disabled>Seleccione transporte</option>"
-                            ?> -->
                     </select>
                   </div>
                   <div class="form-group col-xs-12 col-sm-3 col-md-3 col-lg-3">
                     <label>Producto</label>
                     <select class="form-control" id="arti_id" name="arti_id">
-                      <!-- <?php
-                            echo "<option selected disabled>Seleccione producto</option>"
-                            ?> -->
+                    </select>
+                  </div>
+                  <div class="form-group col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                    <label>Unidad de Medida</label>
+                    <select class="form-control" id="u_medida" name="u_medida">
                     </select>
                   </div>
                   <!-- </div> -->
                 </div>
               </div>
             </form>
-            <!-- <br> -->
             <hr>
             <!--_________________TABLA_________________-->
             <div class="box-body">
@@ -126,6 +125,9 @@ use \koolreport\widgets\google\ColumnChart;
                   // ), // Para desactivar encabezado reemplazar "headers" por "showHeader"=>false
                   // "showHeader" => false,
                   "columns" => array(
+                    "id" => array(
+                      "label" => "ID"
+                    ),
                     "boleta" => array(
                       "label" => "Nº bol."
                     ),
@@ -147,8 +149,21 @@ use \koolreport\widgets\google\ColumnChart;
                     "descripcion" => array(
                       "label" => "Producto"
                     ),
+                    "unidad_medida" => array(
+                      "label" => "U. Medida"
+                    ),
                     "cantidad" => array(
                       "label" => "Cantidad"
+                    ),
+                    array(
+                      "label" => "Descarga",
+                      "value" => function($row) {
+                        $aux = $row["deposito"] . " | " . $row['recipiente'];
+                        return $aux;
+                      }
+                    ),
+                    "codigo" => array(
+                      "label" => "Lote"
                     ),
                     "estado" => array(
                       "label" => "Estado"
@@ -156,7 +171,7 @@ use \koolreport\widgets\google\ColumnChart;
                   ),
                   "cssClass" => array(
                     // "table" => "table-bordered table-striped table-hover dataTable",
-                    "table" => "table-scroll table-responsive dataTables_wrapper form-inline dt-bootstrap dataTable table table-bordered table-striped table-hover display",
+                    "table" => "table dataTable dt-responsive table-striped table-bordered",
                     "th" => "sorting"
                     // "tr" => "cssItem"
                     // "tf" => "cssFooter"
@@ -166,59 +181,14 @@ use \koolreport\widgets\google\ColumnChart;
               </div>
             </div>
             <!-- _________________FIN TABLA_________________-->
-            <!-- <div class="col-md-12">
-              <br>
-              <div class="box box-primary">
-              </div>
-            </div> -->
             <!--_________________ CHARTS_________________-->
-            <!-- <div class="row">
-              <div class="col-md-12"> -->
-            <!--_________________ CHARTS 1_________________-->
-            <!-- <div class="col-md-6">
-              <div class="box-header with-border">
-                <h3 class="box-title center">
-                  <i class="fa fa-pie-chart"></i>
-                  Cantidad de ingresos
-                </h3>
-              </div> -->
-            <!--_________________ BODY CHART 1_________________-->
-            <!-- <div class="box-body">
-              <div style="margin-bottom:50px;">
-                <?php
-                ColumnChart::create(array(
-                  "title" => "Proveedores",
-                  "dataStore" => $this->dataStore('data_ingresos_clumnChart'),
-                  "columns" => array(
-                    "nombre" => array(
-                      "label" => "Proveedor"
-                    ),
-                    "neto" => array(
-                      "type" => "number",
-                      "label" => "Neto"
-                    )
-                  ),
-                  "colorScheme" => array(
-                    "#2f4454",
-                    "#2e1518",
-                    "#da7b93",
-                    "#376e6f",
-                    "#1c3334"
-                  )
-                ));
-                ?>
-              </div>
-            </div>
-          </div> -->
-            <!-- </div>
-        </div> -->
             <!--_________________ FIN CHARTS_________________-->
-          </div>
+          </div> <!-- FIN .box box-primary -->
           <!--_________________ FIN BODY REPORTE ____________________________-->
-        </div>
-      </div>
-    </div>
-  </div>
+        </div> <!-- FIN .box box-solid -->
+      </div><!-- FIN .col-xs-12 col-sm-12 col-md-12 col-lg-12 -->
+    </div><!-- FIN .row -->
+  </div> <!-- FIN #reportContent -->
   <script>
     filtroIngresos();
     cantidadIngresos();
@@ -237,7 +207,7 @@ use \koolreport\widgets\google\ColumnChart;
           //Botón para Excel
           extend: 'excel',
           exportOptions: {
-          columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+          columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
           },
           footer: true,
           title: 'Reporte Ingresos',
@@ -249,7 +219,7 @@ use \koolreport\widgets\google\ColumnChart;
         {
           extend: 'pdf',
           exportOptions: {
-              columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+              columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
           },
           footer: true,
           title: 'Reporte Ingresos',
@@ -259,7 +229,7 @@ use \koolreport\widgets\google\ColumnChart;
         {
           extend: 'copy',
           exportOptions: {
-              columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+              columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
           },
           footer: true,
           title: 'Reporte Ingresos',
@@ -269,7 +239,7 @@ use \koolreport\widgets\google\ColumnChart;
         {
           extend: 'print',
           exportOptions: {
-              columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+              columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
           },
           footer: true,
           title: 'Reporte Ingresos',
@@ -353,7 +323,7 @@ use \koolreport\widgets\google\ColumnChart;
         url: "<?php echo base_url(PRD) ?>Reportes/filtroIngresos",
         success: function(rsp) {
           var html_trans = '<option selected disabled>Seleccione transportista</option>';
-          // debugger;
+          
           if (_isset(rsp.transportista)) {
             rsp.transportista.forEach(element => {
               html_trans += "<option value=" + element.cuit + ">" + element.razon_social + "</option>";
@@ -362,7 +332,7 @@ use \koolreport\widgets\google\ColumnChart;
           $('#tran_id').html(html_trans);
 
           var html_prov = '<option selected disabled>Seleccione proveedor</option>';
-          // debugger;
+          
           if (_isset(rsp.proveedores)) {
             rsp.proveedores.forEach(element => {
               html_prov += "<option value=" + element.id + ">" + element.titulo + "</option>";
@@ -371,13 +341,22 @@ use \koolreport\widgets\google\ColumnChart;
           $('#prov_id').html(html_prov);
 
           var html_prod = '<option selected disabled>Seleccione producto</option>';
-          // debugger;
+          
           if (_isset(rsp.productos)) {
             rsp.productos.forEach(element => {
               html_prod += "<option value=" + element.id + ">" + element.nombre + "</option>";
             });
           }
           $('#arti_id').html(html_prod);
+
+          var html_medidas = '<option selected disabled>Seleccione medida</option>';
+
+          if (_isset(rsp.u_medidas)) {
+            rsp.u_medidas.forEach(element => {
+              html_medidas += "<option value=" + element.valor + ">" + element.descripcion + "</option>";
+            });
+          }
+          $('#u_medida').html(html_medidas);
         },
         error: function(rsp) {
           alert('Error tremendo');
@@ -398,7 +377,7 @@ use \koolreport\widgets\google\ColumnChart;
       var count = 0;
       $('.dataTable tbody').children('tr').each(function() {
         count++;
-        var estado = $(this).find('td:eq(8)').text();
+        var estado = $(this).find('td:eq(11)').text();
         var color = '';
         switch (estado.trim()) {
           case 'CARGADO':
@@ -419,7 +398,7 @@ use \koolreport\widgets\google\ColumnChart;
             color = '';
             break;
         }
-        $(this).find('td:eq(8)').html(bolita(estado, color));
+        $(this).find('td:eq(11)').html(bolita(estado, color));
       })
       $('#cant_ingresos').text(count);
     }

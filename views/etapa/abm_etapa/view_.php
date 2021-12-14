@@ -301,15 +301,19 @@
                   <!--_____________ Artículo _____________-->
                   <div class="form-group">
                       <label for="articulo_id" class="col-sm-4 control-label">Artículo:</label>
-                      <div class="col-sm-12 col-md-8 col-lg-8">
-                        <select style="width: 60%" class="form-control s2MdlAgregar select2-hidden-accesible habilitar requerido" name="arti_id" id="articulo_id">
-                          <option value="" disabled selected>-Seleccione opción-</option>	
+                      <div class="col-sm-12 col-md-8 col-lg-8 ba">
+                        <select style="width: 60%" class="form-control select2-hidden-accesible habilitar requerido" name="arti_id" id="articulo_id">
+                          <option value="" data-foo='' disabled selected>-Seleccione opción-</option>	
                           <?php
                             foreach ($listarArticulos as $articulo) {
-                              echo '<option  value="'.$articulo->arti_id.'">'.$articulo->descripcion.' - Stock: '.$articulo->stock.'</option>';
+                              echo "<option value='$articulo->arti_id' data-json='". json_encode($articulo) . "' data-foo='<small><cite>$articulo->descripcion</cite></small>  <label>♦ </label>   <small><cite>$articulo->stock</cite></small>  <label>♦ </label>' >$articulo->barcode</option>";
                             }
-                          ?>
+                            ?>
                         </select>
+                        <?php 
+                          echo "<label id='detalle' class='select-detalle' class='text-blue'></label>";
+                          echo "<script>$('#articulo_id').select2({matcher: matchCustom,templateResult: formatCustom, dropdownParent: $('#modalAgregarArticulo')}).on('change', function() { selectEvent(this);})</script>";
+                        ?>
                       </div>
                     </div>
                   <!--__________________________-->   

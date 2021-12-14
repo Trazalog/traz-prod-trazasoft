@@ -52,8 +52,14 @@ class Camion extends CI_Controller
         $this->load->view('camion/salida_camion', $data);
     }
 
+    /**
+		* Trae listado de camiones ingresados por establecimiento
+		* @param establecimiento
+		* @return array datos camiones
+    */
     public function listarPorEstablecimiento()
     {
+        log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT | Camion | listarPorEstablecimiento()");
         $establecimiento = $this->input->post('establecimiento');
         $res = $this->Camiones->listarPorEstablecimiento($establecimiento);
         echo json_encode($res['data']);
@@ -85,6 +91,8 @@ class Camion extends CI_Controller
 		*/	
     public function finalizarCarga()
     {
+        log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT | Camion | finalizarCarga()");
+
         $lotes = json_decode($this->input->post('lotes'));
         $rsp = $this->Camiones->guardarCarga($lotes);
         echo json_encode($rsp);
@@ -123,9 +131,14 @@ class Camion extends CI_Controller
         $this->load->view('camion/entrada_camion', $data);
     }
 
-    #FLEIVA
+    /**
+		* Recibe los datos del camion para guardarlos en los movimientos_transportes
+		* @param array datos camion
+		* @return array con respuesta del servicio
+    */	
     public function setEntrada()
     {
+        log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT | Camion | setEntrada()");
         $this->load->model('general/Entradas');
 
         $data = $this->input->post();
@@ -174,6 +187,7 @@ class Camion extends CI_Controller
 
     public function guardarLoteSistema()
     {
+        log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT | Camion | guardarLoteSistema()");
         $frmCamion = $this->input->post('frmCamion');
         $frmDescarga = $this->input->post('array');
 

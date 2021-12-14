@@ -20,7 +20,7 @@ if($etapa->estado == "FINALIZADO"){
     <input class="hidden" type="text" id="batch_id" value="<?php echo $etapa->id ?>">
     <div class="box box-primary">
         <div class="box-header with-border">
-            <h3 class="box-title">Fraccionamiento</h3>
+        <h3 class="box-title"><?php echo $etapa->titulo;?></h3>
         </div>
         <div class="box-body">
             <div class="row">

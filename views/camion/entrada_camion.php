@@ -118,7 +118,7 @@
                 </div>
                 <div id="patenteEntrada" class="col-md-2 col-xs-12">
                     <div class="input-group">
-                        <input type="text" class="form-control" id="patEntrada" name="patente" onchange="getEstadoEntradaCamion()" required>
+                        <input type="text" class="form-control" id="patEntrada" name="patente" required>
                     </div>
                 </div>
                 <div class="col-md-1 col-xs-12"><label class="form-label">Acoplado:</label></div>
@@ -407,7 +407,7 @@ function addCamion(msj = true) {
         success: function(rsp) {
             if (rsp.status) {
                 if ($('#bloque_descarga:visible').length == 0) {
-                    $('#frm-camion')[0].reset();
+                    // $('#frm-camion')[0].reset();
                     $('#frm-info')[0].reset();
                 }
                 if (msj) Swal.fire('Correcto','Datos guardados con éxito','success');
@@ -565,7 +565,9 @@ function cargacamion() {
     document.getElementById('cargacamion').style.borderColor = "blue";
     document.getElementById('descargacamion').style.borderColor = "white";
     document.getElementById('accioncamion').value = "carga";
+    $('#patente').attr('disabled','disabled');
     $('#patenteRecepcion').hide();
+    $('#patEntrada').attr('disabled',false);
     $('#patenteEntrada').show();
     //document.getElementById('boxproductos').hidden = true;
 
@@ -586,7 +588,9 @@ function descargacamion() {
     // document.getElementById('boxproductos').hidden = false;
     $('#add-camion').hide();
     //$('.btn-cargar').show();
+    $('#patente').attr('disabled',false);
     $('#patenteRecepcion').show();
+    $('#patEntrada').attr('disabled','disabled');
     $('#patenteEntrada').hide();
     $('.tag-descarga').show();
 }

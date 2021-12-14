@@ -169,7 +169,7 @@ function Actualiza(establecimiento) {
             document.getElementById('camiones').innerHTML = html;
             document.getElementById('camiones').disabled = false;
             document.getElementById('inputlotes').disabled = false;
-            document.getElementById('btnlotes').disabled = false;
+            // document.getElementById('btnlotes').disabled = false;
         },error:function(){
             document.getElementById('camiones').innerHTML = "";
         },

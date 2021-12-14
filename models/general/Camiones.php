@@ -31,8 +31,8 @@ class Camiones extends CI_Model
 
     /**
     * Guarda la carga de camion(pantalla carga camion)
-    * @param 
-    * @return 
+    * @param $data lotes cargados en pantalla
+    * @return array respuesta del service
     */
     public function guardarCarga($data)
     {
@@ -50,7 +50,7 @@ class Camiones extends CI_Model
 
             #CREAR NUEVO RECIPIENTE
             $rsp = $this->Recipientes->crear($o);
-            log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | CAMIONES | guardarCarga() | #NEW RECIPIENTE: ' . json_encode($rsp));
+            log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | CAMIONES | guardarCarga() | #NEW RECIPIENTE ID: >> reci_id -> ' . json_encode($rsp));
             if (!$rsp['status']) {
                 break;
             }
@@ -73,7 +73,11 @@ class Camiones extends CI_Model
 
         return $rsp;
     }
-
+    /**
+        * Actualiza el estado en la tabla de movimientos_transportes
+        * @param $data movimientos
+        * @return array respuesta del service
+    */
     public function actualizarEstado($data)
     {
         log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | CAMIONES | actualizarEstado() | DATA: ' . json_encode($data));
@@ -185,16 +189,19 @@ class Camiones extends CI_Model
         return wso2($url);
     }
 
+    /**
+		* Esta función hara automáticamente la ENTRADA CAMIÓN y la CARGA CAMIÓN
+		* @param array con datos de salida
+		* @return array con respuesta de servicio
+    */
     public function guardarLoteSistema($frmCamion, $frmDescarga)
     {
-        #Esta función hara automáticamente la ENTRADA CAMIÓN y la CARGA CAMIÓN
-
         #Entrada Camion
         $this->load->model('general/Entradas');
         $frmCamion['bruto'] = "0";
         $frmCamion['tara'] = "0";
         $frmCamion['neto'] = "0";
-        $frmCamion['establecimiento'] = $frmDescarga['loteSistema'][0]['esta_id'];
+        $frmCamion['establecimiento'] = $frmDescarga[0]['loteSistema']['esta_id'];
         $frmCamion['estado'] = 'EN CURSO';
         $rsp = $this->Entradas->guardar($frmCamion);
         if (!$rsp['status']) {
@@ -204,12 +211,12 @@ class Camiones extends CI_Model
 
         #Obtener motr_id
         $rsp = $this->obtenerInfo($frmCamion['patente'], 'EN CURSO');
-        if (!$rsp['status']) {
+        if (!isset($rsp->motr_id)) {
             $rsp['msj'] = 'Error al Obtener MOTR_ID';
             return $rsp;
         }
 
-        $motr_id = $rsp['data'][0]->motr_id;
+        $motr_id = $rsp->motr_id;
 
         #Carga Camion
         $lotes = [];
