@@ -86,7 +86,7 @@ class Camiones extends CI_Model
         $url = REST_PRD . "/camion/estado_batch_req";
         $rsp = $this->rest->callApi('PUT', $url, $aux);
 
-        log_message('DEBUG', '#Camiones/actualizarEstado | RSP: ' . json_encode($rsp));
+        log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | CAMIONES | actualizarEstado() | RSP: ' . json_encode($rsp));
 
         return $rsp;
     }
@@ -199,13 +199,23 @@ class Camiones extends CI_Model
         log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | CAMIONES | guardarCargaCamionExterno() | #frmCamion: ' . json_encode($frmCamion));
         log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | CAMIONES | guardarCargaCamionExterno() | #frmDescarga: ' . json_encode($frmDescarga));
 
+        #Obtener motr_id
+        $this->load->model('general/Entradas');
+        $rsp = $this->obtenerInfo($frmCamion['patente'], 'EN CURSO');
+        if(!isset($rsp->motr_id)){
+            $rsp['msj'] = 'Error al obtener MOTR_ID';
+            return $rsp;
+        }
+
+        $motr_id = $rsp->motr_id;
+
         #Carga Camión
         $lotes = [];
         foreach ($frmDescarga as $o) {
             $aux = new StdClass();
 
             $aux->patente = $frmCamion['patente'];
-            $aux->motr_id = $frmCamion['motr_id'];
+            $aux->motr_id = $motr_id;
             
             $aux->lote_id_origen = $o['origen']['lote_id'];
             $aux->lote_id_destino = $o['destino']['lote_id'];
@@ -216,11 +226,11 @@ class Camiones extends CI_Model
             $aux->cantidad_origen = $o['origen']['cantidad'];
             $aux->cantidad_destino = $o['destino']['cantidad'];
             $aux->num_orden_prod = !empty($o['origen']['orden_prod']) ? $o['origen']['orden_prod'] : '';
-            $aux->reci_id_origen = $o['origen']['reci_id'];
+            $aux->reci_id_destino = $o['destino']['reci_id'];
             $aux->etap_id = ETAPA_TRANSPORTE;
             $aux->usuario_app = userNick();
             $aux->empre_id = empresa();
-            $aux->forzar_agregar = true;
+            $aux->forzar_agregar = $o['destino']['unificar'];
             $aux->fec_vencimiento = FEC_VEN;
 
             $lotes[] = $aux;
@@ -232,16 +242,11 @@ class Camiones extends CI_Model
             $rsp['msj'] = 'Error al guardar la CARGA del listado de recepciones del camión';
             return $rsp;
         }
-        #Descarga Camión
-        // $rsp = $this->guardarDescarga($frmDescarga);
-        // if (!$rsp['status']) {
-        //     $rsp['msj'] = 'Error al guardar la DESCARGA del listado de recepciones del camión';
-        //     return $rsp;
-        // }
-        #Cambio Estado Camión
+
+        #Cambio Estado Camión a DESCARGADO
         $aux1 = array(array(
             'motr_id' => $motr_id,
-            'estado' => 'FINALIZADO',
+            'estado' => 'DESCARGADO',
         ));
 
         $rsp = $this->actualizarEstado($aux1);
@@ -274,27 +279,30 @@ class Camiones extends CI_Model
             log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | CAMIONES | guardarCargaDescargaExterna() | #NEW RECIPIENTE ID: >> reci_id -> ' . json_encode($rsp));
 
             if (!$rsp['status']) {
+                $rsp['msj'] = "Error al crear recipientes de la carga del camión";
                 break;
             }
 
             $newReci = $rsp['data'];
-
             $o->reci_id = $newReci;
-            $o->prov_id = PROVEEDOR_INTERNO;
 
             #Creo el lote
-            $batch_id_nuevo = $this->Lotes->crearLote($lotes);
-            $o->batch_id = $batch_id_nuevo;
+            $rsp = $this->Lotes->crearLote($o);
+            if (!$rsp['status']) {
+                $rsp['msj'] = "Error al crear lotes de la carga del camión";
+                break;
+            }
+            $o->batch_id = $rsp['data'];
 
             $lotes[] = $o;
 
             $camiones[] = array('motr_id' => $o->motr_id, 'estado' => 'CARGADO');
 
-
         }
 
         $rsp = $this->guardarDescargaExterna($lotes);
 
+        #Acutalizo estado camión
         if ($rsp['status']) {
 
             $rsp = $this->actualizarEstado($camiones);
@@ -313,10 +321,11 @@ class Camiones extends CI_Model
                 "id" => $value->lote_id_destino,
                 "producto" => $value->arti_id_origen,
                 "prov_id" => $value->prov_id,
-                "batch_id" => $value->batch_id,
+                "batch_id_padre" => $value->batch_id,
+                "batch_id" => "0",
                 "cantidad" => $value->cantidad_destino,
                 "stock" => $value->cantidad_origen,
-                "reci_id" => $value->reci_id,
+                "reci_id" => $value->reci_id_destino,
                 "forzar_agregar" => $value->forzar_agregar
             );
         }

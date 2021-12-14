@@ -17,6 +17,7 @@
     <div class="box-body">
         <div class="row">
             <input type="hidden" id="accioncamion">
+            <input type="hidden" id="esExterno" name="esExterno" value="externo">
             <div class="col-md-6 col-xs-12">
                 <div id="cargacamion" onclick="cargacamion();">
                     <img src="<?php echo base_url('lib/icon/truck.png'); ?>" alt="Smiley face" height="42" width="42">
@@ -93,8 +94,6 @@
     </div>
     <div class="box-body" id="div_datos_camion">
         <form id="frm-camion">
-            <input type="hidden" id="esExterno" name="esExterno" value="">
-            <input type="hidden" id="motr_id" name="motr_id" value="">
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
@@ -358,6 +357,7 @@ function validarFormulario(msj) {
 }
 
 // Guarda Entrada de Camión
+//Guardar Datos de Camión parametro = FALSE es para NO mostrar el MSJ de Datos Guardados
 function addCamion(msj = true) {
     if (!validarFormulario(msj)) return;
     var frmCamion = new FormData($('#frm-camion')[0]);
@@ -377,10 +377,13 @@ function addCamion(msj = true) {
         success: function(rsp) {
             if (rsp.status) {
                 if ($('#bloque_descarga:visible').length == 0) {
-                    // $('#frm-camion')[0].reset();
+                    $('#frm-camion')[0].reset();
                     $('#frm-info')[0].reset();
                 }
-                if (msj) Swal.fire('Correcto','Datos guardados con éxito','success');
+                if ($("#esExterno").val() != 'externo') Swal.fire('Correcto','Datos guardados con éxito','success');
+
+                //Llamo al guardado de la descarga
+                guardarDescargaOrigen();
             } else {
                 if (rsp.msj) alert(rsp.msj)
                 else alert('Fallo al guardar datos del camión');

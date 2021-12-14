@@ -19,7 +19,7 @@
         </table>
         <hr>
         <button id="guardarDescarga" class="btn btn-primary btn-sm" style="float:right"
-            onclick="guardarEntradaNoCon();guardarDescargaOrigen();" disabled><i
+            onclick="guardarEntradaNoCon();addCamion();" disabled><i
                 class="fa fa-check"></i> Guardar Descarga</button>
 								<!-- <button id="guardarDescarga" class="btn btn-primary btn-sm" style="float:right"
             onclick="guardarEntradaNoCon()"><i
@@ -51,47 +51,40 @@ function agregarFila(data) {
 }
 
 function guardarDescargaOrigen() {
-    cargaCorrecta = true;
-
-    //Guardar Datos de Camión parametro = FALSE es para NO mostrar el MSJ de Datos Guardados
-    if ($('#lotes tr').length != 0 && $('#codigo').find('option').length == 0) // SI EL USUARIO REGISTRO LOTES  Y SI NO HAY LOTES CARGADOS EN EL CAMION EN TRANSITO
-    {
-        addCamion(false);
-    }
 
     var array = [];
     $('#lotes tr.lote').each(function() {
         array.push(JSON.parse(this.dataset.json));
     });
 
-    //Si es externo primero realizo la el guardado de la carga del camion
-    if($("#esExterno") == 'externo'){
-        cargaCorrecta = guardarCargaCamionExterno(array);
-    }
-
-    if (array.length == 0 || !cargaCorrecta) return;
-
-    $.ajax({
-        type: 'POST',
-        dataType: 'JSON',
-        url: '<?php echo base_url(PRD) ?>general/Camion/guardarDescarga',
-        data: {
-            array
-        },
-        success: function(rsp) {
-            if (rsp.status) {
-                console.log('Listado de Recepciones MP se realizó correctamente');
-                actualizarEstadoCamion($('#patente').val());
-                linkTo();
-            } else {
-                alert('Fallo al guardar el listado de Recepciones MP');
+    if (array.length == 0) return;
+    
+    //Si es externo utilizo otro método para el guardado
+    if($("#esExterno").val() == 'externo'){
+        guardarCargaCamionExterno(array);
+    }else{
+        $.ajax({
+            type: 'POST',
+            dataType: 'JSON',
+            url: '<?php echo base_url(PRD) ?>general/Camion/guardarDescarga',
+            data: {
+                array
+            },
+            success: function(rsp) {
+                if (rsp.status) {
+                    console.log('Listado de Recepciones MP se realizó correctamente');
+                    actualizarEstadoCamion($('#patente').val());
+                    linkTo();
+                } else {
+                    alert('Fallo al guardar el listado de Recepciones MP');
+                }
+            },
+            error: function(rsp) {
+                alert('Error: ' + rsp.msj);
+                console.log(rsp.msj);
             }
-        },
-        error: function(rsp) {
-            alert('Error: ' + rsp.msj);
-            console.log(rsp.msj);
-        }
-    });
+        });
+    }
 }
 //Realiza el guardado de la carga del camion cuando es externo (haria las veces de la pantalla carga camion)
 // esto quiere decir que no se realizo la carga de los lotes por sistema
@@ -100,7 +93,7 @@ function guardarCargaCamionExterno(cargaCamion) {
     //Definida en entrada_camion.php, trae el formulario de info y camion juntos agregandole estado = 'EN CURSO'
     var frmCamion = obtenerFormularioCamion();
 
-    if (cargaCamion.length != 0) return;
+    if (cargaCamion.length == 0) return;
 
     wo();
     $.ajax({
@@ -113,13 +106,10 @@ function guardarCargaCamionExterno(cargaCamion) {
         },
         success: function(rsp) {
             if (rsp.status) {
-                // actualizarEstadoCamion($('#patente').val());
-                // Swal.fire('Correcto','Datos guardados con éxito','success');
-                // linkTo();
-                return rsp.status:
+                hecho('Correcto','Se guardó la recepción con éxito');
+                linkTo();
             } else {
-                Swal.fire('Error','Error al guardar lotes cargados en la tabla','error');
-                return rsp.status;
+                error('Error','Error al guardar la recepción');
             }
             
         },

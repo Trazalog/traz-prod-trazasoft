@@ -197,7 +197,7 @@ class Camion extends CI_Controller
     {
         log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT | Camion | guardarCargaCamionExterno()");
         $frmCamion = $this->input->post('frmCamion');
-        $frmDescarga = $this->input->post('descarga');
+        $frmDescarga = $this->input->post('cargaCamion');
 
         $rsp = $this->Camiones->guardarCargaCamionExterno($frmCamion, $frmDescarga);
 
