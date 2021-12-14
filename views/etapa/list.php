@@ -348,7 +348,7 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
   var ul = document.getElementById('nuevo');
   ul.onclick = function(event) {
     target = JSON.parse(event.target.getAttribute('data-json'));
-    linkTo(`<?php echo base_url(PRD) ?>general/etapa/nuevo?op=${target.id}`);
+    linkTo(`<?php echo base_url(PRD) ?>${target.link}`);
   }
 
   //carga modal asignación de responsable/usuario/operario

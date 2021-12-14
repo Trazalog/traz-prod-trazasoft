@@ -26,11 +26,11 @@ class Etapa extends CI_Controller
         $temp = $this->Etapas->listarEtapas()->etapas->etapa;
         //reforma las url segun id
         foreach ($temp as $value) {
-            if ($value->id == 5) {
-                $urlComp = $value->link . 'fraccionar';
+            if ($value->tiet_id == 'prd_tipos_etapaFraccionamiento') {
+                $urlComp = 'general/Etapa/fraccionar?op=' . $value->id;;
                 $value->link = $urlComp;
             } else {
-                $urlComp = $value->link . 'nuevo?op=' . $value->id;
+                $urlComp = 'general/Etapa/nuevo?op=' . $value->id;
                 $value->link = $urlComp;
             }
         }
@@ -49,15 +49,10 @@ class Etapa extends CI_Controller
 
         $data['fecha'] = date('Y-m-d');
         $data['id'] = $this->input->get('op');
-        $data['etapa'] = $this->Etapas->nuevo($data['id'])->etapa; // listo llama a etapas/1
+        $data['etapa'] = $this->Etapas->nuevo($data['id'])->etapa;
         $data['idetapa'] = $data['etapa']->id;
         $data['accion'] = 'Nuevo';
         $data['op'] = $data['etapa']->titulo;
-
-        if ($data['op'] == 'Fraccionamiento') {
-            $this->fraccionar();
-            return;
-        }
 
         $this->load->model(ALM . 'Articulos');
         #$data['materias'] = $this->Articulos->obtenerXTipos(array('Proceso', 'Final', 'Materia Prima'));
@@ -334,7 +329,7 @@ class Etapa extends CI_Controller
         $data['establecimientos'] = $this->Establecimientos->listar()->establecimientos->establecimiento;
         $data['fecha'] = $data['etapa']->fecha;
 
-        if ($data['op'] == 'Fraccionamiento') {
+        if ($data['etapa']->tiet_id == 'prd_tipos_etapaFraccionamiento') {
             // trae lotes segun entrega de materiales de almacen.(81)
             $data['recipientes'] = $this->Recipientes->obtener('DEPOSITO', 'TODOS', $data['etapa']->esta_id)['data'];
             $data['lotesFracc'] = $this->Etapas->getLotesaFraccionar($id)->lotes->lote;
@@ -590,11 +585,9 @@ class Etapa extends CI_Controller
         $data['articulos'] = $this->Articulos->getList();
 
         $data['accion'] = 'Nuevo';
-        $data['etapa'] = $this->Etapas->nuevo(5)->etapa; // igual que en contrato pedido
+        $data['id'] = $this->input->get('op');
+        $data['etapa'] = $this->Etapas->nuevo($data['id'])->etapa;
         $data['fecha'] = date('Y-m-d');
-        //TODO: VER SI TRAER PRODUCTO POR ID BATCH CON ESTA FUNCION
-        //$data['producto'] = $this->Etapas->getRecursosOrigen($id, PRODUCTO)->recursos->recurso;
-        //    $data['lang'] = lang_get('spanish',5);
         $data['establecimientos'] = $this->Establecimientos->listarTodo()->establecimientos->establecimiento;
         $data['empaques'] = $this->Recipientes->listarEmpaques()->empaques->empaque;
         $data['articulos_fraccionar'] = $this->Articulos->obtenerXTipo('Final')['data'];
