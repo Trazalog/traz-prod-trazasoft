@@ -126,10 +126,10 @@ use \koolreport\widgets\google\ColumnChart;
                   // "showHeader" => false,
                   "columns" => array(
                     "id" => array(
-                      "label" => "ID"
+                      "label" => "Nro"
                     ),
                     "boleta" => array(
-                      "label" => "Nº bol."
+                      "label" => "Comprobante"
                     ),
                     "fecha" => array(
                       "label" => "Fecha"
