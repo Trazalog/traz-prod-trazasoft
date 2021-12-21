@@ -35,10 +35,10 @@
                 <input type="text" name="accion" id="accion" class="hidden">
                 <div class="row" style="margin-top: 40px">
                         <div class="col-md-1 col-xs-12">
-                                <label class="form-label">Boleta<?php hreq() ?>:</label>
+                                <label class="form-label">Comprobante<?php hreq() ?>:</label>
                         </div>
                         <div class="col-md-6 col-xs-12">
-                                <input id="boleta" type="text" class="form-control" placeholder="Inserte Numero de Boleta" name="boleta">
+                                <input id="boleta" type="text" class="form-control" placeholder="Ingrese comprobante" name="boleta">
                         </div>
                         <div class="col-md-5">
                         </div>
