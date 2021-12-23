@@ -218,11 +218,16 @@ class Etapas extends CI_Model
         $array = file_get_contents($url, false, $param);
         return json_decode($array);
     }
-    // Informe de Etapa (modal_finaizar)
+    /**
+	* Crea los lotes para finalizar la etapa
+	* @param array datos de los lotes cargados
+	* @return bool true o false segun resultado de servicio de guardado
+	*/
     public function finalizarEtapa($arrayDatos)
     {
-        log_message('DEBUG', 'Etapas/finalizarEtapa(datos)-> ' . json_encode($arrayDatos));
-        $resource = '/_post_lote_noconsumibles_list_batch_req';
+        log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapas | finalizarEtapa(datos)-> ' . json_encode($arrayDatos));
+        
+        $resource = '/_post_lote_list_batch_req';
         $url = REST_PRD_LOTE . $resource;
         $rsp = $this->rest->callAPI("POST", $url, $arrayDatos);
         if (!$rsp['status']) {

@@ -541,7 +541,7 @@ class Etapa extends CI_Controller
     // Informe de etata fracccionamiento.
     public function finalizaFraccionar()
     {
-
+        log_message('DEBUG',"#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapa | finalizaFraccionar()");
         $productos = $this->input->post('productos');
         $num_orden_prod = $this->input->post('num_orden_prod');
         $batch_id_padre = $this->input->post('batch_id');
