@@ -124,8 +124,8 @@ use \koolreport\widgets\koolphp\Card;
                     "etapa" => array(
                       "label" => "Etapa"
                     ),
-                    "responsable" => array(
-                      "label" => "Responsable"
+                    "equipo" => array(
+                      "label" => "Operario/Equipo"
                     )
                   ),
                   "cssClass" => array(
