@@ -422,7 +422,7 @@ class Etapas extends CI_Model
     public function guardarEtapa($etapa)
     {
         $post['_post_etapas'] = $etapa;
-        log_message('DEBUG','#TRAZA|TRAZA-COMP-PRD|ETAPAS|GUARDAR  $post: >> '.json_encode($post));
+        log_message('DEBUG','#TRAZA | TRAZ-PROD-TRAZASOFT | ETAPAS | guardarEtapa()  $post: >> '.json_encode($post));
         $aux = $this->rest->callAPI("POST",REST_PRD_ETAPAS."/etapasProductivas/insertar", $post);
         $aux = json_decode($aux["data"]);
         return $aux->respuesta->etap_id;
@@ -431,7 +431,7 @@ class Etapas extends CI_Model
     public function editarEtapa($etapa)
     {
         $post['_put_etapas'] = $etapa;
-        log_message('DEBUG','#TRAZA|TRAZA-COMP-PRD|ETAPAS   |EDITAR $post: >> '.json_encode($post));
+        log_message('DEBUG','#TRAZA | TRAZ-PROD-TRAZASOFT | ETAPAS   | editarEtapa() $post: >> '.json_encode($post));
         $aux = $this->rest->callAPI("PUT",REST_PRD_ETAPAS."/etapasProductivas/actualizar", $post);
         $aux =json_decode($aux["status"]);
         return $aux;
@@ -440,7 +440,7 @@ class Etapas extends CI_Model
     public function borrarEtapa($etap_id)
     {
         $post['_put_etapas_borrar'] = array("etap_id"=> $etap_id);
-        log_message('DEBUG','#TRAZA|TRAZ-COMP-PRD|ETAPAS $post: >> '.json_encode($post));
+        log_message('DEBUG','#TRAZA | TRAZ-PROD-TRAZASOFT | ETAPAS | borrarEtapa() $post: >> '.json_encode($post));
         $aux = $this->rest->callAPI("PUT",REST_PRD_ETAPAS."/etapasProductivas/borrar", $post);
         $aux =json_decode($aux["status"]);
         return $aux;
@@ -505,7 +505,7 @@ class Etapas extends CI_Model
     public function guardarArticulo($articulo)
     {
         $post['_post_articulo'] = array("arti_id" => $articulo['arti_id'], "etap_id" => $articulo['etap_id']);
-        log_message('DEBUG','#TRAZA|TRAZA-COMP-PRD|ARTICULOS POR ETAPA|GUARDAR $post: >> '.json_encode($articulo));
+        log_message('DEBUG','#TRAZA| TRAZ-PROD-TRAZASOFT |ARTICULOS POR ETAPA|GUARDAR $post: >> '.json_encode($articulo));
         switch ($articulo['tipo_id']) {
             case '1':
                 $resource = '/articuloEntrada';
@@ -521,6 +521,23 @@ class Etapas extends CI_Model
         $aux = $this->rest->callApi('POST', $url, $post);
         $aux = json_decode($aux["status"]);
         return $aux;
+    }
+
+    /**
+	* Consulta a un DS si el valor agregado ya esta creado para el mismo proceso y empresa
+	* @param string nombre de etapa; int proc_id ; int empr_id
+	* @return array respuesta del servicio
+	*/
+    public function validarEtapa($etapa){
+        
+        $url = REST_PRD_ETAPAS."/validar/etapa/". $etapa['nombre']. "/proceso/" . $etapa['proc_id'] . "/empresa/".empresa();
+
+        $aux = $this->rest->callAPI("GET",$url);
+        $resp = json_decode($aux['data']);
+
+        log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapas | validarEtapa() >> resp ".json_encode($resp));
+
+        return $resp->resultado;
     }
     
 }

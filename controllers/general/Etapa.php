@@ -699,6 +699,7 @@ class Etapa extends CI_Controller
 
     public function guardarEtapa()
 	{
+        log_message('INFO','#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapa | guardarEtapa() ');
 		$etapa = $this->input->post('datos');
 		$etapa['empr_id'] = empresa();
         if (!$etapa['form_id']) {
@@ -765,6 +766,18 @@ class Etapa extends CI_Controller
 	{
         $data = $this->input->post('datos');
 		$resp = $this->Etapas->guardarArticulo($data);
+        echo json_encode($resp);
+	}
+
+    public function validarEtapa()
+	{
+        log_message('INFO','#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapa | validarEtapa() ');
+
+		$etapa = $this->input->post('datos');
+		$etapa['empr_id'] = empresa();
+
+		$resp = $this->Etapas->validarEtapa($etapa);
+        
         echo json_encode($resp);
 	}
 
