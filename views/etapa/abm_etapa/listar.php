@@ -88,28 +88,39 @@
         url: 'index.php/<?php echo PRD ?>general/Etapa/listarArticulosYTipos?etap_id='+etap_id,
         success: function(result) {
           if (result) {
-            var tabla = $('#modalarticulos table');    
-            $(tabla).find('tbody').html('');
-            result.forEach(e => {
-                if (e.es_caja == true){
-                  e.es_caja = "SI";
-                }else{
-                  e.es_caja = "NO";
-                };
-                $(tabla).append(
-                  "<tr data-json= ' "+ JSON.stringify(e) +" '>" +
-                    "<td><button type='button' title='Eliminar Artículo' class='btn btn-primary btn-circle btnEliminar' onclick='eliminarArticulo(this)' id='btnBorrar'><span class='glyphicon glyphicon-trash' aria-hidden='true' ></span></button>" +
-                    "<td>" + e.barcode + "</td>" +
-                    "<td>" + e.descripcion + "</td>" +
-                    "<td>" + e.tipo + "</td>" +
-                    "<td>" + e.unidad_medida + "</td>" +
-                    "<td>" + e.es_caja + "</td>" +
-                    "<td class='text-center'>" + e.cantidad_caja + "</td>" +
-                  "</tr>"
-                );
-            });            
+            // var tabla = $('#modalarticulos table');
+            var tablaArticulos = $("#tabla_articulos").DataTable();
+            tablaArticulos.clear().draw();
+            $.each(result, function(index, value) {
+              // console.log(value);
+              // use data table row.add, then .draw for table refresh
+              tablaArticulos.row.add(["<button type='button' title='Eliminar Artículo' class='btn btn-primary btn-circle btnEliminar' onclick='eliminarArticulo("+ value.arti_id +")' id='btnBorrar'><span class='glyphicon glyphicon-trash' aria-hidden='true' ></span></button>", value.barcode, value.descripcion, value.tipo, value.unidad_medida, value.es_caja, value.cantidad_caja]).draw();
+            });
+
+
+
+            // $(tabla).find('tbody').html('');
+            // result.forEach(e => {
+            //     if (e.es_caja == true){
+            //       e.es_caja = "SI";
+            //     }else{
+            //       e.es_caja = "NO";
+            //     };
+            //     $(tabla).append(
+            //       "<tr data-json= ' "+ JSON.stringify(e) +" '>" +
+            //         "<td><button type='button' title='Eliminar Artículo' class='btn btn-primary btn-circle btnEliminar' onclick='eliminarArticulo(this)' id='btnBorrar'><span class='glyphicon glyphicon-trash' aria-hidden='true' ></span></button>" +
+            //         "<td>" + e.barcode + "</td>" +
+            //         "<td>" + e.descripcion + "</td>" +
+            //         "<td>" + e.tipo + "</td>" +
+            //         "<td>" + e.unidad_medida + "</td>" +
+            //         "<td>" + e.es_caja + "</td>" +
+            //         "<td class='text-center'>" + e.cantidad_caja + "</td>" +
+            //       "</tr>"
+            //     );
+            // });
           };
-          $('#modalarticulos').modal('show'); 
+          $('#modalarticulos').modal('show');
+          // tablaArticulos.draw();
         },
         error: function(result) {
             alert('Error');

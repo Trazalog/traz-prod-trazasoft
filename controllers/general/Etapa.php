@@ -334,7 +334,7 @@ class Etapa extends CI_Controller
             $data['recipientes'] = $this->Recipientes->obtener('DEPOSITO', 'TODOS', $data['etapa']->esta_id)['data'];
             $data['lotesFracc'] = $this->Etapas->getLotesaFraccionar($id)->lotes->lote;
             $data['ordenProd'] = $data['etapa']->orden;
-            $data['articulos_fraccionar'] = $this->Articulos->obtenerXTipo('Proceso')['data'];
+            $data['articulos_fraccionar'] = $this->Articulos->obtenerXTipo('En Proceso')['data'];
 
             $this->load->view('etapa/fraccionar/fraccionar', $data);
         } else {

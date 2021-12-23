@@ -355,7 +355,8 @@
   // carga tabla genaral de circuitos
   $("#cargar_tabla").load("<?php echo base_url(PRD); ?>/general/Etapa/listarEtapas");
   // Config Tabla
-  DataTable($('#tabla_articulos'));
+  // tablaArticulos = $("#tabla_articulos").DataTable();
+  // tablaArticulos.clear().draw();
 
   // muestra box de datos al dar click en boton agregar
   $("#botonAgregar").on("click", function() {
