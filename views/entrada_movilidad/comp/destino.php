@@ -181,16 +181,39 @@ function validarRecipiente(json) {
                 })
 
                 if (!ban) {
-                    alert('No se pueden mezclar distintos artículos y distintos lotes en un mismo recipiente');
+                    error('Error','No se pueden mezclar distintos artículos y distintos lotes en un mismo recipiente');
                     $('#unificar').val(false);
                     return;
                 }
+                const confirm = Swal.mixin({
+                    customClass: {
+                        confirmButton: 'btn btn-success',
+                        cancelButton: 'btn btn-danger'
+                    },
+                    buttonsStyling: false
+                    });
 
+                confirm.fire({
+                    title: 'Confirmación',
+                    text: "¿Desea mezclar los artículos en el recipiente?",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Confirmar',
+                    cancelButtonText: 'Cancelar',
+                    reverseButtons: true
+                }).then((result) => {
+                    
+                    if (result.value) {
+                        $('#unificar').val(result.value);
+                    } else if ( result.dismiss === Swal.DismissReason.cancel ) {
+                        $('#unificar').val(result.value);
+                    }
+                });
 
-                $('#unificar').val(confirm('¿Desea mezclar los Artículos en el Recipiente?'));
+                // $('#unificar').val(result.value);
 
             } else {
-                alert('Error al traer contenido del recipiente');
+                error('Error','Error al traer contenido del recipiente');
                 $('#unificar').val(false);
             }
         },

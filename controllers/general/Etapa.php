@@ -56,7 +56,7 @@ class Etapa extends CI_Controller
 
         $this->load->model(ALM . 'Articulos');
         #$data['materias'] = $this->Articulos->obtenerXTipos(array('Proceso', 'Final', 'Materia Prima'));
-        $data['productos'] = $this->Articulos->obtenerXTipos(array('Proceso', 'Producto'));
+        // $data['productos'] = $this->Articulos->obtenerXTipos(array('Proceso', 'Producto'));
 
         #FORMULARIO GENERICO
         $data['form_id'] = $data['etapa']->form_id;
@@ -303,17 +303,17 @@ class Etapa extends CI_Controller
         $data['tarea'] = $this->Etapas->validarPedidoMaterial($id);
 
         $this->load->model(ALM . 'Articulos');
-        $data['articulos'] = $this->Articulos->obtenerXTipos(array('Proceso', 'Final'));
+        #$data['articulos'] = $this->Articulos->obtenerXTipos(array('Proceso', 'Final'));
 
         $data['accion'] = 'Editar';
         $data['etapa'] = $this->Etapas->buscar($id)->etapa;
         $data['idetapa'] = $data['etapa']->id;
 
         #$data['materias'] = $this->Articulos->obtenerXTipos(array('Proceso', 'Final', 'Materia Prima'));
-        $data['productos'] = $this->Articulos->obtenerXTipos(array('Proceso', 'Producto'));
+        // $data['productos'] = $this->Articulos->obtenerXTipos(array('Proceso', 'Producto'));
 
         // trae tablita de materia prima Origen y producto
-        $data['matPrimas'] = $this->Etapas->getRecursosOrigen($id, MATERIA_PRIMA)->recursos->recurso;
+        // $data['matPrimas'] = $this->Etapas->getRecursosOrigen($id, MATERIA_PRIMA)->recursos->recurso;
 
         #Obtener Articulos por Etapa
         $data['productos_etapa'] = $this->Etapas->obtenerArticulos($data['etapa']->etap_id)['data'];
@@ -321,7 +321,7 @@ class Etapa extends CI_Controller
         $data['productos_salida_etapa'] = $this->Etapas->getSalidaEtapa($data['etapa']->etap_id)['data'];
         $data['productos_entrada_etapa'] = $this->Etapas->getEntradaEtapa($data['etapa']->etap_id)['data'];
 
-        $data['producto'] = $this->Etapas->getRecursosOrigen($id, PRODUCTO)->recursos->recurso;
+        #$data['producto'] = $this->Etapas->getRecursosOrigen($id, PRODUCTO)->recursos->recurso;
 
         $data['op'] = $data['etapa']->titulo;
         $data['lang'] = lang_get('spanish', 4);

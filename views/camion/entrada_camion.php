@@ -17,6 +17,7 @@
     <div class="box-body">
         <div class="row">
             <input type="hidden" id="accioncamion">
+            <input type="hidden" id="esExterno" name="esExterno" value="externo">
             <div class="col-md-6 col-xs-12">
                 <div id="cargacamion" onclick="cargacamion();">
                     <img src="<?php echo base_url('lib/icon/truck.png'); ?>" alt="Smiley face" height="42" width="42">
@@ -34,10 +35,10 @@
                 <input type="text" name="accion" id="accion" class="hidden">
                 <div class="row" style="margin-top: 40px">
                         <div class="col-md-1 col-xs-12">
-                                <label class="form-label">Boleta<?php hreq() ?>:</label>
+                                <label class="form-label">Comprobante<?php hreq() ?>:</label>
                         </div>
                         <div class="col-md-6 col-xs-12">
-                                <input id="boleta" type="text" class="form-control" placeholder="Inserte Numero de Boleta" name="boleta">
+                                <input id="boleta" type="text" class="form-control" placeholder="Ingrese comprobante" name="boleta">
                         </div>
                         <div class="col-md-5">
                         </div>
@@ -256,10 +257,11 @@ function obtenerLotesCamion(patente) {
         success: function(rsp) {
 
             if (!rsp.data) {
+                $("#esExterno").val('externo');
                 alert('No existen Lotes Asociados');
                 return;
             }
-
+            $("#esExterno").val('');
             $('#codigo').attr('disabled', false).next(".select2-container").show();
             $('#new_codigo').addClass('hidden').attr('disabled', true);
 
@@ -297,6 +299,7 @@ function obtenerInfoCamion(patente) {
             }else{
                 $('#frm-camion')[0].reset();
                 $("#patente").val(patente);
+                $("#esExterno").val('externo');
             }
         },
         error: function(rsp) {
@@ -316,40 +319,6 @@ function unificarLote() {
     var rese = $(recipienteSelect).val();
     $('.recipiente').each(function() {
         if (this.value == rese) this.dataset.unificar = true;
-    });
-}
-
-// NO SE LLAMA EN NINGUNA PARTE
-function guardarDecarga() {
-    console.log('Guardar Descarga');
-    var array = [];
-    var item = null;
-    $('.recipiente').each(function(e) {
-        item = JSON.parse($(this).closest('tr').attr('data-json'));
-        item.reci_id = this.value;
-        item.unificar = this.dataset.unificar;
-        array.push(item);
-    });
-    array = JSON.stringify(array);
-    wo();
-    $.ajax({
-        type: 'POST',
-        dataType: 'JSON',
-        url: '<?php echo base_url(PRD) ?>general/Camion/guardarDescarga',
-        data: {
-            array
-        },
-        success: function(rsp) {
-            alert('Descarga Guardada');
-            $("#lotes-camion").empty();
-        },
-        error: function(rsp) {
-            alert('Error al Guardar Descarga');
-            console.log(rsp.msj);
-        },
-        complete: function() {
-            wc();
-        }
     });
 }
 
@@ -388,6 +357,7 @@ function validarFormulario(msj) {
 }
 
 // Guarda Entrada de Camión
+//Guardar Datos de Camión parametro = FALSE es para NO mostrar el MSJ de Datos Guardados
 function addCamion(msj = true) {
     if (!validarFormulario(msj)) return;
     var frmCamion = new FormData($('#frm-camion')[0]);
@@ -407,10 +377,13 @@ function addCamion(msj = true) {
         success: function(rsp) {
             if (rsp.status) {
                 if ($('#bloque_descarga:visible').length == 0) {
-                    // $('#frm-camion')[0].reset();
+                    $('#frm-camion')[0].reset();
                     $('#frm-info')[0].reset();
                 }
-                if (msj) Swal.fire('Correcto','Datos guardados con éxito','success');
+                if ($("#esExterno").val() != 'externo') Swal.fire('Correcto','Datos guardados con éxito','success');
+
+                //Llamo al guardado de la descarga
+                guardarDescargaOrigen();
             } else {
                 if (rsp.msj) alert(rsp.msj)
                 else alert('Fallo al guardar datos del camión');
