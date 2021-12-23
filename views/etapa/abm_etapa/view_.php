@@ -423,28 +423,59 @@
       recurso = 'index.php/<?php echo PRD ?>general/Etapa/guardarEtapa';
     }
     wo();
-    $.ajax({
-      type: 'POST',
-      data:{ datos },
-      //dataType: 'JSON',
-      url: recurso,
-      success: function(result) {
-        $("#cargar_tabla").load("<?php echo base_url(PRD); ?>general/Etapa/listarEtapas");
-        wc();
-        $("#boxDatos").hide(500);
-        $("#formEtapas")[0].reset();
-        $("#botonAgregar").removeAttr("disabled");
-        if (operacion == "editar") {
-          alertify.success("Etapa Editada Exitosamente");
-        }else{
-          alertify.success("Etapa Agregada con Exito");
-        }
-      },
-      error: function(result){
-        wc();
-        alertify.error("Error agregando Etapa");
+    validarEtapa(datos).then((result) => {
+      if(!result){
+        $.ajax({
+          type: 'POST',
+          data:{ datos },
+          //dataType: 'JSON',
+          url: recurso,
+          success: function(result) {
+            $("#cargar_tabla").load("<?php echo base_url(PRD); ?>general/Etapa/listarEtapas");
+            wc();
+            $("#boxDatos").hide(500);
+            $("#formEtapas")[0].reset();
+            $("#botonAgregar").removeAttr("disabled");
+            if (operacion == "editar") {
+              alertify.success("Etapa editada exitosamente");
+            }else{
+              alertify.success("Etapa agregada con éxito");
+            }
+          },
+          error: function(result){
+            wc();
+            alertify.error("Error agregando Etapa");
+          }
+        });
+      }else{
+        error("Error","La etapa productiva ingresada ya se encuentra creada para este proceso!");
+      }
+    }).catch((err) => {
+      if(err){
+        console.log(err);
+        error("Error","Se produjo un error al validar el nombre de la Etapa");
       }
     });
+  }
+  async function validarEtapa(datos){
+    let validacion = new Promise((resolve, reject) => {
+      $.ajax({
+        type: 'POST',
+        data:{ datos },
+        dataType: 'JSON',
+        url: "<?php echo PRD ?>general/Etapa/validarEtapa",
+        success: function(rsp) {
+          resolve(rsp.existe);
+        },
+        error: function(rsp){
+          reject(rsp.existe);
+        },
+        complete: function(){
+          wc();
+        }
+      });
+    });
+    return await validacion;
   }
 
   function agregarArticulo() {
