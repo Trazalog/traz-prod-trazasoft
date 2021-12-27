@@ -56,16 +56,24 @@ class Etapas extends CI_Model
         $resp = json_decode($array['data']);
         return $resp;
     }
+    /**
+	* Busca lote en prd.lotes por batch_id
+	* @param integer batch_id
+	* @return array lote en caso de exito
+	*/
     public function buscar($id)
     {
-        if (!$id) {
-            log_message('DEBUG', 'Etapas/buscar #ERROR | BATCH_ID NULO');
+        if (empty($id)) {
+            log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapas | buscar() #ERROR | BATCH_ID NULO');
             return;
         }
+
         $resource = '/lote/';
         $url = REST_PRD_LOTE. $resource . $id;
         $array = $this->rest->callAPI("GET", $url);
         $resp = json_decode($array['data']);
+
+        log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapas | buscar() >> resp ' . json_encode($resp));
 
         return $resp;
     }
