@@ -77,11 +77,11 @@ class Etapa extends CI_Controller
     // guarda el Inicio de una nueva etapa mas orden pedido y lanza pedido almac
     public function guardar($nuevo = null)
     {
-        log_message('DEBUG', 'ETAPA >> guardar | INICIO');
+        log_message('DEBUG', '#TRAZA | TRAZ-PROD-TRAZASOFT | ETAPA | guardar() | INICIO');
 
         $post_data = $this->input->post('data');
 
-        log_message('DEBUG', 'C#ETAPA > guardar | #DATA-POST: ' . json_encode($post_data));
+        log_message('DEBUG', '#TRAZA | TRAZ-PROD-TRAZASOFT | ETAPA | guardar() | #DATA-POST: ' . json_encode($post_data));
         //////////// PARA CREAR EL NUEVO BATCH ///////////////////
 
         $datosCab['arti_id'] = (string) $post_data['idprod'];
@@ -119,7 +119,7 @@ class Etapa extends CI_Controller
 
         $this->Etapas->asociarFormulario($batch_id, $post_data['info_id']);
 
-        log_message('DEBUG', 'ETAPA >> guardar | FIN');
+        log_message('DEBUG', '#TRAZA | TRAZ-PROD-TRAZASOFT | ETAPA | guardar() | FIN');
 
         $res = $this->guardarParte2($post_data, $datosCab, $batch_id);
         if (!$res) {
@@ -133,7 +133,7 @@ class Etapa extends CI_Controller
 
     public function guardarParte2($post_data, $datosCab, $batch_id)
     {
-        log_message('DEBUG', 'ETAPA >> guardarParte2 | INICIO');
+        log_message('DEBUG', '#TRAZA | TRAZ-PROD-TRAZASOFT | ETAPA | guardarParte2() | INICIO');
 
         // guardo recursos materiales (origen)
         $materia = $post_data['materia'];
@@ -143,7 +143,7 @@ class Etapa extends CI_Controller
         if ($datosCab['arti_id'] != "0") {
             $recu_id = $this->Etapas->getRecursoId($datosCab['arti_id']);
             if (!$recu_id) {
-                log_message('ERROR', 'ETAPA/guardarParte2 >> Error al traer ID Rercurso');
+                log_message('ERROR', '#TRAZA | TRAZ-PROD-TRAZASOFT | ETAPA | guardarParte2() >> Error al traer ID Rercurso');
                 return false;
             }
         }
@@ -186,7 +186,7 @@ class Etapa extends CI_Controller
     public function guardarParte3($post_data, $batch_id, $nuevo, $estado)
     {
 
-        log_message('DEBUG', 'ETAPA >> guardarParte3 | INICIO');
+        log_message('DEBUG', '#TRAZA | TRAZ-PROD-TRAZASOFT | ETAPA | guardarParte3() | INICIO');
 
         if (($batch_id == "BATCH_NO_CREADO") || ($batch_id == "RECI_NO_VACIO")) {
             log_message('ERROR', 'Error en creacion Batch. batch_id: >>' . $batch_id);
@@ -226,7 +226,7 @@ class Etapa extends CI_Controller
             $this->lanzarPedidoEtapa($pema_id);
         }
 
-        log_message('DEBUG', 'ETAPA >> guardarParte3 | FIN');
+        log_message('DEBUG', '#TRAZA | TRAZ-PROD-TRAZASOFT | ETAPA | guardarParte3() | FIN');
 
     }
 
@@ -411,7 +411,8 @@ class Etapa extends CI_Controller
             $response = $this->Etapas->setCabeceraNP($cab);
             $pema_id = $response->nota_id->pedido_id;
 
-            $envases = array();
+            //Esto se debe cambiar por fórmulas
+            // $envases = array();
             //////////// PARA CREAR EL BATCH PARA EL BATCH REQUEST //////////
             if ($pema_id) {
                 $x = 0;
@@ -422,15 +423,15 @@ class Etapa extends CI_Controller
                     $det['cantidad'] = (string) $p->cant_descontar;
                     $detalle['_post_notapedido_detalle'][$x] = (object) $det;
 
-                    $envases[$key]['pema_id'] = (string) $pema_id;
-                    $envases[$key]['arti_id'] = (string) $p->envase_arti_id;
-                    $envases[$key]['cantidad'] = (string) $p->cantidad;
+                    // $envases[$key]['pema_id'] = (string) $pema_id;
+                    // $envases[$key]['arti_id'] = (string) $p->envase_arti_id;
+                    // $envases[$key]['cantidad'] = (string) $p->cantidad;
                     $x++;
                 }
                 $arrayDeta['_post_notapedido_detalle_batch_req'] = $detalle;
                 $respDetalle = $this->Etapas->setDetaNP($arrayDeta);
 
-                $rsp = $this->pedidoEnvases($envases);
+                // $rsp = $this->pedidoEnvases($envases);
 
                 if ($respDetalle < 300) {
                     /////// LANZAR EL PROCESO DE BONITA DE PEDIDO
