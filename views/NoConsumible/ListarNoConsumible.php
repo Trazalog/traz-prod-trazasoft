@@ -487,8 +487,8 @@
 											</div>
 											<label class="col-md-2 control-label" for="tipo_no_consumible">Tipo No Consumible<?php echo hreq() ?>:</label>
 											<div class="col-md-4">
-												<select name="tipo_no_consumible" class="form-control">
-													<option value="0"> - Seleccionar - </option>
+												<select name="tipo_no_consumible" class="form-control" required>
+													<option value=""> - Seleccionar - </option>
 													<?php 
 													if(is_array($tipoNoConsumible)){
 														foreach ($tipoNoConsumible as $i) {
