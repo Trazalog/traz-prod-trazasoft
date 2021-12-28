@@ -71,7 +71,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Peso Tara:</label>
-                                <input type="text" id="tara" name="tara" class="form-control" value="<?php echo isset($datosCamion->tara) ? $datosCamion->tara : '' ?>" readonly>
+                                <input type="text" id="tara" name="tara" class="form-control" value="<?php echo isset($datosCamion->tara) ? $datosCamion->tara : '' ?>" >
                             </div>
                         </div>
                         <div class="col-md-4">
