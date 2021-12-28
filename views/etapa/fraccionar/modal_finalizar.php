@@ -17,15 +17,8 @@
                     <!-- Default panel contents -->
                     <div class="panel-heading">Lotes para Fraccionamiento</div>
                     <div class="panel-body">
-                        <table class="table table-striped">
+                        <table id="lotesFraccionar" class="table table-striped">
                             <tbody> 
-                                <?php 
-                                foreach ($lotesFracc as $lote) {
-                                    echo "<tr>";
-                                    echo "<td>LOTE: $lote->codigo | $lote->art_nombre</td>";
-                                    echo "<td>".($lote->tipo == 'Insumo'?bolita('Insumo','orange'):"<button title='Copiar Lote' class='btn btn-link' onclick='$(\"#lotedestino\").val(\"$lote->codigo\")'><i class='fa fa-copy'></i></button></td>");
-                                    echo "</tr>";
-                                }?>
                             </tbody>
                         </table>
                     </div>
@@ -37,55 +30,70 @@
                     <div class="panel-body">
 
                         <div class="row form-group" style="margin-top:20px">
+                            <!--_____________ Producto _____________-->
                             <div class="col-md-3 col-xs-12">
-                                <label for="Producto" class="form-label">Producto:</label>
+                                <label for="Producto" class="form-label">Producto (<?php hreq() ?>):</label>
                             </div>
-                            <div class="col-md-8 col-xs-12 input-group">
-
-                                <?php 
-                                    echo selectBusquedaAvanzada('productos', 'arti_id', $articulos_fraccionar, 'arti_id', 'barcode',array('descripcion','Stock:' => 'stock'));
-                                ?>
-                                <span class="input-group-btn">
-                                    <button class='btn btn-sm btn-primary'
-                                        onclick='checkTabla("tabla_productos","modalproductos",`<?php echo json_encode($materias); ?>`,"Add")'
-                                        data-toggle="modal" data-target="#modal_productos">
-                                        <i class="glyphicon glyphicon-search"></i></button>
-                                </span>
+                            <div class="form-group">
+                                <div class="col-sm-12 col-md-8 col-lg-8 ba">
+                                    <select style="width: 100%" class="form-control select2-hidden-accesible habilitar requerido" name="arti_id" id="productos">
+                                    <option value="" data-foo='' disabled selected>-Seleccione opción-</option>	
+                                    <?php
+                                        foreach ($articulos_fraccionar as $articulo) {
+                                        echo "<option value='$articulo->arti_id' data-json='". json_encode($articulo) . "' data-foo='<small><cite>$articulo->descripcion</cite></small>  <label>♦ </label>   <small><cite>$articulo->stock</cite></small>  <label>♦ </label> <small><cite>$articulo->um</cite></small>' >$articulo->barcode</option>";
+                                        }
+                                    ?>
+                                    </select>
+                                    <?php 
+                                    echo "<label id='detalle' class='select-detalle' class='text-blue'></label>";
+                                    echo "<script>$('#productos').select2({matcher: matchCustom,templateResult: formatCustom, dropdownParent: $('#productos').parent()}).on('change', function() { selectEvent(this);})</script>";
+                                    ?>
+                                </div>
                             </div>
+                            <!--__________________________-->
                             <div class="col-md-3"></div>
                         </div>
                         <div class="row" style="margin-top:20px">
-                            <div class="col-md-3 col-xs-12"><label class="form-label">Cantidad:</label></div>
+                            <div class="col-md-3 col-xs-12"><label class="form-label">Cantidad (<?php hreq() ?>):</label></div>
                             <div class="col-md-4 col-xs-12"><input class="form-control" id="cantidadproducto"
                                     type="text" value="" placeholder="Inserte Cantidad"></div>
                             <div class="col-md-5"></div>
                         </div>
                         <div class="row" style="margin-top:20px">
-                            <div class="col-md-3 col-xs-12"><label class="form-label">Codigo Lote Destino:</label></div>
-                            <div class="col-md-4 col-xs-12"><input class="form-control" type="text" id="lotedestino"
-                                    value="" placeholder="Inserte Lote destino"></div>
-                           
+                            <div class="col-md-3 col-xs-12">
+                                <label class="form-label">Código Lote Destino (<?php hreq() ?>):</label>
+                            </div>
+                            <div class="col-md-4 col-xs-12">
+                                <input class="form-control" type="text" id="lotedestino" value="" placeholder="Inserte Lote destino">
+                            </div>
                             <div class="col-md-1"></div>
                         </div>
-                        <div class="row" style="margin-top:20px">
-                            <div class="col-md-3 col-xs-12"><label class="form-label">Destino:</label></div>
-                            <div class="col-md-6 col-xs-12">
-                                <?php if ($accion == 'Editar') {
-       
-                                echo selectBusquedaAvanzada('productodestino', 'vreci');
-                                }
-                                ?>
+                        <div class="row form-group" style="margin-top:20px">
+                            <div class="col-md-3 col-xs-12">
+                                <label class="form-label">Destino (<?php hreq() ?>):</label>
                             </div>
+                            <?php if ($accion == 'Editar') { ?>
+                                <!--_____________ Destino _____________-->
+                                <div class="form-group">
+                                    <div class="col-sm-12 col-md-8 col-lg-8 ba">
+                                        <select style="width: 100%" class="form-control select2-hidden-accesible habilitar requerido" name="vreci" id="productodestino">
+                                        </select>
+                                        <?php 
+                                            echo "<label id='detalle' class='select-detalle' class='text-blue'></label>";
+                                            echo "<script>$('#productodestino').select2({matcher: matchCustom,templateResult: formatCustom, dropdownParent: $('#productodestino').parent()}).on('change', function() { selectEvent(this);})</script>";
+                                        ?>
+                                    </div>
+                                </div>
+                                <!--__________________________-->
+                            <?php } ?>
                             <div class="col-md-3"></div>
                         </div>
-                        <div class="row" style="margin-top: 20px">
+                        <div class="row form-group" style="margin-top: 20px">
                             <div class="col-md-3 col-xs-12">
                                 <label for="establecimientos" class="form-label">Establecimiento Final:</label>
                             </div>
-                            <div class="col-md-6 col-xs-12">
-                                <select class="form-control select2 select2-hidden-accesible"
-                                    onchange="actualizaRecipiente(this.value, 'productorecipientes')"
-                                    id="productoestablecimientos">
+                            <div class="col-md-8 col-xs-12 col-sm-12">
+                                <select style="width: 100%" class="form-control s2MdlFinalizar select2-hidden-accesible" onchange="actualizaRecipiente(this.value, 'productorecipientes')" id="productoestablecimientos">
                                     <option value="" disabled selected>-Seleccione Establecimiento-</option>
                                     <?php
                                     foreach ($establecimientos as $fila) {
@@ -145,6 +153,12 @@
 
 
 <script>
+$(document).ready(function () {
+    $(".s2MdlFinalizar").select2({
+      tags: true,
+      dropdownParent: $(".s2MdlFinalizar").parent()
+    });
+});
 actualizaRecipiente(<?php echo $etapa->esta_id ?>);
 function actualizaRecipiente(establecimiento) {
     $('#productodestino').empty();
@@ -170,7 +184,6 @@ function actualizaRecipiente(establecimiento) {
                 return;
             }
             fillSelect('#productodestino', result.data);
-
 
         },
         error: function() {
@@ -301,7 +314,7 @@ function agregaProductoFinal(producto) {
         html += "<thead>";
         html += "<tr>";
         html += "<th>Acciones</th>";
-        html += "<th>Lote</th>";
+        // html += "<th>Lote</th>";
         html += "<th>Producto</th>";
         html += "<th>Cantidad</th>";
         html += "<th>Lote Destino</th>";
@@ -312,7 +325,7 @@ function agregaProductoFinal(producto) {
         html += "<tr data-json='" + JSON.stringify(producto) + "' id='" + producto.id + "' class='reci-"+producto.destino+"' data-forzar='false'>";
         html +=
             "<td><i id='generarQR' class='fa fa-fw fa-qrcode text-light-blue generarQR' style='cursor: pointer; margin-left: 15px;' title='QR' onclick='QR(this)'></i><i class='fa fa-fw fa-minus text-light-blue tabla_productos_asignados_borrar' style='cursor: pointer; margin-left: 15px;' title='Eliminar'></i></td>";
-        html += '<td>' + producto.loteorigen + '</td>';
+        // html += '<td>' + producto.loteorigen + '</td>';
         html += '<td>' + producto.titulo + '</td>';
         html += '<td>' + producto.cantidad + '</td>';
         html += '<td>' + producto.lotedestino + '</td>';
@@ -330,7 +343,7 @@ function agregaProductoFinal(producto) {
         html += "<tr data-json='" + JSON.stringify(producto) + "' id='" + producto.id + "' class='reci-"+producto.destino+"' data-forzar='false'>";
         html +=
             "<td><i id='generarQR' class='fa fa-fw fa-qrcode text-light-blue generarQR' style='cursor: pointer; margin-left: 15px;' title='QR' onclick='QR(this)'></i><i class='fa fa-fw fa-minus text-light-blue tabla_productos_asignados_borrar' style='cursor: pointer; margin-left: 15px;' title='Eliminar'></i></td>";
-        html += '<td>' + producto.loteorigen + '</td>';
+        // html += '<td>' + producto.loteorigen + '</td>';
         html += '<td>' + producto.titulo + '</td>';
         html += '<td>' + producto.cantidad + '</td>';
         html += '<td>' + producto.lotedestino + '</td>';
@@ -397,19 +410,14 @@ function FinalizarEtapa() {
             data,
             url: '<?php echo base_url(PRD) ?>general/Etapa/finalizaFraccionar',
             success: function(result) {
-                
-                if (result.msj) {
+                if (_isset(result.msj)) {
                     bak_recipiente = result.reci_id;
                     getContenidoRecipiente(result.reci_id);
                 } else {
-                if (result.status) {
                     $("#modal_finalizar").modal('hide');
                     $('#mdl-unificacion').modal('hide');
                     hecho();
-                   linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
-                } else {
-                    alert("Hubo un error en el fraccionamiento")
-                }
+                    linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
                 }
 
             },
