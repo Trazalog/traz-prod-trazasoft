@@ -332,9 +332,8 @@ class Etapa extends CI_Controller
         if ($data['etapa']->tiet_id == 'prd_tipos_etapaFraccionamiento') {
             // trae lotes segun entrega de materiales de almacen.(81)
             $data['recipientes'] = $this->Recipientes->obtener('DEPOSITO', 'TODOS', $data['etapa']->esta_id)['data'];
-            $data['lotesFracc'] = $this->Etapas->getLotesaFraccionar($id)->lotes->lote;
             $data['ordenProd'] = $data['etapa']->orden;
-            $data['articulos_fraccionar'] = $this->Articulos->obtenerXTipo('En Proceso')['data'];
+            $data['articulos_fraccionar'] = $this->Etapas->getSalidaEtapa($data['etapa']->etap_id)['data'];
 
             $this->load->view('etapa/fraccionar/fraccionar', $data);
         } else {
@@ -781,5 +780,23 @@ class Etapa extends CI_Controller
         
         echo json_encode($resp);
 	}
+    /**
+        * Obtiene los lotes a fraccionar
+        * @param array con datos de lotes para fraccionamiento
+        * @return array respuesta del servicio
+	*/
+    public function getLotesFraccionar(){
+        log_message('INFO','#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapa | getLotesFraccionar() ');
 
+        $batch_id = $this->input->post('batch_id');
+
+        $lotesFracc['data'] = $this->Etapas->getLotesaFraccionar($batch_id)->lotes->lote;
+        
+        if(!empty($lotesFracc)){
+            $lotesFracc['status'] = true;
+            echo json_encode($lotesFracc);
+        }else{
+            echo json_encode(array("status" => false,"msj" => "No se encontraron lotes a fraccionar"));
+        }
+    }
 }
