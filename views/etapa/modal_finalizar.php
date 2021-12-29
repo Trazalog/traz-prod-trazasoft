@@ -103,9 +103,7 @@
                         <label for="establecimientos" class="form-label">Establecimiento Final:</label>
                     </div>
                     <div class="col-md-6 col-xs-12">
-                        <select class="form-control select2"
-                            onchange="actualizaRecipiente(this.value, 'productorecipientes')"
-                            id="productoestablecimientos">
+                        <select class="form-control select2" id="productoestablecimientos">
                             <option disabled selected>-Seleccione Establecimiento-</option>
                             <?php
                     foreach($establecimientos as $fila)
@@ -118,7 +116,7 @@
                     </div>
                     <div class="col-md-3"></div>
                 </div>
-                <div class="row" style="margin-top: 20px">
+                <!-- <div class="row" style="margin-top: 20px">
                     <div class="col-md-3 col-xs-12">
                         <label for="establecimientos" class="form-label">Recipiente Final:</label>
                     </div>
@@ -128,12 +126,12 @@
                         </select>
                     </div>
                     <div class="col-md-3"></div>
-                </div>
-                <div class="row" style="margin-top:20px">
+                </div> -->
+                <!-- <div class="row" style="margin-top:20px">
                     <div class="col-md-3 col-xs-12"><label class="form-label">Requiere Fraccionada:</label></div>
                     <div class="col-md-1 col-xs-12"><input type="checkbox" id="fraccionado" value=""></div>
                     <div class="col-md-8"></div>
-                </div>
+                </div> -->
                 <div class="row" style="margin-top:20px">
                     <div class="col-md-3 col-xs-12"></div>
                     <div class="col-md-3 col-xs-12"><button class="btn btn-success btn-block"
@@ -213,13 +211,13 @@ function AgregarProducto() {
             establecimiento = establecimientos[index].nombre;
             producto.establecimientofinal = document.getElementById('productoestablecimientos').value;
         }
-        recipientefinal = "";
-        producto.recipientefinal = "";
-        if (document.getElementById('productorecipientes').value != "") {
-            recipientefinal = document.getElementById('productorecipientes').options[document.getElementById(
-                'productorecipientes').selectedIndex].innerHTML;
-            producto.recipientefinal = document.getElementById('productorecipientes').value;
-        }
+        // recipientefinal = "";
+        // producto.recipientefinal = "";
+        // if (document.getElementById('productorecipientes').value != "") {
+        //     recipientefinal = document.getElementById('productorecipientes').options[document.getElementById(
+        //         'productorecipientes').selectedIndex].innerHTML;
+        //     producto.recipientefinal = document.getElementById('productorecipientes').value;
+        // }
 
         recipientes = '<?php echo json_encode($recipientes);?>';
         recipientes = JSON.parse(recipientes);
@@ -232,7 +230,8 @@ function AgregarProducto() {
         producto.lotedestino = lotedestino;
         producto.destino = destino;
         producto.titulodestino = $('#productodestino').find('option:selected').text();
-        producto.destinofinal = establecimiento + " " + recipientefinal;
+        // producto.destinofinal = establecimiento + " " + recipientefinal;
+        producto.destinofinal = establecimiento;
 
         var json = $('#operarios').find('[value="' + $('#operario').val() + '"]').attr('data-json');
         if(json){
@@ -243,12 +242,12 @@ function AgregarProducto() {
            producto.tipo_recurso = '';
         }
         producto.unificar = $('#unificar').val();
-        fraccionado = document.getElementById('fraccionado').checked;
-        if (fraccionado) {
-            producto.fraccionado = 'Si';
-        } else {
-            producto.fraccionado = 'No';
-        }
+        // fraccionado = document.getElementById('fraccionado').checked;
+        // if (fraccionado) {
+        //     producto.fraccionado = 'Si';
+        // } else {
+        //     producto.fraccionado = 'No';
+        // }
         agregaProducto(producto);
         $("#inputproducto").val("");
         document.getElementById('cantidadproducto').value = "";
@@ -257,7 +256,7 @@ function AgregarProducto() {
         $('#productodestino').val('').trigger('change');
         document.getElementById('productoestablecimientos').value = "";
         $('#inputproducto').val("").trigger('change');
-        document.getElementById('fraccionado').checked = false;
+        // document.getElementById('fraccionado').checked = false;
         document.getElementById('productorecipientes').value = "";
         document.getElementById('productorecipientes').disabled = true;
     }
@@ -274,7 +273,7 @@ function agregaProducto(producto) {
     contador++;
     if (existe == 'no') {
 
-        html += '<table id="tabla_productos_asignados" style="width: 90%;" class="table">';
+        html += '<table id="tabla_productos_asignados" class="table">';
         html += "<thead>";
         html += "<tr>";
         html += "<th>Acciones</th>";
@@ -284,7 +283,7 @@ function agregaProducto(producto) {
         html += "<th>Lote Destino</th>";
         html += "<th>Destino</th>";
         html += "<th>Destino Final</th>";
-        html += "<th>Fracc</th>";
+        // html += "<th>Fracc</th>";
         html += '</tr></thead><tbody>';
         html += "<tr class='recipiente-"+producto.destino+"' data-json='" + JSON.stringify(producto) + "' id='" + contador + "' data-forzar='false'>";
         html +=
@@ -295,7 +294,7 @@ function agregaProducto(producto) {
         html += '<td>' + producto.lotedestino + '</td>';
         html += '<td>' + producto.titulodestino + '</td>';
         html += '<td>' + producto.destinofinal + '</td>';
-        html += '<td>' + producto.fraccionado + '</td>';
+        // html += '<td>' + producto.fraccionado + '</td>';
         html += '</tr>';
         html += '</tbody></table>';
         document.getElementById('productosasignados').innerHTML = "";
@@ -313,7 +312,7 @@ function agregaProducto(producto) {
         html += '<td>' + producto.lotedestino + '</td>';
         html += '<td>' + producto.titulodestino + '</td>';
         html += '<td>' + producto.destinofinal + '</td>';
-        html += '<td>' + producto.fraccionado + '</td>';
+        // html += '<td>' + producto.fraccionado + '</td>';
         html += '</tr>';
         $('#tabla_productos_asignados tbody').append(html);
         tabla = document.getElementById('tabla_productos_asignados').innerHTML;
