@@ -235,7 +235,7 @@ class Etapas extends CI_Model
     {
         log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapas | finalizarEtapa(datos)-> ' . json_encode($arrayDatos));
         
-        $resource = '/_post_lote_list_batch_req';
+        $resource = '/_post_lote_noconsumibles_list_batch_req';
         $url = REST_PRD_LOTE . $resource;
         $rsp = $this->rest->callAPI("POST", $url, $arrayDatos);
         if (!$rsp['status']) {
