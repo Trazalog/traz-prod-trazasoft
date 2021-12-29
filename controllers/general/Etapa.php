@@ -565,7 +565,8 @@ class Etapa extends CI_Controller
             #FLEIVA
             $arrayPost['batch_id'] = "0";
             $arrayPost['planificado'] = "false";
-            $arrayDatos['_post_lote_list_batch_req']['_post_lote_list'][] = $arrayPost;
+            $arrayPost['noco_list'] = isset($info->nocos) ? implode(';',$info->nocos) : '';// Para reutilizar el stored procedure de Noco's
+            $arrayDatos['_post_lote_noconsumibles_list_batch_req']['_post_lote_noconsumibles_list'][] = $arrayPost;
         }
 
         $rsp = $this->Etapas->finalizarEtapa($arrayDatos);
