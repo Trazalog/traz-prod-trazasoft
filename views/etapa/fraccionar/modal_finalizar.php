@@ -93,7 +93,7 @@
                                 <label for="establecimientos" class="form-label">Establecimiento Final:</label>
                             </div>
                             <div class="col-md-8 col-xs-12 col-sm-12">
-                                <select style="width: 100%" class="form-control s2MdlFinalizar select2-hidden-accesible" onchange="actualizaRecipiente(this.value, 'productorecipientes')" id="productoestablecimientos">
+                                <select style="width: 100%" class="form-control s2MdlFinalizar select2-hidden-accesible" id="productoestablecimientos">
                                     <option value="" disabled selected>-Seleccione Establecimiento-</option>
                                     <?php
                                     foreach ($establecimientos as $fila) {
@@ -105,7 +105,7 @@
                             </div>
                             <div class="col-md-3 col-xs-12"></div>
                         </div>
-                        <div class="row" style="margin-top: 20px">
+                        <!-- <div class="row" style="margin-top: 20px">
                             <div class="col-md-3 col-xs-12">
                                 <label for="establecimientos" class="form-label">Recipiente Final:</label>
                             </div>
@@ -116,13 +116,13 @@
                                 </select>
                             </div>
                             <div class="col-md-3 col-xs-12"></div>
-                        </div>
-                        <div class="row" style="margin-top:20px">
+                        </div> -->
+                        <!-- <div class="row" style="margin-top:20px">
                             <div class="col-md-3 col-xs-12"><label class="form-label">Requiere Fraccionada:</label>
                             </div>
                             <div class="col-md-1 col-xs-12"><input type="checkbox" id="fraccionado" value=""></div>
                             <div class="col-md-8 "></div>
-                        </div>
+                        </div> -->
                         <div class="row" style="margin-top:20px">
                             <div class="col-md-3 col-xs-12"></div>
                             <div class="col-md-3 col-xs-12"><button class="btn btn-success btn-block"
@@ -263,11 +263,11 @@ function AgregarProductoFinal() {
             }
             recipientefinal = "";
             producto.recipientefinal = "";
-            if (document.getElementById('productorecipientes').value != "") {
-                recipientefinal = document.getElementById('productorecipientes').options[document.getElementById(
-                    'productorecipientes').selectedIndex].innerHTML;
-                producto.recipientefinal = document.getElementById('productorecipientes').value;
-            }
+            // if (document.getElementById('productorecipientes').value != "") {
+            //     recipientefinal = document.getElementById('productorecipientes').options[document.getElementById(
+            //         'productorecipientes').selectedIndex].innerHTML;
+            //     producto.recipientefinal = document.getElementById('productorecipientes').value;
+            // }
 
             recipientes = '<?php echo json_encode($recipientes); ?>';
             recipientes = JSON.parse(recipientes);
@@ -283,22 +283,24 @@ function AgregarProductoFinal() {
             producto.lotedestino = lotedestino;
             producto.destino = destino;
             producto.titulodestino = $('#productodestino').find('option:selected').html();  
-            producto.destinofinal = establecimiento + " " + recipientefinal;
-            fraccionado = document.getElementById('fraccionado').checked;
-            if (fraccionado) {
-                producto.fraccionado = 'Si';
-            } else {
-                producto.fraccionado = 'No';
-            }
+            // producto.destinofinal = establecimiento + " " + recipientefinal;
+            producto.destinofinal = establecimiento;
+
+            // fraccionado = document.getElementById('fraccionado').checked;
+            // if (fraccionado) {
+            //     producto.fraccionado = 'Si';
+            // } else {
+            //     producto.fraccionado = 'No';
+            // }
 
             producto.forzar = "false";
             agregaProductoFinal(producto);
             document.getElementById('cantidadproducto').value = "";
             document.getElementById('lotedestino').value = "";
-            document.getElementById('productodestino').value = "";
+            // document.getElementById('productodestino').value = "";
             document.getElementById('productoestablecimientos').value = "";
             document.getElementById('productos').value = "";
-            document.getElementById('fraccionado').checked = false;
+            // document.getElementById('fraccionado').checked = false;
             document.getElementById('productorecipientes').value = "";
             document.getElementById('productorecipientes').disabled = true;
         }
@@ -310,7 +312,7 @@ function agregaProductoFinal(producto) {
     var html = '';
     if (existe == 'no') {
 
-        html += '<table id="tabla_productos_asignados" style="width: 90%;" class="table">';
+        html += '<table id="tabla_productos_asignados" class="table">';
         html += "<thead>";
         html += "<tr>";
         html += "<th>Acciones</th>";
@@ -320,7 +322,7 @@ function agregaProductoFinal(producto) {
         html += "<th>Lote Destino</th>";
         html += "<th>Destino</th>";
         html += "<th>Destino Final</th>";
-        html += "<th>Fracc</th>";
+        // html += "<th>Fracc</th>";
         html += '</tr></thead><tbody>';
         html += "<tr data-json='" + JSON.stringify(producto) + "' id='" + producto.id + "' class='reci-"+producto.destino+"' data-forzar='false'>";
         html +=
@@ -331,7 +333,7 @@ function agregaProductoFinal(producto) {
         html += '<td>' + producto.lotedestino + '</td>';
         html += '<td>' + producto.titulodestino + '</td>';
         html += '<td>' + producto.destinofinal + '</td>';
-        html += '<td>' + producto.fraccionado + '</td>';
+        // html += '<td>' + producto.fraccionado + '</td>';
         html += '</tr>';
         html += '</tbody></table>';
         document.getElementById('productosasignadosfin').innerHTML = "";
@@ -349,7 +351,7 @@ function agregaProductoFinal(producto) {
         html += '<td>' + producto.lotedestino + '</td>';
         html += '<td>' + producto.titulodestino + '</td>';
         html += '<td>' + producto.destinofinal + '</td>';
-        html += '<td>' + producto.fraccionado + '</td>';
+        // html += '<td>' + producto.fraccionado + '</td>';
         html += '</tr>';
         $('#tabla_productos_asignados tbody').append(html);
         tabla = document.getElementById('tabla_productos_asignados').innerHTML;

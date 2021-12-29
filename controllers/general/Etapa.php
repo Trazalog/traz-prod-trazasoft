@@ -17,6 +17,13 @@ class Etapa extends CI_Controller
         $this->load->model('general/Recursos');
         $this->load->model('general/Procesos');
         $this->load->model(FRM . 'Forms');
+
+        // si esta vencida la sesion redirige al login
+		$data = $this->session->userdata();
+		if(!$data['email']){
+			log_message('DEBUG','#TRAZA|DASH|CONSTRUCT|ERROR  >> Sesion Expirada!!!');
+			redirect(DNATO.'main/login');
+		}
     }
 
     // Muestra listado de etapas
