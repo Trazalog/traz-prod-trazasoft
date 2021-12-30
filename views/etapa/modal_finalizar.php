@@ -63,9 +63,23 @@
                     <div class="col-md-3 col-xs-12">
                         <label for="inputproducto" class="form-label">Producto*:</label>
                     </div>
-                    <div class="col-md-8 col-xs-12">
-                        <?php  echo selectBusquedaAvanzada('inputproducto', false, $productos_salida_etapa, 'arti_id', 'descripcion'); ?>
+                    <div class="form-group">
+                        <div class="col-sm-12 col-md-8 col-lg-8 ba">
+                            <select style="width: 100%" class="form-control select2-hidden-accesible habilitar requerido" id="inputproducto">
+                            <option value="" data-foo='' disabled selected>-Seleccione opción-</option>	
+                            <?php
+                                foreach ($productos_salida_etapa as $articulo) {
+                                echo "<option value='$articulo->arti_id' data-json='". json_encode($articulo) . "' data-foo='<small><cite>$articulo->descripcion</cite></small>  <label>♦ </label>   <small><cite>$articulo->stock</cite></small>  <label>♦ </label> <small><cite>$articulo->um</cite></small>' >$articulo->barcode</option>";
+                                }
+                            ?>
+                            </select>
+                            <?php 
+                            echo "<label id='detalle' class='select-detalle' class='text-blue'></label>";
+                            echo "<script>$('#inputproducto').select2({matcher: matchCustom,templateResult: formatCustom, dropdownParent: $('#inputproducto').parent()}).on('change', function() { selectEvent(this);})</script>";
+                            ?>
+                        </div>
                     </div>
+                        <!--__________________________-->
                     <div class="col-md-3"></div>
                 </div>
                 <div class="row" style="margin-top:20px">
