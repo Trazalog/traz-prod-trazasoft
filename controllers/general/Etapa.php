@@ -584,9 +584,14 @@ class Etapa extends CI_Controller
 
         echo json_encode($rsp);
     }
-    // Levanta pantalla abm fraccionar
+    /**
+        * Levanta pantalla abm fraccionar
+        * @param 
+        * @return view etapa fraccionar
+	*/
     public function fraccionar()
     {
+        log_message('DEBUG',"#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapa | fraccionar()");
         $this->load->model(ALM . 'Articulos');
         $this->load->model('general/Recipientes');
 
