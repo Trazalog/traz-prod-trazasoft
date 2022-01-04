@@ -5,16 +5,19 @@
 	</div>
 
 	<div class="box-body table-scroll table-responsive">
-		<table id="tbl-formulas" class="table table-striped table-hover">
+		<table id="tbl-formulas" class="table table-striped table-hover dt-bootstrap">
 			<!--Cabecera del datatable-->
 			<thead>
-				<th hidden></th>
-				<th>Descripción</th>
-				<th>U.M.</th>
-				<th>Cantidad</th>
-				<th>Fecha</th>
-				<!-- <th>Archivo</th> -->
-				<th class="sorting_disabled oculto"></th>
+				<tr>
+					<!-- <th hidden></th> -->
+					<th>Descripción</th>
+					<th>U.M.</th>
+					<th>Cantidad</th>
+					<th>Fecha</th>
+					<!-- <th>Archivo</th> -->
+					<th>Acciones</th>
+					<!-- <th class="sorting_disabled oculto"></th> -->
+				</tr>
 			</thead>
 			<!--________________________________________________________________________-->
 
@@ -24,8 +27,8 @@
 				foreach ($formulas as $fila) {
 					$id = $fila->form_id;
 					$descripcion = $fila->descripcion;
-					echo "<tr  value='$id' id='$id' data-descripcion='$descripcion'>";
-					echo "<td hidden></td>";
+					echo "<tr value='$id' id='$id' data-descripcion='$descripcion'>";
+					// echo "<td hidden></td>";
 
 					echo '<td style="font-weight: lighter;">' . $fila->descripcion . '</td>';
 					echo '<td style="font-weight: lighter;">' . $fila->unme_id . '</td>';
@@ -73,7 +76,7 @@
 <!--Script Data Table-->
 <script>
 	DataTable('#tbl-formulas');
-	$('.oculto').removeClass('sorting');
+	// $('.oculto').removeClass('sorting');
 	// $('#tbl-formulas').dataTable();
 	$("#modal-delete").modal('hide');
 

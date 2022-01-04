@@ -13,7 +13,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Fecha:</label>
-                                <input id="fecha_salida" type="text" name="fecha_salida" class="form-control date" value="<?php echo isset($datosCamion->fecha_entrada) ? date('d-m-Y', strtotime($datosCamion->fecha_entrada)) : '' ?>">
+                                <input id="fecha_salida" type="date" name="fecha_salida" class="form-control" value="<?php echo isset($datosCamion->fecha_entrada) ? date('d-m-Y', strtotime($datosCamion->fecha_entrada)) : '' ?>">
                             </div>
                         </div>
                         <div class="col-md-4">

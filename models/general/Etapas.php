@@ -77,9 +77,14 @@ class Etapas extends CI_Model
 
         return $resp;
     }
+    /**
+	* Obtiene etapa por id, que es la opcion seleccionada
+	* @param integer opcion seleccionada
+	* @return array datos etapa
+	*/
     public function nuevo($opcion)
     {
-        log_message('DEBUG', 'Etapas/nuevo($opcion)-> ' . $opcion);
+        log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapas |  nuevo($opcion) | $opcion >> ' . $opcion);
 
         $resource = '/etapas/';
         $url = REST_PRD_ETAPAS . $resource . $opcion;
