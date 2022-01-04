@@ -94,10 +94,11 @@ use \koolreport\widgets\google\ColumnChart;
                     <select class="form-control" id="tran_id" name="tran_id">
                     </select>
                   </div>
-                  <div class="form-group col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                  <div class="form-group col-xs-12 col-sm-3 col-md-3 col-lg-3 ba">
                     <label>Producto</label>
-                    <select class="form-control" id="arti_id" name="arti_id">
+                    <select style="width: 100%" class="form-control" id="arti_id" name="arti_id">
                     </select>
+                    <label id='detalle' class='select-detalle text-blue'></label>
                   </div>
                   <div class="form-group col-xs-12 col-sm-3 col-md-3 col-lg-3">
                     <label>Unidad de Medida</label>
@@ -340,14 +341,17 @@ use \koolreport\widgets\google\ColumnChart;
           }
           $('#prov_id').html(html_prov);
 
-          var html_prod = '<option selected disabled>Seleccione producto</option>';
+          var html_prod = '<option selected disabled data-foo="">Seleccione producto</option>';
           
           if (_isset(rsp.productos)) {
             rsp.productos.forEach(element => {
-              html_prod += "<option value=" + element.id + ">" + element.nombre + "</option>";
+              // html_prod += "<option value=" + element.id + ">" + element.nombre + "</option>";
+              html_prod += "<option value='"+element.id+"' data-foo='<small><cite>"+element.nombre+"</cite></small><label> ♦ </label>' >"+element.codigo+"</option>";
             });
           }
           $('#arti_id').html(html_prod);
+
+          $('#arti_id').select2({matcher: matchCustom,templateResult: formatCustom}).on('change', function() { selectEvent(this);});
 
           var html_medidas = '<option selected disabled>Seleccione medida</option>';
 
