@@ -62,6 +62,7 @@ class Formulas extends CI_Model
 
 	public function updateFormula($data)
 	{
+		log_message("DEBUG", "#TRAZA | TRAZ-PROD-TRAZASOFT | Formulas | updateFormula()");
 		$url = REST_PRD_ETAPAS . '/updateFormula';
 		$rsp = $this->rest->callApi('PUT', $url, $data);
 		$rsp['data'] = json_decode($rsp['data']);

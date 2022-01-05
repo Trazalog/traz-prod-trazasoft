@@ -44,9 +44,15 @@ class Etapa extends CI_Controller
         $data['etapas'] = $temp;
         $this->load->view('etapa/list', $data);
     }
-    // Llama a etapas para una nueva Etapa
+    /**
+        * Llama a etapas para una nueva Etapa
+        * @param integer $op opcion seleccionada
+        * @return view con $data para nueva Etapa segun opcion seleccionada
+	*/
     public function nuevo()
     {
+        log_message('DEBUG','#TRAZA | #TRAZ-PROD-TRAZASOFT | ETAPA | nuevo()');
+        
         $this->load->model(TST.'Tareas');
         $this->Tareas->eliminarTareasSinOrigen(empresa());
         #Snapshot
