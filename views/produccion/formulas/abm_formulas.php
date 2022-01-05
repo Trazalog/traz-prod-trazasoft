@@ -39,7 +39,7 @@
 					echo '<td width="15%" class="text-center" style="font-weight: lighter;">';
 					echo "<i class='fa fa-fw fa-search-plus text-light-blue' style='cursor: pointer;' title='Ver detalles'  onclick='verDetalles($id)'></i>";
 					// echo '<i class="fa fa-fw fa-refresh text-green" style="cursor: pointer;" title="Editar fórmula"  onclick="editarFormula(this)"></i>';
-					echo "<i class='fa fa-fw fa-refresh text-green' style='cursor: pointer;' title='Editar fórmula'  onclick='editarFormula($id)'></i>";
+					echo "<i class='fa fa-fw fa-edit text-green' style='cursor: pointer;' title='Editar fórmula'  onclick='editarFormula($id)'></i>";
 					// echo '<i class="fa fa-fw fa-trash text-red" style="cursor: pointer;" title="Eliminar fórmula"  onclick="eliminarFormula(this)"></i>';
 					echo "<i class='fa fa-fw fa-trash text-red' style='cursor: pointer;' data-toggle='modal' data-target='#modal-delete'  title='Eliminar fórmula' onclick='validarEliminar($id)'></i>";
 					echo '</td>';
