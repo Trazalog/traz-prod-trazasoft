@@ -56,22 +56,35 @@ class Etapas extends CI_Model
         $resp = json_decode($array['data']);
         return $resp;
     }
+    /**
+	* Busca lote en prd.lotes por batch_id
+	* @param integer batch_id
+	* @return array lote en caso de exito
+	*/
     public function buscar($id)
     {
-        if (!$id) {
-            log_message('DEBUG', 'Etapas/buscar #ERROR | BATCH_ID NULO');
+        if (empty($id)) {
+            log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapas | buscar() #ERROR | BATCH_ID NULO');
             return;
         }
+
         $resource = '/lote/';
         $url = REST_PRD_LOTE. $resource . $id;
         $array = $this->rest->callAPI("GET", $url);
         $resp = json_decode($array['data']);
 
+        log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapas | buscar() >> resp ' . json_encode($resp));
+
         return $resp;
     }
+    /**
+	* Obtiene etapa por id, que es la opcion seleccionada
+	* @param integer opcion seleccionada
+	* @return array datos etapa
+	*/
     public function nuevo($opcion)
     {
-        log_message('DEBUG', 'Etapas/nuevo($opcion)-> ' . $opcion);
+        log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapas |  nuevo($opcion) | $opcion >> ' . $opcion);
 
         $resource = '/etapas/';
         $url = REST_PRD_ETAPAS . $resource . $opcion;
@@ -218,10 +231,15 @@ class Etapas extends CI_Model
         $array = file_get_contents($url, false, $param);
         return json_decode($array);
     }
-    // Informe de Etapa (modal_finaizar)
+    /**
+	* Crea los lotes para finalizar la etapa
+	* @param array datos de los lotes cargados
+	* @return bool true o false segun resultado de servicio de guardado
+	*/
     public function finalizarEtapa($arrayDatos)
     {
-        log_message('DEBUG', 'Etapas/finalizarEtapa(datos)-> ' . json_encode($arrayDatos));
+        log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapas | finalizarEtapa(datos)-> ' . json_encode($arrayDatos));
+        
         $resource = '/_post_lote_noconsumibles_list_batch_req';
         $url = REST_PRD_LOTE . $resource;
         $rsp = $this->rest->callAPI("POST", $url, $arrayDatos);

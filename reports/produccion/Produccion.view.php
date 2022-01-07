@@ -74,7 +74,7 @@ use \koolreport\widgets\koolphp\Card;
                 </div>
                 <!-- PRODUCTO -->
 
-                <div class="col-xs-12 col-sm-12 col-md-3 col-lg-2">
+                <div class="col-xs-12 col-sm-12 col-md-4 col-lg-3">
                     <div style="float:right; padding-top: 24px" class="form-group">
                         <button type="button" class="btn btn-success btn-flat" onclick="filtrar()">Filtrar</button>
                         <button style="margin-left: 5px" type="button" class="btn btn-danger btn-flat flt-clear">Limpiar</button>

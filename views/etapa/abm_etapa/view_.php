@@ -515,7 +515,9 @@
           alertify.success("Artículo agregado con éxito");
         }, 3000);
         $("#modalAgregarArticulo").hide(500);
-        // form.reset();
+        $('#articulo_id').val(null).trigger('change');
+        $('#detalle').html('');
+        $('#tipo_id').val(null).trigger('change');
       },
       error: function(result){
         wc();

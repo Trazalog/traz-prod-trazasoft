@@ -30,16 +30,16 @@ if($etapa->estado == "FINALIZADO"){
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-xs-6">
-                                    <label class="form-label">Fecha*:</label>
+                                    <label class="form-label">Fecha<?php hreq() ?>:</label>
                                     <input type="<?php if($accion != 'Editar'){echo 'date';} ?>" id="fecha"
                                         value="<?php echo $fecha;?>" class="form-control"
                                         <?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
                                 </div>
                                 <div class="col-xs-6">
-                                    <label for="op" class="form-label">Orden de Produccion:</label>
+                                    <label for="op" class="form-label">Orden de Producción:</label>
                                     <input type="text" id="ordenproduccion" class="form-control"
                                         <?php if($accion=='Editar' ){echo ( 'value="'.$ordenProd.'"');}?>
-                                        placeholder="Inserte Orde de Produccion"
+                                        placeholder="Inserte orden de producción"
                                         <?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
                                 </div>
                             </div>
@@ -53,7 +53,7 @@ if($etapa->estado == "FINALIZADO"){
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-xs-6">
-                                    <label for="establecimientos" class="form-label">Establecimiento*:</label>
+                                    <label for="establecimientos" class="form-label">Establecimiento<?php hreq() ?>:</label>
                                     <select class="form-control select2 select2-hidden-accesible"
                                         onchange="actualizaRecipiente(this.value,'recipientes')" id="establecimientos"
                                         <?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
@@ -253,7 +253,7 @@ function actualizaRecipiente(establecimiento, recipientes) {
         dataType: 'JSON',
         data: {
             establecimiento,
-            tipo: 'DEPOSITO'
+            tipo: 'PRODUCTIVO'
         },
         url: '<?php echo base_url(PRD) ?>general/Recipiente/listarPorEstablecimiento/true',
         success: function(result) {
@@ -546,7 +546,7 @@ function guardarForzado(data) {
 
 // finalizar solo llena select y levanta modal 
 function finalizar() {
-
+    getLotesFraccionar();
     $("#modal_finalizar").modal('show');
 }
 $(document).off('click', '.tablaproductos_borrar').on('click', '.tablaproductos_borrar', {
@@ -554,4 +554,40 @@ $(document).off('click', '.tablaproductos_borrar').on('click', '.tablaproductos_
     idrecipiente: 'productosasignados',
     idbandera: 'productoexiste'
 }, remover);
+
+//Obtiene los lotes a fraccionar cuando se llama a la funcion finalizar que abre el modal del reporte de fraccionamiento
+function getLotesFraccionar(){
+    wo();
+    $("#lotesFraccionar").find("tbody td").remove();
+    data = {};
+    data.batch_id = $("#batch_id").val();
+
+    $.ajax({
+        type: "POST",
+        url: "<?php echo PRD ?>general/Etapa/getLotesFraccionar",
+        data: data,
+        dataType: "JSON",
+        success: function (resp) {
+            if(resp.status){
+                $.each(resp.data, function (i, val) {
+                    button = (val.tipo == 'Insumo') ? bolita('Insumo', 'orange') : `<button title='Copiar Lote' class='btn btn-link' onclick='$(\"#lotedestino\").val(\"${val.codigo}\")'><i class='fa fa-copy'></i></button>`;  
+                    
+                    var opcion = `<tr>
+                    <td>LOTE: ${val.codigo} | ${val.art_nombre}</td>
+                    <td>Cantidad: ${val.cant_entreg}</td>
+                    <td>${button}</td>
+                    </tr>`;
+
+                    $("#lotesFraccionar").find("tbody").append(opcion);
+                });
+            }else{
+                console.log("No hay lotes a fraccionar");
+            }
+            wc();
+        },
+        error: function (resp){
+            wc();
+        }
+    });
+}
 </script>   
