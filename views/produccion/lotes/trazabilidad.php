@@ -21,7 +21,7 @@
             <div class="box-body">
                 <div class=" form-group col-sm-5">
                     <div class="col-sm-2">
-                        <h5>Lote</h5>
+                        <h5>Nro Batch</h5>
                     </div>
                     <div class="col-sm-7">
                         <input type="text" class="form-control" id="batch" name="batch"
