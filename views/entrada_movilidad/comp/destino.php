@@ -136,6 +136,7 @@ function obtenerRecipientes() {
             if (rsp.status && _isset(rsp.data)) {
                 $('#recipiente').html(rsp.data);
             }else{
+                $('#recipiente').html('');
                 error('Error!','No se encontraron Recipientes en el establecimiento seleccionado');
             }
         },
