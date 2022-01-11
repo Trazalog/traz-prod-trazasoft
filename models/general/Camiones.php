@@ -342,11 +342,13 @@ class Camiones extends CI_Model
 		*/
     public function guardarSalida($data)
     {
+        log_message("DEBUG", "#TRAZA | TRAZ-PROD-TRAZASOFT | CAMIONES | guardarSalida()");
         $post['_put_camiones_salida'] = array(
             'motr_id' => strval($data['motr_id']),
             //'patente' => $data['patente'],
             'estado' => isset($data['destino_esta_id']) ? 'TRANSITO' : 'FINALIZADO',
             'bruto' => strval($data['bruto']),
+            'tara' => strval($data['tara']),
             'neto' => strval($data['neto']),
         );
         return wso2(REST_LOG . '/camiones/salida', 'PUT', $post);

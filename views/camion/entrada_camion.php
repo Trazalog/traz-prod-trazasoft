@@ -48,7 +48,7 @@
                             <label for="establecimientos" class="form-label">Establecimiento<?php hreq() ?>:</label>
                         </div>
                         <div class="col-md-4 col-xs-12">
-                            <select class="form-control select2 select2-hidden-accesible" id="establecimientos" name="establecimiento" onchange="selectEstablecimiento()" <?php echo req() ?>>
+                            <select class="form-control select2 select2-hidden-accesible" id="establecimientos" name="establecimiento" onchange="selectEstablecimiento();obtenerRecipientes();" <?php echo req() ?>>
                                     <option value="" disabled selected>-Seleccione Establecimiento-</option>
                                     <?php
                                         foreach ($establecimientos as $fila) {
