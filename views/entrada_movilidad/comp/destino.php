@@ -121,25 +121,23 @@ $('#frm-destino').on('submit', function(e) {
         agregarFila(res);
     }
 });
-
-
-
-
-obtenerRecipientes();
-
+//Busca lso recipientes de un establecimiento seleccionado
+//se llama en el onchange del select de establecimiento
 function obtenerRecipientes() {
     console.log('Obtener Recipientes');
+    
+    esta_id = $("#establecimientos").val();
+
     $.ajax({
         type: 'GET',
         dataType: 'JSON',
-        url: '<?php echo base_url(PRD) ?>general/Recipiente/obtenerOpciones?tipo=DEPOSITO&estado=TODOS',
+        url: '<?php echo base_url(PRD) ?>general/Recipiente/obtenerOpciones?tipo=DEPOSITO&estado=TODOS&establecimiento=' + esta_id,
         success: function(rsp) {
-            if (!rsp.status) {
-                alert('No se encontraron Recipientes');
-                return;
+            if (rsp.status && _isset(rsp.data)) {
+                $('#recipiente').html(rsp.data);
+            }else{
+                error('Error!','No se encontraron Recipientes en el establecimiento seleccionado');
             }
-
-            $('#recipiente').html(rsp.data);
         },
         error: function(rsp) {
             alert('Error al Obtener Recipientes');

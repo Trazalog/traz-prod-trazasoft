@@ -125,18 +125,23 @@ class Camion extends CI_Controller
         // var_dump($camion);
         // echo 'ok';
     }
-
+    /**
+		* Carga la vista para generar una nuevo movimiento de transporte(pantalla Nueva Entrada | Recepción MP)
+		* @param 
+		* @return view entrada camion con datos de servicios
+		*/	 
     public function entradaCamion()
     {
-        $data['fecha'] = date('Y-m-d');
-        $data['lang'] = lang_get('spanish', 4);
-        $data['establecimientos'] = $this->Establecimientos->listarTodo()->establecimientos->establecimiento;
-        $data['tipoEstablecimiento'] = $this->Noconsumibles->tipoEstablecimiento()['data'];
-        $data['proveedores'] = $this->Camiones->listarProveedores()['data'];
-        $data['materias'] = $this->Materias->listar()->materias->materia;
-        $data['empaques'] = $this->Recipientes->listarEmpaques()->empaques->empaque;
-        $data['transportistas'] = $this->Transportistas->obtener()['data'];
-        $this->load->view('camion/entrada_camion', $data);
+      log_message('DEBUG'," #TRAZA | #TRAZ-PROD-TRAZASOFT | Camion | entradaCamion()");
+      $data['fecha'] = date('Y-m-d');
+      $data['lang'] = lang_get('spanish', 4);
+      $data['establecimientos'] = $this->Establecimientos->listarTodo()->establecimientos->establecimiento;
+      $data['tipoEstablecimiento'] = $this->Noconsumibles->tipoEstablecimiento()['data'];
+      $data['proveedores'] = $this->Camiones->listarProveedores()['data'];
+      $data['materias'] = $this->Materias->listar()->materias->materia;
+      $data['empaques'] = $this->Recipientes->listarEmpaques()->empaques->empaque;
+      $data['transportistas'] = $this->Transportistas->obtener()['data'];
+      $this->load->view('camion/entrada_camion', $data);
     }
 
     /**

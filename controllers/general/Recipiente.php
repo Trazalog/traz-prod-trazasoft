@@ -32,13 +32,19 @@ class Recipiente extends CI_Controller
     $rsp = $this->Recipientes->obtener($tipo, $estado);
     echo json_encode($rsp);
   }
-
+  /**
+	* Busca recipientes por estado, tipo, establecimiento y empresa
+	* @param array tipo estado establecimiento
+	* @return array recipientes coincidentes
+	*/
   public function obtenerOpciones()
   {
+    log_message('DEBUG'," #TRAZA | #TRAZ-PROD-TRAZASOFT | RECIPIENTE | obtenerOpciones()");
     $tipo = $this->input->get('tipo');
     $estado = $this->input->get('estado');
+    $esta_id = $this->input->get('establecimiento');
 
-    $rsp = $this->Recipientes->obtener($tipo, $estado);
+    $rsp = $this->Recipientes->obtener($tipo, $estado, $esta_id);
     if ($rsp['status']) $rsp['data'] = selectBusquedaAvanzada(false, false, $rsp['data'], 'reci_id', 'nombre', array('Tipo:' => 'tipo', 'Estado:' => 'estado', 'Lote:' => 'lote_id', 'ID ART:' => 'arti_id'));
     echo json_encode($rsp);
   }
