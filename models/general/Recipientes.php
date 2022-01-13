@@ -66,13 +66,14 @@ class Recipientes extends CI_Model
       $rsp['data'] = json_decode($rsp['data'])->resultado->reci_id;
       return $rsp;
     }
-
+    
     public function obtener($tipo = 'TODOS', $estado = 'TODOS', $establecimiento = 0)
     {
-        $url  = REST_PRD. "/recipientes/tipo/$tipo/estado/$estado/establecimiento/$establecimiento/".empresa();
-        $rsp = $this->rest->callAPI('GET' , $url);
-        $rsp['data'] = json_decode($rsp['data'])->recipientes->recipiente;
-        return $rsp;
+      log_message('DEBUG'," #TRAZA | #TRAZ-PROD-TRAZASOFT | RECIPIENTES | obtener()");
+      $url  = REST_PRD. "/recipientes/tipo/$tipo/estado/$estado/establecimiento/$establecimiento/".empresa();
+      $rsp = $this->rest->callAPI('GET' , $url);
+      $rsp['data'] = json_decode($rsp['data'])->recipientes->recipiente;
+      return $rsp;
     }
 
   public function obtenerTodosRecipientes()
