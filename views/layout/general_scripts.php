@@ -81,11 +81,19 @@
          }
 
          function hecho(msj = 'Hecho') {
-            alert(msj);
+          Swal.fire(
+        msj,
+        'success'
+      )
         }
-         function error() {
-           alert('Error')
-         }
+      
+         function error(msj='Error!', detalle="Algo salio mal"){
+    Swal.fire(
+        msj,
+        detalle,
+        'error'
+      )
+}
 
          function conexion() {
            return true;
