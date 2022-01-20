@@ -10,7 +10,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="exampleModalLabel">Informacion</h4>
+                <h4 class="modal-title" id="exampleModalLabel">Información</h4>
             </div>
             <!--_____________________________________________________________-->
 
@@ -25,9 +25,9 @@
                     <!--Cabecera del datatable-->  
                         <thead>
                             <tr>
-                                <th class="articulos" id="articulos" style="width: 1000px; font-weight: lighter;">Articulos</th> 
+                                <th class="articulos" id="articulos" style="width: 1000px; font-weight: lighter;">Artículos</th> 
                                 <th class="cantidad" id="cantidad" style="width: 1000px; font-weight: lighter;">Cantidad</th>
-                                <th class="codigo_lote" id="codigo_lote" style="width: 1000px; font-weight: lighter;">Codigo Lote</th>
+                                <th class="codigo_lote" id="codigo_lote" style="width: 1000px; font-weight: lighter;">Código Lote</th>
                                 <th class="um" id="um" style="width: 1000px; font-weight: lighter;">UM</th>
                            </tr>
                         </thead>

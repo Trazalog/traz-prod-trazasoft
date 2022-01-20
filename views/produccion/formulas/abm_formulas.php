@@ -5,16 +5,19 @@
 	</div>
 
 	<div class="box-body table-scroll table-responsive">
-		<table id="tbl-formulas" class="table table-striped table-hover">
+		<table id="tbl-formulas" class="table table-striped table-hover dt-bootstrap">
 			<!--Cabecera del datatable-->
 			<thead>
-				<th hidden></th>
-				<th>Descripción</th>
-				<th>U.M.</th>
-				<th>Cantidad</th>
-				<th>Fecha</th>
-				<!-- <th>Archivo</th> -->
-				<th class="sorting_disabled oculto"></th>
+				<tr>
+					<!-- <th hidden></th> -->
+					<th>Descripción</th>
+					<th>U.M.</th>
+					<th>Cantidad</th>
+					<th>Fecha</th>
+					<!-- <th>Archivo</th> -->
+					<th>Acciones</th>
+					<!-- <th class="sorting_disabled oculto"></th> -->
+				</tr>
 			</thead>
 			<!--________________________________________________________________________-->
 
@@ -24,8 +27,8 @@
 				foreach ($formulas as $fila) {
 					$id = $fila->form_id;
 					$descripcion = $fila->descripcion;
-					echo "<tr  value='$id' id='$id' data-descripcion='$descripcion'>";
-					echo "<td hidden></td>";
+					echo "<tr value='$id' id='$id' data-descripcion='$descripcion'>";
+					// echo "<td hidden></td>";
 
 					echo '<td style="font-weight: lighter;">' . $fila->descripcion . '</td>';
 					echo '<td style="font-weight: lighter;">' . $fila->unme_id . '</td>';
@@ -36,7 +39,7 @@
 					echo '<td width="15%" class="text-center" style="font-weight: lighter;">';
 					echo "<i class='fa fa-fw fa-search-plus text-light-blue' style='cursor: pointer;' title='Ver detalles'  onclick='verDetalles($id)'></i>";
 					// echo '<i class="fa fa-fw fa-refresh text-green" style="cursor: pointer;" title="Editar fórmula"  onclick="editarFormula(this)"></i>';
-					echo "<i class='fa fa-fw fa-refresh text-green' style='cursor: pointer;' title='Editar fórmula'  onclick='editarFormula($id)'></i>";
+					echo "<i class='fa fa-fw fa-edit text-green' style='cursor: pointer;' title='Editar fórmula'  onclick='editarFormula($id)'></i>";
 					// echo '<i class="fa fa-fw fa-trash text-red" style="cursor: pointer;" title="Eliminar fórmula"  onclick="eliminarFormula(this)"></i>';
 					echo "<i class='fa fa-fw fa-trash text-red' style='cursor: pointer;' data-toggle='modal' data-target='#modal-delete'  title='Eliminar fórmula' onclick='validarEliminar($id)'></i>";
 					echo '</td>';
@@ -73,7 +76,7 @@
 <!--Script Data Table-->
 <script>
 	DataTable('#tbl-formulas');
-	$('.oculto').removeClass('sorting');
+	// $('.oculto').removeClass('sorting');
 	// $('#tbl-formulas').dataTable();
 	$("#modal-delete").modal('hide');
 

@@ -47,7 +47,11 @@ class Opcionesfiltros extends CI_Model
     $url = REST_LOG . '/transportistas/'.empresa();
     return wso2($url)['data'];
   }
-
+  /**
+	* Busca los articulos cargados en alm.alm_articulos 
+	* @param 
+	* @return array listado de articulos cargados en almacenes
+	*/
   public function getProductos()
   { 
     $url = REST_PRD_ETAPAS . '/productos/list';

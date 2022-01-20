@@ -21,7 +21,7 @@
             <div class="box-body">
                 <div class=" form-group col-sm-5">
                     <div class="col-sm-2">
-                        <h5>Lote</h5>
+                        <h5>Nro Batch</h5>
                     </div>
                     <div class="col-sm-7">
                         <input type="text" class="form-control" id="batch" name="batch"
@@ -76,7 +76,7 @@
                             <th style="width: 4%;">Cod. Lote</th>
                             <th style="width: 4%;">Batch id</th>
                             <th style="width: 5%;">Estado</th>
-                            <th style="width: 4%;">N° Orden</th>
+                            <!-- <th style="width: 4%;">N° Orden</th> -->
                             <th style="width: 4%;">Etapa</th>
                             <th style="width: 8%;">Recipiente</th>
                             <!-- <th>Articulo</th> -->
@@ -208,9 +208,9 @@ function crearTabla(data) {
             {
                 "data": "lote_estado"
             },
-            {
-                "data": "lote_num_orden_prod"
-            },
+            //{
+            //    "data": "lote_num_orden_prod"
+            //},
             {
                 "data": "etap_nombre"
             },
