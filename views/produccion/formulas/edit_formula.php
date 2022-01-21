@@ -1,190 +1,182 @@
-<section class="content-header">
-	<h1>
-		<font style="vertical-align: inherit;">
-			<font style="vertical-align: inherit;">
-				Fórmulas
-			</font>
-		</font><small>
-			<font style="vertical-align: inherit;"></font>
-		</small>
-	</h1>
-</section>
-<section class="content">
-	<div class="row">
-		<div class="col-md-6">
-			<div class="box box-primary">
-				<div class="box-header with-border">
-					<h3 class="box-title">
-						<font style="vertical-align: inherit;">
-							<font style="vertical-align: inherit;">Datos de la fórmula</font>
-						</font>
-					</h3>
-				</div>
-				<input hidden type="text" value="<?php echo $tipo ?>" id="tipo" name="tipo" readonly>
-				<input hidden type="text" value="<?php echo $form_id ?>" id="form_id" name="form_id" readonly>
-				<!-- form start -->
-				<form role="form" id="form-Formulas" name="form-Formulas" data-toggle="validator">
-					<!-- <input type="text" id="unme_id" name="unme_id" value="<?php echo $unme_id ?>" hidden> -->
-					<div class="box-body">
-						<div class="form-group col-md-12">
-							<label for="descripcion">Descripción *</label>
-							<input type="text" class="form-control" id="descripcion" name="descripcion" placeholder="Ingrese descripción" value="<?php echo $formula->descripcion ?>" required>
-						</div>
-						<div class="form-group col-md-4">
-							<label for="unme_id">U.M. *</label>
-							<?php
-							if ($tipo == 1) {
-								echo
-									"<input type='text' class='form-control' id='unme_id' name='unme_id' placeholder='Ingrese descripción' value='$formula->unme_id' required>";
-							} else {
-								echo
-									"<select class='form-control' id='unme_id' name='unme_id' required>
-									<option disabled>Seleccione unidad</option>";
-
-								foreach ($um as $key) {
-									$selected = ($formula->unme_id == $key->tabl_id) ? 'selected' : '';
-									echo "
-											<option value='$key->tabl_id' $selected >$key->descripcion ($key->valor)</option>
-											";
-								}
-								echo "</select>";
-							}
-							?>
-						</div>
-						<div class="form-group col-md-4">
-							<label for="cantidad">Cantidad *</label>
-							<input type="number" class="form-control" id="cantidad" name="cantidad" placeholder="Ingrese cantidad" value="<?php echo $formula->cantidad ?>" required>
-						</div>
-						<div class="form-group col-md-4">
-							<label for="exampleInputPassword1">Fecha *</label>
-							<!-- <input type="date" class="form-control" id="fecha" name="fecha" value="<?php echo $formula->fec_alta ?>" required> -->
-							<!-- <input type="text" id="usuario_app" name="usuario_app" value="<?php echo $formula->usuario_app ?>" hidden> -->
-						</div>
-						<div class="form-group col-md-12">
-							<label for="aplicacion">Aplicación *</label>
-							<textarea class="form-control" id="aplicacion" name="aplicacion" rows="3" placeholder="Procedimiento de aplicación..." required><?php echo $formula->aplicacion ?></textarea>
-						</div>
-						<div class="form-group col-md-12">
-							<label for="archivo">Archivo</label>
-							<input type="file" id="archivo">
-							<p class="help-block">Seleccione un archivo PDF.</p>
-						</div>
+<div class="box box-primary">
+	<div class="box-header with-border">
+		<section class="content-header">
+			<h1 class="box-title">
+				<font style="vertical-align: inherit;">
+					<font style="vertical-align: inherit;">
+						Fórmulas
+					</font>
+				</font><small>
+					<font style="vertical-align: inherit;"></font>
+				</small>
+			</h1>
+		</section>
+	</div>
+	<section class="content">
+		<div class="row">
+			<div class="col-md-6">
+				<div class="box box-primary">
+					<div class="box-header with-border">
+						<h3 class="box-title">
+							<font style="vertical-align: inherit;">
+								<font style="vertical-align: inherit;">Datos de la fórmula</font>
+							</font>
+						</h3>
 					</div>
-					<!-- /.box-body -->
-				</form>
-			</div>
-		</div>
-		<div class="col-md-6">
-			<div class="box box-warning">
-				<div class="box-header with-border">
-					<h3 class="box-title">
-						<font style="vertical-align: inherit;">
-							<font style="vertical-align: inherit;">Artículos de la fórmula</font>
-						</font>
-					</h3>
-				</div>
-				<form role="form" id="form-Articulos" name="form-Articulos">
-					<p class="box-body">
-						<div class="form-group col-md-5">
-							<label for="articulo">Artículo</label>
-							<select class="form-control" id="articulo" name="articulo" data-descripcion>
-								<option selected disabled>Seleccione artículo</option>
+					<input hidden type="text" value="<?php echo $tipo ?>" id="tipo" name="tipo" readonly>
+					<input hidden type="text" value="<?php echo $form_id ?>" id="form_id" name="form_id" readonly>
+					<!-- form start -->
+					<form role="form" id="form-Formulas" name="form-Formulas" data-toggle="validator">
+						<!-- <input type="text" id="unme_id" name="unme_id" value="<?php echo $unme_id ?>" hidden> -->
+						<div class="box-body">
+							<div class="form-group col-md-12">
+								<label for="descripcion">Descripción <?php hreq() ?></label>
+								<input type="text" class="form-control" id="descripcion" name="descripcion" placeholder="Ingrese descripción" value="<?php echo $formula->descripcion ?>" required>
+							</div>
+							<div class="form-group col-md-4">
+								<label for="unme_id">U.M. <?php hreq() ?></label>
 								<?php
-								foreach ($articulos as $key) {
-									echo "
-										<option value='$key->id' data-um='$key->unidad_medida' >$key->descripcion</option>
-										";
+								if ($tipo == 1) {
+									echo
+										"<input type='text' class='form-control' id='unme_id' name='unme_id' placeholder='Ingrese descripción' value='$formula->unme_id' required>";
+								} else {
+									echo
+										"<select class='form-control' id='unme_id' name='unme_id' required>
+										<option disabled>Seleccione unidad</option>";
+
+									foreach ($um as $key) {
+										$selected = ($formula->unme_id == $key->tabl_id) ? 'selected' : '';
+										echo "
+												<option value='$key->tabl_id' $selected >$key->descripcion ($key->valor)</option>
+												";
+									}
+									echo "</select>";
 								}
 								?>
-							</select>
-						</div>
-						<div class="form-group col-md-4">
-							<label for="cantidad-articulo">Cantidad</label>
-							<input type="number" class="form-control" id="cantidad-articulo" name="cantidad-articulo" placeholder="Ingrese cantidad">
-						</div>
-						<div class="form-group col-md-2">
-							<label for="um-articulo">U.M.</label>
-							<input type="text" class="form-control" id="um-articulo" name="um-articulo" readonly>
-						</div>
-						<?php
-						if ($tipo == 2) {
-							echo
-								"<div class='form-group col-md-1'>
-								<label for=''></label>
-								<a class='btn btn-social-icon' style='margin-top: 4px;' onclick='agregarFila()'><i class='fa fa-fw fa-plus-square'></i></a>
-							</div>";
-						}
-						?>
-						<div class="dataTables_wrapper form-inline dt-bootstrap">
-							<div class="row">
-								<div class="col-sm-12"></div>
 							</div>
-							<div class="row">
-								<div class="col-sm-12">
-									<table id="tabla-Formula" class="table table-bordered table-hover dataTable" role="grid">
-										<thead>
-											<tr role="row">
-												<th>
-													<font style="vertical-align: inherit;">
-														<font style="vertical-align: inherit;">Artículo</font>
-													</font>
-												</th>
-												<th>
-													<font style="vertical-align: inherit;">
-														<font style="vertical-align: inherit;">U.M.</font>
-													</font>
-												</th>
-												<th>
-													<font style="vertical-align: inherit;">
-														<font style="vertical-align: inherit;">Cantidad</font>
-													</font>
-												</th>
-											</tr>
-										</thead>
-										<tbody>
-											<?php
-											foreach ($articulosFormula as $key) {
-												$cantidad = $key->cantidad;
-												echo "
-													<tr>
-														<td>$key->descripcion</td>
-														<td hidden>$key->arti_id</td>
-														<td>$key->unidad_medida</td>
-														<td value='$cantidad' data-valor='$cantidad'>$cantidad";
-												if ($tipo == 2) {
-													echo
-														"<a type='button' class='del pull-right' style='cursor: pointer;'><i class='fa fa-fw fa-minus'></i></a>";
+							<div class="form-group col-md-4">
+								<label for="cantidad">Cantidad <?php hreq() ?></label>
+								<input type="number" class="form-control" id="cantidad" name="cantidad" placeholder="Ingrese cantidad" value="<?php echo $formula->cantidad ?>" required>
+							</div>
+							<div class="form-group col-md-4">
+								<label for="exampleInputPassword1">Fecha <?php hreq() ?></label>
+								<!-- <input type="date" class="form-control" id="fecha" name="fecha" value="<?php echo $formula->fec_alta ?>" required> -->
+								<!-- <input type="text" id="usuario_app" name="usuario_app" value="<?php echo $formula->usuario_app ?>" hidden> -->
+							</div>
+							<div class="form-group col-md-12">
+								<label for="aplicacion">Aplicación <?php hreq() ?></label>
+								<textarea class="form-control" id="aplicacion" name="aplicacion" rows="3" placeholder="Procedimiento de aplicación..." required><?php echo $formula->aplicacion ?></textarea>
+							</div>
+							<div class="form-group col-md-12">
+								<label for="archivo">Archivo</label>
+								<input type="file" id="archivo">
+								<p class="help-block">Seleccione un archivo PDF.</p>
+							</div>
+						</div>
+						<!-- /.box-body -->
+					</form>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="box box-primary">
+					<div class="box-header with-border">
+						<h3 class="box-title">
+							<font style="vertical-align: inherit;">
+								<font style="vertical-align: inherit;">Artículos de la fórmula</font>
+							</font>
+						</h3>
+					</div>
+					<form role="form" id="form-Articulos" name="form-Articulos">
+						<div class="box-body">
+							<div class="form-group col-md-12 ba">
+								<label for="articulo">Artículo <?php hreq() ?></label>
+								<?php
+									echo selectBusquedaAvanzada('articulo','articulo',$articulos,'arti_id', 'barcode',array("descripcion","Medida"=>"unidad_medida","Stock" =>"stock"));
+								?>
+							</div>
+							<div class="form-group col-md-5">
+								<label for="cantidad-articulo">Cantidad <?php hreq() ?></label>
+								<input type="number" class="form-control" id="cantidad-articulo" name="cantidad-articulo" placeholder="Ingrese cantidad">
+							</div>
+							<div class="form-group col-md-5">
+								<label for="um-articulo">U.M. <?php hreq() ?></label>
+								<input type="text" class="form-control" id="um-articulo" name="um-articulo" readonly>
+							</div>
+							<?php
+							if ($tipo == 2) {
+								echo
+									"<div class='form-group col-md-1'>
+									<label for=''></label>
+									<a class='btn btn-social-icon' style='margin-top: 4px;' onclick='agregarFila()'><i class='fa fa-fw fa-plus-square'></i></a>
+								</div>";
+							}
+							?>
+							<div class="dataTables_wrapper form-inline dt-bootstrap">
+								<div class="row">
+									<div class="col-sm-12"></div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12">
+										<table id="tabla-Formula" class="table table-bordered table-hover dataTable" role="grid">
+											<thead>
+												<tr role="row">
+													<th>
+														<font style="vertical-align: inherit;">
+															<font style="vertical-align: inherit;">Artículo</font>
+														</font>
+													</th>
+													<th>
+														<font style="vertical-align: inherit;">
+															<font style="vertical-align: inherit;">U.M.</font>
+														</font>
+													</th>
+													<th>
+														<font style="vertical-align: inherit;">
+															<font style="vertical-align: inherit;">Cantidad</font>
+														</font>
+													</th>
+												</tr>
+											</thead>
+											<tbody>
+												<?php
+												foreach ($articulosFormula as $key) {
+													$cantidad = $key->cantidad;
+													echo "
+														<tr>
+															<td>$key->descripcion</td>
+															<td hidden>$key->arti_id</td>
+															<td>$key->unidad_medida</td>
+															<td value='$cantidad' data-valor='$cantidad'>$cantidad";
+													if ($tipo == 2) {
+														echo
+															"<a type='button' class='del pull-right' style='cursor: pointer;'><i class='fa fa-fw fa-minus'></i></a>";
+													}
+													echo "	</td>
+														</tr>
+													";
 												}
-												echo "	</td>
-													</tr>
-												";
-											}
-											?>
-										</tbody>
-									</table>
+												?>
+											</tbody>
+										</table>
+									</div>
 								</div>
 							</div>
 						</div>
-			</div>
-			<br>
-			<!-- <div class="box-footer"> -->
-			<?php
+					</form>
+				</div><!-- /.box box-primary -->
+			</div> <!-- /.col-md-6 -->
+		</div> <!-- /.row -->
+	</section>
+	<div class="box-footer">
+		<?php
 			if ($tipo == 2) {
-				echo
-					'<button type="submit" class="btn btn-success pull-right" onclick="validaDatos()" style="margin-top: 20px;">Editar
-							</button>';
+				echo '<button type="submit" class="btn btn-success pull-right" onclick="validaDatos()" style="margin-top: 20px;">Editar</button>';
+			}else{
+				echo '<button type="submit" class="btn btn-default pull-right" onclick="linkTo(\'' .base_url(PRD).'general/Formula\')" style="margin-top: 20px; margin-right: 10px;">Cerrar</button>';
 			}
-			echo
-				'<button type="submit" class="btn btn-default pull-right" onclick="linkTo(\'' .base_url(PRD).'general/Formula\')" style="margin-top: 20px; margin-right: 10px;">Cerrar
-							</button>';
-
-			?>
-			<!-- </div> -->
-			</form>
-		</div>
+		?>
 	</div>
-	</div>
-</section>
+</div> <!-- /.box box-primary -->
 
 <script>
 	if ($('#tipo').val() == 1) {

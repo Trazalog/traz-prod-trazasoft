@@ -15,6 +15,14 @@ class Camion extends CI_Controller
         $this->load->model('general/Transportistas');
         $this->load->model('general/Listado_carga_camion');
         $this->load->model('general/Listado_recepcion_camion');
+
+        // si esta vencida la sesion redirige al login
+		$data = $this->session->userdata();
+		// log_message('DEBUG','#Main/login | '.json_encode($data));
+		if(!$data['email']){
+			log_message('DEBUG','#TRAZA|DASH|CONSTRUCT|ERROR  >> Sesion Expirada!!!');
+			redirect(DNATO.'main/login');
+		}
     }
 		/**
 		* Levanta pantalla Carga Camión
@@ -52,8 +60,14 @@ class Camion extends CI_Controller
         $this->load->view('camion/salida_camion', $data);
     }
 
+    /**
+		* Trae listado de camiones ingresados por establecimiento
+		* @param establecimiento
+		* @return array datos camiones
+    */
     public function listarPorEstablecimiento()
     {
+        log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT | Camion | listarPorEstablecimiento()");
         $establecimiento = $this->input->post('establecimiento');
         $res = $this->Camiones->listarPorEstablecimiento($establecimiento);
         echo json_encode($res['data']);
@@ -85,6 +99,8 @@ class Camion extends CI_Controller
 		*/	
     public function finalizarCarga()
     {
+        log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT | Camion | finalizarCarga()");
+
         $lotes = json_decode($this->input->post('lotes'));
         $rsp = $this->Camiones->guardarCarga($lotes);
         echo json_encode($rsp);
@@ -109,23 +125,33 @@ class Camion extends CI_Controller
         // var_dump($camion);
         // echo 'ok';
     }
-
+    /**
+		* Carga la vista para generar una nuevo movimiento de transporte(pantalla Nueva Entrada | Recepción MP)
+		* @param 
+		* @return view entrada camion con datos de servicios
+		*/	 
     public function entradaCamion()
     {
-        $data['fecha'] = date('Y-m-d');
-        $data['lang'] = lang_get('spanish', 4);
-        $data['establecimientos'] = $this->Establecimientos->listarTodo()->establecimientos->establecimiento;
-        $data['tipoEstablecimiento'] = $this->Noconsumibles->tipoEstablecimiento()['data'];
-        $data['proveedores'] = $this->Camiones->listarProveedores()['data'];
-        $data['materias'] = $this->Materias->listar()->materias->materia;
-        $data['empaques'] = $this->Recipientes->listarEmpaques()->empaques->empaque;
-        $data['transportistas'] = $this->Transportistas->obtener()['data'];
-        $this->load->view('camion/entrada_camion', $data);
+      log_message('DEBUG'," #TRAZA | #TRAZ-PROD-TRAZASOFT | Camion | entradaCamion()");
+      $data['fecha'] = date('Y-m-d');
+      $data['lang'] = lang_get('spanish', 4);
+      $data['establecimientos'] = $this->Establecimientos->listarTodo()->establecimientos->establecimiento;
+      $data['tipoEstablecimiento'] = $this->Noconsumibles->tipoEstablecimiento()['data'];
+      $data['proveedores'] = $this->Camiones->listarProveedores()['data'];
+      $data['materias'] = $this->Materias->listar()->materias->materia;
+      $data['empaques'] = $this->Recipientes->listarEmpaques()->empaques->empaque;
+      $data['transportistas'] = $this->Transportistas->obtener()['data'];
+      $this->load->view('camion/entrada_camion', $data);
     }
 
-    #FLEIVA
+    /**
+		* Recibe los datos del camion para guardarlos en los movimientos_transportes
+		* @param array datos camion
+		* @return array con respuesta del servicio
+    */	
     public function setEntrada()
     {
+        log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT | Camion | setEntrada()");
         $this->load->model('general/Entradas');
 
         $data = $this->input->post();
@@ -172,12 +198,13 @@ class Camion extends CI_Controller
         echo json_encode($rsp);
     }
 
-    public function guardarLoteSistema()
+    public function guardarCargaCamionExterno()
     {
+        log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT | Camion | guardarCargaCamionExterno()");
         $frmCamion = $this->input->post('frmCamion');
-        $frmDescarga = $this->input->post('array');
+        $frmDescarga = $this->input->post('cargaCamion');
 
-        $rsp = $this->Camiones->guardarLoteSistema($frmCamion, $frmDescarga);
+        $rsp = $this->Camiones->guardarCargaCamionExterno($frmCamion, $frmDescarga);
 
         echo json_encode($rsp);
     }

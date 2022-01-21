@@ -301,15 +301,19 @@
                   <!--_____________ Artículo _____________-->
                   <div class="form-group">
                       <label for="articulo_id" class="col-sm-4 control-label">Artículo:</label>
-                      <div class="col-sm-12 col-md-8 col-lg-8">
-                        <select style="width: 60%" class="form-control s2MdlAgregar select2-hidden-accesible habilitar requerido" name="arti_id" id="articulo_id">
-                          <option value="" disabled selected>-Seleccione opción-</option>	
+                      <div class="col-sm-12 col-md-8 col-lg-8 ba">
+                        <select style="width: 60%" class="form-control select2-hidden-accesible habilitar requerido" name="arti_id" id="articulo_id">
+                          <option value="" data-foo='' disabled selected>-Seleccione opción-</option>	
                           <?php
                             foreach ($listarArticulos as $articulo) {
-                              echo '<option  value="'.$articulo->arti_id.'">'.$articulo->descripcion.' - Stock: '.$articulo->stock.'</option>';
+                              echo "<option value='$articulo->arti_id' data-json='". json_encode($articulo) . "' data-foo='<small><cite>$articulo->descripcion</cite></small>  <label>♦ </label>   <small><cite>$articulo->stock</cite></small>  <label>♦ </label>' >$articulo->barcode</option>";
                             }
-                          ?>
+                            ?>
                         </select>
+                        <?php 
+                          echo "<label id='detalle' class='select-detalle' class='text-blue'></label>";
+                          echo "<script>$('#articulo_id').select2({matcher: matchCustom,templateResult: formatCustom, dropdownParent: $('#modalAgregarArticulo')}).on('change', function() { selectEvent(this);})</script>";
+                        ?>
                       </div>
                     </div>
                   <!--__________________________-->   
@@ -351,7 +355,8 @@
   // carga tabla genaral de circuitos
   $("#cargar_tabla").load("<?php echo base_url(PRD); ?>/general/Etapa/listarEtapas");
   // Config Tabla
-  DataTable($('#tabla_articulos'));
+  // tablaArticulos = $("#tabla_articulos").DataTable();
+  // tablaArticulos.clear().draw();
 
   // muestra box de datos al dar click en boton agregar
   $("#botonAgregar").on("click", function() {
@@ -418,28 +423,59 @@
       recurso = 'index.php/<?php echo PRD ?>general/Etapa/guardarEtapa';
     }
     wo();
-    $.ajax({
-      type: 'POST',
-      data:{ datos },
-      //dataType: 'JSON',
-      url: recurso,
-      success: function(result) {
-        $("#cargar_tabla").load("<?php echo base_url(PRD); ?>general/Etapa/listarEtapas");
-        wc();
-        $("#boxDatos").hide(500);
-        $("#formEtapas")[0].reset();
-        $("#botonAgregar").removeAttr("disabled");
-        if (operacion == "editar") {
-          alertify.success("Etapa Editada Exitosamente");
-        }else{
-          alertify.success("Etapa Agregada con Exito");
-        }
-      },
-      error: function(result){
-        wc();
-        alertify.error("Error agregando Etapa");
+    validarEtapa(datos).then((result) => {
+      if(!result){
+        $.ajax({
+          type: 'POST',
+          data:{ datos },
+          //dataType: 'JSON',
+          url: recurso,
+          success: function(result) {
+            $("#cargar_tabla").load("<?php echo base_url(PRD); ?>general/Etapa/listarEtapas");
+            wc();
+            $("#boxDatos").hide(500);
+            $("#formEtapas")[0].reset();
+            $("#botonAgregar").removeAttr("disabled");
+            if (operacion == "editar") {
+              alertify.success("Etapa editada exitosamente");
+            }else{
+              alertify.success("Etapa agregada con éxito");
+            }
+          },
+          error: function(result){
+            wc();
+            alertify.error("Error agregando Etapa");
+          }
+        });
+      }else{
+        error("Error","La etapa productiva ingresada ya se encuentra creada para este proceso!");
+      }
+    }).catch((err) => {
+      if(err){
+        console.log(err);
+        error("Error","Se produjo un error al validar el nombre de la Etapa");
       }
     });
+  }
+  async function validarEtapa(datos){
+    let validacion = new Promise((resolve, reject) => {
+      $.ajax({
+        type: 'POST',
+        data:{ datos },
+        dataType: 'JSON',
+        url: "<?php echo PRD ?>general/Etapa/validarEtapa",
+        success: function(rsp) {
+          resolve(rsp.existe);
+        },
+        error: function(rsp){
+          reject(rsp.existe);
+        },
+        complete: function(){
+          wc();
+        }
+      });
+    });
+    return await validacion;
   }
 
   function agregarArticulo() {
@@ -479,7 +515,9 @@
           alertify.success("Artículo agregado con éxito");
         }, 3000);
         $("#modalAgregarArticulo").hide(500);
-        // form.reset();
+        $('#articulo_id').val(null).trigger('change');
+        $('#detalle').html('');
+        $('#tipo_id').val(null).trigger('change');
       },
       error: function(result){
         wc();

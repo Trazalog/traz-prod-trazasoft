@@ -19,7 +19,7 @@
         </table>
         <hr>
         <button id="guardarDescarga" class="btn btn-primary btn-sm" style="float:right"
-            onclick="guardarEntradaNoCon();guardarDescargaOrigen();guardarLoteSistema();" disabled><i
+            onclick="guardarEntradaNoCon();addCamion();" disabled><i
                 class="fa fa-check"></i> Guardar Descarga</button>
 								<!-- <button id="guardarDescarga" class="btn btn-primary btn-sm" style="float:right"
             onclick="guardarEntradaNoCon()"><i
@@ -34,18 +34,16 @@ var rmFila = function(e){
 }
 function agregarFila(data) {
 
-    var lote_origen = $('#new_codigo').hasClass('hidden') ? $('#codigo').select2('data')[0].text : $('#new_codigo')
-    .val();
+    var lote_origen = $('#new_codigo').hasClass('hidden') ? $('#codigo').select2('data')[0].text : $('#new_codigo').val();
 
     $('#lotes').append(
-        `<tr data-json='${JSON.stringify(data)}' class='${loteSistema?'lote-sistema':'lote'}'>
+        `<tr data-json='${JSON.stringify(data)}' class='lote'>
             <td class="text-center"><i class="fa fa-times text-danger" onclick="conf(rmFila, this)"></i></td>
             <td>${lote_origen}</td>
             <td>${$('.frm-destino #art-detalle').val()}</td>
             <td>${data.destino.cantidad + ' | ' + data.destino.unidad_medida}</td>
             <td>${data.destino.lote_id}</td>
             <td>${data.destino.recipiente}</td>
-            <td>${loteSistema?'<i class="fa fa-barcode text-blue" title="Lote Trazable"></i>':''}</td>
         </tr>`
     );
 
@@ -54,71 +52,64 @@ function agregarFila(data) {
 
 function guardarDescargaOrigen() {
 
-    //Guardar Datos de Camión parametro = FALSE es para NO mostrar el MSJ de Datos Guardados
-    if ($('#lotes tr').length != 0 && $('#codigo').find('option').length == 0) // SI EL USUARIO REGISTRO LOTES  Y SI NO HAY LOTES CARGADOS EN EL CAMION EN TRANSITO
-    {
-        addCamion(false);
-    }
-
     var array = [];
     $('#lotes tr.lote').each(function() {
         array.push(JSON.parse(this.dataset.json));
     });
 
     if (array.length == 0) return;
-
-    $.ajax({
-        type: 'POST',
-        dataType: 'JSON',
-        url: '<?php echo base_url(PRD) ?>general/Camion/guardarDescarga',
-        data: {
-            array
-        },
-        success: function(rsp) {
-            if (rsp.status) {
-                actualizarEstadoCamion($('#patente').val());
-                console.log('Listado de Recepciones MP se realizó correctamente');
-                linkTo();
-            } else {
-                alert('Fallo al guardar el listado de Recepciones MP');
+    
+    //Si es externo utilizo otro método para el guardado
+    if($("#esExterno").val() == 'externo'){
+        guardarCargaCamionExterno(array);
+    }else{
+        $.ajax({
+            type: 'POST',
+            dataType: 'JSON',
+            url: '<?php echo base_url(PRD) ?>general/Camion/guardarDescarga',
+            data: {
+                array
+            },
+            success: function(rsp) {
+                if (rsp.status) {
+                    console.log('Listado de Recepciones MP se realizó correctamente');
+                    actualizarEstadoCamion($('#patente').val());
+                    linkTo();
+                } else {
+                    alert('Fallo al guardar el listado de Recepciones MP');
+                }
+            },
+            error: function(rsp) {
+                alert('Error: ' + rsp.msj);
+                console.log(rsp.msj);
             }
-        },
-        error: function(rsp) {
-            alert('Error: ' + rsp.msj);
-            console.log(rsp.msj);
-        }
-    });
+        });
+    }
 }
-
-function guardarLoteSistema() {
-
+//Realiza el guardado de la carga del camion cuando es externo (haria las veces de la pantalla carga camion)
+// esto quiere decir que no se realizo la carga de los lotes por sistema
+// PARAM 'carga' es un array con los lotes cargados en la tabla de descarga
+function guardarCargaCamionExterno(cargaCamion) {
+    //Definida en entrada_camion.php, trae el formulario de info y camion juntos agregandole estado = 'EN CURSO'
     var frmCamion = obtenerFormularioCamion();
 
-    var array = [];
-    $('#lotes tr.lote-sistema').each(function() {
-        const e = JSON.parse(this.dataset.json);
-        e.loteSistema = loteSistemaData;
-        array.push(e);
-    });
-
-    if (array.length == 0) return;
+    if (cargaCamion.length == 0) return;
 
     wo();
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
-        url: '<?php echo base_url(PRD) ?>general/Camion/guardarLoteSistema',
+        url: '<?php echo base_url(PRD) ?>general/Camion/guardarCargaCamionExterno',
         data: {
-            array,
+            cargaCamion,
             frmCamion
         },
         success: function(rsp) {
-            if (rsp.status == true) {
-                actualizarEstadoCamion($('#patente').val());
-                Swal.fire('Correcto','Datos guardados con éxito','success');
+            if (rsp.status) {
+                hecho('Correcto','Se guardó la recepción con éxito');
                 linkTo();
             } else {
-                alert('Error al guardar lotes del sistema');
+                error('Error','Error al guardar la recepción');
             }
             
         },
@@ -130,7 +121,6 @@ function guardarLoteSistema() {
             wc();
         }
     });
-
 }
 
 function eliminarFila() {

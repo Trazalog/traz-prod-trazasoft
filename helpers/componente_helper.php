@@ -93,3 +93,19 @@ function componente($id, $url, $load = false)
 {
     return "<componente id='$id' class='reload' data-link='$url'>".($load?"<script>reload('#$id')</script>":'')."</componente>";
 }
+
+/**
+* Genera select de la tabla core.tablas por empresa
+* @param  $name es el ID y name; $placeholder ; $tabla campo tabla coincidente; $req si es obligatorio o no
+* @return array listado con productos
+*/
+function selectFromCoreEmpresa($name, $placeholder, $tabla, $req = false)
+{
+    $url = REST_CORE."/tabla/$tabla/empresa/".empresa();
+    $rsp = wso2($url);
+    $opt = '';
+    foreach ($rsp['data'] as $o) {
+        $opt .= "<option value='$o->valor'>$o->descripcion</option>";
+    }
+    return "<select id='$name' name='$name' class='form-control frm-select' style='width: 100%;' ".($req?req():'')."><option value='0' disabled selected> - $placeholder - </option>$opt</select>";   
+}
