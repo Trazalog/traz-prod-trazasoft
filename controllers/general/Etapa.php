@@ -346,7 +346,8 @@ class Etapa extends CI_Controller
             // trae lotes segun entrega de materiales de almacen.(81)
             $data['recipientes'] = $this->Recipientes->obtener('DEPOSITO', 'TODOS', $data['etapa']->esta_id)['data'];
             $data['ordenProd'] = $data['etapa']->orden;
-            $data['articulos_fraccionar'] = $this->Etapas->getSalidaEtapa($data['etapa']->etap_id)['data'];
+            $data['articulos_fraccionar'] = $this->Etapas->getEntradaEtapa($data['etapa']->etap_id)['data'];
+            $data['articulos_fracc_salida'] = $this->Etapas->getSalidaEtapa($data['etapa']->etap_id)['data'];
 
             $this->load->view('etapa/fraccionar/fraccionar', $data);
         } else {
@@ -361,6 +362,7 @@ class Etapa extends CI_Controller
     // guarda fraccionamiento y lanza pedido de materiales
     public function guardarFraccionar()
     {
+        log_message('DEBUG','#TRAZA | #TRAZ-PROD-TRAZASOFT | ETAPA | guardarFraccionar()');
         //////////// PARA CREAR EL NUEVO BATCH ///////////////////
         $datosCab['lote_id'] = 'FRACCIONAMIENTO';
         $datosCab['arti_id'] = (string) 0;
@@ -606,10 +608,12 @@ class Etapa extends CI_Controller
         $data['accion'] = 'Nuevo';
         $data['id'] = $this->input->get('op');
         $data['etapa'] = $this->Etapas->nuevo($data['id'])->etapa;
-        $data['fecha'] = date('Y-m-d');
+        $data['fecha'] = date('Y-m-d');x
         $data['establecimientos'] = $this->Establecimientos->listarTodo()->establecimientos->establecimiento;
         $data['empaques'] = $this->Recipientes->listarEmpaques()->empaques->empaque;
-        $data['articulos_fraccionar'] = $this->Articulos->obtenerXTipo('Final')['data'];
+        $data['articulos_fraccionar'] = $this->Etapas->getEntradaEtapa($data['id'])['data'];
+        $data['articulos_fracc_salida'] = $this->Etapas->getSalidaEtapa($data['id'])['data'];
+
         $this->load->view('etapa/fraccionar/fraccionar', $data);
     }
 
