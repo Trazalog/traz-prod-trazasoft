@@ -424,7 +424,7 @@
     }
     wo();
     validarEtapa(datos).then((result) => {
-      if(!result){
+      if(result=="false"){
         $.ajax({
           type: 'POST',
           data:{ datos },
