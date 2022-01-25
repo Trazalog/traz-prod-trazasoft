@@ -326,7 +326,7 @@ class Etapa extends CI_Controller
         // $data['productos'] = $this->Articulos->obtenerXTipos(array('Proceso', 'Producto'));
 
         // trae tablita de materia prima Origen y producto
-        // $data['matPrimas'] = $this->Etapas->getRecursosOrigen($id, MATERIA_PRIMA)->recursos->recurso;
+         $data['matPrimas'] = $this->Etapas->getRecursosOrigen($id, MATERIA_PRIMA)->recursos->recurso;
 
         #Obtener Articulos por Etapa
         $data['productos_etapa'] = $this->Etapas->obtenerArticulos($data['etapa']->etap_id)['data'];
@@ -608,7 +608,7 @@ class Etapa extends CI_Controller
         $data['accion'] = 'Nuevo';
         $data['id'] = $this->input->get('op');
         $data['etapa'] = $this->Etapas->nuevo($data['id'])->etapa;
-        $data['fecha'] = date('Y-m-d');x
+        $data['fecha'] = date('Y-m-d');
         $data['establecimientos'] = $this->Establecimientos->listarTodo()->establecimientos->establecimiento;
         $data['empaques'] = $this->Recipientes->listarEmpaques()->empaques->empaque;
         $data['articulos_fraccionar'] = $this->Etapas->getEntradaEtapa($data['id'])['data'];
