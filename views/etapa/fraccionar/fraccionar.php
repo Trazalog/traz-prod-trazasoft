@@ -264,7 +264,11 @@ function actualizaRecipiente(establecimiento, recipientes) {
             }
 
             if (!result.data) {
-                alert('No hay Recipientes Asociados');
+                Swal.fire(
+        'Error',
+        'No hay Recipientes Asociados.',
+        'error'
+      );
                 return;
             }
 
@@ -498,7 +502,11 @@ function guardar() {
         url: '<?php echo base_url(PRD) ?>general/Etapa/guardarFraccionar',
         success: function(rsp) {
             if (rsp.status) {
-                alert('Salida Guardada exitosamente.');
+                Swal.fire(
+        'Hecho',
+        'Salida Guardada exitosamente.',
+        'success'
+      );
                linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
             } else {
                 if (rsp.msj) {
@@ -529,7 +537,11 @@ function guardarForzado(data) {
         success: function(rsp) {
             $('#mdl-unificacion').modal('hide');
             if (rsp.status) {
-                alert('Salida Guardada exitosamente.');
+                Swal.fire(
+        'Hecho',
+        'Salida Guardada exitosamente.',
+        'success'
+      );
                linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
             } else {
                 alert('Fallo al iniciar la etapa fraccionamiento');
