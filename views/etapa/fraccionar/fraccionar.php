@@ -135,10 +135,16 @@ if($etapa->estado == "FINALIZADO"){
                     ?>
                             </div>
                         </div>
-                        <div class="col-xs-6">
+                        <div class="col-xs-3">
                             <div class="form-group">
                                 <label class="form-label">Stock:</label>
                                 <input type="number" disabled id="stock" value="" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-xs-3">
+                            <div class="form-group">
+                                <label class="form-label">Unidad de Medida:</label>
+                                <input type="text" disabled id="uni_medida" value="" class="form-control">
                             </div>
                         </div>
                         <div class="col-xs-4">
@@ -297,6 +303,9 @@ $("#inputproductos").on('change', function() {
     document.getElementById('stock').value = getJson(this).stock;
 
     //// stock
+    document.getElementById('uni_medida').value = getJson(this).um;
+
+//// uni_medida
 });
 
 function ActualizaEmpaques() {

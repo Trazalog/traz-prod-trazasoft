@@ -417,10 +417,23 @@
       if( !validarCampos('formEtapas') ){
         return;
       }
-      var form = $('#formEtapas')[0];
-      var datos = new FormData(form);
-      var datos = formToObject(datos);
-      recurso = 'index.php/<?php echo PRD ?>general/Etapa/guardarEtapa';
+      debugger;
+     
+       var form = $('#formEtapas')[0];
+
+    
+       var datos = new FormData(form);
+       var datos = formToObject(datos);
+       
+       console.log('form trae en nombre: ' + datos.nombre);
+
+       nombre_nuevo = datos.nombre.replace(/ /g, "_");
+      
+       datos['nombre']  = nombre_nuevo;
+     
+      console.log('form trae en nombre nuevo: ' + datos.nombre);
+      //return;
+       recurso = 'index.php/<?php  echo PRD ?>general/Etapa/guardarEtapa';
     }
     wo();
     validarEtapa(datos).then((result) => {
