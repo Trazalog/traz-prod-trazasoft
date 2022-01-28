@@ -39,8 +39,8 @@
                                     <select style="width: 100%" class="form-control select2-hidden-accesible habilitar requerido" name="arti_id" id="productos">
                                     <option value="" data-foo='' disabled selected>-Seleccione opción-</option>	
                                     <?php
-                                        foreach ($articulos_fraccionar as $articulo) {
-                                        echo "<option value='$articulo->arti_id' data-json='". json_encode($articulo) . "' data-foo='<small><cite>$articulo->descripcion</cite></small>  <label>♦ </label>   <small><cite>$articulo->stock</cite></small>  <label>♦ </label> <small><cite>$articulo->um</cite></small>' >$articulo->barcode</option>";
+                                        foreach ($articulos_fracc_salida as $articulo) {
+                                        echo "<option value='$articulo->barcode' data-json='". json_encode($articulo) . "' data-foo='<small><cite>$articulo->descripcion</cite></small>  <label>♦ </label>   <small><cite>$articulo->stock</cite></small>  <label>♦ </label> <small><cite>$articulo->um</cite></small>' >$articulo->barcode</option>";
                                         }
                                     ?>
                                     </select>
@@ -180,7 +180,11 @@ function actualizaRecipiente(establecimiento) {
             }
 
             if (!result.data) {
-                alert('No hay Recipientes Asociados');
+                Swal.fire(
+        'Error',
+        'No hay Recipientes Asociados.',
+        'error'
+      );
                 return;
             }
             fillSelect('#productodestino', result.data);

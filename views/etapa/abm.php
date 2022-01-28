@@ -227,7 +227,11 @@ function actualizaRecipiente(establecimiento, recipientes) {
             }
 
             if (!result.data) {
-                alert('No hay Recipientes Asociados');
+                Swal.fire(
+        'Error',
+        'No hay Recipientes Asociados.',
+        'error'
+      );
                 return;
             }
             fillSelect('#recipientes', result.data);
@@ -270,7 +274,11 @@ var guardarForzado = function(data) {
                 setAttr('#origen', 'orta_id', rsp.batch_id);
                 guardarTodasTareas();
                 $('#mdl-unificacion').modal('hide');
-                alert('Salida Guardada exitosamente.');
+                Swal.fire(
+        'Hecho',
+        'Salida Guardada exitosamente.',
+        'success'
+      );
                 linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
             } else {
                 alert('Fallo al iniciar la etapa');
@@ -359,7 +367,11 @@ function guardar(boton) {
             if (rsp.status) {
                 setAttr('#origen', 'orta_id', rsp.batch_id);
                 guardarTodasTareas();
-                alert('Salida Guardada exitosamente.');
+                Swal.fire(
+        'Hecho',
+        'Salida Guardada exitosamente.',
+        'success'
+      );
                 linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
             } else {
                 if (rsp.msj) {
