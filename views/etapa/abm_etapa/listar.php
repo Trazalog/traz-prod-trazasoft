@@ -15,6 +15,10 @@
 			{
 				foreach($listarEtapasProductivas as $rsp)
 				{
+          $cadena_nombre = $rsp->nombre;
+
+$nombre_nuevo = str_replace("_", " ", $cadena_nombre);
+
 					echo "<tr data-json='".json_encode($rsp)."'>";
 					// echo "<tr id='$rsp->etap_id' data-json='" . json_encode($rsp) . "'>";
 						echo "<td class='text-center text-light-blue'>";
@@ -24,7 +28,7 @@
 							echo '<button type="button" title="Eliminar" class="btn btn-primary btn-circle btnEliminar" id="btnBorrar"  ><span class="glyphicon glyphicon-trash" aria-hidden="true" ></span></button>&nbsp';
 						echo "</td>";
             // echo '<td class="hide"/>'.$rsp->etap_id.'</td>';
-						echo '<td>'.$rsp->nombre.'</td>';
+						echo '<td>'.$nombre_nuevo.'</td>';
 						echo '<td>'.$rsp->proc_prod.'</td>';
 						echo '<td>'.$rsp->recipiente.'</td>';
 						echo '<td>'.$rsp->tipo.'</td>';
