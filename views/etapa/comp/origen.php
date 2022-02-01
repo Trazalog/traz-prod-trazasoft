@@ -15,7 +15,7 @@
     <?php if ($etapa->estado != 'En Curso' && $etapa->estado != 'FINALIZADO') { ?>
     <div class="box-body">
 
-        <div class="row" style="margin-top: 40px">
+        <div class="row">
             <div class="col-xs-12">
                 <div class="row form-group">
                     <div class="col-md-3 col-xs-6">
@@ -60,7 +60,7 @@
             </div>
         </div>
 
-        <div class="row" style="margin-top: 40px ">
+        <div class="row">
             <input type="hidden" id="materiasexiste" value="no">
             <div class="col-xs-12 table-responsive" id="materiasasignadas">
             </div>
@@ -73,7 +73,7 @@
     <!-- ORIGEN EDICION ETAPA -->
     <?php if ($accion == 'Editar' && $etapa->estado == 'FINALIZADO') { ?>
     <div class="box-body">
-        <div class="row" style="margin-top: 40px ">
+        <div class="row">
             <input type="hidden" id="materiasexiste" value="no">
             <div class="col-xs-12 table-responsive" id="materiasasignadas">
                 <table id="etapas" class="table table-bordered table-hover">
