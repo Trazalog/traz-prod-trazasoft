@@ -1,10 +1,11 @@
 <style>
   .flotante {
-    display: scroll;
-    position: fixed;
-    bottom: 80%;
+    /* display: scroll; */
+    position: absolute;
+    /* bottom: 80%; */
     right: 2%;
-    z-index: 9999;
+    /* z-index: 9999; */
+    float: right;
   }
 
   .btn-circle.btn-xl {
@@ -32,27 +33,14 @@
 
 <div class="box table-responsive">
   <div class="box-header with-border">
-    <h4 class="box-title">Etapas</h4></div>
-    <div class="row" style="width:900px; margin-top:5px;">
-      <div class="col-xs-10">
-        <?php
-
-        for ($i = 0; $i < count($etapas); $i++) {
-          if ($i < count($etapas) - 1) {
-            echo "<button class='btn btn-primary btn-arrow-right outline' onclick='muestra(`" . $etapas[$i]->titulo . "`,`" . json_encode($list) . "`)'> " . $etapas[$i]->titulo . "  </button>";
-          } else {
-            echo "<button class='btn btn-primary btn-arrow-right-final outline' onclick='muestra(`" . $etapas[$i]->titulo . "`,`" . json_encode($list) . "`)'> " . $etapas[$i]->titulo . "  </button>";
-          }
-        }
-        ?>
-        <button class="btn btn-primary outline" onclick='muestra(`todas`,`<?php echo json_encode($list); ?>`)'>
-          Todas</button>
-      
-      <div class="flotante">
+    <h4 class="box-title">Etapas</h4>
+    <div class="flotante">
         <button style="background: #1D976C;  /* fallback for old browsers */
-background: -webkit-linear-gradient(to bottom, #93F9B9, #1D976C);  /* Chrome 10-25, Safari 5.1-6 */
-background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-" type="button" class=" btn dropdown-toggle btn-circle btn-xl" data-toggle="dropdown" aria-expanded="false"> <b style="color:#ffffff">+</b></button>
+        background: -webkit-linear-gradient(to bottom, #93F9B9, #1D976C);  /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */" 
+        type="button" class=" btn dropdown-toggle btn-circle btn-xl" data-toggle="dropdown" aria-expanded="false" title="Crear Nueva Etapa">
+         <b style="color:#ffffff">+</b>
+        </button>
         <ul class="dropdown-menu dropdown-menu-right" id="nuevo">
           <li class="header text-center text-info"><b>Crear Nueva Etapa</b></li>
           <?php
@@ -65,6 +53,20 @@ background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, 
           <!-- <li  data-value="1"><a data-json="">"siembra"</a></li> -->
         </ul>
       </div>
+  </div>
+    <div class="row" style="width:900px; margin-top:5px;">
+      <div class="col-xs-10">
+        <?php
+
+        for ($i = 0; $i < count($etapas); $i++) {
+          if ($i < count($etapas) - 1) {
+            echo "<button class='btn btn-primary btn-arrow-right outline' onclick='muestra(`" . $etapas[$i]->titulo . "`,`" . json_encode($list) . "`)'> " . $etapas[$i]->titulo . "  </button>";
+          } else {
+            echo "<button class='btn btn-primary btn-arrow-right-final outline' onclick='muestra(`" . $etapas[$i]->titulo . "`,`" . json_encode($list) . "`)'> " . $etapas[$i]->titulo . "  </button>";
+          }
+        }
+        ?>
+        <button class="btn btn-primary outline" onclick='muestra(`todas`,`<?php echo json_encode($list); ?>`)'>Todas</button>
     </div>
   </div><!-- /.box-header -->
   <div class="box-body">

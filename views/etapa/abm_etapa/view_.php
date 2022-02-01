@@ -543,10 +543,11 @@
     var data = JSON.parse($(e).closest('tr').attr('data-json'));
     var arti_id = data.arti_id;
     var tipo = data.tipo;
-    // var etap_id = data.etap_id;
-    $('#arti_id').val(data.arti_id);
-    $('#tipo').val(data.tipo);
+    
+    $('#arti_id').val(arti_id);
+    $('#tipo').val(tipo);
     var etap_id = $("#id_etap").val();
+
     // var etap_id = $("#etapa_id").val();
     $("#id_etapa_borrar").val(etap_id);
 
