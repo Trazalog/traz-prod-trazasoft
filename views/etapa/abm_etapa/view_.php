@@ -17,9 +17,8 @@
 </div>
 <!-- /// ----- HEADER -----/// -->
 
-<!---///--- BOX 1 NUEVO ---///----->
+<!---///--- BOX 1 NUEVA ETAPA PRODUCTIVA ---///----->
 <div class="box box-primary animated bounceInDown" id="boxDatos" name="Content-Type"  scope="transport" hidden>
-<!-- <header name="Content-Type"  scope="transport" action="remove"/> -->
   <div class="box-header with-border">
     <div class="box-tittle">
       <h4>Nueva Etapa Productiva</h4>
@@ -113,7 +112,7 @@
   </div>
   <!--__________________________________-->
 </div>
-<!---///--- FIN BOX NUEVO ---///----->
+<!---///--- FIN BOX NUEVA ETAPA PRODUCTIVA ---///----->
 
 <!---/////---BOX 2 DATATABLE ---/////----->
 <div class="box box-primary">

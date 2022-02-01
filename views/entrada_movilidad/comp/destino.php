@@ -8,25 +8,25 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label>Código Lote:</label>
+                        <label>Código Lote<?php hreq() ?>:</label>
                         <input name="lote_id" class="form-control req" type="text" id="codigo">
-                        <small class="help-block"><a class="pull-right" href="#frm-destino"
-                                onclick="$(this).closest('.form-group').find('input').val($('#new_codigo').hasClass('hidden')?$('#codigo').select2('data')[0].text:$('#new_codigo').val())">#
-                                Copiar Lote
-                                Origen</a></small>
+                        <small class="help-block">
+                            <a class="pull-right" href="#frm-destino" onclick="$(this).closest('.form-group').find('input').val($('#new_codigo').hasClass('hidden')?$('#codigo').select2('data')[0].text:$('#new_codigo').val())">
+                                # Copiar Lote Origen
+                            </a>
+                        </small>
                     </div><br>
                 </div>
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label>Producto:</label>
-                        <input list="articulos" name="arti_id" class="form-control inp-descarga req" type="text"
-                            id="articulo" readonly>
-                        <small class="help-block"><a class="pull-right" href="#frm-origen"
-                                onclick="$('.frm-destino #articulo').val($('.frm-origen #articulo').val())"># Copiar
-                                Producto
-                                Origen</a></small>
+                        <label>Producto<?php hreq() ?>:</label>
+                        <input list="articulos" name="arti_id" class="form-control inp-descarga req" type="text" id="articulo" readonly>
+                        <small class="help-block">
+                            <a class="pull-right" href="#frm-origen" onclick="$('.frm-destino #articulo').val($('.frm-origen #articulo').val())">
+                                # Copiar Producto Origen
+                            </a>
+                        </small>
                         <datalist id="articulos">
-
                         </datalist>
                     </div>
                 </div>
@@ -40,17 +40,16 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label>Unidad Medida:</label>
+                        <label>Unidad Medida<?php hreq() ?>:</label>
                         <input readonly id="unidad_medida" list="unidades" name="unidad_medida" class="form-control req"
                             type="text">
                         <datalist id="unidades" class="unidades">
-
                         </datalist>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label>Cantidad:</label>
+                        <label>Cantidad<?php hreq() ?>:</label>
                         <input name="cantidad" class="form-control req" type="number">
                     </div>
                 </div>
@@ -58,12 +57,9 @@
                     <div class="form-group ba">
                         <label>Destino:</label>
                         <!--
-                        <input list="recipientes" name="reci_id" class="form-control req" type="text" id="recipiente"
-                            placeholder="< Seleccionar >">
+                        <input list="recipientes" name="reci_id" class="form-control req" type="text" id="recipiente" placeholder="< Seleccionar >">
                         <datalist id="recipientes">
-
                         </datalist> -->
-
                         <?php
                             echo selectBusquedaAvanzada('recipiente', 'reci_id')
                         ?>
@@ -71,7 +67,8 @@
                 </div>
                 <div class="col-md-4">
                     <button class="btn btn-primary" style="margin-top:23px; float:right;"><i class="fa fa-plus"></i>
-                        Agregar</button>
+                        Agregar
+                    </button>
                 </div>
             </div>
             <input type="text" name="unificar" value="false" class="hidden" id="unificar" placeholder="< Seleccionar >">
@@ -85,30 +82,22 @@
 <script>
 $('#frm-destino').on('submit', function(e) {
     e.preventDefault();
-
-    console.log('prov_id:' + $('#proveedor').val());
-
+    // console.log('prov_id:' + $('#proveedor').val());
     if (!validar($('#frm-destino'))) {
         alert('Complete los Campos Obligatorios');
         return;
     }
-
     var json = getJson($('#recipiente'));
     if ($('#recipiente').value == '0' || !json) return;
     validarRecipiente(json);
-
     if (vacio || $('#unificar').val() == "true") {
         var fo = new FormData($('#frm-origen')[0]);
         var fd = new FormData($('#frm-destino')[0]);
-
         origen = formToObject(fo);
         destino = formToObject(fd);
-
         origen.prov_id = $('#proveedor').val();
         origen.batch_id = batch;
-
-        destino.recipiente = $("#recipiente").find(':selected').text();
-        
+        destino.recipiente = $("#recipiente").find(':selected').text();        
         if (parseFloat(origen.cantidad) <= 0 || parseFloat(destino.cantidad) > parseFloat(origen.cantidad)) {
             alert('La Cantidad Supera la Cantidad del Lote Origen');
             return;
@@ -124,10 +113,8 @@ $('#frm-destino').on('submit', function(e) {
 //Busca lso recipientes de un establecimiento seleccionado
 //se llama en el onchange del select de establecimiento
 function obtenerRecipientes() {
-    console.log('Obtener Recipientes');
-    
+    console.log('Obtener Recipientes');    
     esta_id = $("#establecimientos").val();
-
     $.ajax({
         type: 'GET',
         dataType: 'JSON',
@@ -153,14 +140,12 @@ function obtenerRecipientes() {
 
 var vacio = false;
 function validarRecipiente(json) {
-
     if (json.estado == 'VACIO'){
         $('#unificar').val(false);
         vacio = true;
         return;
     }
     vacio = false; 
-
     var arti_id = $('.frm-destino #articulo').attr('data-id');
     var lote_id = $('.frm-destino #codigo').val();
     wo();
