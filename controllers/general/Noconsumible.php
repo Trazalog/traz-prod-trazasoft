@@ -215,4 +215,19 @@ class Noconsumible extends CI_Controller
         $resp = $this->Noconsumibles->seleccionarDestino()['data'];
         echo json_encode($resp);
     }
+
+  /**
+	* Recibe el codigo del NoCo, para posteriormente validar si ya esta creado para una empresa
+	* @param string codigo NoCo
+	* @return array respuesta del servicio
+	*/
+  public function validarNoConsumible(){
+    log_message('INFO','#TRAZA | #TRAZ-PROD-TRAZASOFT | Noconsumible | validarNoConsumible()');
+
+		$noco = $this->input->post('codigo');
+
+		$resp = $this->Noconsumibles->validarNoConsumible($noco);
+        
+    echo json_encode($resp);
+	}
 }

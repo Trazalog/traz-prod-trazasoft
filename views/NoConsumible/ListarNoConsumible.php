@@ -79,56 +79,67 @@
     	}
 		var formData = new FormData($('#frm-NoConsumible')[0]);
 		wo();
-		
-		$.ajax({
-			type: 'POST',
-			dataType: 'JSON',
-			url: '<?php echo base_url(PRD) ?>general/Noconsumible/guardarNoConsumible',
-			data: formData,
-			cache: false,
-			contentType: false,
-			processData: false,
-			success: function(rsp) {
-				wc();
-				$("#mdl-NoConsumible").modal('hide');
-				const confirm = Swal.mixin({
-					customClass: {
-						confirmButton: 'btn btn-primary'
+
+		validarNoConsumible(formData).then((result) => {
+			if(result == "false"){
+				$.ajax({
+					type: 'POST',
+					dataType: 'JSON',
+					url: '<?php echo base_url(PRD) ?>general/Noconsumible/guardarNoConsumible',
+					data: formData,
+					cache: false,
+					contentType: false,
+					processData: false,
+					success: function(rsp) {
+						wc();
+						$("#mdl-NoConsumible").modal('hide');
+						const confirm = Swal.mixin({
+							customClass: {
+								confirmButton: 'btn btn-primary'
+							},
+							buttonsStyling: false
+						});
+
+						if (rsp) {
+							confirm.fire({
+								title: 'Correcto',
+								text: "No consumible dado de alta correctamente!",
+								type: 'success',
+								showCancelButton: false,
+								confirmButtonText: 'Ok'
+							}).then((result) => {
+								
+								linkTo('<?php echo base_url(PRD) ?>general/Noconsumible/index');
+								
+							});
+						} else {
+							wc();
+							Swal.fire(
+								'Error...',
+								'No pudo darse de alta el No consumible!',
+								'error'
+							);
+						}
 					},
-					buttonsStyling: false
+					error: function(rsp) {
+						wc();
+						$("#mdl-NoConsumible").modal('hide');
+
+						Swal.fire(
+							'Error...',
+							'No pudo darse de alta el No consumible!',
+							'error'
+						)
+						console.log(rsp.msj);
+					}
 				});
-
-				if (rsp) {
-					confirm.fire({
-						title: 'Correcto',
-						text: "No consumible dado de alta correctamente!",
-						type: 'success',
-						showCancelButton: false,
-						confirmButtonText: 'Ok'
-					}).then((result) => {
-						
-						linkTo('<?php echo base_url(PRD) ?>general/Noconsumible/index');
-						
-					});
-				} else {
-					wc();
-					Swal.fire(
-						'Error...',
-						'No pudo darse de alta el No consumible!',
-						'error'
-					);
-				}
-			},
-			error: function(rsp) {
-				wc();
-				$("#mdl-NoConsumible").modal('hide');
-
-				Swal.fire(
-					'Error...',
-					'No pudo darse de alta el No consumible!',
-					'error'
-				)
-				console.log(rsp.msj);
+			}else{
+				error("Error","El código del No Consumible ingresado ya se encuentra creado!");
+			}
+		}).catch((err) => {
+			if(err){
+				console.log(err);
+				error("Error","Se produjo un error al validar el código del No Consumible");
 			}
 		});
 	}
@@ -454,6 +465,32 @@
 				});
 	}
 ////// Fin Trazabilidad
+
+/////// Validación código del no consumible
+async function validarNoConsumible(datos){
+    let validacion = new Promise((resolve, reject) => {
+      $.ajax({
+        type: 'POST',
+        data: datos,
+		cache: false,
+		contentType: false,
+		processData: false,
+        dataType: 'JSON',
+        url: "<?php echo base_url(PRD) ?>general/Noconsumible/validarNoConsumible",
+        success: function(rsp) {
+          resolve(rsp.existe);
+        },
+        error: function(rsp){
+          reject(rsp.existe);
+        },
+        complete: function(){
+          wc();
+        }
+      });
+    });
+    return await validacion;
+  }
+////////////////
 
 </script>
 
