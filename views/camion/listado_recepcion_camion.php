@@ -91,6 +91,7 @@ $this->load->view('camion/modal_recepcioncamion');
                 <th>CUIT</th>
                 <th>Fecha</th>
                 <th>Patente - Acoplado</th>
+                <th>Establecimiento</th>
                 <th>Neto</th>
                 <th>Estado</th>
 
@@ -118,6 +119,7 @@ $this->load->view('camion/modal_recepcioncamion');
           echo '<td style="font-weight: lighter;">'.$fila->cuit.'</td>';
           echo '<td style="font-weight: lighter;">'.$fila->fecha_entrada.'</td>';
           echo '<td style="font-weight: lighter;">'.$fila->patente .' | '.$fila->acoplado.'</td>';
+          echo '<td style="font-weight: lighter;">'.$fila->establecimiento.'</td>';
           echo '<td style="font-weight: lighter;">'.$fila->neto.'</td>';
           echo '<td style="font-weight: lighter;">'.estado($fila->estado).'</td>';
           echo '</tr>';

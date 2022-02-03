@@ -20,7 +20,7 @@ if($etapa->estado == "FINALIZADO"){
     <input class="hidden" type="text" id="batch_id" value="<?php echo $etapa->id ?>">
     <div class="box box-primary">
         <div class="box-header with-border">
-        <h3 class="box-title"><?php echo $etapa->titulo;?></h3>
+        <h3 class="box-title"><?php echo $etapa->titulo; ?></h3>
         </div>
         <div class="box-body">
             <div class="row">
@@ -33,6 +33,13 @@ if($etapa->estado == "FINALIZADO"){
                                     <label class="form-label">Fecha<?php hreq() ?>:</label>
                                     <input type="<?php if($accion != 'Editar'){echo 'date';} ?>" id="fecha"
                                         value="<?php echo $fecha;?>" class="form-control"
+                                        <?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
+                                </div>
+                                <div class="col-xs-6">
+                                    <label for="Lote" class="form-label">Código Lote:*</label>
+                                    <input type="text" id="lote_id" class="form-control" 
+                                    <?php if($accion=='Editar' ){echo ( 'value="'.$etapa->lote.'"');}?>
+                                        placeholder="Inserte orden de producción"
                                         <?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
                                 </div>
                                 <div class="col-xs-6">
@@ -300,12 +307,11 @@ function despliega() {
 $("#inputproductos").on('change', function() {
 
 
-    document.getElementById('stock').value = getJson(this).stock;
-
     //// stock
+    document.getElementById('stock').value = getJson(this).stock;
+//// uni_medida
     document.getElementById('uni_medida').value = getJson(this).um;
 
-//// uni_medida
 });
 
 function ActualizaEmpaques() {
@@ -472,12 +478,14 @@ function valida() {
 }
 
 function guardar() {
+    //CHUKA
     fecha = document.getElementById('fecha').value;
     establecimiento = document.getElementById('establecimientos').value;
     recipiente = document.getElementById('recipientes').value;
     idetapa = <?php echo $etapa->id ?> ;
     existe = document.getElementById('productoexiste').value;
     ordProduccion = document.getElementById('ordenproduccion').value;
+    lote_id = document.getElementById('lote_id').value;
     var productos = [];
     var acum_cant = 0;
     if (existe == "si") {
@@ -500,6 +508,7 @@ function guardar() {
         productos: productos,
         cant_total_desc: acum_cant,
         ordProduccion: ordProduccion,
+        lote_id : lote_id,
         forzar: 'false'
     };
 

@@ -548,7 +548,7 @@ class Etapas extends CI_Model
 	*/
     public function validarEtapa($etapa){
         
-        $url = REST_PRD_ETAPAS."/validar/etapa/". $etapa['nombre']. "/proceso/" . $etapa['proc_id'] . "/empresa/".empresa();
+        $url = REST_PRD_ETAPAS."/validar/etapa/". urlencode($etapa['nombre']) . "/proceso/" . $etapa['proc_id'] . "/empresa/".empresa();
 
         $aux = $this->rest->callAPI("GET",$url);
         $resp = json_decode($aux['data']);

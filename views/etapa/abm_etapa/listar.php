@@ -95,10 +95,12 @@ $nombre_nuevo = str_replace("_", " ", $cadena_nombre);
             // var tabla = $('#modalarticulos table');
             var tablaArticulos = $("#tabla_articulos").DataTable();
             tablaArticulos.clear().draw();
+            
             $.each(result, function(index, value) {
               // console.log(value);
               // use data table row.add, then .draw for table refresh
-              tablaArticulos.row.add(["<button type='button' title='Eliminar Artículo' class='btn btn-primary btn-circle btnEliminar' onclick='eliminarArticulo("+ value.arti_id +")' id='btnBorrar'><span class='glyphicon glyphicon-trash' aria-hidden='true' ></span></button>", value.barcode, value.descripcion, value.tipo, value.unidad_medida, value.es_caja, value.cantidad_caja]).draw();
+              rowInstanciada = tablaArticulos.row.add(["<button type='button' title='Eliminar Artículo' class='btn btn-primary btn-circle btnEliminar' onclick='eliminarArticulo(this)'><span class='glyphicon glyphicon-trash' aria-hidden='true' ></span></button>", value.barcode, value.descripcion, value.tipo, value.unidad_medida, value.es_caja, value.cantidad_caja]).draw().node();
+              $(rowInstanciada).attr('data-json', JSON.stringify(value));
             });
 
 

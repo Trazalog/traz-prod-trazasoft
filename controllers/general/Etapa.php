@@ -364,7 +364,8 @@ class Etapa extends CI_Controller
     {
         log_message('DEBUG','#TRAZA | #TRAZ-PROD-TRAZASOFT | ETAPA | guardarFraccionar()');
         //////////// PARA CREAR EL NUEVO BATCH ///////////////////
-        $datosCab['lote_id'] = 'FRACCIONAMIENTO';
+      //  $datosCab['lote_id'] = 'FRACCIONAMIENTO';
+        $datosCab['lote_id'] =$this->input->post('lote_id');
         $datosCab['arti_id'] = (string) 0;
         $datosCab['prov_id'] = (string) PROVEEDOR_INTERNO;
         $datosCab['batch_id_padre'] = (string) 0;
@@ -705,6 +706,7 @@ class Etapa extends CI_Controller
 
     public function abmEtapa()
     {
+        log_message('DEBUG','#TRAZA | #TRAZ-PROD-TRAZASOFT | #ETAPA | abmEtapa()');
         $data['listarProcesos'] = $this->Procesos->listarProcesos()->procesos->proceso;
         $data['listarTipos'] = $this->Etapas->listarTipos()->tablas->tabla;
         $data['listarFormularios'] = $this->Forms->listarFormularios()->formularios->formulario;        
