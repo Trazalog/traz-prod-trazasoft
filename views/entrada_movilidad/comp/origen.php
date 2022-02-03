@@ -8,9 +8,8 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label>Código Lote:</label>
-                        <input type="text" id="new_codigo" name="lote_id" class="form-control hidden" disabled
-                            style="margin-botton:-500px">
+                        <label>Código Lote<?php hreq() ?>:</label>
+                        <input type="text" id="new_codigo" name="lote_id" class="form-control hidden" disabled>
                         <?php
                             echo selectBusquedaAvanzada('codigo', 'lote_id');
                         ?>
@@ -19,7 +18,7 @@
                 </div>
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label>Producto:</label>
+                        <label>Producto<?php hreq() ?>:</label>
                         <?php
                             echo selectBusquedaAvanzada('articulos', 'arti_id');
                             ?>
@@ -36,7 +35,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label>Unidad Medida:</label>
+                        <label>Unidad Medida<?php hreq() ?>:</label>
                         <input list="unidades" name="unidad_medida" class="form-control inp-descarga" type="text"
                             id="um" placeholder="< Seleccionar >">
                         <datalist id="unidades" class="unidades">
@@ -46,7 +45,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label>Cantidad:</label>
+                        <label>Cantidad<?php hreq() ?>:</label>
                         <input name="cantidad" class="form-control inp-descarga" type="number" id="cantidad">
                     </div>
                 </div>

@@ -17,9 +17,8 @@
 </div>
 <!-- /// ----- HEADER -----/// -->
 
-<!---///--- BOX 1 NUEVO ---///----->
+<!---///--- BOX 1 NUEVA ETAPA PRODUCTIVA ---///----->
 <div class="box box-primary animated bounceInDown" id="boxDatos" name="Content-Type"  scope="transport" hidden>
-<!-- <header name="Content-Type"  scope="transport" action="remove"/> -->
   <div class="box-header with-border">
     <div class="box-tittle">
       <h4>Nueva Etapa Productiva</h4>
@@ -113,7 +112,7 @@
   </div>
   <!--__________________________________-->
 </div>
-<!---///--- FIN BOX NUEVO ---///----->
+<!---///--- FIN BOX NUEVA ETAPA PRODUCTIVA ---///----->
 
 <!---/////---BOX 2 DATATABLE ---/////----->
 <div class="box box-primary">
@@ -544,10 +543,11 @@
     var data = JSON.parse($(e).closest('tr').attr('data-json'));
     var arti_id = data.arti_id;
     var tipo = data.tipo;
-    // var etap_id = data.etap_id;
-    $('#arti_id').val(data.arti_id);
-    $('#tipo').val(data.tipo);
+    
+    $('#arti_id').val(arti_id);
+    $('#tipo').val(tipo);
     var etap_id = $("#id_etap").val();
+
     // var etap_id = $("#etapa_id").val();
     $("#id_etapa_borrar").val(etap_id);
 

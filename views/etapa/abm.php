@@ -19,12 +19,12 @@
         </div>
         <!-- /.box-header -->
         <div class="box-body">
-            <div class="row">
+            <div class="row form-group">
                 <input type="hidden" value="0" id="batch_id" name="batch_id">
-                <div class="col-md-1 col-xs-12">
+                <div class="col-md-2 col-xs-12">
                     <label for="Lote" class="form-label">Código Lote:*</label>
                 </div>
-                <div class="col-md-5 col-xs-12">
+                <div class="col-md-4 col-xs-12">
                     <input name="vcode" type="text" id="Lote" <?php if ($accion == 'Editar') {
                         echo 'value="' . $etapa->lote . '"';
                     } ?> class="form-control" placeholder="Inserte Lote"
@@ -45,7 +45,7 @@
 
                 </div>
             </div>
-            <div class="row" style="margin-top: 50px">
+            <div class="row form-group">
                 <div class="col-md-2 col-xs-12">
                     <label for="establecimientos" class="form-label">Establecimiento*:</label>
                 </div>
@@ -95,7 +95,7 @@
                     ?>
                 </div>
             </div>
-            <div class="row" style="margin-top: 50px">
+            <div class="row form-group">
                 <div class="col-md-2 col-xs-12">
                     <label for="op" class="form-label">Orden de Producción:</label>
                 </div>
@@ -120,7 +120,7 @@
                 </div>';
                 } ?>
             </div>
-            <div class="row" style="margin-top: 40px">
+            <div class="row">
                 <div class="col-xs-12">
                     <a onclick="despliega()" href="#"><i class="glyphicon glyphicon-plus"></i>Datos Adicionales</a>
                     <div id="desplegable" class="panel panel-default" hidden>

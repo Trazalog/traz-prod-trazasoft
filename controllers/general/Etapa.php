@@ -706,6 +706,7 @@ class Etapa extends CI_Controller
 
     public function abmEtapa()
     {
+        log_message('DEBUG','#TRAZA | #TRAZ-PROD-TRAZASOFT | #ETAPA | abmEtapa()');
         $data['listarProcesos'] = $this->Procesos->listarProcesos()->procesos->proceso;
         $data['listarTipos'] = $this->Etapas->listarTipos()->tablas->tabla;
         $data['listarFormularios'] = $this->Forms->listarFormularios()->formularios->formulario;        

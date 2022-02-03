@@ -530,7 +530,7 @@ function ActualizaPesoEstimado() {
 
 function cargacamion() {
     //Reseteo todos los formularios
-    reset();
+    // reset();
     $('#accion').val('carga');
     $('.panel-req').show();
 
@@ -550,7 +550,7 @@ function cargacamion() {
 }
 
 function descargacamion() {
-    reset();
+    // reset();
     $('#accion').val('descarga');
     $('.panel-req').show();
 
