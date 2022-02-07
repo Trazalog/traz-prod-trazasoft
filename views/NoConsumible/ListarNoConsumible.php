@@ -35,6 +35,7 @@
 									echo '<i class="fa fa-fw fa-pencil " style="cursor: pointer; margin: 3px;" title="Editar" onclick="editarInfo(this)"></i>';
 									echo '<i class="fa fa-fw fa-times-circle eliminar" style="cursor: pointer;margin: 3px;" title="Eliminar" onclick="eliminar(this)"></i>';
 									echo '<i class="fa fa-undo" style="cursor: pointer;margin: 3px;" title="Trazabilidad" onclick="trazabilidad(this)"></i>';
+									echo '<i class="fa fa-qrcode" style="cursor: pointer;margin: 3px;" title="Código QR" onclick="solicitarQR(this)"></i>';
 									echo '<i class="'.($estadoNoconsumible == 'ALTA' ? 'fa fa-fw fa-toggle-off text-light-blue': "fa fa-fw fa-toggle-on text-light-blue").' " title="Habilitar" style="cursor: pointer; margin-left: 15px;" onclick="cambioEstado(this)"></i>';									echo "</td>";
 									echo '<td>'.$codigo.'</td>';
 									//echo '<td>'.$tipo.'</td>';
@@ -491,7 +492,37 @@ async function validarNoConsumible(datos){
     return await validacion;
   }
 ////////////////
+//////// Configuracion y creacion código QR
+// Características para generacion del QR
+function solicitarQR(e){
+	//Limpio el modal
+	$("#infoEtiqueta").empty();
+	$("#contenedorCodigo").empty();
+	$("#infoFooter").empty();
 
+	// configuración de código QR
+	var config = {};
+	config.titulo = "Codigo No Consumible";
+	config.pixel = "7";
+	config.level = "L";
+	config.framSize = "2";
+
+	//Obtengo los datos del No Consumible
+	datos = $(e).closest('tr').attr('data-json');
+	var datosNoCo = JSON.parse(datos);
+
+	//Cargo la vista del QR con datos en el modal
+	$("#infoEtiqueta").load("<?php echo PRD ?>general/CodigoQR/cargaModalQRNoConsumible", datosNoCo);
+	var dataQR = {};
+	dataQR.codigo = datosNoCo.codigo;
+
+	// agrega codigo QR al modal impresion
+	getQR(config, dataQR, 'codigosQR/Traz-prod-trazasoft/NoConsumibles');
+
+	// levanta modal completo para su impresion
+	verModalImpresion();
+}
+////////////// FIN Creación QR
 </script>
 
 
@@ -751,3 +782,7 @@ async function validarNoConsumible(datos){
 		</div> <!-- /.modal-dialog modal-lg -->
 	</div> <!-- /.modal fade -->
 <!-- / Modal -->
+<?php
+    // carga el modal de impresion de QR
+    $this->load->view( COD.'componentes/modal');
+?>
