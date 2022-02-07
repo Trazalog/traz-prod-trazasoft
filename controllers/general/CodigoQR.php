@@ -104,4 +104,15 @@ class CodigoQR extends CI_Controller
 
         echo json_encode($rsp);
     }
+    /**
+    *  Carga la vista vista para impresion en modal de codigo QR del No Consumible
+    * @param array con datos del No Consumible
+    * @return view
+    */
+    public function cargaModalQRNoConsumible(){
+        $data = $this->input->post();
+        $aux = explode(" ", $data['fec_alta']);
+        $data['fec_alta'] = date('d-m-Y', strtotime($aux[0]));
+        $this->load->view('NoConsumible/qr_noConsumible', $data);
+    }
 }
