@@ -294,38 +294,35 @@
 							</div>
 							<!-- Modal body -->
 							<div class="modal-body">
-									<div class="row">
-											<div class="col-md-8">
-													<div class="form-group">
-															<label>Selecionar:</label>
-															<?php  echo componente('pnl-noco', base_url(PRD.'general/etapa/obtenerNoConsumibles')) ?>
-													</div>
-											</div>
-											<div class="col-md-4">
-													<button class="btn btn-success mt" onclick="agregarNoco(getJson('#noco_id'))">
-															<i class="fa fa-plus"></i>
-													</button>
-											</div>
-											<div class="col-md-12">
-													<table id="tbl-noco" class="table table-hover table-striped">
-															<thead>
-																	<td>Código</td>
-																	<td>Descripción</td>
-																	<td></td>
-															</thead>
-															<tbody>
-
-															</tbody>
-															<tfoot class="text-center">
-																	<tr>
-																			<td colspan="3">
-																					Tabla vacía
-																			</td>
-																	</tr>
-															</tfoot>
-													</table>
-											</div>
+								<div class="row">
+									<div class="col-md-12 form-group">
+										<label>Escanear No Consumible</label>
+										<div class="input-group">
+											<input id="codigoNoCoEscaneado" class="form-control" placeholder="Busque Código..." autocomplete="off" onchange="consultarNoCo()">
+											<span class="input-group-btn">
+												<button class="btn btn-primary" style="cursor:not-allowed">
+													<i class="glyphicon glyphicon-search"></i>
+												</button>
+											</span>
+										</div>
 									</div>
+									<div class="col-md-12">
+										<table id="tbl-noco" class="table table-hover table-striped">
+											<thead>
+												<td>Código</td>
+												<td>Descripción</td>
+												<td></td>
+											</thead>
+											<tbody>
+											</tbody>
+											<tfoot class="text-center">
+												<tr>
+													<td colspan="3">Tabla vacía</td>
+												</tr>
+											</tfoot>
+										</table>
+									</div>
+								</div>
 							</div>
 							<!-- Modal footer -->
 							<div class="modal-footer">
@@ -417,26 +414,6 @@
 			}
 		});
 	}
-	// Agrega los NOcons a tabla en modal asignar
-	function agregarNoco(e) {
-			if(!e){
-					alert('Seleccionar un No Consumible antes de agregar a la lista');
-					return;
-			}
-			$('#tbl-noco tfoot').hide();
-			if ($('#tbl-noco tbody').find(`.${e.codigo}`).length > 0) {
-					alert('El item a agregar ya se encuentra en la lista');
-					return;
-			}
-			$('#tbl-noco tbody').append(`
-					<tr class='${e.codigo}' data-json='${JSON.stringify(e)}'>
-							<td>${e.codigo}</td>
-							<td>${e.descripcion}</td>
-							<td><button class="btn btn-link" onclick="$(this).closest('tr').remove()"><i class="fa fa-times text-danger"></i></button></td>
-					</tr>
-			`)
-			$('#noco_id').val('');
-	}
 	//
 	function asociarNocos() {
 			var data = [];
@@ -490,4 +467,52 @@
 		});
 	}
 
+// consulta la información de No Consum por código
+function consultarNoCo(){
+
+	wo('Buscando Informacion');
+	var codigo = $("#codigoNoCoEscaneado").val();
+
+	$.ajax({
+		type: 'POST',
+		dataType:'json',
+		data:{codigo: codigo },
+		url: '<?php echo base_url(PRD) ?>general/Noconsumible/consultarInfo',
+		success: function(result) {
+			wc();
+			if(!$.isEmptyObject(result)){
+				agregarNocoEscaneado(result);
+			}else{
+				alertify.error('El recipiente escaneado no se encuentra cargado...');
+			}
+		},
+		error: function(result){
+			wc();
+		},
+		complete: function(){
+			$('#codigoNoCoEscaneado').val('');
+			wc();
+		}
+	});
+}
+// Agrega el NoCo escaneado a la tabla
+function agregarNocoEscaneado(data) {
+	$('#tbl-noco tfoot').hide();
+	if ($('#tbl-noco tbody').find(`.${data.codigo}`).length > 0) {
+		Swal.fire(
+			'Alerta',
+			' El no consumible ya se encuentra en la lista',
+			'warning'
+		)
+		return;
+	}
+	$('#tbl-noco tbody').append(`
+		<tr class='${data.codigo}' data-json='${JSON.stringify(data)}'>
+			<td>${data.codigo}</td>
+			<td>${data.descripcion}</td>
+			<td><button class="btn btn-link" onclick="$(this).closest('tr').remove()"><i class="fa fa-times text-danger"></i></button></td>
+		</tr>
+	`)
+	$('#codigoNoCoEscaneado').val('');
+}
 </script>
