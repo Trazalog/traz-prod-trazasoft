@@ -45,7 +45,7 @@ class Reportes extends CI_Controller
       $url = REST_PRD_ETAPAS . '/productos/etapa//desde//hasta//producto//empr_id/'.empresa();
       $json = $this->Koolreport->depurarJson($url)->productos->producto;
 
-      log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | #REPORTES | produccion() | #JSON: >>' . $json);
+      log_message('INFO', '#TRAZA | #TRAZ-PROD-TRAZASOFT | #REPORTES | produccion() | #JSON: >>' . json_encode($json));
 
       $reporte = new Produccion($json);
       $reporte->run()->render();
