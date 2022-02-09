@@ -200,7 +200,7 @@ use \koolreport\widgets\google\ColumnChart;
     $(document).ready(function() {
       $('.dataTable').DataTable({
         responsive: true,
-        fixedHeader: true,
+        // fixedHeader: true,
         language: {
         url: '<?php base_url() ?>lib/bower_components/datatables.net/js/es-ar.json' //Ubicacion del archivo con el json del idioma.
         },
