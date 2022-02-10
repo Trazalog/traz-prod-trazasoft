@@ -206,13 +206,13 @@ use \koolreport\widgets\koolphp\Card;
                       <?php
                       ColumnChart::create(array(
                         // "title" => "Productos con mayor cantidad",
-                        "dataStore" => $this->dataStore('data_produccion_pieChart'),
+                        "dataStore" => $this->dataStore('data_produccion_columnChart'),
+                        "options"=>array(
+                          "fixTheChart"=>true
+                        ),
                         "columns" => array(
                           "producto",
-                          "cantidad" => array(
-                            "type" => "number",
-                            "label" => "Cantidad"
-                          )
+                          "cantidad" => array("label" => "Cantidad", "type" => "number")
                         ),
                         "colorScheme" => array(
                           "#2f4454",

@@ -11,7 +11,7 @@
         <h4 class="box-title">Entrada No Consumibles</h4>
     </div>
     <div class="box-body" id="div_vale_entrada">
-    <form class="form-horizontal" id="frm-MovimientoNoConsumible">
+    <form class="form-horizontal" id="frm-MovimientoNoConsumible" onSubmit="return false;">
             <label for="codigo" class="col-md-2 control-label">Código No Consumible:</label>
             <div class="col-md-2">
                 <input id="codigoNoCon" name="codigoNoCon" type="text" placeholder="" class="form-control input-md">
@@ -55,6 +55,13 @@
 <script>
   $(document).ready(function () {
     $("#depositos").attr("disabled","disabled");
+
+    //Cargamos el NoCo en tabla presionando ENTER
+    $("#codigoNoCon").keypress(function (e) { 
+      if (e.keyCode === 13) {
+        agregarFilaNoCon();
+      }
+    });
   });
   // Agrega fila en tabla temporal para guardar
   function agregarFilaNoCon() {
@@ -90,7 +97,8 @@
           '<td value=' + depositos + '>' + $('#deposSelected').text() + '</td>' +
           '</tr>';
         $('#tablaNoCon tbody').append(html);
-        $('#frm-MovimientoNoConsumible')[0].reset();
+        // $('#frm-MovimientoNoConsumible')[0].reset();
+        $("#codigoNoCon").val('');
       }).catch((err) => {
 
       Swal.fire('Error', err,'error');

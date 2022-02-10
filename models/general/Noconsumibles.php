@@ -219,5 +219,21 @@ class Noconsumibles extends CI_Model
 
 			return $monc_id;
 		}
+  
+  /**
+	* Consulta al service si el codigo insertado, ya esta creado para la empresa
+	* @param string código NoCo
+	* @return array respuesta del servicio
+	*/
+  public function validarNoConsumible($noco){
+        
+    $url = REST_PRD_NOCON."/noConsumible/validar/". urlencode($noco) . "/empresa/".empresa();
 
+    $aux = $this->rest->callAPI("GET",$url);
+    $resp = json_decode($aux['data']);
+
+    log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT | Noconsumibles | validarNoConsumible() >> resp ".json_encode($resp));
+
+    return $resp->resultado;
+}
 }
