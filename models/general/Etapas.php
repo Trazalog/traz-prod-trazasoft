@@ -475,6 +475,13 @@ class Etapas extends CI_Model
             $rsp = json_decode($rsp['data']);
         }
         $valores = $rsp->articulos->articulo;
+        foreach ($valores as $valor) {
+            if ($valor->es_caja == "false") {
+                $valor->es_caja = "no";
+            } else {
+                $valor->es_caja = "si";                
+            }
+        }
         return $valores;
     }
 
