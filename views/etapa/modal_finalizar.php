@@ -20,7 +20,7 @@
 
 
                 <div class="row form-group" style="margin-top:20px">
-                    <div class="col-md-3 col-xs-12"><label class="form-label">Codigo Lote Origen:</label></div>
+                    <div class="col-md-3 col-xs-12"><label class="form-label">Código Lote Origen:</label></div>
                     <div class="col-md-4 col-xs-12"><input class="form-control" type="text" id="loteorigen"
                             value="<?php echo $etapa->lote;?>" disabled></div>
                     <div class="col-md-5"></div>
@@ -61,7 +61,7 @@
 
                 <div class="row form-group" style="margin-top:20px">
                     <div class="col-md-3 col-xs-12">
-                        <label for="inputproducto" class="form-label">Producto*:</label>
+                        <label for="inputproducto" class="form-label">Producto <?php hreq() ?>:</label>
                     </div>
                     <div class="form-group">
                         <div class="col-sm-12 col-md-8 col-lg-8 ba">
@@ -83,7 +83,7 @@
                     <div class="col-md-3"></div>
                 </div>
                 <div class="row" style="margin-top:20px">
-                    <div class="col-md-3 col-xs-12"><label class="form-label">Cantidad*:</label></div>
+                    <div class="col-md-3 col-xs-12"><label class="form-label">Cantidad <?php hreq() ?>:</label></div>
                     <div class="col-md-4 col-xs-12"><input class="form-control" id="cantidadproducto" type="text"
                             value="" placeholder="Inserte Cantidad"></div>
                     <div class="col-md-2 col-xs-2">
@@ -92,7 +92,7 @@
                     <div class="col-md-5"></div>
                 </div>
                 <div class="row" style="margin-top:20px">
-                    <div class="col-md-3 col-xs-12"><label class="form-label">Lote Destino*:</label></div>
+                    <div class="col-md-3 col-xs-12"><label class="form-label">Lote Destino <?php hreq() ?>:</label></div>
                     <div class="col-md-4 col-xs-12"><input class="form-control" type="text" id="lotedestino" value=""
                             placeholder="Inserte Lote destino"></div>
                     <div class="col-md-4 col-xs-12"><button class="btn btn-primary btn-block"
@@ -100,7 +100,7 @@
                     <div class="col-md-1"></div>
                 </div>
                 <div class="row" style="margin-top:20px">
-                    <div class="col-md-3 col-xs-12"><label class="form-label">Destino*:</label></div>
+                    <div class="col-md-3 col-xs-12"><label class="form-label">Destino <?php hreq() ?>:</label></div>
                     <div class="col-md-6 col-xs-12">
                         <?php if($accion == 'Editar'){
         
@@ -192,26 +192,22 @@ $('#modal_finalizar').find('#inputproducto').on('change', function(){
 });
 
 function AgregarProducto() {
-    ban = true;
+    ban = '';
 
-    productoid = $("#inputproducto").val();
-    if (!productoid || productoid == "") {
-        ban = false;
+    if (! _isset($("#inputproducto").val())) {
+        ban = "Debe seleccionar un producto!";
     }
-    cantidad = document.getElementById('cantidadproducto').value;
-    if (cantidad == "") {
-        ban = false;
+    if (! _isset($("#cantidadproducto").val())) {
+        ban = "Debe completar la cantidad!";
     }
-    lotedestino = document.getElementById('lotedestino').value;
-    if (lotedestino == "") {
-        ban = false;
+    if (! _isset($("#lotedestino").val())) {
+        ban = "Debe completar lote de destino!";
     }
-    destino = document.getElementById('productodestino').value;
-    if (destino == "") {
-        ban = false;
+    if (! _isset($("#productodestino").val())) {
+        ban = "Debe seleccionar un destino!";
     }
-    if (!ban) {
-        alert("falto algun dato obligatorio");
+    if (ban != '') {
+        error("Error", ban);
     } else {
         establecimiento = "";
         var producto = {};
@@ -271,8 +267,8 @@ function AgregarProducto() {
         document.getElementById('productoestablecimientos').value = "";
         $('#inputproducto').val("").trigger('change');
         // document.getElementById('fraccionado').checked = false;
-        document.getElementById('productorecipientes').value = "";
-        document.getElementById('productorecipientes').disabled = true;
+        // document.getElementById('productorecipientes').value = "";
+        // document.getElementById('productorecipientes').disabled = true;
     }
 }
 var contador  = 0;
