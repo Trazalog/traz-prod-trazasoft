@@ -12,9 +12,109 @@
             </div>
 
             <div class="modal-body" id="modalBodyArticle">
-
                 <div class="panel panel-primary">
-                    <!-- Default panel contents -->
+                    <div class="panel-heading">Información de Lotes</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <h3 style="font-weight: bold"> Información:</h3>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">Fecha:</label>
+                                    <input type="date" id="fechaMdl" value="<?php echo $fecha; ?>" class="form-control" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">Código Lote:</label>
+                                    <input type="text" id="codigoLoteMdl" value="<?php echo $etapa->lote; ?>" class="form-control" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">Orden de Producción:</label>
+                                    <input type="text" id="ordenProduccionMdl" value="<?php echo $ordenProd; ?>" class="form-control" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <h3 style="font-weight: bold">Ubicación:</h3>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">Establecimiento:</label>
+                                    <input type="text" id="establecimientoMdl" value="<?php echo $etapa->establecimiento; ?>" class="form-control" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">Línea:</label>
+                                    <input type="text" id="lineaMdl" value="<?php echo $etapa->recipiente; ?>" class="form-control" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Información de Tarea</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">Producto:</label>
+                                    <input type="date" id="productoMdl" value="<?php echo $fecha; ?>" class="form-control" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">Stock:</label>
+                                    <input type="text" id="stockMdl" value="<?php echo $etapa->lote; ?>" class="form-control" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">Unidad de Medida:</label>
+                                    <input type="text" id="ordenProduccionMdl" value="<?php echo $ordenProd; ?>" class="form-control" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                            <div class="form-group">
+                                    <label class="control-label">Empaque:</label>
+                                    <input type="text" id="empaqueMdl" value="<?php echo $ordenProd; ?>" class="form-control" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">Capacidad:</label>
+                                    <input type="text" id="capacidadMdl" value="<?php echo $etapa->establecimiento; ?>" class="form-control" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">Peso Tara:</label>
+                                    <input type="text" id="taraMdl" value="<?php echo $etapa->recipiente; ?>" class="form-control" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">Cantidad:</label>
+                                    <input type="text" id="cantidadMdl" value="<?php echo $etapa->recipiente; ?>" class="form-control" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">Stock Necesario:</label>
+                                    <input type="text" id="stockNecesarioMdl" value="<?php echo $etapa->recipiente; ?>" class="form-control" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-primary">
                     <div class="panel-heading">Lotes para Fraccionamiento</div>
                     <div class="panel-body">
                         <table id="lotesFraccionar" class="table table-striped">

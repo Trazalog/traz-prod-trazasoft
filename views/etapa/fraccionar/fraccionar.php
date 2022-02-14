@@ -39,15 +39,17 @@ if($etapa->estado == "FINALIZADO"){
                                     <label for="Lote" class="form-label">Código Lote:*</label>
                                     <input type="text" id="lote_id" class="form-control" 
                                     <?php if($accion=='Editar' ){echo ( 'value="'.$etapa->lote.'"');}?>
-                                        placeholder="Inserte orden de producción"
+                                        placeholder="Inserte código de lote"
                                         <?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
                                 </div>
                                 <div class="col-xs-6">
-                                    <label for="op" class="form-label">Orden de Producción:</label>
-                                    <input type="text" id="ordenproduccion" class="form-control"
-                                        <?php if($accion=='Editar' ){echo ( 'value="'.$ordenProd.'"');}?>
-                                        placeholder="Inserte orden de producción"
-                                        <?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
+                                    <div class="form-group">
+                                        <label for="op" class="form-label">Orden de Producción:</label>
+                                        <input type="text" id="ordenproduccion" class="form-control"
+                                            <?php if($accion=='Editar' ){echo ( 'value="'.$ordenProd.'"');}?>
+                                            placeholder="Inserte orden de producción"
+                                            <?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
+                                    </div>
                                 </div>
                             </div>
                         </div>
