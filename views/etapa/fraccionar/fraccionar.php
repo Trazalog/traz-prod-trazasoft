@@ -136,7 +136,7 @@ if($etapa->estado == "FINALIZADO"){
                 <div class="panel-body">
                     <?php  if($etapa->estado != 'En Curso'){?>
                     <div class="row">
-                        <div class="col-xs-6">
+                        <div class="col-xs-6 ba">
                             <div class="form-group">
                                 <label class="form-label">Producto:</label>
                                 <?php 
@@ -371,7 +371,7 @@ function ControlaProducto() {
         document.getElementById('inputproductos').value = "";
         document.getElementById('empaques').value = "";
         document.getElementById('cantidad').value = "";
-        document.getElementById('unidad').value = "";
+        document.getElementById('uni_medida').value = "";
         document.getElementById('volumen').value = "";
         document.getElementById('stock').value = "";
         document.getElementById('cantidad').disabled = true;
@@ -393,7 +393,7 @@ function AgregaProducto(producto) {
         if (estado == 'En Curso') {
             html += "<th>Lote</th>";
         }
-        html += "<th>Titulo</th>";
+        html += "<th>Título</th>";
         html += "<th>Cant a Descontar</th>";
         html += "<th>Empaque</th>";
         html += "<th>Cantidad</th>";
