@@ -34,7 +34,7 @@
           <div class="input-group">
             <input id="codigo" class="form-control" placeholder="Busque Código..." autocomplete="off" onchange="consultar()">
             <span class="input-group-btn">
-                <button class="btn btn-primary" style="cursor:not-allowed">
+                <button class="btn btn-primary">
                     <i class="glyphicon glyphicon-search"></i></button>
             </span>
           </div>
