@@ -170,9 +170,10 @@
 	<div class="box-footer">
 		<?php
 			if ($tipo == 2) {
-				echo '<button type="submit" class="btn btn-success pull-right" onclick="validaDatos()" style="margin-top: 20px;">Editar</button>';
+				echo '<button class="btn btn-success pull-right" onclick="validaDatos()" style="margin-top: 20px;">Editar</button>';
+				echo '<button class="btn btn-danger pull-right" onclick="linkTo(\'' .base_url(PRD).'general/Formula\')" style="margin-top: 20px; margin-right: 10px;">Cancelar</button>';
 			}else{
-				echo '<button type="submit" class="btn btn-default pull-right" onclick="linkTo(\'' .base_url(PRD).'general/Formula\')" style="margin-top: 20px; margin-right: 10px;">Cerrar</button>';
+				echo '<button class="btn btn-danger pull-right" onclick="linkTo(\'' .base_url(PRD).'general/Formula\')" style="margin-top: 20px; margin-right: 10px;">Cerrar</button>';
 			}
 		?>
 	</div>
@@ -207,31 +208,29 @@
 		var id = $(this).val();
 		$(this).children('option').each(function() {
 			if (id == $(this).val()) {
-				var un = $(this).data('um');
-				var descripcion = $(this).text();
-				$('#um-articulo').val(un);
-				$('#articulo').data('descripcion', descripcion); //cargo descripcion en el select
+				dataJson = JSON.parse($(this).attr('data-json'));
+				$('#um-articulo').val(dataJson.unidad_medida);
 			}
 		});
 	});
 
 	//Agregar fila a tabla
 	function agregarFila() {
-		var descripcion = $('#articulo').data('descripcion');
-		var articulo = $('#articulo').val();
+		dataJson = JSON.parse($('#articulo').attr('data-json'));
 		var cantidad = $('#cantidad-articulo').val();
-		var um = $('#um-articulo').val();
-		if (!articulo || !cantidad) {
-			alert('Complete artículo y cantidad.');
+		debugger;
+		if (! _isset(dataJson.arti_id) || ! _isset(cantidad)) {
+			error('Error','Complete artículo y cantidad.');
 			return;
 		}
-		$('#articulo').prop('selectedIndex', 0);
+		$('#articulo').val(null).trigger('change');
+		$('.ba #detalle').text('');
 		$('#cantidad-articulo').val('');
 		$('#um-articulo').val('');
 		html = '<tr>' +
-			'<td>' + descripcion + '</td>' +
-			'<td hidden>' + articulo + '</td>' +
-			'<td>' + um + '</td>' +
+			'<td>' + dataJson.descripcion + '</td>' +
+			'<td hidden>' + dataJson.arti_id + '</td>' +
+			'<td>' + dataJson.unidad_medida + '</td>' +
 			'<td value=' + cantidad + ' data-valor=' + cantidad + '>' + cantidad + '<a type="button" class="del pull-right" style="cursor: pointer;"><i class="fa fa-fw fa-minus"></i></a></td>' +
 			'</tr>';
 		$('#tabla-Formula tbody').append(html);
@@ -249,7 +248,7 @@
 		// var fecha = $('#fecha').val();
 		var aplicacion = $('#aplicacion').val();
 		if (!descripcion || !unme_id || !cantidad || !aplicacion) {
-			alert('Debe completar todos los campos con *.')
+			error('Error','Debe completar todos los campos con *.');
 			return;
 		}
 		crearFormula();
@@ -305,16 +304,15 @@
 		});
 		datosTabla.shift(); //borra encabezado de la tabla
 		if (datosTabla.length < 2) {
-			alert('La fórmula debe contener al menos dos ingredientes.');
+			error('Error','La fórmula debe contener al menos dos ingredientes.');
 			return;
 		}
 
 		var articulos = JSON.stringify(datosTabla);
-		console.log('datosFormula: ' + datosFormula);
 		showFD(datosFormula);
 		datosFormula = formToObject(datosFormula);
-		console.log('articulos: ' + articulos);
 		var form_id = $('#form_id').val();
+
 		wo();
 		$.ajax({
 			type: "POST",
@@ -324,11 +322,11 @@
 				articulos: articulos
 			},
 			success: function(rsp) {
-				alert("Fórmula editada correctamente.");
+				hecho('Hecho',"Fórmula editada correctamente.");
 				linkTo('<?php echo base_url(PRD) ?>general/Formula');
 			},
 			error: function() {
-				alert("Se produjo un error al crear la fórmula.");
+				error('Error',"Se produjo un error al crear la fórmula.");
 			},
 			complete: function() {
 				wc();
