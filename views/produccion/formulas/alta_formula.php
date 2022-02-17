@@ -1,151 +1,143 @@
-<section class="content-header">
-	<h1>
-		<font style="vertical-align: inherit;">
-			<font style="vertical-align: inherit;">
-				Fórmulas
-			</font>
-		</font><small>
-			<font style="vertical-align: inherit;"></font>
-		</small>
-	</h1>
-</section>
-<section class="content">
-	<div class="row">
-		<div class="col-md-6">
-			<div class="box box-primary">
-				<div class="box-header with-border">
-					<h3 class="box-title">
-						<font style="vertical-align: inherit;">
-							<font style="vertical-align: inherit;">Datos de la fórmula</font>
-						</font>
-					</h3>
-				</div>
-				<!-- form start -->
-				<form role="form" id="form-Formulas" name="form-Formulas" data-toggle="validator">
-					<!-- <input type="text" id="unme_id" name="unme_id" value="<?php echo $unme_id ?>" hidden> -->
-					<div class="box-body">
-						<div class="form-group col-md-12">
-							<label for="descripcion">Descripción *</label>
-							<input type="text" class="form-control" id="descripcion" name="descripcion" placeholder="Ingrese descripción" required>
-						</div>
-						<div class="form-group col-md-4">
-							<label for="unme_id">U.M. *</label>
-							<select class="form-control" id="unme_id" name="unme_id" required>
-								<option selected disabled>Seleccione unidad</option>
-								<?php
-								foreach ($um as $key) {
-									echo "
-										<option value='$key->tabl_id'>$key->descripcion ($key->valor)</option>
-										";
-								}
-								?>
-							</select>
-						</div>
-						<div class="form-group col-md-4">
-							<label for="cantidad">Cantidad *</label>
-							<input type="number" class="form-control" id="cantidad" name="cantidad" placeholder="Ingrese cantidad" required>
-						</div>
-						<div class="form-group col-md-4">
-							<label for="exampleInputPassword1">Fecha *</label>
-							<!-- <input type="date" class="form-control" id="fecha" name="fecha" required> -->
-							<input type="text" id="usuario_app" name="usuario_app" value=" 69" hidden>
-						</div>
-						<div class="form-group col-md-12">
-							<label for="aplicacion">Aplicación *</label>
-							<textarea class="form-control" id="aplicacion" name="aplicacion" rows="3" placeholder="Procedimiento de aplicación..." required></textarea>
-						</div>
-						<div class="form-group col-md-12">
-							<label for="archivo">Archivo</label>
-							<input type="file" id="archivo">
-							<p class="help-block">Seleccione un archivo PDF.</p>
-						</div>
+<div class="box box-primary">
+	<div class="box-header with-border">
+		<section class="content-header">
+			<h1>
+				<font style="vertical-align: inherit;">
+					<font style="vertical-align: inherit;">
+						Fórmulas
+					</font>
+				</font><small>
+					<font style="vertical-align: inherit;"></font>
+				</small>
+			</h1>
+		</section>
+	</div>
+	<section class="content">
+		<div class="row">
+			<div class="col-md-6">
+				<div class="box box-primary">
+					<div class="box-header with-border">
+						<h3 class="box-title">
+							<font style="vertical-align: inherit;">
+								<font style="vertical-align: inherit;">Datos de la fórmula</font>
+							</font>
+						</h3>
 					</div>
-					<!-- /.box-body -->
-				</form>
-			</div>
-		</div>
-		<div class="col-md-6">
-			<div class="box box-warning">
-				<div class="box-header with-border">
-					<h3 class="box-title">
-						<font style="vertical-align: inherit;">
-							<font style="vertical-align: inherit;">Artículos de la fórmula</font>
-						</font>
-					</h3>
-				</div>
-				<form role="form" id="form-Articulos" name="form-Articulos">
-					<div class="box-body">
-						<div class="form-group col-md-5">
-							<label for="articulo">Artículo</label>
-							<select class="form-control" id="articulo" name="articulo" data-descripcion>
-								<option selected disabled>Seleccione artículo</option>
-								<?php
-								foreach ($articulos as $key) {
-									echo "
-										<option value='$key->arti_id' data-um='$key->unidad_medida' >$key->descripcion</option>
-										";
-								}
-								?>
-							</select>
-						</div>
-						<div class="form-group col-md-4">
-							<label for="cantidad-articulo">Cantidad</label>
-							<input type="number" class="form-control" id="cantidad-articulo" name="cantidad-articulo" placeholder="Ingrese cantidad">
-						</div>
-						<div class="form-group col-md-2">
-							<label for="um-articulo">U.M.</label>
-							<input type="text" class="form-control" id="um-articulo" name="um-articulo" readonly>
-						</div>
-						<div class="form-group col-md-1">
-							<label for=""></label>
-							<a class="btn btn-social-icon" style="margin-top: 4px;" onclick="agregarFila()"><i class="fa fa-fw fa-plus-square"></i></a>
-						</div>
-						<div class="dataTables_wrapper form-inline dt-bootstrap">
-							<div class="row">
-								<div class="col-sm-12"></div>
+					<!-- form start -->
+					<form role="form" id="form-Formulas" name="form-Formulas" data-toggle="validator">
+						<!-- <input type="text" id="unme_id" name="unme_id" value="<?php echo $unme_id ?>" hidden> -->
+						<div class="box-body">
+							<div class="form-group col-md-12">
+								<label for="descripcion">Descripción <?php hreq() ?></label>
+								<input type="text" class="form-control" id="descripcion" name="descripcion" placeholder="Ingrese descripción" required>
 							</div>
-							<div class="row">
-								<div class="col-sm-12">
-									<table id="tabla-Formula" class="table table-bordered table-hover dataTable" role="grid">
-										<thead>
-											<tr role="row">
-												<th>
-													<font style="vertical-align: inherit;">
-														<font style="vertical-align: inherit;">Artículo</font>
-													</font>
-												</th>
-												<th>
-													<font style="vertical-align: inherit;">
-														<font style="vertical-align: inherit;">U.M.</font>
-													</font>
-												</th>
-												<th>
-													<font style="vertical-align: inherit;">
-														<font style="vertical-align: inherit;">Cantidad</font>
-													</font>
-												</th>
-											</tr>
-										</thead>
-										<tbody>
+							<div class="form-group col-md-4">
+								<label for="unme_id">U.M. <?php hreq() ?></label>
+								<select class="form-control" id="unme_id" name="unme_id" required>
+									<option selected disabled>Seleccione unidad</option>
+									<?php
+									foreach ($um as $key) {
+										echo "<option value='$key->tabl_id'>$key->descripcion ($key->valor)</option>";
+									}
+									?>
+								</select>
+							</div>
+							<div class="form-group col-md-4">
+								<label for="cantidad">Cantidad <?php hreq() ?></label>
+								<input type="number" class="form-control" id="cantidad" name="cantidad" placeholder="Ingrese cantidad" required>
+							</div>
+							<div class="form-group col-md-4">
+								<label for="exampleInputPassword1">Fecha <?php hreq() ?></label>
+								<!-- <input type="date" class="form-control" id="fecha" name="fecha" required> -->
+								<input type="text" id="usuario_app" name="usuario_app" value=" 69" hidden>
+							</div>
+							<div class="form-group col-md-12">
+								<label for="aplicacion">Aplicación <?php hreq() ?></label>
+								<textarea class="form-control" id="aplicacion" name="aplicacion" rows="3" placeholder="Procedimiento de aplicación..." required></textarea>
+							</div>
+							<div class="form-group col-md-12">
+								<label for="archivo">Archivo</label>
+								<input type="file" id="archivo">
+								<p class="help-block">Seleccione un archivo PDF.</p>
+							</div>
+						</div>
+						<!-- /.box-body -->
+					</form>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="box box-primary">
+					<div class="box-header with-border">
+						<h3 class="box-title">
+							<font style="vertical-align: inherit;">
+								<font style="vertical-align: inherit;">Artículos de la fórmula</font>
+							</font>
+						</h3>
+					</div>
+					<form role="form" id="form-Articulos" name="form-Articulos">
+						<div class="box-body">
+							<div class="form-group col-md-12 ba">
+								<label for="articulo">Artículo</label>
+								<?php
+									echo selectBusquedaAvanzada('articulo','articulo',$articulos,'arti_id', 'barcode',array("descripcion","Medida"=>"unidad_medida","Stock" =>"stock"));
+								?>
+							</div>
+							<div class="form-group col-md-5">
+								<label for="cantidad-articulo">Cantidad</label>
+								<input type="number" class="form-control" id="cantidad-articulo" name="cantidad-articulo" placeholder="Ingrese cantidad">
+							</div>
+							<div class="form-group col-md-5">
+								<label for="um-articulo">U.M.</label>
+								<input type="text" class="form-control" id="um-articulo" name="um-articulo" readonly>
+							</div>
+							<div class="form-group col-md-1">
+								<label for=""></label>
+								<a class="btn btn-social-icon" style="margin-top: 4px;" onclick="agregarFila()"><i class="fa fa-fw fa-plus-square"></i></a>
+							</div>
+							<div class="dataTables_wrapper form-inline dt-bootstrap">
+								<div class="row">
+									<div class="col-sm-12"></div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12">
+										<table id="tabla-Formula" class="table table-bordered table-hover dataTable" role="grid">
+											<thead>
+												<tr role="row">
+													<th>
+														<font style="vertical-align: inherit;">
+															<font style="vertical-align: inherit;">Artículo</font>
+														</font>
+													</th>
+													<th>
+														<font style="vertical-align: inherit;">
+															<font style="vertical-align: inherit;">U.M.</font>
+														</font>
+													</th>
+													<th>
+														<font style="vertical-align: inherit;">
+															<font style="vertical-align: inherit;">Cantidad</font>
+														</font>
+													</th>
+												</tr>
+											</thead>
+											<tbody>
 
-										</tbody>
-									</table>
+											</tbody>
+										</table>
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-					<br>
-					<!-- <div class="box-footer"> -->
-					<button type="submit" class="btn btn-success pull-right" onclick="validaDatos()" style="margin-top: 20px;">
-						Crear
-					</button>
-					<!-- </div> -->
-				</form>
-			</div>
-		</div>
+					</form>
+				</div><!-- /.box box-primary -->
+			</div> <!-- /.col-md-6 -->
+		</div> <!-- /.row -->
+	</section>
+	<div class="box-footer">
+		<button class="btn btn-success pull-right" onclick="validaDatos()" style="margin-top: 20px;">Crear</button>
+		<button class="btn btn-danger pull-right" onclick="linkTo('<?php echo base_url(PRD).'general/Formula' ?>')" style="margin-top: 20px; margin-right: 10px;">Cancelar</button>;
 	</div>
-</section>
-
+</div> <!-- /.box box-primary -->
 <script>
 	//Fecha actual
 	Date.prototype.toDateInputValue = (function() {
@@ -160,31 +152,29 @@
 		var id = $(this).val();
 		$(this).children('option').each(function() {
 			if (id == $(this).val()) {
-				var un = $(this).data('um');
-				var descripcion = $(this).text();
-				$('#um-articulo').val(un);
-				$('#articulo').data('descripcion', descripcion); //cargo descripcion en el select
+				dataJson = JSON.parse($(this).attr('data-json'));
+				$('#um-articulo').val(dataJson.unidad_medida);
 			}
 		});
 	});
 
 	//Agregar fila a tabla
 	function agregarFila() {
-		var descripcion = $('#articulo').data('descripcion');
-		var articulo = $('#articulo').val();
+		dataJson = JSON.parse($('#articulo').attr('data-json'));
 		var cantidad = $('#cantidad-articulo').val();
-		var um = $('#um-articulo').val();
-		if (!articulo || !cantidad) {
-			alert('Complete artículo y cantidad.');
+		debugger;
+		if (! _isset(dataJson.arti_id) || ! _isset(cantidad)) {
+			error('Error','Complete artículo y cantidad.');
 			return;
 		}
-		$('#articulo').prop('selectedIndex', 0);
+		$('#articulo').val(null).trigger('change');
+		$('.ba #detalle').text('');
 		$('#cantidad-articulo').val('');
 		$('#um-articulo').val('');
 		html = '<tr>' +
-			'<td>' + descripcion + '</td>' +
-			'<td hidden>' + articulo + '</td>' +
-			'<td>' + um + '</td>' +
+			'<td>' + dataJson.descripcion + '</td>' +
+			'<td hidden>' + dataJson.arti_id + '</td>' +
+			'<td>' + dataJson.unidad_medida + '</td>' +
 			'<td>' + cantidad + '<a type="button" class="del pull-right" style="cursor: pointer;"><i class="fa fa-fw fa-minus"></i></a></td>' +
 			'</tr>';
 		$('#tabla-Formula tbody').append(html);
@@ -202,7 +192,7 @@
 		// var fecha = $('#fecha').val();
 		var aplicacion = $('#aplicacion').val();
 		if (!descripcion || !unme_id || !cantidad || !aplicacion) {
-			alert('Debe completar todos los campos con *.')
+			error('Error','Debe completar todos los campos con *.')
 			return;
 		}
 		crearFormula();
@@ -258,15 +248,13 @@
 		});
 		datosTabla.shift(); //borra encabezado de la tabla
 		if (datosTabla.length < 2) {
-			alert('La fórmula debe contener al menos dos ingredientes.');
+			error('Error','La fórmula debe contener al menos dos ingredientes.');
 			return;
 		}
 
 		var articulos = JSON.stringify(datosTabla);
-		console.log('datosFormula: ' + datosFormula);
 		showFD(datosFormula);
 		datosFormula = formToObject(datosFormula);
-		console.log('articulos: ' + articulos);
 
 		wo();
 		$.ajax({
@@ -277,11 +265,11 @@
 				articulos: articulos
 			},
 			success: function(rsp) {
-				alert("Fórmula creada correctamente.");
+				hecho('Hecho',"Fórmula creada correctamente.");
 				linkTo('<?php echo base_url(PRD) ?>general/Formula');
 			},
 			error: function() {
-				alert("Se produjo un error al crear la fórmula.");
+				error('Error',"Se produjo un error al crear la fórmula.");
 			},
 			complete: function() {
 				wc();

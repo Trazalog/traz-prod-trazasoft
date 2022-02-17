@@ -270,6 +270,7 @@ class Etapas extends CI_Model
         $resource = '/lote/fraccionar/batch/' . $id;
         $url = REST_PRD . $resource;
         $array = $this->rest->callAPI("GET", $url);
+        log_message('DEBUG','#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapas | getLotesaFraccionar()-> resp '.json_encode($array));
         return json_decode($array['data']);
     }
 
@@ -308,9 +309,14 @@ class Etapas extends CI_Model
         $url = REST_PRD_ETAPAS . "/etapas/salidas/$etap_id";
         return wso2($url);
     }
-
+    /**
+	* Obtiene los articulos a fraccionar para la etapa seleccionada
+	* @param array datos permisos de transito
+	* @return bool true or false
+	*/
     public function getEntradaEtapa($etap_id)
     {
+        log_message('DEBUG','#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapas | getEntradaEtapa()');
         $url = REST_PRD_ETAPAS . "/etapas/entradas/$etap_id";
         return wso2($url);
     }
