@@ -356,10 +356,38 @@ function validarFormulario(msj) {
     return ban;
 }
 
+// Valida la patente del camion
+// Si existe muestra un cartel avisando que el carmion ya fue cargado
+function validarCamion(msj) {
+    var ban = true;
+    patenteCamion = document.getElementById('patente').value;
+    if(msj){
+        $('#frm-info').find('.form-control').each(function() {
+            if(this.id != 'proveedor' && this.id != 'nombreproveedor'){
+                if (this.value == "") {
+                    ban = false;
+                }
+            }
+        });
+    }else{
+        $('#frm-info').find('.form-control').each(function() {
+            if (this.value == "") {
+                ban = false;
+            }
+        });
+    }
+    //Valído formulario de Datos Camión IDEM Entrada y Recepcion
+    if(!frm_validar("#frm-camion")){ban = false;}
+    
+    if (!ban) Swal.fire('Error..','Complete los campos obligatorios(*)','error');
+    return ban;
+}
+
 // Guarda Entrada de Camión
 //Guardar Datos de Camión parametro = FALSE es para NO mostrar el MSJ de Datos Guardados
 function addCamion(msj = true) {
     if (!validarFormulario(msj)) return;
+    if (!validarCamion(msj)) return;
     var frmCamion = new FormData($('#frm-camion')[0]);
     var frmInfo = new FormData($('#frm-info')[0]);
     var dataForm = mergeFD(frmInfo, frmCamion);
