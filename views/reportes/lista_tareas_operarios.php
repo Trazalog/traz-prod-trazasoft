@@ -3,32 +3,26 @@
 			width: 50px;
 			height: 50px;
 	}
-
 	.finca {
 			background-color: #9DC3E6;
 			border-radius: 2%;
 	}
-
 	.seleccion {
 			background-color: #F4B183;
 			border-radius: 2%;
 	}
-
 	.preclasificado {
 			background-color: #C7E1AF;
 			border-radius: 2%;
 	}
-
 	.pelado {
 			background-color: #FEDB4C;
 			border-radius: 2%;
 	}
-
 	.fraccionamiento {
 			background-color: #90A9E1;
 			border-radius: 2%;
 	}
-
 	.profileImage {
 			width: 80px;
 			height: 80px;
@@ -39,9 +33,16 @@
 			line-height: 75px;
 			/* margin: 20px 0; */
 	}
-
 	.mt{
 			margin-top: 25px
+	}
+	.botonera button{
+		font-size: 20px;
+	}
+	.botonera button.ver-mas{
+		font-size: 12px !important;
+		border-radius: 20px;
+		margin-left: 5px;
 	}
 </style>
 
@@ -191,12 +192,15 @@
 			var art = getJson('#inputproducto');
 			var destino = getJson('#productodestino');
 			$tblRep.append(
-					`<tr id="${$tblRep.find('tr').length + 1}" class='data-json batch-${s_batchId}' data-json='${JSON.stringify(data)}' data-forzar='false'><td><b>Operario:</b> ${$('#operario option:selected').text()}<br><b>Artículo:</b> ${art.barcode} x ${data.cantidad}(${art.um})</td><td>${destino.nombre}</td>
-							<td>
-									<button class="btn btn-link" title="Agrear no consumible" onclick="switchPane()"><i class="fa fa-plus text-info"></i></button>
-									<button class="btn btn-link" onclick="$(this).closest('tr').remove()"><i class="fa fa-times text-danger"></i></button>
+					`<tr id="${$tblRep.find('tr').length + 1}" class='data-json batch-${s_batchId} cabecera' data-json='${JSON.stringify(data)}' data-forzar='false'><td><b>Operario:</b> ${$('#operario option:selected').text()}<br><b>Artículo:</b> ${art.barcode} x ${data.cantidad}(${art.um})</td><td>${destino.nombre}</td>
+							<td class="botonera">
+									<button class="btn btn-link" title="Agregar no consumible" onclick="switchPane()"><i class="fa fa-download text-info"></i></button>
+									<button class="btn btn-link" title="Eliminar registro" onclick="$(this).closest('tr').remove()"><i class="fa fa-trash text-danger"></i></button>
+									<button class="btn btn-success ver-mas" title="Ver más"><i class="fa fa-plus"></i></button>
 							</td>
-					</tr>`
+					</tr>
+					<tr style="display: none" class="info-extra"></tr>
+					`
 			);
 			$('#frm-etapa').find('.form-control:not(#codigo_lote)').val('');
 			$('.select2').trigger('change');
@@ -279,7 +283,7 @@
 							<!-- Modal footer -->
 							<div class="modal-footer">
 									<button type="button" class="btn" data-dismiss="modal">Cerrar</button>
-									<button type="button" class="btn btn-primary" onclick="FinalizarEtapa()">Guardar Reporte</button>
+									<button type="button" class="btn btn-primary" onclick="FinalizarEtapa()">Guardar</button>
 									<!-- <button type="button" class='btn btn-success' onclick='conf(btnFinalizar)'>Finalizar Etapa</button> -->
 							</div>
 					</div>
@@ -417,8 +421,10 @@
 	//
 	function asociarNocos() {
 			var data = [];
+			$(`.batch-${s_batchId} .info-extra`).text('');// Limpio la info extra antes de agregar
 			$('#tbl-noco tbody  tr').each(function(){
-					data.push(getJson(this).codigo);
+				data.push(getJson(this).codigo);
+				$(`.batch-${s_batchId} .info-extra`).append('');
 			});
 			setAttr($(`.batch-${s_batchId}`), 'nocos', data);
 			//resetNoco();
@@ -481,7 +487,11 @@ function consultarNoCo(){
 		success: function(result) {
 			wc();
 			if(!$.isEmptyObject(result)){
-				agregarNocoEscaneado(result);
+				if(result.estado != 'ALTA'){
+					agregarNocoEscaneado(result);
+				}else{
+					error('Error','El no consumible se encuentra inhabilitado!');
+				}
 			}else{
 				alertify.error('El recipiente escaneado no se encuentra cargado...');
 			}
@@ -515,4 +525,7 @@ function agregarNocoEscaneado(data) {
 	`)
 	$('#codigoNoCoEscaneado').val('');
 }
+$(document).on('click','.ver-mas' ,function(){
+    $(this).parent().parent().next('tr.info-extra').toggle();
+});
 </script>
