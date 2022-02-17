@@ -14,7 +14,10 @@ class Entradas extends CI_Model
     public function guardar($data)
     {
         if($this->validarCamion($data['patente'])){  
-            return array('status'=>false, 'msj'=>'El camión ya se encuentra en el establecimiento');
+            return array('status'=>false, 'msj'=>'El camión ya se encuentra en curso en el establecimiento');
+        }
+        if($this->validarCamionCargado($data['patente'])){  
+            return array('status'=>false, 'msj'=>'El camión ya se encuentra cargado en el establecimiento');
         }
 
         $data['empr_id'] = strval(empresa());
@@ -44,4 +47,20 @@ class Entradas extends CI_Model
         }
         return false;
     }
+
+    public function validarCamionCargado($patente, $estado = 'CARGADO')
+    {
+        log_message('DEBUG',"#TRAZA | #TRAZ-PROD-TRAZASOFT | MÉTODO: ".__METHOD__."| PANTENTE: $patente | ESTADO: $estado");
+
+        $res = wso2(REST_LOG. "/camiones/$patente/".empresa())['data'];
+        if($res){
+            foreach($res as $o) {
+                
+                if($o->estado == $estado) return true;
+
+            }
+        }
+        return false;
+    }
+
 }
