@@ -421,11 +421,18 @@
 	//
 	function asociarNocos() {
 			var data = [];
-			$(`.batch-${s_batchId} .info-extra`).text('');// Limpio la info extra antes de agregar
+			$(`.batch-${s_batchId}`).next(`.info-extra`).text('');// Limpio la info extra antes de agregar
+			infoFila = '<td><label>No consumibles asociados:</label><ul>';
+			// $(`.batch-${s_batchId}`).next(`.info-extra`).append('<td><label>No consumibles asociados:</label><ul>');
+
 			$('#tbl-noco tbody  tr').each(function(){
-				data.push(getJson(this).codigo);
-				$(`.batch-${s_batchId} .info-extra`).append('');
+				dataNoCo = getJson(this);
+				data.push(dataNoCo.codigo);
+				infoFila += `<li>${dataNoCo.codigo} : ${dataNoCo.descripcion}</li>`;
 			});
+			infoFila += '</ul></td><td></td><td></td>';
+			$(`.batch-${s_batchId}`).next(`.info-extra`).html(infoFila);
+
 			setAttr($(`.batch-${s_batchId}`), 'nocos', data);
 			//resetNoco();
 			switchPane();
@@ -438,13 +445,14 @@
 	}
 	// Alterna entre modales
 	function switchPane(){
-			if($('#pnl-1').hasClass('hidden')){
-					$('#pnl-1').removeClass('hidden');
-					$('#pnl-2').addClass('hidden');
-			}else{
-					$('#pnl-2').removeClass('hidden');
-					$('#pnl-1').addClass('hidden');
-			}
+		$('#tbl-reportes .ver-mas').toggle();// oculta info extra
+		if($('#pnl-1').hasClass('hidden')){
+				$('#pnl-1').removeClass('hidden');
+				$('#pnl-2').addClass('hidden');
+		}else{
+				$('#pnl-2').removeClass('hidden');
+				$('#pnl-1').addClass('hidden');
+		}
 	}
 
 	// Funcion que no se usa en esta pantalla
@@ -525,7 +533,10 @@ function agregarNocoEscaneado(data) {
 	`)
 	$('#codigoNoCoEscaneado').val('');
 }
-$(document).on('click','.ver-mas' ,function(){
-    $(this).parent().parent().next('tr.info-extra').toggle();
+$(document).ready(function () {
+	//Despliega fila de info extra -->NOTA: se crea una abajo de cada registro
+	$(document).on('click','.ver-mas' ,function(){
+		$(this).parent().parent().next('.info-extra').toggle();
+	});
 });
 </script>
