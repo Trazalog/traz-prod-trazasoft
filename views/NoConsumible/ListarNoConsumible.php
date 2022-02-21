@@ -692,6 +692,18 @@ function solicitarQR(e){
 												placeholder="" class="form-control input-md habilitar" >
 								</div>
 						</div>
+						<div class="form-group">
+								<label class="col-md-4 control-label" for="deposito">Depósito<strong class="text-danger">*</strong>:</label>
+								<div class="col-md-8">
+										<input id="deposito_ver" type="text" name="deposito" placeholder="" class="form-control input-md deshabilitar" >
+								</div>
+						</div>
+						<div class="form-group">
+								<label class="col-md-4 control-label" for="establecimiento">Establecimiento<strong class="text-danger">*</strong>:</label>
+								<div class="col-md-8">
+										<input id="establecimiento_ver" type="text" name="establecimiento" placeholder="" class="form-control input-md deshabilitar" >
+								</div>
+						</div>
 						<!-- <div class="form-group">
 								<div class="col-md-6 col-md-offset-6">
 									<button id="btn-generar_qr" name="btn-generar_qr" class="btn btn-primary">Generar	QR</button>
