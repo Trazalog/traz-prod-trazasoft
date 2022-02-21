@@ -168,7 +168,7 @@ class Noconsumibles extends CI_Model
 		function cambioEstado($data)
 		{
 			$post['_put_noconsumible_estado'] = $data;
-			log_message('DEBUG','#TRAZA|NOSCONSUMIBLES|cambioEstado($data) >> $data: '.json_encode($data));
+			log_message('DEBUG','#TRAZA | #TRAZ-PROD-TRAZASOFT | Noconsumibles | cambioEstado($data) >> $data: '.json_encode($data));
 			$aux = $this->rest->callAPI("PUT", REST_PRD_NOCON."/noConsumible/estado", $post);
 			$aux =json_decode($aux["status"]);
 			return $aux;
