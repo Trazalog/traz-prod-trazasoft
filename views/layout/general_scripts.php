@@ -73,6 +73,7 @@
              confirmButtonColor: "#3085d6",
              cancelButtonColor: "#d33",
              confirmButtonText: "Si",
+             cancelButtonText: 'No, Cancelar!'
            }).then((result) => {
              if (result.value) {
                fun(e);

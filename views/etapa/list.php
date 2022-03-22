@@ -74,7 +74,7 @@
       <br><br>
       <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
         <div class="form-group">
-          <label style="padding-left: 20%;font-size: 16px;">Mostrar Etapas Finalizadas</label>
+          <label style="padding-left: 20%;font-size: 16px;">Mostrar Batch Finalizados</label>
           <input type="checkbox" style="width: 16px;height: 16px;margin-left: 15px;" id="etapa_finalizada" name="etapa_finalizada">
         </div>
       </div>
@@ -536,9 +536,12 @@
   $('#etapa_finalizada').on( 'click', function () {
     estado = $('#etapa_finalizada').is(':checked');
     if(estado){
-      $('#etapas').DataTable().columns(9).search('Finalizado').draw();
-    }else{
       $('#etapas').DataTable().columns().search('').draw();
+    }else{
+      $('#etapas').DataTable().columns(9).search('En Curso|Planificado',true,false).draw();
     }
+  });
+  $(document).ready(function () {
+    $('#etapas').DataTable().columns(9).search('En Curso|Planificado',true,false).draw();
   });
 </script>

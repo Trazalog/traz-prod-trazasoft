@@ -197,13 +197,16 @@ function AgregarProducto() {
     if (! _isset($("#inputproducto").val())) {
         ban = "Debe seleccionar un producto!";
     }
-    if (! _isset($("#cantidadproducto").val())) {
+    var cantidad = $("#cantidadproducto").val();
+    if (! _isset(cantidad)) {
         ban = "Debe completar la cantidad!";
     }
-    if (! _isset($("#lotedestino").val())) {
+    var lotedestino = $("#lotedestino").val();
+    if (! _isset(lotedestino)) {
         ban = "Debe completar lote de destino!";
     }
-    if (! _isset($("#productodestino").val())) {
+    destino = $("#productodestino").val();
+    if (! _isset(destino)) {
         ban = "Debe seleccionar un destino!";
     }
     if (ban != '') {
@@ -228,12 +231,12 @@ function AgregarProducto() {
         //         'productorecipientes').selectedIndex].innerHTML;
         //     producto.recipientefinal = document.getElementById('productorecipientes').value;
         // }
-
+        dataProducto = JSON.parse($("#inputproducto").attr('data-json'));
         recipientes = '<?php echo json_encode($recipientes);?>';
         recipientes = JSON.parse(recipientes);
         idrecipiente = document.getElementById('productodestino').value;
         //indexrec = recipientes.findIndex(y => y.reci_id == idrecipiente);
-        producto.id = productoid;
+        producto.id = dataProducto.arti_id;
         producto.titulo = $('#inputproducto').find('option:selected').text();
         producto.cantidad = cantidad;
         producto.loteorigen = document.getElementById('loteorigen').value;

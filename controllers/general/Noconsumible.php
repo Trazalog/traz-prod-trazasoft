@@ -198,7 +198,7 @@ class Noconsumible extends CI_Controller
     */
     function cambioEstado()
     {
-        log_message('INFO','#TRAZA|| >> ');
+        log_message('INFO','#TRAZA | #TRAZ-PROD-TRAZASOFT | Noconsumible | cambioEstado');
         $data = $this->input->post('data');
         $data['usuario_app'] = userNick();
         $data['empr_id'] = empresa();
