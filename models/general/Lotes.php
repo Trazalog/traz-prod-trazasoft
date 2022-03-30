@@ -88,5 +88,4 @@ class Lotes extends CI_Model
     }
     return $rsp;
   }
-
 }

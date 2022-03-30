@@ -48,12 +48,13 @@ class Noconsumible extends CI_Controller
     public function editarNoConsumible()
     {
         $data['_put_noconsumibles'] = array(
-                    'codigo' => $this->input->post('codigo'),
-                    'descripcion' => $this->input->post('descripcion'),
-                    'fec_vencimiento' => $this->input->post('fec_vencimiento'),
-                    'usuario_app' => 'rodotest',
-                    'tinc_id' => $this->input->post('tinc_id')
-                  );
+          'codigo' => $this->input->post('codigo'),
+          'descripcion' => $this->input->post('descripcion'),
+          'fec_vencimiento' => $this->input->post('fec_vencimiento'),
+          'usuario_app' => userNick(),
+          'tinc_id' => $this->input->post('tinc_id'),
+          'empr_id' => empresa()
+        );
 
         $data = $this->Noconsumibles->editarNoConsumible($data);
         echo json_encode($data);
@@ -63,7 +64,8 @@ class Noconsumible extends CI_Controller
     {
       $data['_delete_noconsumible'] = array(
         'codigo' => $this->input->post('codigo'),
-        'usuario_app' => 'rodotest'
+        'usuario_app' => userNick(),
+        'empr_id' => empresa()
       );
       $data = $this->Noconsumibles->eliminarNoConsumible($data);
      
@@ -196,7 +198,7 @@ class Noconsumible extends CI_Controller
     */
     function cambioEstado()
     {
-        log_message('INFO','#TRAZA|| >> ');
+        log_message('INFO','#TRAZA | #TRAZ-PROD-TRAZASOFT | Noconsumible | cambioEstado');
         $data = $this->input->post('data');
         $data['usuario_app'] = userNick();
         $data['empr_id'] = empresa();
@@ -213,4 +215,19 @@ class Noconsumible extends CI_Controller
         $resp = $this->Noconsumibles->seleccionarDestino()['data'];
         echo json_encode($resp);
     }
+
+  /**
+	* Recibe el codigo del NoCo, para posteriormente validar si ya esta creado para una empresa
+	* @param string codigo NoCo
+	* @return array respuesta del servicio
+	*/
+  public function validarNoConsumible(){
+    log_message('INFO','#TRAZA | #TRAZ-PROD-TRAZASOFT | Noconsumible | validarNoConsumible()');
+
+		$noco = $this->input->post('codigo');
+
+		$resp = $this->Noconsumibles->validarNoConsumible($noco);
+        
+    echo json_encode($resp);
+	}
 }

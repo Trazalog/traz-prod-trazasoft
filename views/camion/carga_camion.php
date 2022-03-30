@@ -169,7 +169,7 @@ function Actualiza(establecimiento) {
             document.getElementById('camiones').innerHTML = html;
             document.getElementById('camiones').disabled = false;
             document.getElementById('inputlotes').disabled = false;
-            document.getElementById('btnlotes').disabled = false;
+            // document.getElementById('btnlotes').disabled = false;
         },error:function(){
             document.getElementById('camiones').innerHTML = "";
         },
@@ -211,7 +211,7 @@ function ActualizaLotes() {
        
 
            if(!result.status){
-               alert('Fallo la Obtencion de Lotes Asociados');
+               error('Error','Fallo la Obtencion de Lotes Asociados');
                return;
            }
 
@@ -219,7 +219,7 @@ function ActualizaLotes() {
  
         },
         error:function(){
-            alert('Error al Obtener Lotes Asociados al Establecimiento');
+            error('Error','Error al Obtener Lotes Asociados al Establecimiento');
         },
         complete: function(){
             wc();
@@ -409,14 +409,14 @@ function FinalizarCarga() {
                 console.log(result);
                 
                 if(result.status == true) {
-                    alert("Hecho");
+                    hecho('Guardado!','El camión se cargó exitosamente!');
                     $('#tabla_carga tbody').empty();
                     Actualiza($('#establecimientos').val());
                     ActualizaLotes();
 
                 }
                 else{
-                    alert('No se puedo Registrar Carga');
+                    error('Error','No se puedo Registrar Carga');
                 }
 
                 return;
@@ -425,11 +425,11 @@ function FinalizarCarga() {
                     linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
 
                 } else {
-                    alert('Ups! algo salio mal');
+                    error('Error','Se produjo un error al guardar la carga');
                 }
 
             },error: function(rsp){
-                alert('Error al Guardar Cargar');
+                error('Error','Error al Guardar Cargar');
             },complete: function(){
                 wc();
             }

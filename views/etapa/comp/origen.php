@@ -3,10 +3,10 @@
 <div class="box box-primary">
     <div class="box-header with-border">
         <h4 class="box-title">Materia Prima</h4>
-        <span>
+        <!-- <span>
             <button type="button" class="btn btn-warning btn-xs pull-right" data-toggle="modal"
                 data-target="#modal_detalleTarea">Detalle tarea</button>
-        </span>
+        </span> -->
     </div>
     <!-- /.box-header -->
 
@@ -15,7 +15,7 @@
     <?php if ($etapa->estado != 'En Curso' && $etapa->estado != 'FINALIZADO') { ?>
     <div class="box-body">
 
-        <div class="row" style="margin-top: 40px">
+        <div class="row">
             <div class="col-xs-12">
                 <div class="row form-group">
                     <div class="col-md-3 col-xs-6">
@@ -25,7 +25,7 @@
                     <div class="col-md-6 col-xs-12 input-group ba">
 
                         <?php
-                            echo selectBusquedaAvanzada('inputmaterias', 'vmateria', $productos_entrada_etapa, 'arti_id', 'barcode', array('descripcion', 'Unidad Medida:' => 'unidad_medida'));
+                            echo selectBusquedaAvanzada('inputmaterias', 'vmateria', $productos_entrada_etapa, 'arti_id', 'barcode', array('descripcion', 'Unidad Medida:' => 'um'));
                             ?>
                     </div>
                 </div>
@@ -60,7 +60,7 @@
             </div>
         </div>
 
-        <div class="row" style="margin-top: 40px ">
+        <div class="row">
             <input type="hidden" id="materiasexiste" value="no">
             <div class="col-xs-12 table-responsive" id="materiasasignadas">
             </div>
@@ -73,7 +73,7 @@
     <!-- ORIGEN EDICION ETAPA -->
     <?php if ($accion == 'Editar' && $etapa->estado == 'FINALIZADO') { ?>
     <div class="box-body">
-        <div class="row" style="margin-top: 40px ">
+        <div class="row">
             <input type="hidden" id="materiasexiste" value="no">
             <div class="col-xs-12 table-responsive" id="materiasasignadas">
                 <table id="etapas" class="table table-bordered table-hover">
@@ -111,7 +111,7 @@
           if($etapa->estado != 'En Curso'){
             echo"<th>Acciones</th>";
           }
-          echo"<th>Titulo</th>";
+          echo"<th>Título</th>";
           echo"<th>Stock Actual</th>";
           echo"<th>Cantidad</th>";
           echo'</thead>';

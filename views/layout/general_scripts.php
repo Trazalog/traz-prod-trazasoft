@@ -73,6 +73,7 @@
              confirmButtonColor: "#3085d6",
              cancelButtonColor: "#d33",
              confirmButtonText: "Si",
+             cancelButtonText: 'No, Cancelar!'
            }).then((result) => {
              if (result.value) {
                fun(e);
@@ -81,11 +82,19 @@
          }
 
          function hecho(msj = 'Hecho') {
-            alert(msj);
+          Swal.fire(
+        msj,
+        'success'
+      )
         }
-         function error() {
-           alert('Error')
-         }
+      
+         function error(msj='Error!', detalle="Algo salio mal"){
+    Swal.fire(
+        msj,
+        detalle,
+        'error'
+      )
+}
 
          function conexion() {
            return true;

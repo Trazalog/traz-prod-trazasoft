@@ -70,19 +70,13 @@ class Produccion extends \koolreport\KoolReport
       ->pipe(new OnlyColumn(array(
         "producto", "cantidad"
       )))
-      ->pipe(new Sort(array(
-        "cantidad" => "desc"
-      )))
-      ->pipe(new Limit(
-        array(6)
-      ))
       ->pipe($this->dataStore("data_produccion_pieChart"));
 
     $this->src("apiarray")
       ->pipe(new OnlyColumn(array(
-        "producto", "etapa"
+        "producto", "cantidad"
       )))
-      ->pipe($this->dataStore("data_produccion_clumnChart"));
+      ->pipe($this->dataStore("data_produccion_columnChart"));
 
     // $this->src("apiarray2")
     //     ->pipe($this->dataStore("ejemplo"));

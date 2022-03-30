@@ -43,34 +43,42 @@ class Recipientes extends CI_Model
         return json_decode($array['data']);
     }
 
+    /**
+      * Crea un nuevo recipiente y responde con el reci_id nuevo generado
+      * @param array con datos del recipiente nuevo
+      * @return array con reci_id 
+		*/
     public function crear($data)
     {
-        $aux = array(
-            'tipo' => 'TRANSPORTE',
-            'patente' => $data->patente,
-            'motr_id' => $data->motr_id,
-            'depo_id' => strval(DEPOSITO_TRANSPORTE),
-            'empr_id' => strval(empresa()),
-        );
+      $aux = array(
+          'tipo' => 'TRANSPORTE',
+          'patente' => $data->patente,
+          'motr_id' => $data->motr_id,
+          'depo_id' => strval(DEPOSITO_TRANSPORTE),
+          'empr_id' => strval(empresa()),
+      );
+      
+      log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT | RECIPIENTES | crear()  >> data ".json_encode($aux));
 
-        $url = REST_PRD.'/recipientes';
-        $rsp =  $this->rest->callApi('POST', $url, ['post_recipientes'=>$aux]);
-        if(!$rsp['status']) return $rsp;
-        $rsp['data'] = json_decode($rsp['data'])->resultado->reci_id;
-        return $rsp;
+      $url = REST_PRD.'/recipientes';
+      $rsp =  $this->rest->callApi('POST', $url, ['post_recipientes'=>$aux]);
+      if(!$rsp['status']) return $rsp;
+      $rsp['data'] = json_decode($rsp['data'])->resultado->reci_id;
+      return $rsp;
     }
-
+    
     public function obtener($tipo = 'TODOS', $estado = 'TODOS', $establecimiento = 0)
     {
-        $url  = REST_PRD. "/recipientes/tipo/$tipo/estado/$estado/establecimiento/$establecimiento/".empresa();
-        $rsp = $this->rest->callAPI('GET' , $url);
-        $rsp['data'] = json_decode($rsp['data'])->recipientes->recipiente;
-        return $rsp;
+      log_message('DEBUG'," #TRAZA | #TRAZ-PROD-TRAZASOFT | RECIPIENTES | obtener()");
+      $url  = REST_PRD. "/recipientes/tipo/$tipo/estado/$estado/establecimiento/$establecimiento/".empresa();
+      $rsp = $this->rest->callAPI('GET' , $url);
+      $rsp['data'] = json_decode($rsp['data'])->recipientes->recipiente;
+      return $rsp;
     }
 
   public function obtenerTodosRecipientes()
   {
-    $url  = REST_ALM. "/getAllRecipientes";
+    $url  = REST_ALM. "/recipientes/empresa/".empresa();
     $rsp = $this->rest->callAPI('GET', $url);
     $rsp['data'] = json_decode($rsp['data'])->recipientes->recipiente;
     return $rsp['data'];

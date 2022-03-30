@@ -35,7 +35,8 @@
 									echo '<i class="fa fa-fw fa-pencil " style="cursor: pointer; margin: 3px;" title="Editar" onclick="editarInfo(this)"></i>';
 									echo '<i class="fa fa-fw fa-times-circle eliminar" style="cursor: pointer;margin: 3px;" title="Eliminar" onclick="eliminar(this)"></i>';
 									echo '<i class="fa fa-undo" style="cursor: pointer;margin: 3px;" title="Trazabilidad" onclick="trazabilidad(this)"></i>';
-									echo '<i class="'.($estadoNoconsumible == 'ALTA' ? 'fa fa-fw fa-toggle-off text-light-blue': "fa fa-fw fa-toggle-on text-light-blue").' " title="Habilitar" style="cursor: pointer; margin-left: 15px;" onclick="cambioEstado(this)"></i>';									echo "</td>";
+									echo '<i class="fa fa-qrcode" style="cursor: pointer;margin: 3px;" title="Código QR" onclick="solicitarQR(this)"></i>';
+									echo '<i '.($estadoNoconsumible == 'ALTA' ? 'class="fa fa-fw fa-toggle-off text-light-blue" title="Habilitar"': 'class="fa fa-fw fa-toggle-on text-light-blue" title="Inhabilitar"').' title="Habilitar" style="cursor: pointer; margin-left: 15px;" onclick="cambioEstado(this)"></i>';									echo "</td>";
 									echo '<td>'.$codigo.'</td>';
 									//echo '<td>'.$tipo.'</td>';
 									echo '<td>'.$descripcion.'</td>';
@@ -52,11 +53,18 @@
     </div>
 
 <script>
+	//Limpio formulario al cierre de los modales
+	$("#mdl-NoConsumible").on("hidden.bs.modal", function () {
+  		$('#frm-NoConsumible')[0].reset();
+	});
+	$("#mdl-VerNoConsumible").on("hidden.bs.modal", function () {
+  		$('#frm-NoConsumible')[0].reset();
+	});
 
 	DataTable('#tbl-NoConsumibles');
 	DataTable('#tbl-trazabilidad');
 
-  initForm();
+  	initForm();
 
 	function nuevoNCmodal(){
 
@@ -65,9 +73,17 @@
 
 	function guardarNoConsumible() {
 
-			var formData = new FormData($('#frm-NoConsumible')[0]);
-			wo();
-			$.ajax({
+		if(!frm_validar('#frm-NoConsumible')){
+			alertify.error('Debes completar los campos obligatorios (*)');
+        	wc();
+        	return;
+    	}
+		var formData = new FormData($('#frm-NoConsumible')[0]);
+		wo();
+
+		validarNoConsumible(formData).then((result) => {
+			if(result == "false"){
+				$.ajax({
 					type: 'POST',
 					dataType: 'JSON',
 					url: '<?php echo base_url(PRD) ?>general/Noconsumible/guardarNoConsumible',
@@ -76,78 +92,104 @@
 					contentType: false,
 					processData: false,
 					success: function(rsp) {
-						debugger;
 						wc();
 						$("#mdl-NoConsumible").modal('hide');
+						const confirm = Swal.mixin({
+							customClass: {
+								confirmButton: 'btn btn-primary'
+							},
+							buttonsStyling: false
+						});
 
-							if (rsp) {
-
-								// Swal.fire(
-								// 	'Guardado!',
-								// 	'El registro se Guardo Correctamente',
-								// 	'success'
-								// );
-
+						if (rsp) {
+							confirm.fire({
+								title: 'Correcto',
+								text: "No consumible dado de alta correctamente!",
+								type: 'success',
+								showCancelButton: false,
+								confirmButtonText: 'Ok'
+							}).then((result) => {
+								
 								linkTo('<?php echo base_url(PRD) ?>general/Noconsumible/index');
-							} else {
-								wc();
-								Swal.fire(
-									'Error...',
-										'No pudo darse de alta el No consumible!',
-										'error'
-								);
-							}
-
+								
+							});
+						} else {
+							wc();
+							Swal.fire(
+								'Error...',
+								'No pudo darse de alta el No consumible!',
+								'error'
+							);
+						}
 					},
 					error: function(rsp) {
 						wc();
 						$("#mdl-NoConsumible").modal('hide');
 
-							Swal.fire(
-										'Error...',
-											'No pudo darse de alta el No consumible!',
-											'error'
-														)
-							console.log(rsp.msj);
+						Swal.fire(
+							'Error...',
+							'No pudo darse de alta el No consumible!',
+							'error'
+						)
+						console.log(rsp.msj);
 					}
-			});
+				});
+			}else{
+				error("Error","El código del No Consumible ingresado ya se encuentra creado!");
+			}
+		}).catch((err) => {
+			if(err){
+				console.log(err);
+				error("Error","Se produjo un error al validar el código del No Consumible");
+			}
+		});
 	}
 
 	function editarNoConsumible() {
+		wo();
+		var formData = new FormData($('#frm-NoConsumible_Editar')[0]);
+		
+		$.ajax({
+			type: 'POST',
+			dataType: 'JSON',
+			url: '<?php echo base_url(PRD) ?>general/Noconsumible/editarNoConsumible',
+			data: formData,
+			cache: false,
+			contentType: false,
+			processData: false,
+			success: function(rsp) {
 
-			var formData = new FormData($('#frm-NoConsumible_Editar')[0]);
-			debugger;
-			$.ajax({
-					type: 'POST',
-					dataType: 'JSON',
-					url: '<?php echo base_url(PRD) ?>general/Noconsumible/editarNoConsumible',
-					data: formData,
-					cache: false,
-					contentType: false,
-					processData: false,
-					success: function(rsp) {
-
-							$('#mdl-EditarNoConsumible').modal('hide');
-											Swal.fire(
-									'Modificado!',
-									'La Modificacion se Realizó Correctamente.',
-									'success'
-															)
-								$('#frm-NoConsumible')[0].reset();
-							linkTo();
+				const confirm = Swal.mixin({
+					customClass: {
+						confirmButton: 'btn btn-primary'
 					},
-					error: function(rsp) {
-							Swal.fire(
-										'Oops...',
-											'Algo salio mal!',
-											'error'
-														)
-							console.log(rsp.msj);
-					},
-					complete: function() {
-							wc();
-					}
-			});
+					buttonsStyling: false
+				});
+				$('#mdl-VerNoConsumible').modal('hide');
+				confirm.fire({
+					title: 'Correcto',
+					text: "Se edito no consumible correctamente!",
+					type: 'success',
+					showCancelButton: false,
+					confirmButtonText: 'Ok'
+				}).then((result) => {
+					
+					linkTo('<?php echo base_url(PRD) ?>general/Noconsumible/index');
+					
+				});
+			},
+			error: function(rsp) {
+				Swal.fire(
+					'Oops...',
+						'Algo salio mal!',
+						'error'
+				)
+				console.log(rsp.msj);
+			},
+			complete: function() {
+				wc();
+			}
+		});
 	}
 
 	function selectEstablecimiento() {
@@ -165,6 +207,9 @@
 				dataType: 'JSON',
 				url: '<?php echo base_url(PRD) ?>general/Establecimiento/obtenerDepositos/',
 				success: function(rsp) {
+
+					$('#depositos').empty();
+
 					var datos = "<option value='' disabled selected>Seleccionar</option>";
 					for (let i = 0; i < rsp.length; i++) {
 						datos += "<option value=" + rsp[i].depo_id + ">" + rsp[i].descripcion + "</option>";
@@ -174,8 +219,10 @@
 				},
 				error: function(rsp) {
 					if (rsp) {
+						$('#depositos').empty();
 						alert(rsp.responseText);
 					} else {
+						$('#depositos').empty();
 						alert("No se pudieron cargar los depositos del establecimiento seleccionado.");
 					}
 				},
@@ -254,12 +301,14 @@
 	function blockEdicion(){
 		$("select.habilitar").prop("disabled", true);
 		$(".habilitar").attr("readonly","readonly");
+		$('.deshabilitar').attr("readonly","readonly");//codigo
 		$('#btnsave').hide();
 	}
 
 	function habilitarEdicion(){
 		$("select.habilitar").prop("disabled", false);
 		$('.habilitar').removeAttr("readonly");
+		$('.deshabilitar').attr("readonly","readonly");//codigo
 		$('#btnsave').show();
 	}
 
@@ -270,7 +319,7 @@
 		Object.keys(json).forEach(function(key, index) {
 				$('[name="' + key + '"]').val(json[key]);
 		});
-		debugger;
+		
 		var fecha = json['fec_alta'].slice(0, 10)
 		Date.prototype.toDateInputVal = (function() {
 			var fechaAlta = new Date(fecha);
@@ -348,27 +397,41 @@
 	}
 
 	function eliminarNoConsumible() {
-			$.ajax({
-					type: 'POST',
-					data: {
-							codigo: selected
+		wo();
+		$.ajax({
+			type: 'POST',
+			data: {
+					codigo: selected
+			},
+			url: '<?php echo base_url(PRD) ?>general/Noconsumible/eliminarNoConsumible/',
+			success: function(data) {
+				const confirm = Swal.mixin({
+					customClass: {
+						confirmButton: 'btn btn-primary'
 					},
-					url: '<?php echo base_url(PRD) ?>general/Noconsumible/eliminarNoConsumible/',
-					success: function(data) {
-							Swal.fire(
-					'Eliminado!',
-					'Se Elimino Correctamente.',
-					'success'
-				)
-			
-							linkTo();
-					},
-					error: function(result) {
-							console.log('entra por el error');
-							console.log(result);
-					}
-
-			});
+					buttonsStyling: false
+				});
+				$('#mdl-eliminar').modal('hide');
+				confirm.fire({
+					title: 'Correcto',
+					text: "Se eliminó no consumible correctamente!",
+					type: 'success',
+					showCancelButton: false,
+					confirmButtonText: 'Ok'
+				}).then((result) => {
+					
+					linkTo('<?php echo base_url(PRD) ?>general/Noconsumible/index');
+					
+				});
+			},
+			error: function(result) {
+					console.log('entra por el error');
+					console.log(result);
+			},
+			complete: function(result){
+				wc();
+			}
+		});
 	}
 ////// Fin Eliminar No Consumible
 
@@ -404,6 +467,62 @@
 	}
 ////// Fin Trazabilidad
 
+/////// Validación código del no consumible
+async function validarNoConsumible(datos){
+    let validacion = new Promise((resolve, reject) => {
+      $.ajax({
+        type: 'POST',
+        data: datos,
+		cache: false,
+		contentType: false,
+		processData: false,
+        dataType: 'JSON',
+        url: "<?php echo base_url(PRD) ?>general/Noconsumible/validarNoConsumible",
+        success: function(rsp) {
+          resolve(rsp.existe);
+        },
+        error: function(rsp){
+          reject(rsp.existe);
+        },
+        complete: function(){
+          wc();
+        }
+      });
+    });
+    return await validacion;
+  }
+////////////////
+//////// Configuracion y creacion código QR
+// Características para generacion del QR
+function solicitarQR(e){
+	//Limpio el modal
+	$("#infoEtiqueta").empty();
+	$("#contenedorCodigo").empty();
+	$("#infoFooter").empty();
+
+	// configuración de código QR
+	var config = {};
+	config.titulo = "Codigo No Consumible";
+	config.pixel = "7";
+	config.level = "L";
+	config.framSize = "2";
+
+	//Obtengo los datos del No Consumible
+	datos = $(e).closest('tr').attr('data-json');
+	var datosNoCo = JSON.parse(datos);
+
+	//Cargo la vista del QR con datos en el modal
+	$("#infoEtiqueta").load("<?php echo PRD ?>general/CodigoQR/cargaModalQRNoConsumible", datosNoCo);
+	var dataQR = {};
+	dataQR.codigo = datosNoCo.codigo;
+
+	// agrega codigo QR al modal impresion
+	getQR(config, dataQR, 'codigosQR/Traz-prod-trazasoft/NoConsumibles');
+
+	// levanta modal completo para su impresion
+	verModalImpresion();
+}
+////////////// FIN Creación QR
 </script>
 
 
@@ -429,17 +548,15 @@
 							<fieldset id="read-only">
 								<fieldset>
 									<div class="form-group">
-											<label class="col-md-2 control-label" for="codigo">Código<strong
-															class="text-danger">*</strong>:</label>
+											<label class="col-md-2 control-label" for="codigo">Código<?php echo hreq() ?>:</label>
 											<div class="col-md-4">
 													<input id="codigo" name="codigo" type="text" placeholder="Ingrese código..."
 															class="form-control input-md" required>
 											</div>
-											<label class="col-md-2 control-label" for="tipo_no_consumible">Tipo No Consumible<strong
-															class="text-danger">*</strong>:</label>
+											<label class="col-md-2 control-label" for="tipo_no_consumible">Tipo No Consumible<?php echo hreq() ?>:</label>
 											<div class="col-md-4">
-												<select name="tipo_no_consumible" class="form-control">
-													<option value="0"> - Seleccionar - </option>
+												<select name="tipo_no_consumible" class="form-control" required>
+													<option value=""> - Seleccionar - </option>
 													<?php 
 													if(is_array($tipoNoConsumible)){
 														foreach ($tipoNoConsumible as $i) {
@@ -452,8 +569,7 @@
 									</div>
 
 									<div class="form-group">
-											<label class="col-md-2 control-label" for="descripcion">Descripción<strong
-															class="text-danger">*</strong>:</label>
+											<label class="col-md-2 control-label" for="descripcion">Descripción<?php echo hreq() ?>:</label>
 											<div class="col-md-10">
 													<textarea class="form-control" id="descripcion" name="descripcion"
 													<?php echo req() ?>></textarea>
@@ -463,7 +579,7 @@
 									<div class="form-group">
 										
 											<label class="col-md-4 control-label" for="fecha_vencimiento">Fecha de
-													vencimiento<strong class="text-danger">*</strong>:</label>
+													vencimiento<?php echo hreq() ?>:</label>
 											<div class="col-md-8">
 													<input id="fec_vencimiento" name="fec_vencimiento" type="date"
 															placeholder="" class="form-control input-md"  <?php echo req() ?>>
@@ -471,7 +587,7 @@
 									</div>
 									<div class="form-group">
 									
-												<label class="col-md-4 control-label" for="">Establecimiento:</label>
+												<label class="col-md-4 control-label" for="">Establecimiento<?php echo hreq() ?>:</label>
 													<div class="col-md-8">
 													<select class="form-control select2 select2-hidden-accesible" id="establecimiento" name="establecimiento" onchange="selectEstablecimiento()" <?php echo req() ?>>
 															<option value="" disabled selected>Seleccionar</option>
@@ -489,7 +605,7 @@
 										<br>
 											<!-- ___________________________________________________ -->
 									<div class="form-group">
-													<label class="col-md-4 control-label" for="depositos">Depósito:</label>
+													<label class="col-md-4 control-label" for="depositos">Depósito<?php echo hreq() ?>:</label>
 													<div class="col-md-8">
 													<select class="form-control select2 select2-hidden-accesible" id="depositos" name="depositos" onchange="selectDeposito()" <?php echo req() ?>>
 													</select>
@@ -501,9 +617,8 @@
 					</form>
 				</div> <!-- /.modal-body -->
 				<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-						<button type="button" id="btn-accion" class="btn btn-primary btn-guardar"
-								onclick="guardarNoConsumible()">Guardar</button>
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+						<button type="button" id="btn-accion" class="btn btn-success btn-guardar" onclick="guardarNoConsumible()">Guardar</button>
 				</div>
 			</div>
 		</div>
@@ -512,93 +627,99 @@
 
 
 <!-- Modal  Ver/Editar No Consumible-->
-	<div class="modal fade bd-example-modal-md" tabindex="-1" id="mdl-VerNoConsumible" role="dialog"
-			aria-labelledby="myLargeModalLabel" aria-hidden="true">
-			<div class="modal-dialog modal-md">
-				<div class="modal-content">
+	<div class="modal fade bd-example-modal-md" tabindex="-1" id="mdl-VerNoConsumible" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-md">
+			<div class="modal-content">
 
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-										aria-hidden="true">&times;</span></button>
-						<h4 class="modal-title" id="mdl-titulo">Detalle No Consumibles</h4>
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+									aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="mdl-titulo">Detalle No Consumibles</h4>
+				</div>
+
+				<div class="modal-body" id="modalBody">
+					<div class="alert alert-danger alert-dismissable" id="error" style="display: none">
+							<h4><i class="icon fa fa-ban"></i> Error!</h4>
+							Revise que todos los campos esten completos
 					</div>
 
-					<div class="modal-body" id="modalBody">
-							<div class="alert alert-danger alert-dismissable" id="error" style="display: none">
-									<h4><i class="icon fa fa-ban"></i> Error!</h4>
-									Revise que todos los campos esten completos
+					<form class="form-horizontal" id="frm-NoConsumible_Editar">
+						<div class="form-group">
+							<label class="col-md-2 control-label" for="codigo">Código<strong class="text-danger">*</strong>:</label>
+							<div class="col-md-4">
+								<input id="codigo" name="codigo" type="text" placeholder="Ingrese código..." class="form-control input-md deshabilitar" >
 							</div>
 
-							<form class="form-horizontal" id="frm-NoConsumible_Editar">
+							<label class="col-md-2 control-label" for="tipo">Tipo No Consumible<strong class="text-danger">*</strong>:</label>
 
-									<div class="form-group">
+							<div class="col-md-4">
+								<select name="tinc_id" class="form-control habilitar"  <?php echo req() ?>>
+									<option value="0"> - Seleccionar - </option>
+									<?php
+										if(is_array($tipoNoConsumible)){
+											foreach ($tipoNoConsumible as $i) {
+													echo "<option value = $i->tabl_id>$i->valor</option>";
+												}
+										}
+									?>
+								</select>
+							</div>
+						</div>
 
-											<label class="col-md-2 control-label" for="codigo">Código<strong
-															class="text-danger">*</strong>:</label>
-											<div class="col-md-4">
-													<input id="codigo" name="codigo" type="text" placeholder="Ingrese código..."
-															class="form-control input-md habilitar" >
-											</div>
+						<div class="form-group">
+								<label class="col-md-2 control-label" for="descripcion">Descripción<strong
+												class="text-danger">*</strong>:</label>
+								<div class="col-md-10">
+										<textarea class="form-control habilitar" id="descripcion" name="descripcion"
+											></textarea>
+								</div>
+						</div>
 
-											<label class="col-md-2 control-label" for="tipo">Tipo No Consumible<strong
-															class="text-danger">*</strong>:</label>
-											<div class="col-md-4">
-												<select name="tinc_id" class="form-control habilitar"  <?php echo req() ?>>
-													<option value="0"> - Seleccionar - </option>
-														<?php
-															if(is_array($tipoNoConsumible)){
-																foreach ($tipoNoConsumible as $i) {
-																		echo "<option value = $i->tabl_id>$i->valor</option>";
-																	}
-															}
-														?>
-												</select>
-											</div>
-									</div>
-
-									<div class="form-group">
-											<label class="col-md-2 control-label" for="descripcion">Descripción<strong
-															class="text-danger">*</strong>:</label>
-											<div class="col-md-10">
-													<textarea class="form-control habilitar" id="descripcion" name="descripcion"
-														></textarea>
-											</div>
-									</div>
-
-									<div class="form-group bloq_fec_alta">
-											<label class="col-md-4 control-label" for="fec_alta">Fecha de
-													alta<strong class="text-danger">*</strong>:</label>
-											<div class="col-md-8">
-													<input id="fec_alta" name="fec_alta" type="date"
-															placeholder="" class="form-control input-md habilitar" >
-											</div>
-									</div>
-											<br>
-									<div class="form-group">
-											<label class="col-md-4 control-label" for="fec_vencimiento">Fecha de
-													vencimiento<strong class="text-danger">*</strong>:</label>
-											<div class="col-md-8">
-													<input id="fec_vencimiento_Edit" name="fec_vencimiento" type="date"
-															placeholder="" class="form-control input-md habilitar" >
-											</div>
-									</div>
-									<!-- <div class="form-group">
-											<div class="col-md-6 col-md-offset-6">
-												<button id="btn-generar_qr" name="btn-generar_qr" class="btn btn-primary">Generar	QR</button>
-													<br> <br>
-												<button id="btn-imprimir_qr" name="btn-imprimir_qr" class="btn btn-primary">Imprimir QR</button>
-											</div>
-									</div> -->
-
-							</form>
-					</div> <!-- /.modal-body -->
-					<div class="modal-footer">
-							<button type="button" id="btnsave" class="btn btn-primary btn-guardar"	onclick="editarNoConsumible()">Guardar</button>
-							<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-					</div>
-
+						<div class="form-group bloq_fec_alta">
+								<label class="col-md-4 control-label" for="fec_alta">Fecha de
+										alta<strong class="text-danger">*</strong>:</label>
+								<div class="col-md-8">
+										<input id="fec_alta" name="fec_alta" type="date"
+												placeholder="" class="form-control input-md habilitar" >
+								</div>
+						</div>
+								<br>
+						<div class="form-group">
+								<label class="col-md-4 control-label" for="fec_vencimiento">Fecha de
+										vencimiento<strong class="text-danger">*</strong>:</label>
+								<div class="col-md-8">
+										<input id="fec_vencimiento_Edit" name="fec_vencimiento" type="date"
+												placeholder="" class="form-control input-md habilitar" >
+								</div>
+						</div>
+						<div class="form-group">
+								<label class="col-md-4 control-label" for="deposito">Depósito<strong class="text-danger">*</strong>:</label>
+								<div class="col-md-8">
+										<input id="deposito_ver" type="text" name="deposito" placeholder="" class="form-control input-md deshabilitar" >
+								</div>
+						</div>
+						<div class="form-group">
+								<label class="col-md-4 control-label" for="establecimiento">Establecimiento<strong class="text-danger">*</strong>:</label>
+								<div class="col-md-8">
+										<input id="establecimiento_ver" type="text" name="establecimiento" placeholder="" class="form-control input-md deshabilitar" >
+								</div>
+						</div>
+						<!-- <div class="form-group">
+								<div class="col-md-6 col-md-offset-6">
+									<button id="btn-generar_qr" name="btn-generar_qr" class="btn btn-primary">Generar	QR</button>
+										<br> <br>
+									<button id="btn-imprimir_qr" name="btn-imprimir_qr" class="btn btn-primary">Imprimir QR</button>
+								</div>
+						</div> -->
+					</form>
+				</div> <!-- /.modal-body -->
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+					<button type="button" id="btnsave" class="btn btn-success btn-guardar"	onclick="editarNoConsumible()">Guardar</button>
 				</div>
+
 			</div>
+		</div>
 	</div>
 <!-------------------------------------------------------->
 
@@ -652,27 +773,28 @@
 
 <!-- Modal eliminar-->
 	<div class="modal" id="mdl-eliminar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-			<div class="modal-dialog" role="document">
-					<div class="modal-content">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
 
-							<div class="modal-header">
-									<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-													aria-hidden="true">&times;</span></button>
-									<h4 class="modal-title" id="myModalLabel"><span id="modalAction"
-													class="fa fa-fw fa-times-circle text-light-blue"></span> Eliminar Artículo</h4>
-							</div> <!-- /.modal-header  -->
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="myModalLabel"><span id="modalAction" class="fa fa-fw fa-times-circle text-light-blue"></span> Eliminar Artículo</h4>
+				</div> <!-- /.modal-header  -->
 
-							<div class="modal-body" id="modalBodyArticle">
-									<p>¿Realmente desea ELIMINAR el No Consumible? </p>
-							</div> <!-- /.modal-body -->
+				<div class="modal-body" id="modalBodyArticle">
+					<p>¿Realmente desea ELIMINAR el No Consumible? </p>
+				</div> <!-- /.modal-body -->
 
-							<div class="modal-footer">
-									<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-									<button type="button" class="btn btn-primary" id="btnSave" data-dismiss="modal"
-											onclick="eliminarNoConsumible()">Eliminar</button>
-							</div> <!-- /.modal footer -->
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+					<button type="button" class="btn btn-success" id="btnSave" data-dismiss="modal" onclick="eliminarNoConsumible()">Eliminar</button>
+				</div> <!-- /.modal footer -->
 
-					</div> <!-- /.modal-content -->
-			</div> <!-- /.modal-dialog modal-lg -->
+			</div> <!-- /.modal-content -->
+		</div> <!-- /.modal-dialog modal-lg -->
 	</div> <!-- /.modal fade -->
 <!-- / Modal -->
+<?php
+    // carga el modal de impresion de QR
+    $this->load->view( COD.'componentes/modal');
+?>

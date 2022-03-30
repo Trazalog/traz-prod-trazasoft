@@ -20,7 +20,7 @@ if($etapa->estado == "FINALIZADO"){
     <input class="hidden" type="text" id="batch_id" value="<?php echo $etapa->id ?>">
     <div class="box box-primary">
         <div class="box-header with-border">
-            <h3 class="box-title">Fraccionamiento</h3>
+        <h3 class="box-title"><?php echo $etapa->titulo; ?></h3>
         </div>
         <div class="box-body">
             <div class="row">
@@ -30,17 +30,26 @@ if($etapa->estado == "FINALIZADO"){
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-xs-6">
-                                    <label class="form-label">Fecha*:</label>
+                                    <label class="form-label">Fecha<?php hreq() ?>:</label>
                                     <input type="<?php if($accion != 'Editar'){echo 'date';} ?>" id="fecha"
                                         value="<?php echo $fecha;?>" class="form-control"
                                         <?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
                                 </div>
                                 <div class="col-xs-6">
-                                    <label for="op" class="form-label">Orden de Produccion:</label>
-                                    <input type="text" id="ordenproduccion" class="form-control"
-                                        <?php if($accion=='Editar' ){echo ( 'value="'.$ordenProd.'"');}?>
-                                        placeholder="Inserte Orde de Produccion"
+                                    <label for="Lote" class="form-label">Código Lote:*</label>
+                                    <input type="text" id="lote_id" class="form-control" 
+                                    <?php if($accion=='Editar' ){echo ( 'value="'.$etapa->lote.'"');}?>
+                                        placeholder="Inserte código de lote"
                                         <?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label for="op" class="form-label">Orden de Producción:</label>
+                                        <input type="text" id="ordenproduccion" class="form-control"
+                                            <?php if($accion=='Editar' ){echo ( 'value="'.$ordenProd.'"');}?>
+                                            placeholder="Inserte orden de producción"
+                                            <?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -53,7 +62,7 @@ if($etapa->estado == "FINALIZADO"){
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-xs-6">
-                                    <label for="establecimientos" class="form-label">Establecimiento*:</label>
+                                    <label for="establecimientos" class="form-label">Establecimiento<?php hreq() ?>:</label>
                                     <select class="form-control select2 select2-hidden-accesible"
                                         onchange="actualizaRecipiente(this.value,'recipientes')" id="establecimientos"
                                         <?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
@@ -127,7 +136,7 @@ if($etapa->estado == "FINALIZADO"){
                 <div class="panel-body">
                     <?php  if($etapa->estado != 'En Curso'){?>
                     <div class="row">
-                        <div class="col-xs-6">
+                        <div class="col-xs-6 ba">
                             <div class="form-group">
                                 <label class="form-label">Producto:</label>
                                 <?php 
@@ -135,10 +144,16 @@ if($etapa->estado == "FINALIZADO"){
                     ?>
                             </div>
                         </div>
-                        <div class="col-xs-6">
+                        <div class="col-xs-3">
                             <div class="form-group">
                                 <label class="form-label">Stock:</label>
                                 <input type="number" disabled id="stock" value="" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-xs-3">
+                            <div class="form-group">
+                                <label class="form-label">Unidad de Medida:</label>
+                                <input type="text" disabled id="uni_medida" value="" class="form-control">
                             </div>
                         </div>
                         <div class="col-xs-4">
@@ -253,7 +268,7 @@ function actualizaRecipiente(establecimiento, recipientes) {
         dataType: 'JSON',
         data: {
             establecimiento,
-            tipo: 'DEPOSITO'
+            tipo: 'PRODUCTIVO'
         },
         url: '<?php echo base_url(PRD) ?>general/Recipiente/listarPorEstablecimiento/true',
         success: function(result) {
@@ -264,7 +279,11 @@ function actualizaRecipiente(establecimiento, recipientes) {
             }
 
             if (!result.data) {
-                alert('No hay Recipientes Asociados');
+                Swal.fire(
+        'Error',
+        'No hay Recipientes Asociados.',
+        'error'
+      );
                 return;
             }
 
@@ -290,9 +309,11 @@ function despliega() {
 $("#inputproductos").on('change', function() {
 
 
-    document.getElementById('stock').value = getJson(this).stock;
-
     //// stock
+    document.getElementById('stock').value = getJson(this).stock;
+//// uni_medida
+    document.getElementById('uni_medida').value = getJson(this).um;
+
 });
 
 function ActualizaEmpaques() {
@@ -350,7 +371,7 @@ function ControlaProducto() {
         document.getElementById('inputproductos').value = "";
         document.getElementById('empaques').value = "";
         document.getElementById('cantidad').value = "";
-        document.getElementById('unidad').value = "";
+        document.getElementById('uni_medida').value = "";
         document.getElementById('volumen').value = "";
         document.getElementById('stock').value = "";
         document.getElementById('cantidad').disabled = true;
@@ -372,7 +393,7 @@ function AgregaProducto(producto) {
         if (estado == 'En Curso') {
             html += "<th>Lote</th>";
         }
-        html += "<th>Titulo</th>";
+        html += "<th>Título</th>";
         html += "<th>Cant a Descontar</th>";
         html += "<th>Empaque</th>";
         html += "<th>Cantidad</th>";
@@ -459,12 +480,14 @@ function valida() {
 }
 
 function guardar() {
+    //CHUKA
     fecha = document.getElementById('fecha').value;
     establecimiento = document.getElementById('establecimientos').value;
     recipiente = document.getElementById('recipientes').value;
     idetapa = <?php echo $etapa->id ?> ;
     existe = document.getElementById('productoexiste').value;
     ordProduccion = document.getElementById('ordenproduccion').value;
+    lote_id = document.getElementById('lote_id').value;
     var productos = [];
     var acum_cant = 0;
     if (existe == "si") {
@@ -487,6 +510,7 @@ function guardar() {
         productos: productos,
         cant_total_desc: acum_cant,
         ordProduccion: ordProduccion,
+        lote_id : lote_id,
         forzar: 'false'
     };
 
@@ -498,7 +522,11 @@ function guardar() {
         url: '<?php echo base_url(PRD) ?>general/Etapa/guardarFraccionar',
         success: function(rsp) {
             if (rsp.status) {
-                alert('Salida Guardada exitosamente.');
+                Swal.fire(
+        'Hecho',
+        'Salida Guardada exitosamente.',
+        'success'
+      );
                linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
             } else {
                 if (rsp.msj) {
@@ -529,7 +557,11 @@ function guardarForzado(data) {
         success: function(rsp) {
             $('#mdl-unificacion').modal('hide');
             if (rsp.status) {
-                alert('Salida Guardada exitosamente.');
+                Swal.fire(
+        'Hecho',
+        'Salida Guardada exitosamente.',
+        'success'
+      );
                linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
             } else {
                 alert('Fallo al iniciar la etapa fraccionamiento');
@@ -546,7 +578,7 @@ function guardarForzado(data) {
 
 // finalizar solo llena select y levanta modal 
 function finalizar() {
-
+    getLotesFraccionar();
     $("#modal_finalizar").modal('show');
 }
 $(document).off('click', '.tablaproductos_borrar').on('click', '.tablaproductos_borrar', {
@@ -554,4 +586,40 @@ $(document).off('click', '.tablaproductos_borrar').on('click', '.tablaproductos_
     idrecipiente: 'productosasignados',
     idbandera: 'productoexiste'
 }, remover);
+
+//Obtiene los lotes a fraccionar cuando se llama a la funcion finalizar que abre el modal del reporte de fraccionamiento
+function getLotesFraccionar(){
+    wo();
+    $("#lotesFraccionar").find("tbody td").remove();
+    data = {};
+    data.batch_id = $("#batch_id").val();
+
+    $.ajax({
+        type: "POST",
+        url: "<?php echo PRD ?>general/Etapa/getLotesFraccionar",
+        data: data,
+        dataType: "JSON",
+        success: function (resp) {
+            if(resp.status){
+                $.each(resp.data, function (i, val) {
+                    button = (val.tipo == 'Insumo') ? bolita('Insumo', 'orange') : `<button title='Copiar Lote' class='btn btn-link' onclick='$(\"#lotedestino\").val(\"${val.codigo}\")'><i class='fa fa-copy'></i></button>`;  
+                    
+                    var opcion = `<tr>
+                    <td>LOTE: ${val.codigo} | ${val.art_nombre}</td>
+                    <td>Cantidad: ${val.cant_entreg}</td>
+                    <td>${button}</td>
+                    </tr>`;
+
+                    $("#lotesFraccionar").find("tbody").append(opcion);
+                });
+            }else{
+                console.log("No hay lotes a fraccionar");
+            }
+            wc();
+        },
+        error: function (resp){
+            wc();
+        }
+    });
+}
 </script>   

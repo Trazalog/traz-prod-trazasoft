@@ -24,16 +24,16 @@ function validarEtapa() {
 
         <div class="box-header with-border">
             <h3 class="box-title">
-                <?php echo $accion . ' ' . $etapa->titulo ?>
+                <?php echo 'Gestionar' . ' ' . $etapa->titulo ?>
             </h3>
-            <button class="btn btn-success btn-xs pull-right" onclick="deleteSnapshot()">Limpiar Campos</button>
+            <!-- <button class="btn btn-success btn-xs pull-right" onclick="deleteSnapshot()">Limpiar Campos</button> -->
         </div>
         <!-- /.box-header -->
         <div class="box-body">
             <div class="row">
                 <input type="hidden" value="<?php echo isset($etapa)?$etapa->id:null ?>" id="batch_id" name="batch_id">
                 <div class="col-md-1 col-xs-12">
-                    <label for="Lote" class="form-label">Codigo Lote:*</label>
+                    <label for="Lote" class="form-label">Código Lote:*</label>
                 </div>
                 <div class="col-md-5 col-xs-12">
                     <input name="vcode" type="text" id="Lote" <?php if ($accion == 'Editar') {
@@ -98,7 +98,7 @@ function validarEtapa() {
             </div>
             <div class="row" style="margin-top: 50px">
                 <div class="col-md-2 col-xs-12">
-                    <label for="op" class="form-label">Orden de Produccion:</label>
+                    <label for="op" class="form-label">Orden de Producción:</label>
                 </div>
                 <div class="col-md-4 col-xs-12">
 
@@ -220,7 +220,11 @@ function actualizaRecipiente(establecimiento, recipientes) {
             }
 
             if (!result.data) {
-                alert('No hay Recipientes Asociados');
+                Swal.fire(
+        'Error',
+        'No hay Recipientes Asociados.',
+        'error'
+      );
                 return;
             }
             fillSelect('#recipientes', result.data);
@@ -268,7 +272,11 @@ var guardarForzado = function(data) {
         success: function(rsp) {
             console.log(rsp);
             if (rsp.status) {
-                alert('Salida Guardada exitosamente.');
+                Swal.fire(
+        'Hecho',
+        'Salida Guardada exitosamente.',
+        'success'
+      );
                linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
             } else {
                 alert('Fallo al iniciar la etapa');
@@ -350,7 +358,11 @@ function guardar(boton) {
         success: function(rsp) {
             console.log(rsp);
             if (rsp.status) {
-                alert('Salida Guardada exitosamente.');
+                Swal.fire(
+        'Hecho',
+        'Salida Guardada exitosamente.',
+        'success'
+      );
                linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
             } else {
                 if (rsp.msj) {

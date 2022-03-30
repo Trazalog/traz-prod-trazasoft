@@ -13,8 +13,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Fecha:</label>
-                                <input type="text" name="fecha_salida" class="form-control date"
-                                    value="<?php echo date('d-m-Y')?>">
+                                <input id="fecha_salida" type="date" name="fecha_salida" class="form-control" value="<?php echo isset($datosCamion->fecha_entrada) ? date('d-m-Y', strtotime($datosCamion->fecha_entrada)) : '' ?>">
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -37,48 +36,48 @@
                     <h3 class="panel-title">Datos Camión</h3>
                 </div>
                 <div class="panel-body">
-                    <input name="motr_id" class="hidden">
+                    <input id="motr_id" name="motr_id" class="hidden" value="<?php echo isset($datosCamion->motr_id) ? $datosCamion->motr_id : '' ?>">
                     <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>Patente:</label>
-                                <input id="patente" name="patente" class="form-control">
-                            </div>
+								<input id="patente" name="patente" class="form-control" value="<?php echo isset($datosCamion->patente) ? $datosCamion->patente : '' ?>">
+							</div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>Acoplado:</label>
-                                <input type="text" name="acoplado" class="form-control" readonly>
+                                <input id="acoplado" type="text" name="acoplado" class="form-control" value="<?php echo isset($datosCamion->acoplado) ? $datosCamion->acoplado : '' ?>" readonly>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>Conductor:</label>
-                                <input type="text" name="conductor" class="form-control" readonly>
+                                <input id="conductor" type="text" name="conductor" class="form-control" value="<?php echo isset($datosCamion->conductor) ? $datosCamion->conductor : '' ?>" readonly>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>Tipo:</label>
-                                <input type="text" name="tipo" class="form-control" readonly>
+                                <input id="tipo" type="text" name="tipo" class="form-control" value="<?php echo isset($datosCamion->tipo) ? $datosCamion->tipo : '' ?>" readonly>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Peso Bruto:</label>
-                                <input id="bruto" type="number" name="bruto" class="form-control">
+                                <input id="bruto" type="text" name="bruto" class="form-control onlyNumbers" value="<?php echo isset($datosCamion->bruto) ? $datosCamion->bruto : '' ?>" onchange="calculaNeto()">
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Peso Tara:</label>
-                                <input type="text" id="tara" name="tara" class="form-control" readonly>
+                                <input type="text" id="tara" name="tara" class="form-control onlyNumbers" value="<?php echo isset($datosCamion->tara) ? $datosCamion->tara : '' ?>" onchange="calculaNeto()">
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Peso Neto:</label>
-                                <input type="text" id="neto" name="neto" class="form-control" readonly>
+                                <input type="text" id="neto" name="neto" class="form-control" value="<?php echo isset($datosCamion->neto) ? $datosCamion->neto : '' ?>" readonly>
                             </div>
                         </div>
                     </div>
@@ -95,6 +94,13 @@
                             <th width="20%">Cantidad</th>
                         </thead>
                         <tbody>
+							<?php foreach ($datosCamion->articulos->articulo as $fila) {
+								echo "<tr  data-json='".json_encode($fila)."'>";
+								echo '<td style="font-weight: lighter;">'.$fila->articulo.'</td>';
+								echo '<td style="font-weight: lighter;">'.$fila->cantidad.'</td>';
+								echo '</tr>';
+							}
+							?>
                         </tbody>
                     </table>
                     <!-- <div class="form-group">
@@ -115,6 +121,13 @@
 
 
 <script>
+	$(document).ready(function () {
+		estaSelected  = "<?php echo isset($datosCamion->esta_id) ? $datosCamion->esta_id : '' ?>";
+		if(estaSelected != ''){
+			$("#esta_id").val(estaSelected);
+		}
+		$(".onlyNumbers").inputmask({ regex: "[0-9.,]*" });
+	});
 	var $tLotes = $('#tbl-lotes').find('tbody');
 	$('.date').datepicker({
 			dateFormat: 'dd-mm-yy'
@@ -163,13 +176,14 @@
 				});
 		}
 	// suma tara con peso neto de carga
-		$('#bruto').keyup(function() {
-				if (!this.value || this.value == "" || (parseFloat(this.value) <= parseFloat($('#tara').val()))) {
-						$('#neto').val(0);
-						return;
-				}
-				$('#neto').val(parseFloat(this.value) - parseFloat($('#tara').val()));
-		})
+	function calculaNeto(){
+		if (!_isset($('#bruto').val()) || (parseFloat($('#bruto').val()) <= parseFloat($('#tara').val()))) {
+			$('#neto').val(0);
+			return;
+		}else{
+			$('#neto').val(parseFloat($('#bruto').val()) - parseFloat($('#tara').val()));
+		}
+	}
 	// busca info del camion y llama a buscar los lotes cargados (obtenerLotesCamion(patente))
 	function obtenerInfoCamion(patente) {
 			var estado = 'CARGADO|EN CURSO|CARGADO|DESCARGADO';
@@ -238,7 +252,7 @@
 							wc();
 							console.log(res);
 							if(res.status){
-									hecho();linkTo();
+									hecho();linkTo('<?php echo PRD ?>general/Camion/recepcionCamion');
 							}else{
 									error();
 							}

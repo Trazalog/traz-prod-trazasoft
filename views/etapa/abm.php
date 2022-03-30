@@ -15,16 +15,16 @@
             <h3 class="box-title">
                 <?php echo $accion . ' ' . $etapa->titulo ?>
             </h3>
-            <button class="btn btn-success btn-xs pull-right" onclick="deleteSnapshot()">Limpiar Campos</button>
+            <!-- <button class="btn btn-success btn-xs pull-right" onclick="deleteSnapshot()">Limpiar Campos</button> -->
         </div>
         <!-- /.box-header -->
         <div class="box-body">
-            <div class="row">
+            <div class="row form-group">
                 <input type="hidden" value="0" id="batch_id" name="batch_id">
-                <div class="col-md-1 col-xs-12">
-                    <label for="Lote" class="form-label">Codigo Lote:*</label>
+                <div class="col-md-2 col-xs-12">
+                    <label for="Lote" class="form-label">Código Lote:*</label>
                 </div>
-                <div class="col-md-5 col-xs-12">
+                <div class="col-md-4 col-xs-12">
                     <input name="vcode" type="text" id="Lote" <?php if ($accion == 'Editar') {
                         echo 'value="' . $etapa->lote . '"';
                     } ?> class="form-control" placeholder="Inserte Lote"
@@ -45,7 +45,7 @@
 
                 </div>
             </div>
-            <div class="row" style="margin-top: 50px">
+            <div class="row form-group">
                 <div class="col-md-2 col-xs-12">
                     <label for="establecimientos" class="form-label">Establecimiento*:</label>
                 </div>
@@ -95,9 +95,9 @@
                     ?>
                 </div>
             </div>
-            <div class="row" style="margin-top: 50px">
+            <div class="row form-group">
                 <div class="col-md-2 col-xs-12">
-                    <label for="op" class="form-label">Orden de Produccion:</label>
+                    <label for="op" class="form-label">Orden de Producción:</label>
                 </div>
                 <div class="col-md-4 col-xs-12">
 
@@ -120,7 +120,7 @@
                 </div>';
                 } ?>
             </div>
-            <div class="row" style="margin-top: 40px">
+            <div class="row">
                 <div class="col-xs-12">
                     <a onclick="despliega()" href="#"><i class="glyphicon glyphicon-plus"></i>Datos Adicionales</a>
                     <div id="desplegable" class="panel panel-default" hidden>
@@ -227,7 +227,11 @@ function actualizaRecipiente(establecimiento, recipientes) {
             }
 
             if (!result.data) {
-                alert('No hay Recipientes Asociados');
+                Swal.fire(
+        'Error',
+        'No hay Recipientes Asociados.',
+        'error'
+      );
                 return;
             }
             fillSelect('#recipientes', result.data);
@@ -270,13 +274,17 @@ var guardarForzado = function(data) {
                 setAttr('#origen', 'orta_id', rsp.batch_id);
                 guardarTodasTareas();
                 $('#mdl-unificacion').modal('hide');
-                alert('Salida Guardada exitosamente.');
+                Swal.fire(
+        'Hecho',
+        'Salida Guardada exitosamente.',
+        'success'
+      );
                 linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
             } else {
                 alert('Fallo al iniciar la etapa');
             }
         },
-        error: function(rsp) {
+        error: function() {
             alert('Error al iniciar etapa');
         },
         complete: function() {
@@ -359,7 +367,11 @@ function guardar(boton) {
             if (rsp.status) {
                 setAttr('#origen', 'orta_id', rsp.batch_id);
                 guardarTodasTareas();
-                alert('Salida Guardada exitosamente.');
+                Swal.fire(
+        'Hecho',
+        'Salida Guardada exitosamente.',
+        'success'
+      );
                 linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
             } else {
                 if (rsp.msj) {
@@ -371,7 +383,7 @@ function guardar(boton) {
                 }
             }
         },
-        error: function(rsp) {
+        error: function() {
             alert('Error al iniciar etapa');
         },
         complete: function() {

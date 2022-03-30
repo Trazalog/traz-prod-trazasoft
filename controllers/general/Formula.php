@@ -30,6 +30,7 @@ class Formula extends CI_Controller
 
 	public function setFormula($form_id = null)
 	{
+		log_message("DEBUG", "#TRAZA | TRAZ-PROD-TRAZASOFT | Formula | setFormula()");
 		$datosFormula['formula'] = $this->input->post('datosFormula');
 		$datosFormula['formula']['empr_id'] = empresa();
 		if (isset($form_id)) {
@@ -59,6 +60,7 @@ class Formula extends CI_Controller
 
 	public function modificarFormula($tipo = null, $id =  null)
 	{
+		log_message("DEBUG","#TRAZA | TRAZ-PROD-TRAZASOFT | Formula | modificarFormula()");
 		$data['tipo'] = $tipo;
 		$data['form_id'] = $id;
 		// $idFormula = $this->input->post('id');
