@@ -220,15 +220,14 @@ if($etapa->estado == "FINALIZADO"){
               {
            
                 echo '<button class="btn btn-primary" onclick="guardar()">Iniciar</button>';
-              }
-       
+              }       
               if($etapa->estado == 'En Curso')
               {
                   echo '<button class="btn btn-primary" id="btnfinalizar" onclick="finalizar()">Reporte Fraccionamiento</button>';
                   $this->load->view('etapa/btn_finalizar_etapa');
               }
-             ?>
-            <button class="btn btn-default" onclikc="back()">Cerrar</button>
+             ?>            
+            <button class="btn btn-danger pull-right" onclick="linkTo('<?php echo base_url(PRD).'general/Etapa' ?>')">Cerrar</button>
             <!-- /.box-footer-->
         </div>
     </div>
