@@ -405,8 +405,14 @@ class Etapas extends CI_Model
 		return json_decode($array['data']);
     }
     
-    public function validarFormularioCalidad($orta_id)
-    {
+    /**
+        * Valida el formulario segun la columna variable
+        * @param integer $orta_id
+        * @return bool true or false
+    */
+    public function validarFormularioCalidad($orta_id){
+        log_message('DEBUG', '#TRAZA | TRAZ-PROD-TRAZASOFT | Etapas | validarFormularioCalidad()');
+        
         $url = REST_FRM."/formularios/etapa/variables/origen/BATCH/$orta_id";
         $res = wso2($url);
         if($res['data'])

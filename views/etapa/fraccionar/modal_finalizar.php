@@ -312,26 +312,8 @@ function actualizaRecipiente(establecimiento) {
 
 function AgregarProductoFinal() {
     cantidad = document.getElementById('cantidadproducto').value;
-    if (cantidad == 0) {
-        producto = {};
-        producto.id = '-';
-        producto.titulo = '-';
-        producto.cantidad = '-';
-        producto.lotedestino = '-';
-        producto.destino = '-';
-        producto.titulodestino = '-';
-        producto.destinofinal = '-';
-        producto.fraccionado = '-';
-        agregaProductoFinal(producto);
-        document.getElementById('cantidadproducto').value = "";
-        document.getElementById('lotedestino').value = "";
-        document.getElementById('productodestino').value = "";
-        document.getElementById('productoestablecimientos').value = "";
-        document.getElementById('inputproductos').value = "";
-        document.getElementById('fraccionado').checked = false;
-        document.getElementById('productorecipientes').value = "";
-        document.getElementById('productorecipientes').disabled = true;
-  
+    if (cantidad <= 0) {
+        error('Error','No puede ingresar una cantidad menor o igual a 0');
     } else {
         ban = true;
         msj = "";
@@ -389,8 +371,7 @@ function AgregarProductoFinal() {
             idrecipiente = document.getElementById('productodestino').value;
             //indexrec = recipientes.findIndex(y => y.id == idrecipiente);    
             indexrec = recipientes.findIndex(y => y.reci_id == idrecipiente);
-            producto.id = JSON.parse($("#productos option[value='" + $('#productos').val() + "']").attr('data-json'))
-            .id;
+            producto.arti_id = JSON.parse($("#productos option[value='" + $('#productos').val() + "']").attr('data-json')).arti_id;
             producto.titulo = document.getElementById('productos').value;
             producto.cantidad = cantidad;
             producto.lotedestino = lotedestino;
@@ -414,8 +395,8 @@ function AgregarProductoFinal() {
             document.getElementById('productoestablecimientos').value = "";
             document.getElementById('productos').value = "";
             // document.getElementById('fraccionado').checked = false;
-            document.getElementById('productorecipientes').value = "";
-            document.getElementById('productorecipientes').disabled = true;
+            // document.getElementById('productorecipientes').value = "";
+            // document.getElementById('productorecipientes').disabled = true;
         }
     }
 }
@@ -437,7 +418,7 @@ function agregaProductoFinal(producto) {
         html += "<th>Destino Final</th>";
         // html += "<th>Fracc</th>";
         html += '</tr></thead><tbody>';
-        html += "<tr data-json='" + JSON.stringify(producto) + "' id='" + producto.id + "' class='reci-"+producto.destino+"' data-forzar='false'>";
+        html += "<tr data-json='" + JSON.stringify(producto) + "' id='" + producto.arti_id + "' class='reci-"+producto.destino+"' data-forzar='false'>";
         html +=
             "<td><i id='generarQR' class='fa fa-fw fa-qrcode text-light-blue generarQR' style='cursor: pointer; margin-left: 15px;' title='QR' onclick='QR(this)'></i><i class='fa fa-fw fa-minus text-light-blue tabla_productos_asignados_borrar' style='cursor: pointer; margin-left: 15px;' title='Eliminar'></i></td>";
         // html += '<td>' + producto.loteorigen + '</td>';
@@ -455,7 +436,7 @@ function agregaProductoFinal(producto) {
         document.getElementById('productos_existe').value = 'si';
 
     } else if (existe == 'si') {
-        html += "<tr data-json='" + JSON.stringify(producto) + "' id='" + producto.id + "' class='reci-"+producto.destino+"' data-forzar='false'>";
+        html += "<tr data-json='" + JSON.stringify(producto) + "' id='" + producto.arti_id + "' class='reci-"+producto.destino+"' data-forzar='false'>";
         html +=
             "<td><i id='generarQR' class='fa fa-fw fa-qrcode text-light-blue generarQR' style='cursor: pointer; margin-left: 15px;' title='QR' onclick='QR(this)'></i><i class='fa fa-fw fa-minus text-light-blue tabla_productos_asignados_borrar' style='cursor: pointer; margin-left: 15px;' title='Eliminar'></i></td>";
         // html += '<td>' + producto.loteorigen + '</td>';
