@@ -564,7 +564,7 @@ class Etapa extends CI_Controller
 
         foreach ($productos as $info) {
             $arrayPost["lote_id"] = $info['lotedestino']; // lote origen
-            $arrayPost["arti_id"] = $info['titulo']; // art seleccionado en lista
+            $arrayPost["arti_id"] = $info['arti_id']; // art seleccionado en lista
             $arrayPost["prov_id"] = (string) PROVEEDOR_INTERNO;
             $arrayPost["batch_id_padre"] = $batch_id_padre; // bacth actual
             $arrayPost["cantidad"] = $info['cantidad']; // art seleccionado en lista
