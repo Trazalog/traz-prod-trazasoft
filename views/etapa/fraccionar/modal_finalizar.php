@@ -278,7 +278,7 @@ function actualizaRecipiente(establecimiento) {
         dataType: 'JSON',
         data: {
             establecimiento,
-            tipo: 'PRODUCTIVO'
+            tipo: 'DEPOSITO'
         },
         url: '<?php echo base_url(PRD) ?>general/Recipiente/listarPorEstablecimiento/true',
         success: function(result) {
