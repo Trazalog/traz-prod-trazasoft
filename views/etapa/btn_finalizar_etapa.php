@@ -1,5 +1,5 @@
 <?php
-    if( $productos_etapa != null && sizeof($productos_etapa) == 0){
+    if( empty($productos_etapa) && sizeof($productos_etapa) == 0){
 ?>
 <button class='btn btn-success' onclick='btnFinalizar()'>Finalizar Etapa</button>
 <script>
