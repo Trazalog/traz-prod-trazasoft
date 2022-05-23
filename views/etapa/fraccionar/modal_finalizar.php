@@ -89,7 +89,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label class="control-label">Empaque:</label>
-                                    <input type="text" value="<?php echo $mat->uni_med_emp; ?>" class="form-control" readonly>
+                                    <input type="text" value="<?php echo $mat->nombre; ?>" class="form-control" readonly>
                                 </div>
                             </div>
                             <div class="col-md-2">
