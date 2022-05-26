@@ -47,10 +47,8 @@
 
           foreach ($etapas as $fila) {
             echo "<li  data-value='" . $fila->id . "'><a data-json='" . json_encode($fila) . "'><i class='fa fa-chevron-circle-right text-info'></i>" . $fila->titulo . "</a></li>";
-            //var_dump($etapas);
           }
           ?>
-          <!-- <li  data-value="1"><a data-json="">"siembra"</a></li> -->
         </ul>
       </div>
   </div>
@@ -75,7 +73,7 @@
       <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
         <div class="form-group">
           <label style="padding-left: 20%;font-size: 16px;">Mostrar Batch Finalizados</label>
-          <input type="checkbox" style="width: 16px;height: 16px;margin-left: 15px;" id="etapa_finalizada" name="etapa_finalizada">
+          <input type="checkbox" style="width: 16px;height: 16px;margin-left: 15px;" id="etapa_finalizada" name="etapa_finalizada" onclick="muestraBatchsFinalizados()">
         </div>
       </div>
     </div>
@@ -224,7 +222,8 @@
     if (op === 'todas') {
       for (var i = 0; i < etapas.length; i++) {
         html = html + '<tr  id="' + etapas[i].id + '" ><td>' +
-          `<i data-toggle='modal' data-target='#modal-asignarResponsable' class='fa fa-fw fa-user-plus text-green ml-1' style='cursor: pointer;' title='Asignar responsable' onclick='asignarResponsable(${etapas[i].id}'></i>`+
+          `<i data-toggle='modal' data-target='#modal-asignarResponsable' class='fa fa-fw fa-user-plus text-green ml-1' style='cursor: pointer;' title='Asignar responsable' onclick='asignarResponsable(${etapas[i].id})
+          '></i>`+
           '<i class="fa fa-fw fa-cogs text-light-blue" style="cursor: pointer;" title="Gestionar" onclick=linkTo("<?php echo base_url(PRD) ?>general/Etapa/editar?id=' +
           etapas[i].id + '")></i>';
         if (etapas[i].estado == 'PLANIFICADO') {
@@ -279,7 +278,7 @@
       for (var i = 0; i < etapas.length; i++) {
         if (etapas[i].titulo === op) {
           html = html + '<tr  id="' + etapas[i].id + '" ><td>' +
-          `<i data-toggle='modal' data-target='#modal-asignarResponsable' class='fa fa-fw fa-user-plus text-green ml-1' style='cursor: pointer;' title='Asignar responsable' onclick='asignarResponsable(${etapas[i].id}'></i>`+
+          `<i data-toggle='modal' data-target='#modal-asignarResponsable' class='fa fa-fw fa-user-plus text-green ml-1' style='cursor: pointer;' title='Asignar responsable' onclick='asignarResponsable(${etapas[i].id})'></i>`+
             '<i class="fa fa-fw fa-cogs text-light-blue" style="cursor: pointer;" title="Gestionar" onclick=linkTo("<?php echo base_url(PRD) ?>general/Etapa/editar?id=' +
             etapas[i].id + '")></i>';
         if (etapas[i].estado == 'PLANIFICADO') {
@@ -342,8 +341,8 @@
       $(this).find('.fa-pencil').click();
     });
     $("#etapas").dataTable({});
-
-
+    //Reviso el estado del boton luego de filtrar
+    muestraBatchsFinalizados();
   }
 
 
@@ -363,30 +362,22 @@
       type: "GET",
       url: "<?php echo base_url(PRD)?>general/Etapa/getUsers",
       success: function(rsp) {
-        // alert("Usuarios Produccion Lote.");
-        console.log('Usuarios Produccion Lote.');
         var htmlUser = '<option selected disabled>Seleccione operario</option>';
         rsp = JSON.parse(rsp);
         for (let i = 0; i < rsp.length; i++) {
-          // htmlUser += '<option value="' + rsp[i].id + '" >' + rsp[i].lastname + ', ' + rsp[i].firstname + '</option>'; //bonita
-          // htmlUser += '<option value="' + rsp[i].id_user + '" >' + rsp[i].last_name_user + ', ' + rsp[i].first_name_user + '</option>'; //seg.users
           htmlUser += '<option value="' + rsp[i].id + '" >' + rsp[i].last_name + ', ' + rsp[i].first_name + '</option>'; //seg.users
         }
         $('#modal-asignarResponsable').find('#user').html(htmlUser);
       },
       error: function() {
-        // alert("Error al cargar usuarios.");
-        console.log('Error al cargar usuarios.');
+        error('Error','Error al cargar usuarios.');
       }
     });
-
     //trae los turnos de produccion de lote
     $.ajax({
       type: "GET",
       url: "<?php echo base_url(PRD)?>general/Etapa/getTurnosProd",
       success: function(t) {
-        console.log('Turnos produccion de lotes: ');
-        console.log(t)
         var htmlTurnos = '<option selected disabled>Seleccione turno</option>';
         t = JSON.parse(t);
         for (let i = 0; i < t.length; i++) {
@@ -395,8 +386,7 @@
         $('#modal-asignarResponsable').find('#turno').html(htmlTurnos);
       },
       error: function() {
-        // alert("Error al cargar turnos.");
-        console.log('Error al cargar turnos.');
+        error('Error','Error al cargar turnos.');
       }
     });
 
@@ -405,23 +395,20 @@
       type: "GET",
       url: "<?php echo base_url(PRD)?>general/Etapa/getUserLote/" + batch_id,
       success: function(rsp) {
-        // alert("Usuarios resposables lote.");
-        console.log('Usuarios resposables lote.');
         var htmlUserLote = '';
-        console.log('rsp' + rsp);
-        console.table(rsp);
         rsp = JSON.parse(rsp);
-        for (let i = 0; i < rsp.length; i++) {
-          htmlUserLote += '<tr>' +
+        if(_isset(rsp)){
+          for (let i = 0; i < rsp.length; i++) {
+            htmlUserLote += '<tr>' +
             '<td value=' + rsp[i].user_id + ' data-user=' + rsp[i].user_id + '>' + rsp[i].last_name + ', ' + rsp[i].first_name +
             '<td value=' + rsp[i].turn_id + ' data-turno=' + rsp[i].turn_id + '>' + rsp[i].descripcion + '<a type="button" class="del pull-right" style="cursor: pointer;"><i class="fa fa-fw fa-minus"></i></a></td>' +
             '</tr>';
+          }
+          $('#tabla-Operario tbody').append(htmlUserLote);
         }
-        $('#tabla-Operario tbody').append(htmlUserLote);
       },
       error: function() {
-        // alert("Error al cargar responsables.");
-        console.log('Error al cargar responsables.');
+        error('Error','Error al cargar responsables.');
       }
     });
   }
@@ -532,16 +519,16 @@
             }
         });
   }
-
-  $('#etapa_finalizada').on( 'click', function () {
+  // Oculta/Muestra de Batchs Finalizados
+  function muestraBatchsFinalizados(){
     estado = $('#etapa_finalizada').is(':checked');
     if(estado){
       $('#etapas').DataTable().columns().search('').draw();
     }else{
       $('#etapas').DataTable().columns(9).search('En Curso|Planificado',true,false).draw();
     }
-  });
+  }
   $(document).ready(function () {
-    $('#etapas').DataTable().columns(9).search('En Curso|Planificado',true,false).draw();
+    muestraBatchsFinalizados();
   });
 </script>
