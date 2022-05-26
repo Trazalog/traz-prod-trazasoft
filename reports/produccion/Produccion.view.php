@@ -103,6 +103,9 @@ use \koolreport\widgets\koolphp\Card;
                     )
                   ), // Para desactivar encabezado reemplazar "headers" por "showHeader"=>false
                   "columns" => array(
+                    "batch_id" => array(
+                      "label" => "Batch"
+                    ),
                     array(
                       "label" => "Fecha",
                       "value" => function($row) {
@@ -114,6 +117,9 @@ use \koolreport\widgets\koolphp\Card;
                     ),
                     "producto" => array(
                       "label" => "Producto"
+                    ),
+                    "lote_id" => array(
+                      "label" => "Lote"
                     ),
                     "cantidad" => array(
                       "label" => "Cantidad"
