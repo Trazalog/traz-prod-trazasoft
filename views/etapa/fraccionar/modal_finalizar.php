@@ -1,4 +1,3 @@
-<?php $this->load->view('etapa/fraccionar/modal_generarQR') ?>
 <div class="modal" id="modal_finalizar" data-backdrop="static" tabindex="-1" role="dialog"
     style="overflow-y: auto !important; " aria-labelledby="myModalLabel">
     <div class="modal-dialog modal-lg" role="document">
@@ -259,7 +258,10 @@
 
     </div>
 </div>
-
+<?php
+    // carga el modal de impresion de QR
+    $this->load->view( COD.'componentes/modal');
+?>
 
 <script>
 $(document).ready(function () {
@@ -420,7 +422,7 @@ function agregaProductoFinal(producto) {
         html += '</tr></thead><tbody>';
         html += "<tr data-json='" + JSON.stringify(producto) + "' id='" + producto.arti_id + "' class='reci-"+producto.destino+"' data-forzar='false'>";
         html +=
-            "<td><i id='generarQR' class='fa fa-fw fa-qrcode text-light-blue generarQR' style='cursor: pointer; margin-left: 15px;' title='QR' onclick='QR(this)'></i><i class='fa fa-fw fa-minus text-light-blue tabla_productos_asignados_borrar' style='cursor: pointer; margin-left: 15px;' title='Eliminar'></i></td>";
+            "<td><i class='fa fa-fw fa-qrcode text-light-blue generarQR' style='cursor: pointer; margin-left: 15px;' title='QR' onclick='QR(this)'></i><i class='fa fa-fw fa-minus text-light-blue tabla_productos_asignados_borrar' style='cursor: pointer; margin-left: 15px;' title='Eliminar'></i></td>";
         // html += '<td>' + producto.loteorigen + '</td>';
         html += '<td>' + producto.titulo + '</td>';
         html += '<td>' + producto.cantidad + '</td>';
@@ -438,7 +440,7 @@ function agregaProductoFinal(producto) {
     } else if (existe == 'si') {
         html += "<tr data-json='" + JSON.stringify(producto) + "' id='" + producto.arti_id + "' class='reci-"+producto.destino+"' data-forzar='false'>";
         html +=
-            "<td><i id='generarQR' class='fa fa-fw fa-qrcode text-light-blue generarQR' style='cursor: pointer; margin-left: 15px;' title='QR' onclick='QR(this)'></i><i class='fa fa-fw fa-minus text-light-blue tabla_productos_asignados_borrar' style='cursor: pointer; margin-left: 15px;' title='Eliminar'></i></td>";
+            "<td><i class='fa fa-fw fa-qrcode text-light-blue generarQR' style='cursor: pointer; margin-left: 15px;' title='QR' onclick='QR(this)'></i><i class='fa fa-fw fa-minus text-light-blue tabla_productos_asignados_borrar' style='cursor: pointer; margin-left: 15px;' title='Eliminar'></i></td>";
         // html += '<td>' + producto.loteorigen + '</td>';
         html += '<td>' + producto.titulo + '</td>';
         html += '<td>' + producto.cantidad + '</td>';
@@ -526,48 +528,38 @@ function FinalizarEtapa() {
         });
     }
 }
+//////////////////////////////////////////
+// Configuracion y creacion código QR
+// Características para generacion del QR
+function QR(e){
+	//Limpio el modal
+	$("#infoEtiqueta").empty();
+	$("#contenedorCodigo").empty();
+	$("#infoFooter").empty();
 
-function QR(elemento) {
-    var data = $(elemento).closest("tr").attr("data-json");
-    generarQR(data);
-};
+	// configuración de código QR
+	var config = {};
+	config.titulo = "Código QR";
+	config.pixel = "7";
+	config.level = "L";
+	config.framSize = "2";
 
-function generarQR(data) {
-    data = JSON.parse(data);
+	//Obtengo los datos del lote
+	datos = $(e).closest('tr').attr('data-json');
+	var datosLote = JSON.parse(datos);
+    
+	//Cargo la vista del QR con datos en el modal
+	$("#infoEtiqueta").load("<?php echo PRD ?>general/CodigoQR/cargaModalQRLote", datosLote);
+	var dataQR = {};
+	dataQR.codigo = datosLote.codigo;
 
-    wo();
-    $.ajax({
-        type: 'POST',
-        async: false,
-        data: {
-            data
-        },
-        url: '<?php echo base_url(PRD) ?>general/CodigoQR/generarQRFraccionamiento',
-        success: function(rsp) {
-            rsp = JSON.parse(rsp);
+	// agrega codigo QR al modal impresion
+	getQR(config, dataQR, 'codigosQR/Traz-prod-trazasoft/Lotes');
 
-            $('#imagenQR').attr('src', rsp.filename);
-            $('#contenidoQR').html('<h3>Datos lote</h3>' +
-                '<p>Lote origen: ' + rsp.loteorigen +
-                '<br>Producto: ' + rsp.titulo +
-                '<br>Cantidad: ' + rsp.cantidad +
-                '<br>Lote destino: ' + rsp.lotedestino +
-                '<br>Destino: ' + rsp.titulodestino +
-                '<br>Destino final: ' + rsp.destinofinal +
-                '<br>Fraccionado: ' + rsp.fraccionado +
-                '<br><button type="button" class="btn btn-default btn-flat btn-dropbox" onclick="imprimirElemento();" id="idPrint"><i class="fa fa-print"></i></button></p>'
-                );
-
-            $("#modal_generarQR").modal('show');
-        },
-        error: function(rsp) {
-            alert('Error');
-        },
-        complete: function() {
-            wc();
-        }
-    });
-};
+	// levanta modal completo para su impresion
+	verModalImpresion();
+}
+////////////// FIN Creación QR
 
 function imprimirElemento() {
     var elemento2 = $("#idQR").html();
