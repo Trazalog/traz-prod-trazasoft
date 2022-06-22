@@ -75,7 +75,7 @@ function selectFromCore($name, $placeholder, $tabla, $req = false)
     foreach ($rsp['data'] as $o) {
         $opt .= "<option value='$o->valor'>$o->descripcion</option>";
     }
-    return "<select id='$name' name='$name' class='form-control frm-select' style='width: 100%;' ".($req?req():'')."><option value='0' disabled selected> - $placeholder - </option>$opt</select>";   
+    return "<select id='$name' name='$name' class='form-control frm-select' style='width: 100%;' ".($req?req():'')."><option value='' disabled selected> - $placeholder - </option>$opt</select>";   
 }
 
 function selectFromFont($name, $placeholder, $url, $mapValues, $req = false)
