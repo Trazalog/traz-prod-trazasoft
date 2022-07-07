@@ -502,7 +502,7 @@ function solicitarQR(e){
 
 	// configuración de código QR
 	var config = {};
-	config.titulo = "Codigo No Consumible";
+	config.titulo = "Código No Consumible";
 	config.pixel = "7";
 	config.level = "L";
 	config.framSize = "2";
@@ -796,5 +796,5 @@ function solicitarQR(e){
 <!-- / Modal -->
 <?php
     // carga el modal de impresion de QR
-    $this->load->view( COD.'componentes/modal');
+    $this->load->view( COD.'componentes/modalGenerico');
 ?>

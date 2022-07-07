@@ -260,7 +260,7 @@
 </div>
 <?php
     // carga el modal de impresion de QR
-    $this->load->view( COD.'componentes/modal');
+    $this->load->view( COD.'componentes/modalGenerico');
 ?>
 
 <script>
@@ -378,7 +378,8 @@ function AgregarProductoFinal() {
             producto.cantidad = cantidad;
             producto.lotedestino = lotedestino;
             producto.destino = destino;
-            producto.titulodestino = $('#productodestino').find('option:selected').html();  
+            producto.titulodestino = $('#productodestino').find('option:selected').html();
+            producto.descripcion = dataProducto.descripcion;
             // producto.destinofinal = establecimiento + " " + recipientefinal;
             producto.destinofinal = establecimiento;
 
@@ -547,7 +548,9 @@ function QR(e){
 	//Obtengo los datos del lote
 	datos = $(e).closest('tr').attr('data-json');
 	var datosLote = JSON.parse(datos);
-    
+    datosLote.fecha = moment().format('YYYY-MM-DD');
+    datosLote.batch = $("#batch_id").val();
+
 	//Cargo la vista del QR con datos en el modal
 	$("#infoEtiqueta").load("<?php echo PRD ?>general/CodigoQR/cargaModalQRLote", datosLote);
 	var dataQR = {};
@@ -560,26 +563,6 @@ function QR(e){
 	verModalImpresion();
 }
 ////////////// FIN Creación QR
-
-function imprimirElemento() {
-    var elemento2 = $("#idQR").html();
-    $('#idPrint').remove();
-    var elemento = $("#idQR").html();
-    $("#idQR").empty();
-
-    var ventana = window.open('', 'PRINT', 'height=600,width=800');
-    ventana.document.write('<html><head><title>Código QR</title>');
-    ventana.document.write('<link rel="stylesheet" href="<?php base_url(); ?>application/css/codigoQR.css">');
-    ventana.document.write('</head><body >');
-    ventana.document.write(elemento);
-    ventana.document.write('</body></html>');
-    ventana.document.close();
-    ventana.focus();
-    ventana.print();
-    // ventana.close();
-    $("#idQR").html(elemento2);
-    return true;
-}
 
 $(document).off('click', '.tabla_productos_asignados_borrar').on('click', '.tabla_productos_asignados_borrar', {
     idtabla: 'tabla_productos_asignados',
