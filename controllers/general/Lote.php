@@ -112,4 +112,7 @@ class Lote extends CI_Controller
 
     } else echo "¡Batch no encontrado! Intente nuevamente.";
   }
+  function validarCantidadReportes(){
+    echo json_encode(true);
+  }
 }
