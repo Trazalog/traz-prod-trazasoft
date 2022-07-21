@@ -88,4 +88,15 @@ class Lotes extends CI_Model
     }
     return $rsp;
   }
+    /**
+	* Obtiene la cantidad de reportes de produccion realizados para el batch_id
+	* @param integer batch_id del lote
+	* @return array respuesta del servicio con la cantidad de reportes
+	*/
+  function validarCantidadReportes($batch_id){
+    log_message("DEBUG", "#TRAZA | #TRAZ-PROD-TRAZASOFT | Lotes | validarCantidadReportes()");
+    $url = REST_PRD_LOTE. "/lote/".$batch_id."/cantidadReportes";
+    $rsp = $this->rest->callAPI("GET",$url);
+    return $rsp;
+  }
 }

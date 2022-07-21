@@ -405,46 +405,42 @@ var FinalizarEtapa = function() {
         destino = select.value;
 
         wo();
-        validarCantidadReportes().then((result) => {
-            $.ajax({
-                type: 'POST',
-                dataType: 'JSON',
-                async: false,
-                data: {
-                    productos,
-                    cantidad_padre,
-                    num_orden_prod,
-                    destino,
-                    batch_id_padre
-                },
-                url: '<?php echo base_url(PRD) ?>general/Etapa/Finalizar',
-                success: function(rsp) {
-                    console.log(rsp);
-                    if (rsp.status) {
-                        $('#modal_finalizar').modal('hide');
-                        $('#mdl-unificacion').modal('hide');
-                        if(rsp.data.estado.toUpperCase() == 'FINALIZADO'){
-                             hecho('Etapa finalizada exitosamente.');
-                        }else{
-                             hecho('Se genero el Reporte de Producción correctamente.');
-                        }
-                       linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
-                    } else {
-                        if (rsp.msj) {
-                            unificar_lote = rsp.reci_id;
-                            getContenidoRecipiente(unificar_lote);
-    
-                        } else {
-                            alert('Fallo al finalizar la etapa');
-                        }
+        $.ajax({
+            type: 'POST',
+            dataType: 'JSON',
+            async: false,
+            data: {
+                productos,
+                cantidad_padre,
+                num_orden_prod,
+                destino,
+                batch_id_padre
+            },
+            url: '<?php echo base_url(PRD) ?>general/Etapa/Finalizar',
+            success: function(rsp) {
+                console.log(rsp);
+                if (rsp.status) {
+                    $('#modal_finalizar').modal('hide');
+                    $('#mdl-unificacion').modal('hide');
+                    if(rsp.data.estado.toUpperCase() == 'FINALIZADO'){
+                        hecho('Hecho','Etapa finalizada exitosamente.');
+                    }else{
+                        hecho('Hecho','Se genero el Reporte de Producción correctamente.');
                     }
-                },
-                complete:function(){
-                    wc();
+                    linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
+                } else {
+                    if (rsp.msj) {
+                        unificar_lote = rsp.reci_id;
+                        getContenidoRecipiente(unificar_lote);
+
+                    } else {
+                        alert('Fallo al finalizar la etapa');
+                    }
                 }
-            });
-        }).catch((err) => {
-            error('Error','Se produjo un error al validar la cantidad de reportes de produccion asociados');
+            },
+            complete:function(){
+                wc();
+            }
         });
     }
 }
@@ -490,43 +486,6 @@ function obtenerDepositos(establecimiento, recipientes) {
     });
 }
 //////////////////////////////////////////
-// Validacion de si la etapa posee algun reporte de produccion
-// Debe tener al menos 1 reporte de produccion asociado para poder finalizar la Etapa
-async function validarCantidadReportes(){
-    var batch_id = $("#batch_id").val();
-    var aprobacion = new Promise((acepta,rechaza) =>{
-        $.ajax({
-            type: 'POST',
-            dataType: 'JSON',
-            data: {
-                batch_id,
-            },
-            url: '<?php echo base_url(PRD) ?>general/Lote/validarCantidadReportes',
-            success: function(result) {
-                console.log(result);
-                
-                if (!result.status) {
-                    alert('Fallo al Traer Depositos');
-                    return;
-                }
-                
-                if (!result.data) {
-                    alert('No hay Depositos Asociados');
-                    return;
-                }
-                fillSelect('#productodestino', result.data);
-                
-                
-            },
-            error: function() {
-                alert('Error al Traer Depositos');
-            }
-        });
-    });
-    return await aprobacion;
-}
-
-//////////////////////////////////////////
 // Configuracion y creacion código QR
 // Características para generacion del QR
 function QR(e){
@@ -538,7 +497,7 @@ function QR(e){
 	// configuración de código QR
 	var config = {};
 	config.titulo = "Código QR";
-	config.pixel = "7";
+	config.pixel = "4";
 	config.level = "L";
 	config.framSize = "2";
 

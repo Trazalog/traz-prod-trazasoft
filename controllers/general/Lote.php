@@ -112,7 +112,15 @@ class Lote extends CI_Controller
 
     } else echo "¡Batch no encontrado! Intente nuevamente.";
   }
+  /**
+	* Recibe como parametro un batch_id y devuelve la cantidad de reportes de produccion generados para ese batch_id
+	* @param integer
+	* @return array listado de choferes coincidentes
+	*/
   function validarCantidadReportes(){
-    echo json_encode(true);
+    log_message("DEBUG", "#TRAZA | TRAZ-PROD-TRAZASOFT | Lote | validarCantidadReportes()");
+    $batch_id = $this->input->post('batch_id');
+    $rsp = $this->Lotes->validarCantidadReportes($batch_id);
+    echo json_encode($rsp);
   }
 }
