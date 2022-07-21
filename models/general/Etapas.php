@@ -273,9 +273,13 @@ class Etapas extends CI_Model
         log_message('DEBUG','#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapas | getLotesaFraccionar()-> resp '.json_encode($array));
         return json_decode($array['data']);
     }
-
-    public function obtenerArticulos($id_etapa)
-    {
+    /**
+	* Obtiene los articulos de la Etapa
+	* @param integer id_etapa
+	* @return array respuesta del servicio con los productos de la etapa
+	*/
+    public function obtenerArticulos($id_etapa){
+        log_message("DEBUG","#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapas | obtenerArticulos(id_etapa)");
         $resource = "/etapas/productos/$id_etapa";
         $url = REST_PRD_ETAPAS . $resource;
         $rsp = $this->rest->callAPI("GET", $url);

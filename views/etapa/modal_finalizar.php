@@ -112,7 +112,7 @@
                     </div>
                     <div class="col-md-3"></div>
                 </div>
-                <div class="row" style="margin-top: 20px">
+                <!-- <div class="row" style="margin-top: 20px">
                     <div class="col-md-3 col-xs-12">
                         <label for="establecimientos" class="form-label">Establecimiento Final:</label>
                     </div>
@@ -120,16 +120,16 @@
                         <select class="form-control select2" id="productoestablecimientos">
                             <option disabled selected>-Seleccione Establecimiento-</option>
                             <?php
-                    foreach($establecimientos as $fila)
-                    {
-                        echo '<option value="'.$fila->esta_id.'" >'.$fila->nombre.'</option>';
-                    } 
+                    // foreach($establecimientos as $fila)
+                    // {
+                    //     echo '<option value="'.$fila->esta_id.'" >'.$fila->nombre.'</option>';
+                    // } 
                     ?>
                         </select>
 
                     </div>
                     <div class="col-md-3"></div>
-                </div>
+                </div> -->
                 <!-- <div class="row" style="margin-top: 20px">
                     <div class="col-md-3 col-xs-12">
                         <label for="establecimientos" class="form-label">Recipiente Final:</label>
@@ -218,16 +218,16 @@ function AgregarProducto() {
     } else {
         establecimiento = "";
         var producto = {};
-        producto.establecimientofinal = "";
-        if (document.getElementById('productoestablecimientos').value != '' && document.getElementById(
-                'productoestablecimientos').value != "-Seleccione Establecimiento-") {
-            establecimientos = '<?php echo json_encode($establecimientos);?>';
-            establecimientos = JSON.parse(establecimientos);
-            idestablecimiento = document.getElementById('productoestablecimientos').value;
-            index = establecimientos.findIndex(x => x.esta_id == idestablecimiento);
-            establecimiento = establecimientos[index].nombre;
-            producto.establecimientofinal = document.getElementById('productoestablecimientos').value;
-        }
+        // producto.establecimientofinal = "";
+        // if (document.getElementById('productoestablecimientos').value != '' && document.getElementById(
+        //         'productoestablecimientos').value != "-Seleccione Establecimiento-") {
+        //     establecimientos = '<?php echo json_encode($establecimientos);?>';
+        //     establecimientos = JSON.parse(establecimientos);
+        //     idestablecimiento = document.getElementById('productoestablecimientos').value;
+        //     index = establecimientos.findIndex(x => x.esta_id == idestablecimiento);
+        //     establecimiento = establecimientos[index].nombre;
+            // producto.establecimientofinal = document.getElementById('productoestablecimientos').value;
+        // }
         // recipientefinal = "";
         // producto.recipientefinal = "";
         // if (document.getElementById('productorecipientes').value != "") {
@@ -249,7 +249,7 @@ function AgregarProducto() {
         producto.titulodestino = $('#productodestino').find('option:selected').text();
         producto.descripcion = dataProducto.descripcion;
         // producto.destinofinal = establecimiento + " " + recipientefinal;
-        producto.destinofinal = establecimiento;
+        // producto.destinofinal = establecimiento;
 
         var json = $('#operarios').find('[value="' + $('#operario').val() + '"]').attr('data-json');
         if(json){
@@ -272,7 +272,7 @@ function AgregarProducto() {
         document.getElementById('lotedestino').value = "";
         //document.getElementById('productodestino').value = "";
         $('#productodestino').val('').trigger('change');
-        document.getElementById('productoestablecimientos').value = "";
+        // document.getElementById('productoestablecimientos').value = "";
         $('#inputproducto').val("").trigger('change');
         // document.getElementById('fraccionado').checked = false;
         // document.getElementById('productorecipientes').value = "";
@@ -300,7 +300,7 @@ function agregaProducto(producto) {
         html += "<th>Cantidad</th>";
         html += "<th>Lote Destino</th>";
         html += "<th>Destino</th>";
-        html += "<th>Destino Final</th>";
+        // html += "<th>Destino Final</th>";
         // html += "<th>Fracc</th>";
         html += '</tr></thead><tbody>';
         html += "<tr class='recipiente-"+producto.destino+"' data-json='" + JSON.stringify(producto) + "' id='" + contador + "' data-forzar='false'>";
@@ -311,7 +311,7 @@ function agregaProducto(producto) {
         html += '<td>' + producto.cantidad + '</td>';
         html += '<td>' + producto.lotedestino + '</td>';
         html += '<td>' + producto.titulodestino + '</td>';
-        html += '<td>' + producto.destinofinal + '</td>';
+        // html += '<td>' + producto.destinofinal + '</td>';
         // html += '<td>' + producto.fraccionado + '</td>';
         html += '</tr>';
         html += '</tbody></table>';
@@ -329,7 +329,7 @@ function agregaProducto(producto) {
         html += '<td>' + producto.cantidad + '</td>';
         html += '<td>' + producto.lotedestino + '</td>';
         html += '<td>' + producto.titulodestino + '</td>';
-        html += '<td>' + producto.destinofinal + '</td>';
+        // html += '<td>' + producto.destinofinal + '</td>';
         // html += '<td>' + producto.fraccionado + '</td>';
         html += '</tr>';
         $('#tabla_productos_asignados tbody').append(html);
@@ -378,7 +378,7 @@ var FinalizarEtapa = function() {
 
     existe = document.getElementById('productos_existe').value;
     if (existe == "no") {
-        alert("No ha agregado ningun producto final");
+        notificar("Advertencia!","No ha agregado ningun producto final",'warning');
     } else {
         var productos = [];
         $('#tabla_productos_asignados > tbody > tr').each(function() {
@@ -423,11 +423,11 @@ var FinalizarEtapa = function() {
                     $('#modal_finalizar').modal('hide');
                     $('#mdl-unificacion').modal('hide');
                     if(rsp.data.estado.toUpperCase() == 'FINALIZADO'){
-                         hecho('Etapa finalizada exitosamente.');
+                        hecho('Hecho','Etapa finalizada exitosamente.');
                     }else{
-                         hecho('Se genero el Reporte de Producción correctamente.');
+                        hecho('Hecho','Se genero el Reporte de Producción correctamente.');
                     }
-                   linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
+                    linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
                 } else {
                     if (rsp.msj) {
                         unificar_lote = rsp.reci_id;
@@ -497,7 +497,7 @@ function QR(e){
 	// configuración de código QR
 	var config = {};
 	config.titulo = "Código QR";
-	config.pixel = "7";
+	config.pixel = "4";
 	config.level = "L";
 	config.framSize = "2";
 
