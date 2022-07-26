@@ -38,7 +38,7 @@
         <button style="background: #1D976C;  /* fallback for old browsers */
         background: -webkit-linear-gradient(to bottom, #93F9B9, #1D976C);  /* Chrome 10-25, Safari 5.1-6 */
         background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */" 
-        type="button" class=" btn dropdown-toggle btn-circle btn-xl" data-toggle="dropdown" aria-expanded="false" title="Crear Nueva Etapa">
+        type="button" class=" btn dropdown-toggle btn-circle btn-xl" data-toggle="dropdown" aria-expanded="false" title="Crear Nueva Etapa" onclick="crearNuevaEtapa()">
          <b style="color:#ffffff">+</b>
         </button>
         <ul class="dropdown-menu dropdown-menu-right" id="nuevo">
@@ -58,9 +58,9 @@
 
         for ($i = 0; $i < count($etapas); $i++) {
           if ($i < count($etapas) - 1) {
-            echo "<button class='btn btn-primary btn-arrow-right outline' onclick='muestra(`" . $etapas[$i]->titulo . "`,`" . json_encode($list) . "`)'> " . $etapas[$i]->titulo . "  </button>";
+            echo "<button class='btn btn-primary btn-arrow-right outline' data-json='" . json_encode($etapas[$i]) . "' onclick='muestra(`" . $etapas[$i]->titulo . "`,`" . json_encode($list) . "`,this)'> " . $etapas[$i]->titulo . "  </button>";
           } else {
-            echo "<button class='btn btn-primary btn-arrow-right-final outline' onclick='muestra(`" . $etapas[$i]->titulo . "`,`" . json_encode($list) . "`)'> " . $etapas[$i]->titulo . "  </button>";
+            echo "<button class='btn btn-primary btn-arrow-right-final outline' data-json='" . json_encode($etapas[$i]) . "' onclick='muestra(`" . $etapas[$i]->titulo . "`,`" . json_encode($list) . "`,this)'> " . $etapas[$i]->titulo . "  </button>";
           }
         }
         ?>
@@ -194,13 +194,20 @@
 </div>
 </body>
 <script>
+  //Variable para autocreacion de Etapa
+  var etapaSeleccionada = '';
   if (mobileAndTabletcheck()) $('#etapas tbody').find('tr').on('click', function() {
     $(this).find('.fa-pencil').click();
   });
 
   DataTable('#etapas');
 
-  function muestra(op, etapas) {
+  function muestra(op, etapas,tag) {
+    if(_isset($(tag).attr('data-json'))){
+      etapaSeleccionada = JSON.parse($(tag).attr('data-json')).link;
+    }else{
+      etapaSeleccionada = '';
+    }
     etapas = JSON.parse(etapas);
     html = "";
     html = '<thead class="thead-dark">' +
@@ -531,4 +538,11 @@
   $(document).ready(function () {
     muestraBatchsFinalizados();
   });
+  /////////////////////////////////////////////////////////////
+  // Si esta seleccionada una Etapa en el Menu, directamente crea la Etapa seleccionada 
+  function crearNuevaEtapa(){
+    if(_isset(etapaSeleccionada)){
+      linkTo(`<?php echo base_url(PRD) ?>${etapaSeleccionada}`);
+    }
+  }
 </script>
