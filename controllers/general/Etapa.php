@@ -309,8 +309,8 @@ class Etapa extends CI_Controller
     }
 
     // trae info para informe de Etapa (Todas y Fraccionar)
-    public function editar()
-    {
+    public function editar(){
+        log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapa | editar()');
         $id = $this->input->get('id'); // batch_id
 
         $data['tarea'] = $this->Etapas->validarPedidoMaterial($id);

@@ -232,6 +232,7 @@ if($etapa->estado == "FINALIZADO"){
                         </div>
                         <?php  }?>
                         <div class="col-xs-12">
+                            <h2>Productos</h2>
                             <input type="hidden" value="no" id="productoexiste">
                             <div class="col-xs-12 table-responsive" id="productosasignados"></div>
                         </div>
@@ -241,15 +242,12 @@ if($etapa->estado == "FINALIZADO"){
         </div><?php } ?>
         <!-- /.box-body -->
         <div class="modal-footer">
-            <?php if($etapa->estado != 'En Curso' && $etapa_estado != 'FINALIZADO')
-              {
-           
+            <?php if($etapa->estado != 'En Curso' && $etapa_estado != 'FINALIZADO'){           
                 echo '<button class="btn btn-primary" onclick="validaCamposFraccionamiento()">Iniciar</button>';
               }       
-              if($etapa->estado == 'En Curso')
-              {
-                  echo '<button class="btn btn-primary" id="btnfinalizar" onclick="finalizar()">Reporte Fraccionamiento</button>';
-                  $this->load->view('etapa/btn_finalizar_etapa');
+              if($etapa->estado == 'En Curso'){
+                echo '<button class="btn btn-primary" id="btnfinalizar" onclick="finalizar()">Reporte Fraccionamiento</button>';
+                $this->load->view('etapa/btn_finalizar_etapa');
               }
              ?>            
             <button class="btn btn-danger pull-right" onclick="linkTo('<?php echo base_url(PRD).'general/Etapa' ?>')">Cerrar</button>
@@ -398,12 +396,15 @@ function ControlaProducto() {
         producto.cant_descontar = document.getElementById('calculo').value;
         producto = JSON.stringify(producto);
         AgregaProducto(producto);
-        document.getElementById('inputproductos').value = "";
-        document.getElementById('empaques').value = "";
+        $('#inputproductos').val(null).trigger('change');
+        $('.ba #detalle').empty();
+        $('#empaques').val(null).trigger('change');
         document.getElementById('cantidad').value = "";
         document.getElementById('uni_medida').value = "";
         document.getElementById('volumen').value = "";
         document.getElementById('stock').value = "";
+        document.getElementById('tara').value = "";
+        document.getElementById('calculo').value = "";
         document.getElementById('cantidad').disabled = true;
     }
 }
@@ -494,7 +495,7 @@ function validaCamposFraccionamiento() {
         mensaje += "- No ha seleccionado <b>recipiente</b>. <br>";
         ban = false;
     }
-    if (document.getElementById('materiasexiste').value == "no") {
+    if ($('#materiasexiste').val() == "no") {
         mensaje += "- No ha cargado ninguna <b>materia prima</b> en la tabla. <br>";
         ban = false;
     }
@@ -524,9 +525,16 @@ function guardar() {
             acum_cant += parseFloat(temp.cant_descontar);
             productos.push(json);
         });
-        alert("cant total a descontar: " + acum_cant);
-        // productos = JSON.stringify(productos);
     }
+    Swal.fire({
+        title: 'Cantidad total a descontar: ' + acum_cant,
+        text: '',
+        type: 'info',
+        showCancelButton: false,
+        confirmButtonText: 'Hecho'
+    }).then((result) => {
+        
+    });
 
     var data = {
         idetapa: idetapa,
