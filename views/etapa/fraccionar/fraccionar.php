@@ -24,23 +24,27 @@ if($etapa->estado == "FINALIZADO"){
         </div>
         <div class="box-body">
             <div class="row">
-                <div class="col-xs-6">
+                <div class="col-xs-6 col-md-6">
                     <div class="panel panel-default">
                         <div class="panel-heading">Información</div>
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-xs-6">
-                                    <label class="form-label">Fecha<?php hreq() ?>:</label>
-                                    <input type="<?php if($accion != 'Editar'){echo 'date';} ?>" id="fecha"
-                                        value="<?php echo $fecha;?>" class="form-control"
-                                        <?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
+                                    <div class="form-group">
+                                        <label class="form-label">Fecha<?php hreq() ?>:</label>
+                                        <input type="<?php if($accion != 'Editar'){echo 'date';} ?>" id="fecha"
+                                            value="<?php echo $fecha;?>" class="form-control"
+                                            <?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
+                                    </div>
                                 </div>
                                 <div class="col-xs-6">
-                                    <label for="Lote" class="form-label">Código Lote:*</label>
-                                    <input type="text" id="lote_id" class="form-control" 
-                                    <?php if($accion=='Editar' ){echo ( 'value="'.$etapa->lote.'"');}?>
-                                        placeholder="Inserte código de lote"
-                                        <?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
+                                    <div class="form-group">
+                                        <label for="Lote" class="form-label">Código Lote<?php hreq() ?>:</label>
+                                        <input type="text" id="lote_id" class="form-control" 
+                                        <?php if($accion=='Editar' ){echo ( 'value="'.$etapa->lote.'"');}?>
+                                            placeholder="Inserte código de lote"
+                                            <?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
+                                    </div>
                                 </div>
                                 <div class="col-xs-6">
                                     <div class="form-group">
@@ -55,40 +59,57 @@ if($etapa->estado == "FINALIZADO"){
                         </div>
                     </div>
                 </div>
-                <div class="col-xs-6">
+                <div class="col-xs-6 col-md-6">
                     <div class="panel panel-default">
                         <div class="panel-heading">Ubicación</div>
                             <div class="panel-disabled"></div>
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-xs-6">
-                                    <label for="establecimientos" class="form-label">Establecimiento<?php hreq() ?>:</label>
-                                    <select class="form-control select2 select2-hidden-accesible"
-                                        onchange="actualizaRecipiente(this.value,'recipientes')" id="establecimientos"
-                                        <?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
-                                        <option value="" disabled selected>-Seleccione Establecimiento-</option>
-                                        <?php
-                                                foreach($establecimientos as $fila)
-                                                {
-                                            
-                                                    if($accion == 'Editar' && $fila->nombre == $etapa->establecimiento)
+                                    <div class="form-group">
+                                        <label for="establecimientos" class="form-label">Establecimiento<?php hreq() ?>:</label>
+                                        <select class="form-control sel select2-hidden-accesible"
+                                            onchange="actualizaRecipiente(this.value,'recipientes')" id="establecimientos"
+                                            <?php if($etapa->estado == 'En Curso'){echo 'disabled';}?>>
+                                            <option value="" disabled selected>-Seleccione Establecimiento-</option>
+                                            <?php
+                                                    foreach($establecimientos as $fila)
                                                     {
-                                                    echo '<option value="'.$fila->esta_id.'" selected >'.$fila->nombre.'</option>';
-                                                    }else
-                                                    {
-                                                    echo '<option value="'.$fila->esta_id.'" >'.$fila->nombre.'</option>';
-                                                    }
+                                                
+                                                        if($accion == 'Editar' && $fila->nombre == $etapa->establecimiento)
+                                                        {
+                                                        echo '<option value="'.$fila->esta_id.'" selected >'.$fila->nombre.'</option>';
+                                                        }else
+                                                        {
+                                                        echo '<option value="'.$fila->esta_id.'" >'.$fila->nombre.'</option>';
                                                         }
-                                                ?>
-                                    </select>
+                                                            }
+                                                    ?>
+                                        </select>
+                                    </div>
                                 </div>
                                 <div class="col-xs-6">
-                                    <label for="Recipiente"
-                                        class="form-label">Linea*:</label>
-                                    <?php
+                                    <div class="form-group">
+                                        <label for="Recipiente"
+                                            class="form-label">Línea<?php hreq() ?>:</label>
+                                        <?php
                                             echo selectBusquedaAvanzada('recipientes', 'vreci');
-                                            ?>
-
+                                        ?>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-6 col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Tipo:</label>
+                                        <input type="text" class="form-control" id="tipoRecipiente" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Estado:</label>
+                                        <input type="text" class="form-control" id="estadoRecipiente" disabled>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -107,7 +128,7 @@ if($etapa->estado == "FINALIZADO"){
             <table id="prodFracc" class="table table-bordered table-hover">
                 <thead class="thead-dark">
                     <tr>
-                        <th>Titulo</th>
+                        <th>Título</th>
                         <th>Cant a Descontar</th>
                         <th>Empaque</th>
                         <th>Cantidad</th>
@@ -138,10 +159,10 @@ if($etapa->estado == "FINALIZADO"){
                     <div class="row">
                         <div class="col-xs-6 ba">
                             <div class="form-group">
-                                <label class="form-label">Producto:</label>
+                                <label class="form-label">Producto<?php hreq() ?>:</label>
                                 <?php 
-                        echo selectBusquedaAvanzada('inputproductos', 'arti_id', $articulos_fraccionar, 'arti_id', 'barcode',array('descripcion','Stock:' => 'stock'));
-                    ?>
+                                    echo selectBusquedaAvanzada('inputproductos', 'arti_id', $articulos_fraccionar, 'arti_id', 'barcode',array('descripcion','Stock:' => 'stock'));
+                                ?>
                             </div>
                         </div>
                         <div class="col-xs-3">
@@ -156,11 +177,12 @@ if($etapa->estado == "FINALIZADO"){
                                 <input type="text" disabled id="uni_medida" value="" class="form-control">
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col-xs-4">
                             <div class="form-group">
-                                <label class="form-label">Empaque:</label>
-                                <select class="form-control select2 select2-hidden-accesible" id="empaques"
-                                    onchange="ActualizaEmpaques()">
+                                <label class="form-label">Empaque<?php hreq() ?>:</label>
+                                <select class="form-control sel select2-hidden-accesible" id="empaques" onchange="ActualizaEmpaques()">
                                     <option value="" disabled selected>- Seleccionar -</option>
                                     <?php
                             foreach($empaques as $fila)
@@ -177,36 +199,40 @@ if($etapa->estado == "FINALIZADO"){
                                 </select>
                             </div>
                         </div> 
-                        <div class="col-xs-4">
+                        <div class="col-xs-2">
+                            <div class="form-group">
+                                <label class="form-label">Cantidad<?php hreq() ?>:</label>
+                                <input type="number" id="cantidad" disabled onchange="CalculaStock()"
+                                    class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-xs-2">
                             <div class="form-group">
                                 <label class="form-label">Capacidad:</label>
                                 <input type="number" id="volumen" class="form-control" disabled>
                             </div>
                         </div>
-                        <div class="col-xs-4">
+                        <div class="col-xs-2">
                             <div class="form-group">
                                 <label class="form-label">Peso Tara:</label>
                                 <input type="number" id="tara" class="form-control" disabled>
                             </div>
                         </div>
-                        <div class="col-xs-4">
-                            <div class="form-group">
-                                <label class="form-label">Cantidad:</label>
-                                <input type="number" id="cantidad" disabled onchange="CalculaStock()"
-                                    class="form-control">
-                            </div>
-                        </div>
-                        <div class="col-xs-4">
+                        
+                        <div class="col-xs-2">
                             <div class="form-group">
                                 <label class="form-label">Stock Necesario:</label>
                                 <input type="number" id="calculo" class="form-control" disabled>
                             </div>
                         </div>
-                        <div class="col-xs-4">
-                            <button style="margin-top:23px;" class="btn btn-success" onclick="ControlaProducto()"><i class="fa fa-plus"></i> Agregar</button>
+                        <div class="col-xs-12 col-md-12">
+                            <hr>
+                            <button style="" class="btn btn-success pull-right" onclick="ControlaProducto()"><i class="fa fa-plus"></i> Agregar</button>
+                            <button style="" class="btn btn-primary pull-right" onclick="calculaEmpaque()"><i class="fa fa-plus"></i> Pedido de materiales con receta</button>
                         </div>
                         <?php  }?>
                         <div class="col-xs-12">
+                            <h2>Productos</h2>
                             <input type="hidden" value="no" id="productoexiste">
                             <div class="col-xs-12 table-responsive" id="productosasignados"></div>
                         </div>
@@ -216,15 +242,12 @@ if($etapa->estado == "FINALIZADO"){
         </div><?php } ?>
         <!-- /.box-body -->
         <div class="modal-footer">
-            <?php if($etapa->estado != 'En Curso' && $etapa_estado != 'FINALIZADO')
-              {
-           
-                echo '<button class="btn btn-primary" onclick="guardar()">Iniciar</button>';
+            <?php if($etapa->estado != 'En Curso' && $etapa_estado != 'FINALIZADO'){           
+                echo '<button class="btn btn-primary" onclick="validaCamposFraccionamiento()">Iniciar</button>';
               }       
-              if($etapa->estado == 'En Curso')
-              {
-                  echo '<button class="btn btn-primary" id="btnfinalizar" onclick="finalizar()">Reporte Fraccionamiento</button>';
-                  $this->load->view('etapa/btn_finalizar_etapa');
+              if($etapa->estado == 'En Curso'){
+                echo '<button class="btn btn-primary" id="btnfinalizar" onclick="finalizar()">Reporte Fraccionamiento</button>';
+                $this->load->view('etapa/btn_finalizar_etapa');
               }
              ?>            
             <button class="btn btn-danger pull-right" onclick="linkTo('<?php echo base_url(PRD).'general/Etapa' ?>')">Cerrar</button>
@@ -235,7 +258,14 @@ if($etapa->estado == "FINALIZADO"){
 
 
 <script>
-actualizarEntrega()
+$(document).ready(function () {
+    $('#recipientes').attr('disabled', true);
+    $('#prodFracc').DataTable({});
+    $(".sel").select2();
+    actualizaRecipiente($('#establecimientos').val());
+    actualizarEntrega();
+});
+
 function actualizarEntrega() {
     $.ajax({
         type: 'GET',
@@ -253,12 +283,8 @@ function actualizarEntrega() {
     });
 }
 
-
-$('#recipientes').attr('disabled', true);
-$('#prodFracc').DataTable({});
-
-actualizaRecipiente($('#establecimientos').val());
-
+///////////////////////////////////////////////////////////
+//Obtiene los recipientes asociados a un establecimiento
 function actualizaRecipiente(establecimiento, recipientes) {
     if (!establecimiento) return;
     $('#recipientes').attr('disabled', true);
@@ -273,22 +299,19 @@ function actualizaRecipiente(establecimiento, recipientes) {
         success: function(result) {
 
             if (!result.status) {
-                alert('Fallo al Traer Recipientes');
+                error('Error','Se produjo un error al obtener los recipientes');
                 return;
             }
 
             if (!result.data) {
-                Swal.fire(
-        'Error',
-        'No hay Recipientes Asociados.',
-        'error'
-      );
+                notificar('Nota','No hay recipientes asociados a este establecimiento.', 'warning');
                 return;
             }
 
-            fillSelect('#recipientes', result.data);
-            $('#recipientes').val('<?php echo  $etapa->reci_id ?>');
             $('#recipientes').attr('disabled', false);
+            fillSelect('#recipientes', result.data);
+            reci_id = "<?php echo isset($etapa->reci_id) ? $etapa->reci_id : null ?>";
+            if(_isset(reci_id)) $("#recipientes").val(reci_id).trigger('change');
         }
 
     });
@@ -303,16 +326,22 @@ function despliega() {
         document.getElementById('desplegable').hidden = true;
     }
 }
-
-// elige producto y muestra el stock en
+/////////////////////////////////////////////////////////////////////
+// Cuando se selecciona un producto, se muestra el stock y su unidad de medida
 $("#inputproductos").on('change', function() {
-
-
     //// stock
     document.getElementById('stock').value = getJson(this).stock;
-//// uni_medida
+    //// uni_medida
     document.getElementById('uni_medida').value = getJson(this).um;
-
+});
+/////////////////////////////////////////////////////////////////////
+// Cuando se selecciona un recipiente, se muestra el tipo y estado
+$("#recipientes").on('change', function() {
+    debugger;
+    //// Tipo
+    document.getElementById('tipoRecipiente').value = getJson(this).tipo;
+    //// Estado
+    document.getElementById('estadoRecipiente').value = getJson(this).estado;
 });
 
 function ActualizaEmpaques() {
@@ -341,20 +370,20 @@ function checkTabla(idtabla, idrecipiente, json, acciones) {
 function ControlaProducto() {
     msj = "";
     ban = true;
-    if (document.getElementById('inputproductos').value == "") {
+    if (document.getElementById('inputproductos').value == "0") {
         ban = false;
-        msj += "No ha seleccionado Producto \n"
+        msj += "No ha seleccionado <b>producto</b>.<br>"
     }
     if (document.getElementById('empaques').value == "") {
         ban = false;
-        msj += "No ha seleccionado Empaque \n"
+        msj += "No ha seleccionado <b>empaque</b>.<br>"
     }
     if (document.getElementById('cantidad').value == "") {
         ban = false;
-        msj += "No ha Ingresado Cantidad \n"
+        msj += "No ha ingresado <b>cantidad</b>.<br>"
     }
     if (!ban) {
-        alert(msj);
+        error('Error',msj);
     } else {
 
         producto = getJson($('#inputproductos'));
@@ -367,12 +396,15 @@ function ControlaProducto() {
         producto.cant_descontar = document.getElementById('calculo').value;
         producto = JSON.stringify(producto);
         AgregaProducto(producto);
-        document.getElementById('inputproductos').value = "";
-        document.getElementById('empaques').value = "";
+        $('#inputproductos').val(null).trigger('change');
+        $('.ba #detalle').empty();
+        $('#empaques').val(null).trigger('change');
         document.getElementById('cantidad').value = "";
         document.getElementById('uni_medida').value = "";
         document.getElementById('volumen').value = "";
         document.getElementById('stock').value = "";
+        document.getElementById('tara').value = "";
+        document.getElementById('calculo').value = "";
         document.getElementById('cantidad').disabled = true;
     }
 }
@@ -442,44 +474,40 @@ function AgregaProducto(producto) {
         $('#tablaproductos').DataTable({});
     }
 }
-// valida campos vacios
-function valida() {
-    mensaje = "No se ha podido completar la operacion debido a que algunos datos no han sido completados: <br>";
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// valida campos obligatorios Codigo Lote, Fecha, Establecimiento, Línea(recipiente) y materia prima carga en la tabla
+function validaCamposFraccionamiento() {
+    mensaje = "No se pudo completar la operación debido a que: <br>";
     ban = true;
-    if (document.getElementById('Lote').value == "") {
-        mensaje += "- No ha ingresado Lote <br>";
+    if (document.getElementById('lote_id').value == "") {
+        mensaje += "- No ha ingresado <b>lote</b>. <br>";
         ban = false;
     }
     if (document.getElementById('fecha').value == "") {
-        mensaje += "- No ha ingresado Fecha <br>";
+        mensaje += "- No ha ingresado <b>fecha</b>. <br>";
         ban = false;
     }
     if (document.getElementById('establecimientos').value == "") {
-        mensaje += "- No ha seleccionado establecimiento <br>";
+        mensaje += "- No ha seleccionado <b>establecimiento</b>. <br>";
         ban = false;
     }
     if (document.getElementById('recipientes').value == "") {
-        mensaje += "- No ha seleccionado recipiente <br>";
+        mensaje += "- No ha seleccionado <b>recipiente</b>. <br>";
         ban = false;
     }
-    if (document.getElementById('materiasexiste').value == "no") {
-        mensaje += "- No ha seleccionado ninguna materia prima <br>";
+    if ($('#materiasexiste').val() == "no") {
+        mensaje += "- No ha cargado ninguna <b>materia prima</b> en la tabla. <br>";
         ban = false;
     }
 
     if (ban) {
         guardar();
     } else {
-        document.getElementById('mensajeincompleto').innerHTML = "";
-        document.getElementById('mensajeincompleto').innerHTML = mensaje;
-        document.getElementById('incompleto').hidden = false;
+        error('Error!',mensaje);
     }
-
-
 }
 
 function guardar() {
-    //CHUKA
     fecha = document.getElementById('fecha').value;
     establecimiento = document.getElementById('establecimientos').value;
     recipiente = document.getElementById('recipientes').value;
@@ -497,9 +525,16 @@ function guardar() {
             acum_cant += parseFloat(temp.cant_descontar);
             productos.push(json);
         });
-        alert("cant total a descontar: " + acum_cant);
-        // productos = JSON.stringify(productos);
     }
+    Swal.fire({
+        title: 'Cantidad total a descontar: ' + acum_cant,
+        text: '',
+        type: 'info',
+        showCancelButton: false,
+        confirmButtonText: 'Hecho'
+    }).then((result) => {
+        
+    });
 
     var data = {
         idetapa: idetapa,
@@ -521,23 +556,19 @@ function guardar() {
         url: '<?php echo base_url(PRD) ?>general/Etapa/guardarFraccionar',
         success: function(rsp) {
             if (rsp.status) {
-                Swal.fire(
-        'Hecho',
-        'Salida Guardada exitosamente.',
-        'success'
-      );
-               linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
+                fun = () =>{linkTo('<?php echo base_url(PRD) ?>general/Etapa/index')};
+                confRefresh(fun);
             } else {
                 if (rsp.msj) {
                     bak_data = data;
                     getContenidoRecipiente(recipiente);
                 } else {
-                    alert('Fallo al iniciar la etapa');
+                    error('Error','Fallo al iniciar la etapa de fraccionamiento');
                 }
             }
         },
         error: function() {
-            alert('Error al iniciar etapa fraccionamiento');
+            error('Error','Se produjo un error al iniciar etapa fraccionamiento');
         },
         complete: function() {
             wc();
@@ -556,18 +587,14 @@ function guardarForzado(data) {
         success: function(rsp) {
             $('#mdl-unificacion').modal('hide');
             if (rsp.status) {
-                Swal.fire(
-        'Hecho',
-        'Salida Guardada exitosamente.',
-        'success'
-      );
-               linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
+                fun = () =>{linkTo('<?php echo base_url(PRD) ?>general/Etapa/index')};
+                confRefresh(fun);
             } else {
-                alert('Fallo al iniciar la etapa fraccionamiento');
+                error('Error','Fallo al iniciar la etapa de fraccionamiento');
             }
         },
         error: function() {
-            alert('Error al guardar fraccionamiento');
+            error('Error','Se produjo un error al iniciar etapa fraccionamiento');
         },
         complete: function() {
             wc();
