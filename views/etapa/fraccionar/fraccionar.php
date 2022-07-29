@@ -228,7 +228,6 @@ if($etapa->estado == "FINALIZADO"){
                         <div class="col-xs-12 col-md-12">
                             <hr>
                             <button style="" class="btn btn-success pull-right" onclick="ControlaProducto()"><i class="fa fa-plus"></i> Agregar</button>
-                            <button style="" class="btn btn-primary pull-right" onclick="calculaEmpaque()"><i class="fa fa-plus"></i> Pedido de materiales con receta</button>
                         </div>
                         <?php  }?>
                         <div class="col-xs-12">
@@ -337,22 +336,22 @@ $("#inputproductos").on('change', function() {
 /////////////////////////////////////////////////////////////////////
 // Cuando se selecciona un recipiente, se muestra el tipo y estado
 $("#recipientes").on('change', function() {
-    debugger;
     //// Tipo
     document.getElementById('tipoRecipiente').value = getJson(this).tipo;
     //// Estado
     document.getElementById('estadoRecipiente').value = getJson(this).estado;
 });
-
+///////////////////////////////////////////////////////////////////////////
+// Toma los datos del empaque y los muestra en la pantalla
 function ActualizaEmpaques() {
-
     empaque = $("#empaques option:selected").attr('data-json');
-    empaque = JSON.parse(empaque);
-    //document.getElementById('unidad').value = ;
-    document.getElementById('volumen').value = empaque.volumen ;
-    document.getElementById('tara').value = empaque.tara ;
-    document.getElementById('cantidad').disabled = false;
-    CalculaStock();
+    if(_isset(empaque)){
+        empaque = JSON.parse(empaque);
+        document.getElementById('volumen').value = empaque.volumen ;
+        document.getElementById('tara').value = empaque.tara ;
+        document.getElementById('cantidad').disabled = false;
+        CalculaStock();
+    }
 }
 
 function CalculaStock() {
@@ -533,46 +532,45 @@ function guardar() {
         showCancelButton: false,
         confirmButtonText: 'Hecho'
     }).then((result) => {
-        
-    });
+    
+        var data = {
+            idetapa: idetapa,
+            fecha: fecha,
+            establecimiento: establecimiento,
+            recipiente: recipiente,
+            productos: productos,
+            cant_total_desc: acum_cant,
+            ordProduccion: ordProduccion,
+            lote_id : lote_id,
+            forzar: 'false'
+        };
 
-    var data = {
-        idetapa: idetapa,
-        fecha: fecha,
-        establecimiento: establecimiento,
-        recipiente: recipiente,
-        productos: productos,
-        cant_total_desc: acum_cant,
-        ordProduccion: ordProduccion,
-        lote_id : lote_id,
-        forzar: 'false'
-    };
-
-    wo();
-    $.ajax({
-        type: 'POST',
-        dataType: 'JSON',
-        data,
-        url: '<?php echo base_url(PRD) ?>general/Etapa/guardarFraccionar',
-        success: function(rsp) {
-            if (rsp.status) {
-                fun = () =>{linkTo('<?php echo base_url(PRD) ?>general/Etapa/index')};
-                confRefresh(fun);
-            } else {
-                if (rsp.msj) {
-                    bak_data = data;
-                    getContenidoRecipiente(recipiente);
+        wo();
+        $.ajax({
+            type: 'POST',
+            dataType: 'JSON',
+            data,
+            url: '<?php echo base_url(PRD) ?>general/Etapa/guardarFraccionar',
+            success: function(rsp) {
+                if (rsp.status) {
+                    fun = () =>{linkTo('<?php echo base_url(PRD) ?>general/Etapa/index')};
+                    confRefresh(fun);
                 } else {
-                    error('Error','Fallo al iniciar la etapa de fraccionamiento');
+                    if (rsp.msj) {
+                        bak_data = data;
+                        getContenidoRecipiente(recipiente);
+                    } else {
+                        error('Error','Fallo al iniciar la etapa de fraccionamiento');
+                    }
                 }
+            },
+            error: function() {
+                error('Error','Se produjo un error al iniciar etapa fraccionamiento');
+            },
+            complete: function() {
+                wc();
             }
-        },
-        error: function() {
-            error('Error','Se produjo un error al iniciar etapa fraccionamiento');
-        },
-        complete: function() {
-            wc();
-        }
+        });
     });
 }
 
