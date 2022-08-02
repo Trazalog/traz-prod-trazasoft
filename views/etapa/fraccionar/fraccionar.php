@@ -161,7 +161,7 @@ if($etapa->estado == "FINALIZADO"){
                             <div class="form-group">
                                 <label class="form-label">Producto<?php hreq() ?>:</label>
                                 <?php 
-                                    echo selectBusquedaAvanzada('inputproductos', 'arti_id', $articulos_fraccionar, 'arti_id', 'barcode',array('descripcion','Stock:' => 'stock'));
+                                    echo selectBusquedaAvanzada('inputproductos', 'arti_id', $articulos_fraccionar, 'arti_id', 'barcode',array('descripcion','Stock Físico:' => 'stock','Stock Disponible:' => 'stock_disponible'));
                                 ?>
                             </div>
                         </div>
@@ -179,24 +179,12 @@ if($etapa->estado == "FINALIZADO"){
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-xs-4">
+                        <div class="col-xs-6 ba">
                             <div class="form-group">
                                 <label class="form-label">Empaque<?php hreq() ?>:</label>
-                                <select class="form-control sel select2-hidden-accesible" id="empaques" onchange="ActualizaEmpaques()">
-                                    <option value="" disabled selected>- Seleccionar -</option>
-                                    <?php
-                            foreach($empaques as $fila)
-                            { 
-                            if($accion == 'Editar' && $etapa->empaque->titulo == $fila->titulo)
-                            {
-                                echo "<option data-json='".json_encode($fila)."' selected value='".$fila->id."'>".$fila->titulo."</option>";
-                            }
-                                else{
-                                echo "<option data-json='".json_encode($fila)."' value='".$fila->id."'>".$fila->titulo."</option>";
-                                }
-                            } 
-                        ?>
-                                </select>
+                                <?php
+                                    echo selectBusquedaAvanzada('empaques', 'empaques', $empaques, 'id', 'titulo',array('Receta:' => 'receta','Uso:' => 'aplicacion_receta','Cantidad:' => 'cantidad'),false,"ActualizaEmpaques()");
+                                ?>
                             </div>
                         </div> 
                         <div class="col-xs-2">
@@ -210,6 +198,7 @@ if($etapa->estado == "FINALIZADO"){
                             <div class="form-group">
                                 <label class="form-label">Capacidad:</label>
                                 <input type="number" id="volumen" class="form-control" disabled>
+                                <input type="hidden" id="cantidadReceta">
                             </div>
                         </div>
                         <div class="col-xs-2">
@@ -218,7 +207,8 @@ if($etapa->estado == "FINALIZADO"){
                                 <input type="number" id="tara" class="form-control" disabled>
                             </div>
                         </div>
-                        
+                    </div>
+                    <div class="row">
                         <div class="col-xs-2">
                             <div class="form-group">
                                 <label class="form-label">Stock Necesario:</label>
@@ -229,13 +219,14 @@ if($etapa->estado == "FINALIZADO"){
                             <hr>
                             <button style="" class="btn btn-success pull-right" onclick="ControlaProducto()"><i class="fa fa-plus"></i> Agregar</button>
                         </div>
+                    </div>
                         <?php  }?>
                         <div class="col-xs-12">
                             <h2>Productos</h2>
                             <input type="hidden" value="no" id="productoexiste">
                             <div class="col-xs-12 table-responsive" id="productosasignados"></div>
                         </div>
-                    </div>
+                    <!-- </div> -->
                 </div>
             </div>
         </div><?php } ?>
@@ -328,6 +319,10 @@ function despliega() {
 /////////////////////////////////////////////////////////////////////
 // Cuando se selecciona un producto, se muestra el stock y su unidad de medida
 $("#inputproductos").on('change', function() {
+    datos = JSON.parse($(this).attr('data-json'));
+    if(_isset(datos.stock_disponible) && datos.stock_disponible < 0){
+        notificar('Alerta','El artículo se encuentra en stock: '+ datos.stock_disponible,'warning');
+    }
     //// stock
     document.getElementById('stock').value = getJson(this).stock;
     //// uni_medida
@@ -349,13 +344,15 @@ function ActualizaEmpaques() {
         empaque = JSON.parse(empaque);
         document.getElementById('volumen').value = empaque.volumen ;
         document.getElementById('tara').value = empaque.tara ;
+        document.getElementById('cantidadReceta').value = empaque.cantidad;
         document.getElementById('cantidad').disabled = false;
         CalculaStock();
     }
 }
-
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Calcula el stock necesario multiplicando la cantidad de la receta por la cantidad ingresado pro el usuario
 function CalculaStock() {
-    stock = document.getElementById('volumen').value * document.getElementById('cantidad').value;
+    stock = document.getElementById('cantidadReceta').value * document.getElementById('cantidad').value;
     document.getElementById('calculo').value = stock;
 }
 
@@ -393,6 +390,7 @@ function ControlaProducto() {
         producto.envase_arti_id = empaque.arti_id;
         producto.cantidad = document.getElementById('cantidad').value;
         producto.cant_descontar = document.getElementById('calculo').value;
+        producto.receta = empaque.receta;
         producto = JSON.stringify(producto);
         AgregaProducto(producto);
         $('#inputproductos').val(null).trigger('change');
@@ -427,6 +425,7 @@ function AgregaProducto(producto) {
         html += "<th>Cant a Descontar</th>";
         html += "<th>Empaque</th>";
         html += "<th>Cantidad</th>";
+        html += "<th>Receta</th>";
         html += '</tr></thead><tbody>';
         html += "<tr data-json='" + JSON.stringify(producto) + "' id='" + producto.arti_id + "'>";
         if (estado != 'En Curso') {
@@ -440,6 +439,7 @@ function AgregaProducto(producto) {
         html += '<td>' + producto.cant_descontar + '</td>';
         html += '<td>' + producto.empaquetitulo + '</td>';
         html += '<td>' + producto.cantidad + '</td>';
+        html += '<td>' + producto.receta + '</td>';
         html += '</tr>';
         html += '</tbody></table>';
 
