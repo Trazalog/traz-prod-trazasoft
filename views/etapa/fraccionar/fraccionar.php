@@ -161,7 +161,7 @@ if($etapa->estado == "FINALIZADO"){
                             <div class="form-group">
                                 <label class="form-label">Producto<?php hreq() ?>:</label>
                                 <?php 
-                                    echo selectBusquedaAvanzada('inputproductos', 'arti_id', $articulos_fraccionar, 'arti_id', 'barcode',array('descripcion','Stock:' => 'stock'));
+                                    echo selectBusquedaAvanzada('inputproductos', 'arti_id', $articulos_fraccionar, 'arti_id', 'barcode',array('descripcion','Stock Físico:' => 'stock','Stock Disponible:' => 'stock_disponible'));
                                 ?>
                             </div>
                         </div>
@@ -208,7 +208,7 @@ if($etapa->estado == "FINALIZADO"){
                             </div>
                         </div>
                     </div>
-                    <div calss="row">
+                    <div class="row">
                         <div class="col-xs-2">
                             <div class="form-group">
                                 <label class="form-label">Stock Necesario:</label>
@@ -219,13 +219,14 @@ if($etapa->estado == "FINALIZADO"){
                             <hr>
                             <button style="" class="btn btn-success pull-right" onclick="ControlaProducto()"><i class="fa fa-plus"></i> Agregar</button>
                         </div>
+                    </div>
                         <?php  }?>
                         <div class="col-xs-12">
                             <h2>Productos</h2>
                             <input type="hidden" value="no" id="productoexiste">
                             <div class="col-xs-12 table-responsive" id="productosasignados"></div>
                         </div>
-                    </div>
+                    <!-- </div> -->
                 </div>
             </div>
         </div><?php } ?>
@@ -318,6 +319,10 @@ function despliega() {
 /////////////////////////////////////////////////////////////////////
 // Cuando se selecciona un producto, se muestra el stock y su unidad de medida
 $("#inputproductos").on('change', function() {
+    datos = JSON.parse($(this).attr('data-json'));
+    if(_isset(datos.stock_disponible) && datos.stock_disponible < 0){
+        notificar('Alerta','El artículo se encuentra en stock: '+ datos.stock_disponible,'warning');
+    }
     //// stock
     document.getElementById('stock').value = getJson(this).stock;
     //// uni_medida
