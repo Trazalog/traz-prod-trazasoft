@@ -232,6 +232,7 @@ if($etapa->estado == "FINALIZADO"){
         </div><?php } ?>
         <!-- /.box-body -->
         <div class="modal-footer">
+            <button class="btn btn-danger pull-right" onclick="linkTo('<?php echo base_url(PRD).'general/Etapa' ?>')">Cerrar</button>
             <?php if($etapa->estado != 'En Curso' && $etapa_estado != 'FINALIZADO'){           
                 echo '<button class="btn btn-primary" onclick="validaCamposFraccionamiento()">Iniciar</button>';
               }       
@@ -240,12 +241,14 @@ if($etapa->estado == "FINALIZADO"){
                 $this->load->view('etapa/btn_finalizar_etapa');
               }
              ?>            
-            <button class="btn btn-danger pull-right" onclick="linkTo('<?php echo base_url(PRD).'general/Etapa' ?>')">Cerrar</button>
             <!-- /.box-footer-->
         </div>
     </div>
 </div>
-
+<?php
+    //Modal apra vel el datalle del producto cargado en la tabla
+    $this->load->view('etapa/fraccionar/modal_verDetalleFraccionamiento');
+?>
 
 <script>
 $(document).ready(function () {
@@ -387,6 +390,7 @@ function ControlaProducto() {
         empaque = JSON.parse(empaque);
         producto.empaque = empaque.id;
         producto.empaquetitulo = empaque.titulo;
+        producto.volumen = empaque.volumen;
         producto.envase_arti_id = empaque.arti_id;
         producto.cantidad = document.getElementById('cantidad').value;
         producto.cant_descontar = document.getElementById('calculo').value;
@@ -396,6 +400,7 @@ function ControlaProducto() {
         $('#inputproductos').val(null).trigger('change');
         $('.ba #detalle').empty();
         $('#empaques').val(null).trigger('change');
+        $('#empaques').attr('data-json', '');
         document.getElementById('cantidad').value = "";
         document.getElementById('uni_medida').value = "";
         document.getElementById('volumen').value = "";
@@ -412,7 +417,7 @@ function AgregaProducto(producto) {
     var html = '';
     producto = JSON.parse(producto);
     if (existe == 'no') {
-        html += '<table id="tablaproductos" class="table">';
+        html += '<table id="tablaproductos" class="table table-responsive">';
         html += "<thead>";
         html += "<tr>";
         if (estado != 'En Curso') {
@@ -429,8 +434,9 @@ function AgregaProducto(producto) {
         html += '</tr></thead><tbody>';
         html += "<tr data-json='" + JSON.stringify(producto) + "' id='" + producto.arti_id + "'>";
         if (estado != 'En Curso') {
-            html +=
-                '<td><i class="fa fa-fw fa-minus text-light-blue tablaproductos_borrar" style="cursor: pointer; margin-left: 15px;" title="Nuevo"></i></td>';
+            html += '<td><i class="fa fa-fw fa-eye text-light-blue" style="cursor: pointer; margin-left: 10px;" title="Ver detalle" onclick="verDetalleProducto(this)"></i>';
+            html += '<i class="fa fa-fw fa-edit text-light-blue tablaproductos_editar" style="cursor: pointer; margin-left: 10px;" title="Editar" onclick="editarProducto(this)"></i>';
+            html += '<i class="fa fa-fw fa-trash text-light-blue tablaproductos_borrar" style="cursor: pointer; margin-left: 10px;" title="Eliminar"></i></td>';
         }
         if (estado == 'En Curso') {
             html += "<td>" + producto.lote + "</td>";
@@ -472,6 +478,7 @@ function AgregaProducto(producto) {
         document.getElementById('productosasignados').innerHTML = tabla;
         $('#tablaproductos').DataTable({});
     }
+    editando = false;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // valida campos obligatorios Codigo Lote, Fecha, Establecimiento, Línea(recipiente) y materia prima carga en la tabla
@@ -645,5 +652,37 @@ function getLotesFraccionar(){
             wc();
         }
     });
+}
+///////////////////////////////////////////////////////////
+//Edita el detalle de un producto
+var editando = false;
+function editarProducto(tag){
+    if(!editando){
+        var datos = JSON.parse($(tag).closest('tr').attr('data-json'));
+        $("#inputproductos").val(datos.arti_id).trigger('change');
+        $("#empaques").val(datos.empaque).trigger('change');
+        $("#cantidad").val(datos.cantidad);
+        editando = true;
+        // tabla = $('#tablaproductos').DataTable();
+        $('#tablaproductos').DataTable().row( $(tag).parents('tr') ).remove().draw();
+    }else{
+        notificar('Alerta','Ya se esta modificando un producto.','warning');
+    }
+}
+//////////////////////////////////////////////////////////
+// Permite ver todos los datos del producto cargado
+function verDetalleProducto(tag){
+    data = JSON.parse($(tag).closest('tr').attr('data-json'));
+    $("#modalVerTitulo").val(data.barcode);
+    $("#modalVerCantADescontar").val(data.cant_descontar);
+    $("#modalVerEmpaque").val(data.empaquetitulo);
+    $("#modalVerCantidad").val(data.cantidad);
+    $("#modalVerReceta").val(data.receta);
+    $("#modalVerCapacidad").val(data.volumen);
+    $("#modalVerArticulo").val(data.descripcion);
+    $("#modalVerUM").val(data.um);
+    $("#modalVerStock").val(data.stock);
+    $("#modalVerStockDisponible").val(data.stock_disponible);
+    $("#mdl-verDetalleProducto").modal('show');
 }
 </script>   
