@@ -459,8 +459,9 @@ function AgregaProducto(producto) {
 
         html += "<tr data-json='" + JSON.stringify(producto) + "' id='" + producto.arti_id + "'>";
         if (estado != 'En Curso') {
-            html +=
-                '<td><i class="fa fa-fw fa-minus text-light-blue tablaproductos_borrar" style="cursor: pointer; margin-left: 15px;" title="Nuevo"></i></td>';
+            html += '<td><i class="fa fa-fw fa-eye text-light-blue" style="cursor: pointer; margin-left: 10px;" title="Ver detalle" onclick="verDetalleProducto(this)"></i>';
+            html += '<i class="fa fa-fw fa-edit text-light-blue tablaproductos_editar" style="cursor: pointer; margin-left: 10px;" title="Editar" onclick="editarProducto(this)"></i>';
+            html += '<i class="fa fa-fw fa-trash text-light-blue tablaproductos_borrar" style="cursor: pointer; margin-left: 10px;" title="Eliminar"></i></td>';
         }
         if (estado == 'En Curso') {
             html += "<td>" + producto.lote + "</td>";
@@ -469,14 +470,9 @@ function AgregaProducto(producto) {
         html += '<td>' + producto.cant_descontar + '</td>';
         html += '<td>' + producto.empaquetitulo + '</td>';
         html += '<td>' + producto.cantidad + '</td>';
+        html += '<td>' + producto.receta + '</td>';
         html += '</tr>';
-        $('#tablaproductos tbody').append(html);
-        tabla = document.getElementById('tablaproductos').innerHTML;
-        tabla = '<table id="tablaproductos" class="table table-bordered table-hover">' + tabla + '</table>';
-        $('#tablaproductos').dataTable().fnDestroy();
-        document.getElementById('productosasignados').innerHTML = "";
-        document.getElementById('productosasignados').innerHTML = tabla;
-        $('#tablaproductos').DataTable({});
+        $('#tablaproductos').DataTable().row.add($(html)).draw();
     }
     editando = false;
 }
