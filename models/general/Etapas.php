@@ -580,5 +580,20 @@ class Etapas extends CI_Model
 
         return $resp->resultado;
     }
-    
+    /**
+	* Verifica si se realizó alguna entrega de materiales para el batch_id recibido. 
+    * Si es true la respuesta, significa que si se realizo una Entrega de Materiales
+	* @param integer batch_id
+	* @return array respuesta del servicio
+	*/
+    public function verificaEntregaMateriales($batch_id){
+        $url = REST_PRD_ETAPAS."/validar/entregaMateriales/batch_id/".$batch_id;;
+
+        $aux = $this->rest->callAPI("GET",$url);
+        $resp = json_decode($aux['data']);
+
+        log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapas | verificaEntregaMateriales() >> resp ".json_encode($resp));
+
+        return $resp->resultado->existe;
+    }
 }

@@ -356,6 +356,7 @@ class Etapa extends CI_Controller
             $data['templates'] = []; //$this->Templates->listar()->templates->template;
             $data['recursosmateriales'] = []; //$this->Recursos_Materiales->listar()->recursos->recurso;
             $data['rec_trabajo'] = $this->Recursos->obtenerXTipo('TRABAJO')['data'];
+            $data['seRealizoEntregaMateriales'] = $this->Etapas->verificaEntregaMateriales($id);
             $this->load->view('etapa/abm_editar', $data);
         }
     }

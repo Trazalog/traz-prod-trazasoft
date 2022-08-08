@@ -3,16 +3,8 @@
 <?php $this->load->view('etapa/modal_producto'); ?>
 <?php $this->load->view('etapa/modal_unificacion_lote'); ?>
 
-<script>
-function validarEtapa() {
-    if ($('#estado_etapa').val() != 'PLANIFICADO') {
-        //Inhabilitar la edicion del los formularios
-        $('#frm-etapa').find('.form-control').prop('disabled', true);
-    }
-}
-</script>
-
 <input class="hidden" type="text" id="estado_etapa" value="<?php echo $etapa->estado ?>">
+<input class="hidden" type="text" id="verificaEntregaMateriales" value="<?php echo $seRealizoEntregaMateriales ?>">
 <input class="hidden" type="text" id="accion" value="<?php echo $accion ?>">
 <?php if ($etapa->estado == "En Curso") {
         $this->load->view('etapa/modal_finalizar');
