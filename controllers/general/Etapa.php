@@ -16,6 +16,7 @@ class Etapa extends CI_Controller
         #$this->load->model(TAREAS_ASIGNAR . '/Recursos_Materiales');
         $this->load->model('general/Recursos');
         $this->load->model('general/Procesos');
+        $this->load->model('general/Lotes');
         $this->load->model(FRM . 'Forms');
 
         // si esta vencida la sesion redirige al login
@@ -356,7 +357,6 @@ class Etapa extends CI_Controller
             $data['templates'] = []; //$this->Templates->listar()->templates->template;
             $data['recursosmateriales'] = []; //$this->Recursos_Materiales->listar()->recursos->recurso;
             $data['rec_trabajo'] = $this->Recursos->obtenerXTipo('TRABAJO')['data'];
-            $data['seRealizoEntregaMateriales'] = $this->Etapas->verificaEntregaMateriales($id);
             $this->load->view('etapa/abm_editar', $data);
         }
     }
@@ -702,9 +702,13 @@ class Etapa extends CI_Controller
             echo selectBusquedaAvanzada('noco_id', 'noco_id', $rsp['data'], 'codigo', 'codigo');
         }else echo 'S/N';
     }
-
-    public function eliminarEtapa($batchId)
-    {
+    /**
+        * Elimina el lote enviado
+        * @param integer batch_id
+        * @return array respuesta del servicio
+	*/
+    public function eliminarEtapa($batchId){
+        log_message('DEBUG','#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapa | eliminarEtapa($batchId)');
         $rsp = $this->Etapas->eliminarEtapa($batchId);
         echo json_encode($rsp);
     }

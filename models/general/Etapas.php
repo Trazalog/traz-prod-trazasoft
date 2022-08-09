@@ -424,9 +424,13 @@ class Etapas extends CI_Model
             if($o->variable == 'QC_OK' && $o->valor == 'true') return true;
         }
     }
-
-    public function eliminarEtapa($batchId)
-    {
+    /**
+        * Eliminado LOGICO del lote enviado
+        * @param integer $batchId
+        * @return bool true or false
+    */
+    public function eliminarEtapa($batchId){
+        log_message('DEBUG', '#TRAZ | #TRAZ-PRDO-TRAZSOFT | Etapas | eliminarEtapa($batchId)');
         $url = REST_PRD_ETAPAS."/etapas/estado";
         $data['_put_etapas_estado'] = array(
             'estado' => 'ANULADO',
@@ -579,21 +583,5 @@ class Etapas extends CI_Model
         log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapas | validarEtapa() >> resp ".json_encode($resp));
 
         return $resp->resultado;
-    }
-    /**
-	* Verifica si se realizó alguna entrega de materiales para el batch_id recibido. 
-    * Si es true la respuesta, significa que si se realizo una Entrega de Materiales
-	* @param integer batch_id
-	* @return array respuesta del servicio
-	*/
-    public function verificaEntregaMateriales($batch_id){
-        $url = REST_PRD_ETAPAS."/validar/entregaMateriales/batch_id/".$batch_id;;
-
-        $aux = $this->rest->callAPI("GET",$url);
-        $resp = json_decode($aux['data']);
-
-        log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapas | verificaEntregaMateriales() >> resp ".json_encode($resp));
-
-        return $resp->resultado->existe;
     }
 }

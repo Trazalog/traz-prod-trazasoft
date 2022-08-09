@@ -123,4 +123,14 @@ class Lote extends CI_Controller
     $rsp = $this->Lotes->validarCantidadReportes($batch_id);
     echo json_encode($rsp);
   }
+  /**
+    * Verifica si se realizo una entrega de materiales para el lote enviado
+    * @param integer batch_id
+    * @return bool respuesta del servicio
+	*/
+  public function verificaEntregaMateriales($batch_id){
+    log_message('DEBUG','#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapa | verificaEntregaMateriales($id) ');
+    $rsp = $this->Lotes->verificaEntregaMateriales($batch_id);
+    echo json_encode($rsp);
+  }
 }

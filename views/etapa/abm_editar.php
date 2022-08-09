@@ -4,21 +4,17 @@
 <?php $this->load->view('etapa/modal_unificacion_lote'); ?>
 
 <input class="hidden" type="text" id="estado_etapa" value="<?php echo $etapa->estado ?>">
-<input class="hidden" type="text" id="verificaEntregaMateriales" value="<?php echo $seRealizoEntregaMateriales ?>">
 <input class="hidden" type="text" id="accion" value="<?php echo $accion ?>">
 <?php if ($etapa->estado == "En Curso") {
         $this->load->view('etapa/modal_finalizar');
     } ?>
 <div id="snapshot" data-key="<?php echo $key ?>" id="frm-etapa">
-
     <!-- Cabecera -->
     <div class="box box-primary">
-
         <div class="box-header with-border">
             <h3 class="box-title">
-                <?php echo 'Gestionar' . ' ' . $etapa->titulo ?>
+                <?php echo 'Gestionar' . ' ' . $etapa->titulo . ($etapa->realizo_entrega_materiales == 'false' ? ' <i class="fa fa-edit"></i>' : '');?>
             </h3>
-            <!-- <button class="btn btn-success btn-xs pull-right" onclick="deleteSnapshot()">Limpiar Campos</button> -->
         </div>
         <!-- /.box-header -->
         <div class="box-body">
@@ -28,11 +24,8 @@
                     <label for="Lote" class="form-label">Código Lote:*</label>
                 </div>
                 <div class="col-md-5 col-xs-12">
-                    <input name="vcode" type="text" id="Lote" <?php if ($accion == 'Editar') {
-                        echo 'value="' . $etapa->lote . '"';
-                    } ?> class="form-control" placeholder="Inserte Lote" <?php if ($etapa->estado == 'En Curso' || $etapa->estado == 'FINALIZADO') {
-                                                                        echo 'disabled';
-                                                                    } ?>>
+                    <input name="vcode" type="text" id="Lote" <?php echo ($accion == 'Editar') ? 'value="' . $etapa->lote . '"' : '';?>
+                     class="form-control" placeholder="Inserte Lote" <?php echo ($etapa->estado == 'En Curso' || $etapa->estado == 'FINALIZADO') ? 'disabled' : ''; ?>>
                 </div>
                 <div class="col-md-1 col-xs-12">
                     <label for="fecha" class="form-label">Fecha:</label>
@@ -54,8 +47,7 @@
                 <div class="col-md-4 col-xs-12">
                     <select class="form-control select2 select2-hidden-accesible" name="vestablecimiento"
                         onchange="actualizaRecipiente(this.value,'recipientes')" id="establecimientos"
-                        <?php if ($etapa->estado == 'En Curso' || $etapa->estado == 'FINALIZADO') {                                                                                                                                                            echo 'disabled';
-                                                                                                                                                                                            } ?>>
+                        <?php if ($etapa->estado == 'En Curso' || $etapa->estado == 'FINALIZADO') {echo 'disabled';} ?>>
                         <option value="" disabled selected>-Seleccione Establecimiento-</option>
                         <?php
                         foreach ($establecimientos as $fila) {
@@ -93,14 +85,9 @@
                     <label for="op" class="form-label">Orden de Producción:</label>
                 </div>
                 <div class="col-md-4 col-xs-12">
-
-
                     <input type="text" id="ordenproduccion" class="form-control" name="vorden" <?php if ($accion == 'Editar' || $etapa->estado == 'PLANIFICADO') {
                         echo ('value="' . $etapa->orden . '"');
-                    } ?> placeholder="Inserte Orden de Produccion"
-                        <?php if ($etapa->estado == 'En Curso' || $etapa->estado == 'FINALIZADO') {
-                                                                                                                                                    echo 'disabled';
-                                                                                                                                                } ?>>
+                    } ?> placeholder="Inserte Orden de Produccion" <?php if ($etapa->estado == 'En Curso' || $etapa->estado == 'FINALIZADO') {echo 'disabled';} ?>>
                 </div>
                 <?php
                 if ($accion == 'Editar') {
