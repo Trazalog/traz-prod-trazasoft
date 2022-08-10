@@ -6,7 +6,7 @@
     </div>
     <!-- /.box-header -->
     <!-- ORIGEN INICIO ETAPA -->
-    <?php if ($etapa->estado != 'En Curso' && $etapa->estado != 'FINALIZADO') { ?>
+    <?php if (($etapa->estado == 'En Curso' && $etapa->realizo_entrega_materiales == 'false') || $etapa->estado != 'FINALIZADO') { ?>
     <div class="box-body">
         <div class="row">
             <div class="col-xs-12">
