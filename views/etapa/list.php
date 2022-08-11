@@ -102,8 +102,8 @@
                 echo '<td width="6%" class="text-center">';
                 echo "<i data-toggle='modal' data-target='#modal-asignarResponsable' class='fa fa-fw fa-user-plus text-green ml-1' style='cursor: pointer;' title='Asignar responsable' onclick='asignarResponsable($id)'></i>";
                 echo '<i class="fa fa-fw fa-cogs text-light-blue ml-1" style="cursor: pointer;" title="Gestionar" onclick=linkTo("'.base_url(PRD).'general/Etapa/editar?id=' . $id . '")></i>';             
-                if($fila->estado == 'PLANIFICADO')
-                echo "<i class='fa fa-fw fa-times-circle text-red ml-1' style='cursor: pointer;' title='Eliminar' onclick='conf(eliminarEtapa,\"$id\")'></i>";
+                if($fila->estado == 'PLANIFICADO' || $fila->realizo_entrega_materiales == 'false')
+                echo '<i class="fa fa-fw fa-times-circle text-red ml-1" style="cursor: pointer;" title="Eliminar" onclick="conf(eliminarEtapa,\''.$id.'\',\'¿Desea eliminar la Etapa?\')"></i>';
                 echo '</td>';
                 echo '<td>' . $fila->titulo . '</td>';
                 echo "<td>$fila->lote</td>";
@@ -233,8 +233,8 @@
           '></i>`+
           '<i class="fa fa-fw fa-cogs text-light-blue" style="cursor: pointer;" title="Gestionar" onclick=linkTo("<?php echo base_url(PRD) ?>general/Etapa/editar?id=' +
           etapas[i].id + '")></i>';
-        if (etapas[i].estado == 'PLANIFICADO') {
-          html = html + '<i class="fa fa-fw fa-times-circle text-red style="cursor: pointer;" title="Eliminar" onclick="seleccionar(this)"></i>';
+        if (etapas[i].estado == 'PLANIFICADO' && etapas[i].realizo_entrega_materiales == 'false') {
+          html = html + '<i class="fa fa-fw fa-times-circle text-red" style="cursor: pointer;" title="Eliminar" onclick="conf(eliminarEtapa,' + etapas[i].id + ',\'¿Desea eliminar la Etapa?\')"></i>';
         }
         html = html + '</td>' +
           '<td>' + etapas[i].titulo + '</td>' +
@@ -288,8 +288,8 @@
           `<i data-toggle='modal' data-target='#modal-asignarResponsable' class='fa fa-fw fa-user-plus text-green ml-1' style='cursor: pointer;' title='Asignar responsable' onclick='asignarResponsable(${etapas[i].id})'></i>`+
             '<i class="fa fa-fw fa-cogs text-light-blue" style="cursor: pointer;" title="Gestionar" onclick=linkTo("<?php echo base_url(PRD) ?>general/Etapa/editar?id=' +
             etapas[i].id + '")></i>';
-        if (etapas[i].estado == 'PLANIFICADO') {
-          html = html + '<i class="fa fa-fw fa-times-circle text-red style="cursor: pointer;" title="Eliminar" onclick="seleccionar(this)"></i>';
+        if (etapas[i].estado == 'PLANIFICADO' || etapas[i].realizo_entrega_materiales == 'false') {
+          html = html + '<i class="fa fa-fw fa-times-circle text-red" style="cursor: pointer;" title="Eliminar" onclick="conf(eliminarEtapa,' + etapas[i].id + ',\'¿Desea eliminar la Etapa?\')"></i>';
         }
         html = html + '</td>' +
             '<td>' + etapas[i].titulo + '</td>' +
@@ -500,32 +500,47 @@
       }
     });
   }
-
- var eliminarEtapa =  function(id) {
-    wo();
-     $.ajax({
-            type:'POST',
-            dataType:'JSON',
-            url:`<?php echo base_url(PRD) ?>general/etapa/eliminarEtapa/${id}`,
-            success:function(res){
-                if(res.status){
-                  // $('tr#'+id).remove();
-                  linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
-                  hecho();
-                }else{
-                  error();
-                }
-            },
-            error:function(res){
-                error();
-            },
-            complete:function(){
-              setTimeout(() => {
-                  wc();                  
-                }, 2000);
+/////////////////////////////////////////////////////////////////////////////////////////////
+// Se llama desde la funcion conf(). Si se confirma la accion se elimina el lote seleccionado
+ var eliminarEtapa = (id) => {
+   wo();
+  $.ajax({
+    type:'POST',
+    dataType:'JSON',
+    url:`<?php echo base_url(PRD) ?>general/Lote/verificaEntregaMateriales/${id}`,
+    success:(res) => {
+      if(res == 'false'){
+        $.ajax({
+          type:'POST',
+          dataType:'JSON',
+          url:`<?php echo base_url(PRD) ?>general/etapa/eliminarEtapa/${id}`,
+          success:(res) => {
+            if(res.status){
+              linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
+              hecho();
+            }else{
+              error('Error','Se produjo un error al eliminar la etapa.');
             }
+          },
+          error:(res) => {
+            error();
+          },
+          complete:() => {
+            wc();               
+          }
         });
-  }
+      }else{
+        error('Error','El lote posee entregas de materiales.');
+      }
+    },
+    error:(res) => {
+        error();
+    },
+    complete:() => {
+      wc();                  
+    }
+  });
+}
   // Oculta/Muestra de Batchs Finalizados
   function muestraBatchsFinalizados(){
     estado = $('#etapa_finalizada').is(':checked');

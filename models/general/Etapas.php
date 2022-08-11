@@ -144,14 +144,16 @@ class Etapas extends CI_Model
         wso2Msj($rsp);
         return $rsp;
     }
-
-    // Inicia nueva Etapa (ej siembra)
-    public function SetNuevoBatch($data)
-    {
+    /**
+	* Inicia o guardar los datos de la nueva Etapa
+	* @param string nombre de etapa; int proc_id ; int empr_id
+	* @return array respuesta del servicio
+	*/
+    public function SetNuevoBatch($data){
         $this->load->model(ALM . 'Articulos');
 
         $arrayBatch = json_encode($data);
-        log_message('DEBUG', 'Etapas/SetNuevoBatch(datos)-> ' . $arrayBatch);
+        log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapas | SetNuevoBatch(datos)-> ' . $arrayBatch);
         $resource = '/lote';
         $url = REST_PRD_LOTE . $resource;
         $rsp = $this->rest->callAPI("POST", $url, $data);
@@ -424,9 +426,13 @@ class Etapas extends CI_Model
             if($o->variable == 'QC_OK' && $o->valor == 'true') return true;
         }
     }
-
-    public function eliminarEtapa($batchId)
-    {
+    /**
+        * Eliminado LOGICO del lote enviado
+        * @param integer $batchId
+        * @return bool true or false
+    */
+    public function eliminarEtapa($batchId){
+        log_message('DEBUG', '#TRAZ | #TRAZ-PRDO-TRAZSOFT | Etapas | eliminarEtapa($batchId)');
         $url = REST_PRD_ETAPAS."/etapas/estado";
         $data['_put_etapas_estado'] = array(
             'estado' => 'ANULADO',
@@ -580,5 +586,4 @@ class Etapas extends CI_Model
 
         return $resp->resultado;
     }
-    
 }
