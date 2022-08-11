@@ -138,9 +138,9 @@
                         if ($etapa->estado == 'En Curso') {
                             echo '<button class="btn btn-primary" id="btnfinalizar" onclick="finalizar()">Reporte de Producción</button>';         
                             $this->load->view('etapa/btn_finalizar_etapa');
-                        } else {
-                            echo ($etapa->estado != 'En Curso') ? "<button class='btn btn-primary' onclick='guardar(\"iniciar\")'>Iniciar Etapa</button>" : "";
-                            echo ($etapa->estado == 'En Curso' && $realizo_entrega_materiales == 'false') ? "<button class='btn btn-primary' onclick='guardar(" . '"guardar"' . ")'>Guardar</button>" : '';
+                        }else{
+                            echo "<button class='btn btn-primary' onclick='guardar(\"iniciar\")'>Iniciar Etapa</button>";
+                            echo "<button class='btn btn-primary' onclick='guardar(" . '"guardar"' . ")'>Guardar</button>";
                         }
                     }
                 ?>
@@ -315,13 +315,11 @@ function guardar(boton) {
             data
         },
         success: function(rsp) {
-            console.log(rsp);
             if (rsp.status) {
                 hecho('Hecho','Salida Guardada exitosamente.');
-               linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
+                linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
             } else {
                 if (rsp.msj) {
-                  
                     bak_data = data;
                     getContenidoRecipiente(recipiente);
                 } else {

@@ -158,6 +158,7 @@
                 }
                 echo "<button class='btn btn-primary' onclick='guardar(" . '"guardar"' . ")'>Guardar</button>";
             ?>
+            <button class="btn btn-default" onclick="back()">Cerrar</button>
         </div>
     </div>
     <!-- /.box -->
