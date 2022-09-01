@@ -32,10 +32,13 @@ class Recipientes extends CI_Model
       wso2Msj($array);
       return json_decode($array['data']);
     }
-
-    public function listarEmpaques()
-    {
-        log_message('DEBUG', 'Recipientes/listarEmpaques');
+    /**
+      * Trae todos los empaques y su fórmula(receta) asociada, por empresa
+      * @param array con datos del recipiente nuevo
+      * @return array con reci_id 
+		*/
+    public function listarEmpaques(){
+        log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | Recipientes |  listarEmpaques()');
         $resource = '/empaques/'.empresa();
         $url = REST_PRD.$resource;
         $array = $this->rest->callAPI("GET",$url); 	
