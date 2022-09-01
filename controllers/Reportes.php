@@ -115,12 +115,14 @@ class Reportes extends CI_Controller
     $url['responsables'] = REST_TDS . '/recursos/list';
     $url['productos'] = REST_TDS . '/productos/list';
     // $url['unidades_medida'] = '';
-    $url['etapas'] = REST_TDS . '/etapas/all/list';
+    $url['etapas'] = REST_PRD_ETAPAS . '/etapasProductivas/list/empresa/'.empresa();
+    // $url['etapas'] = REST_TDS . '/etapas/all/list';
 
     $valores['responsables'] = $this->Koolreport->depurarJson($url['responsables'])->recursos->recurso;
     $valores['productos'] = $this->Koolreport->depurarJson($url['productos'])->productos->producto;
     // $valores['unidades_medida'] = $this->Koolreport->depurarJson($url['unidades_medida'])->unidades->unidad;
-    $valores['etapas'] = $this->Koolreport->depurarJson($url['etapas'])->etapas->etapa;
+    // $valores['etapas'] = $this->Koolreport->depurarJson($url['etapas'])->etapas->etapa;
+    $valores['etapas'] = $this->Koolreport->depurarJson($url['etapas'])->etapas_productivas->etapa_productiva;
 
     // $data['filtro'] = $this->Opcionesfiltros->filtrosProdResponsable($valores);
 
