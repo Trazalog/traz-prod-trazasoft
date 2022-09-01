@@ -66,6 +66,7 @@
 												echo "<td width='80px'><div class='profileImage ". strtolower($o->titulo)."'>". substr($o->titulo,0,($o->titulo == 'Fraccionamiento' || $o->titulo == "Preclasificado"?2:1)) ."</div></td>";
 												echo "<td class='". strtolower($o->titulo)."'>";
 												echo "<b>LOTE:</b> $o->lote<br>";
+												echo "<b>ETAPA:</b> $o->titulo<br>";
 												echo "<b>ESTABLECIMIENTO:</b> <cite>$o->establecimiento</cite><br>";
 												echo "<b>FECHA:</b> ".formatFechaPG($o->fecha);
 												echo "</td>";
