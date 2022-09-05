@@ -15,6 +15,7 @@
 								<th>Fecha de Alta</th>
 								<th>Fecha de Vencimiento</th>
 								<th width="20%">Lotes</th>
+								<th width="10%">Producto</th>
 								<th width="10%">Estado</th>
 							</tr>
 					</thead>
@@ -28,21 +29,24 @@
 								$descripcion = $rsp->descripcion;
 								$fec_alta = $rsp->fec_alta;
 								$fec_vencimiento = $rsp->fec_vencimiento;
+								$producto_codigo = $rsp->producto_codigo;
 								$lotes = $rsp->lotes;
 								echo "<tr id='$codigo' data-json='" . json_encode($rsp) . "'>";
 									echo "<td class='text-center text-light-blue'>";
-									echo '<i class="fa fa-search" style="cursor: pointer;margin: 3px;" title="Ver Detalles" onclick="verInfo(this)"></i>';
-									echo '<i class="fa fa-fw fa-pencil " style="cursor: pointer; margin: 3px;" title="Editar" onclick="editarInfo(this)"></i>';
-									echo '<i class="fa fa-fw fa-times-circle eliminar" style="cursor: pointer;margin: 3px;" title="Eliminar" onclick="eliminar(this)"></i>';
-									echo '<i class="fa fa-undo" style="cursor: pointer;margin: 3px;" title="Trazabilidad" onclick="trazabilidad(this)"></i>';
+									echo '<i class="fa fa-eye" style="cursor: pointer;margin: 3px;" title="Ver Detalles" onclick="verInfo(this)"></i>';
+									echo '<i class="fa fa-edit" style="cursor: pointer; margin: 3px;" title="Editar" onclick="editarInfo(this)"></i>';
+									echo '<i class="fa fa-trash eliminar" style="cursor: pointer;margin: 3px;" title="Eliminar" onclick="eliminar(this)"></i>';
+									echo '<i class="fa fa-fw fa-sitemap" style="cursor: pointer;margin: 3px;" title="Trazabilidad" onclick="trazabilidad(this)"></i>';
 									echo '<i class="fa fa-qrcode" style="cursor: pointer;margin: 3px;" title="Código QR" onclick="solicitarQR(this)"></i>';
-									echo '<i '.($estadoNoconsumible == 'ALTA' ? 'class="fa fa-fw fa-toggle-off text-light-blue" title="Habilitar"': 'class="fa fa-fw fa-toggle-on text-light-blue" title="Inhabilitar"').' title="Habilitar" style="cursor: pointer; margin-left: 15px;" onclick="cambioEstado(this)"></i>';									echo "</td>";
+									echo '<i '.($estadoNoconsumible == 'ALTA' ? 'class="fa fa-fw fa-toggle-off text-light-blue" title="Habilitar"': 'class="fa fa-fw fa-toggle-on text-light-blue" title="Inhabilitar"').' title="Habilitar" style="cursor: pointer; margin-left: 15px;" onclick="cambioEstado(this)"></i>';
+									echo "</td>";
 									echo '<td>'.$codigo.'</td>';
 									//echo '<td>'.$tipo.'</td>';
 									echo '<td>'.$descripcion.'</td>';
 									echo '<td>'.formatFechaPG($fec_alta).'</td>';
 									echo '<td>'.formatFechaPG($fec_vencimiento).'</td>';
 									echo '<td>'.$lotes.'</td>';
+									echo '<td>'.$producto_codigo.'</td>';
 									echo '<td>'.estadoNoCon($estadoNoconsumible).'</td>';
 								echo '</tr>';
 						}
@@ -702,6 +706,18 @@ function solicitarQR(e){
 								<label class="col-md-4 control-label" for="establecimiento">Establecimiento<strong class="text-danger">*</strong>:</label>
 								<div class="col-md-8">
 										<input id="establecimiento_ver" type="text" name="establecimiento" placeholder="" class="form-control input-md deshabilitar" >
+								</div>
+						</div>
+						<div class="form-group">
+								<label class="col-md-4 control-label" for="lotes">Lote asociado<strong class="text-danger">*</strong>:</label>
+								<div class="col-md-8">
+										<input id="lotes_ver" type="text" name="lotes" placeholder="" class="form-control input-md deshabilitar" >
+								</div>
+						</div>
+						<div class="form-group">
+								<label class="col-md-4 control-label" for="producto">Producto<strong class="text-danger">*</strong>:</label>
+								<div class="col-md-8">
+										<input id="producto_ver" type="text" name="producto" placeholder="" class="form-control input-md deshabilitar" >
 								</div>
 						</div>
 						<!-- <div class="form-group">
