@@ -61,7 +61,7 @@ use \koolreport\widgets\google\PieChart;
                     <div class="col-xs-12 col-sm-12 col-md-4 col-lg-3">
                         <div class="form-group">
                             <label>Etapas</label>
-                            <select class="form-control" id="etapa" name="etapa">
+                            <select class="form-control select2" id="etapa" name="etapa">
                             </select>
                         </div>
                     </div>
