@@ -130,12 +130,10 @@ function obtenerArticulos() {
     $.ajax({
         type: 'GET',
         dataType: 'JSON',
-        url: '<?php echo base_url(ALM) ?>Articulo/obtener/true',
+        url: '<?php echo base_url(PRD) ?>general/Camion/obtenerArticulosPorTipo',
         success: function(rsp) {
-            console.log(rsp);
-
             if (!rsp.status) {
-                alert('No hay Articulos Disponibles');
+                error('Error!','No hay materia prima disponible.');
                 return;
             }
 
@@ -143,7 +141,7 @@ function obtenerArticulos() {
             fillSelect(obj, rsp.data);
         },
         error: function(rsp) {
-            alert('Error: ' + rsp.msj);
+            error('Error','Error: ' + rsp.msj);
             console.log(rsp.msj);
         }
     });
