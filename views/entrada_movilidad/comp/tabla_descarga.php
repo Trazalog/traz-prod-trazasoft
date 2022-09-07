@@ -74,7 +74,7 @@ function guardarDescargaOrigen() {
                 if (rsp.status) {
                     console.log('Listado de Recepciones MP se realizó correctamente');
                     actualizarEstadoCamion($('#patente').val());
-                    linkTo();
+                    linkTo("traz-prod-trazasoft/general/Camion/recepcionCamion");
                 } else {
                     alert('Fallo al guardar el listado de Recepciones MP');
                 }
@@ -107,7 +107,7 @@ function guardarCargaCamionExterno(cargaCamion) {
         success: function(rsp) {
             if (rsp.status) {
                 hecho('Correcto','Se guardó la recepción con éxito');
-                linkTo();
+                linkTo("traz-prod-trazasoft/general/Camion/recepcionCamion");
             } else {
                 error('Error','Error al guardar la recepción');
             }
