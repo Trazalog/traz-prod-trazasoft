@@ -154,7 +154,7 @@
         </form>
 
         <hr>
-        <button id="add-camion" class="btn btn-primary btn-sm" style="float:right" onclick="addCamion()"><i class="fa fa-plus"></i> Agregar</button>
+        <button id="add-camion" class="btn btn-primary btn-sm" style="float:right" onclick="addCamion()">Guardar</button>
     </div>
 </div>
 <!-- / Bloque Datos Camión (en las 2 opciones) -->
@@ -404,12 +404,13 @@ function addCamion(msj = true) {
         data: dataForm,
         success: function(rsp) {
             if (rsp.status) {
-                if ($('#bloque_descarga:visible').length == 0) {
-                    $('#frm-camion')[0].reset();
-                    $('#frm-info')[0].reset();
-                }
-                if ($("#esExterno").val() != 'externo') Swal.fire('Correcto','Datos guardados con éxito','success');
+                if ($("#esExterno").val() != 'externo' || $('#accion').val() == 'carga') Swal.fire('Correcto','Datos guardados con éxito','success');
 
+                if ($('#bloque_descarga:visible').length == 0) {
+                    // $('#frm-camion')[0].reset();
+                    // $('#frm-info')[0].reset();
+                    linkTo("traz-prod-trazasoft/general/Camion/recepcionCamion");
+                }
                 //Llamo al guardado de la descarga
                 guardarDescargaOrigen();
             } else {
@@ -569,6 +570,8 @@ function cargacamion() {
     $('#patente').attr('disabled','disabled');
     $('#patenteRecepcion').hide();
     $('#patEntrada').attr('disabled',false);
+    $("#bruto").val(0);
+    $("#bruto").attr('readonly','readonly');
     $('#patenteEntrada').show();
     //document.getElementById('boxproductos').hidden = true;
 
@@ -592,31 +595,15 @@ function descargacamion() {
     $('#patente').attr('disabled',false);
     $('#patenteRecepcion').show();
     $('#patEntrada').attr('disabled','disabled');
+    $("#bruto").val('');
+    $("#bruto").attr('disabled',false)
     $('#patenteEntrada').hide();
     $('.tag-descarga').show();
-}
-//Se pidio que se remueva esta condicion onkeyup="actualizarNeto" sobre bruto y tara
-//El camion puede esta vacío es decir BRUTO = 0
-//se utiliza funcion actualizaNeto()
-function actualizaNeto() {
-    bruto = document.getElementById('bruto').value;
-    tara = document.getElementById('tara').value;
-    if (tara == "" || bruto == "") {
-        document.getElementById('neto').value = "";
-    } else {
-        neto = bruto - tara;
-        if (neto < 0) {
-            alert('Revise bruto y tara algun dato es incorrecto');
-            document.getElementById('neto').value = "";
-        } else {
-            document.getElementById('neto').value = neto;
-        }
-    }
 }
 // suma tara con peso neto de carga
 function calculaNeto(){
     if (!_isset($('#bruto').val()) || (parseFloat($('#bruto').val()) <= parseFloat($('#tara').val()))) {
-        $('#neto').val(0);
+        $('#neto').val(parseFloat($('#tara').val()));
         return;
     }else{
         $('#neto').val(parseFloat($('#bruto').val()) - parseFloat($('#tara').val()));
