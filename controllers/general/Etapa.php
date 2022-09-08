@@ -16,6 +16,7 @@ class Etapa extends CI_Controller
         #$this->load->model(TAREAS_ASIGNAR . '/Recursos_Materiales');
         $this->load->model('general/Recursos');
         $this->load->model('general/Procesos');
+        $this->load->model('general/Lotes');
         $this->load->model(FRM . 'Forms');
 
         // si esta vencida la sesion redirige al login
@@ -309,8 +310,8 @@ class Etapa extends CI_Controller
     }
 
     // trae info para informe de Etapa (Todas y Fraccionar)
-    public function editar()
-    {
+    public function editar(){
+        log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapa | editar()');
         $id = $this->input->get('id'); // batch_id
 
         $data['tarea'] = $this->Etapas->validarPedidoMaterial($id);
@@ -564,7 +565,7 @@ class Etapa extends CI_Controller
 
         foreach ($productos as $info) {
             $arrayPost["lote_id"] = $info['lotedestino']; // lote origen
-            $arrayPost["arti_id"] = $info['titulo']; // art seleccionado en lista
+            $arrayPost["arti_id"] = $info['arti_id']; // art seleccionado en lista
             $arrayPost["prov_id"] = (string) PROVEEDOR_INTERNO;
             $arrayPost["batch_id_padre"] = $batch_id_padre; // bacth actual
             $arrayPost["cantidad"] = $info['cantidad']; // art seleccionado en lista
@@ -675,9 +676,13 @@ class Etapa extends CI_Controller
         $user = $this->Etapas->getUserLote($batch_id)->users->user;
         echo json_encode($user);
     }
-
-    public function validarFormularioCalidad($orta_id)
-    {
+    
+    /**
+        * Valida el formulario asociado al orta_id
+        * @param integer $orta_id
+        * @return bool true or false
+    */
+    public function validarFormularioCalidad($orta_id){
         $res = $this->Etapas->validarFormularioCalidad($orta_id);
         echo json_encode(['status' => $res]);
     }
@@ -697,9 +702,13 @@ class Etapa extends CI_Controller
             echo selectBusquedaAvanzada('noco_id', 'noco_id', $rsp['data'], 'codigo', 'codigo');
         }else echo 'S/N';
     }
-
-    public function eliminarEtapa($batchId)
-    {
+    /**
+        * Elimina el lote enviado
+        * @param integer batch_id
+        * @return array respuesta del servicio
+	*/
+    public function eliminarEtapa($batchId){
+        log_message('DEBUG','#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapa | eliminarEtapa($batchId)');
         $rsp = $this->Etapas->eliminarEtapa($batchId);
         echo json_encode($rsp);
     }

@@ -144,14 +144,16 @@ class Etapas extends CI_Model
         wso2Msj($rsp);
         return $rsp;
     }
-
-    // Inicia nueva Etapa (ej siembra)
-    public function SetNuevoBatch($data)
-    {
+    /**
+	* Inicia o guardar los datos de la nueva Etapa
+	* @param string nombre de etapa; int proc_id ; int empr_id
+	* @return array respuesta del servicio
+	*/
+    public function SetNuevoBatch($data){
         $this->load->model(ALM . 'Articulos');
 
         $arrayBatch = json_encode($data);
-        log_message('DEBUG', 'Etapas/SetNuevoBatch(datos)-> ' . $arrayBatch);
+        log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapas | SetNuevoBatch(datos)-> ' . $arrayBatch);
         $resource = '/lote';
         $url = REST_PRD_LOTE . $resource;
         $rsp = $this->rest->callAPI("POST", $url, $data);
@@ -273,9 +275,13 @@ class Etapas extends CI_Model
         log_message('DEBUG','#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapas | getLotesaFraccionar()-> resp '.json_encode($array));
         return json_decode($array['data']);
     }
-
-    public function obtenerArticulos($id_etapa)
-    {
+    /**
+	* Obtiene los articulos de la Etapa
+	* @param integer id_etapa
+	* @return array respuesta del servicio con los productos de la etapa
+	*/
+    public function obtenerArticulos($id_etapa){
+        log_message("DEBUG","#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapas | obtenerArticulos(id_etapa)");
         $resource = "/etapas/productos/$id_etapa";
         $url = REST_PRD_ETAPAS . $resource;
         $rsp = $this->rest->callAPI("GET", $url);
@@ -405,8 +411,14 @@ class Etapas extends CI_Model
 		return json_decode($array['data']);
     }
     
-    public function validarFormularioCalidad($orta_id)
-    {
+    /**
+        * Valida el formulario segun la columna variable
+        * @param integer $orta_id
+        * @return bool true or false
+    */
+    public function validarFormularioCalidad($orta_id){
+        log_message('DEBUG', '#TRAZA | TRAZ-PROD-TRAZASOFT | Etapas | validarFormularioCalidad()');
+        
         $url = REST_FRM."/formularios/etapa/variables/origen/BATCH/$orta_id";
         $res = wso2($url);
         if($res['data'])
@@ -414,9 +426,13 @@ class Etapas extends CI_Model
             if($o->variable == 'QC_OK' && $o->valor == 'true') return true;
         }
     }
-
-    public function eliminarEtapa($batchId)
-    {
+    /**
+        * Eliminado LOGICO del lote enviado
+        * @param integer $batchId
+        * @return bool true or false
+    */
+    public function eliminarEtapa($batchId){
+        log_message('DEBUG', '#TRAZ | #TRAZ-PRDO-TRAZSOFT | Etapas | eliminarEtapa($batchId)');
         $url = REST_PRD_ETAPAS."/etapas/estado";
         $data['_put_etapas_estado'] = array(
             'estado' => 'ANULADO',
@@ -570,5 +586,4 @@ class Etapas extends CI_Model
 
         return $resp->resultado;
     }
-    
 }

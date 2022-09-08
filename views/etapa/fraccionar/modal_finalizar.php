@@ -1,4 +1,3 @@
-<?php $this->load->view('etapa/fraccionar/modal_generarQR') ?>
 <div class="modal" id="modal_finalizar" data-backdrop="static" tabindex="-1" role="dialog"
     style="overflow-y: auto !important; " aria-labelledby="myModalLabel">
     <div class="modal-dialog modal-lg" role="document">
@@ -89,7 +88,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label class="control-label">Empaque:</label>
-                                    <input type="text" value="<?php echo $mat->uni_med_emp; ?>" class="form-control" readonly>
+                                    <input type="text" value="<?php echo $mat->nombre; ?>" class="form-control" readonly>
                                 </div>
                             </div>
                             <div class="col-md-2">
@@ -259,7 +258,10 @@
 
     </div>
 </div>
-
+<?php
+    // carga el modal de impresion de QR
+    $this->load->view( COD.'componentes/modalGenerico');
+?>
 
 <script>
 $(document).ready(function () {
@@ -278,7 +280,7 @@ function actualizaRecipiente(establecimiento) {
         dataType: 'JSON',
         data: {
             establecimiento,
-            tipo: 'PRODUCTIVO'
+            tipo: 'DEPOSITO'
         },
         url: '<?php echo base_url(PRD) ?>general/Recipiente/listarPorEstablecimiento/true',
         success: function(result) {
@@ -312,26 +314,8 @@ function actualizaRecipiente(establecimiento) {
 
 function AgregarProductoFinal() {
     cantidad = document.getElementById('cantidadproducto').value;
-    if (cantidad == 0) {
-        producto = {};
-        producto.id = '-';
-        producto.titulo = '-';
-        producto.cantidad = '-';
-        producto.lotedestino = '-';
-        producto.destino = '-';
-        producto.titulodestino = '-';
-        producto.destinofinal = '-';
-        producto.fraccionado = '-';
-        agregaProductoFinal(producto);
-        document.getElementById('cantidadproducto').value = "";
-        document.getElementById('lotedestino').value = "";
-        document.getElementById('productodestino').value = "";
-        document.getElementById('productoestablecimientos').value = "";
-        document.getElementById('inputproductos').value = "";
-        document.getElementById('fraccionado').checked = false;
-        document.getElementById('productorecipientes').value = "";
-        document.getElementById('productorecipientes').disabled = true;
-  
+    if (cantidad <= 0) {
+        error('Error','No puede ingresar una cantidad menor o igual a 0');
     } else {
         ban = true;
         msj = "";
@@ -389,13 +373,13 @@ function AgregarProductoFinal() {
             idrecipiente = document.getElementById('productodestino').value;
             //indexrec = recipientes.findIndex(y => y.id == idrecipiente);    
             indexrec = recipientes.findIndex(y => y.reci_id == idrecipiente);
-            producto.id = JSON.parse($("#productos option[value='" + $('#productos').val() + "']").attr('data-json'))
-            .id;
+            producto.arti_id = JSON.parse($("#productos option[value='" + $('#productos').val() + "']").attr('data-json')).arti_id;
             producto.titulo = document.getElementById('productos').value;
             producto.cantidad = cantidad;
             producto.lotedestino = lotedestino;
             producto.destino = destino;
-            producto.titulodestino = $('#productodestino').find('option:selected').html();  
+            producto.titulodestino = $('#productodestino').find('option:selected').html();
+            producto.descripcion = dataProducto.descripcion;
             // producto.destinofinal = establecimiento + " " + recipientefinal;
             producto.destinofinal = establecimiento;
 
@@ -414,8 +398,8 @@ function AgregarProductoFinal() {
             document.getElementById('productoestablecimientos').value = "";
             document.getElementById('productos').value = "";
             // document.getElementById('fraccionado').checked = false;
-            document.getElementById('productorecipientes').value = "";
-            document.getElementById('productorecipientes').disabled = true;
+            // document.getElementById('productorecipientes').value = "";
+            // document.getElementById('productorecipientes').disabled = true;
         }
     }
 }
@@ -437,9 +421,9 @@ function agregaProductoFinal(producto) {
         html += "<th>Destino Final</th>";
         // html += "<th>Fracc</th>";
         html += '</tr></thead><tbody>';
-        html += "<tr data-json='" + JSON.stringify(producto) + "' id='" + producto.id + "' class='reci-"+producto.destino+"' data-forzar='false'>";
+        html += "<tr data-json='" + JSON.stringify(producto) + "' id='" + producto.arti_id + "' class='reci-"+producto.destino+"' data-forzar='false'>";
         html +=
-            "<td><i id='generarQR' class='fa fa-fw fa-qrcode text-light-blue generarQR' style='cursor: pointer; margin-left: 15px;' title='QR' onclick='QR(this)'></i><i class='fa fa-fw fa-minus text-light-blue tabla_productos_asignados_borrar' style='cursor: pointer; margin-left: 15px;' title='Eliminar'></i></td>";
+            "<td><i class='fa fa-fw fa-qrcode text-light-blue generarQR' style='cursor: pointer; margin-left: 15px;' title='QR' onclick='QR(this)'></i><i class='fa fa-fw fa-minus text-light-blue tabla_productos_asignados_borrar' style='cursor: pointer; margin-left: 15px;' title='Eliminar'></i></td>";
         // html += '<td>' + producto.loteorigen + '</td>';
         html += '<td>' + producto.titulo + '</td>';
         html += '<td>' + producto.cantidad + '</td>';
@@ -455,9 +439,9 @@ function agregaProductoFinal(producto) {
         document.getElementById('productos_existe').value = 'si';
 
     } else if (existe == 'si') {
-        html += "<tr data-json='" + JSON.stringify(producto) + "' id='" + producto.id + "' class='reci-"+producto.destino+"' data-forzar='false'>";
+        html += "<tr data-json='" + JSON.stringify(producto) + "' id='" + producto.arti_id + "' class='reci-"+producto.destino+"' data-forzar='false'>";
         html +=
-            "<td><i id='generarQR' class='fa fa-fw fa-qrcode text-light-blue generarQR' style='cursor: pointer; margin-left: 15px;' title='QR' onclick='QR(this)'></i><i class='fa fa-fw fa-minus text-light-blue tabla_productos_asignados_borrar' style='cursor: pointer; margin-left: 15px;' title='Eliminar'></i></td>";
+            "<td><i class='fa fa-fw fa-qrcode text-light-blue generarQR' style='cursor: pointer; margin-left: 15px;' title='QR' onclick='QR(this)'></i><i class='fa fa-fw fa-minus text-light-blue tabla_productos_asignados_borrar' style='cursor: pointer; margin-left: 15px;' title='Eliminar'></i></td>";
         // html += '<td>' + producto.loteorigen + '</td>';
         html += '<td>' + producto.titulo + '</td>';
         html += '<td>' + producto.cantidad + '</td>';
@@ -545,68 +529,40 @@ function FinalizarEtapa() {
         });
     }
 }
+//////////////////////////////////////////
+// Configuracion y creacion código QR
+// Características para generacion del QR
+function QR(e){
+	//Limpio el modal
+	$("#infoEtiqueta").empty();
+	$("#contenedorCodigo").empty();
+	$("#infoFooter").empty();
 
-function QR(elemento) {
-    var data = $(elemento).closest("tr").attr("data-json");
-    generarQR(data);
-};
+	// configuración de código QR
+	var config = {};
+	config.titulo = "Código QR";
+	config.pixel = "7";
+	config.level = "L";
+	config.framSize = "2";
 
-function generarQR(data) {
-    data = JSON.parse(data);
+	//Obtengo los datos del lote
+	datos = $(e).closest('tr').attr('data-json');
+	var datosLote = JSON.parse(datos);
+    datosLote.fecha = moment().format('YYYY-MM-DD');
+    datosLote.batch = $("#batch_id").val();
 
-    wo();
-    $.ajax({
-        type: 'POST',
-        async: false,
-        data: {
-            data
-        },
-        url: '<?php echo base_url(PRD) ?>general/CodigoQR/generarQRFraccionamiento',
-        success: function(rsp) {
-            rsp = JSON.parse(rsp);
+	//Cargo la vista del QR con datos en el modal
+	$("#infoEtiqueta").load("<?php echo PRD ?>general/CodigoQR/cargaModalQRLote", datosLote);
+	var dataQR = {};
+	dataQR.codigo = datosLote.codigo;
 
-            $('#imagenQR').attr('src', rsp.filename);
-            $('#contenidoQR').html('<h3>Datos lote</h3>' +
-                '<p>Lote origen: ' + rsp.loteorigen +
-                '<br>Producto: ' + rsp.titulo +
-                '<br>Cantidad: ' + rsp.cantidad +
-                '<br>Lote destino: ' + rsp.lotedestino +
-                '<br>Destino: ' + rsp.titulodestino +
-                '<br>Destino final: ' + rsp.destinofinal +
-                '<br>Fraccionado: ' + rsp.fraccionado +
-                '<br><button type="button" class="btn btn-default btn-flat btn-dropbox" onclick="imprimirElemento();" id="idPrint"><i class="fa fa-print"></i></button></p>'
-                );
+	// agrega codigo QR al modal impresion
+	getQR(config, dataQR, 'codigosQR/Traz-prod-trazasoft/Lotes');
 
-            $("#modal_generarQR").modal('show');
-        },
-        error: function(rsp) {
-            alert('Error');
-        },
-        complete: function() {
-            wc();
-        }
-    });
-};
-
-function imprimirElemento() {
-    var elemento2 = $("#idQR").html();
-    $('#idPrint').remove();
-    var elemento = $("#idQR").html();
-    $("#idQR").empty();
-
-    var ventana = window.open('', 'PRINT', 'height=600,width=800');
-    ventana.document.write('<html><head><title>Código QR</title>');
-    ventana.document.write('<link rel="stylesheet" href="<?php base_url(); ?>application/css/codigoQR.css">');
-    ventana.document.write('</head><body >');
-    ventana.document.write(elemento);
-    ventana.document.write('</body></html>');
-    ventana.document.close();
-    ventana.focus();
-    ventana.print();
-    // ventana.close();
-    $("#idQR").html(elemento2);
-    return true;
+	// levanta modal completo para su impresion
+	verModalImpresion();
 }
+////////////// FIN Creación QR
 
 $(document).off('click', '.tabla_productos_asignados_borrar').on('click', '.tabla_productos_asignados_borrar', {
     idtabla: 'tabla_productos_asignados',

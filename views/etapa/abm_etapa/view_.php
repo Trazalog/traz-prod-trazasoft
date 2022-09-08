@@ -107,7 +107,7 @@
   <!--_________________ GUARDAR_________________-->
   <div class="modal-footer">
     <div class="form-group text-right">
-      <button type="button" class="btn btn-primary" onclick="guardar('nueva')" >Guardar</button>
+      <button type="button" class="btn btn-primary" onclick="guardar()" >Guardar</button>
     </div>                
   </div>
   <!--__________________________________-->
@@ -227,7 +227,7 @@
       </div>
       <div class="modal-footer">
         <div class="form-group text-right">
-          <button type="" class="btn btn-primary habilitar" data-dismiss="modal" id="btnsave_edit" onclick="guardar('editar')">Guardar</button>
+          <button type="" class="btn btn-primary habilitar" data-dismiss="modal" id="btnsave_edit" onclick="editarArticulo()">Guardar</button>
           <button type="button" class="btn btn-default cerrarModalEdit" data-dismiss="modal">Cerrar</button>
         </div>
       </div>
@@ -402,38 +402,20 @@
   }
 
   // Da de alta una herramienta nueva en pañol
-  function guardar(operacion){
+  function guardar(){
     var recurso = "";
-    if (operacion == "editar") {
-      if( !validarCampos('formEdicion') ){
-        return;
-      }
-      var form = $('#formEdicion')[0];
-      var datos = new FormData(form);
-      var datos = formToObject(datos);
-      recurso = 'index.php/<?php echo PRD ?>general/Etapa/editarEtapa';
-    } else {
-      if( !validarCampos('formEtapas') ){
-        return;
-      }
-      debugger;
-     
-       var form = $('#formEtapas')[0];
-
-    
-       var datos = new FormData(form);
-       var datos = formToObject(datos);
-       
-       console.log('form trae en nombre: ' + datos.nombre);
-
-       nombre_nuevo = datos.nombre.replace(/ /g, "_");
-      
-       datos['nombre']  = nombre_nuevo;
-     
-      console.log('form trae en nombre nuevo: ' + datos.nombre);
-      //return;
-       recurso = 'index.php/<?php  echo PRD ?>general/Etapa/guardarEtapa';
+    if( !validarCampos('formEtapas') ){
+      return;
     }
+    var form = $('#formEtapas')[0];
+    var datos = new FormData(form);
+    var datos = formToObject(datos);
+
+    nombre_nuevo = datos.nombre.replace(/ /g, "_");
+    datos['nombre']  = nombre_nuevo;
+
+    recurso = 'index.php/<?php  echo PRD ?>general/Etapa/guardarEtapa';
+    
     wo();
     validarEtapa(datos).then((result) => {
      // if(!result){
@@ -489,6 +471,32 @@
       });
     });
     return await validacion;
+  }
+  function editarArticulo(){
+    if( !validarCampos('formEdicion') ) return;
+    wo();
+    var form = $('#formEdicion')[0];
+    var datos = new FormData(form);
+    var datos = formToObject(datos);
+    recurso = 'index.php/<?php echo PRD ?>general/Etapa/editarEtapa';
+    $.ajax({
+      type: 'POST',
+      data:{ datos },
+      //dataType: 'JSON',
+      url: recurso,
+      success: function(result) {
+        $("#cargar_tabla").load("<?php echo base_url(PRD); ?>general/Etapa/listarEtapas");
+        wc();
+        $("#boxDatos").hide(500);
+        $("#formEtapas")[0].reset();
+        $("#botonAgregar").removeAttr("disabled");
+        hecho('',"Etapa editada exitosamente");
+      },
+      error: function(result){
+        wc();
+        error('',"Error agregando Etapa");
+      }
+    });
   }
 
   function agregarArticulo() {

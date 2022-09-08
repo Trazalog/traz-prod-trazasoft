@@ -2,31 +2,22 @@
 <!-- Origen -->
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h4 class="box-title">Materia Prima</h4>
-        <!-- <span>
-            <button type="button" class="btn btn-warning btn-xs pull-right" data-toggle="modal"
-                data-target="#modal_detalleTarea">Detalle tarea</button>
-        </span> -->
+        <h4 class="box-title">Materia Prima <?php echo $etapa->realizo_entrega_materiales == 'false' ? '<i class="fa fa-edit"></i>' : ''; ?></h4>
     </div>
     <!-- /.box-header -->
-
-
     <!-- ORIGEN INICIO ETAPA -->
-    <?php if ($etapa->estado != 'En Curso' && $etapa->estado != 'FINALIZADO') { ?>
+    <?php if (($etapa->estado == 'En Curso' && $etapa->realizo_entrega_materiales == 'false') || $etapa->estado != 'FINALIZADO') { ?>
     <div class="box-body">
-
         <div class="row">
             <div class="col-xs-12">
                 <div class="row form-group">
                     <div class="col-md-3 col-xs-6">
                         <label for="template" class="form-label">Materia <?php echo hreq() ?>:</label>
-
                     </div>
                     <div class="col-md-6 col-xs-12 input-group ba">
-
                         <?php
                             echo selectBusquedaAvanzada('inputmaterias', 'vmateria', $productos_entrada_etapa, 'arti_id', 'barcode', array('descripcion', 'Unidad Medida:' => 'um'));
-                            ?>
+                        ?>
                     </div>
                 </div>
             </div>

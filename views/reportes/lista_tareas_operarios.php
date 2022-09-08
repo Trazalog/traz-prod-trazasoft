@@ -196,7 +196,7 @@
 							<td class="botonera">
 									<button class="btn btn-link" title="Agregar no consumible" onclick="switchPane()"><i class="fa fa-download text-info"></i></button>
 									<button class="btn btn-link" title="Eliminar registro" onclick="$(this).closest('tr').remove()"><i class="fa fa-trash text-danger"></i></button>
-									<button class="btn btn-success ver-mas" title="Ver más"><i class="fa fa-plus"></i></button>
+									<button class="btn btn-success ver-mas" title="Ver más" onclick="verMas(this)"><i class="fa fa-plus"></i></button>
 							</td>
 					</tr>
 					<tr style="display: none" class="info-extra"></tr>
@@ -354,7 +354,7 @@
 
 		var productos = [];
 
-		$tblRep.find('tr').each(function() {
+		$tblRep.find('tr.cabecera').each(function() {
 
 			var json = getJson2(this);
 			
@@ -533,10 +533,8 @@ function agregarNocoEscaneado(data) {
 	`)
 	$('#codigoNoCoEscaneado').val('');
 }
-$(document).ready(function () {
-	//Despliega fila de info extra -->NOTA: se crea una abajo de cada registro
-	$(document).on('click','.ver-mas' ,function(){
-		$(this).parent().parent().next('.info-extra').toggle();
-	});
-});
+//Despliega fila de info extra -->NOTA: se crea una abajo de cada registro
+function verMas(tag){
+	$(tag).parent().parent().next('.info-extra').toggle();
+}
 </script>

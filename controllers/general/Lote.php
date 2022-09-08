@@ -112,4 +112,25 @@ class Lote extends CI_Controller
 
     } else echo "¡Batch no encontrado! Intente nuevamente.";
   }
+  /**
+	* Recibe como parametro un batch_id y devuelve la cantidad de reportes de produccion generados para ese batch_id
+	* @param integer
+	* @return array listado de choferes coincidentes
+	*/
+  function validarCantidadReportes(){
+    log_message("DEBUG", "#TRAZA | TRAZ-PROD-TRAZASOFT | Lote | validarCantidadReportes()");
+    $batch_id = $this->input->post('batch_id');
+    $rsp = $this->Lotes->validarCantidadReportes($batch_id);
+    echo json_encode($rsp);
+  }
+  /**
+    * Verifica si se realizo una entrega de materiales para el lote enviado
+    * @param integer batch_id
+    * @return bool respuesta del servicio
+	*/
+  public function verificaEntregaMateriales($batch_id){
+    log_message('DEBUG','#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapa | verificaEntregaMateriales($id) ');
+    $rsp = $this->Lotes->verificaEntregaMateriales($batch_id);
+    echo json_encode($rsp);
+  }
 }

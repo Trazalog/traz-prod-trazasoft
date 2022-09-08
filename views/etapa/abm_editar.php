@@ -3,30 +3,19 @@
 <?php $this->load->view('etapa/modal_producto'); ?>
 <?php $this->load->view('etapa/modal_unificacion_lote'); ?>
 
-<script>
-function validarEtapa() {
-    if ($('#estado_etapa').val() != 'PLANIFICADO') {
-        //Inhabilitar la edicion del los formularios
-        $('#frm-etapa').find('.form-control').prop('disabled', true);
-    }
-}
-</script>
-
+<input class="hidden" type="text" id="verificaEntregaMateriales" value="<?php echo $etapa->realizo_entrega_materiales ?>">
 <input class="hidden" type="text" id="estado_etapa" value="<?php echo $etapa->estado ?>">
 <input class="hidden" type="text" id="accion" value="<?php echo $accion ?>">
 <?php if ($etapa->estado == "En Curso") {
         $this->load->view('etapa/modal_finalizar');
     } ?>
 <div id="snapshot" data-key="<?php echo $key ?>" id="frm-etapa">
-
     <!-- Cabecera -->
     <div class="box box-primary">
-
         <div class="box-header with-border">
             <h3 class="box-title">
-                <?php echo 'Gestionar' . ' ' . $etapa->titulo ?>
+                <?php echo 'Gestionar' . ' ' . $etapa->titulo . ($etapa->realizo_entrega_materiales == 'false' ? ' <i class="fa fa-edit"></i>' : '');?>
             </h3>
-            <!-- <button class="btn btn-success btn-xs pull-right" onclick="deleteSnapshot()">Limpiar Campos</button> -->
         </div>
         <!-- /.box-header -->
         <div class="box-body">
@@ -36,11 +25,8 @@ function validarEtapa() {
                     <label for="Lote" class="form-label">Código Lote:*</label>
                 </div>
                 <div class="col-md-5 col-xs-12">
-                    <input name="vcode" type="text" id="Lote" <?php if ($accion == 'Editar') {
-                        echo 'value="' . $etapa->lote . '"';
-                    } ?> class="form-control" placeholder="Inserte Lote" <?php if ($etapa->estado == 'En Curso' || $etapa->estado == 'FINALIZADO') {
-                                                                        echo 'disabled';
-                                                                    } ?>>
+                    <input name="vcode" type="text" id="Lote" <?php echo ($accion == 'Editar') ? 'value="' . $etapa->lote . '"' : '';?>
+                     class="form-control" placeholder="Inserte Lote" <?php echo (($etapa->estado == 'En Curso' && $etapa->realizo_entrega_materiales == 'true') || $etapa->estado == 'FINALIZADO') ? 'disabled' : ''; ?>>
                 </div>
                 <div class="col-md-1 col-xs-12">
                     <label for="fecha" class="form-label">Fecha:</label>
@@ -62,8 +48,7 @@ function validarEtapa() {
                 <div class="col-md-4 col-xs-12">
                     <select class="form-control select2 select2-hidden-accesible" name="vestablecimiento"
                         onchange="actualizaRecipiente(this.value,'recipientes')" id="establecimientos"
-                        <?php if ($etapa->estado == 'En Curso' || $etapa->estado == 'FINALIZADO') {                                                                                                                                                            echo 'disabled';
-                                                                                                                                                                                            } ?>>
+                        <?php if (($etapa->estado == 'En Curso' && $etapa->realizo_entrega_materiales == 'true') || $etapa->estado == 'FINALIZADO') {echo 'disabled';} ?>>
                         <option value="" disabled selected>-Seleccione Establecimiento-</option>
                         <?php
                         foreach ($establecimientos as $fila) {
@@ -101,14 +86,9 @@ function validarEtapa() {
                     <label for="op" class="form-label">Orden de Producción:</label>
                 </div>
                 <div class="col-md-4 col-xs-12">
-
-
                     <input type="text" id="ordenproduccion" class="form-control" name="vorden" <?php if ($accion == 'Editar' || $etapa->estado == 'PLANIFICADO') {
                         echo ('value="' . $etapa->orden . '"');
-                    } ?> placeholder="Inserte Orden de Produccion"
-                        <?php if ($etapa->estado == 'En Curso' || $etapa->estado == 'FINALIZADO') {
-                                                                                                                                                    echo 'disabled';
-                                                                                                                                                } ?>>
+                    } ?> placeholder="Inserte Orden de Produccion" <?php if (($etapa->estado == 'En Curso' && $etapa->realizo_entrega_materiales == 'true') || $etapa->estado == 'FINALIZADO') {echo 'disabled';} ?>>
                 </div>
                 <?php
                 if ($accion == 'Editar') {
@@ -142,47 +122,30 @@ function validarEtapa() {
             <?php $this->load->view('etapa/comp/producto') ?>
         </div>
     </div>
-
-
     <!-- Tareas -->
-        
-            <tareas>
-                <script>
-                    $('tareas').load('<?php echo base_url(TST) ?>Tarea/planificar/BATCH/' + $('#batch_id').val());
-                </script>
-            </tareas>
-
-
-        <div class="box box-primary">
-     
+    <tareas>
+        <script>
+            $('tareas').load('<?php echo base_url(TST) ?>Tarea/planificar/BATCH/' + $('#batch_id').val());
+        </script>
+    </tareas>
+    <!-- FIN TAREAS -->
+    <div class="box box-primary">
         <div class="box-body">
-
-                        <!-- /.box-body -->
-                        <div class="modal-footer">
-         
-
-                            <?php 
-
-                            if($etapa->estado != 'FINALIZADO'){
-
-                                if ($etapa->estado == 'En Curso') {
-                                    
-                                    echo '<button class="btn btn-primary" id="btnfinalizar" onclick="finalizar()">Reporte de Producción</button>';
-                                                 
-                                    $this->load->view('etapa/btn_finalizar_etapa');
-                
-                                } else {
-                                    
-                                    echo "<button class='btn btn-primary' onclick='guardar(\"iniciar\")'>Iniciar Etapa</button>";
-                                    echo "<button class='btn btn-primary' onclick='guardar(" . '"guardar"' . ")'>Guardar</button>";
-                                }
-                            }
-
-                            
-                            ?>
-                            <button class="btn btn-default" onclick="back()">Cerrar</button>
-                        </div>
-                  
+            <!-- /.box-body -->
+            <div class="modal-footer">
+                <?php
+                    if($etapa->estado != 'FINALIZADO'){
+                        if ($etapa->estado == 'En Curso') {
+                            echo '<button class="btn btn-primary" id="btnfinalizar" onclick="finalizar()">Reporte de Producción</button>';         
+                            $this->load->view('etapa/btn_finalizar_etapa');
+                        }else{
+                            echo "<button class='btn btn-primary' onclick='guardar(\"iniciar\")'>Iniciar Etapa</button>";
+                            echo "<button class='btn btn-primary' onclick='guardar(" . '"guardar"' . ")'>Guardar</button>";
+                        }
+                    }
+                ?>
+                <button class="btn btn-default" onclick="back()">Cerrar</button>
+            </div>
         </div>
         <!-- /.box -->
     </div>
@@ -215,16 +178,12 @@ function actualizaRecipiente(establecimiento, recipientes) {
         success: function(result) {
 
             if (!result.status) {
-                alert('Fallo al Traer Recipientes');
+                error('Error','Fallo al traer los recipientes');
                 return;
             }
 
             if (!result.data) {
-                Swal.fire(
-        'Error',
-        'No hay Recipientes Asociados.',
-        'error'
-      );
+                error('Error','No hay Recipientes Asociados.');
                 return;
             }
             fillSelect('#recipientes', result.data);
@@ -232,7 +191,7 @@ function actualizaRecipiente(establecimiento, recipientes) {
             if (reci_id) {
                 $('#recipientes').val(reci_id);
                 $('#recipientes').trigger('change');
-                if ($('#estado_etapa').val() != 'PLANIFICADO') {
+                if ($('#estado_etapa').val() == 'FINALIZADO' || ($('#estado_etapa').val() == 'En Curso' && $('#verificaEntregaMateriales').val() == 'true')) {
                     //Inhabilitar la edicion del los formularios
                     $('#recipientes').prop('disabled', true);
                 }
@@ -240,7 +199,7 @@ function actualizaRecipiente(establecimiento, recipientes) {
 
         },
         error: function() {
-            alert('Error al Traer Recipientes');
+            error('Error','Fallo al traer los recipientes');
         },
         complete: function() {
             wc();
@@ -356,17 +315,11 @@ function guardar(boton) {
             data
         },
         success: function(rsp) {
-            console.log(rsp);
             if (rsp.status) {
-                Swal.fire(
-        'Hecho',
-        'Salida Guardada exitosamente.',
-        'success'
-      );
-               linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
+                hecho('Hecho','Salida Guardada exitosamente.');
+                linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
             } else {
                 if (rsp.msj) {
-                  
                     bak_data = data;
                     getContenidoRecipiente(recipiente);
                 } else {
