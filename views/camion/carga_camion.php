@@ -109,7 +109,7 @@
                 <div class="row">
                     <div class="col-md-2 col-xs-12"><label class="form-label">Cantidad*</label></div>
                     <div class="col-md-8 col-xs-12"><input class="form-control" type="number"
-                            placeholder="Inserte Cantidad" id="cantidadcarga"></div>
+                            placeholder="Ingrese cantidad" id="cantidadcarga"></div>
                     <div class="col-md-2"></div>
                 </div>
             </div>
@@ -117,7 +117,7 @@
         <div class="row" style="margin-top: 20px">
             <div class="col-xs-3"></div>
             <div class="col-xs-6"><button class="btn btn-block btn-primary" type="button"
-                    onclick="Cargar();">Cargar Camión<?php #echo $lang["CargarCamion"];?></button></div>
+                    onclick="Cargar();">Cargar camión<?php #echo $lang["CargarCamion"];?></button></div>
             <div class="col-xs-3"></div>
         </div>
     </div>
@@ -160,7 +160,7 @@ function Actualiza(establecimiento) {
            document.getElementById('camiones').innerHTML = "";
            if(!result) return;
             var html = "";
-            html = html + '<option value="" disabled selected>-Seleccione Camion-</option>';
+            html = html + '<option value="" disabled selected>-Seleccione camión -</option>';
             for (var i = 0; i < result.length; i++) {
                 html = html + "<option data-json= '" + JSON.stringify(result[i]) + "'value='" + result[i].id + "'>" + result[i].patente + "</option>";
             }
@@ -211,7 +211,7 @@ function ActualizaLotes() {
        
 
            if(!result.status){
-               error('Error','Fallo la Obtencion de Lotes Asociados');
+               error('Error','Fallo la obtención de lotes asociados');
                return;
            }
 
@@ -219,7 +219,7 @@ function ActualizaLotes() {
  
         },
         error:function(){
-            error('Error','Error al Obtener Lotes Asociados al Establecimiento');
+            error('Error','Error al obtener lotes asociados al establecimiento');
         },
         complete: function(){
             wc();
@@ -249,15 +249,15 @@ function Cargar() {
     msj = "";
     if (document.getElementById('establecimientos').value == "") {
         ban = false;
-        msj += "- No Ha ingresado establecimiento \n";
+        msj += "- No ha ingresado establecimiento \n";
     }
     if (document.getElementById('camiones').value == "") {
         ban = false;
-        msj += "- No Ha Seleccionado Camion \n";
+        msj += "- No ha seleccionado camión \n";
     }
     if (document.getElementById('inputlotes').value == "") {
         ban = false;
-        msj += "- No Ha Seleccionado lote \n";
+        msj += "- No ha seleccionado lote \n";
     } else {
         carga = JSON.parse($('#inputlotes').attr('data-json'));
         console.log(carga);
@@ -266,7 +266,7 @@ function Cargar() {
         
         if (document.getElementById('cantidadcarga').value == "" || cantidad > carga.stock) {
             ban = false;
-            msj += "- No Ha Cargado la cantidad o la cantidad es superior al stock \n";
+            msj += "- No ha cargado la cantidad o dicha cantidad es superior al stock \n";
         }
     }
     if (!ban) {
@@ -416,7 +416,7 @@ function FinalizarCarga() {
 
                 }
                 else{
-                    error('Error','No se puedo Registrar Carga');
+                    error('Error','No se puedo registrar carga');
                 }
 
                 return;
@@ -429,7 +429,7 @@ function FinalizarCarga() {
                 }
 
             },error: function(rsp){
-                error('Error','Error al Guardar Cargar');
+                error('Error','Error al guardar carga');
             },complete: function(){
                 wc();
             }
