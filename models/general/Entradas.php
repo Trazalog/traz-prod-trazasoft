@@ -5,18 +5,29 @@ class Entradas extends CI_Model
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('general/Recipientes');
     }
-
+    /**
+		* Inserta en la tabla de prd.movimientos_transporte el camion
+		* @param array datos del movimiento
+		* @return array con respuesta del servicio
+    */	
     public function guardar($data)
     {
         if($this->validarCamion($data['patente'])){  
-            return array('status'=>false, 'msj'=>'El Camion ya se encuentra en el establecimiento');
+            return array('status'=>false, 'msj'=>'El camión ya se encuentra en curso en el establecimiento');
+        }
+        if($this->validarCamionCargado($data['patente'])){  
+            return array('status'=>false, 'msj'=>'El camión ya se encuentra cargado en el establecimiento');
         }
 
-        $data['proveedor'] = strval(PROVEEDOR_INTERNO);
         $data['empr_id'] = strval(empresa());
+
+        if(!isset($data['proveedor']) || $data['proveedor'] == ""){
+            $data['proveedor'] = strval(PROVEEDOR_INTERNO);
+        }
+
         log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | Entradas | guardar() | #DATA-POST: ' . json_encode($data));
+
         $url = REST_LOG . '/entradas';
         $rsp = $this->rest->callApi('POST', $url, ['post_entradas' => $data]);
         return $rsp;
@@ -26,7 +37,7 @@ class Entradas extends CI_Model
     {
         log_message('DEBUG',"#TRAZA | #TRAZ-PROD-TRAZASOFT | MÉTODO: ".__METHOD__."| PANTENTE: $patente | ESTADO: $estado");
 
-        $res = wso2(REST_LOG. "/camiones/$patente")['data'];
+        $res = wso2(REST_LOG. "/camiones/$patente/".empresa())['data'];
         if($res){
             foreach($res as $o) {
                 
@@ -36,4 +47,20 @@ class Entradas extends CI_Model
         }
         return false;
     }
+
+    public function validarCamionCargado($patente, $estado = 'CARGADO')
+    {
+        log_message('DEBUG',"#TRAZA | #TRAZ-PROD-TRAZASOFT | MÉTODO: ".__METHOD__."| PANTENTE: $patente | ESTADO: $estado");
+
+        $res = wso2(REST_LOG. "/camiones/$patente/".empresa())['data'];
+        if($res){
+            foreach($res as $o) {
+                
+                if($o->estado == $estado) return true;
+
+            }
+        }
+        return false;
+    }
+
 }

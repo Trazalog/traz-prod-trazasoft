@@ -17,9 +17,8 @@
 </div>
 <!-- /// ----- HEADER -----/// -->
 
-<!---///--- BOX 1 NUEVO ---///----->
+<!---///--- BOX 1 NUEVA ETAPA PRODUCTIVA ---///----->
 <div class="box box-primary animated bounceInDown" id="boxDatos" name="Content-Type"  scope="transport" hidden>
-<!-- <header name="Content-Type"  scope="transport" action="remove"/> -->
   <div class="box-header with-border">
     <div class="box-tittle">
       <h4>Nueva Etapa Productiva</h4>
@@ -108,12 +107,12 @@
   <!--_________________ GUARDAR_________________-->
   <div class="modal-footer">
     <div class="form-group text-right">
-      <button type="button" class="btn btn-primary" onclick="guardar('nueva')" >Guardar</button>
+      <button type="button" class="btn btn-primary" onclick="guardar()" >Guardar</button>
     </div>                
   </div>
   <!--__________________________________-->
 </div>
-<!---///--- FIN BOX NUEVO ---///----->
+<!---///--- FIN BOX NUEVA ETAPA PRODUCTIVA ---///----->
 
 <!---/////---BOX 2 DATATABLE ---/////----->
 <div class="box box-primary">
@@ -228,7 +227,7 @@
       </div>
       <div class="modal-footer">
         <div class="form-group text-right">
-          <button type="" class="btn btn-primary habilitar" data-dismiss="modal" id="btnsave_edit" onclick="guardar('editar')">Guardar</button>
+          <button type="" class="btn btn-primary habilitar" data-dismiss="modal" id="btnsave_edit" onclick="editarArticulo()">Guardar</button>
           <button type="button" class="btn btn-default cerrarModalEdit" data-dismiss="modal">Cerrar</button>
         </div>
       </div>
@@ -301,15 +300,19 @@
                   <!--_____________ Artículo _____________-->
                   <div class="form-group">
                       <label for="articulo_id" class="col-sm-4 control-label">Artículo:</label>
-                      <div class="col-sm-12 col-md-8 col-lg-8">
-                        <select style="width: 60%" class="form-control s2MdlAgregar select2-hidden-accesible habilitar requerido" name="arti_id" id="articulo_id">
-                          <option value="" disabled selected>-Seleccione opción-</option>	
+                      <div class="col-sm-12 col-md-8 col-lg-8 ba">
+                        <select style="width: 60%" class="form-control select2-hidden-accesible habilitar requerido" name="arti_id" id="articulo_id">
+                          <option value="" data-foo='' disabled selected>-Seleccione opción-</option>	
                           <?php
                             foreach ($listarArticulos as $articulo) {
-                              echo '<option  value="'.$articulo->arti_id.'">'.$articulo->descripcion.' - Stock: '.$articulo->stock.'</option>';
+                              echo "<option value='$articulo->arti_id' data-json='". json_encode($articulo) . "' data-foo='<small><cite>$articulo->descripcion</cite></small>  <label>♦ </label>   <small><cite>$articulo->stock</cite></small>  <label>♦ </label>' >$articulo->barcode</option>";
                             }
-                          ?>
+                            ?>
                         </select>
+                        <?php 
+                          echo "<label id='detalle' class='select-detalle' class='text-blue'></label>";
+                          echo "<script>$('#articulo_id').select2({matcher: matchCustom,templateResult: formatCustom, dropdownParent: $('#modalAgregarArticulo')}).on('change', function() { selectEvent(this);})</script>";
+                        ?>
                       </div>
                     </div>
                   <!--__________________________-->   
@@ -351,7 +354,8 @@
   // carga tabla genaral de circuitos
   $("#cargar_tabla").load("<?php echo base_url(PRD); ?>/general/Etapa/listarEtapas");
   // Config Tabla
-  DataTable($('#tabla_articulos'));
+  // tablaArticulos = $("#tabla_articulos").DataTable();
+  // tablaArticulos.clear().draw();
 
   // muestra box de datos al dar click en boton agregar
   $("#botonAgregar").on("click", function() {
@@ -398,26 +402,83 @@
   }
 
   // Da de alta una herramienta nueva en pañol
-  function guardar(operacion){
+  function guardar(){
     var recurso = "";
-    if (operacion == "editar") {
-      if( !validarCampos('formEdicion') ){
-        return;
-      }
-      var form = $('#formEdicion')[0];
-      var datos = new FormData(form);
-      var datos = formToObject(datos);
-      recurso = 'index.php/<?php echo PRD ?>general/Etapa/editarEtapa';
-    } else {
-      if( !validarCampos('formEtapas') ){
-        return;
-      }
-      var form = $('#formEtapas')[0];
-      var datos = new FormData(form);
-      var datos = formToObject(datos);
-      recurso = 'index.php/<?php echo PRD ?>general/Etapa/guardarEtapa';
+    if( !validarCampos('formEtapas') ){
+      return;
     }
+    var form = $('#formEtapas')[0];
+    var datos = new FormData(form);
+    var datos = formToObject(datos);
+
+    nombre_nuevo = datos.nombre.replace(/ /g, "_");
+    datos['nombre']  = nombre_nuevo;
+
+    recurso = 'index.php/<?php  echo PRD ?>general/Etapa/guardarEtapa';
+    
     wo();
+    validarEtapa(datos).then((result) => {
+     // if(!result){
+        if(result=="false"){
+        $.ajax({
+          type: 'POST',
+          data:{ datos },
+          //dataType: 'JSON',
+          url: recurso,
+          success: function(result) {
+            $("#cargar_tabla").load("<?php echo base_url(PRD); ?>general/Etapa/listarEtapas");
+            wc();
+            $("#boxDatos").hide(500);
+            $("#formEtapas")[0].reset();
+            $("#botonAgregar").removeAttr("disabled");
+            if (operacion == "editar") {
+              alertify.success("Etapa editada exitosamente");
+            }else{
+              alertify.success("Etapa agregada con éxito");
+            }
+          },
+          error: function(result){
+            wc();
+            alertify.error("Error agregando Etapa");
+          }
+        });
+      }else{
+        error("Error","La etapa productiva ingresada ya se encuentra creada para este proceso!");
+      }
+    }).catch((err) => {
+      if(err){
+        console.log(err);
+        error("Error","Se produjo un error al validar el nombre de la Etapa");
+      }
+    });
+  }
+  async function validarEtapa(datos){
+    let validacion = new Promise((resolve, reject) => {
+      $.ajax({
+        type: 'POST',
+        data:{ datos },
+        dataType: 'JSON',
+        url: "<?php echo PRD ?>general/Etapa/validarEtapa",
+        success: function(rsp) {
+          resolve(rsp.existe);
+        },
+        error: function(rsp){
+          reject(rsp.existe);
+        },
+        complete: function(){
+          wc();
+        }
+      });
+    });
+    return await validacion;
+  }
+  function editarArticulo(){
+    if( !validarCampos('formEdicion') ) return;
+    wo();
+    var form = $('#formEdicion')[0];
+    var datos = new FormData(form);
+    var datos = formToObject(datos);
+    recurso = 'index.php/<?php echo PRD ?>general/Etapa/editarEtapa';
     $.ajax({
       type: 'POST',
       data:{ datos },
@@ -429,15 +490,11 @@
         $("#boxDatos").hide(500);
         $("#formEtapas")[0].reset();
         $("#botonAgregar").removeAttr("disabled");
-        if (operacion == "editar") {
-          alertify.success("Etapa Editada Exitosamente");
-        }else{
-          alertify.success("Etapa Agregada con Exito");
-        }
+        hecho('',"Etapa editada exitosamente");
       },
       error: function(result){
         wc();
-        alertify.error("Error agregando Etapa");
+        error('',"Error agregando Etapa");
       }
     });
   }
@@ -479,7 +536,9 @@
           alertify.success("Artículo agregado con éxito");
         }, 3000);
         $("#modalAgregarArticulo").hide(500);
-        // form.reset();
+        $('#articulo_id').val(null).trigger('change');
+        $('#detalle').html('');
+        $('#tipo_id').val(null).trigger('change');
       },
       error: function(result){
         wc();
@@ -492,10 +551,11 @@
     var data = JSON.parse($(e).closest('tr').attr('data-json'));
     var arti_id = data.arti_id;
     var tipo = data.tipo;
-    // var etap_id = data.etap_id;
-    $('#arti_id').val(data.arti_id);
-    $('#tipo').val(data.tipo);
+    
+    $('#arti_id').val(arti_id);
+    $('#tipo').val(tipo);
     var etap_id = $("#id_etap").val();
+
     // var etap_id = $("#etapa_id").val();
     $("#id_etapa_borrar").val(etap_id);
 

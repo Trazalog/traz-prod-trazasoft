@@ -3,32 +3,26 @@
 			width: 50px;
 			height: 50px;
 	}
-
 	.finca {
 			background-color: #9DC3E6;
 			border-radius: 2%;
 	}
-
 	.seleccion {
 			background-color: #F4B183;
 			border-radius: 2%;
 	}
-
 	.preclasificado {
 			background-color: #C7E1AF;
 			border-radius: 2%;
 	}
-
 	.pelado {
 			background-color: #FEDB4C;
 			border-radius: 2%;
 	}
-
 	.fraccionamiento {
 			background-color: #90A9E1;
 			border-radius: 2%;
 	}
-
 	.profileImage {
 			width: 80px;
 			height: 80px;
@@ -39,9 +33,16 @@
 			line-height: 75px;
 			/* margin: 20px 0; */
 	}
-
 	.mt{
 			margin-top: 25px
+	}
+	.botonera button{
+		font-size: 20px;
+	}
+	.botonera button.ver-mas{
+		font-size: 12px !important;
+		border-radius: 20px;
+		margin-left: 5px;
 	}
 </style>
 
@@ -65,6 +66,7 @@
 												echo "<td width='80px'><div class='profileImage ". strtolower($o->titulo)."'>". substr($o->titulo,0,($o->titulo == 'Fraccionamiento' || $o->titulo == "Preclasificado"?2:1)) ."</div></td>";
 												echo "<td class='". strtolower($o->titulo)."'>";
 												echo "<b>LOTE:</b> $o->lote<br>";
+												echo "<b>ETAPA:</b> $o->titulo<br>";
 												echo "<b>ESTABLECIMIENTO:</b> <cite>$o->establecimiento</cite><br>";
 												echo "<b>FECHA:</b> ".formatFechaPG($o->fecha);
 												echo "</td>";
@@ -191,12 +193,15 @@
 			var art = getJson('#inputproducto');
 			var destino = getJson('#productodestino');
 			$tblRep.append(
-					`<tr id="${$tblRep.find('tr').length + 1}" class='data-json batch-${s_batchId}' data-json='${JSON.stringify(data)}' data-forzar='false'><td><b>Operario:</b> ${$('#operario option:selected').text()}<br><b>Artículo:</b> ${art.barcode} x ${data.cantidad}(${art.um})</td><td>${destino.nombre}</td>
-							<td>
-									<button class="btn btn-link" title="Agrear no consumible" onclick="switchPane()"><i class="fa fa-plus text-info"></i></button>
-									<button class="btn btn-link" onclick="$(this).closest('tr').remove()"><i class="fa fa-times text-danger"></i></button>
+					`<tr id="${$tblRep.find('tr').length + 1}" class='data-json batch-${s_batchId} cabecera' data-json='${JSON.stringify(data)}' data-forzar='false'><td><b>Operario:</b> ${$('#operario option:selected').text()}<br><b>Artículo:</b> ${art.barcode} x ${data.cantidad}(${art.um})</td><td>${destino.nombre}</td>
+							<td class="botonera">
+									<button class="btn btn-link" title="Agregar no consumible" onclick="switchPane()"><i class="fa fa-download text-info"></i></button>
+									<button class="btn btn-link" title="Eliminar registro" onclick="$(this).closest('tr').remove()"><i class="fa fa-trash text-danger"></i></button>
+									<button class="btn btn-success ver-mas" title="Ver más" onclick="verMas(this)"><i class="fa fa-plus"></i></button>
 							</td>
-					</tr>`
+					</tr>
+					<tr style="display: none" class="info-extra"></tr>
+					`
 			);
 			$('#frm-etapa').find('.form-control:not(#codigo_lote)').val('');
 			$('.select2').trigger('change');
@@ -279,7 +284,7 @@
 							<!-- Modal footer -->
 							<div class="modal-footer">
 									<button type="button" class="btn" data-dismiss="modal">Cerrar</button>
-									<button type="button" class="btn btn-primary" onclick="FinalizarEtapa()">Guardar Reporte</button>
+									<button type="button" class="btn btn-primary" onclick="FinalizarEtapa()">Guardar</button>
 									<!-- <button type="button" class='btn btn-success' onclick='conf(btnFinalizar)'>Finalizar Etapa</button> -->
 							</div>
 					</div>
@@ -294,38 +299,35 @@
 							</div>
 							<!-- Modal body -->
 							<div class="modal-body">
-									<div class="row">
-											<div class="col-md-8">
-													<div class="form-group">
-															<label>Selecionar:</label>
-															<?php  echo componente('pnl-noco', base_url(PRD.'general/etapa/obtenerNoConsumibles')) ?>
-													</div>
-											</div>
-											<div class="col-md-4">
-													<button class="btn btn-success mt" onclick="agregarNoco(getJson('#noco_id'))">
-															<i class="fa fa-plus"></i>
-													</button>
-											</div>
-											<div class="col-md-12">
-													<table id="tbl-noco" class="table table-hover table-striped">
-															<thead>
-																	<td>Código</td>
-																	<td>Descripción</td>
-																	<td></td>
-															</thead>
-															<tbody>
-
-															</tbody>
-															<tfoot class="text-center">
-																	<tr>
-																			<td colspan="3">
-																					Tabla vacía
-																			</td>
-																	</tr>
-															</tfoot>
-													</table>
-											</div>
+								<div class="row">
+									<div class="col-md-12 form-group">
+										<label>Escanear No Consumible</label>
+										<div class="input-group">
+											<input id="codigoNoCoEscaneado" class="form-control" placeholder="Busque Código..." autocomplete="off" onchange="consultarNoCo()">
+											<span class="input-group-btn">
+												<button class="btn btn-primary" style="cursor:not-allowed">
+													<i class="glyphicon glyphicon-search"></i>
+												</button>
+											</span>
+										</div>
 									</div>
+									<div class="col-md-12">
+										<table id="tbl-noco" class="table table-hover table-striped">
+											<thead>
+												<td>Código</td>
+												<td>Descripción</td>
+												<td></td>
+											</thead>
+											<tbody>
+											</tbody>
+											<tfoot class="text-center">
+												<tr>
+													<td colspan="3">Tabla vacía</td>
+												</tr>
+											</tfoot>
+										</table>
+									</div>
+								</div>
 							</div>
 							<!-- Modal footer -->
 							<div class="modal-footer">
@@ -353,7 +355,7 @@
 
 		var productos = [];
 
-		$tblRep.find('tr').each(function() {
+		$tblRep.find('tr.cabecera').each(function() {
 
 			var json = getJson2(this);
 			
@@ -417,32 +419,21 @@
 			}
 		});
 	}
-	// Agrega los NOcons a tabla en modal asignar
-	function agregarNoco(e) {
-			if(!e){
-					alert('Seleccionar un No Consumible antes de agregar a la lista');
-					return;
-			}
-			$('#tbl-noco tfoot').hide();
-			if ($('#tbl-noco tbody').find(`.${e.codigo}`).length > 0) {
-					alert('El item a agregar ya se encuentra en la lista');
-					return;
-			}
-			$('#tbl-noco tbody').append(`
-					<tr class='${e.codigo}' data-json='${JSON.stringify(e)}'>
-							<td>${e.codigo}</td>
-							<td>${e.descripcion}</td>
-							<td><button class="btn btn-link" onclick="$(this).closest('tr').remove()"><i class="fa fa-times text-danger"></i></button></td>
-					</tr>
-			`)
-			$('#noco_id').val('');
-	}
 	//
 	function asociarNocos() {
 			var data = [];
+			$(`.batch-${s_batchId}`).next(`.info-extra`).text('');// Limpio la info extra antes de agregar
+			infoFila = '<td><label>No consumibles asociados:</label><ul>';
+			// $(`.batch-${s_batchId}`).next(`.info-extra`).append('<td><label>No consumibles asociados:</label><ul>');
+
 			$('#tbl-noco tbody  tr').each(function(){
-					data.push(getJson(this).codigo);
+				dataNoCo = getJson(this);
+				data.push(dataNoCo.codigo);
+				infoFila += `<li>${dataNoCo.codigo} : ${dataNoCo.descripcion}</li>`;
 			});
+			infoFila += '</ul></td><td></td><td></td>';
+			$(`.batch-${s_batchId}`).next(`.info-extra`).html(infoFila);
+
 			setAttr($(`.batch-${s_batchId}`), 'nocos', data);
 			//resetNoco();
 			switchPane();
@@ -455,13 +446,14 @@
 	}
 	// Alterna entre modales
 	function switchPane(){
-			if($('#pnl-1').hasClass('hidden')){
-					$('#pnl-1').removeClass('hidden');
-					$('#pnl-2').addClass('hidden');
-			}else{
-					$('#pnl-2').removeClass('hidden');
-					$('#pnl-1').addClass('hidden');
-			}
+		$('#tbl-reportes .ver-mas').toggle();// oculta info extra
+		if($('#pnl-1').hasClass('hidden')){
+				$('#pnl-1').removeClass('hidden');
+				$('#pnl-2').addClass('hidden');
+		}else{
+				$('#pnl-2').removeClass('hidden');
+				$('#pnl-1').addClass('hidden');
+		}
 	}
 
 	// Funcion que no se usa en esta pantalla
@@ -490,4 +482,60 @@
 		});
 	}
 
+// consulta la información de No Consum por código
+function consultarNoCo(){
+
+	wo('Buscando Informacion');
+	var codigo = $("#codigoNoCoEscaneado").val();
+
+	$.ajax({
+		type: 'POST',
+		dataType:'json',
+		data:{codigo: codigo },
+		url: '<?php echo base_url(PRD) ?>general/Noconsumible/consultarInfo',
+		success: function(result) {
+			wc();
+			if(!$.isEmptyObject(result)){
+				if(result.estado != 'ALTA'){
+					agregarNocoEscaneado(result);
+				}else{
+					error('Error','El no consumible se encuentra inhabilitado!');
+				}
+			}else{
+				alertify.error('El recipiente escaneado no se encuentra cargado...');
+			}
+		},
+		error: function(result){
+			wc();
+		},
+		complete: function(){
+			$('#codigoNoCoEscaneado').val('');
+			wc();
+		}
+	});
+}
+// Agrega el NoCo escaneado a la tabla
+function agregarNocoEscaneado(data) {
+	$('#tbl-noco tfoot').hide();
+	if ($('#tbl-noco tbody').find(`.${data.codigo}`).length > 0) {
+		Swal.fire(
+			'Alerta',
+			' El no consumible ya se encuentra en la lista',
+			'warning'
+		)
+		return;
+	}
+	$('#tbl-noco tbody').append(`
+		<tr class='${data.codigo}' data-json='${JSON.stringify(data)}'>
+			<td>${data.codigo}</td>
+			<td>${data.descripcion}</td>
+			<td><button class="btn btn-link" onclick="$(this).closest('tr').remove()"><i class="fa fa-times text-danger"></i></button></td>
+		</tr>
+	`)
+	$('#codigoNoCoEscaneado').val('');
+}
+//Despliega fila de info extra -->NOTA: se crea una abajo de cada registro
+function verMas(tag){
+	$(tag).parent().parent().next('.info-extra').toggle();
+}
 </script>

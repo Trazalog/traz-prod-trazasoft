@@ -20,7 +20,7 @@ if (!function_exists('info_header')) {
 }
 
 if (!function_exists('selectBusquedaAvanzada')) {
-    function selectBusquedaAvanzada($id, $name = false, $list = false, $value = false, $label = false, $descripcion = false, $button = false)
+    function selectBusquedaAvanzada($id, $name = false, $list = false, $value = false, $label = false, $descripcion = false, $button = false,$onChange = false)
     {
         #Convertir Datos a Arreglo
         $list = json_decode(json_encode($list), true);
@@ -38,7 +38,7 @@ if (!function_exists('selectBusquedaAvanzada')) {
 
                         foreach ($descripcion as $i => $e) {
                             $o[$e] = $o[$e] ? "\"$o[$e]\"" : ' - ';
-                            $aux .= '<small class"text-blue"><cite>' . (is_numeric($i) ? $o[$e] : sprintf("$i %s", $o[$e])) . '</cite></small>  <label class="text-blue">♦ </label>   ';
+                            $aux .= '<small><cite>' . (is_numeric($i) ? $o[$e] : sprintf("$i %s", $o[$e])) . '</cite></small>  <label class="text-blue">♦ </label>   ';
                         }
 
                     } else {
@@ -52,7 +52,7 @@ if (!function_exists('selectBusquedaAvanzada')) {
         # Si solo pide las opciones retorna $OPT
         if(!$id) return $opt;
 
-        $html .= "<select class='form-control select2' style='width: 100%;' id='$id' name='$name' data-json=''>$opt</select>";
+        $html = "<select class='form-control select2' style='width: 100%;' id='$id' name='$name' data-json='' ". ($onChange ? "onchange='$onChange'" : '' ) .">$opt</select>";
 
         # Boton de Busqueda avanzada
         if ($button) {
@@ -75,7 +75,7 @@ function selectFromCore($name, $placeholder, $tabla, $req = false)
     foreach ($rsp['data'] as $o) {
         $opt .= "<option value='$o->valor'>$o->descripcion</option>";
     }
-    return "<select id='$name' name='$name' class='form-control frm-select' style='width: 100%;' ".($req?req():'')."><option value='0' disabled selected> - $placeholder - </option>$opt</select>";   
+    return "<select id='$name' name='$name' class='form-control frm-select' style='width: 100%;' ".($req?req():'')."><option value='' disabled selected> - $placeholder - </option>$opt</select>";   
 }
 
 function selectFromFont($name, $placeholder, $url, $mapValues, $req = false)
@@ -92,4 +92,20 @@ function selectFromFont($name, $placeholder, $url, $mapValues, $req = false)
 function componente($id, $url, $load = false)
 {
     return "<componente id='$id' class='reload' data-link='$url'>".($load?"<script>reload('#$id')</script>":'')."</componente>";
+}
+
+/**
+* Genera select de la tabla core.tablas por empresa
+* @param  $name es el ID y name; $placeholder ; $tabla campo tabla coincidente; $req si es obligatorio o no
+* @return array listado con productos
+*/
+function selectFromCoreEmpresa($name, $placeholder, $tabla, $req = false)
+{
+    $url = REST_CORE."/tabla/$tabla/empresa/".empresa();
+    $rsp = wso2($url);
+    $opt = '';
+    foreach ($rsp['data'] as $o) {
+        $opt .= "<option value='$o->valor'>$o->descripcion</option>";
+    }
+    return "<select id='$name' name='$name' class='form-control frm-select' style='width: 100%;' ".($req?req():'')."><option value='0' disabled selected> - $placeholder - </option>$opt</select>";   
 }

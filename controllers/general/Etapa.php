@@ -16,7 +16,15 @@ class Etapa extends CI_Controller
         #$this->load->model(TAREAS_ASIGNAR . '/Recursos_Materiales');
         $this->load->model('general/Recursos');
         $this->load->model('general/Procesos');
+        $this->load->model('general/Lotes');
         $this->load->model(FRM . 'Forms');
+
+        // si esta vencida la sesion redirige al login
+		$data = $this->session->userdata();
+		if(!$data['email']){
+			log_message('DEBUG','#TRAZA|DASH|CONSTRUCT|ERROR  >> Sesion Expirada!!!');
+			redirect(DNATO.'main/login');
+		}
     }
 
     // Muestra listado de etapas
@@ -26,20 +34,26 @@ class Etapa extends CI_Controller
         $temp = $this->Etapas->listarEtapas()->etapas->etapa;
         //reforma las url segun id
         foreach ($temp as $value) {
-            if ($value->id == 5) {
-                $urlComp = $value->link . 'fraccionar';
+            if ($value->tiet_id == 'prd_tipos_etapaFraccionamiento') {
+                $urlComp = 'general/Etapa/fraccionar?op=' . $value->id;;
                 $value->link = $urlComp;
             } else {
-                $urlComp = $value->link . 'nuevo?op=' . $value->id;
+                $urlComp = 'general/Etapa/nuevo?op=' . $value->id;
                 $value->link = $urlComp;
             }
         }
         $data['etapas'] = $temp;
         $this->load->view('etapa/list', $data);
     }
-    // Llama a etapas para una nueva Etapa
+    /**
+        * Llama a etapas para una nueva Etapa
+        * @param integer $op opcion seleccionada
+        * @return view con $data para nueva Etapa segun opcion seleccionada
+	*/
     public function nuevo()
     {
+        log_message('DEBUG','#TRAZA | #TRAZ-PROD-TRAZASOFT | ETAPA | nuevo()');
+        
         $this->load->model(TST.'Tareas');
         $this->Tareas->eliminarTareasSinOrigen(empresa());
         #Snapshot
@@ -49,19 +63,14 @@ class Etapa extends CI_Controller
 
         $data['fecha'] = date('Y-m-d');
         $data['id'] = $this->input->get('op');
-        $data['etapa'] = $this->Etapas->nuevo($data['id'])->etapa; // listo llama a etapas/1
+        $data['etapa'] = $this->Etapas->nuevo($data['id'])->etapa;
         $data['idetapa'] = $data['etapa']->id;
         $data['accion'] = 'Nuevo';
         $data['op'] = $data['etapa']->titulo;
 
-        if ($data['op'] == 'Fraccionamiento') {
-            $this->fraccionar();
-            return;
-        }
-
         $this->load->model(ALM . 'Articulos');
         #$data['materias'] = $this->Articulos->obtenerXTipos(array('Proceso', 'Final', 'Materia Prima'));
-        $data['productos'] = $this->Articulos->obtenerXTipos(array('Proceso', 'Producto'));
+        // $data['productos'] = $this->Articulos->obtenerXTipos(array('Proceso', 'Producto'));
 
         #FORMULARIO GENERICO
         $data['form_id'] = $data['etapa']->form_id;
@@ -82,11 +91,11 @@ class Etapa extends CI_Controller
     // guarda el Inicio de una nueva etapa mas orden pedido y lanza pedido almac
     public function guardar($nuevo = null)
     {
-        log_message('DEBUG', 'ETAPA >> guardar | INICIO');
+        log_message('DEBUG', '#TRAZA | TRAZ-PROD-TRAZASOFT | ETAPA | guardar() | INICIO');
 
         $post_data = $this->input->post('data');
 
-        log_message('DEBUG', 'C#ETAPA > guardar | #DATA-POST: ' . json_encode($post_data));
+        log_message('DEBUG', '#TRAZA | TRAZ-PROD-TRAZASOFT | ETAPA | guardar() | #DATA-POST: ' . json_encode($post_data));
         //////////// PARA CREAR EL NUEVO BATCH ///////////////////
 
         $datosCab['arti_id'] = (string) $post_data['idprod'];
@@ -124,7 +133,7 @@ class Etapa extends CI_Controller
 
         $this->Etapas->asociarFormulario($batch_id, $post_data['info_id']);
 
-        log_message('DEBUG', 'ETAPA >> guardar | FIN');
+        log_message('DEBUG', '#TRAZA | TRAZ-PROD-TRAZASOFT | ETAPA | guardar() | FIN');
 
         $res = $this->guardarParte2($post_data, $datosCab, $batch_id);
         if (!$res) {
@@ -138,7 +147,7 @@ class Etapa extends CI_Controller
 
     public function guardarParte2($post_data, $datosCab, $batch_id)
     {
-        log_message('DEBUG', 'ETAPA >> guardarParte2 | INICIO');
+        log_message('DEBUG', '#TRAZA | TRAZ-PROD-TRAZASOFT | ETAPA | guardarParte2() | INICIO');
 
         // guardo recursos materiales (origen)
         $materia = $post_data['materia'];
@@ -148,7 +157,7 @@ class Etapa extends CI_Controller
         if ($datosCab['arti_id'] != "0") {
             $recu_id = $this->Etapas->getRecursoId($datosCab['arti_id']);
             if (!$recu_id) {
-                log_message('ERROR', 'ETAPA/guardarParte2 >> Error al traer ID Rercurso');
+                log_message('ERROR', '#TRAZA | TRAZ-PROD-TRAZASOFT | ETAPA | guardarParte2() >> Error al traer ID Rercurso');
                 return false;
             }
         }
@@ -191,7 +200,7 @@ class Etapa extends CI_Controller
     public function guardarParte3($post_data, $batch_id, $nuevo, $estado)
     {
 
-        log_message('DEBUG', 'ETAPA >> guardarParte3 | INICIO');
+        log_message('DEBUG', '#TRAZA | TRAZ-PROD-TRAZASOFT | ETAPA | guardarParte3() | INICIO');
 
         if (($batch_id == "BATCH_NO_CREADO") || ($batch_id == "RECI_NO_VACIO")) {
             log_message('ERROR', 'Error en creacion Batch. batch_id: >>' . $batch_id);
@@ -231,7 +240,7 @@ class Etapa extends CI_Controller
             $this->lanzarPedidoEtapa($pema_id);
         }
 
-        log_message('DEBUG', 'ETAPA >> guardarParte3 | FIN');
+        log_message('DEBUG', '#TRAZA | TRAZ-PROD-TRAZASOFT | ETAPA | guardarParte3() | FIN');
 
     }
 
@@ -301,24 +310,24 @@ class Etapa extends CI_Controller
     }
 
     // trae info para informe de Etapa (Todas y Fraccionar)
-    public function editar()
-    {
+    public function editar(){
+        log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapa | editar()');
         $id = $this->input->get('id'); // batch_id
 
         $data['tarea'] = $this->Etapas->validarPedidoMaterial($id);
 
         $this->load->model(ALM . 'Articulos');
-        $data['articulos'] = $this->Articulos->obtenerXTipos(array('Proceso', 'Final'));
+        #$data['articulos'] = $this->Articulos->obtenerXTipos(array('Proceso', 'Final'));
 
         $data['accion'] = 'Editar';
         $data['etapa'] = $this->Etapas->buscar($id)->etapa;
         $data['idetapa'] = $data['etapa']->id;
 
         #$data['materias'] = $this->Articulos->obtenerXTipos(array('Proceso', 'Final', 'Materia Prima'));
-        $data['productos'] = $this->Articulos->obtenerXTipos(array('Proceso', 'Producto'));
+        // $data['productos'] = $this->Articulos->obtenerXTipos(array('Proceso', 'Producto'));
 
         // trae tablita de materia prima Origen y producto
-        $data['matPrimas'] = $this->Etapas->getRecursosOrigen($id, MATERIA_PRIMA)->recursos->recurso;
+         $data['matPrimas'] = $this->Etapas->getRecursosOrigen($id, MATERIA_PRIMA)->recursos->recurso;
 
         #Obtener Articulos por Etapa
         $data['productos_etapa'] = $this->Etapas->obtenerArticulos($data['etapa']->etap_id)['data'];
@@ -334,12 +343,12 @@ class Etapa extends CI_Controller
         $data['establecimientos'] = $this->Establecimientos->listar()->establecimientos->establecimiento;
         $data['fecha'] = $data['etapa']->fecha;
 
-        if ($data['op'] == 'Fraccionamiento') {
+        if ($data['etapa']->tiet_id == 'prd_tipos_etapaFraccionamiento') {
             // trae lotes segun entrega de materiales de almacen.(81)
             $data['recipientes'] = $this->Recipientes->obtener('DEPOSITO', 'TODOS', $data['etapa']->esta_id)['data'];
-            $data['lotesFracc'] = $this->Etapas->getLotesaFraccionar($id)->lotes->lote;
             $data['ordenProd'] = $data['etapa']->orden;
-            $data['articulos_fraccionar'] = $this->Articulos->obtenerXTipo('Proceso')['data'];
+            $data['articulos_fraccionar'] = $this->Etapas->getEntradaEtapa($data['etapa']->etap_id)['data'];
+            $data['articulos_fracc_salida'] = $this->Etapas->getSalidaEtapa($data['etapa']->etap_id)['data'];
 
             $this->load->view('etapa/fraccionar/fraccionar', $data);
         } else {
@@ -354,8 +363,10 @@ class Etapa extends CI_Controller
     // guarda fraccionamiento y lanza pedido de materiales
     public function guardarFraccionar()
     {
+        log_message('DEBUG','#TRAZA | #TRAZ-PROD-TRAZASOFT | ETAPA | guardarFraccionar()');
         //////////// PARA CREAR EL NUEVO BATCH ///////////////////
-        $datosCab['lote_id'] = 'FRACCIONAMIENTO';
+      //  $datosCab['lote_id'] = 'FRACCIONAMIENTO';
+        $datosCab['lote_id'] =$this->input->post('lote_id');
         $datosCab['arti_id'] = (string) 0;
         $datosCab['prov_id'] = (string) PROVEEDOR_INTERNO;
         $datosCab['batch_id_padre'] = (string) 0;
@@ -416,7 +427,8 @@ class Etapa extends CI_Controller
             $response = $this->Etapas->setCabeceraNP($cab);
             $pema_id = $response->nota_id->pedido_id;
 
-            $envases = array();
+            //Esto se debe cambiar por fórmulas
+            // $envases = array();
             //////////// PARA CREAR EL BATCH PARA EL BATCH REQUEST //////////
             if ($pema_id) {
                 $x = 0;
@@ -427,15 +439,15 @@ class Etapa extends CI_Controller
                     $det['cantidad'] = (string) $p->cant_descontar;
                     $detalle['_post_notapedido_detalle'][$x] = (object) $det;
 
-                    $envases[$key]['pema_id'] = (string) $pema_id;
-                    $envases[$key]['arti_id'] = (string) $p->envase_arti_id;
-                    $envases[$key]['cantidad'] = (string) $p->cantidad;
+                    // $envases[$key]['pema_id'] = (string) $pema_id;
+                    // $envases[$key]['arti_id'] = (string) $p->envase_arti_id;
+                    // $envases[$key]['cantidad'] = (string) $p->cantidad;
                     $x++;
                 }
                 $arrayDeta['_post_notapedido_detalle_batch_req'] = $detalle;
                 $respDetalle = $this->Etapas->setDetaNP($arrayDeta);
 
-                $rsp = $this->pedidoEnvases($envases);
+                // $rsp = $this->pedidoEnvases($envases);
 
                 if ($respDetalle < 300) {
                     /////// LANZAR EL PROCESO DE BONITA DE PEDIDO
@@ -546,14 +558,14 @@ class Etapa extends CI_Controller
     // Informe de etata fracccionamiento.
     public function finalizaFraccionar()
     {
-
+        log_message('DEBUG',"#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapa | finalizaFraccionar()");
         $productos = $this->input->post('productos');
         $num_orden_prod = $this->input->post('num_orden_prod');
         $batch_id_padre = $this->input->post('batch_id');
 
         foreach ($productos as $info) {
             $arrayPost["lote_id"] = $info['lotedestino']; // lote origen
-            $arrayPost["arti_id"] = $info['titulo']; // art seleccionado en lista
+            $arrayPost["arti_id"] = $info['arti_id']; // art seleccionado en lista
             $arrayPost["prov_id"] = (string) PROVEEDOR_INTERNO;
             $arrayPost["batch_id_padre"] = $batch_id_padre; // bacth actual
             $arrayPost["cantidad"] = $info['cantidad']; // art seleccionado en lista
@@ -570,7 +582,8 @@ class Etapa extends CI_Controller
             #FLEIVA
             $arrayPost['batch_id'] = "0";
             $arrayPost['planificado'] = "false";
-            $arrayDatos['_post_lote_list_batch_req']['_post_lote_list'][] = $arrayPost;
+            $arrayPost['noco_list'] = isset($info->nocos) ? implode(';',$info->nocos) : '';// Para reutilizar el stored procedure de Noco's
+            $arrayDatos['_post_lote_noconsumibles_list_batch_req']['_post_lote_noconsumibles_list'][] = $arrayPost;
         }
 
         $rsp = $this->Etapas->finalizarEtapa($arrayDatos);
@@ -581,23 +594,28 @@ class Etapa extends CI_Controller
 
         echo json_encode($rsp);
     }
-    // Levanta pantalla abm fraccionar
+    /**
+        * Levanta pantalla abm fraccionar
+        * @param 
+        * @return view etapa fraccionar
+	*/
     public function fraccionar()
     {
+        log_message('DEBUG',"#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapa | fraccionar()");
         $this->load->model(ALM . 'Articulos');
         $this->load->model('general/Recipientes');
 
         $data['articulos'] = $this->Articulos->getList();
 
         $data['accion'] = 'Nuevo';
-        $data['etapa'] = $this->Etapas->nuevo(5)->etapa; // igual que en contrato pedido
+        $data['id'] = $this->input->get('op');
+        $data['etapa'] = $this->Etapas->nuevo($data['id'])->etapa;
         $data['fecha'] = date('Y-m-d');
-        //TODO: VER SI TRAER PRODUCTO POR ID BATCH CON ESTA FUNCION
-        //$data['producto'] = $this->Etapas->getRecursosOrigen($id, PRODUCTO)->recursos->recurso;
-        //    $data['lang'] = lang_get('spanish',5);
         $data['establecimientos'] = $this->Establecimientos->listarTodo()->establecimientos->establecimiento;
         $data['empaques'] = $this->Recipientes->listarEmpaques()->empaques->empaque;
-        $data['articulos_fraccionar'] = $this->Articulos->obtenerXTipo('Final')['data'];
+        $data['articulos_fraccionar'] = $this->Etapas->getEntradaEtapa($data['id'])['data'];
+        $data['articulos_fracc_salida'] = $this->Etapas->getSalidaEtapa($data['id'])['data'];
+
         $this->load->view('etapa/fraccionar/fraccionar', $data);
     }
 
@@ -658,9 +676,13 @@ class Etapa extends CI_Controller
         $user = $this->Etapas->getUserLote($batch_id)->users->user;
         echo json_encode($user);
     }
-
-    public function validarFormularioCalidad($orta_id)
-    {
+    
+    /**
+        * Valida el formulario asociado al orta_id
+        * @param integer $orta_id
+        * @return bool true or false
+    */
+    public function validarFormularioCalidad($orta_id){
         $res = $this->Etapas->validarFormularioCalidad($orta_id);
         echo json_encode(['status' => $res]);
     }
@@ -680,15 +702,20 @@ class Etapa extends CI_Controller
             echo selectBusquedaAvanzada('noco_id', 'noco_id', $rsp['data'], 'codigo', 'codigo');
         }else echo 'S/N';
     }
-
-    public function eliminarEtapa($batchId)
-    {
+    /**
+        * Elimina el lote enviado
+        * @param integer batch_id
+        * @return array respuesta del servicio
+	*/
+    public function eliminarEtapa($batchId){
+        log_message('DEBUG','#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapa | eliminarEtapa($batchId)');
         $rsp = $this->Etapas->eliminarEtapa($batchId);
         echo json_encode($rsp);
     }
 
     public function abmEtapa()
     {
+        log_message('DEBUG','#TRAZA | #TRAZ-PROD-TRAZASOFT | #ETAPA | abmEtapa()');
         $data['listarProcesos'] = $this->Procesos->listarProcesos()->procesos->proceso;
         $data['listarTipos'] = $this->Etapas->listarTipos()->tablas->tabla;
         $data['listarFormularios'] = $this->Forms->listarFormularios()->formularios->formulario;        
@@ -706,6 +733,7 @@ class Etapa extends CI_Controller
 
     public function guardarEtapa()
 	{
+        log_message('INFO','#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapa | guardarEtapa() ');
 		$etapa = $this->input->post('datos');
 		$etapa['empr_id'] = empresa();
         if (!$etapa['form_id']) {
@@ -775,4 +803,34 @@ class Etapa extends CI_Controller
         echo json_encode($resp);
 	}
 
+    public function validarEtapa()
+	{
+        log_message('INFO','#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapa | validarEtapa() ');
+
+		$etapa = $this->input->post('datos');
+		$etapa['empr_id'] = empresa();
+
+		$resp = $this->Etapas->validarEtapa($etapa);
+        
+        echo json_encode($resp);
+	}
+    /**
+        * Obtiene los lotes a fraccionar
+        * @param array con datos de lotes para fraccionamiento
+        * @return array respuesta del servicio
+	*/
+    public function getLotesFraccionar(){
+        log_message('INFO','#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapa | getLotesFraccionar() ');
+
+        $batch_id = $this->input->post('batch_id');
+
+        $lotesFracc['data'] = $this->Etapas->getLotesaFraccionar($batch_id)->lotes->lote;
+        
+        if(!empty($lotesFracc)){
+            $lotesFracc['status'] = true;
+            echo json_encode($lotesFracc);
+        }else{
+            echo json_encode(array("status" => false,"msj" => "No se encontraron lotes a fraccionar"));
+        }
+    }
 }

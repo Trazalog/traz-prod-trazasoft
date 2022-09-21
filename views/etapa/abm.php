@@ -19,12 +19,12 @@
         </div>
         <!-- /.box-header -->
         <div class="box-body">
-            <div class="row">
+            <div class="row form-group">
                 <input type="hidden" value="0" id="batch_id" name="batch_id">
-                <div class="col-md-1 col-xs-12">
+                <div class="col-md-2 col-xs-12">
                     <label for="Lote" class="form-label">Código Lote:*</label>
                 </div>
-                <div class="col-md-5 col-xs-12">
+                <div class="col-md-4 col-xs-12">
                     <input name="vcode" type="text" id="Lote" <?php if ($accion == 'Editar') {
                         echo 'value="' . $etapa->lote . '"';
                     } ?> class="form-control" placeholder="Inserte Lote"
@@ -45,7 +45,7 @@
 
                 </div>
             </div>
-            <div class="row" style="margin-top: 50px">
+            <div class="row form-group">
                 <div class="col-md-2 col-xs-12">
                     <label for="establecimientos" class="form-label">Establecimiento*:</label>
                 </div>
@@ -95,19 +95,17 @@
                     ?>
                 </div>
             </div>
-            <div class="row" style="margin-top: 50px">
+            <div class="row form-group">
                 <div class="col-md-2 col-xs-12">
                     <label for="op" class="form-label">Orden de Producción:</label>
                 </div>
                 <div class="col-md-4 col-xs-12">
-
-
                     <input type="text" id="ordenproduccion" class="form-control" name="vorden" <?php if ($accion == 'Editar' || $etapa->estado == 'PLANIFICADO') {
                         echo ('value="' . $etapa->orden . '"');
                     } ?> placeholder="Inserte Orden de Produccion"
                         <?php if ($etapa->estado == 'En Curso' || $etapa->estado == 'FINALIZADO') {
-                                                                                                                                                    echo 'disabled';
-                                                                                                                                                } ?>>
+                            echo 'disabled';
+                        } ?>>
                 </div>
                 <?php
                 if ($accion == 'Editar') {
@@ -120,7 +118,7 @@
                 </div>';
                 } ?>
             </div>
-            <div class="row" style="margin-top: 40px">
+            <div class="row">
                 <div class="col-xs-12">
                     <a onclick="despliega()" href="#"><i class="glyphicon glyphicon-plus"></i>Datos Adicionales</a>
                     <div id="desplegable" class="panel panel-default" hidden>
@@ -150,31 +148,21 @@
 
 <!-- Tareas -->
 <div class="box box-primary">
-
     <!-- /.box-header -->
     <div class="box-body">
-
-
         <div class="modal-footer">
-
-
             <?php if ($etapa->estado != 'En Curso' || $etapa->estado != 'Finalizado') {
-                            echo "<button class='btn btn-primary' onclick='guardar(\"iniciar\")'>Iniciar Etapa</button>";
-                            } else if ($etapa->estado == 'En Curso') {
-                                echo '<button class="btn btn-primary" id="btnfinalizar" onclick="finalizar()">Reporte de Producción</button>';
-                            }
-
-                            echo "<button class='btn btn-primary' onclick='guardar(" . '"guardar"' . ")'>Guardar</button>";
-                            ?>
-
+                echo "<button class='btn btn-primary' onclick='guardar(\"iniciar\")'>Iniciar Etapa</button>";
+                } else if ($etapa->estado == 'En Curso') {
+                    echo '<button class="btn btn-primary" id="btnfinalizar" onclick="finalizar()">Reporte de Producción</button>';
+                }
+                echo "<button class='btn btn-primary' onclick='guardar(" . '"guardar"' . ")'>Guardar</button>";
+            ?>
+            <button class="btn btn-default" onclick="back()">Cerrar</button>
         </div>
-
     </div>
     <!-- /.box -->
 </div>
-
-
-
 
 <script>
 $('.frm-save').hide();
@@ -227,7 +215,11 @@ function actualizaRecipiente(establecimiento, recipientes) {
             }
 
             if (!result.data) {
-                alert('No hay Recipientes Asociados');
+                Swal.fire(
+        'Error',
+        'No hay Recipientes Asociados.',
+        'error'
+      );
                 return;
             }
             fillSelect('#recipientes', result.data);
@@ -270,7 +262,11 @@ var guardarForzado = function(data) {
                 setAttr('#origen', 'orta_id', rsp.batch_id);
                 guardarTodasTareas();
                 $('#mdl-unificacion').modal('hide');
-                alert('Salida Guardada exitosamente.');
+                Swal.fire(
+        'Hecho',
+        'Salida Guardada exitosamente.',
+        'success'
+      );
                 linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
             } else {
                 alert('Fallo al iniciar la etapa');
@@ -359,7 +355,11 @@ function guardar(boton) {
             if (rsp.status) {
                 setAttr('#origen', 'orta_id', rsp.batch_id);
                 guardarTodasTareas();
-                alert('Salida Guardada exitosamente.');
+                Swal.fire(
+        'Hecho',
+        'Salida Guardada exitosamente.',
+        'success'
+      );
                 linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
             } else {
                 if (rsp.msj) {

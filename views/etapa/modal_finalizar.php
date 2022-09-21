@@ -20,7 +20,7 @@
 
 
                 <div class="row form-group" style="margin-top:20px">
-                    <div class="col-md-3 col-xs-12"><label class="form-label">Codigo Lote Origen:</label></div>
+                    <div class="col-md-3 col-xs-12"><label class="form-label">Código Lote Origen:</label></div>
                     <div class="col-md-4 col-xs-12"><input class="form-control" type="text" id="loteorigen"
                             value="<?php echo $etapa->lote;?>" disabled></div>
                     <div class="col-md-5"></div>
@@ -61,15 +61,29 @@
 
                 <div class="row form-group" style="margin-top:20px">
                     <div class="col-md-3 col-xs-12">
-                        <label for="inputproducto" class="form-label">Producto*:</label>
+                        <label for="inputproducto" class="form-label">Producto <?php hreq() ?>:</label>
                     </div>
-                    <div class="col-md-8 col-xs-12">
-                        <?php  echo selectBusquedaAvanzada('inputproducto', false, $productos_salida_etapa, 'arti_id', 'descripcion'); ?>
+                    <div class="form-group">
+                        <div class="col-sm-12 col-md-8 col-lg-8 ba">
+                            <select style="width: 100%" class="form-control select2-hidden-accesible habilitar requerido" id="inputproducto">
+                            <option value="" data-foo='' disabled selected>-Seleccione opción-</option>	
+                            <?php
+                                foreach ($productos_salida_etapa as $articulo) {
+                                echo "<option value='$articulo->arti_id' data-json='". json_encode($articulo) . "' data-foo='<small><cite>$articulo->descripcion</cite></small>  <label>♦ </label>   <small><cite>$articulo->stock</cite></small>  <label>♦ </label> <small><cite>$articulo->um</cite></small>' >$articulo->barcode</option>";
+                                }
+                            ?>
+                            </select>
+                            <?php 
+                            echo "<label id='detalle' class='select-detalle' class='text-blue'></label>";
+                            echo "<script>$('#inputproducto').select2({matcher: matchCustom,templateResult: formatCustom, dropdownParent: $('#inputproducto').parent()}).on('change', function() { selectEvent(this);})</script>";
+                            ?>
+                        </div>
                     </div>
+                        <!--__________________________-->
                     <div class="col-md-3"></div>
                 </div>
                 <div class="row" style="margin-top:20px">
-                    <div class="col-md-3 col-xs-12"><label class="form-label">Cantidad*:</label></div>
+                    <div class="col-md-3 col-xs-12"><label class="form-label">Cantidad <?php hreq() ?>:</label></div>
                     <div class="col-md-4 col-xs-12"><input class="form-control" id="cantidadproducto" type="text"
                             value="" placeholder="Inserte Cantidad"></div>
                     <div class="col-md-2 col-xs-2">
@@ -78,7 +92,7 @@
                     <div class="col-md-5"></div>
                 </div>
                 <div class="row" style="margin-top:20px">
-                    <div class="col-md-3 col-xs-12"><label class="form-label">Lote Destino*:</label></div>
+                    <div class="col-md-3 col-xs-12"><label class="form-label">Lote Destino <?php hreq() ?>:</label></div>
                     <div class="col-md-4 col-xs-12"><input class="form-control" type="text" id="lotedestino" value=""
                             placeholder="Inserte Lote destino"></div>
                     <div class="col-md-4 col-xs-12"><button class="btn btn-primary btn-block"
@@ -86,7 +100,7 @@
                     <div class="col-md-1"></div>
                 </div>
                 <div class="row" style="margin-top:20px">
-                    <div class="col-md-3 col-xs-12"><label class="form-label">Destino*:</label></div>
+                    <div class="col-md-3 col-xs-12"><label class="form-label">Destino <?php hreq() ?>:</label></div>
                     <div class="col-md-6 col-xs-12">
                         <?php if($accion == 'Editar'){
         
@@ -98,27 +112,25 @@
                     </div>
                     <div class="col-md-3"></div>
                 </div>
-                <div class="row" style="margin-top: 20px">
+                <!-- <div class="row" style="margin-top: 20px">
                     <div class="col-md-3 col-xs-12">
                         <label for="establecimientos" class="form-label">Establecimiento Final:</label>
                     </div>
                     <div class="col-md-6 col-xs-12">
-                        <select class="form-control select2"
-                            onchange="actualizaRecipiente(this.value, 'productorecipientes')"
-                            id="productoestablecimientos">
+                        <select class="form-control select2" id="productoestablecimientos">
                             <option disabled selected>-Seleccione Establecimiento-</option>
                             <?php
-                    foreach($establecimientos as $fila)
-                    {
-                        echo '<option value="'.$fila->esta_id.'" >'.$fila->nombre.'</option>';
-                    } 
+                    // foreach($establecimientos as $fila)
+                    // {
+                    //     echo '<option value="'.$fila->esta_id.'" >'.$fila->nombre.'</option>';
+                    // } 
                     ?>
                         </select>
 
                     </div>
                     <div class="col-md-3"></div>
-                </div>
-                <div class="row" style="margin-top: 20px">
+                </div> -->
+                <!-- <div class="row" style="margin-top: 20px">
                     <div class="col-md-3 col-xs-12">
                         <label for="establecimientos" class="form-label">Recipiente Final:</label>
                     </div>
@@ -128,12 +140,12 @@
                         </select>
                     </div>
                     <div class="col-md-3"></div>
-                </div>
-                <div class="row" style="margin-top:20px">
+                </div> -->
+                <!-- <div class="row" style="margin-top:20px">
                     <div class="col-md-3 col-xs-12"><label class="form-label">Requiere Fraccionada:</label></div>
                     <div class="col-md-1 col-xs-12"><input type="checkbox" id="fraccionado" value=""></div>
                     <div class="col-md-8"></div>
-                </div>
+                </div> -->
                 <div class="row" style="margin-top:20px">
                     <div class="col-md-3 col-xs-12"></div>
                     <div class="col-md-3 col-xs-12"><button class="btn btn-success btn-block"
@@ -161,6 +173,10 @@
         </div>
     </div>
 </div>
+<?php
+    // carga el modal de impresion de QR
+    $this->load->view( COD.'componentes/modalGenerico');
+?>
 <script>
 // Filtrar Recipientes por Establecimineto
 $('#productodestino').find('option').each(function(){
@@ -180,59 +196,60 @@ $('#modal_finalizar').find('#inputproducto').on('change', function(){
 });
 
 function AgregarProducto() {
-    ban = true;
+    ban = '';
 
-    productoid = $("#inputproducto").val();
-    if (!productoid || productoid == "") {
-        ban = false;
+    if (! _isset($("#inputproducto").val())) {
+        ban = "Debe seleccionar un producto!";
     }
-    cantidad = document.getElementById('cantidadproducto').value;
-    if (cantidad == "") {
-        ban = false;
+    var cantidad = $("#cantidadproducto").val();
+    if (! _isset(cantidad)) {
+        ban = "Debe completar la cantidad!";
     }
-    lotedestino = document.getElementById('lotedestino').value;
-    if (lotedestino == "") {
-        ban = false;
+    var lotedestino = $("#lotedestino").val();
+    if (! _isset(lotedestino)) {
+        ban = "Debe completar lote de destino!";
     }
-    destino = document.getElementById('productodestino').value;
-    if (destino == "") {
-        ban = false;
+    destino = $("#productodestino").val();
+    if (! _isset(destino)) {
+        ban = "Debe seleccionar un destino!";
     }
-    if (!ban) {
-        alert("falto algun dato obligatorio");
+    if (ban != '') {
+        error("Error", ban);
     } else {
         establecimiento = "";
         var producto = {};
-        producto.establecimientofinal = "";
-        if (document.getElementById('productoestablecimientos').value != '' && document.getElementById(
-                'productoestablecimientos').value != "-Seleccione Establecimiento-") {
-            establecimientos = '<?php echo json_encode($establecimientos);?>';
-            establecimientos = JSON.parse(establecimientos);
-            idestablecimiento = document.getElementById('productoestablecimientos').value;
-            index = establecimientos.findIndex(x => x.esta_id == idestablecimiento);
-            establecimiento = establecimientos[index].nombre;
-            producto.establecimientofinal = document.getElementById('productoestablecimientos').value;
-        }
-        recipientefinal = "";
-        producto.recipientefinal = "";
-        if (document.getElementById('productorecipientes').value != "") {
-            recipientefinal = document.getElementById('productorecipientes').options[document.getElementById(
-                'productorecipientes').selectedIndex].innerHTML;
-            producto.recipientefinal = document.getElementById('productorecipientes').value;
-        }
-
+        // producto.establecimientofinal = "";
+        // if (document.getElementById('productoestablecimientos').value != '' && document.getElementById(
+        //         'productoestablecimientos').value != "-Seleccione Establecimiento-") {
+        //     establecimientos = '<?php echo json_encode($establecimientos);?>';
+        //     establecimientos = JSON.parse(establecimientos);
+        //     idestablecimiento = document.getElementById('productoestablecimientos').value;
+        //     index = establecimientos.findIndex(x => x.esta_id == idestablecimiento);
+        //     establecimiento = establecimientos[index].nombre;
+            // producto.establecimientofinal = document.getElementById('productoestablecimientos').value;
+        // }
+        // recipientefinal = "";
+        // producto.recipientefinal = "";
+        // if (document.getElementById('productorecipientes').value != "") {
+        //     recipientefinal = document.getElementById('productorecipientes').options[document.getElementById(
+        //         'productorecipientes').selectedIndex].innerHTML;
+        //     producto.recipientefinal = document.getElementById('productorecipientes').value;
+        // }
+        dataProducto = JSON.parse($("#inputproducto").attr('data-json'));
         recipientes = '<?php echo json_encode($recipientes);?>';
         recipientes = JSON.parse(recipientes);
         idrecipiente = document.getElementById('productodestino').value;
         //indexrec = recipientes.findIndex(y => y.reci_id == idrecipiente);
-        producto.id = productoid;
+        producto.id = dataProducto.arti_id;
         producto.titulo = $('#inputproducto').find('option:selected').text();
         producto.cantidad = cantidad;
         producto.loteorigen = document.getElementById('loteorigen').value;
         producto.lotedestino = lotedestino;
         producto.destino = destino;
         producto.titulodestino = $('#productodestino').find('option:selected').text();
-        producto.destinofinal = establecimiento + " " + recipientefinal;
+        producto.descripcion = dataProducto.descripcion;
+        // producto.destinofinal = establecimiento + " " + recipientefinal;
+        // producto.destinofinal = establecimiento;
 
         var json = $('#operarios').find('[value="' + $('#operario').val() + '"]').attr('data-json');
         if(json){
@@ -243,23 +260,23 @@ function AgregarProducto() {
            producto.tipo_recurso = '';
         }
         producto.unificar = $('#unificar').val();
-        fraccionado = document.getElementById('fraccionado').checked;
-        if (fraccionado) {
-            producto.fraccionado = 'Si';
-        } else {
-            producto.fraccionado = 'No';
-        }
+        // fraccionado = document.getElementById('fraccionado').checked;
+        // if (fraccionado) {
+        //     producto.fraccionado = 'Si';
+        // } else {
+        //     producto.fraccionado = 'No';
+        // }
         agregaProducto(producto);
         $("#inputproducto").val("");
         document.getElementById('cantidadproducto').value = "";
         document.getElementById('lotedestino').value = "";
         //document.getElementById('productodestino').value = "";
         $('#productodestino').val('').trigger('change');
-        document.getElementById('productoestablecimientos').value = "";
+        // document.getElementById('productoestablecimientos').value = "";
         $('#inputproducto').val("").trigger('change');
-        document.getElementById('fraccionado').checked = false;
-        document.getElementById('productorecipientes').value = "";
-        document.getElementById('productorecipientes').disabled = true;
+        // document.getElementById('fraccionado').checked = false;
+        // document.getElementById('productorecipientes').value = "";
+        // document.getElementById('productorecipientes').disabled = true;
     }
 }
 var contador  = 0;
@@ -274,7 +291,7 @@ function agregaProducto(producto) {
     contador++;
     if (existe == 'no') {
 
-        html += '<table id="tabla_productos_asignados" style="width: 90%;" class="table">';
+        html += '<table id="tabla_productos_asignados" class="table">';
         html += "<thead>";
         html += "<tr>";
         html += "<th>Acciones</th>";
@@ -283,19 +300,19 @@ function agregaProducto(producto) {
         html += "<th>Cantidad</th>";
         html += "<th>Lote Destino</th>";
         html += "<th>Destino</th>";
-        html += "<th>Destino Final</th>";
-        html += "<th>Fracc</th>";
+        // html += "<th>Destino Final</th>";
+        // html += "<th>Fracc</th>";
         html += '</tr></thead><tbody>';
         html += "<tr class='recipiente-"+producto.destino+"' data-json='" + JSON.stringify(producto) + "' id='" + contador + "' data-forzar='false'>";
         html +=
-            '<td><i class="fa fa-fw fa-minus text-light-blue tabla_productos_asignados_borrar" style="cursor: pointer; margin-left: 15px;" title="Eliminar"></i></td>';
+            '<td><i class="fa fa-fw fa-qrcode text-light-blue generarQR" style="cursor: pointer; margin-left: 15px;" title="QR" onclick="QR(this)"></i><i class="fa fa-fw fa-minus text-light-blue tabla_productos_asignados_borrar" style="cursor: pointer; margin-left: 15px;" title="Eliminar"></i></td>';
         html += '<td>' + producto.loteorigen + '</td>';
         html += '<td>' + producto.titulo + '</td>';
         html += '<td>' + producto.cantidad + '</td>';
         html += '<td>' + producto.lotedestino + '</td>';
         html += '<td>' + producto.titulodestino + '</td>';
-        html += '<td>' + producto.destinofinal + '</td>';
-        html += '<td>' + producto.fraccionado + '</td>';
+        // html += '<td>' + producto.destinofinal + '</td>';
+        // html += '<td>' + producto.fraccionado + '</td>';
         html += '</tr>';
         html += '</tbody></table>';
         document.getElementById('productosasignados').innerHTML = "";
@@ -306,14 +323,14 @@ function agregaProducto(producto) {
     } else if (existe == 'si') {
         html += "<tr class='recipiente-"+producto.destino+"' data-json='" + JSON.stringify(producto) + "' id='" + contador + "' data-forzar='false'>";
         html +=
-            '<td><i class="fa fa-fw fa-minus text-light-blue tabla_productos_asignados_borrar" style="cursor: pointer; margin-left: 15px;" title="Eliminar"></i></td>';
+            '<td><i class="fa fa-fw fa-qrcode text-light-blue generarQR" style="cursor: pointer; margin-left: 15px;" title="QR" onclick="QR(this)"></i><i class="fa fa-fw fa-minus text-light-blue tabla_productos_asignados_borrar" style="cursor: pointer; margin-left: 15px;" title="Eliminar"></i></td>';
         html += '<td>' + producto.loteorigen + '</td>';
         html += '<td>' + producto.titulo + '</td>';
         html += '<td>' + producto.cantidad + '</td>';
         html += '<td>' + producto.lotedestino + '</td>';
         html += '<td>' + producto.titulodestino + '</td>';
-        html += '<td>' + producto.destinofinal + '</td>';
-        html += '<td>' + producto.fraccionado + '</td>';
+        // html += '<td>' + producto.destinofinal + '</td>';
+        // html += '<td>' + producto.fraccionado + '</td>';
         html += '</tr>';
         $('#tabla_productos_asignados tbody').append(html);
         tabla = document.getElementById('tabla_productos_asignados').innerHTML;
@@ -361,7 +378,7 @@ var FinalizarEtapa = function() {
 
     existe = document.getElementById('productos_existe').value;
     if (existe == "no") {
-        alert("No ha agregado ningun producto final");
+        notificar("Advertencia!","No ha agregado ningun producto final",'warning');
     } else {
         var productos = [];
         $('#tabla_productos_asignados > tbody > tr').each(function() {
@@ -406,11 +423,11 @@ var FinalizarEtapa = function() {
                     $('#modal_finalizar').modal('hide');
                     $('#mdl-unificacion').modal('hide');
                     if(rsp.data.estado.toUpperCase() == 'FINALIZADO'){
-                         hecho('Etapa finalizada exitosamente.');
+                        hecho('Hecho','Etapa finalizada exitosamente.');
                     }else{
-                         hecho('Se genero el Reporte de Producción correctamente.');
+                        hecho('Hecho','Se genero el Reporte de Producción correctamente.');
                     }
-                   linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
+                    linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
                 } else {
                     if (rsp.msj) {
                         unificar_lote = rsp.reci_id;
@@ -467,5 +484,43 @@ function obtenerDepositos(establecimiento, recipientes) {
             alert('Error al Traer Depositos');
         }
     });
+}
+//////////////////////////////////////////
+// Configuracion y creacion código QR
+// Características para generacion del QR
+function QR(e){
+	//Limpio el modal
+	$("#infoEtiqueta").empty();
+	$("#contenedorCodigo").empty();
+	$("#infoFooter").empty();
+
+	// configuración de código QR
+	var config = {};
+	config.titulo = "Código QR";
+	config.pixel = "7";
+	config.level = "L";
+	config.framSize = "2";
+
+	//Obtengo los datos del lote
+	datos = $(e).closest('tr').attr('data-json');
+	var datosLote = JSON.parse(datos);
+    datosLote.fecha = moment().format('YYYY-MM-DD');
+    datosLote.batch = $('#batch_id_padre').val();
+
+	//Cargo la vista del QR con datos en el modal
+	$("#infoEtiqueta").load("<?php echo PRD ?>general/CodigoQR/cargaModalQRLote", datosLote);
+	var dataQR = {};
+	dataQR.lote = datosLote.loteorigen;
+    dataQR.cod_producto = datosLote.titulo;
+    dataQR.descripcion = datosLote.descripcion;
+    dataQR.cantidad = datosLote.cantidad;
+    dataQR.fecha = datosLote.fecha;
+    dataQR.batch = datosLote.batch;
+
+	// agrega codigo QR al modal impresion
+	getQR(config, dataQR, 'codigosQR/Traz-prod-trazasoft/Lotes');
+
+	// levanta modal completo para su impresion
+	verModalImpresion();
 }
 </script>

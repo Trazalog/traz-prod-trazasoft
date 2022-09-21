@@ -168,7 +168,7 @@ class Noconsumibles extends CI_Model
 		function cambioEstado($data)
 		{
 			$post['_put_noconsumible_estado'] = $data;
-			log_message('DEBUG','#TRAZA|NOSCONSUMIBLES|cambioEstado($data) >> $data: '.json_encode($data));
+			log_message('DEBUG','#TRAZA | #TRAZ-PROD-TRAZASOFT | Noconsumibles | cambioEstado($data) >> $data: '.json_encode($data));
 			$aux = $this->rest->callAPI("PUT", REST_PRD_NOCON."/noConsumible/estado", $post);
 			$aux =json_decode($aux["status"]);
 			return $aux;
@@ -219,5 +219,21 @@ class Noconsumibles extends CI_Model
 
 			return $monc_id;
 		}
+  
+  /**
+	* Consulta al service si el codigo insertado, ya esta creado para la empresa
+	* @param string código NoCo
+	* @return array respuesta del servicio
+	*/
+  public function validarNoConsumible($noco){
+        
+    $url = REST_PRD_NOCON."/noConsumible/validar/". urlencode($noco) . "/empresa/".empresa();
 
+    $aux = $this->rest->callAPI("GET",$url);
+    $resp = json_decode($aux['data']);
+
+    log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT | Noconsumibles | validarNoConsumible() >> resp ".json_encode($resp));
+
+    return $resp->resultado;
+}
 }

@@ -34,7 +34,7 @@
           <div class="input-group">
             <input id="codigo" class="form-control" placeholder="Busque Código..." autocomplete="off" onchange="consultar()">
             <span class="input-group-btn">
-                <button class="btn btn-primary" style="cursor:not-allowed">
+                <button class="btn btn-primary">
                     <i class="glyphicon glyphicon-search"></i></button>
             </span>
           </div>
@@ -50,6 +50,7 @@
                     <th>Borrar</th>
                     <th>Código</th>
                     <th>Descripción</th>
+                    <th>Lote</th>
                   </tr>
               </thead>
               <tbody>    </tbody>
@@ -168,7 +169,7 @@
       });
 
       if (cantEnvases > 1) {
-        alert('Error en datos de No Consumible, intente escanear otro Codigo');
+        error('Error','El no consumible posee mas de un lote, intente escanear otro código');
         $("#codigo").val("");
         return;
       }
@@ -178,6 +179,7 @@
               <td> <i class='fa fa-fw fa-minus text-light-blue btn' style='cursor: pointer; margin-left: 15px;'></i> </td>
               <td>${info.codigo}</td>
               <td>${info.descripcion}</td>
+              <td>${lotes[0].lote_id}</td>
           </tr>`;
       table.row.add($(row)).draw();
 

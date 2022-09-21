@@ -33,7 +33,7 @@ class Reportes extends CI_Controller
       
       log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | #REPORTES | produccion() | #ETAPA: >>' . $etapa . '#DESDE: >>' . $desde . '#HASTA: >>' . $hasta);
 
-      $url = REST_TDS . '/productos/etapa/' . $etapa . '/desde/' . $desde . '/hasta/' . $hasta . '/producto/' . $producto;
+      $url = REST_PRD_ETAPAS . '/productos/etapa/' . $etapa . '/desde/' . $desde . '/hasta/' . $hasta . '/producto/' . $producto.'/empr_id/'.empresa();
       $json = $this->Koolreport->depurarJson($url)->productos->producto;
       $reporte = new Produccion($json);
       $reporte->run()->render();
@@ -42,10 +42,10 @@ class Reportes extends CI_Controller
 
       log_message('INFO', '#TRAZA | #TRAZ-PROD-TRAZASOFT | #REPORTES | produccion() | #INGRESO');
       
-      $url = REST_TDS . '/productos/etapa//desde//hasta//producto/';
+      $url = REST_PRD_ETAPAS . '/productos/etapa//desde//hasta//producto//empr_id/'.empresa();
       $json = $this->Koolreport->depurarJson($url)->productos->producto;
 
-      log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | #REPORTES | produccion() | #JSON: >>' . $json);
+      log_message('INFO', '#TRAZA | #TRAZ-PROD-TRAZASOFT | #REPORTES | produccion() | #JSON: >>' . json_encode($json));
 
       $reporte = new Produccion($json);
       $reporte->run()->render();
@@ -90,12 +90,12 @@ class Reportes extends CI_Controller
   {
     log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | #REPORTES | filtroProduccion() | #INGRESO');
     // $url['responsables'] = '';
-    $url['productos'] = REST_TDS . '/productos/list';
+    $url['articulos'] = REST_PRD_ETAPAS . '/articulos/'.empresa();
     // $url['unidades_medida'] = '';
-    $url['etapas'] = REST_TDS . '/etapas/all/list';
+    $url['etapas'] = REST_PRD_ETAPAS . '/etapas';
 
     // $valores['responsables'] = $this->Koolreport->depurarJson($url['responsables'])->responsables->responsable;
-    $valores['productos'] = $this->Koolreport->depurarJson($url['productos'])->productos->producto;
+    $valores['articulos'] = $this->Koolreport->depurarJson($url['articulos'])->articulos->articulo;
     // $valores['unidades_medida'] = $this->Koolreport->depurarJson($url['unidades_medida'])->unidades->unidad;
     $valores['etapas'] = $this->Koolreport->depurarJson($url['etapas'])->etapas->etapa;
 
@@ -115,12 +115,14 @@ class Reportes extends CI_Controller
     $url['responsables'] = REST_TDS . '/recursos/list';
     $url['productos'] = REST_TDS . '/productos/list';
     // $url['unidades_medida'] = '';
-    $url['etapas'] = REST_TDS . '/etapas/all/list';
+    $url['etapas'] = REST_PRD_ETAPAS . '/etapasProductivas/list/empresa/'.empresa();
+    // $url['etapas'] = REST_TDS . '/etapas/all/list';
 
     $valores['responsables'] = $this->Koolreport->depurarJson($url['responsables'])->recursos->recurso;
     $valores['productos'] = $this->Koolreport->depurarJson($url['productos'])->productos->producto;
     // $valores['unidades_medida'] = $this->Koolreport->depurarJson($url['unidades_medida'])->unidades->unidad;
-    $valores['etapas'] = $this->Koolreport->depurarJson($url['etapas'])->etapas->etapa;
+    // $valores['etapas'] = $this->Koolreport->depurarJson($url['etapas'])->etapas->etapa;
+    $valores['etapas'] = $this->Koolreport->depurarJson($url['etapas'])->etapas_productivas->etapa_productiva;
 
     // $data['filtro'] = $this->Opcionesfiltros->filtrosProdResponsable($valores);
 
@@ -155,6 +157,8 @@ class Reportes extends CI_Controller
     $rsp['proveedores'] = $this->Opcionesfiltros->getProveedores();
     $rsp['transportista'] = $this->Opcionesfiltros->getTransportistas();
     $rsp['productos'] = $this->Opcionesfiltros->getProductos();
+    $rsp['u_medidas'] = $this->Opcionesfiltros->getMedidas();
+    
     echo json_encode($rsp);
   }
 

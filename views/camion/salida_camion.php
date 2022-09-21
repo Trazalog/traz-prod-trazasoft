@@ -13,7 +13,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Fecha:</label>
-                                <input id="fecha_salida" type="text" name="fecha_salida" class="form-control date" value="<?php echo isset($datosCamion->fecha_entrada) ? date('d-m-Y', strtotime($datosCamion->fecha_entrada)) : '' ?>">
+                                <input id="fecha_salida" type="date" name="fecha_salida" class="form-control" value="<?php echo isset($datosCamion->fecha_entrada) ? date('d-m-Y', strtotime($datosCamion->fecha_entrada)) : '' ?>">
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -65,13 +65,13 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Peso Bruto:</label>
-                                <input id="bruto" type="number" name="bruto" class="form-control" value="<?php echo isset($datosCamion->bruto) ? $datosCamion->bruto : '' ?>" onchange="calculaNeto()">
+                                <input id="bruto" type="text" name="bruto" class="form-control onlyNumbers" value="<?php echo isset($datosCamion->bruto) ? $datosCamion->bruto : '' ?>" onchange="calculaNeto()">
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Peso Tara:</label>
-                                <input type="text" id="tara" name="tara" class="form-control" value="<?php echo isset($datosCamion->tara) ? $datosCamion->tara : '' ?>" readonly>
+                                <input type="text" id="tara" name="tara" class="form-control onlyNumbers" value="<?php echo isset($datosCamion->tara) ? $datosCamion->tara : '' ?>" onchange="calculaNeto()">
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -126,6 +126,7 @@
 		if(estaSelected != ''){
 			$("#esta_id").val(estaSelected);
 		}
+		$(".onlyNumbers").inputmask({ regex: "[0-9.,]*" });
 	});
 	var $tLotes = $('#tbl-lotes').find('tbody');
 	$('.date').datepicker({

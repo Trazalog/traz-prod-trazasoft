@@ -15,16 +15,16 @@
 			{
 				foreach($listarEtapasProductivas as $rsp)
 				{
+          $cadena_nombre = $rsp->nombre;
+          $nombre_nuevo = str_replace("_", " ", $cadena_nombre);
 					echo "<tr data-json='".json_encode($rsp)."'>";
-					// echo "<tr id='$rsp->etap_id' data-json='" . json_encode($rsp) . "'>";
 						echo "<td class='text-center text-light-blue'>";
-							echo '<button type="button" title="Editar"  class="btn btn-primary btn-circle btnEditar" data-toggle="modal" data-target="#modaleditar" id="btnEditar" ><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>&nbsp';
+							echo '<button type="button" title="Editar"  class="btn btn-primary btn-circle btnEditar" data-toggle="modal" data-target="#modaleditar"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>&nbsp';
 							echo '<button type="button" title="Info" class="btn btn-primary btn-circle btnInfo" data-toggle="modal" data-target="#modaleditar" ><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></button>&nbsp';
 							echo '<button type="button" title="Ver Artículos" class="btn btn-primary btn-circle btnArticulos" ><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span></button>&nbsp';
-							echo '<button type="button" title="Eliminar" class="btn btn-primary btn-circle btnEliminar" id="btnBorrar"  ><span class="glyphicon glyphicon-trash" aria-hidden="true" ></span></button>&nbsp';
+							echo '<button type="button" title="Eliminar" class="btn btn-primary btn-circle btnEliminar"><span class="glyphicon glyphicon-trash" aria-hidden="true" ></span></button>&nbsp';
 						echo "</td>";
-            // echo '<td class="hide"/>'.$rsp->etap_id.'</td>';
-						echo '<td>'.$rsp->nombre.'</td>';
+						echo '<td>'.$nombre_nuevo.'</td>';
 						echo '<td>'.$rsp->proc_prod.'</td>';
 						echo '<td>'.$rsp->recipiente.'</td>';
 						echo '<td>'.$rsp->tipo.'</td>';
@@ -37,7 +37,6 @@
 	</tbody>
 </table>
 <!--_______ FIN TABLA PRINCIPAL DE PANTALLA ______-->
-
 
 <script>
   // extrae datos de la tabla
@@ -52,6 +51,7 @@
     habilitarEdicion();
     llenarModal(datajson);
   });
+
   // extrae datos de la tabla
   $(".btnInfo").on("click", function(e) {
     $(".modal-header h4").remove();
@@ -64,6 +64,7 @@
     blockEdicion();
     llenarModal(datajson);
   });
+
   //cambia encabezado para agregar una herramienta
   $("#btnAdd").on("click", function(e) {
     $("#operacion").val("Add");
@@ -71,12 +72,11 @@
     $(".modal-header").append('<h4 class="modal-title"  id="myModalLabel"><span id="modalAction" class="fa fa-fw fa-pencil text-light-blue"></span> Agregar Etapa Productiva </h4>');
     ///FIXME: LIMPIAR LOS CAMPOS Y SELECTS
   });
+  
   $(".btnArticulos").on("click", function(e) {
-    $("#modalarticulos td").remove();
     $(".modal-header h4").remove();
-    //guardo el tipo de operacion en el modal
     $("#operacion").val("Articulos");
-    //pongo titlo al modal
+    //pongo titulo al modal
     $(".modal-header").append('<h4 class="modal-title"  id="myModalLabel"><span id="modalAction" class="fa fa-fw fa-pencil"></span> Artículos de la Etapa Productiva </h4>');
     datajson = $(this).parents("tr").attr("data-json");
     data = JSON.parse(datajson);
@@ -87,42 +87,27 @@
         type: 'GET',
         url: 'index.php/<?php echo PRD ?>general/Etapa/listarArticulosYTipos?etap_id='+etap_id,
         success: function(result) {
+          var tablaArticulos = $("#tabla_articulos").DataTable();
+          tablaArticulos.clear().draw();
           if (result) {
-            var tabla = $('#modalarticulos table');    
-            $(tabla).find('tbody').html('');
-            result.forEach(e => {
-                if (e.es_caja == true){
-                  e.es_caja = "SI";
-                }else{
-                  e.es_caja = "NO";
-                };
-                $(tabla).append(
-                  "<tr data-json= ' "+ JSON.stringify(e) +" '>" +
-                    "<td><button type='button' title='Eliminar Artículo' class='btn btn-primary btn-circle btnEliminar' onclick='eliminarArticulo(this)' id='btnBorrar'><span class='glyphicon glyphicon-trash' aria-hidden='true' ></span></button>" +
-                    "<td>" + e.barcode + "</td>" +
-                    "<td>" + e.descripcion + "</td>" +
-                    "<td>" + e.tipo + "</td>" +
-                    "<td>" + e.unidad_medida + "</td>" +
-                    "<td>" + e.es_caja + "</td>" +
-                    "<td class='text-center'>" + e.cantidad_caja + "</td>" +
-                  "</tr>"
-                );
-            });            
+            $.each(result, function(index, value) {
+              // use data table row.add, then .draw for table refresh
+              rowInstanciada = tablaArticulos.row.add(["<button type='button' title='Eliminar Artículo' class='btn btn-primary btn-circle btnEliminar' onclick='eliminarArticulo(this)'><span class='glyphicon glyphicon-trash' aria-hidden='true' ></span></button>", value.barcode, value.descripcion, value.tipo, value.unidad_medida, value.es_caja, value.cantidad_caja]).draw().node();
+              $(rowInstanciada).attr('data-json', JSON.stringify(value));
+            });
           };
-          $('#modalarticulos').modal('show'); 
+          $('#modalarticulos').modal('show');
         },
         error: function(result) {
             alert('Error');
         },
         dataType: 'json'
     });
-    //levanto modal
-    // $("#modalarticulos").modal('show');
-  });  
+  });
+
   // llena modal paa edicio y muestra
   function llenarModal(datajson){
     $('#etap_id').val(datajson.etap_id);
-    //$('#pano_id').val(datajson.pano_id);
     $('#nombre_edit').val(datajson.nombre);
     $('#nom_recipiente_edit').val(datajson.recipiente);
     $('#orden_edit').val(datajson.orden);
@@ -131,6 +116,7 @@
     $('#tiet_id_edit option[value="'+ datajson.tiet_id +'"]').attr("selected",true);
     $('#form_id_edit option[value="'+ datajson.form_id +'"]').attr("selected",true);
   }
+
   // deshabilita botones, selects e inputs de modal
   function blockEdicion(){
     $(".habilitar").attr("readonly","readonly");
@@ -139,6 +125,7 @@
     $("#form_id_edit").attr('disabled', 'disabled');
     $('#btnsave_edit').hide();
   }
+
   // habilita botones, selects e inputs de modal
   function habilitarEdicion(){
     $('.habilitar').removeAttr("readonly");//
@@ -147,6 +134,7 @@
     $("#form_id_edit").removeAttr("disabled");
     $('#btnsave_edit').show();
   }
+
   // Levanta modal prevencion eliminar herramienta
   $(".btnEliminar").on("click", function() {
     $(".modal-header h4").remove();
@@ -159,6 +147,7 @@
     //levanto modal
     $("#modalaviso").modal('show');
   });
+
   // Elimina herramienta
   function eliminar(){
     var etap_id = $("#id_etap").val();

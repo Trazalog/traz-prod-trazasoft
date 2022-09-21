@@ -74,7 +74,7 @@ use \koolreport\widgets\koolphp\Card;
                 </div>
                 <!-- PRODUCTO -->
 
-                <div class="col-xs-12 col-sm-12 col-md-3 col-lg-2">
+                <div class="col-xs-12 col-sm-12 col-md-4 col-lg-3">
                     <div style="float:right; padding-top: 24px" class="form-group">
                         <button type="button" class="btn btn-success btn-flat" onclick="filtrar()">Filtrar</button>
                         <button style="margin-left: 5px" type="button" class="btn btn-danger btn-flat flt-clear">Limpiar</button>
@@ -103,11 +103,23 @@ use \koolreport\widgets\koolphp\Card;
                     )
                   ), // Para desactivar encabezado reemplazar "headers" por "showHeader"=>false
                   "columns" => array(
-                    "fecha" => array(
-                      "label" => "Fecha"
+                    "batch_id" => array(
+                      "label" => "Batch"
+                    ),
+                    array(
+                      "label" => "Fecha",
+                      "value" => function($row) {
+                        $aux = explode("+",$row["fecha"]);
+                        $row["fecha"] = date("d-m-Y",strtotime($aux[0]));
+                        return $row["fecha"];
+                      },
+                      "type" => "date"
                     ),
                     "producto" => array(
                       "label" => "Producto"
+                    ),
+                    "lote_id" => array(
+                      "label" => "Lote"
                     ),
                     "cantidad" => array(
                       "label" => "Cantidad"
@@ -118,8 +130,8 @@ use \koolreport\widgets\koolphp\Card;
                     "etapa" => array(
                       "label" => "Etapa"
                     ),
-                    "recurso" => array(
-                      "label" => "Responsable"
+                    "equipo" => array(
+                      "label" => "Operario/Equipo"
                     )
                   ),
                   "cssClass" => array(
@@ -200,13 +212,13 @@ use \koolreport\widgets\koolphp\Card;
                       <?php
                       ColumnChart::create(array(
                         // "title" => "Productos con mayor cantidad",
-                        "dataStore" => $this->dataStore('data_produccion_pieChart'),
+                        "dataStore" => $this->dataStore('data_produccion_columnChart'),
+                        "options"=>array(
+                          "fixTheChart"=>true
+                        ),
                         "columns" => array(
                           "producto",
-                          "cantidad" => array(
-                            "type" => "number",
-                            "label" => "Cantidad"
-                          )
+                          "cantidad" => array("label" => "Cantidad", "type" => "number")
                         ),
                         "colorScheme" => array(
                           "#2f4454",
@@ -284,8 +296,8 @@ use \koolreport\widgets\koolphp\Card;
           columns: [0, 1, 2, 3, 4, 5]
           },
           footer: true,
-          title: 'Asignación de recursos',
-          filename: 'asignacion_recursos',
+          title: 'Reporte de Producción',
+          filename: 'reporte_produccion',
           //Aquí es donde generas el botón personalizado
           text: '<button class="btn btn-success ml-2 mb-2 mb-2 mt-3">Exportar a Excel <i class="fa fa-file-excel-o"></i></button>'
         },
@@ -296,8 +308,8 @@ use \koolreport\widgets\koolphp\Card;
               columns: [0, 1, 2, 3, 4, 5]
           },
           footer: true,
-          title: 'Asignación de recursos',
-          filename: 'asignacion_recursos',
+          title: 'Reporte de Producción',
+          filename: 'reporte_produccion',
           text: '<button class="btn btn-danger ml-2 mb-2 mb-2 mt-3">Exportar a PDF <i class="fa fa-file-pdf-o mr-1"></i></button>'
         },
         {
@@ -306,8 +318,8 @@ use \koolreport\widgets\koolphp\Card;
               columns: [0, 1, 2, 3, 4, 5]
           },
           footer: true,
-          title: 'Asignación de recursos',
-          filename: 'asignacion_recursos',
+          title: 'Reporte de Producción',
+          filename: 'reporte_produccion',
           text: '<button class="btn btn-primary ml-2 mb-2 mb-2 mt-3">Copiar <i class="fa fa-file-text-o mr-1"></i></button>'
         },
         {
@@ -316,8 +328,8 @@ use \koolreport\widgets\koolphp\Card;
               columns: [0, 1, 2, 3, 4, 5]
           },
           footer: true,
-          title: 'Asignación de recursos',
-          filename: 'asignacion_recursos',
+          title: 'Reporte de Producción',
+          filename: 'reporte_produccion',
           text: '<button class="btn btn-default ml-2 mb-2 mb-2 mt-3">Imprimir <i class="fa fa-print mr-1"></i></button>'
         }]
       });
@@ -370,13 +382,13 @@ use \koolreport\widgets\koolphp\Card;
         url: "<?php echo base_url(PRD) ?>Reportes/filtroProduccion",
         success: function(rsp) {
 
-          if (_isset(rsp.productos)) {
-            var opcProductos = '<option value="" selected>TODOS</option>';
+          if (_isset(rsp.articulos)) {
+            var opcArticulos = '<option value="" selected>TODOS</option>';
 
-            rsp.productos.forEach(element => {
-                opcProductos += "<option value=" + element.id + ">" + element.nombre + "</option>";
+            rsp.articulos.forEach(element => {
+                opcArticulos += "<option value=" + element.arti_id + ">" + element.descripcion + "</option>";
             });
-            $('#producto').html(opcProductos);
+            $('#producto').html(opcArticulos);
 
           }
 
@@ -384,7 +396,7 @@ use \koolreport\widgets\koolphp\Card;
             var opcEtapas = '<option value="" selected>TODOS</option>';
 
             rsp.etapas.forEach(element => {
-                opcEtapas += "<option value=" + element.nombre + ">" + element.nombre + "</option>";
+                opcEtapas += "<option value=" + element.id + ">" + element.titulo + "</option>";
             });
 
             $('#etapa').html(opcEtapas);

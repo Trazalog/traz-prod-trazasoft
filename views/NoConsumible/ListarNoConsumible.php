@@ -15,6 +15,7 @@
 								<th>Fecha de Alta</th>
 								<th>Fecha de Vencimiento</th>
 								<th width="20%">Lotes</th>
+								<th width="10%">Producto</th>
 								<th width="10%">Estado</th>
 							</tr>
 					</thead>
@@ -28,20 +29,24 @@
 								$descripcion = $rsp->descripcion;
 								$fec_alta = $rsp->fec_alta;
 								$fec_vencimiento = $rsp->fec_vencimiento;
+								$producto_codigo = $rsp->producto_codigo;
 								$lotes = $rsp->lotes;
 								echo "<tr id='$codigo' data-json='" . json_encode($rsp) . "'>";
 									echo "<td class='text-center text-light-blue'>";
-									echo '<i class="fa fa-search" style="cursor: pointer;margin: 3px;" title="Ver Detalles" onclick="verInfo(this)"></i>';
-									echo '<i class="fa fa-fw fa-pencil " style="cursor: pointer; margin: 3px;" title="Editar" onclick="editarInfo(this)"></i>';
-									echo '<i class="fa fa-fw fa-times-circle eliminar" style="cursor: pointer;margin: 3px;" title="Eliminar" onclick="eliminar(this)"></i>';
-									echo '<i class="fa fa-undo" style="cursor: pointer;margin: 3px;" title="Trazabilidad" onclick="trazabilidad(this)"></i>';
-									echo '<i class="'.($estadoNoconsumible == 'ALTA' ? 'fa fa-fw fa-toggle-off text-light-blue': "fa fa-fw fa-toggle-on text-light-blue").' " title="Habilitar" style="cursor: pointer; margin-left: 15px;" onclick="cambioEstado(this)"></i>';									echo "</td>";
+									echo '<i class="fa fa-eye" style="cursor: pointer;margin: 3px;" title="Ver Detalles" onclick="verInfo(this)"></i>';
+									echo '<i class="fa fa-edit" style="cursor: pointer; margin: 3px;" title="Editar" onclick="editarInfo(this)"></i>';
+									echo '<i class="fa fa-trash eliminar" style="cursor: pointer;margin: 3px;" title="Eliminar" onclick="eliminar(this)"></i>';
+									echo '<i class="fa fa-fw fa-sitemap" style="cursor: pointer;margin: 3px;" title="Trazabilidad" onclick="trazabilidad(this)"></i>';
+									echo '<i class="fa fa-qrcode" style="cursor: pointer;margin: 3px;" title="Código QR" onclick="solicitarQR(this)"></i>';
+									echo '<i '.($estadoNoconsumible == 'ALTA' ? 'class="fa fa-fw fa-toggle-off text-light-blue" title="Habilitar"': 'class="fa fa-fw fa-toggle-on text-light-blue" title="Inhabilitar"').' title="Habilitar" style="cursor: pointer; margin-left: 15px;" onclick="cambioEstado(this)"></i>';
+									echo "</td>";
 									echo '<td>'.$codigo.'</td>';
 									//echo '<td>'.$tipo.'</td>';
 									echo '<td>'.$descripcion.'</td>';
 									echo '<td>'.formatFechaPG($fec_alta).'</td>';
 									echo '<td>'.formatFechaPG($fec_vencimiento).'</td>';
 									echo '<td>'.$lotes.'</td>';
+									echo '<td>'.$producto_codigo.'</td>';
 									echo '<td>'.estadoNoCon($estadoNoconsumible).'</td>';
 								echo '</tr>';
 						}
@@ -79,56 +84,67 @@
     	}
 		var formData = new FormData($('#frm-NoConsumible')[0]);
 		wo();
-		
-		$.ajax({
-			type: 'POST',
-			dataType: 'JSON',
-			url: '<?php echo base_url(PRD) ?>general/Noconsumible/guardarNoConsumible',
-			data: formData,
-			cache: false,
-			contentType: false,
-			processData: false,
-			success: function(rsp) {
-				wc();
-				$("#mdl-NoConsumible").modal('hide');
-				const confirm = Swal.mixin({
-					customClass: {
-						confirmButton: 'btn btn-primary'
+
+		validarNoConsumible(formData).then((result) => {
+			if(result == "false"){
+				$.ajax({
+					type: 'POST',
+					dataType: 'JSON',
+					url: '<?php echo base_url(PRD) ?>general/Noconsumible/guardarNoConsumible',
+					data: formData,
+					cache: false,
+					contentType: false,
+					processData: false,
+					success: function(rsp) {
+						wc();
+						$("#mdl-NoConsumible").modal('hide');
+						const confirm = Swal.mixin({
+							customClass: {
+								confirmButton: 'btn btn-primary'
+							},
+							buttonsStyling: false
+						});
+
+						if (rsp) {
+							confirm.fire({
+								title: 'Correcto',
+								text: "No consumible dado de alta correctamente!",
+								type: 'success',
+								showCancelButton: false,
+								confirmButtonText: 'Ok'
+							}).then((result) => {
+								
+								linkTo('<?php echo base_url(PRD) ?>general/Noconsumible/index');
+								
+							});
+						} else {
+							wc();
+							Swal.fire(
+								'Error...',
+								'No pudo darse de alta el No consumible!',
+								'error'
+							);
+						}
 					},
-					buttonsStyling: false
+					error: function(rsp) {
+						wc();
+						$("#mdl-NoConsumible").modal('hide');
+
+						Swal.fire(
+							'Error...',
+							'No pudo darse de alta el No consumible!',
+							'error'
+						)
+						console.log(rsp.msj);
+					}
 				});
-
-				if (rsp) {
-					confirm.fire({
-						title: 'Correcto',
-						text: "No consumible dado de alta correctamente!",
-						type: 'success',
-						showCancelButton: false,
-						confirmButtonText: 'Ok'
-					}).then((result) => {
-						
-						linkTo('<?php echo base_url(PRD) ?>general/Noconsumible/index');
-						
-					});
-				} else {
-					wc();
-					Swal.fire(
-						'Error...',
-						'No pudo darse de alta el No consumible!',
-						'error'
-					);
-				}
-			},
-			error: function(rsp) {
-				wc();
-				$("#mdl-NoConsumible").modal('hide');
-
-				Swal.fire(
-					'Error...',
-					'No pudo darse de alta el No consumible!',
-					'error'
-				)
-				console.log(rsp.msj);
+			}else{
+				error("Error","El código del No Consumible ingresado ya se encuentra creado!");
+			}
+		}).catch((err) => {
+			if(err){
+				console.log(err);
+				error("Error","Se produjo un error al validar el código del No Consumible");
 			}
 		});
 	}
@@ -455,6 +471,62 @@
 	}
 ////// Fin Trazabilidad
 
+/////// Validación código del no consumible
+async function validarNoConsumible(datos){
+    let validacion = new Promise((resolve, reject) => {
+      $.ajax({
+        type: 'POST',
+        data: datos,
+		cache: false,
+		contentType: false,
+		processData: false,
+        dataType: 'JSON',
+        url: "<?php echo base_url(PRD) ?>general/Noconsumible/validarNoConsumible",
+        success: function(rsp) {
+          resolve(rsp.existe);
+        },
+        error: function(rsp){
+          reject(rsp.existe);
+        },
+        complete: function(){
+          wc();
+        }
+      });
+    });
+    return await validacion;
+  }
+////////////////
+//////// Configuracion y creacion código QR
+// Características para generacion del QR
+function solicitarQR(e){
+	//Limpio el modal
+	$("#infoEtiqueta").empty();
+	$("#contenedorCodigo").empty();
+	$("#infoFooter").empty();
+
+	// configuración de código QR
+	var config = {};
+	config.titulo = "Código No Consumible";
+	config.pixel = "7";
+	config.level = "L";
+	config.framSize = "2";
+
+	//Obtengo los datos del No Consumible
+	datos = $(e).closest('tr').attr('data-json');
+	var datosNoCo = JSON.parse(datos);
+
+	//Cargo la vista del QR con datos en el modal
+	$("#infoEtiqueta").load("<?php echo PRD ?>general/CodigoQR/cargaModalQRNoConsumible", datosNoCo);
+	var dataQR = {};
+	dataQR.codigo = datosNoCo.codigo;
+
+	// agrega codigo QR al modal impresion
+	getQR(config, dataQR, 'codigosQR/Traz-prod-trazasoft/NoConsumibles');
+
+	// levanta modal completo para su impresion
+	verModalImpresion();
+}
+////////////// FIN Creación QR
 </script>
 
 
@@ -487,8 +559,8 @@
 											</div>
 											<label class="col-md-2 control-label" for="tipo_no_consumible">Tipo No Consumible<?php echo hreq() ?>:</label>
 											<div class="col-md-4">
-												<select name="tipo_no_consumible" class="form-control">
-													<option value="0"> - Seleccionar - </option>
+												<select name="tipo_no_consumible" class="form-control" required>
+													<option value=""> - Seleccionar - </option>
 													<?php 
 													if(is_array($tipoNoConsumible)){
 														foreach ($tipoNoConsumible as $i) {
@@ -624,6 +696,30 @@
 												placeholder="" class="form-control input-md habilitar" >
 								</div>
 						</div>
+						<div class="form-group">
+								<label class="col-md-4 control-label" for="deposito">Depósito<strong class="text-danger">*</strong>:</label>
+								<div class="col-md-8">
+										<input id="deposito_ver" type="text" name="deposito" placeholder="" class="form-control input-md deshabilitar" >
+								</div>
+						</div>
+						<div class="form-group">
+								<label class="col-md-4 control-label" for="establecimiento">Establecimiento<strong class="text-danger">*</strong>:</label>
+								<div class="col-md-8">
+										<input id="establecimiento_ver" type="text" name="establecimiento" placeholder="" class="form-control input-md deshabilitar" >
+								</div>
+						</div>
+						<div class="form-group">
+								<label class="col-md-4 control-label" for="lotes">Lote asociado<strong class="text-danger">*</strong>:</label>
+								<div class="col-md-8">
+										<input id="lotes_ver" type="text" name="lotes" placeholder="" class="form-control input-md deshabilitar" >
+								</div>
+						</div>
+						<div class="form-group">
+								<label class="col-md-4 control-label" for="producto">Producto<strong class="text-danger">*</strong>:</label>
+								<div class="col-md-8">
+										<input id="producto_ver" type="text" name="producto" placeholder="" class="form-control input-md deshabilitar" >
+								</div>
+						</div>
 						<!-- <div class="form-group">
 								<div class="col-md-6 col-md-offset-6">
 									<button id="btn-generar_qr" name="btn-generar_qr" class="btn btn-primary">Generar	QR</button>
@@ -714,3 +810,7 @@
 		</div> <!-- /.modal-dialog modal-lg -->
 	</div> <!-- /.modal fade -->
 <!-- / Modal -->
+<?php
+    // carga el modal de impresion de QR
+    $this->load->view( COD.'componentes/modalGenerico');
+?>

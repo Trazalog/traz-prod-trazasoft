@@ -5,7 +5,7 @@
     </div>
     <!-- /.box-header -->
     <div class="box-body">
-        <div class="row" style="margin-top: 40px">
+        <div class="row">
             <div class="col-xs-12">
                 <div class="row form-group">
                     <div class="col-md-3 col-xs-6">
@@ -13,7 +13,7 @@
                     </div>
                     <div class="col-md-6 col-xs-12 input-group ba">
                         <?php
-                            echo selectBusquedaAvanzada('idproducto', 'vprod', $productos_etapa, 'arti_id', 'barcode',  array('descripcion', 'Unidad Medida:' => 'unidad_medida'));
+                            echo selectBusquedaAvanzada('idproducto', 'vprod', $productos_etapa, 'arti_id', 'barcode',  array('descripcion', 'Unidad Medida:' => 'um'));
                             ?>
                     </div>
                 </div>

@@ -88,4 +88,28 @@ class Lotes extends CI_Model
     }
     return $rsp;
   }
+    /**
+	* Obtiene la cantidad de reportes de produccion realizados para el batch_id
+	* @param integer batch_id del lote
+	* @return array respuesta del servicio con la cantidad de reportes
+	*/
+  function validarCantidadReportes($batch_id){
+    log_message("DEBUG", "#TRAZA | #TRAZ-PROD-TRAZASOFT | Lotes | validarCantidadReportes()");
+    $url = REST_PRD_LOTE. "/lote/".$batch_id."/cantidadReportes";
+    $rsp = $this->rest->callAPI("GET",$url);
+    return $rsp;
+  }
+  /**
+	* Verifica si se realizó alguna entrega de materiales para el batch_id recibido. 
+  * Si es true la respuesta, significa que si se realizo una Entrega de Materiales
+	* @param integer batch_id
+	* @return array respuesta del servicio
+	*/
+  public function verificaEntregaMateriales($batch_id){
+    log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapas | verificaEntregaMateriales() >> resp ".json_encode($resp));
+    $url = REST_PRD_LOTE."/validar/entregaMateriales/batch_id/".$batch_id;
+    $aux = $this->rest->callAPI("GET",$url);
+    $resp = json_decode($aux['data']);
+    return $resp->resultado->existe;
+  }
 }
