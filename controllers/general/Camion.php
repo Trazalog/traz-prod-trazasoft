@@ -138,7 +138,6 @@ class Camion extends CI_Controller
       $data['establecimientos'] = $this->Establecimientos->listarTodo()->establecimientos->establecimiento;
       $data['tipoEstablecimiento'] = $this->Noconsumibles->tipoEstablecimiento()['data'];
       $data['proveedores'] = $this->Camiones->listarProveedores()['data'];
-      $data['materias'] = $this->Materias->listar()->materias->materia;
       $data['empaques'] = $this->Recipientes->listarEmpaques()->empaques->empaque;
       $data['transportistas'] = $this->Transportistas->obtener()['data'];
       $this->load->view('camion/entrada_camion', $data);
@@ -258,12 +257,29 @@ class Camion extends CI_Controller
 		* @return array con datos de los movimientos de transporte(camion)
     */
     public function getMovimientoCamion(){
-        
-        log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT | Camion | getMovimientoCamion()");
-        
-        $motr_id = $this->input->post("motr_id");
-        $resp = $this->Camiones->getMovimientoTransporte($motr_id);
+      log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT | Camion | getMovimientoCamion()");
+      
+      $motr_id = $this->input->post("motr_id");
+      $resp = $this->Camiones->getMovimientoTransporte($motr_id);
 
-        echo json_encode($resp);
+      echo json_encode($resp);
+    }
+    /**
+		* Obtiene el listado de articulos por tipo y luego genera el select de busqueda avanzada con el listado
+		* @param 
+		* @return html select con articulso tipo materia prima
+    */
+    public function obtenerArticulosPorTipo(){
+      log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT | Camion | obtenerArticulosPorTipo()");
+      $rsp = $this->Materias->listar('Materia Prima');
+      if($rsp['status']){
+        $materiasPrimas = json_decode($rsp['data']);
+        $data['status'] = $rsp['status'];
+        $data['data'] = selectBusquedaAvanzada(false, false, $materiasPrimas->articulos->articulo, 'arti_id', 'barcode',array('descripcion','um'));
+        echo json_encode($data);
+      }else{
+        $rsp['msj'] = "Fallo el servicio que obtiene los articulos tipo materia prima.";
+        json_encode($rsp);
+      }
     }
 }
