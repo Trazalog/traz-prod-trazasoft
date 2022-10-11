@@ -1,7 +1,8 @@
 <div class="modal" id="modal_finalizar" role="dialog" style="overflow-y: auto !important; "
     aria-labelledby="myModalLabel">
     <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
+        <!-- modal viejo -->
+        <div id="pnl-1" class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
@@ -171,6 +172,53 @@
                 </div>
             </div>
         </div>
+        <!-- fin modal viejo -->
+        <!-- modal asignar no consumible -->
+        <div id="pnl-2" class="modal-content hidden">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                        <button type="button" class="close" onclick="switchPane()">&times;</button>
+                        <h4 class="modal-title">Asignar no Consumibles</h4>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12 form-group">
+                            <label>Escanear No Consumible</label>
+                            <div class="input-group">
+                                <input id="codigoNoCoEscaneado" class="form-control" placeholder="Busque Código..." autocomplete="off" onchange="consultarNoCo()">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-primary" style="cursor:not-allowed">
+                                        <i class="glyphicon glyphicon-search"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <table id="tbl-noco" class="table table-hover table-striped">
+                                <thead>
+                                    <td>Código</td>
+                                    <td>Descripción</td>
+                                    <td></td>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                                <tfoot class="text-center">
+                                    <tr>
+                                        <td colspan="3">Tabla vacía</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                        <button type="button" class="btn" onclick="resetNoco()">Cancelar</button>
+                        <button type="button" class='btn btn-success' onclick='asociarNocos()'>Hecho</button>
+                </div>
+        </div>
+        <!-- fin modal asignar no consumible -->
     </div>
 </div>
 <?php
@@ -305,7 +353,7 @@ function agregaProducto(producto) {
         html += '</tr></thead><tbody>';
         html += "<tr class='recipiente-"+producto.destino+"' data-json='" + JSON.stringify(producto) + "' id='" + contador + "' data-forzar='false'>";
         html +=
-            '<td><i class="fa fa-fw fa-qrcode text-light-blue generarQR" style="cursor: pointer; margin-left: 15px;" title="QR" onclick="QR(this)"></i><i class="fa fa-fw fa-minus text-light-blue tabla_productos_asignados_borrar" style="cursor: pointer; margin-left: 15px;" title="Eliminar"></i></td>';
+            '<td><i class="fa fa-fw fa-qrcode text-light-blue generarQR" style="cursor: pointer; margin-left: 15px;" title="QR" onclick="QR(this)"></i><i class="fa fa-fw fa-minus text-light-blue tabla_productos_asignados_borrar" style="cursor: pointer; margin-left: 15px;" title="Eliminar"></i><i class="fa fa-fw fa-cubes text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Asignar No consumible" onclick="switchPane()"></i></td>';
         html += '<td>' + producto.loteorigen + '</td>';
         html += '<td>' + producto.titulo + '</td>';
         html += '<td>' + producto.cantidad + '</td>';
@@ -323,7 +371,7 @@ function agregaProducto(producto) {
     } else if (existe == 'si') {
         html += "<tr class='recipiente-"+producto.destino+"' data-json='" + JSON.stringify(producto) + "' id='" + contador + "' data-forzar='false'>";
         html +=
-            '<td><i class="fa fa-fw fa-qrcode text-light-blue generarQR" style="cursor: pointer; margin-left: 15px;" title="QR" onclick="QR(this)"></i><i class="fa fa-fw fa-minus text-light-blue tabla_productos_asignados_borrar" style="cursor: pointer; margin-left: 15px;" title="Eliminar"></i></td>';
+            '<td><i class="fa fa-fw fa-qrcode text-light-blue generarQR" style="cursor: pointer; margin-left: 15px;" title="QR" onclick="QR(this)"></i><i class="fa fa-fw fa-minus text-light-blue tabla_productos_asignados_borrar" style="cursor: pointer; margin-left: 15px;" title="Eliminar"></i><i class="fa fa-fw fa-cubes text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Asignar No consumible"></i></td>';
         html += '<td>' + producto.loteorigen + '</td>';
         html += '<td>' + producto.titulo + '</td>';
         html += '<td>' + producto.cantidad + '</td>';
@@ -522,5 +570,41 @@ function QR(e){
 
 	// levanta modal completo para su impresion
 	verModalImpresion();
+}
+
+function asociarNocos() {
+    var data = [];
+    $(`.batch-${s_batchId}`).next(`.info-extra`).text('');// Limpio la info extra antes de agregar
+    infoFila = '<td><label>No consumibles asociados:</label><ul>';
+    // $(`.batch-${s_batchId}`).next(`.info-extra`).append('<td><label>No consumibles asociados:</label><ul>');
+
+    $('#tbl-noco tbody  tr').each(function(){
+        dataNoCo = getJson(this);
+        data.push(dataNoCo.codigo);
+        infoFila += `<li>${dataNoCo.codigo} : ${dataNoCo.descripcion}</li>`;
+    });
+    infoFila += '</ul></td><td></td><td></td>';
+    $(`.batch-${s_batchId}`).next(`.info-extra`).html(infoFila);
+
+    setAttr($(`.batch-${s_batchId}`), 'nocos', data);
+    //resetNoco();
+    switchPane();
+}
+// Limpia tabla nocons y abre modal padre
+function resetNoco(){
+    $('#tbl-noco tbody').empty();
+    $('#tbl-noco tfoot').show();
+    switchPane()
+}
+// Alterna entre modales
+function switchPane(){
+    $('#tbl-reportes .ver-mas').toggle();// oculta info extra
+    if($('#pnl-1').hasClass('hidden')){
+        $('#pnl-1').removeClass('hidden');
+        $('#pnl-2').addClass('hidden');
+    }else{
+        $('#pnl-2').removeClass('hidden');
+        $('#pnl-1').addClass('hidden');
+    }
 }
 </script>
