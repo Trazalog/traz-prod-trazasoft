@@ -32,6 +32,7 @@ class Etapa extends CI_Controller
     {
         $data['list'] = $this->Etapas->listar()->etapas->etapa;
         $temp = $this->Etapas->listarEtapas()->etapas->etapa;
+        $data['procesosProductivos'] = $this->Procesos->listarProcesos()->procesos->proceso;
         //reforma las url segun id
         foreach ($temp as $value) {
             if ($value->tiet_id == 'prd_tipos_etapaFraccionamiento') {

@@ -26,6 +26,66 @@
     font-size: 12px;
     line-height: 1.42857;
   }
+/*ESTILOS DEL SLIDER */
+/* Label */
+.checkboxtext {
+    width: 100%
+}
+/* Caja del slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 20px;
+}
+/* Oculto caract nativas */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+/* El slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 14px;
+  width: 14px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+input:checked+.slider {
+  background-color: #2196F3;
+}
+input:focus+.slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+input:checked+.slider:before {
+  -webkit-transform: translateX(19px);
+  -ms-transform: translateX(19px);
+  transform: translateX(19px);
+}
+/* Redondeo slider */
+.slider.round {
+  border-radius: 34px;
+}
+.slider.round:before {
+  border-radius: 50%;
+}
+/** FIN ESTILOS SLIDER */
 </style>
 <?php
     $this->load->view('layout/mycss');
@@ -35,25 +95,56 @@
   <div class="box-header with-border">
     <h4 class="box-title">Etapas</h4>
     <div class="flotante">
-        <button style="background: #1D976C;  /* fallback for old browsers */
-        background: -webkit-linear-gradient(to bottom, #93F9B9, #1D976C);  /* Chrome 10-25, Safari 5.1-6 */
-        background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */" 
-        type="button" class=" btn dropdown-toggle btn-circle btn-xl" data-toggle="dropdown" aria-expanded="false" title="Crear Nueva Etapa" onclick="crearNuevaEtapa()">
-         <b style="color:#ffffff">+</b>
-        </button>
-        <ul class="dropdown-menu dropdown-menu-right" id="nuevo">
-          <li class="header text-center text-info"><b>Crear Nueva Etapa</b></li>
-          <?php
+      <button style="background: #1D976C;  /* fallback for old browsers */
+      background: -webkit-linear-gradient(to bottom, #93F9B9, #1D976C);  /* Chrome 10-25, Safari 5.1-6 */
+      background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */" 
+      type="button" class=" btn dropdown-toggle btn-circle btn-xl" data-toggle="dropdown" aria-expanded="false" title="Crear Nueva Etapa" onclick="crearNuevaEtapa()">
+        <b style="color:#ffffff">+</b>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-right" id="nuevo">
+        <li class="header text-center text-info"><b>Crear Nueva Etapa</b></li>
+        <?php
 
-          foreach ($etapas as $fila) {
-            echo "<li  data-value='" . $fila->id . "'><a data-json='" . json_encode($fila) . "'><i class='fa fa-chevron-circle-right text-info'></i>" . $fila->titulo . "</a></li>";
+        foreach ($etapas as $fila) {
+          echo "<li  data-value='" . $fila->id . "'><a data-json='" . json_encode($fila) . "'><i class='fa fa-chevron-circle-right text-info'></i>" . $fila->titulo . "</a></li>";
+        }
+        ?>
+      </ul>
+    </div>
+  </div>
+  <!-- FILA FILTROS -->
+  <div class="row" style="margin-left:10px;margin-top:10px">
+    <div class="col-md-3">
+      <div class="form-group">
+        <label for="procesoProductivo">Procesos productivos:</label>
+        <select class="form-control select2 select2-hidden-accesible" name="procesoProductivo" id="procesoProductivo" onChange="seProcProductivo(this)">
+          <option value="" disabled selected>-Seleccionar-</option>	
+          <?php
+          if(!empty($procesosProductivos)){
+            foreach ($procesosProductivos as $procesos) {
+                echo "<option data-json='".json_encode($procesos)."' value='".$procesos->proc_id."'>".$procesos->nombre."</option>";
+            }
           }
           ?>
-        </ul>
+        </select>
       </div>
+    </div>
+    <div style="text-align: center;" class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+      <div class="form-check">
+        <label class="checkboxtext">Mostrar Batch Finalizados</label>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="etapa_finalizada" name="etapa_finalizada" onclick="muestraBatchsFinalizados()">
+        <span class="slider round"></span>
+      </label>
+    </div>
   </div>
-    <div class="row" style="width:900px; margin-top:5px;">
-      <div class="col-xs-10">
+  <div class="row">
+    <hr>
+  </div>
+  <!-- FIN FILA FILTROS -->
+    <div class="row" style="margin-top:5px;">
+      <div class="col-md-12">
         <?php
 
         for ($i = 0; $i < count($etapas); $i++) {
@@ -68,15 +159,6 @@
     </div>
   </div><!-- /.box-header -->
   <div class="box-body">
-    <div class="row">
-      <br><br>
-      <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-        <div class="form-group">
-          <label style="padding-left: 20%;font-size: 16px;">Mostrar Batch Finalizados</label>
-          <input type="checkbox" style="width: 16px;height: 16px;margin-left: 15px;" id="etapa_finalizada" name="etapa_finalizada" onclick="muestraBatchsFinalizados()">
-        </div>
-      </div>
-    </div>
     <div class="row">
       <div class="col-xs-12">
         <h4 class="box-title" style="margin-bottom: 20px; margin-top: 0px;">Producción de Lotes</h4>
