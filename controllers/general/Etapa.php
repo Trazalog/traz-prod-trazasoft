@@ -834,4 +834,14 @@ class Etapa extends CI_Controller
             echo json_encode(array("status" => false,"msj" => "No se encontraron lotes a fraccionar"));
         }
     }
+    /**
+        * Obtiene las etapas por proceso productivo
+        * @param integer proc_id
+        * @return array respuesta del servicio
+	*/
+    public function filtrarEtapas(){
+        $proc_id = $this->input->post('proc_id');
+        $rsp = $this->Etapas->filtrarEtapas($proc_id);
+        echo json_encode($rsp);
+    }
 }

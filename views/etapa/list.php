@@ -16,76 +16,6 @@
     font-size: 24px;
     line-height: 1.33;
   }
-
-  .btn-circle {
-    width: 30px;
-    height: 30px;
-    padding: 6px 0px;
-    border-radius: 15px;
-    text-align: center;
-    font-size: 12px;
-    line-height: 1.42857;
-  }
-/*ESTILOS DEL SLIDER */
-/* Label */
-.checkboxtext {
-    width: 100%
-}
-/* Caja del slider */
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 40px;
-  height: 20px;
-}
-/* Oculto caract nativas */
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-/* El slider */
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 14px;
-  width: 14px;
-  left: 3px;
-  bottom: 3px;
-  background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-input:checked+.slider {
-  background-color: #2196F3;
-}
-input:focus+.slider {
-  box-shadow: 0 0 1px #2196F3;
-}
-input:checked+.slider:before {
-  -webkit-transform: translateX(19px);
-  -ms-transform: translateX(19px);
-  transform: translateX(19px);
-}
-/* Redondeo slider */
-.slider.round {
-  border-radius: 34px;
-}
-.slider.round:before {
-  border-radius: 50%;
-}
-/** FIN ESTILOS SLIDER */
 </style>
 <?php
     $this->load->view('layout/mycss');
@@ -129,7 +59,7 @@ input:checked+.slider:before {
         </select>
       </div>
     </div>
-    <div style="text-align: center;" class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+    <div id="botonToggleOnOff" style="text-align: center;" class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
       <div class="form-check">
         <label class="checkboxtext">Mostrar Batch Finalizados</label>
       </div>
@@ -145,17 +75,18 @@ input:checked+.slider:before {
   <!-- FIN FILA FILTROS -->
     <div class="row" style="margin-top:5px;">
       <div class="col-md-12">
-        <?php
-
-        for ($i = 0; $i < count($etapas); $i++) {
-          if ($i < count($etapas) - 1) {
-            echo "<button class='btn btn-primary btn-arrow-right outline' data-json='" . json_encode($etapas[$i]) . "' onclick='muestra(`" . $etapas[$i]->titulo . "`,`" . json_encode($list) . "`,this)'> " . $etapas[$i]->titulo . "  </button>";
-          } else {
-            echo "<button class='btn btn-primary btn-arrow-right-final outline' data-json='" . json_encode($etapas[$i]) . "' onclick='muestra(`" . $etapas[$i]->titulo . "`,`" . json_encode($list) . "`,this)'> " . $etapas[$i]->titulo . "  </button>";
+        <div id="contenedorMenuEtapasProductivas">
+          <?php
+          for ($i = 0; $i < count($etapas); $i++) {
+            if ($i < count($etapas) - 1) {
+              echo "<button class='btn btn-primary btn-arrow-right outline' data-json='" . json_encode($etapas[$i]) . "' onclick='muestra(`" . $etapas[$i]->titulo . "`,this)'> " . $etapas[$i]->titulo . "  </button>";
+            } else {
+              echo "<button class='btn btn-primary btn-arrow-right-final outline' data-json='" . json_encode($etapas[$i]) . "' onclick='muestra(`" . $etapas[$i]->titulo . "`,this)'> " . $etapas[$i]->titulo . "  </button>";
+            }
           }
-        }
-        ?>
-        <button class="btn btn-primary outline" onclick='muestra(`todas`,`<?php echo json_encode($list); ?>`)'>Todas</button>
+          ?>
+          <button class="btn btn-primary outline" onclick='muestra(`todas`,this)'>Todas</button>
+        </div>
     </div>
   </div><!-- /.box-header -->
   <div class="box-body">
@@ -281,16 +212,16 @@ input:checked+.slider:before {
   if (mobileAndTabletcheck()) $('#etapas tbody').find('tr').on('click', function() {
     $(this).find('.fa-pencil').click();
   });
-
+  var listadoLotes = '<?php echo json_encode($list) ?>';
   DataTable('#etapas');
 
-  function muestra(op, etapas,tag) {
+  function muestra(op,tag) {
     if(_isset($(tag).attr('data-json'))){
       etapaSeleccionada = JSON.parse($(tag).attr('data-json')).link;
     }else{
       etapaSeleccionada = '';
     }
-    etapas = JSON.parse(etapas);
+    etapas = JSON.parse(listadoLotes);
     html = "";
     html = '<thead class="thead-dark">' +
       '<tr>' +
@@ -641,5 +572,37 @@ input:checked+.slider:before {
     if(_isset(etapaSeleccionada)){
       linkTo(`<?php echo base_url(PRD) ?>${etapaSeleccionada}`);
     }
+  }
+  function seProcProductivo(tag){
+    wo();
+    var data = {"proc_id" : JSON.parse($(tag).find(":selected").attr("data-json")).proc_id };
+    $.ajax({
+      type: 'POST',
+      data: data,
+      cache: false,
+      dataType: "json",
+      url: "<?php echo PRD; ?>general/Etapa/filtrarEtapas",
+      success: function(rsp) { 
+        if(_isset(rsp)){
+          var etapasFiltradas = '';
+          rsp.forEach((element,i) => {
+            if(i != rsp.length-1){
+              etapasFiltradas += "<button class='btn btn-primary btn-arrow-right outline' data-json='" + JSON.stringify(element) + "' onclick='muestra(\"" + element.nombre + "\",this)'> " + element.nombre + "  </button>";
+            }else{
+              etapasFiltradas += "<button class='btn btn-primary btn-arrow-right-final outline' data-json='" + JSON.stringify(element) + "' onclick='muestra(\"" + element.nombre + "\",this)'> " + element.nombre + "  </button>";
+            }
+          });
+          etapasFiltradas += "<button class='btn btn-primary outline' onclick='muestra(`todas`,this)'>Todas</button>";
+          $("#contenedorMenuEtapasProductivas").empty();
+          $("#contenedorMenuEtapasProductivas").html(etapasFiltradas);
+        }else{
+          error('Error',"Se produjo un error al obtener el listado filtrado de etapas");
+        }
+      },
+      error: function(rsp) {
+          error('Error',"Se produjo un error al obtener el listado filtrado de etapas");
+      },
+      complete: () => {wc()}
+    });
   }
 </script>
