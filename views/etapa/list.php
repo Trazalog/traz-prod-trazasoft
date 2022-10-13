@@ -16,16 +16,6 @@
     font-size: 24px;
     line-height: 1.33;
   }
-
-  .btn-circle {
-    width: 30px;
-    height: 30px;
-    padding: 6px 0px;
-    border-radius: 15px;
-    text-align: center;
-    font-size: 12px;
-    line-height: 1.42857;
-  }
 </style>
 <?php
     $this->load->view('layout/mycss');
@@ -35,48 +25,71 @@
   <div class="box-header with-border">
     <h4 class="box-title">Etapas</h4>
     <div class="flotante">
-        <button style="background: #1D976C;  /* fallback for old browsers */
-        background: -webkit-linear-gradient(to bottom, #93F9B9, #1D976C);  /* Chrome 10-25, Safari 5.1-6 */
-        background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */" 
-        type="button" class=" btn dropdown-toggle btn-circle btn-xl" data-toggle="dropdown" aria-expanded="false" title="Crear Nueva Etapa" onclick="crearNuevaEtapa()">
-         <b style="color:#ffffff">+</b>
-        </button>
-        <ul class="dropdown-menu dropdown-menu-right" id="nuevo">
-          <li class="header text-center text-info"><b>Crear Nueva Etapa</b></li>
-          <?php
-
-          foreach ($etapas as $fila) {
-            echo "<li  data-value='" . $fila->id . "'><a data-json='" . json_encode($fila) . "'><i class='fa fa-chevron-circle-right text-info'></i>" . $fila->titulo . "</a></li>";
-          }
-          ?>
-        </ul>
-      </div>
-  </div>
-    <div class="row" style="width:900px; margin-top:5px;">
-      <div class="col-xs-10">
+      <button style="background: #1D976C;  /* fallback for old browsers */
+      background: -webkit-linear-gradient(to bottom, #93F9B9, #1D976C);  /* Chrome 10-25, Safari 5.1-6 */
+      background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */" 
+      type="button" class=" btn dropdown-toggle btn-circle btn-xl" data-toggle="dropdown" aria-expanded="false" title="Crear Nueva Etapa" onclick="crearNuevaEtapa()">
+        <b style="color:#ffffff">+</b>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-right" id="nuevo">
+        <li class="header text-center text-info"><b>Crear Nueva Etapa</b></li>
         <?php
 
-        for ($i = 0; $i < count($etapas); $i++) {
-          if ($i < count($etapas) - 1) {
-            echo "<button class='btn btn-primary btn-arrow-right outline' data-json='" . json_encode($etapas[$i]) . "' onclick='muestra(`" . $etapas[$i]->titulo . "`,`" . json_encode($list) . "`,this)'> " . $etapas[$i]->titulo . "  </button>";
-          } else {
-            echo "<button class='btn btn-primary btn-arrow-right-final outline' data-json='" . json_encode($etapas[$i]) . "' onclick='muestra(`" . $etapas[$i]->titulo . "`,`" . json_encode($list) . "`,this)'> " . $etapas[$i]->titulo . "  </button>";
-          }
+        foreach ($etapas as $fila) {
+          echo "<li  data-value='" . $fila->id . "'><a data-json='" . json_encode($fila) . "'><i class='fa fa-chevron-circle-right text-info'></i>" . $fila->titulo . "</a></li>";
         }
         ?>
-        <button class="btn btn-primary outline" onclick='muestra(`todas`,`<?php echo json_encode($list); ?>`)'>Todas</button>
+      </ul>
+    </div>
+  </div>
+  <!-- FILA FILTROS -->
+  <div class="row" style="margin-left:10px;margin-top:10px">
+    <div class="col-md-3">
+      <div class="form-group">
+        <label for="procesoProductivo">Procesos productivos:</label>
+        <select class="form-control select2 select2-hidden-accesible" name="procesoProductivo" id="procesoProductivo" onChange="seProcProductivo(this)">
+          <option value="" disabled selected>-Seleccionar-</option>	
+          <?php
+          if(!empty($procesosProductivos)){
+            foreach ($procesosProductivos as $procesos) {
+                echo "<option data-json='".json_encode($procesos)."' value='".$procesos->proc_id."'>".$procesos->nombre."</option>";
+            }
+          }
+          ?>
+        </select>
+      </div>
+    </div>
+    <div id="botonToggleOnOff" style="text-align: center;" class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+      <div class="form-check">
+        <label class="checkboxtext">Mostrar Batch Finalizados</label>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="etapa_finalizada" name="etapa_finalizada" onclick="muestraBatchsFinalizados()">
+        <span class="slider round"></span>
+      </label>
+    </div>
+  </div>
+  <div class="row">
+    <hr>
+  </div>
+  <!-- FIN FILA FILTROS -->
+    <div class="row" style="margin-top:5px;">
+      <div class="col-md-12">
+        <div id="contenedorMenuEtapasProductivas">
+          <?php
+          for ($i = 0; $i < count($etapas); $i++) {
+            if ($i < count($etapas) - 1) {
+              echo "<button class='btn btn-primary btn-arrow-right outline' data-json='" . json_encode($etapas[$i]) . "' onclick='muestra(`" . $etapas[$i]->titulo . "`,this)'> " . $etapas[$i]->titulo . "  </button>";
+            } else {
+              echo "<button class='btn btn-primary btn-arrow-right-final outline' data-json='" . json_encode($etapas[$i]) . "' onclick='muestra(`" . $etapas[$i]->titulo . "`,this)'> " . $etapas[$i]->titulo . "  </button>";
+            }
+          }
+          ?>
+          <button class="btn btn-primary outline" onclick='muestra(`todas`,this)'>Todas</button>
+        </div>
     </div>
   </div><!-- /.box-header -->
   <div class="box-body">
-    <div class="row">
-      <br><br>
-      <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-        <div class="form-group">
-          <label style="padding-left: 20%;font-size: 16px;">Mostrar Batch Finalizados</label>
-          <input type="checkbox" style="width: 16px;height: 16px;margin-left: 15px;" id="etapa_finalizada" name="etapa_finalizada" onclick="muestraBatchsFinalizados()">
-        </div>
-      </div>
-    </div>
     <div class="row">
       <div class="col-xs-12">
         <h4 class="box-title" style="margin-bottom: 20px; margin-top: 0px;">Producción de Lotes</h4>
@@ -199,16 +212,16 @@
   if (mobileAndTabletcheck()) $('#etapas tbody').find('tr').on('click', function() {
     $(this).find('.fa-pencil').click();
   });
-
+  var listadoLotes = '<?php echo json_encode($list) ?>';
   DataTable('#etapas');
 
-  function muestra(op, etapas,tag) {
+  function muestra(op,tag) {
     if(_isset($(tag).attr('data-json'))){
       etapaSeleccionada = JSON.parse($(tag).attr('data-json')).link;
     }else{
       etapaSeleccionada = '';
     }
-    etapas = JSON.parse(etapas);
+    etapas = JSON.parse(listadoLotes);
     html = "";
     html = '<thead class="thead-dark">' +
       '<tr>' +
@@ -559,5 +572,37 @@
     if(_isset(etapaSeleccionada)){
       linkTo(`<?php echo base_url(PRD) ?>${etapaSeleccionada}`);
     }
+  }
+  function seProcProductivo(tag){
+    wo();
+    var data = {"proc_id" : JSON.parse($(tag).find(":selected").attr("data-json")).proc_id };
+    $.ajax({
+      type: 'POST',
+      data: data,
+      cache: false,
+      dataType: "json",
+      url: "<?php echo PRD; ?>general/Etapa/filtrarEtapas",
+      success: function(rsp) { 
+        if(_isset(rsp)){
+          var etapasFiltradas = '';
+          rsp.forEach((element,i) => {
+            if(i != rsp.length-1){
+              etapasFiltradas += "<button class='btn btn-primary btn-arrow-right outline' data-json='" + JSON.stringify(element) + "' onclick='muestra(\"" + element.nombre + "\",this)'> " + element.nombre + "  </button>";
+            }else{
+              etapasFiltradas += "<button class='btn btn-primary btn-arrow-right-final outline' data-json='" + JSON.stringify(element) + "' onclick='muestra(\"" + element.nombre + "\",this)'> " + element.nombre + "  </button>";
+            }
+          });
+          etapasFiltradas += "<button class='btn btn-primary outline' onclick='muestra(`todas`,this)'>Todas</button>";
+          $("#contenedorMenuEtapasProductivas").empty();
+          $("#contenedorMenuEtapasProductivas").html(etapasFiltradas);
+        }else{
+          error('Error',"Se produjo un error al obtener el listado filtrado de etapas");
+        }
+      },
+      error: function(rsp) {
+          error('Error',"Se produjo un error al obtener el listado filtrado de etapas");
+      },
+      complete: () => {wc()}
+    });
   }
 </script>
