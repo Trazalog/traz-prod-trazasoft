@@ -586,4 +586,20 @@ class Etapas extends CI_Model
 
         return $resp->resultado;
     }
+    /**
+	* Obtiene listado de etapas filtrado por proc_id
+	* @param integer int proc_id
+	* @return array respuesta del servicio
+	*/
+    public function filtrarEtapas($proc_id){
+        
+        $url = REST_PRD_ETAPAS."/etapas/proceso/" . $proc_id;
+
+        $aux = $this->rest->callAPI("GET",$url);
+        $resp = json_decode($aux['data']);
+
+        log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapas | filtrarEtapas() >> resp ".json_encode($resp));
+
+        return $resp->etapas->etapa;
+    }
 }

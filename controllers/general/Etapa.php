@@ -32,6 +32,7 @@ class Etapa extends CI_Controller
     {
         $data['list'] = $this->Etapas->listar()->etapas->etapa;
         $temp = $this->Etapas->listarEtapas()->etapas->etapa;
+        $data['procesosProductivos'] = $this->Procesos->listarProcesos()->procesos->proceso;
         //reforma las url segun id
         foreach ($temp as $value) {
             if ($value->tiet_id == 'prd_tipos_etapaFraccionamiento') {
@@ -832,5 +833,15 @@ class Etapa extends CI_Controller
         }else{
             echo json_encode(array("status" => false,"msj" => "No se encontraron lotes a fraccionar"));
         }
+    }
+    /**
+        * Obtiene las etapas por proceso productivo
+        * @param integer proc_id
+        * @return array respuesta del servicio
+	*/
+    public function filtrarEtapas(){
+        $proc_id = $this->input->post('proc_id');
+        $rsp = $this->Etapas->filtrarEtapas($proc_id);
+        echo json_encode($rsp);
     }
 }
