@@ -579,9 +579,9 @@ function asociarNocos() {
     aux = JSON.parse($(`.recipiente-${LoteAsociarNoConsumible2}`).attr('data-json'));    	
     $('#tbl-noco tbody  tr').each(function(){	
         dataNoCo = getJson(this);
-        var datos = [];
-        datos['codigo'] = dataNoCo.codigo;
-        datos['descripcion'] = dataNoCo.descripcion; 
+        var datos = {};
+        datos.codigo = dataNoCo.codigo;
+        datos.descripcion = dataNoCo.descripcion; 
         dataNoconsum.push(datos);
     });
     console.log(dataNoconsum);
