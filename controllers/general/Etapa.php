@@ -44,6 +44,8 @@ class Etapa extends CI_Controller
         }
         $data['etapas'] = $temp;
         $this->load->view('etapa/list', $data);
+        //$this->load->view('etapa/dashboard', $data);
+
     }
     /**
         * Llama a etapas para una nueva Etapa
