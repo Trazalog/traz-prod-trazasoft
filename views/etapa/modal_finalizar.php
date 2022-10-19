@@ -10,6 +10,7 @@
             </div>
             <input class="hidden" type="text" id="num_orden_prod" value="<?php echo $etapa->orden;?>">
             <input class="hidden" type="text" id="batch_id_padre" value="<?php echo $etapa->id;?>">
+            <input class="hidden" type="text" id="LoteAsociarNoConsumible">
             <div class="modal-body" id="modalBodyArticle">
 
                 <div class="row form-group" style="margin-top:20px">
@@ -353,7 +354,7 @@ function agregaProducto(producto) {
         html += '</tr></thead><tbody>';
         html += "<tr class='recipiente-"+producto.destino+"' data-json='" + JSON.stringify(producto) + "' id='" + contador + "' data-forzar='false'>";
         html +=
-            '<td><i class="fa fa-fw fa-qrcode text-light-blue generarQR" style="cursor: pointer; margin-left: 15px;" title="QR" onclick="QR(this)"></i><i class="fa fa-fw fa-minus text-light-blue tabla_productos_asignados_borrar" style="cursor: pointer; margin-left: 15px;" title="Eliminar"></i><i class="fa fa-fw fa-cubes text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Asignar No consumible" onclick="switchPane()"></i></td>';
+            '<td><i class="fa fa-fw fa-qrcode text-light-blue generarQR" style="cursor: pointer; margin-left: 15px;" title="QR" onclick="QR(this)"></i><i class="fa fa-fw fa-minus text-light-blue tabla_productos_asignados_borrar" style="cursor: pointer; margin-left: 15px;" title="Eliminar"></i><i class="fa fa-fw fa-cubes text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Asignar No consumible" onclick="switchPane();$(\'#LoteAsociarNoConsumible\').val('+producto.destino+')"></i></td>';
         html += '<td>' + producto.loteorigen + '</td>';
         html += '<td>' + producto.titulo + '</td>';
         html += '<td>' + producto.cantidad + '</td>';
@@ -371,7 +372,7 @@ function agregaProducto(producto) {
     } else if (existe == 'si') {
         html += "<tr class='recipiente-"+producto.destino+"' data-json='" + JSON.stringify(producto) + "' id='" + contador + "' data-forzar='false'>";
         html +=
-            '<td><i class="fa fa-fw fa-qrcode text-light-blue generarQR" style="cursor: pointer; margin-left: 15px;" title="QR" onclick="QR(this)"></i><i class="fa fa-fw fa-minus text-light-blue tabla_productos_asignados_borrar" style="cursor: pointer; margin-left: 15px;" title="Eliminar"></i><i class="fa fa-fw fa-cubes text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Asignar No consumible"></i></td>';
+            '<td><i class="fa fa-fw fa-qrcode text-light-blue generarQR" style="cursor: pointer; margin-left: 15px;" title="QR" onclick="QR(this)"></i><i class="fa fa-fw fa-minus text-light-blue tabla_productos_asignados_borrar" style="cursor: pointer; margin-left: 15px;" title="Eliminar"></i><i class="fa fa-fw fa-cubes text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Asignar No consumible" onclick="switchPane();$(\'#LoteAsociarNoConsumible\').val('+producto.destino+')"></i></td>';
         html += '<td>' + producto.loteorigen + '</td>';
         html += '<td>' + producto.titulo + '</td>';
         html += '<td>' + producto.cantidad + '</td>';
@@ -572,23 +573,35 @@ function QR(e){
 	verModalImpresion();
 }
 
-function asociarNocos() {
-    var data = [];
-    $(`.batch-${s_batchId}`).next(`.info-extra`).text('');// Limpio la info extra antes de agregar
-    infoFila = '<td><label>No consumibles asociados:</label><ul>';
-    // $(`.batch-${s_batchId}`).next(`.info-extra`).append('<td><label>No consumibles asociados:</label><ul>');
-
-    $('#tbl-noco tbody  tr').each(function(){
-        dataNoCo = getJson(this);
-        data.push(dataNoCo.codigo);
-        infoFila += `<li>${dataNoCo.codigo} : ${dataNoCo.descripcion}</li>`;
-    });
-    infoFila += '</ul></td><td></td><td></td>';
-    $(`.batch-${s_batchId}`).next(`.info-extra`).html(infoFila);
-
-    setAttr($(`.batch-${s_batchId}`), 'nocos', data);
-    //resetNoco();
-    switchPane();
+function asociarNocos() {	
+    var dataNoconsum = [];	
+    var LoteAsociarNoConsumible2 = $("#LoteAsociarNoConsumible").val();	
+    aux = JSON.parse($(`.recipiente-${LoteAsociarNoConsumible2}`).attr('data-json'));    	
+    $('#tbl-noco tbody  tr').each(function(){	
+        dataNoCo = getJson(this);	
+        dataNoconsum.codigo=dataNoCo.codigo;	
+        dataNoconsum.descripcion=dataNoCo.descripcion;	
+        // dataNoconsum.push(dataNoCo.codigo);	
+        // dataNoconsum.push(dataNoCo.descripcion);	
+        // data.codigo = dataNoCo.codigo;	
+        // data.descripcion = dataNoCo.descripcion;	
+        // data.push(dataNoCo.codigo);	
+        // infoFila += `<li>${dataNoCo.codigo} : ${dataNoCo.descripcion}</li>`;	
+    });	
+    console.log(dataNoconsum);	
+    auxParseado = JSON.stringify(aux);	
+    $(`.recipiente-${LoteAsociarNoConsumible2}`).attr('data-json',auxParseado);	
+    // console.log(auxParseado);	
+    // $(`.recipiente-${s_batchId}`).next(`.info-extra`).text('');// Limpio la info extra antes de agregar	
+    // infoFila = '<td><label>No consumibles asociados:</label><ul>';	
+    // // $(`.batch-${s_batchId}`).next(`.info-extra`).append('<td><label>No consumibles asociados:</label><ul>');	
+    	
+    // infoFila += '</ul></td><td></td><td></td>';	
+    // console.log(infoFila);	
+    // $(`.recipiente-${s_batchId}`).next(`.info-extra`).html(infoFila);	
+    // setAttr($(`.recipiente-${s_batchId}`), 'nocos', data);	
+    //resetNoco();	
+    switchPane();	
 }
 // Limpia tabla nocons y abre modal padre
 function resetNoco(){
@@ -596,15 +609,71 @@ function resetNoco(){
     $('#tbl-noco tfoot').show();
     switchPane()
 }
-// Alterna entre modales
-function switchPane(){
-    $('#tbl-reportes .ver-mas').toggle();// oculta info extra
-    if($('#pnl-1').hasClass('hidden')){
-        $('#pnl-1').removeClass('hidden');
-        $('#pnl-2').addClass('hidden');
-    }else{
-        $('#pnl-2').removeClass('hidden');
-        $('#pnl-1').addClass('hidden');
-    }
+// Alterna entre modales	
+function switchPane(tag){	
+    $('#tbl-reportes .ver-mas').toggle();// oculta info extra	
+    if($('#pnl-1').hasClass('hidden')){	
+        $('#pnl-1').removeClass('hidden');	
+        $('#pnl-2').addClass('hidden');	
+    }else{	
+        // var datito = document.getElementById('" + contador + "').value;	
+        // var datito = ('.recipiente-"+producto.destino+"').val();	
+        // dataNoCo = getJson(this);	
+        console.log(s_batchId);	
+        // data.push(dataNoCo.codigo);	
+        // infoFila += `<li>${dataNoCo.codigo} : ${dataNoCo.descripcion}</li>`;	
+        $('#pnl-2').removeClass('hidden');	
+        $('#pnl-1').addClass('hidden');	
+    }	
+}
+// consulta la información de No Consum por código	
+function consultarNoCo(){	
+    wo('Buscando Informacion');	
+    var codigo = $("#codigoNoCoEscaneado").val();	
+    $.ajax({	
+        type: 'POST',	
+        dataType:'json',	
+        data:{codigo: codigo },	
+        url: '<?php echo base_url(PRD) ?>general/Noconsumible/consultarInfo',	
+        success: function(result) {	
+            wc();	
+            if(!$.isEmptyObject(result)){	
+                if(result.estado != 'ALTA'){	
+                    agregarNocoEscaneado(result);	
+                }else{	
+                    error('Error','El no consumible se encuentra inhabilitado!');	
+                }	
+            }else{	
+                alertify.error('El recipiente escaneado no se encuentra cargado...');	
+            }	
+        },	
+        error: function(result){	
+            wc();	
+        },	
+        complete: function(){	
+            $('#codigoNoCoEscaneado').val('');	
+            wc();	
+        }	
+    });	
+}
+// Agrega el NoCo escaneado a la tabla	
+function agregarNocoEscaneado(data) {	
+    $('#tbl-noco tfoot').hide();	
+    if ($('#tbl-noco tbody').find(`.${data.codigo}`).length > 0) {	
+        Swal.fire(	
+            'Alerta',	
+            ' El no consumible ya se encuentra en la lista',	
+            'warning'	
+        )	
+        return;	
+    }	
+    $('#tbl-noco tbody').append(`	
+        <tr class='${data.codigo}' data-json='${JSON.stringify(data)}'>	
+            <td>${data.codigo}</td>	
+            <td>${data.descripcion}</td>	
+            <td><button class="btn btn-link" onclick="$(this).closest('tr').remove()"><i class="fa fa-times text-danger"></i></button></td>	
+        </tr>	
+    `)	
+    $('#codigoNoCoEscaneado').val('');	
 }
 </script>
