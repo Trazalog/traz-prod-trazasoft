@@ -578,31 +578,21 @@ function asociarNocos() {
     var LoteAsociarNoConsumible2 = $("#LoteAsociarNoConsumible").val();	
     aux = JSON.parse($(`.recipiente-${LoteAsociarNoConsumible2}`).attr('data-json'));    	
     $('#tbl-noco tbody  tr').each(function(){	
-        dataNoCo = getJson(this);	
-        dataNoconsum.codigo=dataNoCo.codigo;	
-        dataNoconsum.descripcion=dataNoCo.descripcion;	
-        // dataNoconsum.push(dataNoCo.codigo);	
-        // dataNoconsum.push(dataNoCo.descripcion);	
-        // data.codigo = dataNoCo.codigo;	
-        // data.descripcion = dataNoCo.descripcion;	
-        // data.push(dataNoCo.codigo);	
-        // infoFila += `<li>${dataNoCo.codigo} : ${dataNoCo.descripcion}</li>`;	
-    });	
-    console.log(dataNoconsum);	
+        dataNoCo = getJson(this);
+        var datos = [];
+        datos['codigo'] = dataNoCo.codigo;
+        datos['descripcion'] = dataNoCo.descripcion; 
+        dataNoconsum.push(datos);
+    });
+    console.log(dataNoconsum);
+    aux.NoConsumibles={"NC":dataNoconsum};
+    console.log(aux);
     auxParseado = JSON.stringify(aux);	
+    console.log(auxParseado);	
     $(`.recipiente-${LoteAsociarNoConsumible2}`).attr('data-json',auxParseado);	
-    // console.log(auxParseado);	
-    // $(`.recipiente-${s_batchId}`).next(`.info-extra`).text('');// Limpio la info extra antes de agregar	
-    // infoFila = '<td><label>No consumibles asociados:</label><ul>';	
-    // // $(`.batch-${s_batchId}`).next(`.info-extra`).append('<td><label>No consumibles asociados:</label><ul>');	
-    	
-    // infoFila += '</ul></td><td></td><td></td>';	
-    // console.log(infoFila);	
-    // $(`.recipiente-${s_batchId}`).next(`.info-extra`).html(infoFila);	
-    // setAttr($(`.recipiente-${s_batchId}`), 'nocos', data);	
-    //resetNoco();	
     switchPane();	
 }
+
 // Limpia tabla nocons y abre modal padre
 function resetNoco(){
     $('#tbl-noco tbody').empty();
@@ -619,7 +609,7 @@ function switchPane(tag){
         // var datito = document.getElementById('" + contador + "').value;	
         // var datito = ('.recipiente-"+producto.destino+"').val();	
         // dataNoCo = getJson(this);	
-        console.log(s_batchId);	
+        // console.log(s_batchId);	
         // data.push(dataNoCo.codigo);	
         // infoFila += `<li>${dataNoCo.codigo} : ${dataNoCo.descripcion}</li>`;	
         $('#pnl-2').removeClass('hidden');	
