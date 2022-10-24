@@ -4,6 +4,7 @@
     </div>
     <div class="box-body">
 			<button class="btn btn-block btn-primary" style="width: 100px; margin-top: 10px;" onclick="nuevoNCmodal()">Agregar</button>
+			<button class="btn btn-block btn-primary" style="width: 100px; margin-top: 10px;" onclick="modalLoteNCs()">Agregar Masivo</button>
 			<div class="box-body table-scroll table-responsive">
 				<table id="tbl-NoConsumibles" class="table table-striped table-hover">
 					<thead>
@@ -813,4 +814,6 @@ function solicitarQR(e){
 <?php
     // carga el modal de impresion de QR
     $this->load->view( COD.'componentes/modalGenerico');
+	//Modal alta masiva de NC's
+    $this->load->view('NoConsumible/mdl_altaMasivaNCs');
 ?>
