@@ -230,4 +230,41 @@ class Noconsumible extends CI_Controller
         
     echo json_encode($resp);
 	}
+  /**
+	* Realiza la validación, generación y creación de los NoCo's segun los parámetros recibidos
+	* @param array parametros (cantidad, prefijo,desde,tipo NC, descripción, fec_vencimiento, establecimiento, depósito)
+	* @return array respuesta del servicio
+	*/
+  public function altaMasivaNoConsumibles(){
+    $cantidad = $this->input->post('cantidad');
+    $prefijo = $this->input->post('prefijo');
+    $desde = $this->input->post('desde');
+    $tipo_no_consumible = $this->input->post('tipo_no_consumible');
+    $descripcion = $this->input->post('descripcion');
+    $fec_vencimiento = $this->input->post('fec_vencimiento');
+    $establecimiento = $this->input->post('establecimiento');
+    $deposito = $this->input->post('deposito');
+    $noco_inicial =  (!empty($prefijo)? $prefijo : '') . $desde;
+    $noco_final =  (!empty($prefijo)? $prefijo : '') . ($desde + $cantidad);
+    $rspValidacion =  $this->Noconsumibles->validarCodigoMasivoNoConsumibles($noco_inicial,$noco_final);
+    // $data[]['_post_noconsumibles'] = array(
+    //           'codigo' => $this->input->post('codigo'),
+    //           'descripcion' => $this->input->post('descripcion'),
+    //           'fec_vencimiento' => $this->input->post('fec_vencimiento'),
+    //           'usuario_app' => userNick(),
+    //           'tinc_id' => $this->input->post('tipo_no_consumible'),
+    //           'empr_id' => empresa()
+    //         );
+
+    //   $data[]['_post_noconsumibles_movimientos'] = array(
+    //           'estado' => 'ALTA',
+    //           'usuario_app' => userNick(),
+    //           'noco_id' => $this->input->post('codigo'),
+    //           'depo_id' => $this->input->post('depositos'),
+    //           'dest_id' => '',
+    //           'empr_id' => empresa()
+    //         );
+
+    echo json_encode($rspValidacion);
+  }
 }
