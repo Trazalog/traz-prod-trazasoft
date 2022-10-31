@@ -55,6 +55,7 @@ function agregaMateria(materia) {
             '<td><i class="fa fa-fw fa-minus text-light-blue" style="cursor: pointer; margin-left: 15px;" onclick="eliminarOrigen(this)"></i></td>';
     }
     html += '<td>' + materia[0].barcode + '</td>';
+    html += '<td>' + materia[0].descripcion + '</td>';
     html += '<td>' + materia[0].stock + '</td>';
     html += '<td>' + materia[0].cantidad + '</td>';
     html += '</tr>';
