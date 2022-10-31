@@ -248,4 +248,17 @@ class Noconsumibles extends CI_Model
 
     return $resp->resultado;
   }
+  /**
+	* Consulta al service si el prefijo recibido esta creado, si es afirmativa obtiene el último codigo ingresado
+	* @param string $prefijo cadena del codigo
+	* @return array respuesta del servicio
+	*/
+  public function obtenerIndicePrefijo($prefijo){
+    log_message('DEBUG','#TRAZA | #TRAZ-PROD-TRAZASOFT | Noconsumibles | obtenerIndicePrefijo()');
+    $url = REST_PRD_NOCON."/noConsumibles/ultimoCodigo/". urlencode($prefijo) ."/empresa/".empresa();
+
+    $aux = $this->rest->callAPI("GET",$url);
+    $resp = json_decode($aux['data']);
+    return $resp;
+  }
 }

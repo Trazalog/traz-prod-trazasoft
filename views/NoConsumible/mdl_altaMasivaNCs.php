@@ -16,7 +16,7 @@
                             </div>
                             <label class="col-md-2 control-label" for="prefijo">Prefijo:</label>
                             <div class="col-md-4">
-                                <input id="prefijoNCM" name="prefijo" type="text" placeholder="Ingrese prefijo" class="form-control input-md">
+                                <input id="prefijoNCM" name="prefijo" type="text" placeholder="Ingrese prefijo" class="form-control input-md" onchange="obtenerUltimoIndicePrefijo()">
                             </div>
                         </div>
                         <!-- ___________________________________________________ -->
@@ -88,6 +88,26 @@
     </div>
 </div>
 <!-------------------------------------------------------->
+<!-- MODAL PLANTILLA QR MASIVO-->
+<div class='modal fade' id='modalPlantillaQR' tabindex='-1' role='dialog' aria-labelledby='myModalLabel'>
+    <div class='modal-dialog' role='document'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class='modal-title' id='myModalLabel'>Listado QR's generados</h4>
+            </div>
+            <div class='modal-body'>
+                <div id="QRsGenerados" style="position:relative; float:left">
+                </div>
+            </div>
+            <div class='modal-footer'>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+                <button type='button' class='btn btn-primary' onclick='imprimirQRMasivos()'>Imprimir</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- FIN MODAL PLANTILLA QR MASIVO-->
 <script>
 ///////////////////////////////////////////////////////////
 //Scripts para el alta masiva de NC's
@@ -114,9 +134,9 @@ function guardarNoCoMasivo() {
         cache: false,
         contentType: false,
         processData: false,
-        success: function(rsp) {
+        success: function(resp) {
             wc();
-            resp = JSON.parse(rsp);
+            // resp = JSON.parse(rsp);
             $("#mdl-altaMasivaNCs").modal('hide');
             const confirm = Swal.mixin({
                 customClass: {
@@ -127,27 +147,155 @@ function guardarNoCoMasivo() {
 
             if (resp.status) {
                 confirm.fire({
-                    title: 'Correcto',
-                    text: "No consumible dado de alta correctamente!",
-                    type: 'success',
+                    title: resp.title,
+                    html: resp.msg,
+                    type: resp.type,
                     showCancelButton: false,
                     confirmButtonText: 'Ok'
                 }).then((result) => {
-                    
-                    linkTo('<?php echo base_url(PRD) ?>general/Noconsumible/index');
-                    
+                    resp.NoCos.forEach(NoCo => {
+                        solicitarQRMasivo(NoCo);
+                    });
+                    wo();
+                    setTimeout(() =>{
+                        $("#modalPlantillaQR").modal('show');
+                        wc();
+                    }, 5000);
                 });
             } else {
                 wc();
-                error('Error...','No pudo darse de alta el No consumible!')
+                notificar(resp.title,resp.msg,resp.type);
             }
         },
-        error: function(rsp) {
+        error: function(resp) {
+            // resp = JSON.parse(rsp);
             wc();
             $("#mdl-altaMasivaNCs").modal('hide');
-            error('Error...','No pudo darse de alta el No consumible!')
-            console.log(rsp.msj);
+            notificar(resp.title,resp.msg,resp.type);
         }
     });
-}	
+}
+///////////////////////////////////////////////
+//Obtiene el ultimo valor + 1 cargado para el prefijo ingresado
+function obtenerUltimoIndicePrefijo() {
+    wo();
+    data = {"prefijo": $("#prefijoNCM").val()};
+    $.ajax({
+        type: 'POST',
+        dataType: 'JSON',
+        url: '<?php echo base_url(PRD) ?>general/Noconsumible/obtenerIndicePrefijo',
+        data: data,
+        success: function(resp) {
+            wc();
+            if(resp.status){
+                notificar('Último índice: ' + resp.indice,' - ','info');
+                $("#desdeNCM").val(++resp.indice);
+            }
+        },
+        error: function(resp) {
+            wc();
+        }
+    });
+}
+///////////////////////////////////////////////////
+//////// Configuracion y creacion códigos QR MASIVO
+function solicitarQRMasivo(datosNoCo){
+	// configuración de código QR
+	var config = {};
+	config.titulo = "Código No Consumible";
+	config.pixel = "3";
+	config.level = "L";
+	config.framSize = "2";
+
+	var dataQR = datosNoCo;
+
+	// agrega codigo QR al modal impresion
+	obtenerQR(config, dataQR, 'codigosQR/Traz-prod-trazasoft/NoConsumibles/QR_Masivo');
+}
+// trae codigo QR con los datos recibidos y pega el resultado para ser impreso
+function obtenerQR(config, data, direccion) {
+    $.ajax({
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            config,
+            data,
+            direccion
+        },
+        url: 'index.php/<?php echo COD ?>Codigo/generarQRMasivo',
+        success: function(result) {
+
+            if (result != null) {
+                html =  '<div style="width: 45%; float:left">' +
+                            '<div style="width: 100%">' +
+                                '<div style="width: 100%">' +
+                                    '<p>No consumible: <strong>'+ data.codigo+'</strong></p>'+
+                                '</div>'+
+                                '<div style="width: 100%">' +
+                                    '<p>Descripción: <strong>'+ data.descripcion+'</strong></p>'+
+                                    '<p>Fecha de Alta: <strong>'+ data.fec_alta+'</strong></p>'+
+                                '</div>'+
+                            '</div>'+
+                            '<div style="width: 100%; text-align:center"><img src="' + result.filename + '" alt="codigo qr" >' +
+                            '</div>'+
+                        '</div>';
+                $("#QRsGenerados").append(html);
+            }
+        },
+        error: function(result) {
+
+        },
+        complete: function() {
+
+        }
+    });
+}
+////////////// FIN Creación QR
+function testeo(){
+    jsonTest = {
+        "NoCos": [{
+                "codigo" : "RNS-10",
+                "descripcion": "continuaci\u00f3n de la locura masiva",
+                "fec_alta": "27-10-2222"
+            },
+            {
+                "codigo" : "RNS-11",
+                "descripcion": "continuaci\u00f3n de la locura masiva",
+                "fec_alta": "27-10-2222"
+            },
+            {
+                "codigo" : "RNS-12",
+                "descripcion": "continuaci\u00f3n de la locura masiva",
+                "fec_alta": "27-10-2222"
+            },
+            {
+                "codigo" : "RNS-13",
+                "descripcion": "continuaci\u00f3n de la locura masiva",
+                "fec_alta": "27-10-2222"
+            },
+            {
+                "codigo" : "RNS-14",
+                "descripcion": "continuaci\u00f3n de la locura masiva",
+                "fec_alta": "27-10-2222"
+            }
+        ]
+    }
+    //Fin json testeo
+    jsonTest.NoCos.forEach(item => {
+        solicitarQRMasivo(item);
+    });
+}
+function imprimirQRMasivos(){
+    var base = "<?php echo base_url()?>";
+    $('#QRsGenerados').printThis({
+        debug: false,
+        importCSS: false,
+        importStyle: true,
+        pageTitle: "TRAZALOG TOOLS",
+        printContainer: true,
+        removeInline: true,
+        printDelay: 3000,
+        base: base
+    });
+}
 </script>
