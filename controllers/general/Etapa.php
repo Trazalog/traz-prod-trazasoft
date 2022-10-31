@@ -17,6 +17,7 @@ class Etapa extends CI_Controller
         $this->load->model('general/Recursos');
         $this->load->model('general/Procesos');
         $this->load->model('general/Lotes');
+        $this->load->model('general/Formulas');
         $this->load->model(FRM . 'Forms');
 
         // si esta vencida la sesion redirige al login
@@ -79,7 +80,7 @@ class Etapa extends CI_Controller
         #Obtener Proucto por Etapa
         $data['productos_etapa'] = $this->Etapas->obtenerArticulos($data['etapa']->id)['data'];
         $data['productos_entrada_etapa'] = $this->Etapas->getEntradaEtapa($data['etapa']->id)['data'];
-
+        $data['formulas'] = $this->Formulas->getFormulas()->formulas->formula;
         $data['lang'] = lang_get('spanish', 5);
         $data['tareas'] = []; //$this->Tareas->listar()->tareas->tarea;
         $data['templates'] = []; //$this->Templates->listar()->templates->template;
@@ -353,7 +354,7 @@ class Etapa extends CI_Controller
 
             $this->load->view('etapa/fraccionar/fraccionar', $data);
         } else {
-
+            $data['formulas'] = $this->Formulas->getFormulas()->formulas->formula;
             $data['tareas'] = []; //$this->Tareas->listar()->tareas->tarea;
             $data['templates'] = []; //$this->Templates->listar()->templates->template;
             $data['recursosmateriales'] = []; //$this->Recursos_Materiales->listar()->recursos->recurso;
