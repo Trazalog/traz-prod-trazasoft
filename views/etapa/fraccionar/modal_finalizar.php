@@ -365,7 +365,7 @@ function AgregarProductoFinal() {
             //         'productorecipientes').selectedIndex].innerHTML;
             //     producto.recipientefinal = document.getElementById('productorecipientes').value;
             // }
-
+            dataProducto = JSON.parse($("#productos").attr('data-json'));
             recipientes = '<?php echo json_encode($recipientes); ?>';
             recipientes = JSON.parse(recipientes);
             console.log("recipientes: ");
