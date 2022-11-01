@@ -19,10 +19,10 @@
           $nombre_nuevo = str_replace("_", " ", $cadena_nombre);
 					echo "<tr data-json='".json_encode($rsp)."'>";
 						echo "<td class='text-center text-light-blue'>";
-							echo '<button type="button" title="Editar"  class="btn btn-primary btn-circle btnEditar" data-toggle="modal" data-target="#modaleditar"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>&nbsp';
-							echo '<button type="button" title="Info" class="btn btn-primary btn-circle btnInfo" data-toggle="modal" data-target="#modaleditar" ><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></button>&nbsp';
-							echo '<button type="button" title="Ver Artículos" class="btn btn-primary btn-circle btnArticulos" ><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span></button>&nbsp';
-							echo '<button type="button" title="Eliminar" class="btn btn-primary btn-circle btnEliminar"><span class="glyphicon glyphicon-trash" aria-hidden="true" ></span></button>&nbsp';
+              echo '<i title="Ver detalle" class="fa fa-eye btnInfo" style="cursor: pointer; margin: 3px;" aria-hidden="true" data-toggle="modal" data-target="#modaleditar" ></i>&nbsp';
+              echo '<i title="Editar" class="fa fa-pencil-square-o btnEditar"  aria-hidden="true" style="cursor: pointer; margin: 3px;" data-toggle="modal" data-target="#modaleditar"></i>&nbsp';
+              echo '<i title="Ver Artículos" class="fa fa-list btnArticulos"  aria-hidden="true" style="cursor: pointer; margin: 3px;"></i>&nbsp';
+              echo '<i title="Eliminar" class="fa fa-trash btnEliminar" aria-hidden="true" style="cursor: pointer; margin: 3px;"></i>&nbsp';
 						echo "</td>";
 						echo '<td>'.$nombre_nuevo.'</td>';
 						echo '<td>'.$rsp->proc_prod.'</td>';
