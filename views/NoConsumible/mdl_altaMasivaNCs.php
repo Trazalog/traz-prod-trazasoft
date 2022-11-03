@@ -43,7 +43,7 @@
                         <div class="form-group">
                             <label class="col-md-2 control-label" for="descripcion">Descripción<?php echo hreq() ?>:</label>
                             <div class="col-md-10">
-                                <textarea class="form-control" id="descripcionNCM" name="descripcion" <?php echo req() ?>></textarea>
+                                <textarea class="form-control" id="descripcionNCM" name="descripcion" maxlength="80" <?php echo req() ?>></textarea>
                             </div>
                         </div>
                         <!-- ___________________________________________________ -->
@@ -97,7 +97,7 @@
                 <h4 class='modal-title' id='myModalLabel'>Listado QR's generados</h4>
             </div>
             <div class='modal-body'>
-                <div id="QRsGenerados" style="position:relative; float:left">
+                <div id="QRsGenerados" style="position:relative; float:left; width: 100%">
                 </div>
             </div>
             <div class='modal-footer'>
@@ -153,12 +153,14 @@ function guardarNoCoMasivo() {
                     showCancelButton: false,
                     confirmButtonText: 'Ok'
                 }).then((result) => {
+                    $("#QRsGenerados").empty();
                     resp.NoCos.forEach(NoCo => {
                         solicitarQRMasivo(NoCo);
                     });
                     wo();
                     setTimeout(() =>{
-                        $("#modalPlantillaQR").modal('show');
+                        // $("#modalPlantillaQR").modal('show');
+                        imprimirQRMasivos();
                         wc();
                     }, 5000);
                 });
@@ -224,19 +226,18 @@ function obtenerQR(config, data, direccion) {
         },
         url: 'index.php/<?php echo COD ?>Codigo/generarQRMasivo',
         success: function(result) {
-
             if (result != null) {
-                html =  '<div style="width: 45%; float:left">' +
-                            '<div style="width: 100%">' +
-                                '<div style="width: 100%">' +
-                                    '<p>No consumible: <strong>'+ data.codigo+'</strong></p>'+
+                html =  '<div class="contenedorBloqueNoCo anchoFull" style="width: 100%; float:left">' +
+                            '<div class="anchoFull" style="width: 100%">' +
+                                '<div class="anchoFull separarContenido" style="width: 100%">' +
+                                    '<p class="tituloNoCo">ID: <strong>'+ data.codigo+'</strong></p>'+
                                 '</div>'+
-                                '<div style="width: 100%">' +
-                                    '<p>Descripción: <strong>'+ data.descripcion+'</strong></p>'+
-                                    '<p>Fecha de Alta: <strong>'+ data.fec_alta+'</strong></p>'+
+                                '<div class="anchoFull separarContenido" style="width: 100%">' +
+                                    '<p><strong>Descripción: '+ data.descripcion+'</strong></p>'+
+                                    '<p><strong>Fecha de Alta: '+ data.fec_alta+'</strong></p>'+
                                 '</div>'+
                             '</div>'+
-                            '<div style="width: 100%; text-align:center"><img src="' + result.filename + '" alt="codigo qr" >' +
+                            '<div class="anchoFull centrar" style="width: 100%; text-align:center"><img class="imagenQRNoCo" src="' + result.filename + '" alt="codigo qr" >' +
                             '</div>'+
                         '</div>';
                 $("#QRsGenerados").append(html);
@@ -260,7 +261,7 @@ function testeo(){
             },
             {
                 "codigo" : "RNS-11",
-                "descripcion": "continuaci\u00f3n de la locura masiva",
+                "descripcion": "continuaci\u00f3n porque estoy tratando de probar cuanto puede soportar sin perder el estilo, me entendes?",
                 "fec_alta": "27-10-2222"
             },
             {
@@ -270,7 +271,7 @@ function testeo(){
             },
             {
                 "codigo" : "RNS-13",
-                "descripcion": "continuaci\u00f3n de la locura masiva",
+                "descripcion": "continuaci\u00f3n de la locura masiva esta descripcion es mas larga",
                 "fec_alta": "27-10-2222"
             },
             {
@@ -285,16 +286,20 @@ function testeo(){
         solicitarQRMasivo(item);
     });
 }
+//hoja_estilos se define en core.tablas por empresa
 function imprimirQRMasivos(){
     var base = "<?php echo base_url()?>";
+    var hoja_estilos = "<?php echo !empty($estiloImpresionQR->descripcion) ? base_url($estiloImpresionQR->descripcion) : '' ?>";
     $('#QRsGenerados').printThis({
         debug: false,
         importCSS: false,
-        importStyle: true,
+        importStyle: false,
         pageTitle: "TRAZALOG TOOLS",
-        printContainer: true,
-        removeInline: true,
+        printContainer: false,
+        // removeInline: true,
+        // copyTagClasses: true,
         printDelay: 3000,
+        loadCSS: hoja_estilos,
         base: base
     });
 }

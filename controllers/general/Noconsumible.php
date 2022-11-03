@@ -16,6 +16,7 @@ class Noconsumible extends CI_Controller
       $data['tipoNoConsumible'] = $this->Noconsumibles->tipoNoConsumible()['data'];
       $data['tipoEstablecimiento'] = $this->Noconsumibles->tipoEstablecimiento()['data'];
       $data['ListarNoConsumible'] = $this->Noconsumibles->ListarNoConsumible()['data'];
+      $data['estiloImpresionQR'] = $this->Noconsumibles->getEstilosQRNoCos()[0];
       $this->load->view('NoConsumible/ListarNoConsumible',$data);
     }
 

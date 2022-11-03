@@ -563,7 +563,7 @@ function solicitarQR(e){
 									<div class="form-group">
 											<label class="col-md-2 control-label" for="descripcion">Descripción<?php echo hreq() ?>:</label>
 											<div class="col-md-10">
-													<textarea class="form-control" id="descripcion" name="descripcion"
+													<textarea class="form-control" id="descripcion" name="descripcion" maxlength="80"
 													<?php echo req() ?>></textarea>
 											</div>
 									</div>
@@ -662,8 +662,7 @@ function solicitarQR(e){
 								<label class="col-md-2 control-label" for="descripcion">Descripción<strong
 												class="text-danger">*</strong>:</label>
 								<div class="col-md-10">
-										<textarea class="form-control habilitar" id="descripcion" name="descripcion"
-											></textarea>
+										<textarea class="form-control habilitar" id="descripcion" name="descripcion" maxlength="80"></textarea>
 								</div>
 						</div>
 
