@@ -17,11 +17,12 @@
 				{
           $cadena_nombre = $rsp->nombre;
           $nombre_nuevo = str_replace("_", " ", $cadena_nombre);
+          $nombre_etapa = str_replace(" ", "-", $cadena_nombre);
 					echo "<tr data-json='".json_encode($rsp)."'>";
 						echo "<td class='text-center text-light-blue'>";
               echo '<i title="Ver detalle" class="fa fa-eye btnInfo" style="cursor: pointer; margin: 3px;" aria-hidden="true" data-toggle="modal" data-target="#modaleditar" ></i>&nbsp';
               echo '<i title="Editar" class="fa fa-pencil-square-o btnEditar"  aria-hidden="true" style="cursor: pointer; margin: 3px;" data-toggle="modal" data-target="#modaleditar"></i>&nbsp';
-              echo '<i title="Ver Artículos" class="fa fa-list btnArticulos"  aria-hidden="true" style="cursor: pointer; margin: 3px;"></i>&nbsp';
+              echo '<i title="Ver Artículos" class="fa fa-list btnArticulos"  data-nombre_etapa='.$nombre_etapa.' aria-hidden="true" style="cursor: pointer; margin: 3px;"></i>&nbsp';
               echo '<i title="Eliminar" class="fa fa-trash btnEliminar" aria-hidden="true" style="cursor: pointer; margin: 3px;"></i>&nbsp';
 						echo "</td>";
 						echo '<td>'.$nombre_nuevo.'</td>';
@@ -76,8 +77,8 @@
   $(".btnArticulos").on("click", function(e) {
     $(".modal-header h4").remove();
     $("#operacion").val("Articulos");
-    //pongo titulo al modal
-    $(".modal-header").append('<h4 class="modal-title"  id="myModalLabel"><span id="modalAction" class="fa fa-fw fa-pencil"></span> Artículos de la Etapa Productiva </h4>');
+    //pongo titulo al modal y le agrego el dataset con el titulo
+    $(".modal-header").append(`<h4 class="modal-title"  id="myModalLabel"><span id="modalAction"  class="fa fa-fw fa-pencil"></span> Artículos de la Etapa ${e.target.dataset.nombre_etapa}  </h4>`);
     datajson = $(this).parents("tr").attr("data-json");
     data = JSON.parse(datajson);
     var etap_id = data.etap_id;
