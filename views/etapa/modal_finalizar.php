@@ -1,7 +1,8 @@
 <div class="modal" id="modal_finalizar" role="dialog" style="overflow-y: auto !important; "
     aria-labelledby="myModalLabel">
     <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
+        <!-- modal viejo -->
+        <div id="pnl-1" class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
@@ -9,6 +10,7 @@
             </div>
             <input class="hidden" type="text" id="num_orden_prod" value="<?php echo $etapa->orden;?>">
             <input class="hidden" type="text" id="batch_id_padre" value="<?php echo $etapa->id;?>">
+            <input class="hidden" type="text" id="LoteAsociarNoConsumible">
             <div class="modal-body" id="modalBodyArticle">
 
                 <div class="row form-group" style="margin-top:20px">
@@ -171,6 +173,53 @@
                 </div>
             </div>
         </div>
+        <!-- fin modal viejo -->
+        <!-- modal asignar no consumible -->
+        <div id="pnl-2" class="modal-content hidden">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                        <button type="button" class="close" onclick="switchPane()">&times;</button>
+                        <h4 class="modal-title">Asignar no Consumibles</h4>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12 form-group">
+                            <label>Escanear No Consumible</label>
+                            <div class="input-group">
+                                <input id="codigoNoCoEscaneado" class="form-control" placeholder="Busque Código..." autocomplete="off" onchange="consultarNoCo()">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-primary" style="cursor:not-allowed">
+                                        <i class="glyphicon glyphicon-search"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <table id="tbl-noco" class="table table-hover table-striped">
+                                <thead>
+                                    <td>Código</td>
+                                    <td>Descripción</td>
+                                    <td></td>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                                <tfoot class="text-center">
+                                    <tr>
+                                        <td colspan="3">Tabla vacía</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                        <button type="button" class="btn" onclick="resetNoco()">Cancelar</button>
+                        <button type="button" class='btn btn-success' onclick='asociarNocos()'>Hecho</button>
+                </div>
+        </div>
+        <!-- fin modal asignar no consumible -->
     </div>
 </div>
 <?php
@@ -305,7 +354,7 @@ function agregaProducto(producto) {
         html += '</tr></thead><tbody>';
         html += "<tr class='recipiente-"+producto.destino+"' data-json='" + JSON.stringify(producto) + "' id='" + contador + "' data-forzar='false'>";
         html +=
-            '<td><i class="fa fa-fw fa-qrcode text-light-blue generarQR" style="cursor: pointer; margin-left: 15px;" title="QR" onclick="QR(this)"></i><i class="fa fa-fw fa-minus text-light-blue tabla_productos_asignados_borrar" style="cursor: pointer; margin-left: 15px;" title="Eliminar"></i></td>';
+            '<td><i class="fa fa-fw fa-qrcode text-light-blue generarQR" style="cursor: pointer; margin-left: 15px;" title="QR" onclick="QR(this)"></i><i class="fa fa-fw fa-minus text-light-blue tabla_productos_asignados_borrar" style="cursor: pointer; margin-left: 15px;" title="Eliminar"></i><i class="fa fa-fw fa-cubes text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Asignar No consumible" onclick="switchPane();$(\'#LoteAsociarNoConsumible\').val('+producto.destino+')"></i></td>';
         html += '<td>' + producto.loteorigen + '</td>';
         html += '<td>' + producto.titulo + '</td>';
         html += '<td>' + producto.cantidad + '</td>';
@@ -323,7 +372,7 @@ function agregaProducto(producto) {
     } else if (existe == 'si') {
         html += "<tr class='recipiente-"+producto.destino+"' data-json='" + JSON.stringify(producto) + "' id='" + contador + "' data-forzar='false'>";
         html +=
-            '<td><i class="fa fa-fw fa-qrcode text-light-blue generarQR" style="cursor: pointer; margin-left: 15px;" title="QR" onclick="QR(this)"></i><i class="fa fa-fw fa-minus text-light-blue tabla_productos_asignados_borrar" style="cursor: pointer; margin-left: 15px;" title="Eliminar"></i></td>';
+            '<td><i class="fa fa-fw fa-qrcode text-light-blue generarQR" style="cursor: pointer; margin-left: 15px;" title="QR" onclick="QR(this)"></i><i class="fa fa-fw fa-minus text-light-blue tabla_productos_asignados_borrar" style="cursor: pointer; margin-left: 15px;" title="Eliminar"></i><i class="fa fa-fw fa-cubes text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Asignar No consumible" onclick="switchPane();$(\'#LoteAsociarNoConsumible\').val('+producto.destino+')"></i></td>';
         html += '<td>' + producto.loteorigen + '</td>';
         html += '<td>' + producto.titulo + '</td>';
         html += '<td>' + producto.cantidad + '</td>';
@@ -522,5 +571,99 @@ function QR(e){
 
 	// levanta modal completo para su impresion
 	verModalImpresion();
+}
+
+function asociarNocos() {	
+    var dataNoconsum = [];	
+    var LoteAsociarNoConsumible2 = $("#LoteAsociarNoConsumible").val();	
+    aux = JSON.parse($(`.recipiente-${LoteAsociarNoConsumible2}`).attr('data-json'));    	
+    $('#tbl-noco tbody  tr').each(function(){	
+        dataNoCo = getJson(this);
+        var datos = {};
+        datos.codigo = dataNoCo.codigo;
+        datos.descripcion = dataNoCo.descripcion; 
+        dataNoconsum.push(datos);
+    });
+    console.log(dataNoconsum);
+    aux.NoConsumibles={"NC":dataNoconsum};
+    console.log(aux);
+    auxParseado = JSON.stringify(aux);	
+    console.log(auxParseado);	
+    $(`.recipiente-${LoteAsociarNoConsumible2}`).attr('data-json',auxParseado);	
+    switchPane();	
+}
+
+// Limpia tabla nocons y abre modal padre
+function resetNoco(){
+    $('#tbl-noco tbody').empty();
+    $('#tbl-noco tfoot').show();
+    switchPane()
+}
+// Alterna entre modales	
+function switchPane(tag){	
+    $('#tbl-reportes .ver-mas').toggle();// oculta info extra	
+    if($('#pnl-1').hasClass('hidden')){	
+        $('#pnl-1').removeClass('hidden');	
+        $('#pnl-2').addClass('hidden');	
+    }else{	
+        // var datito = document.getElementById('" + contador + "').value;	
+        // var datito = ('.recipiente-"+producto.destino+"').val();	
+        // dataNoCo = getJson(this);	
+        // console.log(s_batchId);	
+        // data.push(dataNoCo.codigo);	
+        // infoFila += `<li>${dataNoCo.codigo} : ${dataNoCo.descripcion}</li>`;	
+        $('#pnl-2').removeClass('hidden');	
+        $('#pnl-1').addClass('hidden');	
+    }	
+}
+// consulta la información de No Consum por código	
+function consultarNoCo(){	
+    wo('Buscando Informacion');	
+    var codigo = $("#codigoNoCoEscaneado").val();	
+    $.ajax({	
+        type: 'POST',	
+        dataType:'json',	
+        data:{codigo: codigo },	
+        url: '<?php echo base_url(PRD) ?>general/Noconsumible/consultarInfo',	
+        success: function(result) {	
+            wc();	
+            if(!$.isEmptyObject(result)){	
+                if(result.estado != 'ALTA'){	
+                    agregarNocoEscaneado(result);	
+                }else{	
+                    error('Error','El no consumible se encuentra inhabilitado!');	
+                }	
+            }else{	
+                alertify.error('El recipiente escaneado no se encuentra cargado...');	
+            }	
+        },	
+        error: function(result){	
+            wc();	
+        },	
+        complete: function(){	
+            $('#codigoNoCoEscaneado').val('');	
+            wc();	
+        }	
+    });	
+}
+// Agrega el NoCo escaneado a la tabla	
+function agregarNocoEscaneado(data) {	
+    $('#tbl-noco tfoot').hide();	
+    if ($('#tbl-noco tbody').find(`.${data.codigo}`).length > 0) {	
+        Swal.fire(	
+            'Alerta',	
+            ' El no consumible ya se encuentra en la lista',	
+            'warning'	
+        )	
+        return;	
+    }	
+    $('#tbl-noco tbody').append(`	
+        <tr class='${data.codigo}' data-json='${JSON.stringify(data)}'>	
+            <td>${data.codigo}</td>	
+            <td>${data.descripcion}</td>	
+            <td><button class="btn btn-link" onclick="$(this).closest('tr').remove()"><i class="fa fa-times text-danger"></i></button></td>	
+        </tr>	
+    `)	
+    $('#codigoNoCoEscaneado').val('');	
 }
 </script>
