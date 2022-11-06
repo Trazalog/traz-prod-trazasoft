@@ -3,7 +3,12 @@
         <h4 class="box-title">Listado de No Consumibles</h4>
     </div>
     <div class="box-body">
-			<button class="btn btn-block btn-primary" style="width: 100px; margin-top: 10px;" onclick="nuevoNCmodal()">Agregar</button>
+			<div class="row">
+				<div class="col-md-6">
+					<button class="btn btn-primary" style="margin-top: 10px;" onclick="nuevoNCmodal()">Agregar</button>
+					<button class="btn btn-primary" style="margin-top: 10px;" onclick="modalLoteNCs()">Agregar Masivo</button>
+				</div>
+			</div>
 			<div class="box-body table-scroll table-responsive">
 				<table id="tbl-NoConsumibles" class="table table-striped table-hover">
 					<thead>
@@ -119,22 +124,13 @@
 							});
 						} else {
 							wc();
-							Swal.fire(
-								'Error...',
-								'No pudo darse de alta el No consumible!',
-								'error'
-							);
+							error('Error...','No pudo darse de alta el No consumible!')
 						}
 					},
 					error: function(rsp) {
 						wc();
 						$("#mdl-NoConsumible").modal('hide');
-
-						Swal.fire(
-							'Error...',
-							'No pudo darse de alta el No consumible!',
-							'error'
-						)
+						error('Error...','No pudo darse de alta el No consumible!')
 						console.log(rsp.msj);
 					}
 				});
@@ -177,17 +173,11 @@
 					showCancelButton: false,
 					confirmButtonText: 'Ok'
 				}).then((result) => {
-					
 					linkTo('<?php echo base_url(PRD) ?>general/Noconsumible/index');
-					
 				});
 			},
 			error: function(rsp) {
-				Swal.fire(
-					'Oops...',
-						'Algo salio mal!',
-						'error'
-				)
+				error('Oops...','Algo salio mal!');
 				console.log(rsp.msj);
 			},
 			complete: function() {
@@ -196,81 +186,80 @@
 		});
 	}
 
-	function selectEstablecimiento() {
-    var esta_id = $('#establecimiento').val();
-    $('#estabSelected').text('');
-    $('#deposSelected').text('');
-    $('#recipSelected').text('');
+	function selectEstablecimiento(tag) {
+		var esta_id = $(tag).val();
+		$('#estabSelected').text('');
+		$('#deposSelected').text('');
+		$('#recipSelected').text('');
 
-    wo();
-    $.ajax({
-				type: 'GET',
-				data: {
-					esta_id: esta_id
-				},
-				dataType: 'JSON',
-				url: '<?php echo base_url(PRD) ?>general/Establecimiento/obtenerDepositos/',
-				success: function(rsp) {
+		wo();
+		$.ajax({
+			type: 'GET',
+			data: {
+				esta_id: esta_id
+			},
+			dataType: 'JSON',
+			url: '<?php echo base_url(PRD) ?>general/Establecimiento/obtenerDepositos/',
+			success: function(rsp) {
 
-					$('#depositos').empty();
+				$('.selectedDeposito').empty();
 
-					var datos = "<option value='' disabled selected>Seleccionar</option>";
-					for (let i = 0; i < rsp.length; i++) {
-						datos += "<option value=" + rsp[i].depo_id + ">" + rsp[i].descripcion + "</option>";
-					}
-					//selectSearch('establecimiento', 'estabSelected');
-					$('#depositos').html(datos);
-				},
-				error: function(rsp) {
-					if (rsp) {
-						$('#depositos').empty();
-						alert(rsp.responseText);
-					} else {
-						$('#depositos').empty();
-						alert("No se pudieron cargar los depositos del establecimiento seleccionado.");
-					}
-				},
-				complete: function(rsp) {
-        wc();
-      },
-    })
-  }
+				var datos = "<option value='' disabled selected>Seleccionar</option>";
+				for (let i = 0; i < rsp.length; i++) {
+					datos += "<option value=" + rsp[i].depo_id + ">" + rsp[i].descripcion + "</option>";
+				}
+				//selectSearch('establecimiento', 'estabSelected');
+				$('.selectedDeposito').html(datos);
+			},
+			error: function(rsp) {
+				if (rsp) {
+					$('.selectedDeposito').empty();
+					error('Error',rsp.responseText);
+				} else {
+					$('.selectedDeposito').empty();
+					error('Error',"No se pudieron cargar los depositos del establecimiento seleccionado.");
+				}
+			},
+			complete: function(rsp) {
+				wc();
+			},
+		})
+  	}
 
-  function selectDeposito() {
-
-			var esta_id = $('#establecimiento').val();
-			var depo_id = $('#depositos').val();
-			$('#deposSelected').text('');
-			$('#recipSelected').text('');
-			wo();
-			$.ajax({
-				type: 'GET',
-				data: {
-					esta_id: esta_id,
-					depo_id: depo_id
-				},
-				dataType: 'JSON',
-				url: '<?php echo base_url(PRD) ?>general/Establecimiento/obtenerRecipientesDeposito/',
-				success: function(rsp) {
-					var datos = "<option value='' disabled selected>Seleccionar</option>";
-					for (let i = 0; i < rsp.length; i++) {
-						datos += "<option value=" + rsp[i].nombre + ">" + rsp[i].nombre + "</option>";
-					}
-					//selectSearch('depositos', 'deposSelected');
-					$('#tipo_residuo').html(datos);
-				},
-				error: function(rsp) {
-					if (rsp) {
-						alert(rsp.responseText);
-					} else {
-						alert("No se pudieron cargar los recipientes.");
-					}
-				},
-				complete: function(rsp) {
-					wc();
-				},
-			})
-  }
+  	function selectDeposito() {
+		var esta_id = $('#establecimiento').val();
+		var depo_id = $('#depositos').val();
+		$('#deposSelected').text('');
+		$('#recipSelected').text('');
+		wo();
+		$.ajax({
+			type: 'GET',
+			data: {
+				esta_id: esta_id,
+				depo_id: depo_id
+			},
+			dataType: 'JSON',
+			url: '<?php echo base_url(PRD) ?>general/Establecimiento/obtenerRecipientesDeposito/',
+			success: function(rsp) {
+				var datos = "<option value='' disabled selected>Seleccionar</option>";
+				for (let i = 0; i < rsp.length; i++) {
+					datos += "<option value=" + rsp[i].nombre + ">" + rsp[i].nombre + "</option>";
+				}
+				//selectSearch('depositos', 'deposSelected');
+				$('#tipo_residuo').html(datos);
+			},
+			error: function(rsp) {
+				if (rsp) {
+					alert(rsp.responseText);
+				} else {
+					alert("No se pudieron cargar los recipientes.");
+				}
+			},
+			complete: function(rsp) {
+				wc();
+			},
+		})
+  	}
 
   function selectRecipiente() {
     selectSearch('tipo_residuo', 'recipSelected');
@@ -285,7 +274,6 @@
       }
     });
   }
-
 
 ////// Bloque ver y editar
 	function verInfo(data){
@@ -593,7 +581,7 @@ function solicitarQR(e){
 									
 												<label class="col-md-4 control-label" for="">Establecimiento<?php echo hreq() ?>:</label>
 													<div class="col-md-8">
-													<select class="form-control select2 select2-hidden-accesible" id="establecimiento" name="establecimiento" onchange="selectEstablecimiento()" <?php echo req() ?>>
+													<select class="form-control select2 select2-hidden-accesible" id="establecimiento" name="establecimiento" onchange="selectEstablecimiento(this)" <?php echo req() ?>>
 															<option value="" disabled selected>Seleccionar</option>
 															<?php
 																if(is_array($tipoEstablecimiento)){
@@ -611,7 +599,7 @@ function solicitarQR(e){
 									<div class="form-group">
 													<label class="col-md-4 control-label" for="depositos">Depósito<?php echo hreq() ?>:</label>
 													<div class="col-md-8">
-													<select class="form-control select2 select2-hidden-accesible" id="depositos" name="depositos" onchange="selectDeposito()" <?php echo req() ?>>
+													<select class="form-control select2 select2-hidden-accesible selectedDeposito" id="depositos" name="depositos" onchange="selectDeposito()" <?php echo req() ?>>
 													</select>
 													<span id="deposSelected" style="color: forestgreen;"></span>
 													</div>
@@ -813,4 +801,6 @@ function solicitarQR(e){
 <?php
     // carga el modal de impresion de QR
     $this->load->view( COD.'componentes/modalGenerico');
+	//Modal alta masiva de NC's
+    $this->load->view('NoConsumible/mdl_altaMasivaNCs');
 ?>
