@@ -83,7 +83,7 @@
                                     </div>
                                     <div id="RecetasLote" class="col-md-6 col-xs-12 input-group ba">
                                         <?php
-                                            echo selectBusquedaAvanzada('formulas_articulos', 'vunme', $formulas, 'form_id', 'descripcion');
+                                            echo selectBusquedaAvanzada('formulas', 'vunme', $formulas, 'form_id', 'descripcion');
                                         ?>
                                     </div>
                                 </div>
@@ -206,6 +206,17 @@
 
 $(document).ready(function () {
     $(".select2").select2();
+});
+
+$('#formulas').on('change', function() {
+    var data = getJson(this);
+    console.log('data: ' + data);
+    console.table(data);
+    var form_id = data.form_id;
+    var unme = data.unidad_medida;
+    var descripcion = data.descripcion;
+    document.getElementById('unmedisabled').value = unme;
+    document.getElementById('descridisabled').value = descripcion;
 });
 
 actualizarEntrega()
