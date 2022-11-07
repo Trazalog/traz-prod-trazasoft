@@ -217,40 +217,6 @@ $('#formulas').on('change', function() {
     var descripcion = data.descripcion;
     document.getElementById('unmedisabled').value = unme;
     document.getElementById('descridisabled').value = descripcion;
-    wo();
-        $.ajax({
-            type: 'POST',
-            // dataType: "json",
-            data: {form_id: form_id},
-            url: 'index.php/core/Transportista/getEstados',
-            success: function(rsp) {
-                var resp = JSON.parse(rsp);
-                $('#prov_id').empty();
-                $('#loca_id').empty();
-                if (resp != null) {
-                    /* habilitarEdicion(); */
-                    var datos = "<option value='' disabled selected>-Seleccione Estado/Provincia-</option>";
-                    for (let i = 0; i < resp.length; i++) {
-                        var datito = encodeURIComponent(resp[i].tabl_id);
-                        datos += "<option value=" + datito + ">" + resp[i].valor + "</option>";
-                    }
-                    $('#prov_id').html(datos);
-                    var datos = "<option value='' disabled selected>-Seleccione Localidad-</option>";
-                    $('#loca_id').html(datos);
-                } else {
-                    var provincia = "<option value='' disabled selected>-Seleccione Estado/Provincia-</option>";
-                    $('#prov_id').html(provincia);
-                    var localidad = "<option value='' disabled selected>-Seleccione Localidad-</option>";
-                    $('#loca_id').html(localidad);
-                    alertify.error("El País no contiene estados");
-                }
-                wc();
-            },
-            error: function(data) {
-                wc();                
-                alert('Error');
-            }
-        });
 });
 
 actualizarEntrega()
