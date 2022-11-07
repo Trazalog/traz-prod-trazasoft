@@ -488,14 +488,12 @@ async function validarNoConsumible(datos){
 // Características para generacion del QR
 function solicitarQR(e){
 	//Limpio el modal
-	$("#infoEtiqueta").empty();
-	$("#contenedorCodigo").empty();
-	$("#infoFooter").empty();
+	$("#QRsGenerados").empty();
 
 	// configuración de código QR
 	var config = {};
 	config.titulo = "Código No Consumible";
-	config.pixel = "7";
+	config.pixel = "3";
 	config.level = "L";
 	config.framSize = "2";
 
@@ -504,15 +502,16 @@ function solicitarQR(e){
 	var datosNoCo = JSON.parse(datos);
 
 	//Cargo la vista del QR con datos en el modal
-	$("#infoEtiqueta").load("<?php echo PRD ?>general/CodigoQR/cargaModalQRNoConsumible", datosNoCo);
 	var dataQR = {};
 	dataQR.codigo = datosNoCo.codigo;
+	dataQR.descripcion = datosNoCo.descripcion;
+	dataQR.fec_alta = datosNoCo.fec_alta;
 
 	// agrega codigo QR al modal impresion
-	getQR(config, dataQR, 'codigosQR/Traz-prod-trazasoft/NoConsumibles');
+	obtenerQR(config, dataQR, 'codigosQR/Traz-prod-trazasoft/NoConsumibles');
 
 	// levanta modal completo para su impresion
-	verModalImpresion();
+	$("#modalPlantillaQR").modal('show');
 }
 ////////////// FIN Creación QR
 </script>

@@ -94,7 +94,7 @@
         <div class='modal-content'>
             <div class='modal-header'>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class='modal-title' id='myModalLabel'>Listado QR's generados</h4>
+                <h4 class='modal-title' id='myModalLabel'>QR generado</h4>
             </div>
             <div class='modal-body'>
                 <div id="QRsGenerados" style="position:relative; float:left; width: 100%">
@@ -252,40 +252,6 @@ function obtenerQR(config, data, direccion) {
     });
 }
 ////////////// FIN Creación QR
-function testeo(){
-    jsonTest = {
-        "NoCos": [{
-                "codigo" : "RNS-10",
-                "descripcion": "continuaci\u00f3n de la locura masiva",
-                "fec_alta": "27-10-2222"
-            },
-            {
-                "codigo" : "RNS-11",
-                "descripcion": "continuaci\u00f3n porque estoy tratando de probar cuanto puede soportar sin perder el estilo, me entendes?",
-                "fec_alta": "27-10-2222"
-            },
-            {
-                "codigo" : "RNS-12",
-                "descripcion": "continuaci\u00f3n de la locura masiva",
-                "fec_alta": "27-10-2222"
-            },
-            {
-                "codigo" : "RNS-13",
-                "descripcion": "continuaci\u00f3n de la locura masiva esta descripcion es mas larga",
-                "fec_alta": "27-10-2222"
-            },
-            {
-                "codigo" : "RNS-14",
-                "descripcion": "continuaci\u00f3n de la locura masiva",
-                "fec_alta": "27-10-2222"
-            }
-        ]
-    }
-    //Fin json testeo
-    jsonTest.NoCos.forEach(item => {
-        solicitarQRMasivo(item);
-    });
-}
 //hoja_estilos se define en core.tablas por empresa
 function imprimirQRMasivos(){
     var base = "<?php echo base_url()?>";
