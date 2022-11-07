@@ -70,6 +70,11 @@
   		$('#frm-NoConsumible')[0].reset();
 	});
 
+	function limpiarform(){
+		$('#frm-NoConsumible').data('bootstrapValidator').resetForm();
+	}
+	
+
 	DataTable('#tbl-NoConsumibles');
 	DataTable('#tbl-trazabilidad');
 
@@ -81,6 +86,13 @@
 	}	
 
 	function guardarNoConsumible() {
+
+		if($("#fec_vencimiento").val() < $("#fec_alta_nuevo").val()){
+			wc();
+			error('Error...','La fecha de vencimiento no puede ser anterior a la fecha de alta');
+			$("#fec_vencimiento").val('');
+			return;
+		}
 
 		if(!frm_validar('#frm-NoConsumible')){
 			alertify.error('Debes completar los campos obligatorios (*)');
@@ -146,6 +158,13 @@
 	}
 
 	function editarNoConsumible() {
+
+		if($("#fec_vencimiento_Edit").val() < $("#fec_alta").val()){
+			wc();
+			error('Error...','La fecha de vencimiento no puede ser anterior a la fecha de alta');
+			$("#fec_vencimiento_Edit").val('');
+			return;
+		}
 		wo();
 		var formData = new FormData($('#frm-NoConsumible_Editar')[0]);
 		
@@ -286,7 +305,7 @@
 	function editarInfo(data) {
 		habilitarEdicion();
 		llenarCampos(data);
-		$(".bloq_fec_alta").hide();
+		$(".bloq_fec_alta").show();
 		$("#mdl-VerNoConsumible").modal('show');
 	}
 
@@ -568,6 +587,16 @@ function solicitarQR(e){
 									</div>
 
 									<div class="form-group">
+											<label class="col-md-4 control-label" for="fec_alta">Fecha de
+													alta<strong class="text-danger">*</strong>:</label>
+											<div class="col-md-8">
+											<?php $fcha = date("Y-m-d");?>
+													<input id="fec_alta_nuevo" name="fec_alta" type="date"
+															value='<?= $fcha ?>' placeholder="" class="form-control input-md" disabled>
+											</div>
+									</div>
+
+									<div class="form-group">
 										
 											<label class="col-md-4 control-label" for="fecha_vencimiento">Fecha de
 													vencimiento<?php echo hreq() ?>:</label>
@@ -608,7 +637,7 @@ function solicitarQR(e){
 					</form>
 				</div> <!-- /.modal-body -->
 				<div class="modal-footer">
-						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+						<button type="button" class="btn btn-danger" data-dismiss="modal" onclick='limpiarform()'>Cancelar</button>
 						<button type="button" id="btn-accion" class="btn btn-success btn-guardar" onclick="guardarNoConsumible()">Guardar</button>
 				</div>
 			</div>
@@ -670,7 +699,7 @@ function solicitarQR(e){
 										alta<strong class="text-danger">*</strong>:</label>
 								<div class="col-md-8">
 										<input id="fec_alta" name="fec_alta" type="date"
-												placeholder="" class="form-control input-md habilitar" >
+												placeholder="" class="form-control input-md deshabilitar" >
 								</div>
 						</div>
 								<br>
