@@ -239,8 +239,8 @@ class Noconsumibles extends CI_Model
 	* @param string codigo_incial; codigo_final
 	* @return array respuesta del servicio
 	*/
-  public function validarCodigoMasivoNoConsumibles($noco_inicio,$noco_final){
-    $url = REST_PRD_NOCON."/noConsumible/validar/desde/". urlencode($noco_inicio) . "/hasta/". urlencode($noco_final) ."/empresa/".empresa();
+  public function validarCodigoMasivoNoConsumibles($prefijo,$noco_inicio,$noco_final){
+    $url = REST_PRD_NOCON."/noConsumible/validar/prefijo/". urlencode($prefijo) ."/desde/". urlencode($noco_inicio) . "/hasta/". urlencode($noco_final) ."/empresa/".empresa();
 
     $aux = $this->rest->callAPI("GET",$url);
     $resp = json_decode($aux['data']);
