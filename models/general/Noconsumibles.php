@@ -261,4 +261,20 @@ class Noconsumibles extends CI_Model
     $resp = json_decode($aux['data']);
     return $resp;
   }
+  /**
+	* Obtiene el estilo definido en core.tablas para los no consumibles 
+	* @param integer empr_id
+	* @return array respuesta con estilos configurados
+	*/
+  public function getEstilosQRNoCos(){
+        
+    $url = REST_CORE."/tabla/estilos_qr/empresa/".empresa();
+
+    $aux = $this->rest->callAPI("GET",$url);
+    $resp = json_decode($aux['data']);
+
+    log_message('DEBUG', "#TRAZA | #SICPOA | Inspecciones | getTiposFacturas()  resp: >> " . json_encode($resp));
+
+    return $resp->tablas->tabla;
+}
 }
