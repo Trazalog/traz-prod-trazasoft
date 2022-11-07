@@ -396,7 +396,7 @@ use \koolreport\widgets\koolphp\Card;
             var opcEtapas = '<option value="" selected>TODOS</option>';
 
             rsp.etapas.forEach(element => {
-                opcEtapas += "<option value=" + element.id + ">" + element.titulo + "</option>";
+                opcEtapas += "<option value=" + element.etap_id + ">" + element.nombre + "</option>";
             });
 
             $('#etapa').html(opcEtapas);
