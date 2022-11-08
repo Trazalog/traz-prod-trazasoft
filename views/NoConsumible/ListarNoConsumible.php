@@ -70,17 +70,30 @@
   		$('#frm-NoConsumible')[0].reset();
 	});
 
+	  
+
+	function limpiarform(){
+		$('#frm-NoConsumible').data('bootstrapValidator').resetForm();
+	}
+	
+
 	DataTable('#tbl-NoConsumibles');
 	DataTable('#tbl-trazabilidad');
 
   	initForm();
 
 	function nuevoNCmodal(){
-
 		$("#mdl-NoConsumible").modal('show');
 	}	
 
 	function guardarNoConsumible() {
+
+		if($("#fec_vencimiento").val() < $("#fec_alta_nuevo").val()){
+			wc();
+			error('Error...','La fecha de vencimiento no puede ser anterior a la fecha de alta');
+			$("#fec_vencimiento").val('');
+			return;
+		}
 
 		if(!frm_validar('#frm-NoConsumible')){
 			alertify.error('Debes completar los campos obligatorios (*)');
@@ -146,6 +159,13 @@
 	}
 
 	function editarNoConsumible() {
+
+		if($("#fec_vencimiento_Edit").val() < $("#fec_alta").val()){
+			wc();
+			error('Error...','La fecha de vencimiento no puede ser anterior a la fecha de alta');
+			$("#fec_vencimiento_Edit").val('');
+			return;
+		}
 		wo();
 		var formData = new FormData($('#frm-NoConsumible_Editar')[0]);
 		
@@ -286,7 +306,7 @@
 	function editarInfo(data) {
 		habilitarEdicion();
 		llenarCampos(data);
-		$(".bloq_fec_alta").hide();
+		$(".bloq_fec_alta").show();
 		$("#mdl-VerNoConsumible").modal('show');
 	}
 
@@ -331,6 +351,70 @@
 	}
 ////// Fin Bloque ver y editar
 
+////// Refrezca la tabla cuando cambia el estado del no consumible
+function refrezcaListado(){
+	$.ajax({
+				type: 'GET',
+				dataType: 'JSON',
+				url: '<?php echo base_url(PRD) ?>general/Noconsumible/getListadoNoconsumible',
+				success: function(result) {
+							console.log(result);
+							tabla = $('#tbl-NoConsumibles').DataTable();
+							tabla.clear().draw(); //limpio la tabla
+							$.each(result, function(i, value){
+								var fcha_alta = value.fec_alta,
+									fcha_vencimiento = value.fec_vencimiento;
+
+									fila = "<tr data-json= '"+ JSON.stringify(value) +"'>" +
+            					        '<td class="text-center text-light-blue"> <i class="fa fa-eye" style="cursor: pointer;margin: 3px;" title="Ver Detalles" onclick="verInfo(this)"></i>' +
+																				'<i class="fa fa-edit" style="cursor: pointer; margin: 3px;" title="Editar" onclick="editarInfo(this)"></i>'+
+																				'<i class="fa fa-trash eliminar" style="cursor: pointer;margin: 3px;" title="Eliminar" onclick="eliminar(this)"></i>'+
+																				'<i class="fa fa-fw fa-sitemap" style="cursor: pointer;margin: 3px;" title="Trazabilidad" onclick="trazabilidad(this)"></i>'+
+																				'<i class="fa fa-qrcode" style="cursor: pointer;margin: 3px;" title="Código QR" onclick="solicitarQR(this)"></i>'+
+																				'<i '+ (value.estado == 'ALTA' ? 'class="fa fa-fw fa-toggle-off text-light-blue" title="Habilitar"': 'class="fa fa-fw fa-toggle-on text-light-blue" title="Inhabilitar"')+' title="Habilitar" style="cursor: pointer; margin-left: 15px;" onclick="cambioEstado(this)"></i>'+
+            					        '<td>' + value.codigo + '</td>' +
+            					        '<td>' + value.descripcion + '</td>' +
+            					        '<td>' + fcha_alta.replaceAll("-", "/") +'</td>' +
+            					        '<td>' + (fcha_vencimiento ? fcha_vencimiento.replaceAll("-", "/"): "") +'</td>' +
+            					        '<td> ' + (value.lotes ? value.lotes : "") + '</td>' +
+            					        '<td>' + (value.producto_codigo ?  value.producto_codigo : "") + ' </td>' +
+            					        '<td>' +  colorEstado(value.estado) + '</td>'
+            					    '</tr>';
+            					tabla.row.add($(fila)).draw();
+							});
+				},
+				error: function(result){
+					wc();
+					error('error','Error en Cambio de estado');
+				},
+				complete: function(){
+					wc();
+				}
+		});
+}
+//////FIN Refrezca la tabla cuando cambia el estado del no consumible
+
+
+//////color bolita de Estado
+function colorEstado(estado){
+	switch (estado) {
+
+		case 'ALTA':
+			return bolita('Alta', 'blue');
+			break;
+		case 'VENCIDO':
+			return bolita('Vencido', 'red');
+			break;
+		case 'ACTIVO':
+			return bolita('Activo', 'green');
+			break;
+		case 'EN_TRANSITO':
+			return bolita('En Tránsito', 'warning');
+			break;
+	}
+}
+//////fin color bolita de Estado
+
 ////// Cambio de Estado
 	function cambioEstado(row){
 
@@ -347,11 +431,7 @@
 					data.estado = 'ALTA';
 				}
 		} else {
-			Swal.fire({
-					icon: 'error',
-					title: 'Cambio de estado bloqueado',
-					text: 'No es posible cambiar el estado del No Consumible'
-			});
+			error('Cambio de estado bloqueado','No es posible cambiar el estado del No Consumible');
 			return;
 		}
 		wo();
@@ -362,14 +442,13 @@
 				url: '<?php echo base_url(PRD) ?>general/Noconsumible/cambioEstado',
 				success: function(result) {
 							wc();
-							linkTo('<?php echo base_url(PRD) ?>general/Noconsumible/index');
+							/* linkTo('<?php echo base_url(PRD) ?>general/Noconsumible/index'); */
+							refrezcaListado();
 				},
 				error: function(result){
+					error('error','Error en Cambio de estado');
 					wc();
-					Swal.fire({
-							icon: 'error',
-							title: 'Error en Cambio de estado'
-					});
+					
 				},
 				complete: function(){
 					wc();
@@ -545,9 +624,10 @@ function solicitarQR(e){
 															class="form-control input-md" required>
 											</div>
 											<label class="col-md-2 control-label" for="tipo_no_consumible">Tipo No Consumible<?php echo hreq() ?>:</label>
-											<div class="col-md-4">
-												<select name="tipo_no_consumible" class="form-control" required>
-													<option value=""> - Seleccionar - </option>
+											<div class="col-md-4" title="Para agregar el tipo de No Consumible, debes dirigirte al módulo Configuraciones y selecciona el ABM Lista de valores">
+												<select name="tipo_no_consumible" class="form-control"  required>
+												
+													<option value="" > - Seleccionar - </option>
 													<?php 
 													if(is_array($tipoNoConsumible)){
 														foreach ($tipoNoConsumible as $i) {
@@ -555,8 +635,11 @@ function solicitarQR(e){
 														}
 													}
 													?>
+
 												</select>
 											</div>
+											
+
 									</div>
 
 									<div class="form-group">
@@ -564,6 +647,16 @@ function solicitarQR(e){
 											<div class="col-md-10">
 													<textarea class="form-control" id="descripcion" name="descripcion" maxlength="80"
 													<?php echo req() ?>></textarea>
+											</div>
+									</div>
+
+									<div class="form-group">
+											<label class="col-md-4 control-label" for="fec_alta">Fecha de
+													alta<strong class="text-danger">*</strong>:</label>
+											<div class="col-md-8">
+											<?php $fcha = date("Y-m-d");?>
+													<input id="fec_alta_nuevo" name="fec_alta" type="date"
+															value='<?= $fcha ?>' placeholder="" class="form-control input-md" disabled>
 											</div>
 									</div>
 
@@ -579,7 +672,7 @@ function solicitarQR(e){
 									<div class="form-group">
 									
 												<label class="col-md-4 control-label" for="">Establecimiento<?php echo hreq() ?>:</label>
-													<div class="col-md-8">
+													<div class="col-md-8" title="Para agregar un establecimiento, debes dirigirte al módulo Configuraciones y seleccionar el ABM Establecimientos: botón 'Agregar' ">
 													<select class="form-control select2 select2-hidden-accesible" id="establecimiento" name="establecimiento" onchange="selectEstablecimiento(this)" <?php echo req() ?>>
 															<option value="" disabled selected>Seleccionar</option>
 															<?php
@@ -597,7 +690,7 @@ function solicitarQR(e){
 											<!-- ___________________________________________________ -->
 									<div class="form-group">
 													<label class="col-md-4 control-label" for="depositos">Depósito<?php echo hreq() ?>:</label>
-													<div class="col-md-8">
+													<div class="col-md-8" title="Para agregar un depósito, debes dirigirte al módulo Configuraciones, seleccionar el ABM Establecimientos y, en el botón Depósitos del establecimiento deseado ">
 													<select class="form-control select2 select2-hidden-accesible selectedDeposito" id="depositos" name="depositos" onchange="selectDeposito()" <?php echo req() ?>>
 													</select>
 													<span id="deposSelected" style="color: forestgreen;"></span>
@@ -608,7 +701,7 @@ function solicitarQR(e){
 					</form>
 				</div> <!-- /.modal-body -->
 				<div class="modal-footer">
-						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+						<button type="button" class="btn btn-danger" data-dismiss="modal" onclick='limpiarform()'>Cancelar</button>
 						<button type="button" id="btn-accion" class="btn btn-success btn-guardar" onclick="guardarNoConsumible()">Guardar</button>
 				</div>
 			</div>
@@ -670,7 +763,7 @@ function solicitarQR(e){
 										alta<strong class="text-danger">*</strong>:</label>
 								<div class="col-md-8">
 										<input id="fec_alta" name="fec_alta" type="date"
-												placeholder="" class="form-control input-md habilitar" >
+												placeholder="" class="form-control input-md deshabilitar" >
 								</div>
 						</div>
 								<br>
@@ -748,11 +841,12 @@ function solicitarQR(e){
 															<table id="tbl-trazabilidad" class="table table-striped table-hover">
 									<thead>
 											<tr>
-													<th>Descripcion</th>
-													<th>Codigo</th>
+													<th>Descripción</th>
+													<th>Código</th>
 													<th>Tipo</th>
 													<th>Responsable</th>
-													<th>Deposito/Destino</th>
+													<th>Depósito/Destino</th>
+													<th>Lotes</th>
 													<th>Fecha de Alta</th>
 													<th>Estado</th>
 											</tr>
