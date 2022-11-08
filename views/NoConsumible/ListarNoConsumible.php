@@ -606,11 +606,11 @@ function solicitarQR(e){
 											<label class="col-md-2 control-label" for="codigo">Código<?php echo hreq() ?>:</label>
 											<div class="col-md-4">
 													<input id="codigo" name="codigo" type="text" placeholder="Ingrese código..."
-															class="form-control input-md" required>
+															class="form-control input-md" required maxlength="14">
 											</div>
 											<label class="col-md-2 control-label" for="tipo_no_consumible">Tipo No Consumible<?php echo hreq() ?>:</label>
 											<div class="col-md-4" title="Para agregar el tipo de No Consumible, debes dirigirte al módulo Configuraciones y selecciona el ABM Lista de valores">
-												<select name="tipo_no_consumible" class="form-control"  required>
+												<select name="tipo_no_consumible" class="form-control" required>
 												
 													<option value="" > - Seleccionar - </option>
 													<?php 

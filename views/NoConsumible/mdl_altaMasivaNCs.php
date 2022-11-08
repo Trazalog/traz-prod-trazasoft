@@ -16,7 +16,7 @@
                             </div>
                             <label class="col-md-2 control-label" for="prefijo">Prefijo:</label>
                             <div class="col-md-4">
-                                <input id="prefijoNCM" name="prefijo" type="text" placeholder="Ingrese prefijo" class="form-control input-md" onchange="obtenerUltimoIndicePrefijo()">
+                                <input id="prefijoNCM" name="prefijo" type="text" placeholder="Ingrese prefijo" class="form-control input-md" onchange="obtenerUltimoIndicePrefijo()" maxlength="8">
                             </div>
                         </div>
                         <!-- ___________________________________________________ -->
