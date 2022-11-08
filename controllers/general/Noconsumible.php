@@ -125,7 +125,7 @@ class Noconsumible extends CI_Controller
             }
         }
 
-        echo json_encode($rsp);
+        echo json_encode($response);
     }
 
     /**
@@ -313,5 +313,10 @@ class Noconsumible extends CI_Controller
       $resp['indice'] = 'SIN COINCIDENCIAS';
     }
     echo json_encode($resp);
-	} 
+	}
+
+  public function getListadoNoconsumible(){
+    $data = $this->Noconsumibles->ListarNoConsumible()['data'];
+    echo json_encode($data);
+  }
 }
