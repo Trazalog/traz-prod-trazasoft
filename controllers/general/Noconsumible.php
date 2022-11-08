@@ -246,11 +246,8 @@ class Noconsumible extends CI_Controller
     // $establecimiento = $this->input->post('establecimiento');
     $deposito = $this->input->post('deposito');
 
-    $noco_inicial =  (!empty($prefijo)? $prefijo : '') . $desde;
-    $noco_final =  (!empty($prefijo)? $prefijo : '') . ($desde + $cantidad);
-
     //Valido que los parametros sean correctos y no existan NoCo's en dicho intervalo
-    $rspValidacion =  $this->Noconsumibles->validarCodigoMasivoNoConsumibles($noco_inicial,$noco_final);
+    $rspValidacion =  $this->Noconsumibles->validarCodigoMasivoNoConsumibles($prefijo,$desde,$desde + $cantidad);
     //Este arreglo va amndar a la vista lso NoCo's generados apra su psoteriror impresión
     $NoCosGenerados = array();
     if($rspValidacion->existe != "true"){

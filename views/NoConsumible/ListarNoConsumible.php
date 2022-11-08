@@ -325,29 +325,14 @@
 	}
 
 	function llenarCampos(e) {
-
 		var json = JSON.parse(JSON.stringify($(e).closest('tr').data('json')));
 
 		Object.keys(json).forEach(function(key, index) {
-				$('[name="' + key + '"]').val(json[key]);
+			$('[name="' + key + '"]').val(json[key]);
 		});
-		
-		var fecha = json['fec_alta'].slice(0, 10)
-		Date.prototype.toDateInputVal = (function() {
-			var fechaAlta = new Date(fecha);
-			return fechaAlta.toJSON().slice(0, 10);
-		});
-		$("#fec_alta").val(new Date().toDateInputVal());
-
-		var fecha = json['fec_vencimiento'].slice(0, 10)
-		Date.prototype.toDateInputValue = (function() {
-			var fechaVto = new Date(fecha);
-			return fechaVto.toJSON().slice(0, 10);
-		});
-		$("#fec_vencimiento_Edit").val(new Date().toDateInputValue());
-
+		$("#fec_alta").val(dateFormat(json['fec_alta']));
+		$("#fec_vencimiento_Edit").val(dateFormat(json['fec_vencimiento']));
 		$('[name="tinc_id"]').val(json['tinc_id']);
-
 	}
 ////// Fin Bloque ver y editar
 
@@ -374,8 +359,8 @@ function refrezcaListado(){
 																				'<i '+ (value.estado == 'ALTA' ? 'class="fa fa-fw fa-toggle-off text-light-blue" title="Habilitar"': 'class="fa fa-fw fa-toggle-on text-light-blue" title="Inhabilitar"')+' title="Habilitar" style="cursor: pointer; margin-left: 15px;" onclick="cambioEstado(this)"></i>'+
             					        '<td>' + value.codigo + '</td>' +
             					        '<td>' + value.descripcion + '</td>' +
-            					        '<td>' + fcha_alta.replaceAll("-", "/") +'</td>' +
-            					        '<td>' + (fcha_vencimiento ? fcha_vencimiento.replaceAll("-", "/"): "") +'</td>' +
+            					        '<td>' + dateFormat(fcha_alta).replaceAll("-", "/") +'</td>' +
+            					        '<td>' + (_isset(fcha_vencimiento) ? dateFormat(fcha_vencimiento).replaceAll("-", "/") : "") +'</td>' +
             					        '<td> ' + (value.lotes ? value.lotes : "") + '</td>' +
             					        '<td>' + (value.producto_codigo ?  value.producto_codigo : "") + ' </td>' +
             					        '<td>' +  colorEstado(value.estado) + '</td>'
@@ -621,11 +606,11 @@ function solicitarQR(e){
 											<label class="col-md-2 control-label" for="codigo">Código<?php echo hreq() ?>:</label>
 											<div class="col-md-4">
 													<input id="codigo" name="codigo" type="text" placeholder="Ingrese código..."
-															class="form-control input-md" required>
+															class="form-control input-md" required maxlength="14">
 											</div>
 											<label class="col-md-2 control-label" for="tipo_no_consumible">Tipo No Consumible<?php echo hreq() ?>:</label>
 											<div class="col-md-4" title="Para agregar el tipo de No Consumible, debes dirigirte al módulo Configuraciones y selecciona el ABM Lista de valores">
-												<select name="tipo_no_consumible" class="form-control"  required>
+												<select name="tipo_no_consumible" class="form-control" required>
 												
 													<option value="" > - Seleccionar - </option>
 													<?php 
