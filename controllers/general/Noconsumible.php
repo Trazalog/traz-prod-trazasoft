@@ -16,6 +16,7 @@ class Noconsumible extends CI_Controller
       $data['tipoNoConsumible'] = $this->Noconsumibles->tipoNoConsumible()['data'];
       $data['tipoEstablecimiento'] = $this->Noconsumibles->tipoEstablecimiento()['data'];
       $data['ListarNoConsumible'] = $this->Noconsumibles->ListarNoConsumible()['data'];
+      $data['estiloImpresionQR'] = $this->Noconsumibles->getEstilosQRNoCos()[0];
       $this->load->view('NoConsumible/ListarNoConsumible',$data);
     }
 
@@ -124,7 +125,7 @@ class Noconsumible extends CI_Controller
             }
         }
 
-        echo json_encode($rsp);
+        echo json_encode($response);
     }
 
     /**
@@ -245,11 +246,8 @@ class Noconsumible extends CI_Controller
     // $establecimiento = $this->input->post('establecimiento');
     $deposito = $this->input->post('deposito');
 
-    $noco_inicial =  (!empty($prefijo)? $prefijo : '') . $desde;
-    $noco_final =  (!empty($prefijo)? $prefijo : '') . ($desde + $cantidad);
-
     //Valido que los parametros sean correctos y no existan NoCo's en dicho intervalo
-    $rspValidacion =  $this->Noconsumibles->validarCodigoMasivoNoConsumibles($noco_inicial,$noco_final);
+    $rspValidacion =  $this->Noconsumibles->validarCodigoMasivoNoConsumibles($prefijo,$desde,$desde + $cantidad);
     //Este arreglo va amndar a la vista lso NoCo's generados apra su psoteriror impresión
     $NoCosGenerados = array();
     if($rspValidacion->existe != "true"){
@@ -312,5 +310,10 @@ class Noconsumible extends CI_Controller
       $resp['indice'] = 'SIN COINCIDENCIAS';
     }
     echo json_encode($resp);
-	} 
+	}
+
+  public function getListadoNoconsumible(){
+    $data = $this->Noconsumibles->ListarNoConsumible()['data'];
+    echo json_encode($data);
+  }
 }
