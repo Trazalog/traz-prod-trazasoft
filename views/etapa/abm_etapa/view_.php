@@ -375,11 +375,25 @@
 
   // valida campos obligatorios
   function validarCampos(form){
-    var mensaje = "";
-    var ban = true;
+    var mensaje = "", campo="";
+    var ban = true, ban1=true;
     $('#' + form).find('.requerido').each(function() {
+
+      
       if (this.value == "" || this.value=="-1") {
         ban = ban && false;
+
+        //Especifico que campo viene vacio
+        if(ban1 == true){
+          if(this.name == 'nombre'){ campo = "Por favor, completa el campo Nombre";this.focus();}
+          if(this.name == 'proc_id') {campo = "Por favor, selecciona un Proceso productivo"+"<br><br>Dirigirse al Módulo Configuraciones y seleccionar en ABM Lista de valores el listado 'procesos' ";this.focus();}
+          if(this.name == 'tiet_id') {campo =  "Por favor, selecciona Tipo"+"<br><br>Dirigirse al Módulo Configuraciones y seleccionar en ABM Lista de valores el listado 'prd_tipo_etapa' ";this.focus();}
+          if(this.name == 'nom_recipiente') {campo = "Por favor, selecciona un Recipiente"+"<br><br>Dirigirse al Módulo Configuraciones y agregar desde 'Creación de recipientes'";this.focus();}
+          if(this.name == 'orden') {campo = "Por favor, selecciona un Recipiente"+"<br><br>Dirigirse al Módulo Configuraciones y seleccionar en ABM Lista de valores el listado 'formulario_prd_tipo_etapa' ";this.focus();}
+          ban1 = ban1 && false; 
+          return;
+        }
+        else 
         return;
       }
     });
@@ -396,7 +410,10 @@
           };
         },true,'alert');
       }
-      alertify.errorAlert("Por favor complete los campos Obligatorios(*)..." );
+      if(campo == '')
+      alertify.errorAlert("Por favor complete los campos Obligatorios(*)...");
+      else 
+      alertify.errorAlert(campo);
     }
     return ban;
   }
