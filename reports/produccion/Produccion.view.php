@@ -352,26 +352,35 @@ use \koolreport\widgets\koolphp\Card;
     function filtrar() {
       var data = new FormData($('#frm-filtros')[0]);
       data = formToObject(data);
-      wo();
-      var url = 'produccion';
-      $.ajax({
-        type: 'POST',
 
-        data: {
-          data
-        },
-        url: '<?php echo base_url(PRD) ?>Reportes/' + url,
-        success: function(result) {
-          $('#reportContent').empty();
-          $('#reportContent').html(result);
-        },
-        error: function() {
-          alert('Error');
-        },
-        complete: function(result) {
-          wc();
-        }
-      });
+      //Validacion de fecha
+      if($("#datepickerHasta").val() < $("#datepickerDesde").val()){
+	      error('Error...','La fecha de inicio no puede ser mayor a la fecha final');
+	      $("#fec_entrega").val('');
+      }
+      else{
+      
+          wo();
+          var url = 'produccion';
+          $.ajax({
+            type: 'POST',
+          
+            data: {
+              data
+            },
+            url: '<?php echo base_url(PRD) ?>Reportes/' + url,
+            success: function(result) {
+              $('#reportContent').empty();
+              $('#reportContent').html(result);
+            },
+            error: function() {
+              alert('Error');
+            },
+            complete: function(result) {
+              wc();
+            }
+          });
+      }
     }
 
     function filtroProduccion() {
