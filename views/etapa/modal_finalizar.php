@@ -77,7 +77,6 @@
                             </select>
                             <?php 
                             echo "<label id='detalle' class='select-detalle' class='text-blue'></label>";
-                            echo "<script>$('#inputproducto').select2({matcher: matchCustom,templateResult: formatCustom, dropdownParent: $('#inputproducto').parent()}).on('change', function() { selectEvent(this);})</script>";
                             ?>
                         </div>
                     </div>
@@ -227,6 +226,11 @@
     $this->load->view( COD.'componentes/modalGenerico');
 ?>
 <script>
+    $(document).ready(function () {
+        setTimeout(function() {
+            $('#inputproducto').select2({matcher: matchCustom,templateResult: formatCustom, dropdownParent: $('#inputproducto').parent()}).on('change', function() { selectEvent(this);});
+        }, 5000)
+    });
 // Filtrar Recipientes por Establecimineto
 $('#productodestino').find('option').each(function(){
     var data  = getJson(this);
