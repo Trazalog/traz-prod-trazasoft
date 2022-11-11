@@ -85,7 +85,7 @@
             }
           }
           ?>
-          <button class="btn btn-primary outline" onclick='muestra(`todas`,this)'>Todas</button>
+          <button class="btn btn-primary outline" onclick='muestra(`todas`,this)'  data-toggle="tooltip" title="Para agregar una etapa productiva dirigirse al módulo Configuraciones y seleccionar 'Etapas productivas'" >Todas</button>
         </div>
     </div>
   </div><!-- /.box-header -->
