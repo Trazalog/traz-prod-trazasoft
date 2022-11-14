@@ -375,8 +375,8 @@ class Camiones extends CI_Model
         return wso2($url, 'PUT', $data);
     }
 
-    public function actualizarProveedor($patente, $estado, $proveedor)
-    {
+    public function actualizarProveedor($patente, $estado, $proveedor){
+        log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT| Camiones | actualizarProveedor($patente, $estado, $proveedor)');
         $data['_put_camiones_proveedor'] = array(
             'patente' => $patente,
             'estado' => $estado,

@@ -18,8 +18,8 @@ class Lote extends CI_Controller
     $res = $this->Lotes->listarPorMateria($id)->lotes->lote;
     echo json_encode($res);
   }
-  public function listarPorEstablecimientoConSalida()
-  {
+  public function listarPorEstablecimientoConSalida(){
+    log_message('DEBUG','#TRAZA | #TRAZ-PROD-TRAZASOFT | Lote | listarPorEstablecimientoConSalida()');
     $establecimiento = $this->input->post('establecimiento');
     $salida = $this->input->post('salida');
     $res = $this->Lotes->listarPorEstablecimientoConSalida($establecimiento);

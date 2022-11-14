@@ -297,7 +297,7 @@ function obtenerInfoCamion(patente) {
                 obtenerLotesCamion(patente); 
         
             }else{
-                $('#frm-camion')[0].reset();
+                // $('#frm-camion')[0].reset();
                 $("#patente").val(patente);
                 $("#esExterno").val('externo');
             }

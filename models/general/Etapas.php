@@ -416,15 +416,27 @@ class Etapas extends CI_Model
         * @param integer $orta_id
         * @return bool true or false
     */
-    public function validarFormularioCalidad($orta_id){
+    public function validarFormularioCalidad($orta_id, $origen){
         log_message('DEBUG', '#TRAZA | TRAZ-PROD-TRAZASOFT | Etapas | validarFormularioCalidad()');
         
-        $url = REST_FRM."/formularios/etapa/variables/origen/BATCH/$orta_id";
+        $url = REST_FRM."/formularios/etapa/variables/origen/$origen/$orta_id";
         $res = wso2($url);
-        if($res['data'])
-        foreach ($res['data'] as $o) {
-            if($o->variable == 'QC_OK' && $o->valor == 'true') return true;
+        if($res['data']){
+            foreach ($res['data'] as $o) {
+                if($o->variable == 'QC_OK'){
+                    $rsp['poseeQC'] = true;
+                    if(strpos($o->valor, 'Aprobado')){
+                        $rsp['status'] = true;
+                    }else{
+                        $rsp['status'] = false;
+                    }
+                }
+            }
+        }else{
+            $rsp['status'] = true;
+            $rsp['poseeQC'] = false;
         }
+        return $rsp;
     }
     /**
         * Eliminado LOGICO del lote enviado
