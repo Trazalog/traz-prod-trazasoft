@@ -602,4 +602,20 @@ class Etapas extends CI_Model
 
         return $resp->etapas->etapa;
     }
+    /**
+	* Obtiene listado de lotes filtrado por etapa
+	* @param integer int empr_id, int etap_id
+	* @return array respuesta del servicio
+	*/
+    
+    public function validarLotesxEstado($etap_id)
+    {
+        log_message('DEBUG','#TRAZA | TRAZ-TOOLS | ETAPAS | validarLotesxEstado() ');
+        $resource = '/lotes/etapa/'.$etap_id.'/'.empresa();
+        $url = REST_PRD_LOTE . $resource;
+        $aux = $this->rest->callAPI("GET", $url);
+        $aux = json_decode($aux["data"]);
+        return $aux;
+    }
+
 }
