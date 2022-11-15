@@ -681,12 +681,12 @@ class Etapa extends CI_Controller
     
     /**
         * Valida el formulario asociado al orta_id
-        * @param integer $orta_id
+        * @param integer $orta_id, string $origen
         * @return bool true or false
     */
-    public function validarFormularioCalidad($orta_id){
-        $res = $this->Etapas->validarFormularioCalidad($orta_id);
-        echo json_encode(['status' => $res]);
+    public function validarFormularioCalidad($orta_id,$origen){
+        $res = $this->Etapas->validarFormularioCalidad($orta_id,$origen);
+        echo json_encode($res);
     }
 
     public function obtenerProductosSalida($etapId)

@@ -74,13 +74,12 @@ function guardarDescargaOrigen() {
                 if (rsp.status) {
                     console.log('Listado de Recepciones MP se realizó correctamente');
                     actualizarEstadoCamion($('#patente').val());
-                    linkTo("traz-prod-trazasoft/general/Camion/recepcionCamion");
                 } else {
-                    alert('Fallo al guardar el listado de Recepciones MP');
+                    error('Error','Fallo al guardar el listado de Recepciones MP');
                 }
             },
             error: function(rsp) {
-                alert('Error: ' + rsp.msj);
+                error('Error','Error: ' + rsp.msj);
                 console.log(rsp.msj);
             }
         });
@@ -131,19 +130,24 @@ function eliminarFila() {
 
     $('#guardarDescarga').attr('disabled', $('#lotes tr').length == 0);
 }
-
+// Actualizo los datos del movimiento con lso datos de recepcion
 function actualizarEstadoCamion(patente) {
     var estado = 'TRANSITO|EN CURSO';
     var estadoFinal = 'DESCARGADO';
     var proveedor = $('#proveedor').val();
+    var boleta = $('#boleta').val();
+    var tara = $('#tara').val();
+    var neto = $('#neto').val();
+    var motr_id = $('#motr_id').val();
     wo();
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
         url: '<?php echo base_url(PRD) ?>general/camion/estado',
-        data: {patente, estado, estadoFinal, proveedor},
+        data: {patente, estado, estadoFinal, proveedor,boleta,tara,neto,motr_id},
         success: function(res) {
-            hecho();
+            hecho('Éxito','Se guardo la recepción del camión correctamente');
+            linkTo("traz-prod-trazasoft/general/Camion/recepcionCamion");
         },
         error: function(res) {
             error();
