@@ -406,9 +406,6 @@ function addCamion(msj = true) {
             cache: false,
             data: dataForm,
             success: function(rsp) {
-                hecho();
-                console.log(rsp);
-                return;
                 if (rsp.status) {
                     if ($("#esExterno").val() != 'externo' || $('#accion').val() == 'carga') Swal.fire('Correcto','Datos guardados con éxito','success');
 
