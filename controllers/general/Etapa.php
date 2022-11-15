@@ -37,7 +37,7 @@ class Etapa extends CI_Controller
         //reforma las url segun id
         foreach ($temp as $value) {
             if ($value->tiet_id == 'prd_tipos_etapaFraccionamiento') {
-                $urlComp = 'general/Etapa/fraccionar?op=' . $value->id;;
+                $urlComp = 'general/Etapa/fraccionar?op=' . $value->id;
                 $value->link = $urlComp;
             } else {
                 $urlComp = 'general/Etapa/nuevo?op=' . $value->id;
@@ -843,6 +843,15 @@ class Etapa extends CI_Controller
     public function filtrarEtapas(){
         $proc_id = $this->input->post('proc_id');
         $rsp = $this->Etapas->filtrarEtapas($proc_id);
+        foreach ($rsp as $value) {
+            if ($value->tiet_id == 'prd_tipos_etapaFraccionamiento') {
+                $urlComp = 'general/Etapa/fraccionar?op=' . $value->etap_id;
+                $value->link = $urlComp;
+            } else {
+                $urlComp = 'general/Etapa/nuevo?op=' . $value->etap_id;
+                $value->link = $urlComp;
+            }
+        }
         echo json_encode($rsp);
     }
 }
