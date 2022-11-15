@@ -854,4 +854,28 @@ class Etapa extends CI_Controller
         }
         echo json_encode($rsp);
     }
+      /**
+        * Obtiene los lotes asociados a una etapa
+        * @param integer etap_id
+        * @return array respuesta del servicio
+	*/
+    public function validarLotesxEstado(){
+        log_message('INFO','#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapa | validarLotesxEstado() ');
+        $etap_id=$this->input->post('etap_id');
+		$aux= $this->Etapas->validarLotesxEstado($etap_id)->lotes->lote;
+        if(!empty($aux)){
+            $i=0;
+            while(($aux[$i]->estado !== 'finalizado') && $i < count($aux)){
+                $i++;
+            }
+            if($i <= count($aux)){
+                echo json_encode(array("status" => false,"msj" => "Error, la etapa tiene Lotes asociado"));
+            }else{
+                $aux['status'] = true;
+                echo json_encode($aux);
+            }
+        }else{
+            echo json_encode(array("status" => true,"msj" => "Se elimino la etapa que no posee lotes"));
+        }
+    }
 }

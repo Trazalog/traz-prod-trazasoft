@@ -171,6 +171,33 @@
     });
   }
 
+  //valido el estado de la etapa antes de eliminar 
+  function validaEstadoLote(){ 
+    var etap_id = $("#id_etap").val(); 
+    wo(); 
+    $.ajax({ 
+        type: 'POST', 
+        data:{etap_id: etap_id}, 
+        dataType:'json', 
+        url: 'index.php/<?php echo PRD ?>general/Etapa/validarLotesxEstado', 
+        success: function(result) { 
+          wc(); 
+          if(result.status){ 
+            eliminar(); 
+          } 
+          else{ 
+            notificar("¡No se puede eliminar!", "Aún se encuentran lotes asociados a la etapa", "warning"); 
+          } 
+        }, 
+        error: function(result){ 
+          wc(); 
+          $("#modalaviso").modal('hide'); 
+          alertify.error('Error en eliminado de Etapa Productiva...'); 
+        } 
+    }); 
+  } 
+ 
+
   // Config Tabla
   DataTable($('#tabla_etapas_productivas'));
 </script>
@@ -193,7 +220,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="eliminar()">Aceptar</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="validaEstadoLote()">Aceptar</button>
         </div>
       </div>
     </div>

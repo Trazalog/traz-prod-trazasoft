@@ -204,9 +204,9 @@
 
 <script>
 
-$(document).ready(function () {
-   /*  $(".select2").select2(); */
-});
+/* $(document).ready(function () {
+     $(".select2").select2(); 
+}); */
 
 $('#formulas').on('change', function() {
     var data = getJson(this);
