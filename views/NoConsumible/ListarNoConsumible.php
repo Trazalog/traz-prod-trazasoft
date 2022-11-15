@@ -70,6 +70,8 @@
   		$('#frm-NoConsumible')[0].reset();
 	});
 
+	  
+
 	function limpiarform(){
 		$('#frm-NoConsumible').data('bootstrapValidator').resetForm();
 	}
@@ -81,7 +83,6 @@
   	initForm();
 
 	function nuevoNCmodal(){
-
 		$("#mdl-NoConsumible").modal('show');
 	}	
 
@@ -324,31 +325,80 @@
 	}
 
 	function llenarCampos(e) {
-
 		var json = JSON.parse(JSON.stringify($(e).closest('tr').data('json')));
 
 		Object.keys(json).forEach(function(key, index) {
-				$('[name="' + key + '"]').val(json[key]);
+			$('[name="' + key + '"]').val(json[key]);
 		});
-		
-		var fecha = json['fec_alta'].slice(0, 10)
-		Date.prototype.toDateInputVal = (function() {
-			var fechaAlta = new Date(fecha);
-			return fechaAlta.toJSON().slice(0, 10);
-		});
-		$("#fec_alta").val(new Date().toDateInputVal());
-
-		var fecha = json['fec_vencimiento'].slice(0, 10)
-		Date.prototype.toDateInputValue = (function() {
-			var fechaVto = new Date(fecha);
-			return fechaVto.toJSON().slice(0, 10);
-		});
-		$("#fec_vencimiento_Edit").val(new Date().toDateInputValue());
-
+		$("#fec_alta").val(dateFormat(json['fec_alta']));
+		$("#fec_vencimiento_Edit").val(dateFormat(json['fec_vencimiento']));
 		$('[name="tinc_id"]').val(json['tinc_id']);
-
 	}
 ////// Fin Bloque ver y editar
+
+////// Refrezca la tabla cuando cambia el estado del no consumible
+function refrezcaListado(){
+	$.ajax({
+				type: 'GET',
+				dataType: 'JSON',
+				url: '<?php echo base_url(PRD) ?>general/Noconsumible/getListadoNoconsumible',
+				success: function(result) {
+							console.log(result);
+							tabla = $('#tbl-NoConsumibles').DataTable();
+							tabla.clear().draw(); //limpio la tabla
+							$.each(result, function(i, value){
+								var fcha_alta = value.fec_alta,
+									fcha_vencimiento = value.fec_vencimiento;
+
+									fila = "<tr data-json= '"+ JSON.stringify(value) +"'>" +
+            					        '<td class="text-center text-light-blue"> <i class="fa fa-eye" style="cursor: pointer;margin: 3px;" title="Ver Detalles" onclick="verInfo(this)"></i>' +
+																				'<i class="fa fa-edit" style="cursor: pointer; margin: 3px;" title="Editar" onclick="editarInfo(this)"></i>'+
+																				'<i class="fa fa-trash eliminar" style="cursor: pointer;margin: 3px;" title="Eliminar" onclick="eliminar(this)"></i>'+
+																				'<i class="fa fa-fw fa-sitemap" style="cursor: pointer;margin: 3px;" title="Trazabilidad" onclick="trazabilidad(this)"></i>'+
+																				'<i class="fa fa-qrcode" style="cursor: pointer;margin: 3px;" title="Código QR" onclick="solicitarQR(this)"></i>'+
+																				'<i '+ (value.estado == 'ALTA' ? 'class="fa fa-fw fa-toggle-off text-light-blue" title="Habilitar"': 'class="fa fa-fw fa-toggle-on text-light-blue" title="Inhabilitar"')+' title="Habilitar" style="cursor: pointer; margin-left: 15px;" onclick="cambioEstado(this)"></i>'+
+            					        '<td>' + value.codigo + '</td>' +
+            					        '<td>' + value.descripcion + '</td>' +
+            					        '<td>' + dateFormat(fcha_alta).replaceAll("-", "/") +'</td>' +
+            					        '<td>' + (_isset(fcha_vencimiento) ? dateFormat(fcha_vencimiento).replaceAll("-", "/") : "") +'</td>' +
+            					        '<td> ' + (value.lotes ? value.lotes : "") + '</td>' +
+            					        '<td>' + (value.producto_codigo ?  value.producto_codigo : "") + ' </td>' +
+            					        '<td>' +  colorEstado(value.estado) + '</td>'
+            					    '</tr>';
+            					tabla.row.add($(fila)).draw();
+							});
+				},
+				error: function(result){
+					wc();
+					error('error','Error en Cambio de estado');
+				},
+				complete: function(){
+					wc();
+				}
+		});
+}
+//////FIN Refrezca la tabla cuando cambia el estado del no consumible
+
+
+//////color bolita de Estado
+function colorEstado(estado){
+	switch (estado) {
+
+		case 'ALTA':
+			return bolita('Alta', 'blue');
+			break;
+		case 'VENCIDO':
+			return bolita('Vencido', 'red');
+			break;
+		case 'ACTIVO':
+			return bolita('Activo', 'green');
+			break;
+		case 'EN_TRANSITO':
+			return bolita('En Tránsito', 'warning');
+			break;
+	}
+}
+//////fin color bolita de Estado
 
 ////// Cambio de Estado
 	function cambioEstado(row){
@@ -366,11 +416,7 @@
 					data.estado = 'ALTA';
 				}
 		} else {
-			Swal.fire({
-					icon: 'error',
-					title: 'Cambio de estado bloqueado',
-					text: 'No es posible cambiar el estado del No Consumible'
-			});
+			error('Cambio de estado bloqueado','No es posible cambiar el estado del No Consumible');
 			return;
 		}
 		wo();
@@ -381,14 +427,13 @@
 				url: '<?php echo base_url(PRD) ?>general/Noconsumible/cambioEstado',
 				success: function(result) {
 							wc();
-							linkTo('<?php echo base_url(PRD) ?>general/Noconsumible/index');
+							/* linkTo('<?php echo base_url(PRD) ?>general/Noconsumible/index'); */
+							refrezcaListado();
 				},
 				error: function(result){
+					error('error','Error en Cambio de estado');
 					wc();
-					Swal.fire({
-							icon: 'error',
-							title: 'Error en Cambio de estado'
-					});
+					
 				},
 				complete: function(){
 					wc();
@@ -561,12 +606,13 @@ function solicitarQR(e){
 											<label class="col-md-2 control-label" for="codigo">Código<?php echo hreq() ?>:</label>
 											<div class="col-md-4">
 													<input id="codigo" name="codigo" type="text" placeholder="Ingrese código..."
-															class="form-control input-md" required>
+															class="form-control input-md" required maxlength="14">
 											</div>
 											<label class="col-md-2 control-label" for="tipo_no_consumible">Tipo No Consumible<?php echo hreq() ?>:</label>
-											<div class="col-md-4">
+											<div class="col-md-4" title="Para agregar el tipo de No Consumible, debes dirigirte al módulo Configuraciones y selecciona el ABM Lista de valores">
 												<select name="tipo_no_consumible" class="form-control" required>
-													<option value=""> - Seleccionar - </option>
+												
+													<option value="" > - Seleccionar - </option>
 													<?php 
 													if(is_array($tipoNoConsumible)){
 														foreach ($tipoNoConsumible as $i) {
@@ -574,8 +620,11 @@ function solicitarQR(e){
 														}
 													}
 													?>
+
 												</select>
 											</div>
+											
+
 									</div>
 
 									<div class="form-group">
@@ -608,7 +657,7 @@ function solicitarQR(e){
 									<div class="form-group">
 									
 												<label class="col-md-4 control-label" for="">Establecimiento<?php echo hreq() ?>:</label>
-													<div class="col-md-8">
+													<div class="col-md-8" title="Para agregar un establecimiento, debes dirigirte al módulo Configuraciones y seleccionar el ABM Establecimientos: botón 'Agregar' ">
 													<select class="form-control select2 select2-hidden-accesible" id="establecimiento" name="establecimiento" onchange="selectEstablecimiento(this)" <?php echo req() ?>>
 															<option value="" disabled selected>Seleccionar</option>
 															<?php
@@ -626,7 +675,7 @@ function solicitarQR(e){
 											<!-- ___________________________________________________ -->
 									<div class="form-group">
 													<label class="col-md-4 control-label" for="depositos">Depósito<?php echo hreq() ?>:</label>
-													<div class="col-md-8">
+													<div class="col-md-8" title="Para agregar un depósito, debes dirigirte al módulo Configuraciones, seleccionar el ABM Establecimientos y, en el botón Depósitos del establecimiento deseado ">
 													<select class="form-control select2 select2-hidden-accesible selectedDeposito" id="depositos" name="depositos" onchange="selectDeposito()" <?php echo req() ?>>
 													</select>
 													<span id="deposSelected" style="color: forestgreen;"></span>
@@ -777,11 +826,12 @@ function solicitarQR(e){
 															<table id="tbl-trazabilidad" class="table table-striped table-hover">
 									<thead>
 											<tr>
-													<th>Descripcion</th>
-													<th>Codigo</th>
+													<th>Descripción</th>
+													<th>Código</th>
 													<th>Tipo</th>
 													<th>Responsable</th>
-													<th>Deposito/Destino</th>
+													<th>Depósito/Destino</th>
+													<th>Lotes</th>
 													<th>Fecha de Alta</th>
 													<th>Estado</th>
 											</tr>

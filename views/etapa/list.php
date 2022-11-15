@@ -48,7 +48,7 @@
       <div class="form-group">
         <label for="procesoProductivo">Procesos productivos:</label>
         <select class="form-control select2 select2-hidden-accesible" name="procesoProductivo" id="procesoProductivo" onChange="seProcProductivo(this)">
-          <option value="" disabled selected>-Seleccionar-</option>	
+          <!-- <option value="" disabled selected>-Seleccionar-</option>	 -->
           <?php
           if(!empty($procesosProductivos)){
             foreach ($procesosProductivos as $procesos) {
@@ -85,7 +85,7 @@
             }
           }
           ?>
-          <button class="btn btn-primary outline" onclick='muestra(`todas`,this)'>Todas</button>
+          <button class="btn btn-primary outline" onclick='muestra(`todas`,this)'  data-toggle="tooltip" title="Para agregar una etapa productiva dirigirse al módulo Configuraciones y seleccionar 'Etapas productivas'" >Todas</button>
         </div>
     </div>
   </div><!-- /.box-header -->

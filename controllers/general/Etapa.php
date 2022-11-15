@@ -37,7 +37,7 @@ class Etapa extends CI_Controller
         //reforma las url segun id
         foreach ($temp as $value) {
             if ($value->tiet_id == 'prd_tipos_etapaFraccionamiento') {
-                $urlComp = 'general/Etapa/fraccionar?op=' . $value->id;;
+                $urlComp = 'general/Etapa/fraccionar?op=' . $value->id;
                 $value->link = $urlComp;
             } else {
                 $urlComp = 'general/Etapa/nuevo?op=' . $value->id;
@@ -681,12 +681,12 @@ class Etapa extends CI_Controller
     
     /**
         * Valida el formulario asociado al orta_id
-        * @param integer $orta_id
+        * @param integer $orta_id, string $origen
         * @return bool true or false
     */
-    public function validarFormularioCalidad($orta_id){
-        $res = $this->Etapas->validarFormularioCalidad($orta_id);
-        echo json_encode(['status' => $res]);
+    public function validarFormularioCalidad($orta_id,$origen){
+        $res = $this->Etapas->validarFormularioCalidad($orta_id,$origen);
+        echo json_encode($res);
     }
 
     public function obtenerProductosSalida($etapId)
@@ -843,6 +843,39 @@ class Etapa extends CI_Controller
     public function filtrarEtapas(){
         $proc_id = $this->input->post('proc_id');
         $rsp = $this->Etapas->filtrarEtapas($proc_id);
+        foreach ($rsp as $value) {
+            if ($value->tiet_id == 'prd_tipos_etapaFraccionamiento') {
+                $urlComp = 'general/Etapa/fraccionar?op=' . $value->etap_id;
+                $value->link = $urlComp;
+            } else {
+                $urlComp = 'general/Etapa/nuevo?op=' . $value->etap_id;
+                $value->link = $urlComp;
+            }
+        }
         echo json_encode($rsp);
+    }
+      /**
+        * Obtiene los lotes asociados a una etapa
+        * @param integer etap_id
+        * @return array respuesta del servicio
+	*/
+    public function validarLotesxEstado(){
+        log_message('INFO','#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapa | validarLotesxEstado() ');
+        $etap_id=$this->input->post('etap_id');
+		$aux= $this->Etapas->validarLotesxEstado($etap_id)->lotes->lote;
+        if(!empty($aux)){
+            $i=0;
+            while(($aux[$i]->estado !== 'finalizado') && $i < count($aux)){
+                $i++;
+            }
+            if($i <= count($aux)){
+                echo json_encode(array("status" => false,"msj" => "Error, la etapa tiene Lotes asociado"));
+            }else{
+                $aux['status'] = true;
+                echo json_encode($aux);
+            }
+        }else{
+            echo json_encode(array("status" => true,"msj" => "Se elimino la etapa que no posee lotes"));
+        }
     }
 }

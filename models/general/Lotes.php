@@ -23,11 +23,11 @@ class Lotes extends CI_Model
         $array = file_get_contents($url, false, $param);
         return json_decode($array);
     }
-    public function listarPorEstablecimientoConSalida($establecimiento, $salida = false)
-    {
-        $resource = "/lotes_establecimiento/$establecimiento";
-        $url = REST_PRD_LOTE . $resource;
-        return wso2($url);
+    public function listarPorEstablecimientoConSalida($establecimiento, $salida = false){
+      log_message('DEBUG','#TRAZA | #TRAZ-PROD-TRAZASOFT | Lotes | listarPorEstablecimientoConSalida($establecimiento, $salida)');
+      $resource = "/lotes_establecimiento/$establecimiento";
+      $url = REST_PRD_LOTE . $resource;
+      return wso2($url);
     }
     public function listarPorCamion($camion)
     {

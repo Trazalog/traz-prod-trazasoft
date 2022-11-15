@@ -52,7 +52,7 @@ function agregaMateria(materia) {
     html += '<tr data-json="' + JSON.stringify(materia[0]) + '" id="' + materia[0].arti_id + '">';
     if (estado != 'En Curso') {
         html +=
-            '<td><i class="fa fa-fw fa-minus text-light-blue" style="cursor: pointer; margin-left: 15px;" onclick="eliminarOrigen(this)"></i></td>';
+            '<td><i class="fa fa-trash text-light-blue" style="cursor: pointer; margin-left: 15px;" onclick="eliminarOrigen(this)"></i></td>';
     }
     html += '<td>' + materia[0].barcode + '</td>';
     html += '<td>' + materia[0].descripcion + '</td>';
