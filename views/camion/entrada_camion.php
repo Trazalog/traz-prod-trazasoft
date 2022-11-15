@@ -18,6 +18,7 @@
         <div class="row">
             <input type="hidden" id="accioncamion">
             <input type="hidden" id="esExterno" name="esExterno" value="externo">
+            <input type="hidden" id="motr_id" name="motr_id">
             <div class="col-md-6 col-xs-12">
                 <div id="cargacamion" onclick="cargacamion();">
                     <img src="<?php echo base_url('lib/icon/truck.png'); ?>" alt="Smiley face" height="42" width="42">
@@ -32,7 +33,6 @@
             </div>
         </div>
         <form id="frm-info">
-            <input type="hidden" id="motr_id" name="motr_id">
             <input type="text" name="accion" id="accion" class="hidden">
             <div class="row" style="margin-top: 40px">
                 <div class="col-md-1 col-xs-12">
@@ -395,7 +395,7 @@ function addCamion(msj = true) {
     var dataForm = mergeFD(frmInfo, frmCamion);
     dataForm.append('estado', 'EN CURSO');
     showFD(dataForm);
-    if($("#motr_id") == ''){
+    if($("#motr_id").val() == ''){
         wo();
         $.ajax({
             type: 'POST',
