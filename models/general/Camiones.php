@@ -34,20 +34,15 @@ class Camiones extends CI_Model
     * @param $data lotes cargados en pantalla
     * @return array respuesta del service
     */
-    public function guardarCarga($data)
-    {
-
+    public function guardarCarga($data){
         log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | CAMIONES | guardarCarga() | #DATA: ' . json_encode($data));
 
         $this->load->model(ALM . '/Lotes');
         $this->load->model(PRD . 'general/Recipientes');
-
         $array = [];
-
         $camiones = [];
 
         foreach ($data as $key => $o) {
-
             #CREAR NUEVO RECIPIENTE
             $rsp = $this->Recipientes->crear($o);
             log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | CAMIONES | guardarCarga() | #NEW RECIPIENTE ID: >> reci_id -> ' . json_encode($rsp));
@@ -60,14 +55,12 @@ class Camiones extends CI_Model
             $o->prov_id = PROVEEDOR_INTERNO;
 
             $array[] = $o;
-
             $camiones[] = array('motr_id' => $o->motr_id, 'estado' => 'CARGADO');
         }
 
         $rsp = $this->Lotes->guardarCargaCamion($array);
 
         if ($rsp['status']) {
-
             $rsp = $this->actualizarEstado($camiones);
         }
 
@@ -90,9 +83,12 @@ class Camiones extends CI_Model
 
         return $rsp;
     }
-
-    public function guardarDescarga($data)
-    {
+    /**
+        * Crea los lotes para guardar los productos y su stock
+        * @param $data datos para crear los lotes(stored procedure)
+        * @return array respuesta del service
+    */
+    public function guardarDescarga($data){
         log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | CAMIONES | guardarDescarga() | #DATA: ' . json_encode($data));
 
         $array = [];
@@ -101,7 +97,7 @@ class Camiones extends CI_Model
                 "id" => $o['destino']['lote_id'],
                 "producto" => $o['origen']['arti_id'],
                 "prov_id" => $o['origen']['prov_id'],
-                "batch_id" => $o['origen']['batch_id'] ? $o['origen']['batch_id'] : 0,
+                "batch_id_padre" => $o['origen']['batch_id'] ? $o['origen']['batch_id'] : 0,
                 "cantidad" => $o['destino']['cantidad'],
                 "stock" => $o['origen']['cantidad'],
                 "reci_id" => $o['destino']['reci_id'],
@@ -122,9 +118,12 @@ class Camiones extends CI_Model
         $rsp = $this->rest->callApi('PUT', $url, $aux);
         return $rsp;
     }
-
-    public function obtenerInfo($patente, $estado)
-    {
+    /**
+    * Obtiene la informacion cargada para una patente por estado
+    * @param string $patente;$estado
+    * @return array con datos del camion 
+    */
+    public function obtenerInfo($patente, $estado){
         $url = REST_LOG . "/camiones/$patente/".empresa();
         $rsp = wso2($url);
         if ($estado) {
@@ -154,29 +153,11 @@ class Camiones extends CI_Model
             }
         }
     }
-
-    public function validarCamion($patente, $estado = 'EN CURSO')
-    {
-        log_message('DEBUG', "#TZL | " . __METHOD__ . "| PANTENTE: $pantente | ESTADO: $estado");
-
-        $res = wso2(REST_LOG . "/camiones/$patente")['data'];
-        if ($res) {
-            foreach ($res as $o) {
-
-                if ($o->estado == $estado) {
-                    return true;
-                }
-
-            }
-        }
-        return false;
-    }
-
     /**
-		* Listado de Movimientos de Transporte (Listado Recepción Camión)
-		* @param
-		* @return array con respuesta de servicio
-		*/
+    * Listado de Movimientos de Transporte (Listado Recepción Camión)
+    * @param
+    * @return array con respuesta de servicio
+    */
     public function listaTransporte()
     {
         $url = REST_LOG . '/transporte/movimiento/list/tipo_movimiento/' . empresa();
@@ -310,9 +291,13 @@ class Camiones extends CI_Model
 
         return $rsp;
     }
-
-    public function guardarDescargaExterna($data)
-    {
+    /**
+    * Crea los lotes necesarios para los articulos cargados en pantalla.
+    * NOTA: Si batch_id_padre(seria el batch_id cargado en origen de la pantalla) es 0 crea lotes nuevos, no descuenta ni vacía)
+    * @param $data lotes cargados en pantalla
+    * @return array $rsp respuesta del service
+    */
+    public function guardarDescargaExterna($data){
         log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | CAMIONES | guardarDescarga() | #DATA: ' . json_encode($data));
 
         $array = [];
@@ -335,11 +320,11 @@ class Camiones extends CI_Model
         return $rsp;
     }
 
-		/**
-		* Guarda salida de camion a algun deposito interno o Salida al exterior
-		* @param array con datos de salida
-		* @return array con respuesta de servicio
-		*/
+    /**
+    * Guarda salida de camion a algun deposito interno o Salida al exterior
+    * @param array con datos de salida
+    * @return array con respuesta de servicio
+    */
     public function guardarSalida($data)
     {
         log_message("DEBUG", "#TRAZA | TRAZ-PROD-TRAZASOFT | CAMIONES | guardarSalida()");
@@ -353,12 +338,15 @@ class Camiones extends CI_Model
         );
         return wso2(REST_LOG . '/camiones/salida', 'PUT', $post);
     }
-
-    public function estado($patente, $estado, $estadoFinal)
-    {
+    /**
+    * Actualiza el estado del camion en prd.movimientos_transportes por motr_id
+    * @param array motr_id;estado
+    * @return array con respuesta de servicio
+    */
+    public function estado($patente, $estado, $estadoFinal){
+        log_message('DEBUG','#TRAZA | #TRAZ-PROD-TRAZASOFT | Camiones | estado($patente, $estado, $estadoFinal)');
         $rsp = $this->obtenerInfo($patente, $estado);
-        if($rsp)
-        {
+        if($rsp){
             $url = REST_LOG . '/camiones/estado';
             $data['_put_camiones_estado'] = array(
                 'motr_id' => $rsp->motr_id,
@@ -375,16 +363,18 @@ class Camiones extends CI_Model
         return wso2($url, 'PUT', $data);
     }
 
-    public function actualizarProveedor($patente, $estado, $proveedor){
-        log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT| Camiones | actualizarProveedor($patente, $estado, $proveedor)');
-        $data['_put_camiones_proveedor'] = array(
-            'patente' => $patente,
-            'estado' => $estado,
-            'prov_id' => "$proveedor"
+    public function actualizaDatosMovimientoTransporte($data){
+        log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT| Camiones | actualizaDatosMovimientoTransporte($data)');
+        $dataPut['_put_camiones_proveedor'] = array(
+            'boleta' => $data['boleta'],
+            'tara' => $data['tara'],
+            'neto' => $data['neto'],
+            'motr_id' => $data['motr_id'],
+            'prov_id' => $data['proveedor']
         );
 
         $url = REST_LOG."/camiones/proveedor";
-        return wso2($url, 'PUT', $data);
+        return wso2($url, 'PUT', $dataPut);
     }
     /**
 	* Busca datos del movimiento de transporte (camion) por motr_id en prd.movimiento_transporte

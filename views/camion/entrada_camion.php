@@ -32,56 +32,57 @@
             </div>
         </div>
         <form id="frm-info">
-                <input type="text" name="accion" id="accion" class="hidden">
-                <div class="row" style="margin-top: 40px">
-                        <div class="col-md-1 col-xs-12">
-                                <label class="form-label">Comprobante<?php hreq() ?>:</label>
-                        </div>
-                        <div class="col-md-6 col-xs-12">
-                                <input id="boleta" type="text" class="form-control" placeholder="Ingrese comprobante" name="boleta">
-                        </div>
-                        <div class="col-md-5">
-                        </div>
+            <input type="hidden" id="motr_id" name="motr_id">
+            <input type="text" name="accion" id="accion" class="hidden">
+            <div class="row" style="margin-top: 40px">
+                <div class="col-md-1 col-xs-12">
+                        <label class="form-label">Comprobante<?php hreq() ?>:</label>
                 </div>
-                <div class="row" style="margin-top:40px">
-                        <div class="col-md-2 col-xs-12">
-                            <label for="establecimientos" class="form-label">Establecimiento<?php hreq() ?>:</label>
-                        </div>
-                        <div class="col-md-4 col-xs-12">
-                            <select class="form-control select2 select2-hidden-accesible" id="establecimientos" name="establecimiento" onchange="selectEstablecimiento();obtenerRecipientes();" <?php echo req() ?>>
-                                    <option value="" disabled selected>-Seleccione Establecimiento-</option>
-                                    <?php
-                                        foreach ($establecimientos as $fila) {
-                                                echo '<option value="' . $fila->esta_id . '" >' . $fila->nombre . '</option>';
-                                        }
-                                    ?>
-                            </select>
-                        </div>
-                        <div class="col-md-1 col-xs-12">
-                            <label for="fecha" class="form-label">Fecha<?php hreq() ?>:</label>
-                        </div>
-                        <div class="col-md-3 col-xs-12">
-                            <input type="date" id="fecha" value="<?php echo $fecha; ?>" class="form-control" name="fecha">
-                        </div>
-                        <div class="col-md-2"></div>
+                <div class="col-md-6 col-xs-12">
+                        <input id="boleta" type="text" class="form-control" placeholder="Ingrese comprobante" name="boleta">
                 </div>
-                <div class="row" style="margin-top:40px">
-                        <div class="col-md-1 col-xs-12">
-                            <label class="form-label tag-descarga">Proveedor<?php hreq() ?>:</label>
-                        </div>
-                        <div class="col-md-3 col-xs-12">
-                                <input list="proveedores" class="form-control tag-descarga" id="proveedor" name="proveedor" autocomplete="off">
-                                <datalist id="proveedores">
-                                        <?php foreach ($proveedores as $fila) {
-                                        echo "<option data-json='" . json_encode($fila) . "' value='" . $fila->id . "'>" . $fila->titulo . "</option>";
+                <div class="col-md-5">
+                </div>
+            </div>
+            <div class="row" style="margin-top:40px">
+                <div class="col-md-2 col-xs-12">
+                    <label for="establecimientos" class="form-label">Establecimiento<?php hreq() ?>:</label>
+                </div>
+                <div class="col-md-4 col-xs-12">
+                    <select class="form-control select2 select2-hidden-accesible" id="establecimientos" name="establecimiento" onchange="selectEstablecimiento();obtenerRecipientes();" <?php echo req() ?>>
+                            <option value="" disabled selected>-Seleccione Establecimiento-</option>
+                            <?php
+                                foreach ($establecimientos as $fila) {
+                                        echo '<option value="' . $fila->esta_id . '" >' . $fila->nombre . '</option>';
                                 }
-                                ?>
-                                </datalist>
-                        </div>
-                        <div class="col-md-5 col-xs-12">
-                            <input type="text" disabled id="nombreproveedor" class="form-control tag-descarga">
-                        </div>
+                            ?>
+                    </select>
                 </div>
+                <div class="col-md-1 col-xs-12">
+                    <label for="fecha" class="form-label">Fecha<?php hreq() ?>:</label>
+                </div>
+                <div class="col-md-3 col-xs-12">
+                    <input type="date" id="fecha" value="<?php echo $fecha; ?>" class="form-control" name="fecha">
+                </div>
+                <div class="col-md-2"></div>
+            </div>
+            <div class="row" style="margin-top:40px">
+                <div class="col-md-1 col-xs-12">
+                    <label class="form-label tag-descarga">Proveedor<?php hreq() ?>:</label>
+                </div>
+                <div class="col-md-3 col-xs-12">
+                        <input list="proveedores" class="form-control tag-descarga" id="proveedor" name="proveedor" autocomplete="off">
+                        <datalist id="proveedores">
+                                <?php foreach ($proveedores as $fila) {
+                                echo "<option data-json='" . json_encode($fila) . "' value='" . $fila->id . "'>" . $fila->titulo . "</option>";
+                        }
+                        ?>
+                        </datalist>
+                </div>
+                <div class="col-md-5 col-xs-12">
+                    <input type="text" disabled id="nombreproveedor" class="form-control tag-descarga">
+                </div>
+            </div>
         </form>
     </div>
 </div>
@@ -385,6 +386,7 @@ function validarCamion(msj) {
 
 // Guarda Entrada de Camión
 //Guardar Datos de Camión parametro = FALSE es para NO mostrar el MSJ de Datos Guardados
+// si tiene motr_id se realizo la carga por sistema
 function addCamion(msj = true) {
     if (!validarFormulario(msj)) return;
     if (!validarCamion(msj)) return;
@@ -393,38 +395,43 @@ function addCamion(msj = true) {
     var dataForm = mergeFD(frmInfo, frmCamion);
     dataForm.append('estado', 'EN CURSO');
     showFD(dataForm);
-    wo();
-    $.ajax({
-        type: 'POST',
-        dataType: 'json',
-        url: '<?php echo base_url(PRD) ?>general/Camion/setEntrada',
-        contentType: false,
-        processData: false,
-        cache: false,
-        data: dataForm,
-        success: function(rsp) {
-            if (rsp.status) {
-                if ($("#esExterno").val() != 'externo' || $('#accion').val() == 'carga') Swal.fire('Correcto','Datos guardados con éxito','success');
+    if($("#motr_id") == ''){
+        wo();
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: '<?php echo base_url(PRD) ?>general/Camion/setEntrada',
+            contentType: false,
+            processData: false,
+            cache: false,
+            data: dataForm,
+            success: function(rsp) {
+                hecho();
+                console.log(rsp);
+                return;
+                if (rsp.status) {
+                    if ($("#esExterno").val() != 'externo' || $('#accion').val() == 'carga') Swal.fire('Correcto','Datos guardados con éxito','success');
 
-                if ($('#bloque_descarga:visible').length == 0) {
-                    // $('#frm-camion')[0].reset();
-                    // $('#frm-info')[0].reset();
-                    linkTo("traz-prod-trazasoft/general/Camion/recepcionCamion");
+                    if ($('#bloque_descarga:visible').length == 0) {
+                        linkTo("traz-prod-trazasoft/general/Camion/recepcionCamion");
+                    }
+                    //Llamo al guardado de la descarga
+                    guardarDescargaOrigen();
+                } else {
+                    if (rsp.msj) error('Error',rsp.msj)
+                    else error('Error','Fallo al guardar datos del camión');
                 }
-                //Llamo al guardado de la descarga
-                guardarDescargaOrigen();
-            } else {
-                if (rsp.msj) alert(rsp.msj)
-                else alert('Fallo al guardar datos del camión');
+            },
+            error: function(rsp) {
+                error('Error','Error al guardar datos del camión');
+            },
+            complete: function() {
+                wc();
             }
-        },
-        error: function(rsp) {
-            alert('Error al guardar datos del camión');
-        },
-        complete: function() {
-            wc();
-        }
-    });
+        });
+    }else{
+        guardarDescargaOrigen();
+    }
 }
 </script>
 <script>
