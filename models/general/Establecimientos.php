@@ -89,7 +89,8 @@ class Establecimientos extends CI_Model
         "tipo":[
           {"nombre":"DEPOSITO"},
           {"nombre":"PRODUCTIVO"},
-          {"nombre":"TRANSPORTE"}
+          {"nombre":"TRANSPORTE"},
+          {"nombre":"DEPÓSITO/PRODUCTIVO"}
       ]
     }
     }';

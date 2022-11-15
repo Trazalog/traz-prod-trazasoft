@@ -185,7 +185,7 @@
             foreach ($matPrimas as $fila) {
                 echo "<tr data-json='".json_encode($fila)."' id='$fila->arti_id'>";
                 if($etapa->estado != 'En Curso'){
-                    echo '<td><i class="fa fa-fw fa-minus text-light-blue" style="cursor: pointer; margin-left: 15px;" onclick="eliminarOrigen(this)"></i></td>';
+                    echo '<td><i class="fa fa-trash text-light-blue" style="cursor: pointer; margin-left: 15px;" onclick="eliminarOrigen(this)"></i></td>';
                 }
                 echo "<td>$fila->barcode</td>";
                 echo "<td>$fila->descripcion</td>";
@@ -204,9 +204,9 @@
 
 <script>
 
-$(document).ready(function () {
-    $(".select2").select2();
-});
+/* $(document).ready(function () {
+     $(".select2").select2(); 
+}); */
 
 $('#formulas').on('change', function() {
     var data = getJson(this);
