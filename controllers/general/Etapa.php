@@ -17,6 +17,7 @@ class Etapa extends CI_Controller
         $this->load->model('general/Recursos');
         $this->load->model('general/Procesos');
         $this->load->model('general/Lotes');
+        $this->load->model('general/Formulas');
         $this->load->model(FRM . 'Forms');
 
         // si esta vencida la sesion redirige al login
@@ -32,6 +33,7 @@ class Etapa extends CI_Controller
     {
         $data['list'] = $this->Etapas->listar()->etapas->etapa;
         $temp = $this->Etapas->listarEtapas()->etapas->etapa;
+        $data['procesosProductivos'] = $this->Procesos->listarProcesos()->procesos->proceso;
         //reforma las url segun id
         foreach ($temp as $value) {
             if ($value->tiet_id == 'prd_tipos_etapaFraccionamiento') {
@@ -78,7 +80,7 @@ class Etapa extends CI_Controller
         #Obtener Proucto por Etapa
         $data['productos_etapa'] = $this->Etapas->obtenerArticulos($data['etapa']->id)['data'];
         $data['productos_entrada_etapa'] = $this->Etapas->getEntradaEtapa($data['etapa']->id)['data'];
-
+        $data['formulas'] = $this->Formulas->getFormulas()->formulas->formula;
         $data['lang'] = lang_get('spanish', 5);
         $data['tareas'] = []; //$this->Tareas->listar()->tareas->tarea;
         $data['templates'] = []; //$this->Templates->listar()->templates->template;
@@ -352,7 +354,7 @@ class Etapa extends CI_Controller
 
             $this->load->view('etapa/fraccionar/fraccionar', $data);
         } else {
-
+            $data['formulas'] = $this->Formulas->getFormulas()->formulas->formula;
             $data['tareas'] = []; //$this->Tareas->listar()->tareas->tarea;
             $data['templates'] = []; //$this->Templates->listar()->templates->template;
             $data['recursosmateriales'] = []; //$this->Recursos_Materiales->listar()->recursos->recurso;
@@ -832,5 +834,15 @@ class Etapa extends CI_Controller
         }else{
             echo json_encode(array("status" => false,"msj" => "No se encontraron lotes a fraccionar"));
         }
+    }
+    /**
+        * Obtiene las etapas por proceso productivo
+        * @param integer proc_id
+        * @return array respuesta del servicio
+	*/
+    public function filtrarEtapas(){
+        $proc_id = $this->input->post('proc_id');
+        $rsp = $this->Etapas->filtrarEtapas($proc_id);
+        echo json_encode($rsp);
     }
 }

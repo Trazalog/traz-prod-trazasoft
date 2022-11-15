@@ -226,14 +226,55 @@ class Noconsumibles extends CI_Model
 	* @return array respuesta del servicio
 	*/
   public function validarNoConsumible($noco){
-        
     $url = REST_PRD_NOCON."/noConsumible/validar/". urlencode($noco) . "/empresa/".empresa();
 
     $aux = $this->rest->callAPI("GET",$url);
     $resp = json_decode($aux['data']);
-
     log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT | Noconsumibles | validarNoConsumible() >> resp ".json_encode($resp));
 
     return $resp->resultado;
+  }
+  /**
+	* Consulta al service si los parametros enviados no estas ya insertados
+	* @param string codigo_incial; codigo_final
+	* @return array respuesta del servicio
+	*/
+  public function validarCodigoMasivoNoConsumibles($prefijo,$noco_inicio,$noco_final){
+    $url = REST_PRD_NOCON."/noConsumible/validar/prefijo/". urlencode($prefijo) ."/desde/". urlencode($noco_inicio) . "/hasta/". urlencode($noco_final) ."/empresa/".empresa();
+
+    $aux = $this->rest->callAPI("GET",$url);
+    $resp = json_decode($aux['data']);
+    log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT | Noconsumibles | validarCodigoMasivoNoConsumibles() >> resp ".json_encode($resp));
+
+    return $resp->resultado;
+  }
+  /**
+	* Consulta al service si el prefijo recibido esta creado, si es afirmativa obtiene el último codigo ingresado
+	* @param string $prefijo cadena del codigo
+	* @return array respuesta del servicio
+	*/
+  public function obtenerIndicePrefijo($prefijo){
+    log_message('DEBUG','#TRAZA | #TRAZ-PROD-TRAZASOFT | Noconsumibles | obtenerIndicePrefijo()');
+    $url = REST_PRD_NOCON."/noConsumibles/ultimoCodigo/". urlencode($prefijo) ."/empresa/".empresa();
+
+    $aux = $this->rest->callAPI("GET",$url);
+    $resp = json_decode($aux['data']);
+    return $resp;
+  }
+  /**
+	* Obtiene el estilo definido en core.tablas para los no consumibles 
+	* @param integer empr_id
+	* @return array respuesta con estilos configurados
+	*/
+  public function getEstilosQRNoCos(){
+        
+    $url = REST_CORE."/tabla/estilos_qr/empresa/".empresa();
+
+    $aux = $this->rest->callAPI("GET",$url);
+    $resp = json_decode($aux['data']);
+
+    log_message('DEBUG', "#TRAZA | #SICPOA | Inspecciones | getTiposFacturas()  resp: >> " . json_encode($resp));
+
+    return $resp->tablas->tabla;
 }
 }

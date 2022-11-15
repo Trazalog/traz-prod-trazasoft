@@ -574,11 +574,13 @@
     $('#formEstablecimiento').bootstrapValidator('validate');
     $('#formDatos').bootstrapValidator('validate');
     if (!$('#formEstablecimiento').data('bootstrapValidator').isValid()) {
-      alert('Formulario establecimiento incompleto');
+      alert('Formulario establecimiento incompleto');   
+      limpiarCampos();
       return false;
     }
     if (!$('#formDatos').data('bootstrapValidator').isValid()) {
       alert('Formulario recipiente incompleto');
+      limpiarCampos();
       return false;
     }
     return true;
@@ -589,6 +591,7 @@
     $('#formEstablecimiento').data('bootstrapValidator').resetForm();
     $('#formDatos')[0].reset();
     $('#formDatos').data('bootstrapValidator').resetForm();
+    $('#tipo_residuo').html('');
     $('#estabSelected').text('');
     $('#deposSelected').text('');
     $('#recipSelected').text('');

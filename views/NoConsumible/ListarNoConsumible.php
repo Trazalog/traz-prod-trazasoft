@@ -3,7 +3,12 @@
         <h4 class="box-title">Listado de No Consumibles</h4>
     </div>
     <div class="box-body">
-			<button class="btn btn-block btn-primary" style="width: 100px; margin-top: 10px;" onclick="nuevoNCmodal()">Agregar</button>
+			<div class="row">
+				<div class="col-md-6">
+					<button class="btn btn-primary" style="margin-top: 10px;" onclick="nuevoNCmodal()">Agregar</button>
+					<button class="btn btn-primary" style="margin-top: 10px;" onclick="modalLoteNCs()">Agregar Masivo</button>
+				</div>
+			</div>
 			<div class="box-body table-scroll table-responsive">
 				<table id="tbl-NoConsumibles" class="table table-striped table-hover">
 					<thead>
@@ -65,6 +70,11 @@
   		$('#frm-NoConsumible')[0].reset();
 	});
 
+	function limpiarform(){
+		$('#frm-NoConsumible').data('bootstrapValidator').resetForm();
+	}
+	
+
 	DataTable('#tbl-NoConsumibles');
 	DataTable('#tbl-trazabilidad');
 
@@ -76,6 +86,13 @@
 	}	
 
 	function guardarNoConsumible() {
+
+		if($("#fec_vencimiento").val() < $("#fec_alta_nuevo").val()){
+			wc();
+			error('Error...','La fecha de vencimiento no puede ser anterior a la fecha de alta');
+			$("#fec_vencimiento").val('');
+			return;
+		}
 
 		if(!frm_validar('#frm-NoConsumible')){
 			alertify.error('Debes completar los campos obligatorios (*)');
@@ -119,22 +136,13 @@
 							});
 						} else {
 							wc();
-							Swal.fire(
-								'Error...',
-								'No pudo darse de alta el No consumible!',
-								'error'
-							);
+							error('Error...','No pudo darse de alta el No consumible!')
 						}
 					},
 					error: function(rsp) {
 						wc();
 						$("#mdl-NoConsumible").modal('hide');
-
-						Swal.fire(
-							'Error...',
-							'No pudo darse de alta el No consumible!',
-							'error'
-						)
+						error('Error...','No pudo darse de alta el No consumible!')
 						console.log(rsp.msj);
 					}
 				});
@@ -150,6 +158,13 @@
 	}
 
 	function editarNoConsumible() {
+
+		if($("#fec_vencimiento_Edit").val() < $("#fec_alta").val()){
+			wc();
+			error('Error...','La fecha de vencimiento no puede ser anterior a la fecha de alta');
+			$("#fec_vencimiento_Edit").val('');
+			return;
+		}
 		wo();
 		var formData = new FormData($('#frm-NoConsumible_Editar')[0]);
 		
@@ -177,17 +192,11 @@
 					showCancelButton: false,
 					confirmButtonText: 'Ok'
 				}).then((result) => {
-					
 					linkTo('<?php echo base_url(PRD) ?>general/Noconsumible/index');
-					
 				});
 			},
 			error: function(rsp) {
-				Swal.fire(
-					'Oops...',
-						'Algo salio mal!',
-						'error'
-				)
+				error('Oops...','Algo salio mal!');
 				console.log(rsp.msj);
 			},
 			complete: function() {
@@ -196,81 +205,80 @@
 		});
 	}
 
-	function selectEstablecimiento() {
-    var esta_id = $('#establecimiento').val();
-    $('#estabSelected').text('');
-    $('#deposSelected').text('');
-    $('#recipSelected').text('');
+	function selectEstablecimiento(tag) {
+		var esta_id = $(tag).val();
+		$('#estabSelected').text('');
+		$('#deposSelected').text('');
+		$('#recipSelected').text('');
 
-    wo();
-    $.ajax({
-				type: 'GET',
-				data: {
-					esta_id: esta_id
-				},
-				dataType: 'JSON',
-				url: '<?php echo base_url(PRD) ?>general/Establecimiento/obtenerDepositos/',
-				success: function(rsp) {
+		wo();
+		$.ajax({
+			type: 'GET',
+			data: {
+				esta_id: esta_id
+			},
+			dataType: 'JSON',
+			url: '<?php echo base_url(PRD) ?>general/Establecimiento/obtenerDepositos/',
+			success: function(rsp) {
 
-					$('#depositos').empty();
+				$('.selectedDeposito').empty();
 
-					var datos = "<option value='' disabled selected>Seleccionar</option>";
-					for (let i = 0; i < rsp.length; i++) {
-						datos += "<option value=" + rsp[i].depo_id + ">" + rsp[i].descripcion + "</option>";
-					}
-					//selectSearch('establecimiento', 'estabSelected');
-					$('#depositos').html(datos);
-				},
-				error: function(rsp) {
-					if (rsp) {
-						$('#depositos').empty();
-						alert(rsp.responseText);
-					} else {
-						$('#depositos').empty();
-						alert("No se pudieron cargar los depositos del establecimiento seleccionado.");
-					}
-				},
-				complete: function(rsp) {
-        wc();
-      },
-    })
-  }
+				var datos = "<option value='' disabled selected>Seleccionar</option>";
+				for (let i = 0; i < rsp.length; i++) {
+					datos += "<option value=" + rsp[i].depo_id + ">" + rsp[i].descripcion + "</option>";
+				}
+				//selectSearch('establecimiento', 'estabSelected');
+				$('.selectedDeposito').html(datos);
+			},
+			error: function(rsp) {
+				if (rsp) {
+					$('.selectedDeposito').empty();
+					error('Error',rsp.responseText);
+				} else {
+					$('.selectedDeposito').empty();
+					error('Error',"No se pudieron cargar los depositos del establecimiento seleccionado.");
+				}
+			},
+			complete: function(rsp) {
+				wc();
+			},
+		})
+  	}
 
-  function selectDeposito() {
-
-			var esta_id = $('#establecimiento').val();
-			var depo_id = $('#depositos').val();
-			$('#deposSelected').text('');
-			$('#recipSelected').text('');
-			wo();
-			$.ajax({
-				type: 'GET',
-				data: {
-					esta_id: esta_id,
-					depo_id: depo_id
-				},
-				dataType: 'JSON',
-				url: '<?php echo base_url(PRD) ?>general/Establecimiento/obtenerRecipientesDeposito/',
-				success: function(rsp) {
-					var datos = "<option value='' disabled selected>Seleccionar</option>";
-					for (let i = 0; i < rsp.length; i++) {
-						datos += "<option value=" + rsp[i].nombre + ">" + rsp[i].nombre + "</option>";
-					}
-					//selectSearch('depositos', 'deposSelected');
-					$('#tipo_residuo').html(datos);
-				},
-				error: function(rsp) {
-					if (rsp) {
-						alert(rsp.responseText);
-					} else {
-						alert("No se pudieron cargar los recipientes.");
-					}
-				},
-				complete: function(rsp) {
-					wc();
-				},
-			})
-  }
+  	function selectDeposito() {
+		var esta_id = $('#establecimiento').val();
+		var depo_id = $('#depositos').val();
+		$('#deposSelected').text('');
+		$('#recipSelected').text('');
+		wo();
+		$.ajax({
+			type: 'GET',
+			data: {
+				esta_id: esta_id,
+				depo_id: depo_id
+			},
+			dataType: 'JSON',
+			url: '<?php echo base_url(PRD) ?>general/Establecimiento/obtenerRecipientesDeposito/',
+			success: function(rsp) {
+				var datos = "<option value='' disabled selected>Seleccionar</option>";
+				for (let i = 0; i < rsp.length; i++) {
+					datos += "<option value=" + rsp[i].nombre + ">" + rsp[i].nombre + "</option>";
+				}
+				//selectSearch('depositos', 'deposSelected');
+				$('#tipo_residuo').html(datos);
+			},
+			error: function(rsp) {
+				if (rsp) {
+					alert(rsp.responseText);
+				} else {
+					alert("No se pudieron cargar los recipientes.");
+				}
+			},
+			complete: function(rsp) {
+				wc();
+			},
+		})
+  	}
 
   function selectRecipiente() {
     selectSearch('tipo_residuo', 'recipSelected');
@@ -286,7 +294,6 @@
     });
   }
 
-
 ////// Bloque ver y editar
 	function verInfo(data){
 		blockEdicion();
@@ -298,7 +305,7 @@
 	function editarInfo(data) {
 		habilitarEdicion();
 		llenarCampos(data);
-		$(".bloq_fec_alta").hide();
+		$(".bloq_fec_alta").show();
 		$("#mdl-VerNoConsumible").modal('show');
 	}
 
@@ -500,14 +507,12 @@ async function validarNoConsumible(datos){
 // Características para generacion del QR
 function solicitarQR(e){
 	//Limpio el modal
-	$("#infoEtiqueta").empty();
-	$("#contenedorCodigo").empty();
-	$("#infoFooter").empty();
+	$("#QRsGenerados").empty();
 
 	// configuración de código QR
 	var config = {};
 	config.titulo = "Código No Consumible";
-	config.pixel = "7";
+	config.pixel = "3";
 	config.level = "L";
 	config.framSize = "2";
 
@@ -516,15 +521,16 @@ function solicitarQR(e){
 	var datosNoCo = JSON.parse(datos);
 
 	//Cargo la vista del QR con datos en el modal
-	$("#infoEtiqueta").load("<?php echo PRD ?>general/CodigoQR/cargaModalQRNoConsumible", datosNoCo);
 	var dataQR = {};
 	dataQR.codigo = datosNoCo.codigo;
+	dataQR.descripcion = datosNoCo.descripcion;
+	dataQR.fec_alta = datosNoCo.fec_alta;
 
 	// agrega codigo QR al modal impresion
-	getQR(config, dataQR, 'codigosQR/Traz-prod-trazasoft/NoConsumibles');
+	obtenerQR(config, dataQR, 'codigosQR/Traz-prod-trazasoft/NoConsumibles');
 
 	// levanta modal completo para su impresion
-	verModalImpresion();
+	$("#modalPlantillaQR").modal('show');
 }
 ////////////// FIN Creación QR
 </script>
@@ -575,8 +581,18 @@ function solicitarQR(e){
 									<div class="form-group">
 											<label class="col-md-2 control-label" for="descripcion">Descripción<?php echo hreq() ?>:</label>
 											<div class="col-md-10">
-													<textarea class="form-control" id="descripcion" name="descripcion"
+													<textarea class="form-control" id="descripcion" name="descripcion" maxlength="80"
 													<?php echo req() ?>></textarea>
+											</div>
+									</div>
+
+									<div class="form-group">
+											<label class="col-md-4 control-label" for="fec_alta">Fecha de
+													alta<strong class="text-danger">*</strong>:</label>
+											<div class="col-md-8">
+											<?php $fcha = date("Y-m-d");?>
+													<input id="fec_alta_nuevo" name="fec_alta" type="date"
+															value='<?= $fcha ?>' placeholder="" class="form-control input-md" disabled>
 											</div>
 									</div>
 
@@ -593,7 +609,7 @@ function solicitarQR(e){
 									
 												<label class="col-md-4 control-label" for="">Establecimiento<?php echo hreq() ?>:</label>
 													<div class="col-md-8">
-													<select class="form-control select2 select2-hidden-accesible" id="establecimiento" name="establecimiento" onchange="selectEstablecimiento()" <?php echo req() ?>>
+													<select class="form-control select2 select2-hidden-accesible" id="establecimiento" name="establecimiento" onchange="selectEstablecimiento(this)" <?php echo req() ?>>
 															<option value="" disabled selected>Seleccionar</option>
 															<?php
 																if(is_array($tipoEstablecimiento)){
@@ -611,7 +627,7 @@ function solicitarQR(e){
 									<div class="form-group">
 													<label class="col-md-4 control-label" for="depositos">Depósito<?php echo hreq() ?>:</label>
 													<div class="col-md-8">
-													<select class="form-control select2 select2-hidden-accesible" id="depositos" name="depositos" onchange="selectDeposito()" <?php echo req() ?>>
+													<select class="form-control select2 select2-hidden-accesible selectedDeposito" id="depositos" name="depositos" onchange="selectDeposito()" <?php echo req() ?>>
 													</select>
 													<span id="deposSelected" style="color: forestgreen;"></span>
 													</div>
@@ -621,7 +637,7 @@ function solicitarQR(e){
 					</form>
 				</div> <!-- /.modal-body -->
 				<div class="modal-footer">
-						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+						<button type="button" class="btn btn-danger" data-dismiss="modal" onclick='limpiarform()'>Cancelar</button>
 						<button type="button" id="btn-accion" class="btn btn-success btn-guardar" onclick="guardarNoConsumible()">Guardar</button>
 				</div>
 			</div>
@@ -674,8 +690,7 @@ function solicitarQR(e){
 								<label class="col-md-2 control-label" for="descripcion">Descripción<strong
 												class="text-danger">*</strong>:</label>
 								<div class="col-md-10">
-										<textarea class="form-control habilitar" id="descripcion" name="descripcion"
-											></textarea>
+										<textarea class="form-control habilitar" id="descripcion" name="descripcion" maxlength="80"></textarea>
 								</div>
 						</div>
 
@@ -684,7 +699,7 @@ function solicitarQR(e){
 										alta<strong class="text-danger">*</strong>:</label>
 								<div class="col-md-8">
 										<input id="fec_alta" name="fec_alta" type="date"
-												placeholder="" class="form-control input-md habilitar" >
+												placeholder="" class="form-control input-md deshabilitar" >
 								</div>
 						</div>
 								<br>
@@ -813,4 +828,6 @@ function solicitarQR(e){
 <?php
     // carga el modal de impresion de QR
     $this->load->view( COD.'componentes/modalGenerico');
+	//Modal alta masiva de NC's
+    $this->load->view('NoConsumible/mdl_altaMasivaNCs');
 ?>

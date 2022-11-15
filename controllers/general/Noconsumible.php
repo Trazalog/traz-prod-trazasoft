@@ -16,6 +16,7 @@ class Noconsumible extends CI_Controller
       $data['tipoNoConsumible'] = $this->Noconsumibles->tipoNoConsumible()['data'];
       $data['tipoEstablecimiento'] = $this->Noconsumibles->tipoEstablecimiento()['data'];
       $data['ListarNoConsumible'] = $this->Noconsumibles->ListarNoConsumible()['data'];
+      $data['estiloImpresionQR'] = $this->Noconsumibles->getEstilosQRNoCos()[0];
       $this->load->view('NoConsumible/ListarNoConsumible',$data);
     }
 
@@ -230,4 +231,84 @@ class Noconsumible extends CI_Controller
         
     echo json_encode($resp);
 	}
+  /**
+	* Realiza la validación, generación y creación de los NoCo's segun los parámetros recibidos
+	* @param array parametros (cantidad, prefijo,desde,tipo NC, descripción, fec_vencimiento, establecimiento, depósito)
+	* @return array respuesta del servicio
+	*/
+  public function altaMasivaNoConsumibles(){
+    $cantidad = $this->input->post('cantidad');
+    $prefijo = $this->input->post('prefijo');
+    $desde = $this->input->post('desde');
+    $tipo_no_consumible = $this->input->post('tipo_no_consumible');
+    $descripcion = $this->input->post('descripcion');
+    $fec_vencimiento = $this->input->post('fec_vencimiento');
+    // $establecimiento = $this->input->post('establecimiento');
+    $deposito = $this->input->post('deposito');
+
+    //Valido que los parametros sean correctos y no existan NoCo's en dicho intervalo
+    $rspValidacion =  $this->Noconsumibles->validarCodigoMasivoNoConsumibles($prefijo,$desde,$desde + $cantidad);
+    //Este arreglo va amndar a la vista lso NoCo's generados apra su psoteriror impresión
+    $NoCosGenerados = array();
+    if($rspValidacion->existe != "true"){
+      for ($i=$desde; $i < $desde + $cantidad; $i++) {
+        $data[]['_post_noconsumibles'] = array(
+          'codigo' => (!empty($prefijo)? $prefijo : '') . $i,
+          'descripcion' => $descripcion,
+          'fec_vencimiento' => $fec_vencimiento,
+          'usuario_app' => userNick(),
+          'tinc_id' => $tipo_no_consumible,
+          'empr_id' => empresa()
+        );
+  
+        $data[]['_post_noconsumibles_movimientos'] = array(
+          'estado' => 'ALTA',
+          'usuario_app' => userNick(),
+          'noco_id' => (!empty($prefijo)? $prefijo : '') . $i,
+          'depo_id' => $deposito,
+          'dest_id' => '',
+          'empr_id' => empresa()
+        );
+        array_push($NoCosGenerados, array("codigo" => (!empty($prefijo)? $prefijo : '') . $i, "descripcion" => $descripcion, "fec_alta" => date('d-m-Y')));
+        $rsp = $this->Noconsumibles->guardarNoConsumible($data);
+        unset($data);
+      }
+
+      if($rsp['status']){
+        $rsp['title'] = 'Hecho';
+        $rsp['msg'] = "Se dieron de alta los <b>No Consumibles</b> exitosamente.";
+        $rsp['type'] = "success";
+        $rsp['NoCos'] = $NoCosGenerados;
+      }else{
+        $rsp['title'] = 'Error';
+        $rsp['msg'] = "Se produjo un error al dar de alta algún <b>No Consumible</b>";
+        $rsp['type'] = "error";
+      }
+    }else{
+      $rsp['status'] = false;
+      $rsp['title'] = "Ops!";
+      $rsp['msg'] = "Ya existen <b>No Consumibles</b> con identificador dentro del rango solicitado";
+      $rsp['type'] = "warning";
+    }
+    echo json_encode($rsp);
+  }
+  /**
+	* Recibe un prefijo del codigo de un NoCo, para posteriormente buscar el ultimo indice de ese código
+	* @param string codigo NoCo
+	* @return array respuesta del servicio
+	*/
+  public function obtenerIndicePrefijo(){
+    log_message('INFO','#TRAZA | #TRAZ-PROD-TRAZASOFT | Noconsumible | obtenerIndicePrefijo()');
+		$prefijo = $this->input->post('prefijo');
+		$aux = $this->Noconsumibles->obtenerIndicePrefijo($prefijo);
+    if(!empty($aux->noConsumible->codigo)){
+      $resp['status'] = true;
+      $auxi = str_replace(array('+','-'), '', $aux->noConsumible->codigo);
+      $resp['indice'] = (int) filter_var($auxi, FILTER_SANITIZE_NUMBER_INT);
+    }else{
+      $resp['status'] = false;
+      $resp['indice'] = 'SIN COINCIDENCIAS';
+    }
+    echo json_encode($resp);
+	} 
 }
