@@ -80,7 +80,7 @@
 
                 <div class="col-md-5 col-xs-12">
                     <?php if ($accion == 'Nuevo') {
-                        echo selectBusquedaAvanzada('recipientes', 'vreci');
+                        echo selectBusquedaAvanzada('recipientes','vreci', array('Tipo'=>'tipo','Estado:'=>'estado')); 
                     } elseif ($accion == 'Editar' && $etapa->estado != 'PLANIFICADO') {
                         echo "<input value='$etapa->recipiente' type='text' class='form-control' readonly id='recipientes_id' name='recipientes_id'>";
                     } elseif ($accion == 'Editar' && $etapa->estado == 'PLANIFICADO') {
@@ -89,12 +89,13 @@
                         echo "<span class='input-group-btn'><button id='buttonRecipi' type='button' class='btn btn-primary btn-flat' onclick='callRecipiente()'>Editar</button></span>
                         </div>";
                         echo "<div class='col-md-12 col-xs-12 recipientesDiv'>";
-                        echo selectBusquedaAvanzada('recipientes', 'vreci');
+                        echo selectBusquedaAvanzada('recipientes', 'vreci', array('Tipo'=>'tipo','Estado:'=>'estado'));
                         echo "</div>";
                     }
                     ?>
                 </div>
             </div>
+
             <div class="row form-group">
                 <div class="col-md-2 col-xs-12">
                     <label for="op" class="form-label">Orden de Producción:</label>
@@ -118,6 +119,7 @@
                 </div>';
                 } ?>
             </div>
+            
             <div class="row">
                 <div class="col-xs-12">
                     <a onclick="despliega()" href="#"><i class="glyphicon glyphicon-plus"></i>Datos Adicionales</a>
