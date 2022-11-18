@@ -4,30 +4,40 @@
 <button class='btn btn-success' onclick='btnFinalizar()'>Finalizar Etapa</button>
 <script>
 function btnFinalizar() {
-    wo();
-    validarCantidadReportes().then((result) => {
-        wc();
-        if(!result){
-            Swal.fire({
-                title: 'Atención!',
-                html: '<h5><b>No se agregó ningún reporte de producción.</b></h5><br><b style="font-size: 13px;">¿Esta seguro de finalizar la etapa?</b><br> <b style="font-size: 13px;">Esta acción no puede ser revertida.</b>',
-                type: 'question',
-                showCancelButton: true,
-                cancelButtonColor: "#d33",
-                confirmButtonText: 'Finalizar',
-                cancelButtonText: 'Cancelar',
-                reverseButtons: true
-            }).then((result) => {
-                if (result.value) {
+    validarFormularioControlCalidad().then((result) => {
+        if(result){
+            wo();
+            validarCantidadReportes().then((result) => {
+                wc();
+                if(!result){
+                    Swal.fire({
+                        title: 'Atención!',
+                        html: '<h5><b>No se agregó ningún reporte de producción.</b></h5><br><b style="font-size: 13px;">¿Esta seguro de finalizar la etapa?</b><br> <b style="font-size: 13px;">Esta acción no puede ser revertida.</b>',
+                        type: 'question',
+                        showCancelButton: true,
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: 'Finalizar',
+                        cancelButtonText: 'Cancelar',
+                        reverseButtons: true
+                    }).then((result) => {
+                        if (result.value) {
+                            finalizarEtapa();
+                        }
+                    });
+                }else{
                     finalizarEtapa();
                 }
+            }).catch((err) => {
+                wc();
+                error('Error','Se produjo un error al validar la cantidad de reportes de produccion asociados');
             });
         }else{
-            finalizarEtapa();
+            notificar('Nota','<b>Para realizar un reporte de producción el formulario de calidad debe estar aprobado</b>','warning');
         }
     }).catch((err) => {
         wc();
-        error('Error','Se produjo un error al validar la cantidad de reportes de produccion asociados');
+        error("Error","Se produjo un error al validar el formulario de calidad");
+        console.log(err);
     });
 }
 //////////////////////////////////////////

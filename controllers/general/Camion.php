@@ -97,13 +97,11 @@ class Camion extends CI_Controller
 		* @param array con datos
 		* @return array con respuesta del servicio
 		*/	
-    public function finalizarCarga()
-    {
-        log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT | Camion | finalizarCarga()");
-
-        $lotes = json_decode($this->input->post('lotes'));
-        $rsp = $this->Camiones->guardarCarga($lotes);
-        echo json_encode($rsp);
+    public function finalizarCarga(){
+      log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT | Camion | finalizarCarga()");
+      $lotes = json_decode($this->input->post('lotes'));
+      $rsp = $this->Camiones->guardarCarga($lotes);
+      echo json_encode($rsp);
     }
 
     public function finalizarSalida()
@@ -148,21 +146,20 @@ class Camion extends CI_Controller
 		* @param array datos camion
 		* @return array con respuesta del servicio
     */	
-    public function setEntrada()
-    {
-        log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT | Camion | setEntrada()");
-        $this->load->model('general/Entradas');
+    public function setEntrada(){
+      log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT | Camion | setEntrada()");
+      $this->load->model('general/Entradas');
 
-        $data = $this->input->post();
-        $rsp = $this->Entradas->guardar($data);
-        echo json_encode($rsp);
+      $data = $this->input->post();
+      $rsp = $this->Entradas->guardar($data);
+      echo json_encode($rsp);
     }
 
-    public function guardarDescarga()
-    {
-        $data = $this->input->post('array');
-        $rsp = $this->Camiones->guardarDescarga($data);
-        echo json_encode($rsp);
+    public function guardarDescarga(){
+      log_message('DEBUG'," #TRAZA | #TRAZ-PROD-TRAZASOFT | Camion | guardarDescarga()");
+      $data = $this->input->post('array');
+      $rsp = $this->Camiones->guardarDescarga($data);
+      echo json_encode($rsp);
     }
     #_____________________________________________________________________________________
 
@@ -241,14 +238,18 @@ class Camion extends CI_Controller
 
         echo json_encode($res);
     }
-
-    public function estado()
-    {
-        $post = $this->input->post();
-        $rsp = $this->Camiones->estado($post['patente'], $post['estado'], $post['estadoFinal']);
-        if($rsp['status'] && $post['estadoFinal'] == 'DESCARGADO')
-            $this->Camiones->actualizarProveedor($post['patente'], $post['estadoFinal'], $post['proveedor']);
-        echo json_encode($rsp);
+    /**
+		* Actualiza el estado del camion. Si es estado final es descargado, actualiza datos del movimiento
+		* @param array patente; estado; estadoFinal; proveedor; tara; neto;boleta
+		* @return array respuesta del servicio
+    */
+    public function estado(){
+      log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT | Camion | estado()");
+      $post = $this->input->post();
+      $rsp['estadoMovimiento'] = $this->Camiones->estado($post['patente'], $post['estado'], $post['estadoFinal']);
+      if($rsp['estadoMovimiento']['status'] && $post['estadoFinal'] == 'DESCARGADO')
+        $rsp['datos_movimiento'] = $this->Camiones->actualizaDatosMovimientoTransporte($post);
+      echo json_encode($rsp);
     }
     
     /**

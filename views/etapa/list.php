@@ -48,7 +48,7 @@
       <div class="form-group">
         <label for="procesoProductivo">Procesos productivos:</label>
         <select class="form-control select2 select2-hidden-accesible" name="procesoProductivo" id="procesoProductivo" onChange="seProcProductivo(this)">
-          <option value="" disabled selected>-Seleccionar-</option>	
+          <!-- <option value="" disabled selected>-Seleccionar-</option>	 -->
           <?php
           if(!empty($procesosProductivos)){
             foreach ($procesosProductivos as $procesos) {

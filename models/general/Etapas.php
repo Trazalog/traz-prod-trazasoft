@@ -416,15 +416,28 @@ class Etapas extends CI_Model
         * @param integer $orta_id
         * @return bool true or false
     */
-    public function validarFormularioCalidad($orta_id){
+    public function validarFormularioCalidad($orta_id, $origen){
         log_message('DEBUG', '#TRAZA | TRAZ-PROD-TRAZASOFT | Etapas | validarFormularioCalidad()');
         
-        $url = REST_FRM."/formularios/etapa/variables/origen/BATCH/$orta_id";
+        $url = REST_FRM."/formularios/etapa/variables/origen/$origen/$orta_id";
         $res = wso2($url);
-        if($res['data'])
-        foreach ($res['data'] as $o) {
-            if($o->variable == 'QC_OK' && $o->valor == 'true') return true;
+        if($res['data']){
+            foreach ($res['data'] as $key => $o) {
+                if($o->variable == 'QC_OK'){
+                    $rsp['poseeQC'][$key] = true;
+                    if(strpos($o->valor, 'Aprobado')){
+                        $rsp['status'] = true;
+                    }else{
+                        $rsp['status'] = false;
+                    }
+                }
+            }
+            $rsp['cantidadQC'] = !empty($rsp['poseeQC']) ? count($rsp['poseeQC']) : 0;
+        }else{
+            $rsp['status'] = true;
+            $rsp['poseeQC'] = false;
         }
+        return $rsp;
     }
     /**
         * Eliminado LOGICO del lote enviado
@@ -602,4 +615,20 @@ class Etapas extends CI_Model
 
         return $resp->etapas->etapa;
     }
+    /**
+	* Obtiene listado de lotes filtrado por etapa
+	* @param integer int empr_id, int etap_id
+	* @return array respuesta del servicio
+	*/
+    
+    public function validarLotesxEstado($etap_id)
+    {
+        log_message('DEBUG','#TRAZA | TRAZ-TOOLS | ETAPAS | validarLotesxEstado() ');
+        $resource = '/lotes/etapa/'.$etap_id.'/'.empresa();
+        $url = REST_PRD_LOTE . $resource;
+        $aux = $this->rest->callAPI("GET", $url);
+        $aux = json_decode($aux["data"]);
+        return $aux;
+    }
+
 }
