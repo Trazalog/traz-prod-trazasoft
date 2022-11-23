@@ -422,9 +422,9 @@ class Etapas extends CI_Model
         $url = REST_FRM."/formularios/etapa/variables/origen/$origen/$orta_id";
         $res = wso2($url);
         if($res['data']){
-            foreach ($res['data'] as $o) {
+            foreach ($res['data'] as $key => $o) {
                 if($o->variable == 'QC_OK'){
-                    $rsp['poseeQC'] = true;
+                    $rsp['poseeQC'][$key] = true;
                     if(strpos($o->valor, 'Aprobado')){
                         $rsp['status'] = true;
                     }else{
@@ -432,6 +432,7 @@ class Etapas extends CI_Model
                     }
                 }
             }
+            $rsp['cantidadQC'] = !empty($rsp['poseeQC']) ? count($rsp['poseeQC']) : 0;
         }else{
             $rsp['status'] = true;
             $rsp['poseeQC'] = false;

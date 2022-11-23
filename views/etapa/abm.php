@@ -39,7 +39,7 @@
 
                     <?php
                     if ($accion == 'Editar' || $accion == 'Nuevo') {
-                        echo '<input type="" id="fecha" class="form-control" value="' . $fecha . '" disabled >';
+                        echo '<input type="date" id="fecha" class="form-control" value="' . $fecha . '"  >';
                     }
                     ?>
 
@@ -302,7 +302,7 @@ function guardar(boton) {
     var materia = [];
 
     $.each(tabla, function(index) {
-        var cantidad = $(this).find("td").eq(3).html();
+        var cantidad = $(this).find("td").eq(4).html();
         var id_materia = $(this).attr("id");
         if (id_materia != null) {
             materia.push({
@@ -314,6 +314,14 @@ function guardar(boton) {
 
     var lote = $('#Lote').val();
     var fecha = $('#fecha').val();
+
+    //Invierto formato de fecha
+    var nueva_fecha =fecha.split(" ")[0];
+    var format = nueva_fecha.split("-");
+    var ultima = format[2]+'-'+format[1] +'-'+format[0];
+
+
+
     var establecimiento = document.getElementById('establecimientos').value;
 
     var op = document.getElementById('ordenproduccion').value;
@@ -333,7 +341,7 @@ function guardar(boton) {
         info_id: info_id,
         idetapa: idetapa,
         lote: lote,
-        fecha: fecha,
+        fecha: ultima,
         establecimiento: establecimiento,
         recipiente: recipiente,
         op: op,
@@ -395,6 +403,11 @@ function validarCampos() {
 
     if ($('#idproducto').val() != null && $('#cantidad_producto').val() == '') {
         alert('Por favor ingresar cantidad para el Producto');
+        return false;
+    }
+
+    if(($('#fecha').val() == '' )){
+        alert('Por favor ingresar fecha');
         return false;
     }
 

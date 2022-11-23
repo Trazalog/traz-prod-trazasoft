@@ -113,6 +113,7 @@ class Etapa extends CI_Controller
         $datosCab['empr_id'] = (string) empresa();
         $datosCab['forzar_agregar'] = ($nuevo == 'guardar') ? 'false' : $post_data['forzar'];
         $datosCab['fec_vencimiento'] = FEC_VEN;
+        $datosCab['fec_iniciado'] = (string) $post_data['fecha'];
         $datosCab['recu_id'] = "0";
         $datosCab['tipo_recurso'] = "";
 
@@ -221,7 +222,8 @@ class Etapa extends CI_Controller
 
         } else {
             ////////////// INSERTAR CABECERA NOTA PEDIDO   ///
-            $arrayPost['fecha'] = $post_data['fecha'];
+
+            $arrayPost['fecha'] = date("Y-m-d",strtotime($post_data['fecha']));
             $arrayPost['empr_id'] = (string) empresa();
             $arrayPost['batch_id'] = $batch_id;
 
