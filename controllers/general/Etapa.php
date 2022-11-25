@@ -880,4 +880,16 @@ class Etapa extends CI_Controller
             echo json_encode(array("status" => true,"msj" => "Se elimino la etapa que no posee lotes"));
         }
     }
+
+    /**
+        * Obtiene los articulos asociados a una receta
+        * @param integer form_id
+        * @return array respuesta del servicio
+	*/
+    public function getArticulosEnRecetas($form_id){
+        log_message('INFO','#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapa | getArticulosEnRecetas() ');
+		$data = $this->Etapas->getArticulosEnRecetas($form_id)->articulos->articulo;
+        echo json_encode($data);
+    
+    }
 }
