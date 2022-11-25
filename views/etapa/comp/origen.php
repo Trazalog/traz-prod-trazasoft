@@ -83,7 +83,7 @@
                                     </div>
                                     <div id="RecetasLote" class="col-md-6 col-xs-12 input-group ba">
                                         <?php
-                                            echo selectBusquedaAvanzada('formulas', 'vunme', $formulas, 'form_id', 'descripcion');
+                                            echo selectBusquedaAvanzada('formulas', 'vunme', $formulas, 'form_id', 'descripcion', array('Unidad Medida:' => 'unidad_medida', 'Cantidad:' => 'cantidad'));
                                         ?>
                                     </div>
                                 </div>
@@ -117,7 +117,7 @@
                                         <label for="" class="form-label">Cantidad:</label>
                                     </div>
                                     <div class="col-md-6 col-xs-12 input-group">
-                                        <input type="text" class="form-control" id="cantidad" name="cantidad">
+                                        <input type="text" class="form-control" id="cantidadreceta" name="cantidadreceta">
                                         <span class="input-group-btn">
                                             <button class='btn btn-success' id="botonreceta" disabled
                                                 onclick="aceptarReceta()">Aceptar
@@ -138,6 +138,45 @@
                 <?php } ?>               
             </div>
             <!-- ./ CON RECETA -->
+             <!-- TABLA DE ARTICULOS DE UNA RECETA -->
+            <div class="dataTables_wrapper form-inline dt-bootstrap">
+					
+					<div class="row">
+						<div class="col-sm-8">
+							<table id="tabla-Formula" class="table table-bordered table-hover dataTable" role="grid"  style="display:none">
+								<thead>
+									<tr role="row">
+										<th>
+											<font style="vertical-align: inherit;">
+												<font style="vertical-align: inherit;">Artículo</font>
+											</font>
+										</th>
+										<th>
+											<font style="vertical-align: inherit;">
+												<font style="vertical-align: inherit;">U.M.</font>
+											</font>
+										</th>
+										<th>
+											<font style="vertical-align: inherit;">
+												<font style="vertical-align: inherit;">Cantidad</font>
+											</font>
+										</th>
+									</tr>
+								</thead>
+								<tbody>  
+								</tbody>
+							</table>
+						</div>
+                        <div class="col-md-2 col-xs-12 input-group"></div>
+                        <div class="col-md-2 col-xs-12 input-group">
+                            <span class="input-group-btn">
+                                <button class='btn btn-success' id="botonAgregareceta" style="display:none" disabled>Agregar
+                                </button>
+                                </span>
+                        </div>
+					</div>
+			</div>
+             <!-- ./FIN TABLA DE ARTICULOS DE UNA RECETA -->
         </div>
     </div>
     <div class="tab-content">
@@ -217,6 +256,43 @@ $('#formulas').on('change', function() {
     var descripcion = data.descripcion;
     document.getElementById('unmedisabled').value = unme;
     document.getElementById('descridisabled').value = descripcion;
+    document.getElementById('botonreceta').disabled = false;
+
+    $.ajax({
+        type: "GET",
+        url: '<?php echo base_url(PRD) ?>general/Etapa/getArticulosEnRecetas/' + form_id,
+        success: function (res) {
+            wo();
+            
+            if(res != 'null'){
+                console.log(res);
+                $('#tabla-Formula').removeAttr('style');
+                $('#botonAgregareceta').removeAttr('style');
+                $('#tabla-Formula').css('background','#d2d6de');
+                articulos = JSON.parse(res);
+                var html='';
+                $('#tabla-Formula > tbody').empty();//limpia los registros del body
+		        $.each(articulos, function(i, item) {
+                 html += '<tr>' +
+			            '<td>' + articulos[i].descripcion + '</td>' +
+			            '<td hidden>' + articulos[i].arti_id + '</td>' +
+			            '<td>' + articulos[i].unidad_medida + '</td>' +
+			            '<td>' + articulos[i].cantidad + '</td>' +
+			            '</tr>';
+			    });
+                $('#tabla-Formula tbody').append(html);
+               
+            }else{
+                //console.log("No hay articulos");
+                $('#tabla-Formula').css('display', 'none');
+                $('#botonAgregareceta').css('display', 'none');
+            }
+            wc();
+        },
+        error: function(res) {
+            alert('Error');
+        },
+    });
 });
 
 actualizarEntrega()
@@ -288,6 +364,41 @@ function aceptarMateria() {
 }
 
 function aceptarReceta() {
+    const d=document;
+    cantidad = d.getElementById('cantidadreceta').value;
+    if (cantidad == '') {
+        alert('Por favor ingresar una cantidad para la receta');
+        return;
+    }
+    $('#formulas').val('').trigger('change');
+    d.getElementById('botonAgregareceta').disabled = false;
+    d.getElementById('botonreceta').disabled = true;
+    
+    $("#botonAgregareceta").on('click', function() {
+        articulo = articulos;
+        $.each(articulo, function(i, item) {
+            articulo[i].cantidad *= cantidad; 
+            articulo[i] = JSON.stringify(articulo[i]);
+            articulo[i] = '[' + articulo[i] + ']';
+            articulo[i] = JSON.parse(articulo[i]);
+            agregaMateria(articulo[i]);
+	    });
+        $('#tabla-Formula').css('display', 'none');
+        d.getElementById('botonAgregareceta').disabled = true;
+        $('#botonAgregareceta').css('display', 'none');
+        $("#descridisabled").prop('disabled', false);
+        $('#descridisabled').val('');
+        $("#descridisabled").prop('disabled', true);
+        $("#unmedisabled").prop('disabled', false);
+        $('#unmedisabled').val('');
+        $("#unmedisabled").prop('disabled', true);
+        $('#cantidadreceta').val('');
+        $("#RecetasLote .select-detalle").text(''); 
+        $("#formula").val(''); 
+        articulos=null;
+    });
+
+    //console.log(articulo); console.log(articulos);
 }
 
 function eliminarOrigen(e) {
