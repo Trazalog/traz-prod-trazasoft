@@ -15,7 +15,8 @@ class Camion extends CI_Controller
         $this->load->model('general/Transportistas');
         $this->load->model('general/Listado_carga_camion');
         $this->load->model('general/Listado_recepcion_camion');
-
+        $this->load->model('core/Clientes');  
+  
         // si esta vencida la sesion redirige al login
 		$data = $this->session->userdata();
 		// log_message('DEBUG','#Main/login | '.json_encode($data));
@@ -35,6 +36,7 @@ class Camion extends CI_Controller
         $data['lang'] = lang_get('spanish', 4);
         $data['establecimientos'] = $this->Establecimientos->listarTodo()->establecimientos->establecimiento;
         $data['tipoEstablecimiento'] = $this->Noconsumibles->tipoEstablecimiento()['data'];
+        $data['clientes']=$this->Clientes->Listar_Clientes();
         $this->load->view('camion/carga_camion', $data);
     }
 
@@ -283,4 +285,17 @@ class Camion extends CI_Controller
         json_encode($rsp);
       }
     }
+
+     /**
+		* Obtiene el listado de clientes de ABM Clientes
+		* @param 
+		* @return array clientes 
+    */
+    function Listar_Clientes()
+	  {
+		log_message('INFO','#TRAZA| CLIENTES | Listar_Clientes() >> ');
+		$data['list'] = $this->Clientes->Listar_Clientes();
+    return $data;
+	  }
+
 }

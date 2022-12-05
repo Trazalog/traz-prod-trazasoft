@@ -107,6 +107,24 @@
                     <div class="col-md-2 "></div>
                 </div>
                 <div class="row">
+                    <div class="col-md-2 col-xs-12">
+                        <label for="establecimientos" class="form-label">Cliente*</label>
+                    </div>
+                    <div class="col-md-8 col-xs-12">
+                        <select class="form-control select2 select2-hidden-accesible" id="clientes">
+                        <option value="" disabled selected>-Seleccione Cliente-</option>
+                        <?php
+                            foreach($clientes as $fila)
+                            {  
+                                echo '<option value="'.$fila->clie_id.'" " data-nombre="'.$fila->nombre.'">'.$fila->nombre.'</option>';
+                            } 
+                        ?>
+                    </div>
+                </select>
+                </div>
+                    <div class="col-md-2 "></div>
+                </div>
+                <div class="row">
                     <div class="col-md-2 col-xs-12"><label class="form-label">Cantidad*</label></div>
                     <div class="col-md-8 col-xs-12"><input class="form-control" type="number"
                             placeholder="Ingrese cantidad" id="cantidadcarga"></div>
@@ -233,6 +251,10 @@ $("#inputlotes").on('change', function() {
     ActualizaLote(lote);
 });
 
+$("#clientes").change(function () {
+    nombreCli=($(this).find(':selected').data("nombre"));
+});
+
 function ActualizaLote(lote) {
     console.log(lote);
     
@@ -255,6 +277,10 @@ function Cargar() {
         ban = false;
         msj += "- No ha seleccionado camión \n";
     }
+    if (document.getElementById('clientes').value == "") {
+        ban = false;
+        msj += "- No ha seleccionado cliente \n";
+    }
     if (document.getElementById('inputlotes').value == "") {
         ban = false;
         msj += "- No ha seleccionado lote \n";
@@ -273,6 +299,8 @@ function Cargar() {
         alert(msj);
     } else {
         existe = document.getElementById('existe_tabla').value;
+        carga.nombreCli= nombreCli;
+        carga.cliente =document.getElementById('clientes').value;
         carga.cantidad = document.getElementById('cantidadcarga').value;
         carga.patente = document.getElementById('patentecamion').value;
         carga.motr_id = data_camion.id;
@@ -286,6 +314,7 @@ function Cargar() {
             html += "<th>Lote</th>";
             html += "<th>Envase</th>";
             html += "<th>Producto</th>";
+            html += "<th>Cliente</th>";
             html += "<th>Cantidad</th>";
             html += '</tr></thead><tbody>';
             html += "<tr data-json='" + JSON.stringify(carga) + "' id='" + carga.id + "'>";
@@ -294,6 +323,7 @@ function Cargar() {
             html += '<td>' + carga.titulo + '</td>';
             html += '<td>' + carga.tituloenvase + '</td>';
             html += '<td>' + carga.tituloproducto + '</td>';
+            html += '<td>' + carga.nombreCli + '</td>';
             html += '<td>' + carga.cantidad + '</td>';
             html += '</tr>';
             html += '</tbody></table>';
@@ -309,6 +339,7 @@ function Cargar() {
             html += '<td>' + carga.titulo + '</td>';
             html += '<td>' + carga.tituloenvase + '</td>';
             html += '<td>' + carga.tituloproducto + '</td>';
+            html += '<td>' + carga.nombreCli + '</td>';
             html += '<td>' + carga.cantidad + '</td>';
             html += '</tr>';
             $('#tabla_carga tbody').append(html);
@@ -326,6 +357,8 @@ function Cargar() {
         document.getElementById('stocklote').value = "";
         document.getElementById('cantidadcarga').value = "";
         document.getElementById('inputlotes').value = "";
+        document.getElementById('clientes').value = "";
+
     }
 }
 
