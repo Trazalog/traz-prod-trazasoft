@@ -392,4 +392,17 @@ class Camiones extends CI_Model
 
         return $resp->movimiento;
     }
+
+     /**
+    * Listado de Clientes
+    * @param 
+    * @return array con datos de clientes
+    */
+    function Listar_Clientes(){
+        $empre_id = empresa();
+    	$aux = $this->rest->callAPI("GET",REST_CORE."/clientes/porEmpresa/$empre_id/porEstado/ACTIVO");
+    	$aux = json_decode($aux["data"]);
+    	$clientes = $aux->cliente->clientes;
+        return $clientes;
+    }
 }
