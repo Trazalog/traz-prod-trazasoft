@@ -61,7 +61,7 @@
                         <datalist id="recipientes">
                         </datalist> -->
                         <?php
-                            echo selectBusquedaAvanzada('recipiente', 'reci_id')
+                            echo selectBusquedaAvanzada('recipiente', 'reci_id', false, false, false, false, false, 'revisarRecipiente(this)')
                         ?>
                     </div>
                 </div>
@@ -110,10 +110,10 @@ $('#frm-destino').on('submit', function(e) {
         agregarFila(res);
     }
 });
-//Busca lso recipientes de un establecimiento seleccionado
+//Busca los recipientes de un establecimiento seleccionado
 //se llama en el onchange del select de establecimiento
 function obtenerRecipientes() {
-    console.log('Obtener Recipientes');    
+    // console.log('Obtener Recipientes');    
     esta_id = $("#establecimientos").val();
     $.ajax({
         type: 'GET',
@@ -129,6 +129,39 @@ function obtenerRecipientes() {
         },
         error: function(rsp) {
             alert('Error al Obtener Recipientes');
+        }
+    });
+}
+//Busca las etapas de un recipiente seleccionado siempre y cuando sea DEPOSITO/PRODUCTIVO
+//se llama en el onchange del select de recipientes
+function revisarRecipiente(elem) {
+    console.log('Obtener Etapas');
+    // dataJsoncito = JSON.parse($(tag).closest('tr').attr('data-json'));  
+    var recipiencito = JSON.parse($(elem).find(":selected").attr("data-json"));
+    // console.log(recipiencito);  
+    if (recipiencito.tipo == "DEPOSITO") {
+        console.log(recipiencito);
+    };   
+}
+//Busca las etapas de un recipiente seleccionado siempre y cuando sea DEPOSITO/PRODUCTIVO
+//se llama en el onchange del select de recipientes
+function obtenerEtapas() {
+    console.log('Obtener Etapas');    
+    reci_id = $("#recipiente").val();
+    $.ajax({
+        type: 'GET',
+        dataType: 'JSON',
+        url: '<?php echo base_url(PRD) ?>general/Recipiente/obtenerOpciones?tipo=DEPOSITO&estado=TODOS&establecimiento=' + reci_id,
+        success: function(rsp) {
+            if (rsp.status && _isset(rsp.data)) {
+                $('#recipiente').html(rsp.data);
+            }else{
+                $('#recipiente').html('');
+                error('Error!','No se encontraron Etapas en el establecimiento seleccionado');
+            }
+        },
+        error: function(rsp) {
+            alert('Error al Obtener Etapas');
         }
     });
 }
