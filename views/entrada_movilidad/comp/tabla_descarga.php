@@ -139,12 +139,13 @@ function actualizarEstadoCamion(patente) {
     var tara = $('#tara').val();
     var neto = $('#neto').val();
     var motr_id = $('#motr_id').val();
+    var accionCamion = $("#accioncamion").val();
     wo();
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
         url: '<?php echo base_url(PRD) ?>general/camion/estado',
-        data: {patente, estado, estadoFinal, proveedor,boleta,tara,neto,motr_id},
+        data: {patente, estado, estadoFinal, proveedor,boleta,tara,neto,motr_id, accionCamion},
         success: function(res) {
             hecho('Éxito','Se guardo la recepción del camión correctamente');
             linkTo("traz-prod-trazasoft/general/Camion/recepcionCamion");

@@ -77,15 +77,15 @@
       <div class="col-md-12">
         <div id="contenedorMenuEtapasProductivas">
           <?php
-          for ($i = 0; $i < count($etapas); $i++) {
-            if ($i < count($etapas) - 1) {
-              echo "<button class='btn btn-primary btn-arrow-right outline' data-json='" . json_encode($etapas[$i]) . "' onclick='muestra(`" . $etapas[$i]->titulo . "`,this)'> " . $etapas[$i]->titulo . "  </button>";
-            } else {
-              echo "<button class='btn btn-primary btn-arrow-right-final outline' data-json='" . json_encode($etapas[$i]) . "' onclick='muestra(`" . $etapas[$i]->titulo . "`,this)'> " . $etapas[$i]->titulo . "  </button>";
-            }
-          }
+          // for ($i = 0; $i < count($etapas); $i++) {
+          //   if ($i < count($etapas) - 1) {
+          //     echo "<button class='btn btn-primary btn-arrow-right outline' data-json='" . json_encode($etapas[$i]) . "' onclick='muestra(`" . $etapas[$i]->titulo . "`,this)'> " . $etapas[$i]->titulo . "  </button>";
+          //   } else {
+          //     echo "<button class='btn btn-primary btn-arrow-right-final outline' data-json='" . json_encode($etapas[$i]) . "' onclick='muestra(`" . $etapas[$i]->titulo . "`,this)'> " . $etapas[$i]->titulo . "  </button>";
+          //   }
+          // }
           ?>
-          <button class="btn btn-primary outline" onclick='muestra(`todas`,this)'  data-toggle="tooltip" title="Para agregar una etapa productiva dirigirse al módulo Configuraciones y seleccionar 'Etapas productivas'" >Todas</button>
+          <!-- <button class="btn btn-primary outline" onclick='muestra(`todas`,this)'  data-toggle="tooltip" title="Para agregar una etapa productiva dirigirse al módulo Configuraciones y seleccionar 'Etapas productivas'" >Todas</button> -->
         </div>
     </div>
   </div><!-- /.box-header -->
@@ -565,6 +565,7 @@
   }
   $(document).ready(function () {
     muestraBatchsFinalizados();
+    $("#procesoProductivo").trigger('change');
   });
   /////////////////////////////////////////////////////////////
   // Si esta seleccionada una Etapa en el Menu, directamente crea la Etapa seleccionada 
