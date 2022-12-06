@@ -25,7 +25,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Establecimiento Destino:</label>
-                                <?php echo selectFromFont('destino_esta_id', 'Seleccionar', REST_ALM."/establecimiento", array('value'=>'esta_id', 'descripcion'=>'nombre')) ?>
+                                <?php echo selectFromFont('destino_esta_id', 'Seleccionar', REST_ALM."/establecimientos/empresa/".empresa(), array('value'=>'esta_id', 'descripcion'=>'nombre')) ?>
                             </div>
                         </div>
                     </div>

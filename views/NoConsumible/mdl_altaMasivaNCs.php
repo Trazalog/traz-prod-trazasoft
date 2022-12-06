@@ -268,5 +268,6 @@ function imprimirQRMasivos(){
         loadCSS: hoja_estilos,
         base: base
     });
+	linkTo('<?php echo base_url(PRD) ?>general/Noconsumible/index');
 }
 </script>
