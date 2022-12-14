@@ -641,5 +641,13 @@ class Etapas extends CI_Model
 		return $rsp; 
     }
 
+    public function getProcesosEtapas($empr_id)
+    {
+        $resource = '/etapas/proceso/' . $empr_id;
+        $url = REST_PRD_ETAPAS . $resource;
+        $array = $this->rest->callAPI("GET", $url);
+        log_message('DEBUG','#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapas | getProcesosEtapas()-> resp '.json_encode($array));
+        return json_decode($array['data']);
+    }
 
 }
