@@ -892,4 +892,23 @@ class Etapa extends CI_Controller
         echo json_encode($data);
     
     }
+
+    /**
+        * Obtiene los procesos concatenados con las etapas asociadas
+        * @return array respuesta del servicio
+	*/
+    public function getProcesosEtapas(){
+        log_message('INFO','#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapa | getProcesosEtapas() ');
+
+        $empr_id = empresa();
+
+        $procesos_etapas['data'] = $this->Etapas->getProcesosEtapas($empr_id)->procesos->proceso;
+        
+        if(!empty($procesos_etapas)){
+            $procesos_etapas['status'] = true;
+            echo json_encode($procesos_etapas);
+        }else{
+            echo json_encode(array("status" => false,"msj" => "No se encontraron etapas"));
+        }
+    }
 }
