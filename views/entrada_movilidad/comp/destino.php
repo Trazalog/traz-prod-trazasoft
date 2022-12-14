@@ -65,6 +65,14 @@
                         ?>
                     </div>
                 </div>
+                <div class="col-md-8">
+                    <div class="form-group ba">
+                        <label>Etapa:</label>
+                        <?php
+                            echo selectBusquedaAvanzada('recipiente', 'reci_id', false, false, false, false, false, 'revisarRecipiente(this)')
+                        ?>
+                    </div>
+                </div>
                 <div class="col-md-4">
                     <button class="btn btn-primary" style="margin-top:23px; float:right;"><i class="fa fa-plus"></i>
                         Agregar
@@ -139,8 +147,24 @@ function revisarRecipiente(elem) {
     // dataJsoncito = JSON.parse($(tag).closest('tr').attr('data-json'));  
     var recipiencito = JSON.parse($(elem).find(":selected").attr("data-json"));
     // console.log(recipiencito);  
-    if (recipiencito.tipo == "DEPOSITO") {
+    if (recipiencito.tipo == "DEPOSITO/PRODUCTIVO") {
         console.log(recipiencito);
+        $.ajax({
+            type: 'GET',
+            dataType: 'JSON',
+            url: '<?php echo base_url(PRD) ?>general/Etapa/getProcesosEtapas',
+            success: function(rsp) {
+                if (rsp.status && _isset(rsp.data)) {
+                    $('#recipiente').html(rsp.data);
+                }else{
+                    $('#recipiente').html('');
+                    error('Error!','No se encontraron Etapas en el establecimiento seleccionado');
+                }
+            },
+            error: function(rsp) {
+                alert('Error al Obtener Etapas');
+            }
+        });
     };   
 }
 //Busca las etapas de un recipiente seleccionado siempre y cuando sea DEPOSITO/PRODUCTIVO
