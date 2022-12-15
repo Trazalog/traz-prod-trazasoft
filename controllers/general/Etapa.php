@@ -902,11 +902,13 @@ class Etapa extends CI_Controller
 
         $empr_id = empresa();
 
-        $procesos_etapas['data'] = $this->Etapas->getProcesosEtapas($empr_id)->procesos->proceso;
+        $rsp = $this->Etapas->getProcesosEtapas($empr_id);
+        // $rsp['data'] = $this->Etapas->getProcesosEtapas($empr_id)->procesos->proceso;
         
-        if(!empty($procesos_etapas)){
-            $procesos_etapas['status'] = true;
-            echo json_encode($procesos_etapas);
+        if(!empty($rsp)){
+            // $rsp['status'] = true;
+            $rsp['data'] = selectBusquedaAvanzada(false, false, $rsp['data'], 'etapa_etap_id', 'etapa_nombre', false);
+            echo json_encode($rsp);
         }else{
             echo json_encode(array("status" => false,"msj" => "No se encontraron etapas"));
         }
