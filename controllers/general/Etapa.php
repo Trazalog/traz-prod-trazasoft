@@ -513,7 +513,12 @@ class Etapa extends CI_Controller
             $arrayPost["cantidad_padre"] = strval($key == (sizeof($productos) - 1) ? $cantidad_padre : 0); //cantida padre es lo que descuenta del batch actual
             $arrayPost["num_orden_prod"] = $num_orden_prod;
             $arrayPost["reci_id"] = $value->destino; //reci_id destino del nuevo batch
-            $arrayPost["etap_id"] = (string) ETAPA_DEPOSITO;
+            if ($value->proceso) {
+                $arrayPost["etap_id"] = strval($value->proceso);
+            } else {
+                // $aux["etap_id"] = strval(ETAPA_DEPOSITO);
+                $arrayPost["etap_id"] = (string) ETAPA_DEPOSITO;
+            }
             $arrayPost["usuario_app"] = userNick();
             $arrayPost["empr_id"] = (string) empresa();
             $arrayPost["forzar_agregar"] = $value->forzar;

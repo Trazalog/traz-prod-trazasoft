@@ -306,6 +306,7 @@ function AgregarProducto() {
         producto.loteorigen = document.getElementById('loteorigen').value;
         producto.lotedestino = lotedestino;
         producto.destino = destino;
+        producto.proceso = $('#proceso').find('option:selected').text();
         producto.titulodestino = $('#productodestino').find('option:selected').text();
         producto.descripcion = dataProducto.descripcion;
         // producto.destinofinal = establecimiento + " " + recipientefinal;
