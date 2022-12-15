@@ -65,11 +65,11 @@
                         ?>
                     </div>
                 </div>
-                <div class="col-md-8">
+                <div class="col-md-8" id="bloque_etapa" hidden="true">
                     <div class="form-group ba">
                         <label>Etapa:</label>
                         <?php
-                            echo selectBusquedaAvanzada('recipiente', 'reci_id', false, false, false, false, false, 'revisarRecipiente(this)')
+                            echo selectBusquedaAvanzada('proceso', 'etapa_etap_id', false, false, false, false, false, false)
                         ?>
                     </div>
                 </div>
@@ -155,9 +155,12 @@ function revisarRecipiente(elem) {
             url: '<?php echo base_url(PRD) ?>general/Etapa/getProcesosEtapas',
             success: function(rsp) {
                 if (rsp.status && _isset(rsp.data)) {
-                    $('#recipiente').html(rsp.data);
+                    $('#proceso').html(rsp.data);
+                    // $('#proceso').show();
+                    $('#bloque_etapa').attr('hidden', false);
+                    // $('#proceso').removeAttr("disabled");
                 }else{
-                    $('#recipiente').html('');
+                    $('#proceso').html('');
                     error('Error!','No se encontraron Etapas en el establecimiento seleccionado');
                 }
             },
