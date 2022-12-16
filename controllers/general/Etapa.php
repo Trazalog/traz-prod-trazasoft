@@ -383,6 +383,7 @@ class Etapa extends CI_Controller
         $datosCab['empr_id'] = (string) empresa();
         $datosCab['forzar_agregar'] = $this->input->post('forzar');
         $datosCab['fec_vencimiento'] = FEC_VEN;
+        $datosCab['fec_iniciado'] = (string) date("d-m-Y",strtotime($this->input->post('fecha')));
         $datosCab['recu_id'] = (string) 0;
         $datosCab['tipo_recurso'] = "";
 
