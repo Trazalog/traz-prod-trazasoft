@@ -383,6 +383,7 @@ class Etapa extends CI_Controller
         $datosCab['empr_id'] = (string) empresa();
         $datosCab['forzar_agregar'] = $this->input->post('forzar');
         $datosCab['fec_vencimiento'] = FEC_VEN;
+        $datosCab['fec_iniciado'] = (string) date("d-m-Y",strtotime($this->input->post('fecha')));
         $datosCab['recu_id'] = (string) 0;
         $datosCab['tipo_recurso'] = "";
 
@@ -513,7 +514,12 @@ class Etapa extends CI_Controller
             $arrayPost["cantidad_padre"] = strval($key == (sizeof($productos) - 1) ? $cantidad_padre : 0); //cantida padre es lo que descuenta del batch actual
             $arrayPost["num_orden_prod"] = $num_orden_prod;
             $arrayPost["reci_id"] = $value->destino; //reci_id destino del nuevo batch
-            $arrayPost["etap_id"] = (string) ETAPA_DEPOSITO;
+            if ($value->proceso) {
+                $arrayPost["etap_id"] = strval($value->proceso);
+            } else {
+                // $aux["etap_id"] = strval(ETAPA_DEPOSITO);
+                $arrayPost["etap_id"] = (string) ETAPA_DEPOSITO;
+            }
             $arrayPost["usuario_app"] = userNick();
             $arrayPost["empr_id"] = (string) empresa();
             $arrayPost["forzar_agregar"] = $value->forzar;
@@ -878,6 +884,39 @@ class Etapa extends CI_Controller
             }
         }else{
             echo json_encode(array("status" => true,"msj" => "Se elimino la etapa que no posee lotes"));
+        }
+    }
+
+    /**
+        * Obtiene los articulos asociados a una receta
+        * @param integer form_id
+        * @return array respuesta del servicio
+	*/
+    public function getArticulosEnRecetas($form_id){
+        log_message('INFO','#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapa | getArticulosEnRecetas() ');
+		$data = $this->Etapas->getArticulosEnRecetas($form_id)->articulos->articulo;
+        echo json_encode($data);
+    
+    }
+
+    /**
+        * Obtiene los procesos concatenados con las etapas asociadas
+        * @return array respuesta del servicio
+	*/
+    public function getProcesosEtapas(){
+        log_message('INFO','#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapa | getProcesosEtapas() ');
+
+        $empr_id = empresa();
+
+        $rsp = $this->Etapas->getProcesosEtapas($empr_id);
+        // $rsp['data'] = $this->Etapas->getProcesosEtapas($empr_id)->procesos->proceso;
+        
+        if(!empty($rsp)){
+            // $rsp['status'] = true;
+            $rsp['data'] = selectBusquedaAvanzada(false, false, $rsp['data'], 'etapa_etap_id', 'etapa_nombre', false);
+            echo json_encode($rsp);
+        }else{
+            echo json_encode(array("status" => false,"msj" => "No se encontraron etapas"));
         }
     }
 }

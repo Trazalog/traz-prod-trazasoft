@@ -20,6 +20,11 @@ class Entradas extends CI_Model
             return array('status'=>false, 'msj'=>'El camión ya se encuentra cargado en el establecimiento');
         }
 
+        if($data['accion'] == 'carga')
+        {
+            if($this->validarCamionFinalizado($data['patente']))
+            return array('status'=>false, 'msj'=>'El camión no se encuentra en estado finalizado dentro de el establecimiento');
+        }
         $data['empr_id'] = strval(empresa());
 
         if(!isset($data['proveedor']) || $data['proveedor'] == ""){
@@ -63,4 +68,19 @@ class Entradas extends CI_Model
         return false;
     }
 
+    //valida si esta en algun estado que no sea finalizado
+    public function validarCamionFinalizado($patente, $estado = 'FINALIZADO')
+    {
+        log_message('DEBUG',"#TRAZA | #TRAZ-PROD-TRAZASOFT | MÉTODO: ".__METHOD__."| PANTENTE: $patente | ESTADO: $estado");
+
+        $res = wso2(REST_LOG. "/camiones/$patente/".empresa())['data'];
+        if($res){
+            foreach($res as $o) {
+                
+                if($o->estado != $estado) return true;
+
+            }
+        }
+        return false;
+    }
 }

@@ -102,6 +102,7 @@ class Camiones extends CI_Model
                 "stock" => $o['origen']['cantidad'],
                 "reci_id" => $o['destino']['reci_id'],
                 "forzar_agregar" => $o['destino']['unificar'],
+                "fec_iniciado" => date("d-m-Y")
             );
         }
         $array = json_decode(json_encode($array));
@@ -213,6 +214,7 @@ class Camiones extends CI_Model
             $aux->empre_id = empresa();
             $aux->forzar_agregar = $o['destino']['unificar'];
             $aux->fec_vencimiento = FEC_VEN;
+            $aux->fec_vencimiento = date("d-m-Y");
 
             $lotes[] = $aux;
         }
@@ -370,7 +372,8 @@ class Camiones extends CI_Model
             'tara' => $data['tara'],
             'neto' => $data['neto'],
             'motr_id' => $data['motr_id'],
-            'prov_id' => $data['proveedor']
+            'prov_id' => $data['proveedor'],
+            'accion' => $data['accionCamion']
         );
 
         $url = REST_LOG."/camiones/proveedor";
@@ -391,5 +394,18 @@ class Camiones extends CI_Model
         log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT| Camiones | getMovimientoTransporte()  resp: >> " . json_encode($resp));
 
         return $resp->movimiento;
+    }
+
+     /**
+    * Listado de Clientes
+    * @param 
+    * @return array con datos de clientes
+    */
+    function Listar_Clientes(){
+        $empre_id = empresa();
+    	$aux = $this->rest->callAPI("GET",REST_CORE."/clientes/porEmpresa/$empre_id/porEstado/ACTIVO");
+    	$aux = json_decode($aux["data"]);
+    	$clientes = $aux->cliente->clientes;
+        return $clientes;
     }
 }
