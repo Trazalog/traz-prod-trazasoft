@@ -683,8 +683,8 @@ function agregarNocoEscaneado(data) {
 function revisarRecipiente(elem) {
     console.log('Obtener Etapas');
     // dataJsoncito = JSON.parse($(tag).closest('tr').attr('data-json'));  
-    var recipiencito = JSON.parse($(elem).find(":selected").attr("data-json"));
-    // console.log(recipiencito);  
+    var recipiencito = JSON.parse($(elem).attr("data-json"));
+    console.log(recipiencito);  
     if (recipiencito.tipo == "DEPOSITO/PRODUCTIVO") {
         console.log(recipiencito);
         $.ajax({
