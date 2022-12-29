@@ -254,14 +254,16 @@ class Etapa extends CI_Controller
         if($materia){
         foreach ($materia as $o) {
             if ($cantidad !== "") {
-                $det['pema_id'] = $pema_id;
+                $det['pema_id'] =  $pema_id;
                 $det['arti_id'] = (string) $o['id_materia'];
-                $det['cantidad'] = $o['cantidad'];
-                $detalle['_post_notapedido_detalle'][] = $det;
+                $det['cantidad'] =  $o['cantidad'];
+                $det['cantidad_receta'] = $o['cantidad_receta']; 
+                $det['receta'] = $o['receta'] ? $o['receta'] : "";
+                $detalle['_post_pedidos_detalle_conreceta'][] = $det;
             }
         }
-        $arrayDeta['_post_notapedido_detalle_batch_req'] = $detalle;
-        $respDetalle = $this->Etapas->setDetaNP($arrayDeta);
+        $arrayDeta['_post_pedidos_detalle_conreceta_batch_req'] = $detalle;
+        $respDetalle = $this->Etapas->setDetaPedidoconReceta($arrayDeta);
         }
         if ($respDetalle >= 300) {
             log_message('ERROR', 'Error en generacion de Detalle Pedido Materiales. respDetalle: >>' . $respDetalle);
@@ -331,15 +333,14 @@ class Etapa extends CI_Controller
         // $data['productos'] = $this->Articulos->obtenerXTipos(array('Proceso', 'Producto'));
 
         // trae tablita de materia prima Origen y producto
-         $data['matPrimas'] = $this->Etapas->getRecursosOrigen($id, MATERIA_PRIMA)->recursos->recurso;
+        $data['matPrimas'] = $this->Etapas->getPedido($id)->articulos->articulo;
 
+        $data['detaEmpaque'] = $this->Etapas->getRecursosOrigen($id, MATERIA_PRIMA)->recursos->recursos;
         #Obtener Articulos por Etapa
         $data['productos_etapa'] = $this->Etapas->obtenerArticulos($data['etapa']->etap_id)['data'];
 
         $data['productos_salida_etapa'] = $this->Etapas->getSalidaEtapa($data['etapa']->etap_id)['data'];
         $data['productos_entrada_etapa'] = $this->Etapas->getEntradaEtapa($data['etapa']->etap_id)['data'];
-
-        $data['producto'] = $this->Etapas->getRecursosOrigen($id, PRODUCTO)->recursos->recurso;
 
         $data['op'] = $data['etapa']->titulo;
         $data['lang'] = lang_get('spanish', 4);
@@ -441,16 +442,20 @@ class Etapa extends CI_Controller
                     $p = json_decode($prod);
                     $det['pema_id'] = (string) $pema_id;
                     $det['arti_id'] = (string) $p->arti_id;
-                    $det['cantidad'] = (string) $p->cant_descontar;
-                    $detalle['_post_notapedido_detalle'][$x] = (object) $det;
+                    $det['cantidad'] = (string) $p->cantidad;
+                    $det['cantidad_receta'] = (string) $p->cantidad_receta;
+                    $det['receta'] = $p->receta ? $p->receta : "";
+                    $detalle['_post_pedidos_detalle_conreceta'][] = $det;
+                    //$detalle['_post_notapedido_detalle'][$x] = (object) $det;
 
                     // $envases[$key]['pema_id'] = (string) $pema_id;
                     // $envases[$key]['arti_id'] = (string) $p->envase_arti_id;
                     // $envases[$key]['cantidad'] = (string) $p->cantidad;
                     $x++;
                 }
-                $arrayDeta['_post_notapedido_detalle_batch_req'] = $detalle;
-                $respDetalle = $this->Etapas->setDetaNP($arrayDeta);
+                $arrayDeta['_post_pedidos_detalle_conreceta_batch_req'] = $detalle;
+                $respDetalle = $this->Etapas->setDetaPedidoconReceta($arrayDeta);
+                //$respDetalle = $this->Etapas->setDetaNP($arrayDeta);
 
                 // $rsp = $this->pedidoEnvases($envases);
 
