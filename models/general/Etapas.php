@@ -326,9 +326,13 @@ class Etapas extends CI_Model
         $url = REST_PRD_ETAPAS . "/etapas/entradas/$etap_id";
         return wso2($url);
     }
-
-    public function validarPedidoMaterial($batch_id)
-    {
+    /**
+	* Recibe un batch_id para buscar el taskId en bonita de la tarea especificada "Entrega pedido pendiente"
+	* @param integer batch_id
+	* @return integer/bool taskId de la tarea si lo encontrara, caso contrario retorna false
+	*/
+    public function validarPedidoMaterial($batch_id){
+        log_message('DEBUG','#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapa | validarPedidoMaterial($batch_id)');
         if (PLANIF_AVANZA_TAREA) { #Pregunta Magica
 
             $url = REST_ALM . "/pedidos/batch/$batch_id";

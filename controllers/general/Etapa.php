@@ -635,9 +635,13 @@ class Etapa extends CI_Controller
         $rsp = $this->Etapas->finalizarLote($id);
         echo json_encode($rsp);
     }
-
-    public function validarPedidoMaterial($batch_id)
-    {
+    /**
+	* Recibe un batch_id para buscar el taskId en bonita de la tarea especificada
+	* @param integer batch_id
+	* @return integer/bool taskId de la tarea si lo encontrara, caso contrario false
+	*/
+    public function validarPedidoMaterial($batch_id){
+        log_message('DEBUG','#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapa | validarPedidoMaterial($batch_id)');
         $rsp['tarea'] = $this->Etapas->validarPedidoMaterial($batch_id);
         echo json_encode($rsp);
     }
