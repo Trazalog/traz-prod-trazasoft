@@ -74,6 +74,7 @@ class Recipientes extends CI_Model
     {
       log_message('DEBUG'," #TRAZA | #TRAZ-PROD-TRAZASOFT | RECIPIENTES | obtener()");
       $url  = REST_PRD. "/recipientes/tipo/$tipo/estado/$estado/establecimiento/$establecimiento/".empresa();
+      // $url  = REST_PRD. '/recipientes/tipo/'.$tipo.'/estado/'.$estado.'/establecimiento/'.$establecimiento;
       $rsp = $this->rest->callAPI('GET' , $url);
       $rsp['data'] = json_decode($rsp['data'])->recipientes->recipiente;
       return $rsp;
