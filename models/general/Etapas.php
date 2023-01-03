@@ -193,6 +193,15 @@ class Etapas extends CI_Model
         $array = $this->rest->callAPI("POST", $url, $arrayDeta);
         return json_decode($array['code']);
     }
+    // Guarda detalle de Nota de pedido con la receta o con el producto
+    public function setDetaPedidoconReceta($arrayDeta)
+    {
+        log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapas | setDetaPedidoConReceta(datos)-> ' . json_encode($arrayDeta));
+        $resource = '/_post_pedidos_detalle_conreceta_batch_req';
+        $url = REST_ALM . $resource;
+        $array = $this->rest->callAPI("POST", $url, $arrayDeta);
+        return json_decode($array['code']);
+    }
 
     public function eliminarDetallePedido($pemaId){
         $url = REST_ALM . '/pedidos/detalle';
@@ -222,6 +231,17 @@ class Etapas extends CI_Model
         $array = $this->rest->callAPI("GET", $url, $id);
         return json_decode($array['data']);
     }
+
+    public function getPedido($id)
+    {
+        log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapas | getPedido(batch_id)-> ' . $id);
+        $idBatch = json_encode($id);
+        $resource = '/lote/articulosReceta/batch/' . $id;
+        $url = REST_PRD_LOTE . $resource;
+        $array = $this->rest->callAPI("GET", $url, $id);
+        return json_decode($array['data']);
+    }
+
     public function getRecursosFraccionar($id, $recursoTipo)
     {
 
