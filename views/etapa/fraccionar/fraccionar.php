@@ -687,8 +687,6 @@ function guardar() {
             url: '<?php echo base_url(PRD) ?>general/Etapa/guardarFraccionar',
             success: function(rsp) {
                 if (rsp.status) {
-                    //setAttr('#origen', 'orta_id', rsp.batch_id);
-                    debugger;
                     fun = () =>{linkTo('<?php echo base_url(PRD) ?>general/Etapa/index')};
                     confRefresh(fun);
                 } else {
@@ -761,7 +759,6 @@ function getLotesFraccionar(){
             if(resp.status){
                 $.each(resp.data, function (i, val) {
                     button = (val.tipo == 'Insumo') ? bolita('Insumo', 'orange') : `<button title='Copiar Lote' class='btn btn-link' onclick='$(\"#lotedestino\").val(\"${val.codigo}\")'><i class='fa fa-copy'></i></button>`;  
-                    
                     var opcion = `<tr>
                     <td>LOTE: ${val.codigo} | ${val.art_nombre}</td>
                     <td>Cantidad: ${val.cant_entreg}</td>

@@ -520,7 +520,7 @@ class Etapa extends CI_Controller
             $arrayPost["empr_id"] = (string) empresa();
             $arrayPost["forzar_agregar"] = $value->forzar;
             $arrayPost["fec_vencimiento"] = FEC_VEN;
-            $arrayPost['fec_iniciado'] = (string) date("d-m-Y"); //consultar que fecha va acaaa
+            $arrayPost['fec_iniciado'] = (string) date("d-m-Y"); //to do: Agregar input de fecha en reporte 
             $arrayPost["recu_id"] = strval($value->recu_id);
             $arrayPost["tipo_recurso"] = $value->tipo_recurso;
             $arrayPost['batch_id'] = "0";
@@ -583,7 +583,7 @@ class Etapa extends CI_Controller
             $arrayPost["usuario_app"] = userNick();
             $arrayPost["empr_id"] = (string) empresa();
             $arrayPost["forzar_agregar"] = $info['forzar'];
-            $arrayPost['fec_iniciado'] = (string) date("d-m-Y"); //consultar que fecha va acaaa
+            $arrayPost['fec_iniciado'] = (string) date("d-m-Y");//to do: Agregar input de fecha en reporte 
             $arrayPost["fec_vencimiento"] = FEC_VEN;
             $arrayPost["recu_id"] = "0";
             $arrayPost["tipo_recurso"] = "";
