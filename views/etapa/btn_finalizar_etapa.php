@@ -99,6 +99,37 @@ function finalizarEtapa(){
         }
     });
 }
+/////////////
+//Valida que la variable QC_OK del formulario de calidad este Aprobada
+//Si sale por el else, es una etapa de fraccionamiento
+async function validarFormularioControlCalidad(){
+    wo();
+    origenFormulario = _isset($("#origen").attr('data-json')) ? JSON.parse($("#origen").attr('data-json')) : null;
+    debugger;
+    if(_isset(origenFormulario)){
+        let validacionForm = new Promise((resolve,reject) => {
+            wo();
+            $.ajax({
+                type: 'GET',
+                dataType: 'JSON',
+                url: '<?php echo base_url(PRD) ?>general/etapa/validarFormularioCalidad/' + origenFormulario.orta_id + '/' + origenFormulario.origen,
+                success: function(res) {
+                    if (res.status) {
+                        resolve(true);
+                    } else {
+                        resolve(false);
+                    }
+                },
+                error: function(res) {
+                    reject(false);
+                }
+            });
+        });
+    return await validacionForm;
+    }else{
+        return new Promise((res) => res(true));
+    }
+}
 </script>
 
 <?php } ?>
