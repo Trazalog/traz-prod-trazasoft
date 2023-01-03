@@ -350,7 +350,8 @@ function actualizarEntrega() {
             else $('enma').empty();
         },
         error: function(res) {
-            error();wbox();
+            error();
+            // wbox();
         }
     });
 }
