@@ -402,6 +402,7 @@ if ($accion == 'Editar' && $etapa->estado == "PLANIFICADO") {
 async function validarFormularioControlCalidad(){
     wo();
     origenFormulario = JSON.parse($("#origen").attr('data-json'));
+    debugger;
     let validacionForm = new Promise((resolve,reject) => {
         wo();
         $.ajax({

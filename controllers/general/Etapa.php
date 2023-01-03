@@ -412,7 +412,7 @@ class Etapa extends CI_Controller
             $arrRec['recu_id'] = (string) $recurso_id;
             $arrRec['usuario'] = userNick();
             $arrRec['empr_id'] = (string) empresa();
-            $arrRec['cantidad'] = (string) $p->cant_descontar; // cantidad a descontar en stock
+            $arrRec['cantidad'] = (string) $p->cantidad; // cantidad a descontar en stock
             $arrRec['tipo'] = MATERIA_PRIMA;
             $arrRec['empa_id'] = (string) $p->empaque;
             $arrRec['empa_cantidad'] = (string) $p->cantidad; // cantidad del empaque
@@ -446,11 +446,6 @@ class Etapa extends CI_Controller
                     $det['cantidad_receta'] = (string) $p->cantidad_receta;
                     $det['receta'] = $p->receta ? $p->receta : "";
                     $detalle['_post_pedidos_detalle_conreceta'][] = $det;
-                    //$detalle['_post_notapedido_detalle'][$x] = (object) $det;
-
-                    // $envases[$key]['pema_id'] = (string) $pema_id;
-                    // $envases[$key]['arti_id'] = (string) $p->envase_arti_id;
-                    // $envases[$key]['cantidad'] = (string) $p->cantidad;
                     $x++;
                 }
                 $arrayDeta['_post_pedidos_detalle_conreceta_batch_req'] = $detalle;
@@ -469,6 +464,7 @@ class Etapa extends CI_Controller
                         $case_id = strval($rsp['data']['caseId']);
                         $this->load->model(ALM . 'Notapedidos');
                         $this->Notapedidos->setCaseId($pema_id, $case_id);
+                        $rsp['batch_id'] = $batch_id; 
                         // AVANZA PROCESO A TAREA SIGUIENTE
                         if (PLANIF_AVANZA_TAREA) {
 
@@ -524,6 +520,7 @@ class Etapa extends CI_Controller
             $arrayPost["empr_id"] = (string) empresa();
             $arrayPost["forzar_agregar"] = $value->forzar;
             $arrayPost["fec_vencimiento"] = FEC_VEN;
+            $arrayPost['fec_iniciado'] = (string) date("d-m-Y"); //consultar que fecha va acaaa
             $arrayPost["recu_id"] = strval($value->recu_id);
             $arrayPost["tipo_recurso"] = $value->tipo_recurso;
             $arrayPost['batch_id'] = "0";
@@ -586,6 +583,7 @@ class Etapa extends CI_Controller
             $arrayPost["usuario_app"] = userNick();
             $arrayPost["empr_id"] = (string) empresa();
             $arrayPost["forzar_agregar"] = $info['forzar'];
+            $arrayPost['fec_iniciado'] = (string) date("d-m-Y"); //consultar que fecha va acaaa
             $arrayPost["fec_vencimiento"] = FEC_VEN;
             $arrayPost["recu_id"] = "0";
             $arrayPost["tipo_recurso"] = "";

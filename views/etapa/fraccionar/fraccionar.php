@@ -122,7 +122,7 @@ if($etapa->estado == "FINALIZADO"){
         <div class="box-body">
               <enma></enma>
         </div>
-
+        <h3> Pedido materiales</h3>
         <div class="box-body">
             <input type="hidden" id="materiasexiste" value="no">
             <table id="detaPedido" class="table table-bordered table-hover">
@@ -153,29 +153,6 @@ if($etapa->estado == "FINALIZADO"){
             </table>
         </div>
         <hr>
-        <div class="box-body">
-            <input type="hidden" id="materiasexiste" value="no">
-            <table id="detaEmpaque" class="table table-bordered table-hover">
-                <thead class="thead-dark">
-                    <th>Titulo</th>
-                    <th>Cant a Descontar</th>
-                    <th>Empaque</th>
-                    <th>Cantidad</th>
-                </thead>
-                <tbody>
-                    <?php											
-                          foreach($detaEmpaque as $fila)
-                          {
-                            echo"<tr data-json=' " .json_encode($fila). " ' id='".$fila->arti_id."'>";
-                            echo"<td>$fila->descripcion</td>";
-                           // echo"<td>".$fila->cantidad.'('.$fila->uni_med.')'."</td>";
-                            echo"<td>$fila->cantidad_emp</td>";
-                            echo"</tr>";																
-                          }		
-                      ?>
-                </tbody>
-            </table>
-        </div>
         <?php }else{ ?>
         <!-- Producto fraccionado -->
         <div class="box-body">
@@ -210,7 +187,7 @@ if($etapa->estado == "FINALIZADO"){
                             <div class="form-group">
                                 <label class="form-label">Empaque<?php hreq() ?>:</label>
                                 <?php
-                                    echo selectBusquedaAvanzada('empaques', 'empaques', $empaques, 'id', 'titulo',array('Receta:' => 'receta','Uso:' => 'aplicacion_receta','Cantidad:' => 'cantidad'),false,"ActualizaEmpaques()");
+                                    echo selectBusquedaAvanzada('empaques', 'empaques', $empaques, 'id', 'titulo',array('Receta:' => 'receta','Uso:' => 'aplicacion_receta','Cantidad:' => 'cantidad'),false,"crearTablaReceta(this),false");
                                 ?>
                             </div>
                         </div> 
@@ -348,52 +325,59 @@ $(document).ready(function () {
     actualizarEntrega();
 });
 
-$('#empaques').on('change', function() {
-    var data = getJson(this);
-    console.log('data: ' + data);
-    console.table(data);
+function crearTablaReceta(tag){
+
+    empaque = $("#empaques option:selected").attr('data-json');
+    if(_isset(empaque)){
+        empaque = JSON.parse(empaque);
+        document.getElementById('volumen').value = empaque.volumen ;
+        document.getElementById('tara').value = empaque.tara ;
+        document.getElementById('cantidadReceta').value = empaque.cantidad;
+        document.getElementById('cantidad').disabled = false;
+        CalculaStock();
+    }
+    var data = getJson(tag);
+    //console.log('data: ' + data);
+    //console.table(data);
     var form_id =  data.form_id;
-  /*   var unme = data.unidad;
-    var descripcion = data.descripcion;
-    document.getElementById('unmedisabled').value = unme;
-    document.getElementById('descridisabled').value = descripcion;
-    document.getElementById('botonreceta').disabled = false; */
-
-    $.ajax({
-        type: "GET",
-        url: '<?php echo base_url(PRD) ?>general/Etapa/getArticulosEnRecetas/' + form_id,
-        success: function (res) {
-            wo();
-            if(res != 'null'){
-                //console.log(res);
-                document.getElementById('tabla-Formula').hidden = false;
-                $('#tabla-Formula').css('background','#d2d6de');
-                articulos = JSON.parse(res);
-                id_form = form_id;
-                var html='';
-                $('#tabla-Formula > tbody').empty();//limpia los registros del body
-		        $.each(articulos, function(i, item) {
-                 html += '<tr>' +
-			            '<td>' + articulos[i].descripcion + '</td>' +
-			            '<td hidden>' + articulos[i].arti_id + '</td>' +
-			            '<td>' + articulos[i].unidad_medida + '</td>' +
-			            '<td>' + articulos[i].cantidad + '</td>' +
-			            '</tr>';
-			    });
-                $('#tabla-Formula tbody').append(html);
-               
-            }else{
-                //console.log("No hay articulos");
-                document.getElementById('tabla-Formula').hidden = true;
-            }
-            wc();
-        },
-        error: function(res) {
-            alert('Error');
-        },
-    }); 
-});
-
+    if(_isset($("#empaques").val()))
+    {
+        $.ajax({
+            type: "GET",
+            url: '<?php echo base_url(PRD) ?>general/Etapa/getArticulosEnRecetas/' + form_id,
+            success: function (res) {
+                wo();
+                if(res != 'null'){
+                    //console.log(res);
+                    document.getElementById('tabla-Formula').hidden = false;
+                    $('#tabla-Formula').css('background','#d2d6de');
+                    articulos = JSON.parse(res);
+                    id_form = form_id;
+                    var html='';
+                    $('#tabla-Formula > tbody').empty();//limpia los registros del body
+	    	        $.each(articulos, function(i, item) {
+                     html += '<tr>' +
+	    		            '<td>' + articulos[i].descripcion + '</td>' +
+	    		            '<td hidden>' + articulos[i].arti_id + '</td>' +
+	    		            '<td>' + articulos[i].unidad_medida + '</td>' +
+	    		            '<td>' + articulos[i].cantidad + '</td>' +
+	    		            '</tr>';
+	    		    });
+                    $('#tabla-Formula tbody').append(html);
+                
+                }else{
+                    //console.log("No hay articulos");
+                    document.getElementById('tabla-Formula').hidden = true;
+                }
+                wc();
+            },
+            error: function(res) {
+                alert('Error');
+            },
+        }); 
+    }
+}
+actualizarEntrega()
 function actualizarEntrega() {
     $.ajax({
         type: 'GET',
@@ -530,6 +514,7 @@ function ControlaProducto() {
         articulo = articulos;
         var prod=[];
           $.each(articulo, function(i, item) {
+            articulo[i].empaque = empaque.id;
             articulo[i].receta = id_form;
             articulo[i].cantidad_receta = cantidad;
             articulo[i].cantidad *= cantidad;
@@ -679,18 +664,9 @@ function guardar() {
             json = "";
             json = $(this).attr('data-json');
             temp = JSON.parse(json);
-            //acum_cant += parseFloat(temp.cant_descontar);
             productos.push(json);
         });
     }
-    Swal.fire({
-        title: 'Cantidad total a descontar: ' ,
-        text: '',
-        type: 'info',
-        showCancelButton: false,
-        confirmButtonText: 'Hecho'
-    }).then((result) => {
-    
         var data = {
             idetapa: idetapa,
             fecha: fecha,
@@ -711,6 +687,8 @@ function guardar() {
             url: '<?php echo base_url(PRD) ?>general/Etapa/guardarFraccionar',
             success: function(rsp) {
                 if (rsp.status) {
+                    //setAttr('#origen', 'orta_id', rsp.batch_id);
+                    debugger;
                     fun = () =>{linkTo('<?php echo base_url(PRD) ?>general/Etapa/index')};
                     confRefresh(fun);
                 } else {
@@ -729,7 +707,6 @@ function guardar() {
                 wc();
             }
         });
-    });
 }
 
 function guardarForzado(data) {
@@ -775,7 +752,6 @@ function getLotesFraccionar(){
     $("#lotesFraccionar").find("tbody td").remove();
     data = {};
     data.batch_id = $("#batch_id").val();
-
     $.ajax({
         type: "POST",
         url: "<?php echo PRD ?>general/Etapa/getLotesFraccionar",
@@ -811,7 +787,7 @@ function editarProducto(tag){
     var datos='';
     $('#mdl-editar').modal('show');
         datos = JSON.parse($(tag).closest('tr').attr('data-json'));
-        $("#aceptarCantidad").click(function(){
+        $("#aceptarCantidad").off().on('click',function(){
             cantnuevo = document.getElementById('cantArticulo').value;
             if((cantnuevo != '') && (cantnuevo > 0) && (ban))
             {

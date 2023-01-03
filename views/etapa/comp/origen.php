@@ -83,7 +83,7 @@
                                     </div>
                                     <div id="RecetasLote" class="col-md-6 col-xs-12 input-group ba">
                                         <?php
-                                            echo selectBusquedaAvanzada('formulas', 'vunme', $formulas, 'form_id', 'descripcion', array('Unidad Medida:' => 'unidad_medida', 'Cantidad:' => 'cantidad'));
+                                            echo selectBusquedaAvanzada('formulas', 'vunme', $formulas, 'form_id', 'descripcion', array('Unidad Medida:' => 'unidad_medida', 'Cantidad:' => 'cantidad'),false ,"crearTablaReceta(this)");
                                         ?>
                                     </div>
                                 </div>
@@ -284,55 +284,58 @@
      $(".select2").select2(); 
 }); */
 
-$('#formulas').on('change', function() {
-    var data = getJson(this);
-    console.log('data: ' + data);
-    console.table(data);
-    var form_id = data.form_id;
-    id_form = form_id;
-    var unme = data.unidad_medida;
-    var descripcion = data.descripcion;
-    descripcionReceta= descripcion;
-    document.getElementById('unmedisabled').value = unme;
-    document.getElementById('descridisabled').value = descripcion;
-    document.getElementById('botonreceta').disabled = false;
+function crearTablaReceta(tag){
+    if(_isset($("#formulas").val()))
+    {
+        var data = getJson(tag);
+        console.log('data: ' + data);
+        console.table(data);
+        var form_id = data.form_id;
+        id_form = form_id;
+        var unme = data.unidad_medida;
+        var descripcion = data.descripcion;
+        descripcionReceta= descripcion;
+        document.getElementById('unmedisabled').value = unme;
+        document.getElementById('descridisabled').value = descripcion;
+        document.getElementById('botonreceta').disabled = false;
 
-    $.ajax({
-        type: "GET",
-        url: '<?php echo base_url(PRD) ?>general/Etapa/getArticulosEnRecetas/' + form_id,
-        success: function (res) {
-            wo();
-            
-            if(res != 'null'){
-                //console.log(res);
-                $('#tabla-Formula').removeAttr('style');
-                $('#botonAgregareceta').removeAttr('style');
-                $('#tabla-Formula').css('background','#d2d6de');
-                articulos = JSON.parse(res);
-                var html='';
-                $('#tabla-Formula > tbody').empty();//limpia los registros del body
-		        $.each(articulos, function(i, item) {
-                 html += '<tr>' +
-			            '<td>' + articulos[i].descripcion + '</td>' +
-			            '<td hidden>' + articulos[i].arti_id + '</td>' +
-			            '<td>' + articulos[i].unidad_medida + '</td>' +
-			            '<td>' + articulos[i].cantidad + '</td>' +
-			            '</tr>';
-			    });
-                $('#tabla-Formula tbody').append(html);
-               
-            }else{
-                //console.log("No hay articulos");
-                $('#tabla-Formula').css('display', 'none');
-                $('#botonAgregareceta').css('display', 'none');
-            }
-            wc();
-        },
-        error: function(res) {
-            alert('Error');
-        },
-    });
-});
+        $.ajax({
+            type: "GET",
+            url: '<?php echo base_url(PRD) ?>general/Etapa/getArticulosEnRecetas/' + form_id,
+            success: function (res) {
+                wo();
+
+                if(res != 'null'){
+                    //console.log(res);
+                    $('#tabla-Formula').removeAttr('style');
+                    $('#botonAgregareceta').removeAttr('style');
+                    $('#tabla-Formula').css('background','#d2d6de');
+                    articulos = JSON.parse(res);
+                    var html='';
+                    $('#tabla-Formula > tbody').empty();//limpia los registros del body
+	    	        $.each(articulos, function(i, item) {
+                     html += '<tr>' +
+	    		            '<td>' + articulos[i].descripcion + '</td>' +
+	    		            '<td hidden>' + articulos[i].arti_id + '</td>' +
+	    		            '<td>' + articulos[i].unidad_medida + '</td>' +
+	    		            '<td>' + articulos[i].cantidad + '</td>' +
+	    		            '</tr>';
+	    		    });
+                    $('#tabla-Formula tbody').append(html);
+                
+                }else{
+                    //console.log("No hay articulos");
+                    $('#tabla-Formula').css('display', 'none');
+                    $('#botonAgregareceta').css('display', 'none');
+                }
+                wc();
+            },
+            error: function(res) {
+                alert('Error');
+            },
+        });
+    }
+}
 
 actualizarEntrega()
 function actualizarEntrega() {
@@ -452,7 +455,7 @@ function editarOrigen(e){
     var ban= true;
     var materia = JSON.parse($(e).closest('tr').attr('data-json'));
     $('#mdl-editar').modal('show');
-    $("#aceptarCantidad").click(function(){
+    $("#aceptarCantidad").off().on('click',function(){
             cantnuevo = document.getElementById('cantArticulo').value;
             if((cantnuevo != '')&&(ban)&&(cantnuevo > 0))
             {

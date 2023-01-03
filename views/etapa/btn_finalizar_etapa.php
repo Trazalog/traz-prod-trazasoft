@@ -4,6 +4,7 @@
 <button class='btn btn-success' onclick='btnFinalizar()'>Finalizar Etapa</button>
 <script>
 function btnFinalizar() {
+    debugger;  
     validarFormularioControlCalidad().then((result) => {
         if(result){
             wo();
@@ -75,6 +76,7 @@ async function validarCantidadReportes(){
 /////////////////////////////////////
 //Cierra la etapa con batch_id
 function finalizarEtapa(){
+    debugger;
     wo();
     $.ajax({
         type: 'POST',
