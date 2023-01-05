@@ -504,6 +504,7 @@ class Etapa extends CI_Controller
         $num_orden_prod = $this->input->post('num_orden_prod');
         $batch_id_padre = $this->input->post('batch_id_padre');
         $depo_id = $this->input->post('depo_id');
+        $fecha = $this->input->post('fecha');//fec_iniciado
 
         foreach ($productos as $key => $value) {
 
@@ -531,6 +532,7 @@ class Etapa extends CI_Controller
             $arrayPost['batch_id'] = "0";
             $arrayPost['planificado'] = "false";
             $arrayPost['noco_list'] = isset($value->nocos)?implode(';',$value->nocos):'';
+            $arrayPost['fec_iniciado'] = date('d-m-Y');
             $arrayDatos['_post_lote_noconsumibles_list_batch_req']['_post_lote_noconsumibles_list'][] = $arrayPost;
 						$noco_list = isset($value->nocos)? $value->nocos:'';
         }
@@ -638,9 +640,13 @@ class Etapa extends CI_Controller
         $rsp = $this->Etapas->finalizarLote($id);
         echo json_encode($rsp);
     }
-
-    public function validarPedidoMaterial($batch_id)
-    {
+    /**
+	* Recibe un batch_id para buscar el taskId en bonita de la tarea especificada
+	* @param integer batch_id
+	* @return integer/bool taskId de la tarea si lo encontrara, caso contrario false
+	*/
+    public function validarPedidoMaterial($batch_id){
+        log_message('DEBUG','#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapa | validarPedidoMaterial($batch_id)');
         $rsp['tarea'] = $this->Etapas->validarPedidoMaterial($batch_id);
         echo json_encode($rsp);
     }
