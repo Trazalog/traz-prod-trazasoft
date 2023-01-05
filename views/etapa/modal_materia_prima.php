@@ -42,21 +42,24 @@ function agregaMateria(materia) {
     var materia = JSON.stringify(materia);
     materia = JSON.parse(materia);
     document.getElementById('inputrecursosmateriales').value = materia[0].descripcion;
-
-
     //$('#tablamateriasasignadas').dataTable().fnDestroy();
     if (typeof materia[0].arti_id === 'undefined') {
         // your code here
         materia[0].arti_id = materia[0].id;
     }
-    html += '<tr data-json="' + JSON.stringify(materia[0]) + '" id="' + materia[0].arti_id + '">';
+    
+    html += "<tr data-json= '"+  JSON.stringify(materia[0])  + "' id='" + materia[0].arti_id + "'>";
     if (estado != 'En Curso') {
-        html +=
-            '<td><i class="fa fa-trash text-light-blue" style="cursor: pointer; margin-left: 15px;" onclick="eliminarOrigen(this)"></i></td>';
+        html +='<td>';
+        html +='<i class="fa fa-trash text-light-blue" style="cursor: pointer; margin-left: 15px;" onclick="eliminarOrigen(this)"></i>';
+        html +='<i class="fa fa-edit text-light-blue" style="cursor: pointer; margin-left: 15px;" onclick="editarOrigen(this)" title="Editar"></i>';
+        html +='</td>';
     }
+    html += '<td>' + materia[0].tipo + '</td>';
     html += '<td>' + materia[0].barcode + '</td>';
     html += '<td>' + materia[0].descripcion + '</td>';
     html += '<td>' + materia[0].stock + '</td>';
+    html += '<td>' + materia[0].cantidad_receta + '</td>';
     html += '<td>' + materia[0].cantidad + '</td>';
     html += '</tr>';
     $('#tablamateriasasignadas tbody').append(html);
