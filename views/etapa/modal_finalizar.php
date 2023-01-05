@@ -102,22 +102,15 @@
                 </div>
                 <div class="row" style="margin-top:20px">
                     <div class="col-md-3 col-xs-12"><label class="form-label">Destino <?php hreq() ?>:</label></div>
-                        <div class="col-md-6 col-xs-12">
-                            <?php if($accion == 'Editar'){
-                                echo selectBusquedaAvanzada('productodestino', false, false, false, false, false, false, 'revisarRecipiente(this)');
-                            }
-                            ?>
-                        </div>
-                    <div class="col-md-3"></div>
-                </div>
-                <div class="row" style="margin-top:20px" id="bloque_etapa" hidden="true">
-                    <div class="col-md-3 col-xs-12"><label class="form-label">Etapa <?php hreq() ?>:</label></div>
-                        <div class="col-md-6 col-xs-12">
-                            <?php if($accion == 'Editar'){
-                                echo selectBusquedaAvanzada('proceso', 'etapa_etap_id', false, false, false, false, false, false);
-                            }
-                            ?>
-                        </div>
+                    <div class="col-md-6 col-xs-12">
+                        <?php if($accion == 'Editar'){
+        
+
+                      echo selectBusquedaAvanzada('productodestino', false);
+
+                        }
+                        ?>
+                    </div>
                     <div class="col-md-3"></div>
                 </div>
                 <!-- <div class="row" style="margin-top: 20px">
@@ -306,7 +299,6 @@ function AgregarProducto() {
         producto.loteorigen = document.getElementById('loteorigen').value;
         producto.lotedestino = lotedestino;
         producto.destino = destino;
-        producto.proceso = $('#proceso').find('option:selected').text();
         producto.titulodestino = $('#productodestino').find('option:selected').text();
         producto.descripcion = dataProducto.descripcion;
         // producto.destinofinal = establecimiento + " " + recipientefinal;
@@ -677,35 +669,5 @@ function agregarNocoEscaneado(data) {
         </tr>	
     `)	
     $('#codigoNoCoEscaneado').val('');	
-}
-//Busca las etapas de un recipiente seleccionado siempre y cuando sea DEPOSITO/PRODUCTIVO
-//se llama en el onchange del select de recipientes
-function revisarRecipiente(elem) {
-    console.log('Obtener Etapas');
-    // dataJsoncito = JSON.parse($(tag).closest('tr').attr('data-json'));  
-    var recipiencito = JSON.parse($(elem).attr("data-json"));
-    console.log(recipiencito);  
-    if (recipiencito.tipo == "DEPOSITO/PRODUCTIVO") {
-        console.log(recipiencito);
-        $.ajax({
-            type: 'GET',
-            dataType: 'JSON',
-            url: '<?php echo base_url(PRD) ?>general/Etapa/getProcesosEtapas',
-            success: function(rsp) {
-                if (rsp.status && _isset(rsp.data)) {
-                    $('#proceso').html(rsp.data);
-                    // $('#proceso').show();
-                    $('#bloque_etapa').attr('hidden', false);
-                    // $('#proceso').removeAttr("disabled");
-                }else{
-                    $('#proceso').html('');
-                    error('Error!','No se encontraron Etapas en el establecimiento seleccionado');
-                }
-            },
-            error: function(rsp) {
-                alert('Error al Obtener Etapas');
-            }
-        });
-    };   
 }
 </script>

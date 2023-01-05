@@ -597,7 +597,8 @@
           $("#contenedorMenuEtapasProductivas").empty();
           $("#contenedorMenuEtapasProductivas").html(etapasFiltradas);
         }else{
-          error('Error',"Se produjo un error al obtener el listado filtrado de etapas");
+          $("#contenedorMenuEtapasProductivas").empty();
+          notificar('Nota',"El proceso productivo seleccionado no posee etapas",'warning');
         }
       },
       error: function(rsp) {
