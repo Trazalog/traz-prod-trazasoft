@@ -231,7 +231,7 @@
                     echo '<td><i class="fa fa-trash text-light-blue" style="cursor: pointer; margin-left: 15px;" onclick="eliminarOrigen(this)" title="Eliminar"></i></td>';
                     echo '<td><i class="fa fa-edit text-light-blue" style="cursor: pointer; margin-left: 15px;" onclick="editarOrigen(this)" title="editar"></i></td>';
                 }
-                ($fila->receta) ? $receta =  $fila->receta : $receta = "Unitario";
+                    ($fila->receta) ? $receta =  $fila->receta : $receta = "Unitario";
                 echo"<td>$receta</td>";
                 echo"<td>$fila->barcode</td>";
                 echo"<td>$fila->descripcion</td>";

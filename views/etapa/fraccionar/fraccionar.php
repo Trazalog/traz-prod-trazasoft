@@ -136,11 +136,11 @@ if($etapa->estado == "FINALIZADO"){
                 </thead>
                 <tbody>
                     <?php											
-                          foreach($matPrimas as $fila)
+                          foreach($detaEmpaque as $fila)
                           {
                             echo"<tr data-json=' " .json_encode($fila). " ' id='".$fila->arti_id."'>";
-                            ($fila->receta) ? $receta =  $fila->receta : $receta = "Unitario";
-                            echo"<td>$receta</td>";
+                            ($fila->receta) ? $tipo =  $fila->receta : $tipo = "Unitario";
+                            echo"<td>$tipo</td>";
                             echo"<td>$fila->barcode</td>";
                             echo"<td>$fila->descripcion</td>";
                             echo"<td>$fila->stock</td>";
@@ -508,14 +508,12 @@ function ControlaProducto() {
         empaque = $("#empaques option:selected").attr('data-json');
         empaque = JSON.parse(empaque);
         cantidad =  document.getElementById('cantidad').value;
-        //console.log(empaque);
 
         //productos-articulos de una receta
         articulo = articulos;
         var prod=[];
           $.each(articulo, function(i, item) {
             articulo[i].empaque = empaque.id;
-            articulo[i].receta = id_form;
             articulo[i].cantidad_receta = cantidad;
             articulo[i].cantidad *= cantidad;
             articulo[i].tipo = empaque.receta;
@@ -524,7 +522,6 @@ function ControlaProducto() {
 	    });
         
         //producto unitario
-        producto.empaque = empaque.id;
         producto.empaquetitulo = empaque.titulo;
         producto.volumen = empaque.volumen;
         producto.envase_arti_id = empaque.arti_id;
