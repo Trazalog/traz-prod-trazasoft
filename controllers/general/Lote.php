@@ -37,11 +37,16 @@ class Lote extends CI_Controller
     $res = $this->Lotes->listar()->lotes->lote;
     echo json_encode($res);
   }
-
-  public function obtenerLotesCamion($options = true)
-  {
+  /**
+	* Busca los lotes cargados en un camion por meido de la patente
+	* @param string patente
+	* @return array select cargado con los lotes encontrados en el camion
+	*/
+  public function obtenerLotesCamion($options = true){
+    log_message('DEBUG','#TRAZA | #TRAZ-PROD-TRAZASOFT | Lote | obtenerLotesCamion($options = true)');
     $patente = $this->input->post('patente');
     $rsp = $this->Lotes->obtenerLotesCamion($patente);
+    $rsp['lotes'] = $rsp['data'];
     if($options != "false")$rsp['data'] = selectBusquedaAvanzada(false, false, $rsp['data'], 'batch_id', 'lote_id', array('Origen:' => 'establecimiento', 'Cantidad:' => 'cantidad', 'Unidad Medida:' => 'um'));
     echo json_encode($rsp);
   }
@@ -58,11 +63,21 @@ class Lote extends CI_Controller
     $data = '';
     $this->load->view('produccion/lotes/trazabilidad', $data);
   }
-
-  public function trazabilidadBatch()
-  {
+  /**
+	* Recibe el codigo enviado desde la vista, busca el batch_id asociado al codigo de lote y genera la trazabilidad para la vista
+	* @param varchar/integer batch puede ser codigo de lote o batch_id
+	* @return array arbol de trazabilidad
+	*/
+  public function trazabilidadBatch(){
     $lote_id = $this->input->get('batch');
-    $batch_id = $this->Lotes->getBatchIdLote($lote_id)['data'][0]->batch_id;
+    $tipoCodigo = $this->input->get('tipoCodigo');
+
+    if($tipoCodigo == 'lote'){
+      $batch_id = $this->Lotes->getBatchIdLote($lote_id)['data'][0]->batch_id;
+    }else{
+      $batch_id = $this->input->get('batch');
+    }
+    
     if (isset($batch_id)) {
       $rsp = $this->Lotes->trazabilidadBatch($batch_id);
       $data = $rsp['data'];
