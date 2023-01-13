@@ -259,6 +259,7 @@ class Etapa extends CI_Controller
                 $det['cantidad'] =  $o['cantidad'];
                 $det['cantidad_receta'] = $o['cantidad_receta']; 
                 $det['receta'] = $o['receta'] ? $o['receta'] : "";
+                $det['empaque'] = ""; //coloco el empaque vacio porque es una etapa simple
                 $detalle['_post_pedidos_detalle_conreceta'][] = $det;
             }
         }
@@ -335,7 +336,7 @@ class Etapa extends CI_Controller
         // trae tablita de materia prima Origen y producto
         $data['matPrimas'] = $this->Etapas->getPedido($id)->articulos->articulo;
 
-        $data['detaEmpaque'] = $this->Etapas->getRecursosOrigen($id, MATERIA_PRIMA)->recursos->recursos;
+        $data['detaEmpaque'] = $this->Etapas->getPedidoEmpaque($id)->articulos->articulo;
         #Obtener Articulos por Etapa
         $data['productos_etapa'] = $this->Etapas->obtenerArticulos($data['etapa']->etap_id)['data'];
 
@@ -444,7 +445,8 @@ class Etapa extends CI_Controller
                     $det['arti_id'] = (string) $p->arti_id;
                     $det['cantidad'] = (string) $p->cantidad;
                     $det['cantidad_receta'] = (string) $p->cantidad_receta;
-                    $det['receta'] = $p->receta ? $p->receta : "";
+                    $det['empaque'] = $p->empaque ? $p->empaque : "";
+                    $det['receta'] = "";//coloco la receta vacio porque es una empaque asosiado a una receta
                     $detalle['_post_pedidos_detalle_conreceta'][] = $det;
                     $x++;
                 }
