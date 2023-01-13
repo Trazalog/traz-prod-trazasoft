@@ -97,6 +97,7 @@
           <thead class="thead-dark">
             <th width="6%">Acciones</th>
             <th>Etapa</th>
+            <th>ID Batch</th>
             <th>Lote</th>
             <th>Producto</th>
             <th>Cantidad</th>
@@ -119,6 +120,7 @@
                 echo '<i class="fa fa-fw fa-times-circle text-red ml-1" style="cursor: pointer;" title="Eliminar" onclick="conf(eliminarEtapa,\''.$id.'\',\'¿Desea eliminar la Etapa?\')"></i>';
                 echo '</td>';
                 echo '<td>' . $fila->titulo . '</td>';
+                echo "<td>$fila->id</td>";
                 echo "<td>$fila->lote</td>";
                 echo '<td>' . $fila->producto . '</td>';
                 echo '<td>' . $fila->cantidad . ' ' . $fila->unidad . '</td>';
@@ -216,6 +218,7 @@
   DataTable('#etapas');
 
   function muestra(op,tag) {
+    debugger;
     if(_isset($(tag).attr('data-json'))){
       etapaSeleccionada = JSON.parse($(tag).attr('data-json')).link;
     }else{
@@ -227,6 +230,7 @@
       '<tr>' +
       '<th>Acciones</th>' +
       '<th>Etapa</th>' +
+      '<th>ID Batch</th>' +
       '<th>Lote</th>' +
       '<th>Producto</th>' +
       '<th>Cantidad</th>' +
@@ -251,6 +255,7 @@
         }
         html = html + '</td>' +
           '<td>' + etapas[i].titulo + '</td>' +
+          '<td>' + etapas[i].id + '</td>' +
           '<td>' + etapas[i].lote + ' </td>' +
           '<td>' + etapas[i].producto + '</td>' +
           '<td>' + etapas[i].cantidad + ' ' + etapas[i].unidad + '</td>' +
@@ -306,6 +311,7 @@
         }
         html = html + '</td>' +
             '<td>' + etapas[i].titulo + '</td>' +
+            '<td>' + etapas[i].id + '</td>' +
             '<td>' + etapas[i].lote + ' </td>' +
             '<td>' + etapas[i].producto + '</td>' +
             '<td>' + etapas[i].cantidad + ' ' + etapas[i].unidad + '</td>' +
@@ -556,11 +562,12 @@
 }
   // Oculta/Muestra de Batchs Finalizados
   function muestraBatchsFinalizados(){
+    debugger;
     estado = $('#etapa_finalizada').is(':checked');
     if(estado){
       $('#etapas').DataTable().columns().search('').draw();
     }else{
-      $('#etapas').DataTable().columns(9).search('En Curso|Planificado',true,false).draw();
+      $('#etapas').DataTable().columns(10).search('En Curso|Planificado',true,false).draw();
     }
   }
   $(document).ready(function () {
