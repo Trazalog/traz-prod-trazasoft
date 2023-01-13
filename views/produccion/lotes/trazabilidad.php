@@ -19,17 +19,23 @@
                 <h4>Trazabilidad de Bloques</h4>
             </div>
             <div class="box-body">
-                <div class=" form-group col-sm-5">
-                    <div class="col-sm-2">
-                        <h5>Nro Batch</h5>
+                <div class="col-md-2 col-sm-6 col-xs-12">
+                    <label for="tipoCodigo">Búsqueda por(<strong style="color: #dd4b39">*</strong>):</label>
+                    <div class="form-check">
+                        <input type="radio" class='form-check-input' name="tipoCodigo" value="lote" checked/>
+                        <label class="form-check-label" for="">Código de lote</label>
                     </div>
+                    <div class="form-check">
+                        <input type="radio" class='form-check-input' name="tipoCodigo" value="batch"/>
+                        <label class="form-check-label" for="">Batch ID</label>
+                    </div>
+                </div>
+                <div class="form-group col-sm-5">
                     <div class="col-sm-7">
-                        <input type="text" class="form-control" id="batch" name="batch"
-                            placeholder="Ingrese código de batch">
+                        <input type="text" class="form-control" id="batch" name="batch" placeholder="Ingrese código a buscar">
                     </div>
                     <div class="col-sm-3">
-                        <button type="button" class="btn btn-block btn-primary btn-flat"
-                            onclick="buscarBatch()">Buscar</button>
+                        <button type="button" class="btn btn-block btn-primary btn-flat" onclick="buscarBatch()">Buscar</button>
                     </div>
                 </div>
             </div>
@@ -112,11 +118,17 @@ var table = '';
 function buscarBatch() {
     var nodos = '';
     var batch = $('#batch').val();
+    var tipoCodigo = $('input[name=tipoCodigo]:checked').val();
+    if(tipoCodigo === 'batch' && !$.isNumeric($('#batch').val())){
+        notificar('Cuidado','Se seleccionó la opción Batch ID, esta búsqueda solo se realiza con números enteros.','warning');
+        return;
+    }
     wo();
     $.ajax({
         type: 'GET',
         data: {
-            batch: batch
+            batch: batch,
+            tipoCodigo: tipoCodigo
         },
         dataType: 'JSON',
         url: '<?php echo base_url(PRD) ?>general/Lote/trazabilidadBatch',
