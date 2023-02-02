@@ -397,29 +397,4 @@ if ($accion == 'Editar' && $etapa->estado == "PLANIFICADO") {
 
     <?php
 } ?>
-/////////////
-//Valida que la variable QC_OK del formulario de calidad este Aprobada
-async function validarFormularioControlCalidad(){
-    wo();
-    origenFormulario = JSON.parse($("#origen").attr('data-json'));
-    let validacionForm = new Promise((resolve,reject) => {
-        wo();
-        $.ajax({
-            type: 'GET',
-            dataType: 'JSON',
-            url: '<?php echo base_url(PRD) ?>general/etapa/validarFormularioCalidad/' + origenFormulario.orta_id + '/' + origenFormulario.origen,
-            success: function(res) {
-                if (res.status) {
-                    resolve(true);
-                } else {
-                    resolve(false);
-                }
-            },
-            error: function(res) {
-                reject(false);
-            }
-        });
-    });
-    return await validacionForm;
-}
 </script>

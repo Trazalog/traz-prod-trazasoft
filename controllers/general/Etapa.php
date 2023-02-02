@@ -254,14 +254,17 @@ class Etapa extends CI_Controller
         if($materia){
         foreach ($materia as $o) {
             if ($cantidad !== "") {
-                $det['pema_id'] = $pema_id;
+                $det['pema_id'] =  $pema_id;
                 $det['arti_id'] = (string) $o['id_materia'];
-                $det['cantidad'] = $o['cantidad'];
-                $detalle['_post_notapedido_detalle'][] = $det;
+                $det['cantidad'] =  $o['cantidad'];
+                $det['cantidad_receta'] = $o['cantidad_receta']; 
+                $det['receta'] = $o['receta'] ? $o['receta'] : "";
+                $det['empaque'] = ""; //coloco el empaque vacio porque es una etapa simple
+                $detalle['_post_pedidos_detalle_conreceta'][] = $det;
             }
         }
-        $arrayDeta['_post_notapedido_detalle_batch_req'] = $detalle;
-        $respDetalle = $this->Etapas->setDetaNP($arrayDeta);
+        $arrayDeta['_post_pedidos_detalle_conreceta_batch_req'] = $detalle;
+        $respDetalle = $this->Etapas->setDetaPedidoconReceta($arrayDeta);
         }
         if ($respDetalle >= 300) {
             log_message('ERROR', 'Error en generacion de Detalle Pedido Materiales. respDetalle: >>' . $respDetalle);
@@ -331,15 +334,14 @@ class Etapa extends CI_Controller
         // $data['productos'] = $this->Articulos->obtenerXTipos(array('Proceso', 'Producto'));
 
         // trae tablita de materia prima Origen y producto
-         $data['matPrimas'] = $this->Etapas->getRecursosOrigen($id, MATERIA_PRIMA)->recursos->recurso;
+        $data['matPrimas'] = $this->Etapas->getPedido($id)->articulos->articulo;
 
+        $data['detaEmpaque'] = $this->Etapas->getPedidoEmpaque($id)->articulos->articulo;
         #Obtener Articulos por Etapa
         $data['productos_etapa'] = $this->Etapas->obtenerArticulos($data['etapa']->etap_id)['data'];
 
         $data['productos_salida_etapa'] = $this->Etapas->getSalidaEtapa($data['etapa']->etap_id)['data'];
         $data['productos_entrada_etapa'] = $this->Etapas->getEntradaEtapa($data['etapa']->etap_id)['data'];
-
-        $data['producto'] = $this->Etapas->getRecursosOrigen($id, PRODUCTO)->recursos->recurso;
 
         $data['op'] = $data['etapa']->titulo;
         $data['lang'] = lang_get('spanish', 4);
@@ -411,7 +413,7 @@ class Etapa extends CI_Controller
             $arrRec['recu_id'] = (string) $recurso_id;
             $arrRec['usuario'] = userNick();
             $arrRec['empr_id'] = (string) empresa();
-            $arrRec['cantidad'] = (string) $p->cant_descontar; // cantidad a descontar en stock
+            $arrRec['cantidad'] = (string) $p->cantidad; // cantidad a descontar en stock
             $arrRec['tipo'] = MATERIA_PRIMA;
             $arrRec['empa_id'] = (string) $p->empaque;
             $arrRec['empa_cantidad'] = (string) $p->cantidad; // cantidad del empaque
@@ -441,16 +443,16 @@ class Etapa extends CI_Controller
                     $p = json_decode($prod);
                     $det['pema_id'] = (string) $pema_id;
                     $det['arti_id'] = (string) $p->arti_id;
-                    $det['cantidad'] = (string) $p->cant_descontar;
-                    $detalle['_post_notapedido_detalle'][$x] = (object) $det;
-
-                    // $envases[$key]['pema_id'] = (string) $pema_id;
-                    // $envases[$key]['arti_id'] = (string) $p->envase_arti_id;
-                    // $envases[$key]['cantidad'] = (string) $p->cantidad;
+                    $det['cantidad'] = (string) $p->cantidad;
+                    $det['cantidad_receta'] = (string) $p->cantidad_receta;
+                    $det['empaque'] = $p->empaque ? $p->empaque : "";
+                    $det['receta'] = "";//coloco la receta vacio porque es una empaque asosiado a una receta
+                    $detalle['_post_pedidos_detalle_conreceta'][] = $det;
                     $x++;
                 }
-                $arrayDeta['_post_notapedido_detalle_batch_req'] = $detalle;
-                $respDetalle = $this->Etapas->setDetaNP($arrayDeta);
+                $arrayDeta['_post_pedidos_detalle_conreceta_batch_req'] = $detalle;
+                $respDetalle = $this->Etapas->setDetaPedidoconReceta($arrayDeta);
+                //$respDetalle = $this->Etapas->setDetaNP($arrayDeta);
 
                 // $rsp = $this->pedidoEnvases($envases);
 
@@ -464,6 +466,7 @@ class Etapa extends CI_Controller
                         $case_id = strval($rsp['data']['caseId']);
                         $this->load->model(ALM . 'Notapedidos');
                         $this->Notapedidos->setCaseId($pema_id, $case_id);
+                        $rsp['batch_id'] = $batch_id; 
                         // AVANZA PROCESO A TAREA SIGUIENTE
                         if (PLANIF_AVANZA_TAREA) {
 
@@ -503,6 +506,7 @@ class Etapa extends CI_Controller
         $num_orden_prod = $this->input->post('num_orden_prod');
         $batch_id_padre = $this->input->post('batch_id_padre');
         $depo_id = $this->input->post('depo_id');
+        $fecha = $this->input->post('fecha');//fec_iniciado
 
         foreach ($productos as $key => $value) {
 
@@ -524,11 +528,13 @@ class Etapa extends CI_Controller
             $arrayPost["empr_id"] = (string) empresa();
             $arrayPost["forzar_agregar"] = $value->forzar;
             $arrayPost["fec_vencimiento"] = FEC_VEN;
+            $arrayPost['fec_iniciado'] = (string) date("d-m-Y"); //to do: Agregar input de fecha en reporte 
             $arrayPost["recu_id"] = strval($value->recu_id);
             $arrayPost["tipo_recurso"] = $value->tipo_recurso;
             $arrayPost['batch_id'] = "0";
             $arrayPost['planificado'] = "false";
             $arrayPost['noco_list'] = isset($value->nocos)?implode(';',$value->nocos):'';
+            $arrayPost['fec_iniciado'] = date('d-m-Y');
             $arrayDatos['_post_lote_noconsumibles_list_batch_req']['_post_lote_noconsumibles_list'][] = $arrayPost;
 						$noco_list = isset($value->nocos)? $value->nocos:'';
         }
@@ -586,6 +592,7 @@ class Etapa extends CI_Controller
             $arrayPost["usuario_app"] = userNick();
             $arrayPost["empr_id"] = (string) empresa();
             $arrayPost["forzar_agregar"] = $info['forzar'];
+            $arrayPost['fec_iniciado'] = (string) date("d-m-Y");//to do: Agregar input de fecha en reporte 
             $arrayPost["fec_vencimiento"] = FEC_VEN;
             $arrayPost["recu_id"] = "0";
             $arrayPost["tipo_recurso"] = "";
@@ -635,9 +642,13 @@ class Etapa extends CI_Controller
         $rsp = $this->Etapas->finalizarLote($id);
         echo json_encode($rsp);
     }
-
-    public function validarPedidoMaterial($batch_id)
-    {
+    /**
+	* Recibe un batch_id para buscar el taskId en bonita de la tarea especificada
+	* @param integer batch_id
+	* @return integer/bool taskId de la tarea si lo encontrara, caso contrario false
+	*/
+    public function validarPedidoMaterial($batch_id){
+        log_message('DEBUG','#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapa | validarPedidoMaterial($batch_id)');
         $rsp['tarea'] = $this->Etapas->validarPedidoMaterial($batch_id);
         echo json_encode($rsp);
     }

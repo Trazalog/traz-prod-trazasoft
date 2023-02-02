@@ -52,12 +52,16 @@ class Lotes extends CI_Model
         $array = file_get_contents($url, false, $param);
         return json_decode($array);
     }
-
-    public function obtenerLotesCamion($patente)
-    {
-        $resource = "/camion/lotes/$patente";
-        $url = REST_LOG . $resource;
-        return wso2($url);
+    /**
+    * Busca los lotes cargados en un camion por meido de la patente
+    * @param string patente
+    * @return array respuesta del servicio
+    */
+    public function obtenerLotesCamion($patente){
+      log_message('DEBUG','#TRAZA | #TRAZ-PROD-TRAZASOFT | Lotes | obtenerLotesCamion($patente)');
+      $resource = "/camion/lotes/$patente";
+      $url = REST_LOG . $resource;
+      return wso2($url);
     }
 
     public function obtenerLote($lote)

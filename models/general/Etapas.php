@@ -193,6 +193,15 @@ class Etapas extends CI_Model
         $array = $this->rest->callAPI("POST", $url, $arrayDeta);
         return json_decode($array['code']);
     }
+    // Guarda detalle de Nota de pedido con la receta o con el producto
+    public function setDetaPedidoconReceta($arrayDeta)
+    {
+        log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapas | setDetaPedidoConReceta(datos)-> ' . json_encode($arrayDeta));
+        $resource = '/_post_pedidos_detalle_conreceta_batch_req';
+        $url = REST_ALM . $resource;
+        $array = $this->rest->callAPI("POST", $url, $arrayDeta);
+        return json_decode($array['code']);
+    }
 
     public function eliminarDetallePedido($pemaId){
         $url = REST_ALM . '/pedidos/detalle';
@@ -222,6 +231,27 @@ class Etapas extends CI_Model
         $array = $this->rest->callAPI("GET", $url, $id);
         return json_decode($array['data']);
     }
+
+    public function getPedido($id)
+    {
+        log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapas | getPedido(batch_id)-> ' . $id);
+        $idBatch = json_encode($id);
+        $resource = '/lote/articulosReceta/batch/' . $id;
+        $url = REST_PRD_LOTE . $resource;
+        $array = $this->rest->callAPI("GET", $url, $id);
+        return json_decode($array['data']);
+    }
+
+    public function getPedidoEmpaque($id)
+    {
+        log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapas | getPedidoEmpaque(batch_id)-> ' . $id);
+        $idBatch = json_encode($id);
+        $resource = '/lote/articulosEmpaque/batch/' . $id;
+        $url = REST_PRD_LOTE . $resource;
+        $array = $this->rest->callAPI("GET", $url, $id);
+        return json_decode($array['data']);
+    }
+    
     public function getRecursosFraccionar($id, $recursoTipo)
     {
 
@@ -326,9 +356,13 @@ class Etapas extends CI_Model
         $url = REST_PRD_ETAPAS . "/etapas/entradas/$etap_id";
         return wso2($url);
     }
-
-    public function validarPedidoMaterial($batch_id)
-    {
+    /**
+	* Recibe un batch_id para buscar el taskId en bonita de la tarea especificada "Entrega pedido pendiente"
+	* @param integer batch_id
+	* @return integer/bool taskId de la tarea si lo encontrara, caso contrario retorna false
+	*/
+    public function validarPedidoMaterial($batch_id){
+        log_message('DEBUG','#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapa | validarPedidoMaterial($batch_id)');
         if (PLANIF_AVANZA_TAREA) { #Pregunta Magica
 
             $url = REST_ALM . "/pedidos/batch/$batch_id";

@@ -122,33 +122,37 @@ if($etapa->estado == "FINALIZADO"){
         <div class="box-body">
               <enma></enma>
         </div>
-
+        <h3> Pedido materiales</h3>
         <div class="box-body">
             <input type="hidden" id="materiasexiste" value="no">
-            <table id="prodFracc" class="table table-bordered table-hover">
+            <table id="detaPedido" class="table table-bordered table-hover">
                 <thead class="thead-dark">
-                    <tr>
-                        <th>Título</th>
-                        <th>Cant a Descontar</th>
-                        <th>Empaque</th>
-                        <th>Cantidad</th>
-                    </tr>
+                    <th>Origen</th>
+                    <th>Código</th>
+                    <th>Articulo</th>
+                    <th>Stock Actual</th>
+                    <th>Cantidad receta</th>
+                    <th>Cantidad artículo</th>
                 </thead>
                 <tbody>
                     <?php											
-                          foreach($matPrimas as $fila)
+                          foreach($detaEmpaque as $fila)
                           {
-                              echo '<tr  id="" data-json:>';
-                              echo '<td>' .$fila->descripcion. '</td>';
-                              echo '<td>' .$fila->cantidad.' ('.$fila->uni_med.')'.'</td>';
-                              echo '<td>' .$fila->nombre. '</td>';
-                              echo '<td>' .$fila->cant_emp. '</td>';         
-                              echo '</tr>'; 																
+                            echo"<tr data-json=' " .json_encode($fila). " ' id='".$fila->arti_id."'>";
+                            ($fila->receta) ? $tipo =  $fila->receta : $tipo = "Unitario";
+                            echo"<td>$tipo</td>";
+                            echo"<td>$fila->barcode</td>";
+                            echo"<td>$fila->descripcion</td>";
+                            echo"<td>$fila->stock</td>";
+                            echo"<td>$fila->cantidad_receta</td>";
+                            echo"<td>$fila->cantidad</td>";
+                            echo"</tr>";																
                           }		
                       ?>
                 </tbody>
             </table>
         </div>
+        <hr>
         <?php }else{ ?>
         <!-- Producto fraccionado -->
         <div class="box-body">
@@ -183,7 +187,7 @@ if($etapa->estado == "FINALIZADO"){
                             <div class="form-group">
                                 <label class="form-label">Empaque<?php hreq() ?>:</label>
                                 <?php
-                                    echo selectBusquedaAvanzada('empaques', 'empaques', $empaques, 'id', 'titulo',array('Receta:' => 'receta','Uso:' => 'aplicacion_receta','Cantidad:' => 'cantidad'),false,"ActualizaEmpaques()");
+                                    echo selectBusquedaAvanzada('empaques', 'empaques', $empaques, 'id', 'titulo',array('Receta:' => 'receta','Uso:' => 'aplicacion_receta','Cantidad:' => 'cantidad'),false,"crearTablaReceta(this),false");
                                 ?>
                             </div>
                         </div> 
@@ -215,9 +219,41 @@ if($etapa->estado == "FINALIZADO"){
                                 <input type="number" id="calculo" class="form-control" disabled>
                             </div>
                         </div>
+		            </div>
+                    <hr>
+                    <!-- TABLA DE ARTICULOS DE UNA RECETA -->
+                    <div class="row">
+                    <div class="dataTables_wrapper form-inline dt-bootstrap">
+		                    			<div class="col-sm-10">
+		                    				<table id="tabla-Formula" class="table table-bordered table-hover dataTable" role="grid"  hidden>
+		                    					<thead>
+		                    						<tr role="row">
+		                    							<th>
+		                    								<font style="vertical-align: inherit;">
+		                    									<font style="vertical-align: inherit;">Artículo</font>
+		                    								</font>
+		                    							</th>
+		                    							<th>
+		                    								<font style="vertical-align: inherit;">
+		                    									<font style="vertical-align: inherit;">U.M.</font>
+		                    								</font>
+		                    							</th>
+		                    							<th>
+		                    								<font style="vertical-align: inherit;">
+		                    									<font style="vertical-align: inherit;">Cantidad</font>
+		                    								</font>
+		                    							</th>
+		                    						</tr>
+		                    					</thead>
+		                    					<tbody>  
+		                    					</tbody>
+		                    				</table>
+		                    			</div>
+                    </div>
+		                    		
                         <div class="col-xs-12 col-md-12">
                             <hr>
-                            <button style="" class="btn btn-success pull-right" onclick="ControlaProducto()"><i class="fa fa-plus"></i> Agregar</button>
+                            <button style="" class="btn btn-success pull-right" onclick="ControlaProducto()" ><i class="fa fa-plus"></i> Agregar</button>
                         </div>
                     </div>
                         <?php  }?>
@@ -250,15 +286,98 @@ if($etapa->estado == "FINALIZADO"){
     $this->load->view('etapa/fraccionar/modal_verDetalleFraccionamiento');
 ?>
 
+
+<!-- Modal Editar cantidad de articulo -->
+<div class="modal modal-fade" id="mdl-editar">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Editar cantidad artículo</h4>
+            </div>
+            <form id="formEditarCant" action="#">
+            <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Cantidad(<strong style="color: #dd4b39">*</strong>):</label>
+                        <input id="cantArticulo" class="form-control" type="text" name="cantidad" required>
+                    </div>
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" id="aceptarCantidad">Aceptar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- FIN MODAL Editar -->
+
 <script>
 $(document).ready(function () {
     $('#recipientes').attr('disabled', true);
-    $('#prodFracc').DataTable({});
+    $('#detaEmpaque').DataTable({});
+    $('#detaPedido').DataTable({});
     $(".sel").select2();
     actualizaRecipiente($('#establecimientos').val());
     actualizarEntrega();
 });
 
+function crearTablaReceta(tag){
+
+    empaque = $("#empaques option:selected").attr('data-json');
+    if(_isset(empaque)){
+        empaque = JSON.parse(empaque);
+        document.getElementById('volumen').value = empaque.volumen ;
+        document.getElementById('tara').value = empaque.tara ;
+        document.getElementById('cantidadReceta').value = empaque.cantidad;
+        document.getElementById('cantidad').disabled = false;
+        CalculaStock();
+    }
+    var data = getJson(tag);
+    //console.log('data: ' + data);
+    //console.table(data);
+    var form_id =  data.form_id;
+    if(_isset($("#empaques").val()))
+    {
+        $.ajax({
+            type: "GET",
+            url: '<?php echo base_url(PRD) ?>general/Etapa/getArticulosEnRecetas/' + form_id,
+            success: function (res) {
+                wo();
+                if(res != 'null'){
+                    //console.log(res);
+                    document.getElementById('tabla-Formula').hidden = false;
+                    $('#tabla-Formula').css('background','#d2d6de');
+                    articulos = JSON.parse(res);
+                    id_form = form_id;
+                    var html='';
+                    $('#tabla-Formula > tbody').empty();//limpia los registros del body
+	    	        $.each(articulos, function(i, item) {
+                     html += '<tr>' +
+	    		            '<td>' + articulos[i].descripcion + '</td>' +
+	    		            '<td hidden>' + articulos[i].arti_id + '</td>' +
+	    		            '<td>' + articulos[i].unidad_medida + '</td>' +
+	    		            '<td>' + articulos[i].cantidad + '</td>' +
+	    		            '</tr>';
+	    		    });
+                    $('#tabla-Formula tbody').append(html);
+                
+                }else{
+                    //console.log("No hay articulos");
+                    document.getElementById('tabla-Formula').hidden = true;
+                }
+                wc();
+            },
+            error: function(res) {
+                alert('Error');
+            },
+        }); 
+    }
+}
+actualizarEntrega()
 function actualizarEntrega() {
     $.ajax({
         type: 'GET',
@@ -388,15 +507,32 @@ function ControlaProducto() {
         producto = getJson($('#inputproductos'));
         empaque = $("#empaques option:selected").attr('data-json');
         empaque = JSON.parse(empaque);
-        producto.empaque = empaque.id;
+        cantidad =  document.getElementById('cantidad').value;
+
+        //productos-articulos de una receta
+        articulo = articulos;
+        var prod=[];
+          $.each(articulo, function(i, item) {
+            articulo[i].empaque = empaque.id;
+            articulo[i].cantidad_receta = cantidad;
+            articulo[i].cantidad *= cantidad;
+            articulo[i].tipo = empaque.receta;
+            prod= JSON.stringify(articulo[i]);
+            AgregaProducto(prod); 
+	    });
+        
+        //producto unitario
         producto.empaquetitulo = empaque.titulo;
         producto.volumen = empaque.volumen;
         producto.envase_arti_id = empaque.arti_id;
-        producto.cantidad = document.getElementById('cantidad').value;
+        producto.cantidad =cantidad;
+        producto.cantidad_receta=cantidad;
         producto.cant_descontar = document.getElementById('calculo').value;
-        producto.receta = empaque.receta;
+        producto.tipo = "Unitario";
         producto = JSON.stringify(producto);
         AgregaProducto(producto);
+
+        document.getElementById('tabla-Formula').hidden = true;
         $('#inputproductos').val(null).trigger('change');
         $('.ba #detalle').empty();
         $('#empaques').val(null).trigger('change');
@@ -426,26 +562,27 @@ function AgregaProducto(producto) {
         if (estado == 'En Curso') {
             html += "<th>Lote</th>";
         }
-        html += "<th>Título</th>";
-        html += "<th>Cant a Descontar</th>";
-        html += "<th>Empaque</th>";
-        html += "<th>Cantidad</th>";
-        html += "<th>Receta</th>";
+        html += "<th>Tipo de Pedido</th>";
+        html += "<th>Código</th>";
+        html += "<th>Descripcion</th>";
+        html += "<th>Stock</th>";
+        html += "<th>Cantidad Receta</th>";
+        html += "<th>Cantidad Articulo</th>";
         html += '</tr></thead><tbody>';
         html += "<tr data-json='" + JSON.stringify(producto) + "' id='" + producto.arti_id + "'>";
         if (estado != 'En Curso') {
-            html += '<td><i class="fa fa-fw fa-eye text-light-blue" style="cursor: pointer; margin-left: 10px;" title="Ver detalle" onclick="verDetalleProducto(this)"></i>';
-            html += '<i class="fa fa-fw fa-edit text-light-blue tablaproductos_editar" style="cursor: pointer; margin-left: 10px;" title="Editar" onclick="editarProducto(this)"></i>';
+            html += '<td><i class="fa fa-fw fa-edit text-light-blue tablaproductos_editar" style="cursor: pointer; margin-left: 10px;" title="Editar" onclick="editarProducto(this)"></i>';
             html += '<i class="fa fa-fw fa-trash text-light-blue tablaproductos_borrar" style="cursor: pointer; margin-left: 10px;" title="Eliminar"></i></td>';
         }
         if (estado == 'En Curso') {
             html += "<td>" + producto.lote + "</td>";
         }
+        html += '<td>' + producto.tipo + '</td>'; 
         html += '<td>' + producto.barcode + '</td>';
-        html += '<td>' + producto.cant_descontar + '</td>';
-        html += '<td>' + producto.empaquetitulo + '</td>';
+        html += '<td>' + producto.descripcion + '</td>'; 
+        html += '<td>' + producto.stock + '</td>';
+        html += '<td>' + producto.cantidad_receta + '</td>';
         html += '<td>' + producto.cantidad + '</td>';
-        html += '<td>' + producto.receta + '</td>';
         html += '</tr>';
         html += '</tbody></table>';
 
@@ -459,18 +596,18 @@ function AgregaProducto(producto) {
 
         html += "<tr data-json='" + JSON.stringify(producto) + "' id='" + producto.arti_id + "'>";
         if (estado != 'En Curso') {
-            html += '<td><i class="fa fa-fw fa-eye text-light-blue" style="cursor: pointer; margin-left: 10px;" title="Ver detalle" onclick="verDetalleProducto(this)"></i>';
-            html += '<i class="fa fa-fw fa-edit text-light-blue tablaproductos_editar" style="cursor: pointer; margin-left: 10px;" title="Editar" onclick="editarProducto(this)"></i>';
+            html += '<td><i class="fa fa-fw fa-edit text-light-blue tablaproductos_editar" style="cursor: pointer; margin-left: 10px;" title="Editar" onclick="editarProducto(this)"></i>';
             html += '<i class="fa fa-fw fa-trash text-light-blue tablaproductos_borrar" style="cursor: pointer; margin-left: 10px;" title="Eliminar"></i></td>';
         }
         if (estado == 'En Curso') {
             html += "<td>" + producto.lote + "</td>";
         }
+        html += '<td>' + producto.tipo + '</td>';
         html += '<td>' + producto.barcode + '</td>';
-        html += '<td>' + producto.cant_descontar + '</td>';
-        html += '<td>' + producto.empaquetitulo + '</td>';
+        html += '<td>' + producto.descripcion + '</td>'; 
+        html += '<td>' + producto.stock + '</td>';
+        html += '<td>' + producto.cantidad_receta + '</td>';
         html += '<td>' + producto.cantidad + '</td>';
-        html += '<td>' + producto.receta + '</td>';
         html += '</tr>';
         $('#tablaproductos').DataTable().row.add($(html)).draw();
     }
@@ -524,25 +661,16 @@ function guardar() {
             json = "";
             json = $(this).attr('data-json');
             temp = JSON.parse(json);
-            acum_cant += parseFloat(temp.cant_descontar);
             productos.push(json);
         });
     }
-    Swal.fire({
-        title: 'Cantidad total a descontar: ' + acum_cant,
-        text: '',
-        type: 'info',
-        showCancelButton: false,
-        confirmButtonText: 'Hecho'
-    }).then((result) => {
-    
         var data = {
             idetapa: idetapa,
             fecha: fecha,
             establecimiento: establecimiento,
             recipiente: recipiente,
             productos: productos,
-            cant_total_desc: acum_cant,
+            cant_total_desc: 0,
             ordProduccion: ordProduccion,
             lote_id : lote_id,
             forzar: 'false'
@@ -574,7 +702,6 @@ function guardar() {
                 wc();
             }
         });
-    });
 }
 
 function guardarForzado(data) {
@@ -620,7 +747,6 @@ function getLotesFraccionar(){
     $("#lotesFraccionar").find("tbody td").remove();
     data = {};
     data.batch_id = $("#batch_id").val();
-
     $.ajax({
         type: "POST",
         url: "<?php echo PRD ?>general/Etapa/getLotesFraccionar",
@@ -630,7 +756,6 @@ function getLotesFraccionar(){
             if(resp.status){
                 $.each(resp.data, function (i, val) {
                     button = (val.tipo == 'Insumo') ? bolita('Insumo', 'orange') : `<button title='Copiar Lote' class='btn btn-link' onclick='$(\"#lotedestino\").val(\"${val.codigo}\")'><i class='fa fa-copy'></i></button>`;  
-                    
                     var opcion = `<tr>
                     <td>LOTE: ${val.codigo} | ${val.art_nombre}</td>
                     <td>Cantidad: ${val.cant_entreg}</td>
@@ -651,19 +776,26 @@ function getLotesFraccionar(){
 }
 ///////////////////////////////////////////////////////////
 //Edita el detalle de un producto
-var editando = false;
 function editarProducto(tag){
-    if(!editando){
-        var datos = JSON.parse($(tag).closest('tr').attr('data-json'));
-        $("#inputproductos").val(datos.arti_id).trigger('change');
-        $("#empaques").val(datos.empaque).trigger('change');
-        $("#cantidad").val(datos.cantidad);
-        editando = true;
-        // tabla = $('#tablaproductos').DataTable();
-        $('#tablaproductos').DataTable().row( $(tag).parents('tr') ).remove().draw();
-    }else{
-        notificar('Alerta','Ya se esta modificando un producto.','warning');
-    }
+    var ban = true;
+    var datos='';
+    $('#mdl-editar').modal('show');
+        datos = JSON.parse($(tag).closest('tr').attr('data-json'));
+        $("#aceptarCantidad").off().on('click',function(){
+            cantnuevo = document.getElementById('cantArticulo').value;
+            if((cantnuevo != '') && (cantnuevo > 0) && (ban))
+            {
+                $('#tablaproductos').DataTable().row( $(tag).parents('tr') ).remove().draw();
+                datos.cantidad = cantnuevo;
+                datos = JSON.stringify(datos);
+                AgregaProducto(datos);
+                $('#mdl-editar').modal('hide');
+                ban=false;  
+            }
+        });
+    $('#cantArticulo').val('');
+    $('#mdl-editar').bootstrapValidator('resetForm', true);
+    cantnuevo ='';
 }
 //////////////////////////////////////////////////////////
 // Permite ver todos los datos del producto cargado
