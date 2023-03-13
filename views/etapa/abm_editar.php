@@ -264,7 +264,7 @@ function guardar(boton) {
     var materia = [];
 
     $.each(tabla, function(index) {
-        var cantidad = $(this).find("td").eq(3).html();
+        var cantidad = $(this).find("td").eq(6).html();
         var id_materia = $(this).attr("id");
         if (id_materia != null) {
             materia.push({
