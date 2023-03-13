@@ -242,6 +242,16 @@ class Etapas extends CI_Model
         return json_decode($array['data']);
     }
 
+    public function getPedidoEmpaque($id)
+    {
+        log_message('DEBUG', '#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapas | getPedidoEmpaque(batch_id)-> ' . $id);
+        $idBatch = json_encode($id);
+        $resource = '/lote/articulosEmpaque/batch/' . $id;
+        $url = REST_PRD_LOTE . $resource;
+        $array = $this->rest->callAPI("GET", $url, $id);
+        return json_decode($array['data']);
+    }
+    
     public function getRecursosFraccionar($id, $recursoTipo)
     {
 
