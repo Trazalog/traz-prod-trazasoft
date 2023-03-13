@@ -61,7 +61,7 @@
                         <datalist id="recipientes">
                         </datalist> -->
                         <?php
-                            echo selectBusquedaAvanzada('recipiente', 'reci_id', false, false, false, false, false, 'revisarRecipiente(this)')
+                            echo selectBusquedaAvanzada('recipiente', 'reci_id', false, false, false, false, false, 'revisarRecipiente(this)');
                         ?>
                     </div>
                 </div>
@@ -144,9 +144,12 @@ function obtenerRecipientes() {
 //se llama en el onchange del select de recipientes
 function revisarRecipiente(elem) {
     console.log('Obtener Etapas');
-    // dataJsoncito = JSON.parse($(tag).closest('tr').attr('data-json'));  
-    var recipiencito = JSON.parse($(elem).attr("data-json"));
-    // console.log(recipiencito);  
+    
+    dataJson = $(elem).attr("data-json");
+    if(!_isset(dataJson)) return;
+
+    var recipiencito = JSON.parse(dataJson);
+      
     if (recipiencito.tipo == "DEPOSITO/PRODUCTIVO") {
         console.log(recipiencito);
         $.ajax({
