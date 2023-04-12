@@ -29,6 +29,12 @@ class Lotes extends CI_Model
       $url = REST_PRD_LOTE . $resource;
       return wso2($url);
     }
+    public function listarPorEstablecimientoConSalidaStock($establecimiento, $salida = false){
+      log_message('DEBUG','#TRAZA | #TRAZ-PROD-TRAZASOFT | Lotes | listarPorEstablecimientoConSalidaStock($establecimiento, $salida)');
+      $resource = "/lotes_establecimientostock/$establecimiento";
+      $url = REST_PRD_LOTE . $resource;
+      return wso2($url);
+    }
     public function listarPorCamion($camion)
     {
         $parametros["http"]["method"] = "GET";
