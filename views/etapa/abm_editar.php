@@ -88,8 +88,8 @@
                     <input type="text" id="ordenproduccion" class="form-control" name="vorden" <?php if ($accion == 'Editar' || $etapa->estado == 'PLANIFICADO') {
                                                                                                     echo ('value="' . $etapa->orden . '"');
                                                                                                 } ?> placeholder="Inserte Orden de Produccion" <?php if (($etapa->estado == 'En Curso' && $etapa->realizo_entrega_materiales == 'true') || $etapa->estado == 'FINALIZADO') {
-                                                                        echo 'disabled';
-                                                                    } ?>>
+                                                                                                                                                    echo 'disabled';
+                                                                                                                                                } ?>>
                 </div>
                 <?php
                 if ($accion == 'Editar') {
@@ -363,34 +363,29 @@
     /////////////
     //Valida que la variable QC_OK del formulario de calidad este Aprobada
     //Si sale por el else, es una etapa de fraccionamiento
-    async function validarFormularioControlCalidad() {
+    function validarFormularioControlCalidad() {
         wo();
         origenFormulario = _isset($("#origen").attr('data-json')) ? JSON.parse($("#origen").attr('data-json')) : null;
         // debugger;
         console.log(origenFormulario);
-        if (_isset(origenFormulario)) {
-            let validacionForm = new Promise((resolve, reject) => {
-                wo();
-                $.ajax({
-                    type: 'GET',
-                    dataType: 'JSON',
-                    url: '<?php echo base_url(PRD) ?>general/etapa/validarFormularioCalidad/' + origenFormulario.orta_id + '/' + origenFormulario.origen,
-                    success: function(res) {
-                        if (res.status) {
-                            resolve(true);
-                        } else {
-                            resolve(false);
-                        }
-                    },
-                    error: function(res) {
-                        reject(false);
-                    }
-                });
+
+        let validacionForm = new Promise((resolve, reject) => {
+            wo();
+            $.ajax({
+                type: 'GET',
+                dataType: 'JSON',
+                url: '<?php echo base_url(PRD) ?>general/etapa/validarFormularioCalidad/' + origenFormulario.orta_id + '/' + origenFormulario.origen,
+                success: function(res) {
+                   
+                    resolve(res);
+                },
+                error: function(res) {
+                    reject(false);
+                }
             });
-            return await validacionForm;
-        } else {
-            return new Promise((res) => res(true));
-        }
+        });
+        return validacionForm;
+
     }
     // levanta modal para finalizar la etapa solamente
     function finalizar() {
@@ -399,9 +394,10 @@
         let filas = tablaTarea.rows;
         if (filas.length > 1) {
             validarFormularioControlCalidad().then((result) => {
+                console.log(result);
                 wc();
-                if (result) {
-                    console.log(result);
+                if (result.status) {
+
                     $("#modal_finalizar").modal('show');
                 } else {
                     notificar('Nota', '<b>Para realizar un reporte de producción el formulario de calidad debe estar aprobado</b>', 'warning');
@@ -414,7 +410,7 @@
         } else {
             notificar('Nota', '<b>Para realizar un reporte de producción debe haber tareas asignadas</b>', 'warning');
         }
-       
+
     }
     $(document).off('click', '.tablamateriasasignadas_borrar').on('click', '.tablamateriasasignadas_borrar', {
         idtabla: 'tablamateriasasignadas',
