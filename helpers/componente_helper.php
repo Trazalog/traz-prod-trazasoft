@@ -52,7 +52,7 @@ if (!function_exists('selectBusquedaAvanzada')) {
         # Si solo pide las opciones retorna $OPT
         if(!$id) return $opt;
 
-        $html = "<select class='form-control select2' style='width: 100%;' id='$id' name='$name' data-json='' ". ($onChange ? "onchange='$onChange'" : '' ) .">$opt</select>";
+        $html = "<select required class='form-control select2' style='width: 100%;' id='$id' name='$name' data-json='' ". ($onChange ? "onchange='$onChange'" : '' ) .">$opt</select>";
 
         # Boton de Busqueda avanzada
         if ($button) {

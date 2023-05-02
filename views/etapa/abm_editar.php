@@ -257,6 +257,7 @@
         //     alert('Por favor ingresar cantidad para el Producto');
         //     return false;
         // }
+        
         $('.frm').find('.frm-save').click();
 
         var recipiente = idprod = '';
@@ -274,7 +275,7 @@
                 });
             }
         });
-
+        
         var lote = $('#Lote').val();
         var fecha = $('#fecha').val();
         var establecimiento = document.getElementById('establecimientos').value;
@@ -287,8 +288,22 @@
         var prod = prod ? prod.arti_id : 0;
 
         var recipiente = getJson($('#recipientes'));
-        var recipiente = recipiente ? recipiente.reci_id : 0;
+        console.log(recipiente);
+        if (!recipiente) {
+            
+          // Redirigir al campo select
+            $('html, body').animate({
+                scrollTop: $('#recipientes').offset().top
+            }, 800);
+            
+            $('#recipientes').focus(function () {
+                $(this).css('background-color', 'yellow');
+            }); // Darle el foco al campo select
 
+            
+        }else {
+              // var recipiente = recipiente ? recipiente.reci_id : 0;
+            recipiente = recipiente.reci_id;
         var estadoEtapa = $('#estadoEtapa').val();
         var batch_id = $('#batch_id').val();
 
@@ -335,6 +350,8 @@
                 wc();
             }
         });
+        }
+      
     }
 
     // selecciona id de producto y guarda en input hidden
