@@ -78,7 +78,12 @@
                     echo selectBusquedaAvanzada('recipientes', 'vreci');
 
                     ?>
+                    <div class="form-group">
+                        <label id="alerta" for="alerta"></label>
+
+                    </div>
                 </div>
+
             </div>
             <div class="row" style="margin-top: 50px">
                 <div class="col-md-2 col-xs-12">
@@ -257,6 +262,7 @@
         //     alert('Por favor ingresar cantidad para el Producto');
         //     return false;
         // }
+
         $('.frm').find('.frm-save').click();
 
         var recipiente = idprod = '';
@@ -287,54 +293,84 @@
         var prod = prod ? prod.arti_id : 0;
 
         var recipiente = getJson($('#recipientes'));
-        var recipiente = recipiente ? recipiente.reci_id : 0;
+        console.log(recipiente);
 
-        var estadoEtapa = $('#estadoEtapa').val();
-        var batch_id = $('#batch_id').val();
+        if (!recipiente) {
 
-        var data = {
-            idetapa: idetapa,
-            lote: lote,
-            fecha: fecha,
-            establecimiento: establecimiento,
-            recipiente: recipiente,
-            op: op,
-            materia: materia,
-            cantidad: cantidad,
-            idprod: prod,
-            estadoEtapa: estadoEtapa,
-            batch_id: batch_id,
-            forzar: "false"
-        };
+            let select = document.getElementById("recipientes");
+            let valorSeleccionado = select.value;
 
-        wo();
-        $.ajax({
-            type: 'POST',
-            dataType: 'JSON',
-            url: '<?php echo base_url(PRD) ?>general/Etapa/guardar/' + boton,
-            data: {
-                data
-            },
-            success: function(rsp) {
-                if (rsp.status) {
-                    hecho('Hecho', 'Salida Guardada exitosamente.');
-                    linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
-                } else {
-                    if (rsp.msj) {
-                        bak_data = data;
-                        getContenidoRecipiente(recipiente);
-                    } else {
-                        alert('Fallo al iniciar la etapa');
-                    }
-                }
-            },
-            error: function(rsp) {
-                alert('Error al iniciar etapa');
-            },
-            complete: function() {
-                wc();
+            if (valorSeleccionado === "") {
+
+                $("#alerta").html("<span style='color:red'> Campo obligatorio</span>");
+            } else {
+                $("#alerta").html("");
             }
-        });
+
+
+            // Redirigir al campo select
+            $('html, body').animate({
+                scrollTop: $('#recipientes').offset().top
+            }, 800);
+
+            $('#recipientes').focus(function() {
+                $(this).css('background-color', 'yellow');
+            }); // Darle el foco al campo select
+
+
+        } else {
+            // var recipiente = recipiente ? recipiente.reci_id : 0;
+            $("#alerta").html("");
+            
+            recipiente = recipiente.reci_id;
+            var estadoEtapa = $('#estadoEtapa').val();
+            var batch_id = $('#batch_id').val();
+
+            var data = {
+                idetapa: idetapa,
+                lote: lote,
+                fecha: fecha,
+                establecimiento: establecimiento,
+                recipiente: recipiente,
+                op: op,
+                materia: materia,
+                cantidad: cantidad,
+                idprod: prod,
+                estadoEtapa: estadoEtapa,
+                batch_id: batch_id,
+                forzar: "false"
+            };
+
+            wo();
+            $.ajax({
+                type: 'POST',
+                dataType: 'JSON',
+                url: '<?php echo base_url(PRD) ?>general/Etapa/guardar/' + boton,
+                data: {
+                    data
+                },
+                success: function(rsp) {
+                    if (rsp.status) {
+                        hecho('Hecho', 'Salida Guardada exitosamente.');
+                        linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
+                    } else {
+                        if (rsp.msj) {
+                            bak_data = data;
+                            getContenidoRecipiente(recipiente);
+                        } else {
+                            alert('Fallo al iniciar la etapa');
+                        }
+                    }
+                },
+                error: function(rsp) {
+                    alert('Error al iniciar etapa');
+                },
+                complete: function() {
+                    wc();
+                }
+            });
+        }
+
     }
 
     // selecciona id de producto y guarda en input hidden
@@ -376,7 +412,7 @@
                 dataType: 'JSON',
                 url: '<?php echo base_url(PRD) ?>general/etapa/validarFormularioCalidad/' + origenFormulario.orta_id + '/' + origenFormulario.origen,
                 success: function(res) {
-                   
+
                     resolve(res);
                 },
                 error: function(res) {

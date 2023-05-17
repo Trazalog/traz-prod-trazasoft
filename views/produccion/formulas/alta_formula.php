@@ -79,7 +79,7 @@
 							<div class="form-group col-md-12 ba">
 								<label for="articulo">Artículo</label>
 								<?php
-									echo selectBusquedaAvanzada('articulo','articulo',$articulos,'arti_id', 'barcode',array("descripcion","Medida"=>"unidad_medida","Stock" =>"stock"));
+								echo selectBusquedaAvanzada('articulo', 'articulo', $articulos, 'arti_id', 'barcode', array("descripcion", "Medida" => "unidad_medida", "Stock" => "stock"));
 								?>
 							</div>
 							<div class="form-group col-md-5">
@@ -135,7 +135,7 @@
 	</section>
 	<div class="box-footer">
 		<button class="btn btn-success pull-right" onclick="validaDatos()" style="margin-top: 20px;">Crear</button>
-		<button class="btn btn-danger pull-right" onclick="linkTo('<?php echo base_url(PRD).'general/Formula' ?>')" style="margin-top: 20px; margin-right: 10px;">Cancelar</button>;
+		<button class="btn btn-danger pull-right" onclick="linkTo('<?php echo base_url(PRD) . 'general/Formula' ?>')" style="margin-top: 20px; margin-right: 10px;">Cancelar</button>;
 	</div>
 </div> <!-- /.box box-primary -->
 <script>
@@ -163,8 +163,8 @@
 		dataJson = JSON.parse($('#articulo').attr('data-json'));
 		var cantidad = $('#cantidad-articulo').val();
 		debugger;
-		if (! _isset(dataJson.arti_id) || ! _isset(cantidad)) {
-			error('Error','Complete artículo y cantidad.');
+		if (!_isset(dataJson.arti_id) || !_isset(cantidad)) {
+			error('Error', 'Complete artículo y cantidad.');
 			return;
 		}
 		$('#articulo').val(null).trigger('change');
@@ -192,7 +192,7 @@
 		// var fecha = $('#fecha').val();
 		var aplicacion = $('#aplicacion').val();
 		if (!descripcion || !unme_id || !cantidad || !aplicacion) {
-			error('Error','Debe completar todos los campos con *.')
+			error('Error', 'Debe completar todos los campos con *.')
 			return;
 		}
 		crearFormula();
@@ -227,14 +227,17 @@
 	}
 
 	async function crearFormula() {
-		// var datosFormula = $('#form-Formulas').serialize();
+
 
 		//Datos de la fórmula
 		var datosFormula = new FormData($('#form-Formulas')[0]);
-		var file = document.querySelector('#archivo').files[0];
-    if (file) {
+		
+		const fileInput = document.getElementById('archivo');
+		const file = fileInput.files[0];
+		if (file) {
 			var archivo = await getFile(file);
-			datosFormula.append('archivo', archivo.base64StringFile);
+			// datosFormula.append('archivo', archivo.base64StringFile);
+			console.log(datosFormula+" --->  "+archivo);
 		}
 
 		//Datos de la tabla de artículos
@@ -248,7 +251,7 @@
 		});
 		datosTabla.shift(); //borra encabezado de la tabla
 		if (datosTabla.length < 2) {
-			error('Error','La fórmula debe contener al menos dos ingredientes.');
+			error('Error', 'La fórmula debe contener al menos dos ingredientes.');
 			return;
 		}
 
@@ -256,20 +259,21 @@
 		showFD(datosFormula);
 		datosFormula = formToObject(datosFormula);
 
-		wo();
-		$.ajax({
-			type: "POST",
-			url: "<?php echo base_url(PRD)?>general/Formula/setFormula",
-			data: {
+		const myData = {
 				datosFormula: datosFormula,
 				articulos: articulos
-			},
+		}		
+		wo();
+		$.ajax({
+			type: "POST",			
+			url: "<?php echo base_url(PRD) ?>general/Formula/setFormula",
+			data: myData,
 			success: function(rsp) {
-				hecho('Hecho',"Fórmula creada correctamente.");
+				hecho('Hecho', "Fórmula creada correctamente.");
 				linkTo('<?php echo base_url(PRD) ?>general/Formula');
 			},
 			error: function() {
-				error('Error',"Se produjo un error al crear la fórmula.");
+				error('Error', "Se produjo un error al crear la fórmula.");
 			},
 			complete: function() {
 				wc();
