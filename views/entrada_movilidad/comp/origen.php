@@ -57,8 +57,8 @@
 <!-- box -->
 
 <script>
-$('#new_codigo').removeClass('hidden').attr('disabled', false);
-$('#frm-origen #codigo').attr('disabled', true).next(".select2-container").hide();
+//$('#new_codigo').removeClass('hidden').attr('disabled', false);
+//$('#frm-origen #codigo').attr('disabled', true).next(".select2-container").hide();
 
 var batch = null;
 $('.frm-origen #codigo').on('change', function() {
@@ -68,6 +68,7 @@ $('.frm-origen #codigo').on('change', function() {
 
 
     var json = getJson(this);
+    console.log(json);
     if (!json) return;
 
     $('.frm-origen #articulos').val(json.arti_id).trigger('change');
@@ -150,5 +151,19 @@ function obtenerArticulos() {
 
 $('.frm-origen #um').on('change', function() {
     $('.frm-destino #unidad_medida').val(this.value);
+});
+
+// Capturamos el producto y copiamos la Unidad de Medida y Cantidad
+// a sus respectivos campos
+
+$('.frm-origen').find('#articulos').on('change', function () {
+    // OBtengo los datos del campo select cuando este cambia
+    let data = $(this).find(':selected').data('json');
+    const {um, stock} = data;
+    // Copiamos los datos a los input
+    $("#um").val(um).prop("disabled", true);
+    $("#cantidad").val(parseInt(stock)).prop("disabled",true);
+    $('.frm-destino #unidad_medida').val(um).prop("disanled",true);
+   
 });
 </script>
