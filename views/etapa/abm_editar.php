@@ -15,6 +15,7 @@
         <div class="box-header with-border">
             <h3 class="box-title">
                 <?php echo 'Gestionar' . ' ' . $etapa->titulo . ($etapa->realizo_entrega_materiales == 'false' ? ' <i class="fa fa-edit"></i>' : ''); ?>
+                
             </h3>
         </div>
         <!-- /.box-header -->
