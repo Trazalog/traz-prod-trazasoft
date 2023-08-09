@@ -81,9 +81,11 @@ class Lotes extends CI_Model
   public function getBatchIdLote($lote_id)
   {
     $lote_id = str_replace(' ','%20', $lote_id);
-    $path = "/lote/". $lote_id."/ultimo";
+    //$path = "/lote/". $lote_id."/ultimo";
+    $path = "/lote/". $lote_id."/todos";
     $url = REST_PRD_LOTE . $path;
     $rsp = $this->rest->callApi('GET', $url);
+    
     if ($rsp['status']) $rsp['data'] = json_decode($rsp['data'])->lotes->lote;
     return $rsp;
   }
@@ -93,10 +95,16 @@ class Lotes extends CI_Model
     $path = "/lote/" . $batch_id . "/trazabilidad";
     $url = REST_PRD_LOTE . $path;
     $rsp = $this->rest->callApi('GET', $url);
-    if ($rsp['status']) {
-      $rsp['data'] = json_decode($rsp['data'])->lotes->lote;
+
+    $path2 = "/lote/" . $batch_id . "/trazabilidadV2";
+    $url2 = REST_PRD_LOTE . $path2;
+    $rsp2 = $this->rest->callApi('GET', $url2);
+
+    if ($rsp2['status']) {
+      //$rsp['data'] = json_decode($rsp['data'])->lotes->lote;
+      $rsp2['data'] = json_decode($rsp2['data'])->lotes->lote;
     }
-    return $rsp;
+    return $rsp2;
   }
     /**
 	* Obtiene la cantidad de reportes de produccion realizados para el batch_id

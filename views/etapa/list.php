@@ -108,7 +108,7 @@ $this->load->view('layout/mycss');
           </thead>
           <tbody>
             <?php
-
+            
             foreach ($list as $fila) {
               if ($fila->estado == 'ANULADO') continue;
               $id = $fila->id;
