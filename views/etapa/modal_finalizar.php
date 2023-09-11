@@ -10,26 +10,21 @@
             <input class="hidden" type="text" id="batch_id_padre" value="<?php echo $etapa->id; ?>">
             <input class="hidden" type="text" id="LoteAsociarNoConsumible">
             <div class="modal-body" id="modalBodyArticle">
-
                 <div class="row form-group" style="margin-top:20px">
                     <div class="col-md-3 col-xs-12"><label class="form-label">Establecimiento:</label></div>
                     <div class="col-md-4 col-xs-12"><input class="form-control" type="text" value="<?php echo $etapa->establecimiento ?>" disabled></div>
                     <div class="col-md-5"></div>
                 </div>
-
-
                 <div class="row form-group" style="margin-top:20px">
                     <div class="col-md-3 col-xs-12"><label class="form-label">Código Lote Origen:</label></div>
                     <div class="col-md-4 col-xs-12"><input class="form-control" type="text" id="loteorigen" value="<?php echo $etapa->lote; ?>" disabled></div>
                     <div class="col-md-5"></div>
                 </div>
-
                 <div class="row form-group <?php echo ($producto ? '' : 'hidden') ?>" style="margin-top:20px">
                     <div class="col-md-3 col-xs-12"><label class="form-label">Producto:</label></div>
                     <div class="col-md-8 col-xs-12"><input class="form-control" type="text" id="prod_origen" value="<?php echo $producto[0]->descripcion; ?>" disabled></div>
                     <div class="col-md-5"></div>
                 </div>
-
                 <div class="row form-group <?php echo ($producto ? '' : 'hidden') ?>" style="margin-top:20px">
                     <div class="col-md-3 col-xs-12"><label class="form-label">Cantidad:</label></div>
                     <div class="col-md-4 col-xs-12"><input class="form-control" type="text" id="cant_origen" value="<?php echo $etapa->existencia->cantidad . ' (' . $producto[0]->uni_med . ')'; ?>" disabled></div>
@@ -40,20 +35,17 @@
                     <div class="col-md-4 col-xs-12"><input class="form-control" type="text" id="cant_descontar" value="<?php echo ($producto ? '' : 0) ?>" placeholder="Inserte cantidad a Extraer"></div>
                     <div class="col-md-5"></div>
                 </div>
-
                 <input class="hidden" type="text" id="unificar">
-
                 <!-- Recursos de Trabajo -->
                 <div class="row form-group" style="margin-top:20px">
                     <div class="col-md-3 col-xs-12"><label class="form-label">Operario:</label></div>
                     <div class="col-md-8 col-xs-12"><input class="form-control datalist" list="operarios" id="operario"><datalist id="operarios"><?php foreach ($rec_trabajo as $o) {
-                                                                                                                                                        echo "<option value='$o->descripcion' data-json='" . json_encode($o) . "'></option>";
-                                                                                                                                                    } ?></datalist>
+                            echo "<option value='$o->descripcion' data-json='" . json_encode($o) . "'></option>";
+                        } ?></datalist>
                     </div>
                     <div class="col-md-5"></div>
                 </div>
                 <!-- Fin | Recursos de Trabajo -->
-
                 <div class="row form-group" style="margin-top:20px">
                     <div class="col-md-3 col-xs-12">
                         <label for="inputproducto" class="form-label">Producto <?php hreq() ?>:</label>
@@ -94,8 +86,6 @@
                     <div class="col-md-3 col-xs-12"><label class="form-label">Destino <?php hreq() ?>:</label></div>
                     <div class="col-md-6 col-xs-12">
                         <?php if ($accion == 'Editar') {
-
-
                             echo selectBusquedaAvanzada('productodestino', false);
                         }
                         ?>
@@ -223,8 +213,6 @@ $this->load->view(COD . 'componentes/modalGenerico');
                 selectEvent(this);
             });
         }, 5000);
-
-
     });
     // Filtrar Recipientes por Establecimineto
     $('#productodestino').find('option').each(function() {
@@ -232,21 +220,17 @@ $this->load->view(COD . 'componentes/modalGenerico');
         var esta = $('#establecimientos').val();
         if (data.esta_id != esta) $(this).remove();
     });
-
     $('.datalist').on('change', function() {
         this.dataset.json = $('#' + this.getAttribute('list')).find('[value="' + this.value + '"]').attr(
             'data-json');
     });
-
     //Captura la unidad de medida y la actualiza en el campo
     $('#modal_finalizar').find('#inputproducto').on('change', function() {
         let data = $(this).find(':selected').data('json');
         $('#um').val(data.um);
     });
-
     function AgregarProducto() {
         ban = '';
-
         if (!_isset($("#inputproducto").val())) {
             ban = "Debe seleccionar un producto!";
         }
@@ -331,16 +315,12 @@ $this->load->view(COD . 'componentes/modalGenerico');
     var contador = 0;
 
     function agregaProducto(producto) {
-
-        console.log('Agrega Producto');
-        console.log(producto);
-
-
+        // console.log('Agrega Producto');
+        // console.log(producto);
         existe = document.getElementById('productos_existe').value;
         var html = '';
         contador++;
         if (existe == 'no') {
-
             html += '<table id="tabla_productos_asignados" class="table">';
             html += "<thead>";
             html += "<tr>";
@@ -369,7 +349,6 @@ $this->load->view(COD . 'componentes/modalGenerico');
             document.getElementById('productosasignados').innerHTML = html;
             $('#tabla_productos_asignados').DataTable({});
             document.getElementById('productos_existe').value = 'si';
-
         } else if (existe == 'si') {
             html += "<tr class='recipiente-" + producto.destino + "' data-json='" + JSON.stringify(producto) + "' id='" + contador + "' data-forzar='false'>";
             html +=
@@ -389,7 +368,6 @@ $this->load->view(COD . 'componentes/modalGenerico');
             document.getElementById('productosasignados').innerHTML = "";
             document.getElementById('productosasignados').innerHTML = tabla;
             $('#tabla_productos_asignados').DataTable({});
-
         }
     }
 
@@ -402,30 +380,23 @@ $this->load->view(COD . 'componentes/modalGenerico');
     // });
 
     function validarCantidad() {
-
         var NUMERIC_REGEXP = /[-]{0,1}[\d]*[.]{0,1}[\d]+/g;
-
         var cantOrigen = parseFloat($('#cant_origen').val().match(NUMERIC_REGEXP));
-
         if ($('#cant_descontar').val() == null || $('#cant_descontar').val() == '') {
             alert('Cantidad a Extraer debe ser mayor a Cero');
             return false;
         }
-
         if (parseFloat($('#cant_descontar').val()) > cantOrigen) {
             alert('Cantidad a Extraer supera cantidad existente');
             return false;
         }
-
         return true;
     }
 
     var unificar_lote = false;
     // Genera Informe de Etapa
     var FinalizarEtapa = function() {
-
         if (!validarCantidad()) return;
-
         existe = document.getElementById('productos_existe').value;
         if (existe == "no") {
             notificar("Advertencia!", "No ha agregado ningun producto final", 'warning');
@@ -434,18 +405,14 @@ $this->load->view(COD . 'componentes/modalGenerico');
             $('#tabla_productos_asignados > tbody > tr').each(function() {
                 json = "";
                 json = JSON.parse($(this).attr('data-json'));
-
                 if (unificar_lote && unificar_lote == json.destino && this.dataset.forzar == 'false') {
                     this.dataset.forzar = "true";
                     unificar_lote = false;
                 }
-
                 json.forzar = this.dataset.forzar;
                 productos.push(json);
             });
-
-            console.log(productos);
-
+            // console.log(productos);
             productos = JSON.stringify(productos);
             cantidad_padre = $('#cant_descontar').val();
             num_orden_prod = $('#num_orden_prod').val();
@@ -453,7 +420,6 @@ $this->load->view(COD . 'componentes/modalGenerico');
             select = document.getElementById("productodestino");
             batch_id_padre = $('#batch_id_padre').val();
             destino = select.value;
-
             wo();
             $.ajax({
                 type: 'POST',
@@ -468,21 +434,20 @@ $this->load->view(COD . 'componentes/modalGenerico');
                 },
                 url: '<?php echo base_url(PRD) ?>general/Etapa/Finalizar',
                 success: function(rsp) {
-                    console.log(rsp);
+                    // console.log(rsp);
                     if (rsp.status) {
                         $('#modal_finalizar').modal('hide');
                         $('#mdl-unificacion').modal('hide');
                         if (rsp.data.estado.toUpperCase() == 'FINALIZADO') {
                             hecho('Hecho', 'Etapa finalizada exitosamente.');
                         } else {
-                            hecho('Hecho', 'Se genero el Reporte de Producción correctamente.');
+                            hecho('Hecho', 'Se generó el Reporte de Producción correctamente.');
                         }
                         linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
                     } else {
                         if (rsp.msj) {
                             unificar_lote = rsp.reci_id;
                             getContenidoRecipiente(unificar_lote);
-
                         } else {
                             alert('Fallo al finalizar la etapa');
                         }
@@ -500,13 +465,11 @@ $this->load->view(COD . 'componentes/modalGenerico');
         idbandera: 'productos_existe'
     }, remover);
 
-
     obtenerDepositos($('#establecimientos').val());
 
     function obtenerDepositos(establecimiento, recipientes) {
         establecimiento = establecimiento;
         if (!establecimiento) return;
-
         $.ajax({
             type: 'POST',
             dataType: 'JSON',
@@ -516,20 +479,16 @@ $this->load->view(COD . 'componentes/modalGenerico');
             },
             url: '<?php echo base_url(PRD) ?>general/Recipiente/listarPorEstablecimiento/true',
             success: function(result) {
-                console.log(result);
-
+                // console.log(result);
                 if (!result.status) {
                     alert('Fallo al Traer Depositos');
                     return;
                 }
-
                 if (!result.data) {
                     alert('No hay Depositos Asociados');
                     return;
                 }
                 fillSelect('#productodestino', result.data);
-
-
             },
             error: function() {
                 alert('Error al Traer Depositos');
@@ -586,13 +545,13 @@ $this->load->view(COD . 'componentes/modalGenerico');
             datos.descripcion = dataNoCo.descripcion;
             dataNoconsum.push(datos);
         });
-        console.log(dataNoconsum);
+        // console.log(dataNoconsum);
         aux.NoConsumibles = {
             "NC": dataNoconsum
         };
-        console.log(aux);
+        // console.log(aux);
         auxParseado = JSON.stringify(aux);
-        console.log(auxParseado);
+        // console.log(auxParseado);
         $(`.recipiente-${LoteAsociarNoConsumible2}`).attr('data-json', auxParseado);
         switchPane();
     }
