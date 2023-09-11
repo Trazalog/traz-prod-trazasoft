@@ -274,7 +274,7 @@ class Camion extends CI_Controller
     */
     public function obtenerArticulosPorTipo(){
       log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT | Camion | obtenerArticulosPorTipo()");
-      $rsp = $this->Materias->listar('Materia Prima');
+      $rsp = $this->Materias->listar('TODOS');
       if($rsp['status']){
         $materiasPrimas = json_decode($rsp['data']);
         $data['status'] = $rsp['status'];

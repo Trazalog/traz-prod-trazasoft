@@ -301,13 +301,20 @@ function guardar(boton) {
     var materiales = [];
     var materia = [];
 
-    $.each(tabla, function(index) {
-        var cantidad = $(this).find("td").eq(4).html();
+    $.each(tabla, function(i, elem) {
+        var json = JSON.parse($(elem).attr('data-json'));
+        var cantidad = json.cantidad;
         var id_materia = $(this).attr("id");
+        var tipo =json.tipo;
+        var receta = json.receta;
+        var cantidad_receta = json.cantidad_receta;
         if (id_materia != null) {
             materia.push({
                 id_materia,
-                cantidad
+                cantidad,
+                tipo,
+                cantidad_receta,
+                receta
             });
         }
     });
@@ -336,7 +343,7 @@ function guardar(boton) {
 
     var estadoEtapa = $('#estadoEtapa').val();
     var batch_id = $('#batch_id').val();
-
+    
     var data = {
         info_id: info_id,
         idetapa: idetapa,

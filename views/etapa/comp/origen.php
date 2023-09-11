@@ -83,7 +83,7 @@
                                     </div>
                                     <div id="RecetasLote" class="col-md-6 col-xs-12 input-group ba">
                                         <?php
-                                            echo selectBusquedaAvanzada('formulas', 'vunme', $formulas, 'form_id', 'descripcion', array('Unidad Medida:' => 'unidad_medida', 'Cantidad:' => 'cantidad'));
+                                            echo selectBusquedaAvanzada('formulas', 'vunme', $formulas, 'form_id', 'descripcion', array('Unidad Medida:' => 'unidad_medida', 'Cantidad:' => 'cantidad'),false ,"crearTablaReceta(this)");
                                         ?>
                                     </div>
                                 </div>
@@ -215,30 +215,69 @@
             if($etapa->estado != 'En Curso'){
                 echo"<th>Acciones</th>";
             }
+            echo"<th>Origen</th>";
             echo"<th>Código</th>";
-            echo"<th>Descripción</th>";
+            echo"<th>Articulo</th>";
             echo"<th>Stock Actual</th>";
-            echo"<th>Cantidad</th>";
-            echo'</thead>';
-            echo '<tbody>';
+            echo"<th>Cantidad receta</th>";
+            echo"<th>Cantidad artículo</th>";
+            echo"</thead>";
+            echo"<tbody>";
+
+            //reccorrido por los productos dentro de una receta
             foreach ($matPrimas as $fila) {
-                echo "<tr data-json='".json_encode($fila)."' id='$fila->arti_id'>";
+                echo"<tr data-json=' " .json_encode($fila). " ' id='".$fila->arti_id."'>";
                 if($etapa->estado != 'En Curso'){
-                    echo '<td><i class="fa fa-trash text-light-blue" style="cursor: pointer; margin-left: 15px;" onclick="eliminarOrigen(this)"></i></td>';
+                    echo '<td>';
+                    echo '<i class="fa fa-trash text-light-blue" style="cursor: pointer; margin-left: 15px;" onclick="eliminarOrigen(this)" title="Eliminar"></i>';
+                    echo '<i class="fa fa-edit text-light-blue" style="cursor: pointer; margin-left: 15px;" onclick="editarOrigen(this)" title="editar"></i>';
+                    echo '</td>';
                 }
-                echo "<td>$fila->barcode</td>";
-                echo "<td>$fila->descripcion</td>";
-                echo "<td>$fila->stock</td>";
-                echo "<td>$fila->cantidad</td>";
-                echo "</tr>";
+                    ($fila->receta) ? $receta =  $fila->receta : $receta = "Unitario";
+                echo"<td>$receta</td>";
+                echo"<td>$fila->barcode</td>";
+                echo"<td>$fila->descripcion</td>";
+                echo"<td>$fila->stock</td>";
+                echo"<td>$fila->cantidad_receta</td>";
+                echo"<td>$fila->cantidad</td>";
+                echo"</tr>";
             }
-            echo '</tbody></table>';
+            echo"</tbody></table>";
         } ?>
         <div class="box-body">
             <enma></enma>
         </div>
     </div>
 </div>
+
+<!-- Modal Editar cantidad de articulo -->
+<div class="modal modal-fade" id="mdl-editar">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Editar cantidad artículo</h4>
+            </div>
+            <form id="formEditarCant" action="#">
+            <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Cantidad(<strong style="color: #dd4b39">*</strong>):</label>
+                        <input id="cantArticulo" class="form-control" type="text" name="cantidad" required>
+                    </div>
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn" data-dismiss="modal" id="cancelarEdit">Cerrar</button>
+                    <button type="button" class="btn btn-primary" id="aceptarCantidad">Aceptar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- FIN MODAL Editar -->
+
 
 
 <script>
@@ -247,53 +286,58 @@
      $(".select2").select2(); 
 }); */
 
-$('#formulas').on('change', function() {
-    var data = getJson(this);
-    console.log('data: ' + data);
-    console.table(data);
-    var form_id = data.form_id;
-    var unme = data.unidad_medida;
-    var descripcion = data.descripcion;
-    document.getElementById('unmedisabled').value = unme;
-    document.getElementById('descridisabled').value = descripcion;
-    document.getElementById('botonreceta').disabled = false;
+function crearTablaReceta(tag){
+    if(_isset($("#formulas").val()))
+    {
+        var data = getJson(tag);
+        console.log('data: ' + data);
+        console.table(data);
+        var form_id = data.form_id;
+        id_form = form_id;
+        var unme = data.unidad_medida;
+        var descripcion = data.descripcion;
+        descripcionReceta= descripcion;
+        document.getElementById('unmedisabled').value = unme;
+        document.getElementById('descridisabled').value = descripcion;
+        document.getElementById('botonreceta').disabled = false;
 
-    $.ajax({
-        type: "GET",
-        url: '<?php echo base_url(PRD) ?>general/Etapa/getArticulosEnRecetas/' + form_id,
-        success: function (res) {
-            wo();
-            
-            if(res != 'null'){
-                console.log(res);
-                $('#tabla-Formula').removeAttr('style');
-                $('#botonAgregareceta').removeAttr('style');
-                $('#tabla-Formula').css('background','#d2d6de');
-                articulos = JSON.parse(res);
-                var html='';
-                $('#tabla-Formula > tbody').empty();//limpia los registros del body
-		        $.each(articulos, function(i, item) {
-                 html += '<tr>' +
-			            '<td>' + articulos[i].descripcion + '</td>' +
-			            '<td hidden>' + articulos[i].arti_id + '</td>' +
-			            '<td>' + articulos[i].unidad_medida + '</td>' +
-			            '<td>' + articulos[i].cantidad + '</td>' +
-			            '</tr>';
-			    });
-                $('#tabla-Formula tbody').append(html);
-               
-            }else{
-                //console.log("No hay articulos");
-                $('#tabla-Formula').css('display', 'none');
-                $('#botonAgregareceta').css('display', 'none');
-            }
-            wc();
-        },
-        error: function(res) {
-            alert('Error');
-        },
-    });
-});
+        $.ajax({
+            type: "GET",
+            url: '<?php echo base_url(PRD) ?>general/Etapa/getArticulosEnRecetas/' + form_id,
+            success: function (res) {
+                wo();
+
+                if(res != 'null'){
+                    //console.log(res);
+                    $('#tabla-Formula').removeAttr('style');
+                    $('#botonAgregareceta').removeAttr('style');
+                    $('#tabla-Formula').css('background','#d2d6de');
+                    articulos = JSON.parse(res);
+                    var html='';
+                    $('#tabla-Formula > tbody').empty();//limpia los registros del body
+	    	        $.each(articulos, function(i, item) {
+                     html += '<tr>' +
+	    		            '<td>' + articulos[i].descripcion + '</td>' +
+	    		            '<td hidden>' + articulos[i].arti_id + '</td>' +
+	    		            '<td>' + articulos[i].unidad_medida + '</td>' +
+	    		            '<td>' + articulos[i].cantidad + '</td>' +
+	    		            '</tr>';
+	    		    });
+                    $('#tabla-Formula tbody').append(html);
+                
+                }else{
+                    //console.log("No hay articulos");
+                    $('#tabla-Formula').css('display', 'none');
+                    $('#botonAgregareceta').css('display', 'none');
+                }
+                wc();
+            },
+            error: function(res) {
+                alert('Error');
+            },
+        });
+    }
+}
 
 actualizarEntrega()
 function actualizarEntrega() {
@@ -308,7 +352,8 @@ function actualizarEntrega() {
             else $('enma').empty();
         },
         error: function(res) {
-            error();wbox();
+            error();
+            // wbox();
         }
     });
 }
@@ -352,10 +397,12 @@ function aceptarMateria() {
     
     materia = matSelect;
     materia.cantidad = cantidad;
+    materia.cantidad_receta = cantidad;
+    materia.tipo = "Unitario";
     materia = JSON.stringify(materia);
     materia = '[' + materia + ']';
     materia = JSON.parse(materia);
-    
+    console.log(materia);
     agregaMateria(materia);
     $("#stockdisabled").prop('disabled', false);
     $('#stockdisabled').val('');
@@ -377,6 +424,9 @@ function aceptarReceta() {
     $("#botonAgregareceta").on('click', function() {
         articulo = articulos;
         $.each(articulo, function(i, item) {
+            articulo[i].receta=id_form;
+            articulo[i].tipo = descripcionReceta;
+            articulo[i].cantidad_receta =  cantidad;
             articulo[i].cantidad *= cantidad; 
             articulo[i] = JSON.stringify(articulo[i]);
             articulo[i] = '[' + articulo[i] + ']';
@@ -397,12 +447,35 @@ function aceptarReceta() {
         $("#formula").val(''); 
         articulos=null;
     });
-
-    //console.log(articulo); console.log(articulos);
 }
 
 function eliminarOrigen(e) {
     $(e).closest('tr').remove();
+}
+
+
+function editarOrigen(e){
+    var ban= true;
+    var materia = JSON.parse($(e).closest('tr').attr('data-json'));
+    $('#mdl-editar').modal('show');
+    $("#aceptarCantidad").off().on('click',function(){
+            cantnuevo = document.getElementById('cantArticulo').value;
+            if((cantnuevo != '')&&(ban)&&(cantnuevo > 0))
+            {
+                eliminarOrigen(e);
+                materia.cantidad = cantnuevo;
+                materia = JSON.stringify(materia);
+                materia = '[' + materia + ']';
+                materia = JSON.parse(materia);
+                agregaMateria(materia);
+                $('#mdl-editar').modal('hide');
+                materia='';
+                ban=false;    
+            }
+    });
+    $('#cantArticulo').val('');
+    $('#mdl-editar').bootstrapValidator('resetForm', true);
+    cantnuevo ='';
 }
 
 
