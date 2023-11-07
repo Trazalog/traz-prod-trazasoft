@@ -502,13 +502,13 @@ class Etapa extends CI_Controller
         }
     }
     // Elabora informe de Etapa hasta que se saque el total del contenido de batch origen
-    public function Finalizar()
-    {
+    public function Finalizar(){
+        
         $productos = json_decode($this->input->post('productos'));
         $cantidad_padre = $this->input->post('cantidad_padre');
         $num_orden_prod = $this->input->post('num_orden_prod');
         $batch_id_padre = $this->input->post('batch_id_padre');
-        $depo_id = $this->input->post('depo_id');
+        $depo_id = $this->input->post('depo_id'); //deposito
         $fecha = $this->input->post('fecha');//fec_iniciado
 
         foreach ($productos as $key => $value) {
