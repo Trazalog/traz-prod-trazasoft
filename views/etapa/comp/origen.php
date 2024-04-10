@@ -228,8 +228,10 @@
             foreach ($matPrimas as $fila) {
                 echo"<tr data-json=' " .json_encode($fila). " ' id='".$fila->arti_id."'>";
                 if($etapa->estado != 'En Curso'){
-                    echo '<td><i class="fa fa-trash text-light-blue" style="cursor: pointer; margin-left: 15px;" onclick="eliminarOrigen(this)" title="Eliminar"></i></td>';
-                    echo '<td><i class="fa fa-edit text-light-blue" style="cursor: pointer; margin-left: 15px;" onclick="editarOrigen(this)" title="editar"></i></td>';
+                    echo '<td>';
+                    echo '<i class="fa fa-trash text-light-blue" style="cursor: pointer; margin-left: 15px;" onclick="eliminarOrigen(this)" title="Eliminar"></i>';
+                    echo '<i class="fa fa-edit text-light-blue" style="cursor: pointer; margin-left: 15px;" onclick="editarOrigen(this)" title="editar"></i>';
+                    echo '</td>';
                 }
                     ($fila->receta) ? $receta =  $fila->receta : $receta = "Unitario";
                 echo"<td>$receta</td>";

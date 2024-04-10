@@ -53,14 +53,14 @@ class Formula extends CI_Controller
 		// $artiArray = $tableDataArray;
 		$rspArticulos = $this->Formulas->setArticulosFormula($artiArray);
 
-		$datos = '';
+		// $datos = '';
 
 		echo json_encode($rspArticulos);
-	}	
+	}
 
 	public function modificarFormula($tipo = null, $id =  null)
 	{
-		log_message("DEBUG","#TRAZA | TRAZ-PROD-TRAZASOFT | Formula | modificarFormula()");
+		log_message("DEBUG", "#TRAZA | TRAZ-PROD-TRAZASOFT | Formula | modificarFormula()");
 		$data['tipo'] = $tipo;
 		$data['form_id'] = $id;
 		// $idFormula = $this->input->post('id');

@@ -267,9 +267,8 @@ function obtenerLotesCamion(patente) {
             $('#new_codigo').addClass('hidden').attr('disabled', true);
 
             fillSelect("#codigo", rsp.data);
-
-            alert('Lotes Encontrados: ' + (parseInt($('#codigo').find('option').length) - 1));
-
+            
+            notificar('Lotes encontrados: ' + (parseInt($('#codigo').find('option').length) - 1), '-', 'info');
         },
         error: function(rsp) {
             alert('No hay Lotes Asociados');

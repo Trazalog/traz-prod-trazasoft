@@ -113,7 +113,7 @@ class Etapa extends CI_Controller
         $datosCab['empr_id'] = (string) empresa();
         $datosCab['forzar_agregar'] = ($nuevo == 'guardar') ? 'false' : $post_data['forzar'];
         $datosCab['fec_vencimiento'] = FEC_VEN;
-        $datosCab['fec_iniciado'] = (string) $post_data['fecha'];
+        $datosCab['fec_iniciado'] = !empty($post_data['fecha']) ? date("d-m-Y",strtotime($post_data['fecha'])) : date("d-m-Y");
         $datosCab['recu_id'] = "0";
         $datosCab['tipo_recurso'] = "";
 
@@ -273,10 +273,13 @@ class Etapa extends CI_Controller
         }
         return true;
     }
-
-    public function lanzarPedidoEtapa($pema_id)
-    {
-        log_message("DEBUG", "ETAPA / lanzarPedidoEtapa >> pema_id: $pema_id");
+    /**
+        * Lanza el proceso de pedido de materiales para una etapa
+        * @param integer $pema_id id pedido de materiales generado en el paso anterior
+        * @return 
+	*/
+    public function lanzarPedidoEtapa($pema_id){
+        log_message("DEBUG", "#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapa |  lanzarPedidoEtapa() >> pema_id: $pema_id");
 
         $contract['pIdPedidoMaterial'] = $pema_id;
         $rsp = $this->bpm->lanzarProceso(BPM_PROCESS_ID_PEDIDOS_NORMALES, $contract);
@@ -499,13 +502,13 @@ class Etapa extends CI_Controller
         }
     }
     // Elabora informe de Etapa hasta que se saque el total del contenido de batch origen
-    public function Finalizar()
-    {
+    public function Finalizar(){
+        
         $productos = json_decode($this->input->post('productos'));
         $cantidad_padre = $this->input->post('cantidad_padre');
         $num_orden_prod = $this->input->post('num_orden_prod');
         $batch_id_padre = $this->input->post('batch_id_padre');
-        $depo_id = $this->input->post('depo_id');
+        $depo_id = $this->input->post('depo_id'); //deposito
         $fecha = $this->input->post('fecha');//fec_iniciado
 
         foreach ($productos as $key => $value) {

@@ -18,7 +18,7 @@
   }
 </style>
 <?php
-    $this->load->view('layout/mycss');
+$this->load->view('layout/mycss');
 ?>
 
 <div class="box table-responsive">
@@ -27,8 +27,7 @@
     <div class="flotante">
       <button style="background: #1D976C;  /* fallback for old browsers */
       background: -webkit-linear-gradient(to bottom, #93F9B9, #1D976C);  /* Chrome 10-25, Safari 5.1-6 */
-      background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */" 
-      type="button" class=" btn dropdown-toggle btn-circle btn-xl" data-toggle="dropdown" aria-expanded="false" title="Crear Nueva Etapa" onclick="crearNuevaEtapa()">
+      background: linear-gradient(to bottom, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */" type="button" class=" btn dropdown-toggle btn-circle btn-xl" data-toggle="dropdown" aria-expanded="false" title="Crear Nueva Etapa" onclick="crearNuevaEtapa()">
         <b style="color:#ffffff">+</b>
       </button>
       <ul class="dropdown-menu dropdown-menu-right" id="nuevo">
@@ -50,9 +49,9 @@
         <select class="form-control select2 select2-hidden-accesible" name="procesoProductivo" id="procesoProductivo" onChange="seProcProductivo(this)">
           <!-- <option value="" disabled selected>-Seleccionar-</option>	 -->
           <?php
-          if(!empty($procesosProductivos)){
+          if (!empty($procesosProductivos)) {
             foreach ($procesosProductivos as $procesos) {
-                echo "<option data-json='".json_encode($procesos)."' value='".$procesos->proc_id."'>".$procesos->nombre."</option>";
+              echo "<option data-json='" . json_encode($procesos) . "' value='" . $procesos->proc_id . "'>" . $procesos->nombre . "</option>";
             }
           }
           ?>
@@ -73,26 +72,26 @@
     <hr>
   </div>
   <!-- FIN FILA FILTROS -->
-    <div class="row" style="margin-top:5px;">
-      <div class="col-md-12">
-        <div id="contenedorMenuEtapasProductivas">
-          <?php
-          // for ($i = 0; $i < count($etapas); $i++) {
-          //   if ($i < count($etapas) - 1) {
-          //     echo "<button class='btn btn-primary btn-arrow-right outline' data-json='" . json_encode($etapas[$i]) . "' onclick='muestra(`" . $etapas[$i]->titulo . "`,this)'> " . $etapas[$i]->titulo . "  </button>";
-          //   } else {
-          //     echo "<button class='btn btn-primary btn-arrow-right-final outline' data-json='" . json_encode($etapas[$i]) . "' onclick='muestra(`" . $etapas[$i]->titulo . "`,this)'> " . $etapas[$i]->titulo . "  </button>";
-          //   }
-          // }
-          ?>
-          <!-- <button class="btn btn-primary outline" onclick='muestra(`todas`,this)'  data-toggle="tooltip" title="Para agregar una etapa productiva dirigirse al módulo Configuraciones y seleccionar 'Etapas productivas'" >Todas</button> -->
-        </div>
+  <div class="row" style="margin-top:5px;">
+    <div class="col-md-12">
+      <div id="contenedorMenuEtapasProductivas">
+        <?php
+        // for ($i = 0; $i < count($etapas); $i++) {
+        //   if ($i < count($etapas) - 1) {
+        //     echo "<button class='btn btn-primary btn-arrow-right outline' data-json='" . json_encode($etapas[$i]) . "' onclick='muestra(`" . $etapas[$i]->titulo . "`,this)'> " . $etapas[$i]->titulo . "  </button>";
+        //   } else {
+        //     echo "<button class='btn btn-primary btn-arrow-right-final outline' data-json='" . json_encode($etapas[$i]) . "' onclick='muestra(`" . $etapas[$i]->titulo . "`,this)'> " . $etapas[$i]->titulo . "  </button>";
+        //   }
+        // }
+        ?>
+        <!-- <button class="btn btn-primary outline" onclick='muestra(`todas`,this)'  data-toggle="tooltip" title="Para agregar una etapa productiva dirigirse al módulo Configuraciones y seleccionar 'Etapas productivas'" >Todas</button> -->
+      </div>
     </div>
   </div><!-- /.box-header -->
   <div class="box-body">
     <div class="row">
       <div class="col-xs-12">
-        <h4 class="box-title" style="margin-bottom: 20px; margin-top: 0px;">Producción de Lotes</h4>
+        <h4 class="box-title" style="margin-bottom: 20px; margin-top: 0px;">Producción de Lotess</h4>
         <table id="etapas" class="table table-bordered table-hover">
           <thead class="thead-dark">
             <th width="6%">Acciones</th>
@@ -109,26 +108,30 @@
           </thead>
           <tbody>
             <?php
+            
             foreach ($list as $fila) {
-              if($fila->estado == 'ANULADO') continue;
+              if ($fila->estado == 'ANULADO') continue;
               $id = $fila->id;
               echo '<tr  id="' . $id . '" data-json=\'' . json_encode($fila) . '\'>';
-                echo '<td width="6%" class="text-center">';
-                echo "<i data-toggle='modal' data-target='#modal-asignarResponsable' class='fa fa-fw fa-user-plus text-green ml-1' style='cursor: pointer;' title='Asignar responsable' onclick='asignarResponsable($id)'></i>";
-                echo '<i class="fa fa-fw fa-cogs text-light-blue ml-1" style="cursor: pointer;" title="Gestionar" onclick=linkTo("'.base_url(PRD).'general/Etapa/editar?id=' . $id . '")></i>';             
-                if($fila->estado == 'PLANIFICADO' || $fila->realizo_entrega_materiales == 'false')
-                echo '<i class="fa fa-fw fa-times-circle text-red ml-1" style="cursor: pointer;" title="Eliminar" onclick="conf(eliminarEtapa,\''.$id.'\',\'¿Desea eliminar la Etapa?\')"></i>';
-                echo '</td>';
-                echo '<td>' . $fila->titulo . '</td>';
-                echo "<td>$fila->id</td>";
-                echo "<td>$fila->lote</td>";
-                echo '<td>' . $fila->producto . '</td>';
-                echo '<td>' . $fila->cantidad . ' ' . $fila->unidad . '</td>';
-                echo '<td>' . $fila->establecimiento . '</td>';
-                echo '<td>' . $fila->recipiente . '</td>';
-                echo '<td>' . $fila->orden . '</td>';
-                echo  "<td>" . formatFechaPG($fila->fecha) . "</td>";
-                echo '<td>' . estado($fila->estado) . '</td>';
+              echo '<td width="6%" class="text-center">';
+              echo "<i data-toggle='modal' data-target='#modal-asignarResponsable' class='fa fa-fw fa-user-plus text-green ml-1' style='cursor: pointer;' title='Asignar responsable' onclick='asignarResponsable($id)'></i>";
+            
+              if ($fila->estado == 'PLANIFICADO' || $fila->estado == 'En Curso' && $fila->realizo_entrega_materiales == 'false') {
+
+                echo '<i class="fa fa-fw fa-cogs text-light-blue ml-1" style="cursor: pointer;" title="Gestionar" onclick=linkTo("' . base_url(PRD) . 'general/Etapa/editar?id=' . $id . '")></i>';
+                echo '<i class="fa fa-fw fa-times-circle text-red ml-1" style="cursor: pointer;" title="Eliminar" onclick="conf(eliminarEtapa,\'' . $id . '\',\'¿Desea eliminar la Etapa?\')"></i>';
+              }
+              echo '</td>';
+              echo '<td>' . $fila->titulo . '</td>';
+              echo "<td>$fila->id</td>";
+              echo "<td>$fila->lote</td>";
+              echo '<td>' . $fila->producto . '</td>';
+              echo '<td>' . $fila->cantidad . ' ' . $fila->unidad . '</td>';
+              echo '<td>' . $fila->establecimiento . '</td>';
+              echo '<td>' . $fila->recipiente . '</td>';
+              echo '<td>' . $fila->orden . '</td>';
+              echo  "<td>" . formatFechaPG($fila->fecha) . "</td>";
+              echo '<td>' . estado($fila->estado) . '</td>';
               echo '</tr>';
             }
             ?>
@@ -174,7 +177,7 @@
                 $operario = 1; //a futuro cambiarlo por si existe operario, sino no mostrar la tabla
                 if (isset($operario)) {
                   echo
-                    "<thead>
+                  "<thead>
 											<tr role='row'>
 												<th>
 													<font style='vertical-align: inherit;'>
@@ -217,11 +220,11 @@
   var listadoLotes = '<?php echo json_encode($list) ?>';
   DataTable('#etapas');
 
-  function muestra(op,tag) {
+  function muestra(op, tag) {
     debugger;
-    if(_isset($(tag).attr('data-json'))){
+    if (_isset($(tag).attr('data-json'))) {
       etapaSeleccionada = JSON.parse($(tag).attr('data-json')).link;
-    }else{
+    } else {
       etapaSeleccionada = '';
     }
     etapas = JSON.parse(listadoLotes);
@@ -247,7 +250,7 @@
       for (var i = 0; i < etapas.length; i++) {
         html = html + '<tr  id="' + etapas[i].id + '" ><td>' +
           `<i data-toggle='modal' data-target='#modal-asignarResponsable' class='fa fa-fw fa-user-plus text-green ml-1' style='cursor: pointer;' title='Asignar responsable' onclick='asignarResponsable(${etapas[i].id})
-          '></i>`+
+          '></i>` +
           '<i class="fa fa-fw fa-cogs text-light-blue" style="cursor: pointer;" title="Gestionar" onclick=linkTo("<?php echo base_url(PRD) ?>general/Etapa/editar?id=' +
           etapas[i].id + '")></i>';
         if (etapas[i].estado == 'PLANIFICADO' && etapas[i].realizo_entrega_materiales == 'false') {
@@ -262,54 +265,54 @@
           '<td>' + etapas[i].establecimiento + '</td>' +
           '<td>' + etapas[i].recipiente + '</td>' +
           '<td>' + etapas[i].orden + '</td>' +
-          '<td>' + etapas[i].fecha.substr(0,10).split(/[-/]/).reverse().join("/") + '</td>' +
+          '<td>' + etapas[i].fecha.substr(0, 10).split(/[-/]/).reverse().join("/") + '</td>' +
           '<td>';
-          switch (etapas[i].estado) {
-            case 'AC':
-                html = html + '<span data-toggle="tooltip" class="badge bg-green estado">Activo</span>';
-                break;
-            case 'IN':
-                 html = html + '<span data-toggle="tooltip" class="badge bg-red estado">Inactivo</span>';
-                break;
-            case 'CARGADO':
-                 html = html + '<span data-toggle="tooltip" class="badge bg-yellow estado">Cargado</span>';
-                break;
-            case 'EN CURSO':
-                 html = html + '<span data-toggle="tooltip" class="badge bg-green estado">En Curso</span>';
-                break;
-            case 'DESCARGADO':
-                 html = html + '<span data-toggle="tooltip" class="badge bg-yellow estado">Descargado</span>';
-                break;
-            case 'TRANSITO':
-                 html = html + '<span data-toggle="tooltip" class="badge bg-orange estado">En Transito</span>';
-                break;
-            case 'FINALIZADO':
-                 html = html + '<span data-toggle="tooltip" class="badge bg-red estado">Finalizado</span>';
-                break;
-            case 'En Curso':
-                 html = html + '<span data-toggle="tooltip" class="badge bg-green estado">En Curso</span>';
-                break;
-            case 'PLANIFICADO':
-                 html = html + '<span data-toggle="tooltip" class="badge bg-blue estado">Planificado</span>';
-                break;
-            default:
-                 html = html + '<span data-toggle="tooltip" class="badge bg- estado">S/E</span>';
-                break;
-            }
-          html = html + '</td>' +
+        switch (etapas[i].estado) {
+          case 'AC':
+            html = html + '<span data-toggle="tooltip" class="badge bg-green estado">Activo</span>';
+            break;
+          case 'IN':
+            html = html + '<span data-toggle="tooltip" class="badge bg-red estado">Inactivo</span>';
+            break;
+          case 'CARGADO':
+            html = html + '<span data-toggle="tooltip" class="badge bg-yellow estado">Cargado</span>';
+            break;
+          case 'EN CURSO':
+            html = html + '<span data-toggle="tooltip" class="badge bg-green estado">En Curso</span>';
+            break;
+          case 'DESCARGADO':
+            html = html + '<span data-toggle="tooltip" class="badge bg-yellow estado">Descargado</span>';
+            break;
+          case 'TRANSITO':
+            html = html + '<span data-toggle="tooltip" class="badge bg-orange estado">En Transito</span>';
+            break;
+          case 'FINALIZADO':
+            html = html + '<span data-toggle="tooltip" class="badge bg-red estado">Finalizado</span>';
+            break;
+          case 'En Curso':
+            html = html + '<span data-toggle="tooltip" class="badge bg-green estado">En Curso</span>';
+            break;
+          case 'PLANIFICADO':
+            html = html + '<span data-toggle="tooltip" class="badge bg-blue estado">Planificado</span>';
+            break;
+          default:
+            html = html + '<span data-toggle="tooltip" class="badge bg- estado">S/E</span>';
+            break;
+        }
+        html = html + '</td>' +
           '</tr>';
       }
     } else {
       for (var i = 0; i < etapas.length; i++) {
         if (etapas[i].titulo === op) {
           html = html + '<tr  id="' + etapas[i].id + '" ><td>' +
-          `<i data-toggle='modal' data-target='#modal-asignarResponsable' class='fa fa-fw fa-user-plus text-green ml-1' style='cursor: pointer;' title='Asignar responsable' onclick='asignarResponsable(${etapas[i].id})'></i>`+
+            `<i data-toggle='modal' data-target='#modal-asignarResponsable' class='fa fa-fw fa-user-plus text-green ml-1' style='cursor: pointer;' title='Asignar responsable' onclick='asignarResponsable(${etapas[i].id})'></i>` +
             '<i class="fa fa-fw fa-cogs text-light-blue" style="cursor: pointer;" title="Gestionar" onclick=linkTo("<?php echo base_url(PRD) ?>general/Etapa/editar?id=' +
             etapas[i].id + '")></i>';
-        if (etapas[i].estado == 'PLANIFICADO' || etapas[i].realizo_entrega_materiales == 'false') {
-          html = html + '<i class="fa fa-fw fa-times-circle text-red" style="cursor: pointer;" title="Eliminar" onclick="conf(eliminarEtapa,' + etapas[i].id + ',\'¿Desea eliminar la Etapa?\')"></i>';
-        }
-        html = html + '</td>' +
+          if (etapas[i].estado == 'PLANIFICADO' || etapas[i].realizo_entrega_materiales == 'false') {
+            html = html + '<i class="fa fa-fw fa-times-circle text-red" style="cursor: pointer;" title="Eliminar" onclick="conf(eliminarEtapa,' + etapas[i].id + ',\'¿Desea eliminar la Etapa?\')"></i>';
+          }
+          html = html + '</td>' +
             '<td>' + etapas[i].titulo + '</td>' +
             '<td>' + etapas[i].id + '</td>' +
             '<td>' + etapas[i].lote + ' </td>' +
@@ -318,41 +321,41 @@
             '<td>' + etapas[i].establecimiento + '</td>' +
             '<td>' + etapas[i].recipiente + '</td>' +
             '<td>' + etapas[i].orden + '</td>' +
-            '<td>' + etapas[i].fecha.substr(0,10).split(/[-/]/).reverse().join("/") + '</td>' +
+            '<td>' + etapas[i].fecha.substr(0, 10).split(/[-/]/).reverse().join("/") + '</td>' +
             '<td>';
-            switch (etapas[i].estado) {
-              case 'AC':
-                  html = html + '<span data-toggle="tooltip" class="badge bg-green estado">Activo</span>';
-                  break;
-              case 'IN':
-                  html = html + '<span data-toggle="tooltip" class="badge bg-red estado">Inactivo</span>';
-                  break;
-              case 'CARGADO':
-                  html = html + '<span data-toggle="tooltip" class="badge bg-yellow estado">Cargado</span>';
-                  break;
-              case 'EN CURSO':
-                  html = html + '<span data-toggle="tooltip" class="badge bg-green estado">En Curso</span>';
-                  break;
-              case 'DESCARGADO':
-                  html = html + '<span data-toggle="tooltip" class="badge bg-yellow estado">Descargado</span>';
-                  break;
-              case 'TRANSITO':
-                  html = html + '<span data-toggle="tooltip" class="badge bg-orange estado">En Transito</span>';
-                  break;
-              case 'FINALIZADO':
-                  html = html + '<span data-toggle="tooltip" class="badge bg-red estado">Finalizado</span>';
-                  break;
-              case 'En Curso':
-                  html = html + '<span data-toggle="tooltip" class="badge bg-green estado">En Curso</span>';
-                  break;
-              case 'PLANIFICADO':
-                  html = html + '<span data-toggle="tooltip" class="badge bg-blue estado">Planificado</span>';
-                  break;
-              default:
-                  html = html + '<span data-toggle="tooltip" class="badge bg- estado">S/E</span>';
-                  break;
-              }
-            html = html + '</td>' +
+          switch (etapas[i].estado) {
+            case 'AC':
+              html = html + '<span data-toggle="tooltip" class="badge bg-green estado">Activo</span>';
+              break;
+            case 'IN':
+              html = html + '<span data-toggle="tooltip" class="badge bg-red estado">Inactivo</span>';
+              break;
+            case 'CARGADO':
+              html = html + '<span data-toggle="tooltip" class="badge bg-yellow estado">Cargado</span>';
+              break;
+            case 'EN CURSO':
+              html = html + '<span data-toggle="tooltip" class="badge bg-green estado">En Curso</span>';
+              break;
+            case 'DESCARGADO':
+              html = html + '<span data-toggle="tooltip" class="badge bg-yellow estado">Descargado</span>';
+              break;
+            case 'TRANSITO':
+              html = html + '<span data-toggle="tooltip" class="badge bg-orange estado">En Transito</span>';
+              break;
+            case 'FINALIZADO':
+              html = html + '<span data-toggle="tooltip" class="badge bg-red estado">Finalizado</span>';
+              break;
+            case 'En Curso':
+              html = html + '<span data-toggle="tooltip" class="badge bg-green estado">En Curso</span>';
+              break;
+            case 'PLANIFICADO':
+              html = html + '<span data-toggle="tooltip" class="badge bg-blue estado">Planificado</span>';
+              break;
+            default:
+              html = html + '<span data-toggle="tooltip" class="badge bg- estado">S/E</span>';
+              break;
+          }
+          html = html + '</td>' +
             '</tr>';
         }
       }
@@ -386,7 +389,7 @@
     //trae los usuarios a responsables
     $.ajax({
       type: "GET",
-      url: "<?php echo base_url(PRD)?>general/Etapa/getUsers",
+      url: "<?php echo base_url(PRD) ?>general/Etapa/getUsers",
       success: function(rsp) {
         var htmlUser = '<option selected disabled>Seleccione operario</option>';
         rsp = JSON.parse(rsp);
@@ -396,13 +399,13 @@
         $('#modal-asignarResponsable').find('#user').html(htmlUser);
       },
       error: function() {
-        error('Error','Error al cargar usuarios.');
+        error('Error', 'Error al cargar usuarios.');
       }
     });
     //trae los turnos de produccion de lote
     $.ajax({
       type: "GET",
-      url: "<?php echo base_url(PRD)?>general/Etapa/getTurnosProd",
+      url: "<?php echo base_url(PRD) ?>general/Etapa/getTurnosProd",
       success: function(t) {
         var htmlTurnos = '<option selected disabled>Seleccione turno</option>';
         t = JSON.parse(t);
@@ -412,29 +415,29 @@
         $('#modal-asignarResponsable').find('#turno').html(htmlTurnos);
       },
       error: function() {
-        error('Error','Error al cargar turnos.');
+        error('Error', 'Error al cargar turnos.');
       }
     });
 
     //obtiene y carga usuarios cargados con anterioridad
     $.ajax({
       type: "GET",
-      url: "<?php echo base_url(PRD)?>general/Etapa/getUserLote/" + batch_id,
+      url: "<?php echo base_url(PRD) ?>general/Etapa/getUserLote/" + batch_id,
       success: function(rsp) {
         var htmlUserLote = '';
         rsp = JSON.parse(rsp);
-        if(_isset(rsp)){
+        if (_isset(rsp)) {
           for (let i = 0; i < rsp.length; i++) {
             htmlUserLote += '<tr>' +
-            '<td value=' + rsp[i].user_id + ' data-user=' + rsp[i].user_id + '>' + rsp[i].last_name + ', ' + rsp[i].first_name +
-            '<td value=' + rsp[i].turn_id + ' data-turno=' + rsp[i].turn_id + '>' + rsp[i].descripcion + '<a type="button" class="del pull-right" style="cursor: pointer;"><i class="fa fa-fw fa-minus"></i></a></td>' +
-            '</tr>';
+              '<td value=' + rsp[i].user_id + ' data-user=' + rsp[i].user_id + '>' + rsp[i].last_name + ', ' + rsp[i].first_name +
+              '<td value=' + rsp[i].turn_id + ' data-turno=' + rsp[i].turn_id + '>' + rsp[i].descripcion + '<a type="button" class="del pull-right" style="cursor: pointer;"><i class="fa fa-fw fa-minus"></i></a></td>' +
+              '</tr>';
           }
           $('#tabla-Operario tbody').append(htmlUserLote);
         }
       },
       error: function() {
-        error('Error','Error al cargar responsables.');
+        error('Error', 'Error al cargar responsables.');
       }
     });
   }
@@ -501,7 +504,7 @@
     wo();
     $.ajax({
       type: "POST",
-      url: "<?php echo base_url(PRD)?>general/Etapa/setUserLote",
+      url: "<?php echo base_url(PRD) ?>general/Etapa/setUserLote",
       data: {
         batch_id: batch_id,
         responsables: responsables
@@ -519,99 +522,104 @@
       }
     });
   }
-/////////////////////////////////////////////////////////////////////////////////////////////
-// Se llama desde la funcion conf(). Si se confirma la accion se elimina el lote seleccionado
- var eliminarEtapa = (id) => {
-   wo();
-  $.ajax({
-    type:'POST',
-    dataType:'JSON',
-    url:`<?php echo base_url(PRD) ?>general/Lote/verificaEntregaMateriales/${id}`,
-    success:(res) => {
-      if(res == 'false'){
-        $.ajax({
-          type:'POST',
-          dataType:'JSON',
-          url:`<?php echo base_url(PRD) ?>general/etapa/eliminarEtapa/${id}`,
-          success:(res) => {
-            if(res.status){
-              linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
-              hecho();
-            }else{
-              error('Error','Se produjo un error al eliminar la etapa.');
+  /////////////////////////////////////////////////////////////////////////////////////////////
+  // Se llama desde la funcion conf(). Si se confirma la accion se elimina el lote seleccionado
+  var eliminarEtapa = (id) => {
+    wo();
+    $.ajax({
+      type: 'POST',
+      dataType: 'JSON',
+      url: `<?php echo base_url(PRD) ?>general/Lote/verificaEntregaMateriales/${id}`,
+      success: (res) => {
+        if (res == 'false') {
+          $.ajax({
+            type: 'POST',
+            dataType: 'JSON',
+            url: `<?php echo base_url(PRD) ?>general/etapa/eliminarEtapa/${id}`,
+            success: (res) => {
+              if (res.status) {
+                linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
+                hecho();
+              } else {
+                error('Error', 'Se produjo un error al eliminar la etapa.');
+              }
+            },
+            error: (res) => {
+              error();
+            },
+            complete: () => {
+              wc();
             }
-          },
-          error:(res) => {
-            error();
-          },
-          complete:() => {
-            wc();               
-          }
-        });
-      }else{
-        error('Error','El lote posee entregas de materiales.');
-      }
-    },
-    error:(res) => {
+          });
+        } else {
+          error('Error', 'El lote posee entregas de materiales.');
+        }
+      },
+      error: (res) => {
         error();
-    },
-    complete:() => {
-      wc();                  
-    }
-  });
-}
+      },
+      complete: () => {
+        wc();
+      }
+    });
+  }
   // Oculta/Muestra de Batchs Finalizados
-  function muestraBatchsFinalizados(){
+  function muestraBatchsFinalizados() {
     debugger;
     estado = $('#etapa_finalizada').is(':checked');
-    if(estado){
+    if (estado) {
       $('#etapas').DataTable().columns().search('').draw();
-    }else{
-      $('#etapas').DataTable().columns(10).search('En Curso|Planificado',true,false).draw();
+    } else {
+      $('#etapas').DataTable().columns(10).search('En Curso|Planificado', true, false).draw();
     }
   }
-  $(document).ready(function () {
+  $(document).ready(function() {
     muestraBatchsFinalizados();
     $("#procesoProductivo").trigger('change');
   });
   /////////////////////////////////////////////////////////////
   // Si esta seleccionada una Etapa en el Menu, directamente crea la Etapa seleccionada 
-  function crearNuevaEtapa(){
-    if(_isset(etapaSeleccionada)){
+  function crearNuevaEtapa() {
+    if (_isset(etapaSeleccionada)) {
       linkTo(`<?php echo base_url(PRD) ?>${etapaSeleccionada}`);
     }
   }
-  function seProcProductivo(tag){
+
+  function seProcProductivo(tag) {
     wo();
-    var data = {"proc_id" : JSON.parse($(tag).find(":selected").attr("data-json")).proc_id };
+    var data = {
+      "proc_id": JSON.parse($(tag).find(":selected").attr("data-json")).proc_id
+    };
     $.ajax({
       type: 'POST',
       data: data,
       cache: false,
       dataType: "json",
       url: "<?php echo PRD; ?>general/Etapa/filtrarEtapas",
-      success: function(rsp) { 
-        if(_isset(rsp)){
+      success: function(rsp) {
+        if (_isset(rsp)) {
           var etapasFiltradas = '';
-          rsp.forEach((element,i) => {
-            if(i != rsp.length-1){
+          rsp.forEach((element, i) => {
+            if (i != rsp.length - 1) {
               etapasFiltradas += "<button class='btn btn-primary btn-arrow-right outline' data-json='" + JSON.stringify(element) + "' onclick='muestra(\"" + element.nombre + "\",this)'> " + element.nombre + "  </button>";
-            }else{
+            } else {
               etapasFiltradas += "<button class='btn btn-primary btn-arrow-right-final outline' data-json='" + JSON.stringify(element) + "' onclick='muestra(\"" + element.nombre + "\",this)'> " + element.nombre + "  </button>";
             }
           });
           etapasFiltradas += "<button class='btn btn-primary outline' onclick='muestra(`todas`,this)'>Todas</button>";
           $("#contenedorMenuEtapasProductivas").empty();
           $("#contenedorMenuEtapasProductivas").html(etapasFiltradas);
-        }else{
+        } else {
           $("#contenedorMenuEtapasProductivas").empty();
-          notificar('Nota',"El proceso productivo seleccionado no posee etapas",'warning');
+          notificar('Nota', "El proceso productivo seleccionado no posee etapas", 'warning');
         }
       },
       error: function(rsp) {
-          error('Error',"Se produjo un error al obtener el listado filtrado de etapas");
+        error('Error', "Se produjo un error al obtener el listado filtrado de etapas");
       },
-      complete: () => {wc()}
+      complete: () => {
+        wc()
+      }
     });
   }
 </script>
