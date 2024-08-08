@@ -113,7 +113,7 @@ class Etapa extends CI_Controller
         $datosCab['empr_id'] = (string) empresa();
         $datosCab['forzar_agregar'] = ($nuevo == 'guardar') ? 'false' : $post_data['forzar'];
         $datosCab['fec_vencimiento'] = FEC_VEN;
-        $datosCab['fec_iniciado'] = (string) $post_data['fecha'];
+        $datosCab['fec_iniciado'] = !empty($post_data['fecha']) ? date("d-m-Y",strtotime($post_data['fecha'])) : date("d-m-Y");
         $datosCab['recu_id'] = "0";
         $datosCab['tipo_recurso'] = "";
 
@@ -273,10 +273,13 @@ class Etapa extends CI_Controller
         }
         return true;
     }
-
-    public function lanzarPedidoEtapa($pema_id)
-    {
-        log_message("DEBUG", "ETAPA / lanzarPedidoEtapa >> pema_id: $pema_id");
+    /**
+        * Lanza el proceso de pedido de materiales para una etapa
+        * @param integer $pema_id id pedido de materiales generado en el paso anterior
+        * @return 
+	*/
+    public function lanzarPedidoEtapa($pema_id){
+        log_message("DEBUG", "#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapa |  lanzarPedidoEtapa() >> pema_id: $pema_id");
 
         $contract['pIdPedidoMaterial'] = $pema_id;
         $rsp = $this->bpm->lanzarProceso(BPM_PROCESS_ID_PEDIDOS_NORMALES, $contract);
@@ -499,13 +502,14 @@ class Etapa extends CI_Controller
         }
     }
     // Elabora informe de Etapa hasta que se saque el total del contenido de batch origen
-    public function Finalizar()
-    {
+    public function Finalizar(){
+        
         $productos = json_decode($this->input->post('productos'));
         $cantidad_padre = $this->input->post('cantidad_padre');
         $num_orden_prod = $this->input->post('num_orden_prod');
         $batch_id_padre = $this->input->post('batch_id_padre');
-        $depo_id = $this->input->post('depo_id');
+        $depo_id = $this->input->post('depo_id'); //deposito
+        $fecha = $this->input->post('fecha');//fec_iniciado
 
         foreach ($productos as $key => $value) {
 
@@ -517,7 +521,12 @@ class Etapa extends CI_Controller
             $arrayPost["cantidad_padre"] = strval($key == (sizeof($productos) - 1) ? $cantidad_padre : 0); //cantida padre es lo que descuenta del batch actual
             $arrayPost["num_orden_prod"] = $num_orden_prod;
             $arrayPost["reci_id"] = $value->destino; //reci_id destino del nuevo batch
-            $arrayPost["etap_id"] = (string) ETAPA_DEPOSITO;
+            if ($value->proceso) {
+                $arrayPost["etap_id"] = strval($value->proceso);
+            } else {
+                // $aux["etap_id"] = strval(ETAPA_DEPOSITO);
+                $arrayPost["etap_id"] = (string) ETAPA_DEPOSITO;
+            }
             $arrayPost["usuario_app"] = userNick();
             $arrayPost["empr_id"] = (string) empresa();
             $arrayPost["forzar_agregar"] = $value->forzar;
@@ -528,6 +537,7 @@ class Etapa extends CI_Controller
             $arrayPost['batch_id'] = "0";
             $arrayPost['planificado'] = "false";
             $arrayPost['noco_list'] = isset($value->nocos)?implode(';',$value->nocos):'';
+            $arrayPost['fec_iniciado'] = date('d-m-Y');
             $arrayDatos['_post_lote_noconsumibles_list_batch_req']['_post_lote_noconsumibles_list'][] = $arrayPost;
 						$noco_list = isset($value->nocos)? $value->nocos:'';
         }
@@ -635,9 +645,13 @@ class Etapa extends CI_Controller
         $rsp = $this->Etapas->finalizarLote($id);
         echo json_encode($rsp);
     }
-
-    public function validarPedidoMaterial($batch_id)
-    {
+    /**
+	* Recibe un batch_id para buscar el taskId en bonita de la tarea especificada
+	* @param integer batch_id
+	* @return integer/bool taskId de la tarea si lo encontrara, caso contrario false
+	*/
+    public function validarPedidoMaterial($batch_id){
+        log_message('DEBUG','#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapa | validarPedidoMaterial($batch_id)');
         $rsp['tarea'] = $this->Etapas->validarPedidoMaterial($batch_id);
         echo json_encode($rsp);
     }
@@ -908,11 +922,13 @@ class Etapa extends CI_Controller
 
         $empr_id = empresa();
 
-        $procesos_etapas['data'] = $this->Etapas->getProcesosEtapas($empr_id)->procesos->proceso;
+        $rsp = $this->Etapas->getProcesosEtapas($empr_id);
+        // $rsp['data'] = $this->Etapas->getProcesosEtapas($empr_id)->procesos->proceso;
         
-        if(!empty($procesos_etapas)){
-            $procesos_etapas['status'] = true;
-            echo json_encode($procesos_etapas);
+        if(!empty($rsp)){
+            // $rsp['status'] = true;
+            $rsp['data'] = selectBusquedaAvanzada(false, false, $rsp['data'], 'etapa_etap_id', 'etapa_nombre', false);
+            echo json_encode($rsp);
         }else{
             echo json_encode(array("status" => false,"msj" => "No se encontraron etapas"));
         }

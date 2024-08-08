@@ -356,9 +356,13 @@ class Etapas extends CI_Model
         $url = REST_PRD_ETAPAS . "/etapas/entradas/$etap_id";
         return wso2($url);
     }
-
-    public function validarPedidoMaterial($batch_id)
-    {
+    /**
+	* Recibe un batch_id para buscar el taskId en bonita de la tarea especificada "Entrega pedido pendiente"
+	* @param integer batch_id
+	* @return integer/bool taskId de la tarea si lo encontrara, caso contrario retorna false
+	*/
+    public function validarPedidoMaterial($batch_id){
+        log_message('DEBUG','#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapa | validarPedidoMaterial($batch_id)');
         if (PLANIF_AVANZA_TAREA) { #Pregunta Magica
 
             $url = REST_ALM . "/pedidos/batch/$batch_id";
@@ -673,11 +677,12 @@ class Etapas extends CI_Model
 
     public function getProcesosEtapas($empr_id)
     {
-        $resource = '/etapas/proceso/' . $empr_id;
+        log_message('DEBUG'," #TRAZA | #TRAZ-PROD-TRAZASOFT | PROCESOS ETAPAS | getProcesosEtapas()");
+        $resource = '/etapas/procesos/' . $empr_id;
         $url = REST_PRD_ETAPAS . $resource;
-        $array = $this->rest->callAPI("GET", $url);
-        log_message('DEBUG','#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapas | getProcesosEtapas()-> resp '.json_encode($array));
-        return json_decode($array['data']);
+        $rsp = $this->rest->callAPI("GET", $url);
+        $rsp['data'] = json_decode($rsp['data'])->procesos->proceso;
+        return $rsp;
     }
 
 }

@@ -29,6 +29,12 @@ class Lotes extends CI_Model
       $url = REST_PRD_LOTE . $resource;
       return wso2($url);
     }
+    public function listarPorEstablecimientoConSalidaStock($establecimiento, $salida = false){
+      log_message('DEBUG','#TRAZA | #TRAZ-PROD-TRAZASOFT | Lotes | listarPorEstablecimientoConSalidaStock($establecimiento, $salida)');
+      $resource = "/lotes_establecimiento_stock/$establecimiento";
+      $url = REST_PRD_LOTE . $resource;
+      return wso2($url);
+    }
     public function listarPorCamion($camion)
     {
         $parametros["http"]["method"] = "GET";
@@ -52,12 +58,16 @@ class Lotes extends CI_Model
         $array = file_get_contents($url, false, $param);
         return json_decode($array);
     }
-
-    public function obtenerLotesCamion($patente)
-    {
-        $resource = "/camion/lotes/$patente";
-        $url = REST_LOG . $resource;
-        return wso2($url);
+    /**
+    * Busca los lotes cargados en un camion por meido de la patente
+    * @param string patente
+    * @return array respuesta del servicio
+    */
+    public function obtenerLotesCamion($patente){
+      log_message('DEBUG','#TRAZA | #TRAZ-PROD-TRAZASOFT | Lotes | obtenerLotesCamion($patente)');
+      $resource = "/camion/lotes/$patente";
+      $url = REST_LOG . $resource;
+      return wso2($url);
     }
 
     public function obtenerLote($lote)
@@ -71,9 +81,11 @@ class Lotes extends CI_Model
   public function getBatchIdLote($lote_id)
   {
     $lote_id = str_replace(' ','%20', $lote_id);
-    $path = "/lote/". $lote_id."/ultimo";
+    //$path = "/lote/". $lote_id."/ultimo";
+    $path = "/lote/". $lote_id."/todos";
     $url = REST_PRD_LOTE . $path;
     $rsp = $this->rest->callApi('GET', $url);
+    
     if ($rsp['status']) $rsp['data'] = json_decode($rsp['data'])->lotes->lote;
     return $rsp;
   }
@@ -83,10 +95,16 @@ class Lotes extends CI_Model
     $path = "/lote/" . $batch_id . "/trazabilidad";
     $url = REST_PRD_LOTE . $path;
     $rsp = $this->rest->callApi('GET', $url);
-    if ($rsp['status']) {
-      $rsp['data'] = json_decode($rsp['data'])->lotes->lote;
+
+    $path2 = "/lote/" . $batch_id . "/trazabilidadV2";
+    $url2 = REST_PRD_LOTE . $path2;
+    $rsp2 = $this->rest->callApi('GET', $url2);
+
+    if ($rsp2['status']) {
+      //$rsp['data'] = json_decode($rsp['data'])->lotes->lote;
+      $rsp2['data'] = json_decode($rsp2['data'])->lotes->lote;
     }
-    return $rsp;
+    return $rsp2;
   }
     /**
 	* Obtiene la cantidad de reportes de produccion realizados para el batch_id

@@ -232,39 +232,47 @@
 											<input type="text" class="hidden" id="depo_id">
 											<div class="row">
 													<div class="col-md-12">
-															<div class="form-group">
-																	<label>Código Lote:</label>
-																	<input type="text" id="codigo_lote" class='form-control' readonly>
-															</div>
+														<div class="form-group">
+															<label>Código Lote:</label>
+															<input type="text" id="codigo_lote" class='form-control' readonly>
+														</div>
 													</div>
 													<div class="col-md-12">
-															<div class="form-group">
-																	<label>Asignar Operario:</label>
-																	<select id="operario" name="recu_id" class="form-control">
-																			<?php foreach($rec_trabajo as $o) {echo "<option value='$o->recu_id' data-json='".json_encode($o)."'>$o->descripcion</option>";} ?>
-																	</select>
-																	<input type="text" class="hidden" name="tipo_recurso" value="HUMANO">
-															</div>
+														<div class="form-group">
+															<label>Asignar Operario:</label>
+															<select id="operario" name="recu_id" class="form-control">
+																<?php foreach($rec_trabajo as $o) {echo "<option value='$o->recu_id' data-json='".json_encode($o)."'>$o->descripcion</option>";} ?>
+															</select>
+															<input type="text" class="hidden" name="tipo_recurso" value="HUMANO">
+														</div>
 													</div>
 													<div class="col-md-12">
-															<div class="form-group">
-																	<label>Producto:</label>
-																	<?php  echo componente('articulos-salida',base_url(PRD).'general/etapa/obtenerProductosSalida') ?>
-															</div>
+														<div class="form-group">
+															<label>Producto:</label>
+															<?php  echo componente('articulos-salida',base_url(PRD).'general/etapa/obtenerProductosSalida') ?>
+														</div>
 													</div>
 													<div class="col-md-12">
-															<div class="form-group">
-																	<label>Cantidad:</label>
-																	<input type="number" name="cantidad" class="form-control">
-															</div>
+														<div class="form-group">
+															<label>Cantidad:</label>
+															<input type="number" name="cantidad" class="form-control">
+														</div>
 													</div>
 													<div class="col-md-12">
-															<div class="form-group">
-																	<label>Destino:</label>
-																	<?php
-																		echo selectBusquedaAvanzada('productodestino', 'destino');
-																	?>
-															</div>
+														<div class="form-group">
+															<label>Destino:</label>
+															<?php
+																echo selectBusquedaAvanzada('productodestino', 'destino', false, false, false, false, false, 'revisarRecipiente(this)')
+															?>
+														</div>
+													</div>
+													<div class="col-md-12" id="bloque_etapa" hidden="true">
+														<div class="form-group">
+															<label>Etapa:</label>
+															<?php
+																echo selectBusquedaAvanzada('proceso', 'etapa_etap_id', false, false, false, false, false, false)
+															?>
+														</div>
 													</div>
 											</div>
 									</form>
@@ -537,5 +545,34 @@ function agregarNocoEscaneado(data) {
 //Despliega fila de info extra -->NOTA: se crea una abajo de cada registro
 function verMas(tag){
 	$(tag).parent().parent().next('.info-extra').toggle();
+}
+//Busca las etapas de un recipiente seleccionado siempre y cuando sea DEPOSITO/PRODUCTIVO
+//se llama en el onchange del select de recipientes
+function revisarRecipiente(elem) {
+    console.log('Obtener Etapas');
+    var recipiencito = JSON.parse($(elem).attr("data-json"));
+    // console.log(recipiencito);  
+    if (recipiencito.tipo == "DEPOSITO/PRODUCTIVO") {
+        console.log(recipiencito);
+        $.ajax({
+            type: 'GET',
+            dataType: 'JSON',
+            url: '<?php echo base_url(PRD) ?>general/Etapa/getProcesosEtapas',
+            success: function(rsp) {
+                if (rsp.status && _isset(rsp.data)) {
+                    $('#proceso').html(rsp.data);
+                    // $('#proceso').show();
+                    $('#bloque_etapa').attr('hidden', false);
+                    // $('#proceso').removeAttr("disabled");
+                }else{
+                    $('#proceso').html('');
+                    error('Error!','No se encontraron Etapas en el establecimiento seleccionado');
+                }
+            },
+            error: function(rsp) {
+                alert('Error al Obtener Etapas');
+            }
+        });
+    };   
 }
 </script>

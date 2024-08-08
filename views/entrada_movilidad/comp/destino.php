@@ -61,15 +61,15 @@
                         <datalist id="recipientes">
                         </datalist> -->
                         <?php
-                            echo selectBusquedaAvanzada('recipiente', 'reci_id', false, false, false, false, false, 'revisarRecipiente(this)')
+                            echo selectBusquedaAvanzada('recipiente', 'reci_id', false, false, false, false, false, 'revisarRecipiente(this)');
                         ?>
                     </div>
                 </div>
-                <div class="col-md-8">
+                <div class="col-md-8" id="bloque_etapa" hidden="true">
                     <div class="form-group ba">
                         <label>Etapa:</label>
                         <?php
-                            echo selectBusquedaAvanzada('recipiente', 'reci_id', false, false, false, false, false, 'revisarRecipiente(this)')
+                            echo selectBusquedaAvanzada('proceso', 'etapa_etap_id', false, false, false, false, false, false)
                         ?>
                     </div>
                 </div>
@@ -144,9 +144,12 @@ function obtenerRecipientes() {
 //se llama en el onchange del select de recipientes
 function revisarRecipiente(elem) {
     console.log('Obtener Etapas');
-    // dataJsoncito = JSON.parse($(tag).closest('tr').attr('data-json'));  
-    var recipiencito = JSON.parse($(elem).find(":selected").attr("data-json"));
-    // console.log(recipiencito);  
+    
+    dataJson = $(elem).attr("data-json");
+    if(!_isset(dataJson)) return;
+
+    var recipiencito = JSON.parse(dataJson);
+      
     if (recipiencito.tipo == "DEPOSITO/PRODUCTIVO") {
         console.log(recipiencito);
         $.ajax({
@@ -155,9 +158,12 @@ function revisarRecipiente(elem) {
             url: '<?php echo base_url(PRD) ?>general/Etapa/getProcesosEtapas',
             success: function(rsp) {
                 if (rsp.status && _isset(rsp.data)) {
-                    $('#recipiente').html(rsp.data);
+                    $('#proceso').html(rsp.data);
+                    // $('#proceso').show();
+                    $('#bloque_etapa').attr('hidden', false);
+                    // $('#proceso').removeAttr("disabled");
                 }else{
-                    $('#recipiente').html('');
+                    $('#proceso').html('');
                     error('Error!','No se encontraron Etapas en el establecimiento seleccionado');
                 }
             },
