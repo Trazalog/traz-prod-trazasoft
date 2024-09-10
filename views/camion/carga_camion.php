@@ -1,7 +1,7 @@
 <?php $this->load->view('camion/modal_lotes')?>
 <div class="box">
     <div class="box-header with-border">
-        <h3 class="box-title">Carga Camión</h3>
+        <h3 class="box-title">Carga Camión nnnn</h3>
         <div class="box-tools pull-right">
         </div>
     </div>
@@ -224,7 +224,7 @@ function ActualizaLotes() {
             establecimiento: establecimiento,
             salida: salida
         },
-        url: '<?php echo base_url(PRD) ?>general/Lote/listarPorEstablecimientoConSalida',
+        url: '<?php echo base_url(PRD) ?>general/Lote/listarPorEstablecimientoConSalidaStock',
         success: function(result) {
        
 
@@ -371,7 +371,7 @@ function ModalLotes() {
             establecimiento: establecimiento,
             salida: salida
         },
-        url: '<?php echo base_url(PRD) ?>general/Lote/listarPorEstablecimientoConSalida',
+        url: '<?php echo base_url(PRD) ?>general/Lote/listarPorEstablecimientoConSalidaStock',
         success: function(result) {
             result = JSON.parse(result);
             var html = "";

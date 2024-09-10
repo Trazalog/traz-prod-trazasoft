@@ -63,7 +63,7 @@ $('#frm-origen #codigo').attr('disabled', true).next(".select2-container").hide(
 var batch = null;
 $('.frm-origen #codigo').on('change', function() {
     $('.frm-destino')[0].reset();
-    $('.frm-destino').find('#recipiente').val(null).trigger('change');
+    $('.frm-destino').find('#recipiente').val("0").trigger('change');
     $('.frm-destino').find('#recipiente').parent().find('#detalle').empty();
 
 
