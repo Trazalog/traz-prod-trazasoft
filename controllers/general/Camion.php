@@ -15,7 +15,8 @@ class Camion extends CI_Controller
         $this->load->model('general/Transportistas');
         $this->load->model('general/Listado_carga_camion');
         $this->load->model('general/Listado_recepcion_camion');
-        $this->load->model('core/Clientes');  
+        $this->load->model('core/Clientes');
+        $this->load->model('core/Precios');
   
         // si esta vencida la sesion redirige al login
 		$data = $this->session->userdata();
@@ -30,14 +31,15 @@ class Camion extends CI_Controller
 		* @param 
 		* @return
 		*/	
-    public function cargarCamion()
-    {
-        $data['fecha'] = date('Y-m-d');
-        $data['lang'] = lang_get('spanish', 4);
-        $data['establecimientos'] = $this->Establecimientos->listarTodo()->establecimientos->establecimiento;
-        $data['tipoEstablecimiento'] = $this->Noconsumibles->tipoEstablecimiento()['data'];
-        $data['clientes']=$this->Clientes->Listar_Clientes();
-        $this->load->view('camion/carga_camion', $data);
+    public function cargarCamion(){
+      log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT | Camion | cargarCamion()");
+      $data['fecha'] = date('Y-m-d');
+      $data['lang'] = lang_get('spanish', 4);
+      $data['establecimientos'] = $this->Establecimientos->listarTodo()->establecimientos->establecimiento;
+      $data['tipoEstablecimiento'] = $this->Noconsumibles->tipoEstablecimiento()['data'];
+      $data['clientes']=$this->Clientes->Listar_Clientes();
+      $data['listasPrecios']=$this->Precios->getListasPrecios();
+      $this->load->view('camion/carga_camion', $data);
     }
 
     public function descargarCamion()

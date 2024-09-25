@@ -1,67 +1,72 @@
 <?php $this->load->view('camion/modal_lotes')?>
 <div class="box">
     <div class="box-header with-border">
-        <h3 class="box-title">Carga Camión nnnn</h3>
+        <h3 class="box-title">Carga Camión</h3>
         <div class="box-tools pull-right">
         </div>
     </div>
     <div class="box-body">
         <div class="row">
-            <div class="col-md-2 col-xs-12">
-                <label for="establecimientos" class="form-label">Establecimiento*:</label>
-            </div>
-            <div class="col-md-4 col-xs-12">
-                <select class="form-control select2 select2-hidden-accesible" onchange="Actualiza(this.value); ActualizaLotes();" id="establecimientos">
-                    <option value="" disabled selected>-Seleccione Establecimiento-</option>
-                    <?php
-                     foreach($establecimientos as $fila)
-                     {  
-                           echo '<option value="'.$fila->esta_id.'" >'.$fila->nombre.'</option>';
-                     } 
-                     ?>
-                </select>
-            </div>
-            <div class="col-md-1 col-xs-12">
-                <label for="fecha" class="form-label">Fecha*:</label>
-            </div>
-            <div class="col-md-3 col-xs-12">
-                <input type="date" id="fecha" value="<?php echo $fecha;?>" class="form-control">
-            </div>
-            <div class="col-md-2"></div>
-        </div>
-    </div>
-</div>
-</div>
-<div class="box box-primary">
-    <div class="box-header with-border">
-        <h3 class="box-title">Datos Camión</h3>
-    </div>
-    <div class="box-body">
-        <div class="row" style="margin-top:40px;">
-            <div class="col-md-6 col-xs-12">
-                <label class="form-label" for="">Camiones ingresados*:</label>
-                <select id="camiones" class="form-control" onchange="DatosCamion()" disabled>
-                </select>
-            </div>
-            <div class="col-md-6 col-xs-12">
-                <div class="row">
+            <div class="col-xs-12 col-md-12 col-lg-12">
+                <div class="form-inline">
+                    <div class="col-xs-12 col-md-5">
+                        <div class="form-group">
+                            <label for="establecimientos" class="form-label">Establecimiento<?php hreq() ?>:</label>
+                            <select class="form-control select2 select2-hidden-accesible" onchange="Actualiza(this.value); ActualizaLotes();" id="establecimientos">
+                                <option value="" disabled selected>-Seleccione establecimiento-</option>
+                                <?php
+                                foreach($establecimientos as $fila)
+                                {  
+                                    echo '<option value="'.$fila->esta_id.'" >'.$fila->nombre.'</option>';
+                                } 
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-3">
+                        <div class="form-group">
+                            <label for="fecha" class="form-label">Fecha<?php hreq() ?>:</label>
+                            <input type="date" id="fecha" value="<?php echo $fecha;?>" class="form-control">
+                        </div>
+                    </div>
+                    <!-- /.fecha seleccionada -->
+                    <div class="col-xs-12 col-md-4">
+                        <div class="form-group">
+                            <label class="form-label" for="">Camiones ingresados<?php hreq() ?>:</label>
+                            <select id="camiones" class="form-control" onchange="DatosCamion()" disabled>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- /.camiones -->
+                </div>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+        <div class="row">
+            <div class="col-xs-12 col-md-12 col-lg-12">
+                <h3 style="margin-top: 5px;"><small>Datos del Camión</small></h3>
+                <div class="form-inline">
                     <input type="hidden" id="idcamion">
-                    <div class="col-md-2 col-xs-12"><label class="form-label">Fecha</label></div>
-                    <div class="col-md-8 col-xs-12"><input class="form-control" id="fechacamion" type="text" disabled>
+                    <div class="col-xs-12 col-md-3 col-md-offset-1">
+                        <div class="form-group">
+                            <label class="form-label">Fecha:</label>
+                            <input class="form-control" id="fechacamion" type="text" disabled>
+                        </div>
                     </div>
-                    <div class="col-md-2"></div>
-                </div>
-                <div class="row">
-                    <div class="col-md-2 col-xs-12"><label class="form-label">Patente</label></div>
-                    <div class="col-md-8 col-xs-12"><input class="form-control" id="patentecamion" type="text" disabled>
+                    <!-- /.fecha info camion -->
+                    <div class="col-xs-12 col-md-3">
+                        <div class="form-group">
+                            <label class="form-label">Patente:</label>
+                            <input class="form-control" id="patentecamion" type="text" disabled>
+                        </div>
                     </div>
-                    <div class="col-md-2"></div>
-                </div>
-                <div class="row">
-                    <div class="col-md-2 col-xs-12"><label class="form-label">Conductor</label></div>
-                    <div class="col-md-8 col-xs-12"><input class="form-control" id="conductorcamion" type="text"
-                            disabled></div>
-                    <div class="col-md-2"></div>
+                    <!-- /.patente -->
+                    <div class="col-xs-12 col-md-3">
+                        <div class="form-group">
+                            <label class="form-label">Conductor:</label>
+                            <input class="form-control" id="conductorcamion" type="text" disabled>
+                        </div>
+                    </div>
+                    <!-- /.conductor -->
                 </div>
             </div>
         </div>
@@ -72,79 +77,109 @@
         <h3 class="box-title">Datos de Carga</h3>
     </div>
     <div class="box-body">
-        <div class="row" style="margin-top:40px;">
-            <div class="col-md-6 col-xs-12">
-               <label class="form-label" for="">Codigos Lotes*: &nbsp;&nbsp;</label>  
-                <div class="row">
-                    <div class="col-xs-11 margin form-group ba">
-                        <?php echo selectBusquedaAvanzada('inputlotes'); ?>
+        <div class="row firstRowOrder">
+            <div class="col-xs-12 col-md-12 col-lg-12">
+                <div class="form-inline">
+                    <div class="col-xs-12 col-md-6">
+                        <div class="col-xs-6 col-md-3">
+                            <label class="form-label">Cód. Lote<?php hreq() ?>:</label>
+                        </div>
+                        <div class="col-md-9 ba">
+                            <?php echo selectBusquedaAvanzada('inputlotes'); ?>
+                        </div>
                     </div>
+                    <!-- /.lote -->
+                    <div class="col-xs-12 col-md-3">
+                        <div class="form-group">
+                            <label class="form-label">Fecha:</label>
+                            <input class="form-control" type="text" disabled id="fechalote">
+                        </div>
+                    </div>
+                    <!-- /.fecha -->
+                    <div class="col-xs-12 col-md-3">
+                        <div class="form-group">
+                            <label class="form-label">Envase:</label>
+                            <input class="form-control" type="text" id="envaselote" disabled>
+                        </div>
+                    </div>
+                    <!-- /.envase -->
+                    
+                </div><!-- /.form-inline -->
+            </div><!-- /.col -->
+        </div><!-- /.firstRowOrder -->
+        <div style="margin-top:10px" class="row secondRowOrder">
+            <div class="col-xs-12 col-md-12 col-lg-12">
+                <div class="form-inline">
+                    <div class="col-xs-6 col-md-3 col-md-offset-1">
+                        <div class="form-group">
+                            <label for="establecimientos" class="form-label">Cliente<?php hreq() ?>:</label>                                
+                            <select class="form-control select2 select2-hidden-accesible" id="clientes">
+                                <option value="" disabled selected>-Seleccione cliente-</option>
+                                <?php
+                                    foreach($clientes as $fila){  
+                                        echo '<option value="'.$fila->clie_id.'" " data-nombre="'.$fila->nombre.'">'.$fila->nombre.'</option>';
+                                    } 
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- /.cliente -->
+                    <div class="col-xs-6 col-md-3">
+                        <div class="form-group">
+                            <label class="form-label">Cantidad<?php hreq() ?>:</label>
+                            <input class="form-control" type="number" placeholder="Ingrese cantidad" id="cantidadcarga">
+                        </div>
+                    </div>
+                    <!-- /.cantidad -->
+                    <div class="col-xs-12 col-md-5">
+                        <div class="form-group">
+                            <label for="establecimientos" class="form-label">Lista precios<?php hreq() ?>:</label>                                
+                            <select class="form-control select2 select2-hidden-accesible" id="lista_precios">
+                                <option value="" disabled selected>-Seleccione lista de precios-</option>
+                                <?php
+                                    foreach($listasPrecios as $lista){  
+                                        echo '<option value="'.$lista->lipr_id.'" " data-nombre="'.$lista->nombre.'">'.$lista->nombre.'</option>';
+                                    } 
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- /.lista precio -->
                 </div>
             </div>
-            <div class="col-xs-12 col-md-6">
-                <div class="row">
-                    <div class="col-md-2 col-xs-12"><label class="form-label">Fecha</label></div>
-                    <div class="col-md-8 col-xs-12"><input class="form-control" type="text" disabled id="fechalote">
-                    </div>
-                    <div class="col-md-2"></div>
-                </div>
-                <div class="row">
-                    <div class="col-md-2 col-xs-12"><label class="form-label">Envase</label></div>
-                    <div class="col-md-8 col-xs-12"><input class="form-control" type="text" id="envaselote" disabled>
-                    </div>
-                    <div class="col-md-2"></div>
-                </div>
-                <div class="row">
-                    <div class="col-md-2 col-xs-12"><label class="form-label">Producto</label></div>
-                    <div class="col-md-8 col-xs-12"><input class="form-control" type="text" id="productolote" disabled>
-                    </div>
-                    <div class="col-md-2"></div>
-                </div>
-                <div class="row">
-                    <div class="col-md-2 col-xs-12"><label class="form-label">Stock</label></div>
-                    <div class="col-md-8 col-xs-12"><input class="form-control" type="text" id="stocklote" disabled>
-                    </div>
-                    <div class="col-md-2 "></div>
-                </div>
-                <div class="row">
-                    <div class="col-md-2 col-xs-12">
-                        <label for="establecimientos" class="form-label">Cliente*</label>
-                    </div>
-                    <div class="col-md-8 col-xs-12">
-                        <select class="form-control select2 select2-hidden-accesible" id="clientes">
-                        <option value="" disabled selected>-Seleccione Cliente-</option>
-                        <?php
-                            foreach($clientes as $fila)
-                            {  
-                                echo '<option value="'.$fila->clie_id.'" " data-nombre="'.$fila->nombre.'">'.$fila->nombre.'</option>';
-                            } 
-                        ?>
-                    </div>
-                </select>
-                </div>
-                    <div class="col-md-2 "></div>
-                </div>
-                <div class="row">
-                    <div class="col-md-2 col-xs-12"><label class="form-label">Cantidad*</label></div>
-                    <div class="col-md-8 col-xs-12"><input class="form-control" type="number"
-                            placeholder="Ingrese cantidad" id="cantidadcarga"></div>
-                    <div class="col-md-2"></div>
-                </div>
+        </div>
+        <div class="row thirdRowOrder">
+            <div class="col-xs-12 col-md-12 col-lg-12">
+                <!-- <h3 style="margin-top: 5px;"><small>Datos del lote</small></h3> -->
+                <div class="form-inline">
+                    <!-- <div class="col-xs-12 col-md-3">
+                        <div class="form-group">
+                            <label class="form-label">Producto:</label>
+                            <input class="form-control" type="text" id="productolote" disabled>
+                        </div>
+                    </div> -->
+                    <!-- /.producto -->
+                    <!-- <div class="col-xs-12 col-md-3">
+                        <div class="form-group">
+                            <label class="form-label">Stock:</label>
+                            <input class="form-control" type="text" id="stocklote" disabled>
+                        </div>
+                    </div> -->
+                    <!-- /.stock -->
+
+                </div><!-- /.form-inline -->
+            </div><!-- /.col -->
+        </div><!-- /.thirdRowOrder -->
+        <div class="row" style="margin-top: 20px">
+            <div class="col-xs-6 col-md-3 col-md-offset-5 col-lg-2">
+                <button class="btn btn-block btn-primary" type="button" onclick="Cargar();">Cargar camión<?php #echo $lang["CargarCamion"];?></button>
             </div>
         </div>
         <div class="row" style="margin-top: 20px">
-            <div class="col-xs-3"></div>
-            <div class="col-xs-6"><button class="btn btn-block btn-primary" type="button"
-                    onclick="Cargar();">Cargar camión<?php #echo $lang["CargarCamion"];?></button></div>
-            <div class="col-xs-3"></div>
+            <input type="hidden" id="existe_tabla" value="no">
+            <div class="col-xs-12 table-responsive" id="tablacargas"></div>
         </div>
-    </div>
-    <div class="row" style="margin-top: 20px">
-        <input type="hidden" id="existe_tabla" value="no">
-        <div class="col-xs-12 table-responsive" id="tablacargas"></div>
-    </div>
-
-    <!-- /.box-body -->
+    </div><!-- /.box-body -->
     <div class="box-footer">
         <div class="row">
             <div class="col-md-8"></div>
@@ -158,6 +193,9 @@
         </div>
     </div>
     <!-- /.box-footer-->
+    <!-- MODAL REMITO -->
+    <?php $this->load->view(PRD. "camion/modal_remito") ?>
+    <!-- FIN MODAL REMITO -->
 </div>
 <script>
 function Blanquealote() {
@@ -260,8 +298,8 @@ function ActualizaLote(lote) {
     
     document.getElementById('fechalote').value = lote.fecha;
     document.getElementById('envaselote').value = lote.tituloenvase;
-    document.getElementById('productolote').value = lote.tituloproducto;
-    document.getElementById('stocklote').value = lote.stock;
+    // document.getElementById('productolote').value = lote.tituloproducto;
+    // document.getElementById('stocklote').value = lote.stock;
 }
 
 function Cargar() {
@@ -428,6 +466,9 @@ function FinalizarCarga() {
             lotes.push(json);
         });
         lotes = JSON.stringify(lotes);
+        console.log("HARCODEO FURIOSO");
+        hecho("DALE PA", "EEEEH VIERNEEEE");
+        return;
         wo();
         $.ajax({
             type: 'POST',

@@ -135,4 +135,21 @@ class Opcionesfiltros extends CI_Model
     $url = REST_LOG . '/movimientos/proveedor/' . $prov_id . '/transporte/' . $cuit . '/producto/' . $arti_id . '/u_medida/' . $u_medida . '/desde/' . $fecdesde . '/hasta/' . $fechasta . '/empresa/'. empresa() .'/ingresos';
     return wso2($url)['data'];
   }
+  /**
+  * Develve info filtrada de remitos por parametros recibidos
+  * @param array parametros para filtrar la lista
+  * @return array con datos filtrados
+  */
+  function getHistoricoRemitos($data){
+    log_message('DEBUG','#TRAZA | TRAZ-PROD-TRAZASOFT | OPCIONESFILTROS | getHistoricoRemitos($data) | $data: >> '.json_encode($data));
+    $fec_desde = !empty($data['fec_desde']) ? date("Y-m-d", strtotime($data["fec_desde"])) : "";
+    $fec_hasta = !empty($data['fec_hasta']) ? date("Y-m-d", strtotime($data["fec_hasta"])) : "";
+    $cuit_origen = !empty($data["cuit_origen"]) ? $data['cuit_origen'] : 'TODOS';
+
+    $url = '/inspecciones/avanzado/desde/'.$fec_desde.'/hasta/'.$fec_hasta.'/cliente/'.$cliente;
+    $aux = $this->rest->callAPI("GET",REST_SICP.$url);
+
+    $aux = json_decode($aux["data"]);
+    return $aux->inspecciones->inspeccion;
+  }
 }
