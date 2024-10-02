@@ -10,6 +10,7 @@
             <div class='modal-body' id='modalBodyRemito'>
                 <div class="container-fluid">
                     <div class="row">
+                        <input type="hidden" name="nro_contador_remito" id="nro_contador_remito" >
                         <div class="col-xs-5 col-md-5">
                             <img src="<?php echo base_url() ?>imagenes/armo/armo_logo.png" id='armoLogo'>
                             <h5 style="margin: 0px"><small>Costa canal 23232 - Pocito - San Juan - Argentina</small></h5>
@@ -22,7 +23,7 @@
                             <div class="col-xs-offset-1 col-xs-10 col-md-offset-1 col-md-10">
                                 <strong>N° <span id="nroRemito">0000023</span></strong>
                                 <p>Documento no válido como factura</p>
-                                <p>FECHA <span id="fechaRemito">17/09/2024</span></p>
+                                <p>FECHA <span id="fechaRemito"></span></p>
                             </div>
                         </div>
                     </div>
@@ -40,7 +41,7 @@
                                     <th>Importe</th>
                                 </thead>
                                 <tbody>
-                                <tr>
+                                <!-- <tr>
                                     <td>300</td>
                                     <td>PIM800 - Pimenton Extra 100g</td>
                                     <td>500,00</td>
@@ -57,7 +58,7 @@
                                     <td>AJO330 - Ajo disecado 200g</td>
                                     <td>100,00</td>
                                     <td>50000,00</td>
-                                </tr>
+                                </tr> -->
                                 </tbody>
                             </table>
                             <div class="row">
@@ -89,19 +90,113 @@ function cierraModalRemito() {
 }
 
 function imprimirRemito() {
-    var base = "<?php echo base_url()?>";
-    $('#modalBodyRemito').printThis({
-        debug: false,
-        importCSS: true,
-        importStyle: true,
-        pageTitle: "TRAZALOG TOOLS",
-        printContainer: true,
-        loadCSS: base + "lib/bower_components/bootstrap/dist/css/bootstrap.min.css",
-        copyTagClasses: true,
-        afterPrint: function() {
-            cierraModalRemito();
-        },
-        base: base
+    return new Promise((resolve, reject) => {
+        var base = "<?php echo base_url()?>";
+        $('#modalBodyRemito').printThis({
+            debug: false,
+            importCSS: true,
+            importStyle: true,
+            pageTitle: "TRAZALOG TOOLS",
+            printContainer: true,
+            loadCSS: base + "lib/bower_components/bootstrap/dist/css/bootstrap.min.css",
+            copyTagClasses: true,
+            printDelay: 4000,
+            afterPrint: function() {
+                resolve();
+            },
+            base: base
+        });
     });
+}
+async function generaRemito() {
+    wo();
+    var clientesProductos = {};
+    var listadoClientesCargados = [];
+    $('#tablacargas tbody tr').each(function() {
+        var jsonDecoded = JSON.parse($(this).attr("data-json"));
+
+        if (!clientesProductos[jsonDecoded.cliente]) {
+            clientesProductos[jsonDecoded.cliente] = [];
+            listadoClientesCargados.push({ id: jsonDecoded.cliente, nombre: jsonDecoded.nombreCli });
+        }
+
+        var productoExistente = clientesProductos[jsonDecoded.cliente].find(function(producto) {
+            return producto.arti_id === jsonDecoded.producto;
+        });
+
+        if (productoExistente) {
+            productoExistente.cantidad += parseFloat(jsonDecoded.cantidad);
+            productoExistente.importe += parseFloat(jsonDecoded.importeTotal);
+        } else {
+            clientesProductos[jsonDecoded.cliente].push({
+                arti_id: jsonDecoded.producto,
+                descripcion: jsonDecoded.tituloproducto,
+                cantidad: jsonDecoded.cantidad,
+                precio: jsonDecoded.precio,
+                importe: jsonDecoded.importeTotal
+            });
+        }
+    });
+
+    var modalBody = $('#modalBodyRemito');
+    modalBody.find('#tabla_detalle tbody').empty();
+    var total = 0;
+    //Cargo la data en el remito
+    var fechaUnformatted = $("#fecha").val();
+    var fechaSpliteada = fechaUnformatted.split('-');
+    var formattedDate = fechaSpliteada[2] + '-' + fechaSpliteada[1] + '-' + fechaSpliteada[0];
+    $("#fechaRemito").val(formattedDate);
+
+    for (const cliente of listadoClientesCargados) {
+        modalBody.find('#clienteRemito').text(cliente.nombre);
+        clientesProductos[cliente.id].forEach(function(producto) {
+            var row = '<tr>' +
+                '<td>' + producto.cantidad + '</td>' +
+                '<td>' + producto.descripcion + '</td>' +
+                '<td>' + producto.precio + '</td>' +
+                '<td>' + producto.importe + '</td>' +
+                '</tr>';
+            modalBody.find('#tabla_detalle').append(row);
+            total += producto.importe;
+        });
+
+        modalBody.find('#footer_table2').val(total);
+        //Obtengo el nro del contador para remito desde core.tablas
+        var remitoID = await getNroContadorRemito();
+        $("#nroRemito").text(remitoID);
+        //Espero a que se resuelva la promesa para continuar las impresiones
+        await imprimirRemito();
+
+        modalBody.find('#tabla_detalle tbody').empty();
+        modalBody.find('#clienteRemito').empty();
+        total = 0;
+    }
+    wc();
+}
+async function getNroContadorRemito () {
+    let nro_contador_remito = new Promise( function(resolve,reject){
+        $.ajax({
+            type: 'POST',
+            data: {},
+            cache: false,
+            dataType: "json",
+            url: "<?php echo PRD; ?>camion/getNroContadorRemito",
+            success: function(data) { 
+
+                if(data.status){
+                    console.log(data.message);
+                    resolve();
+                }else{
+                    console.log(data.message);
+                    reject();
+                }
+                 
+            },
+            error: function(data) {
+                reject();
+            }
+        });
+    });
+    return await nro_contador_remito;
 }
 </script>
