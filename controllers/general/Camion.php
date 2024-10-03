@@ -4,40 +4,47 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Camion extends CI_Controller
 {
 
-    public function __construct()
-    {
-        parent::__construct();
-        $this->load->model('general/Noconsumibles');
-        $this->load->model('general/Establecimientos');
-        $this->load->model('general/Camiones');
-        $this->load->model('general/Materias');
-        $this->load->model('general/Recipientes');
-        $this->load->model('general/Transportistas');
-        $this->load->model('general/Listado_carga_camion');
-        $this->load->model('general/Listado_recepcion_camion');
-        $this->load->model('core/Clientes');  
-  
-        // si esta vencida la sesion redirige al login
-		$data = $this->session->userdata();
-		// log_message('DEBUG','#Main/login | '.json_encode($data));
-		if(!$data['email']){
-			log_message('DEBUG','#TRAZA|DASH|CONSTRUCT|ERROR  >> Sesion Expirada!!!');
-			redirect(DNATO.'main/login');
-		}
+    public function __construct(){
+      parent::__construct();
+      $this->load->model('general/Noconsumibles');
+      $this->load->model('general/Establecimientos');
+      $this->load->model('general/Camiones');
+      $this->load->model('general/Materias');
+      $this->load->model('general/Recipientes');
+      $this->load->model('general/Transportistas');
+      $this->load->model('general/Listado_carga_camion');
+      $this->load->model('general/Listado_recepcion_camion');
+      $this->load->model('core/Clientes');
+      $this->load->model('core/Precios');
+      $this->load->model('core/Valores');
+      // si esta vencida la sesion redirige al login
+      $data = $this->session->userdata();
+      // log_message('DEBUG','#Main/login | '.json_encode($data));
+      if(!$data['email']){
+        log_message('DEBUG','#TRAZA|DASH|CONSTRUCT|ERROR  >> Sesion Expirada!!!');
+        redirect(DNATO.'main/login');
+      }
     }
 		/**
 		* Levanta pantalla Carga Camión
 		* @param 
 		* @return
 		*/	
-    public function cargarCamion()
-    {
-        $data['fecha'] = date('Y-m-d');
-        $data['lang'] = lang_get('spanish', 4);
-        $data['establecimientos'] = $this->Establecimientos->listarTodo()->establecimientos->establecimiento;
-        $data['tipoEstablecimiento'] = $this->Noconsumibles->tipoEstablecimiento()['data'];
-        $data['clientes']=$this->Clientes->Listar_Clientes();
-        $this->load->view('camion/carga_camion', $data);
+    public function cargarCamion(){
+      log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT | Camion | cargarCamion()");
+      $data['fecha'] = date('Y-m-d');
+      $data['lang'] = lang_get('spanish', 4);
+      $data['establecimientos'] = $this->Establecimientos->listarTodo()->establecimientos->establecimiento;
+      $data['tipoEstablecimiento'] = $this->Noconsumibles->tipoEstablecimiento()['data'];
+      $data['clientes']=$this->Clientes->Listar_Clientes();
+      $poseeRemitosValorizados = $this->Valores->getValor("posee_remitos_valorizados_carga_camion"); //TODO: verificar si el cliente posee remitos valorizados
+      if($poseeRemitosValorizados[0]->valor == 'true'){
+        $data['remitosValorizados'] = $poseeRemitosValorizados;
+        $data['listasPrecios']=$this->Precios->getListasPrecios();
+      }else{
+        $data['remitosValorizados'] = $poseeRemitosValorizados;
+      }
+      $this->load->view('camion/carga_camion', $data);
     }
 
     public function descargarCamion()
@@ -285,17 +292,59 @@ class Camion extends CI_Controller
         json_encode($rsp);
       }
     }
-
-     /**
+    /**
 		* Obtiene el listado de clientes de ABM Clientes
 		* @param 
 		* @return array clientes 
     */
-    function Listar_Clientes()
-	  {
-		log_message('INFO','#TRAZA| CLIENTES | Listar_Clientes() >> ');
-		$data['list'] = $this->Clientes->Listar_Clientes();
-    return $data;
+    function Listar_Clientes(){
+      log_message('INFO','#TRAZA| CLIENTES | Listar_Clientes() >> ');
+      $data['list'] = $this->Clientes->Listar_Clientes();
+      return $data;
+	  }
+    /**
+		* Genera el remito de carga de camion y devuelve el ID para numero de remito con la funcion de contador
+		* @param array $data articulos cargados en el remito separados por cliente 
+		* @return Array clientes 
+    */
+    function guardaRemito(){
+      log_message('DEBUG','#TRAZA | #TRAZ-PROD-TRAZASOFT | Camion | guardaRemito()');
+      $detalleArticulos = $this->input->post('data');
+      $clie_id = $this->input->post('clie_id');
+      $tabla = 'numerador_remito_carga_camion';
+			$nro = $this->Valores->getValor($tabla);
+      if (!$nro) {
+				$dataRemito['nro_remito'] = '1';
+			} else {
+				$nuevoNro = $nro[0]->valor2 + 1;
+				$dataRemito['nro_remito'] = strval($nuevoNro);
+			}
+      $dataRemito['detalleArticulos'] =  $detalleArticulos;
+      $dataRemito['clie_id'] = $clie_id;
+      //Creo la cabcera y el detalle del remito
+			$respRemito = $this->Camiones->crearRemito($dataRemito);
+      
+      /* Actualizo o creo nuevo registro en core.tablas con 'numerador_remito_carga_camion' */
+			if($respRemito['cabecera']['status'] && $respRemito['detalle']['status']){
+				$datos['tabla'] = $tabla;
+				if(!$nro){
+					$datos['valor'] = 'contador';
+					$datos['valor2'] = '1';
+					$datos['valor3'] = '';
+					$datos['descripcion'] = $tabla;
+					$respRemito['contador'] = $this->Valores->guardarValor($datos);
+				}else {
+					$dato['valor'] = 'contador';
+					$dato['valor2'] = strval($nuevoNro);
+					$dato['valor3'] = '';
+					$dato['descripcion'] = $tabla;
+					$dato['tabl_id'] = $nro[0]->tabl_id;
+					$respRemito['contador'] = $this->Valores->editarValor($dato);
+				}
+
+				$respRemito['nro_remito'] = $dataRemito['nro_remito'];
+			}
+      echo json_encode($respRemito);
 	  }
 
 }

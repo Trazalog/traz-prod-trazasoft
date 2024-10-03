@@ -1,67 +1,72 @@
 <?php $this->load->view('camion/modal_lotes')?>
 <div class="box">
     <div class="box-header with-border">
-        <h3 class="box-title">Carga Camión nnnn</h3>
+        <h3 class="box-title">Carga Camión</h3>
         <div class="box-tools pull-right">
         </div>
     </div>
     <div class="box-body">
         <div class="row">
-            <div class="col-md-2 col-xs-12">
-                <label for="establecimientos" class="form-label">Establecimiento*:</label>
-            </div>
-            <div class="col-md-4 col-xs-12">
-                <select class="form-control select2 select2-hidden-accesible" onchange="Actualiza(this.value); ActualizaLotes();" id="establecimientos">
-                    <option value="" disabled selected>-Seleccione Establecimiento-</option>
-                    <?php
-                     foreach($establecimientos as $fila)
-                     {  
-                           echo '<option value="'.$fila->esta_id.'" >'.$fila->nombre.'</option>';
-                     } 
-                     ?>
-                </select>
-            </div>
-            <div class="col-md-1 col-xs-12">
-                <label for="fecha" class="form-label">Fecha*:</label>
-            </div>
-            <div class="col-md-3 col-xs-12">
-                <input type="date" id="fecha" value="<?php echo $fecha;?>" class="form-control">
-            </div>
-            <div class="col-md-2"></div>
-        </div>
-    </div>
-</div>
-</div>
-<div class="box box-primary">
-    <div class="box-header with-border">
-        <h3 class="box-title">Datos Camión</h3>
-    </div>
-    <div class="box-body">
-        <div class="row" style="margin-top:40px;">
-            <div class="col-md-6 col-xs-12">
-                <label class="form-label" for="">Camiones ingresados*:</label>
-                <select id="camiones" class="form-control" onchange="DatosCamion()" disabled>
-                </select>
-            </div>
-            <div class="col-md-6 col-xs-12">
-                <div class="row">
+            <div class="col-xs-12 col-md-12 col-lg-12">
+                <div class="form-inline">
+                    <div class="col-xs-12 col-md-5">
+                        <div class="form-group">
+                            <label for="establecimientos" class="form-label">Establecimiento<?php hreq() ?>:</label>
+                            <select class="form-control select2 select2-hidden-accesible" onchange="Actualiza(this.value); ActualizaLotes();" id="establecimientos">
+                                <option value="" disabled selected>-Seleccione establecimiento-</option>
+                                <?php
+                                foreach($establecimientos as $fila)
+                                {  
+                                    echo '<option value="'.$fila->esta_id.'" >'.$fila->nombre.'</option>';
+                                } 
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-3">
+                        <div class="form-group">
+                            <label for="fecha" class="form-label">Fecha<?php hreq() ?>:</label>
+                            <input type="date" id="fecha" value="<?php echo $fecha;?>" class="form-control">
+                        </div>
+                    </div>
+                    <!-- /.fecha seleccionada -->
+                    <div class="col-xs-12 col-md-4">
+                        <div class="form-group">
+                            <label class="form-label" for="">Camiones ingresados<?php hreq() ?>:</label>
+                            <select id="camiones" class="form-control" onchange="DatosCamion()" disabled>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- /.camiones -->
+                </div>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+        <div class="row">
+            <div class="col-xs-12 col-md-12 col-lg-12">
+                <h3 style="margin-top: 5px;"><small>Datos del Camión</small></h3>
+                <div class="form-inline">
                     <input type="hidden" id="idcamion">
-                    <div class="col-md-2 col-xs-12"><label class="form-label">Fecha</label></div>
-                    <div class="col-md-8 col-xs-12"><input class="form-control" id="fechacamion" type="text" disabled>
+                    <div class="col-xs-12 col-md-3 col-md-offset-1">
+                        <div class="form-group">
+                            <label class="form-label">Fecha:</label>
+                            <input class="form-control" id="fechacamion" type="text" disabled>
+                        </div>
                     </div>
-                    <div class="col-md-2"></div>
-                </div>
-                <div class="row">
-                    <div class="col-md-2 col-xs-12"><label class="form-label">Patente</label></div>
-                    <div class="col-md-8 col-xs-12"><input class="form-control" id="patentecamion" type="text" disabled>
+                    <!-- /.fecha info camion -->
+                    <div class="col-xs-12 col-md-3">
+                        <div class="form-group">
+                            <label class="form-label">Patente:</label>
+                            <input class="form-control" id="patentecamion" type="text" disabled>
+                        </div>
                     </div>
-                    <div class="col-md-2"></div>
-                </div>
-                <div class="row">
-                    <div class="col-md-2 col-xs-12"><label class="form-label">Conductor</label></div>
-                    <div class="col-md-8 col-xs-12"><input class="form-control" id="conductorcamion" type="text"
-                            disabled></div>
-                    <div class="col-md-2"></div>
+                    <!-- /.patente -->
+                    <div class="col-xs-12 col-md-3">
+                        <div class="form-group">
+                            <label class="form-label">Conductor:</label>
+                            <input class="form-control" id="conductorcamion" type="text" disabled>
+                        </div>
+                    </div>
+                    <!-- /.conductor -->
                 </div>
             </div>
         </div>
@@ -72,79 +77,115 @@
         <h3 class="box-title">Datos de Carga</h3>
     </div>
     <div class="box-body">
-        <div class="row" style="margin-top:40px;">
-            <div class="col-md-6 col-xs-12">
-               <label class="form-label" for="">Codigos Lotes*: &nbsp;&nbsp;</label>  
-                <div class="row">
-                    <div class="col-xs-11 margin form-group ba">
-                        <?php echo selectBusquedaAvanzada('inputlotes'); ?>
+        <div class="row firstRowOrder">
+            <div class="col-xs-12 col-md-12 col-lg-12">
+                <div class="form-inline">
+                    <div class="col-xs-12 col-md-6">
+                        <div class="col-xs-6 col-md-3">
+                            <label class="form-label">Cód. Lote<?php hreq() ?>:</label>
+                        </div>
+                        <div class="col-md-9 ba">
+                            <?php echo selectBusquedaAvanzada('inputlotes'); ?>
+                        </div>
                     </div>
+                    <!-- /.lote -->
+                    <div class="col-xs-12 col-md-3">
+                        <div class="form-group">
+                            <label class="form-label">Fecha:</label>
+                            <input class="form-control" type="text" disabled id="fechalote">
+                        </div>
+                    </div>
+                    <!-- /.fecha -->
+                    <div class="col-xs-12 col-md-3">
+                        <div class="form-group">
+                            <label class="form-label">Envase:</label>
+                            <input class="form-control" type="text" id="envaselote" disabled>
+                        </div>
+                    </div>
+                    <!-- /.envase -->
+                    
+                </div><!-- /.form-inline -->
+            </div><!-- /.col -->
+        </div><!-- /.firstRowOrder -->
+        <div style="margin-top:10px" class="row secondRowOrder">
+            <div class="col-xs-12 col-md-12 col-lg-12">
+                <div class="form-inline">
+                    <div class="col-xs-6 col-md-3 col-md-offset-1">
+                        <div class="form-group">
+                            <label for="establecimientos" class="form-label">Cliente<?php hreq() ?>:</label>                                
+                            <select class="form-control sel2 select2-hidden-accesible" id="clientes">
+                                <option value="" disabled selected>-Seleccione cliente-</option>
+                                <?php
+                                    foreach($clientes as $fila){  
+                                        echo '<option value="'.$fila->clie_id.'" " data-nombre="'.$fila->nombre.'">'.$fila->nombre.'</option>';
+                                    } 
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- /.cliente -->
+                    <div class="col-xs-6 col-md-3">
+                        <div class="form-group">
+                            <label class="form-label">Cantidad<?php hreq() ?>:</label>
+                            <input class="form-control" type="number" placeholder="Ingrese cantidad" id="cantidadcarga">
+                        </div>
+                    </div>
+                    <!-- /.cantidad -->
+                     <?php if($listasPrecios): ?>
+                    <div class="col-xs-12 col-md-5">
+                        <div class="form-group">
+                            <label for="lista_precios" class="form-label">Lista precios<?php hreq() ?>:</label>                                
+                            <select class="form-control sel2 select2-hidden-accesible" id="lista_precios">
+                                <option value="" data-foo='' disabled selected>-Seleccione lista de precios-</option>
+                                <?php
+                                    foreach($listasPrecios as $lista){
+                                        $descripcion = $lista->detalles_lista_precio->detalle_lista_precio[0]->descripcion ? '<small><cite>'.$lista->detalles_lista_precio->detalle_lista_precio[0]->descripcion.' </cite></small><label class="text-blue">♦ </label>' : '';
+                                        $version = $lista->detalles_lista_precio->detalle_lista_precio[0]->nro_version ? '<small><cite> Versión: v'.$lista->detalles_lista_precio->detalle_lista_precio[0]->nro_version.'</cite></small>' : '';
+                                        $aux = $descripcion ? $descripcion : '';
+                                        $aux .= $version ? $version : '';
+                                        echo "<option data-foo='$aux' data-json='".json_encode($lista)."' value='$lista->lipr_id' data-nombre='$lista->nombre'>$lista->nombre</option>";
+                                    } 
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                    <?php endif; ?>
+                    <!-- /.lista precio -->
                 </div>
             </div>
-            <div class="col-xs-12 col-md-6">
-                <div class="row">
-                    <div class="col-md-2 col-xs-12"><label class="form-label">Fecha</label></div>
-                    <div class="col-md-8 col-xs-12"><input class="form-control" type="text" disabled id="fechalote">
-                    </div>
-                    <div class="col-md-2"></div>
-                </div>
-                <div class="row">
-                    <div class="col-md-2 col-xs-12"><label class="form-label">Envase</label></div>
-                    <div class="col-md-8 col-xs-12"><input class="form-control" type="text" id="envaselote" disabled>
-                    </div>
-                    <div class="col-md-2"></div>
-                </div>
-                <div class="row">
-                    <div class="col-md-2 col-xs-12"><label class="form-label">Producto</label></div>
-                    <div class="col-md-8 col-xs-12"><input class="form-control" type="text" id="productolote" disabled>
-                    </div>
-                    <div class="col-md-2"></div>
-                </div>
-                <div class="row">
-                    <div class="col-md-2 col-xs-12"><label class="form-label">Stock</label></div>
-                    <div class="col-md-8 col-xs-12"><input class="form-control" type="text" id="stocklote" disabled>
-                    </div>
-                    <div class="col-md-2 "></div>
-                </div>
-                <div class="row">
-                    <div class="col-md-2 col-xs-12">
-                        <label for="establecimientos" class="form-label">Cliente*</label>
-                    </div>
-                    <div class="col-md-8 col-xs-12">
-                        <select class="form-control select2 select2-hidden-accesible" id="clientes">
-                        <option value="" disabled selected>-Seleccione Cliente-</option>
-                        <?php
-                            foreach($clientes as $fila)
-                            {  
-                                echo '<option value="'.$fila->clie_id.'" " data-nombre="'.$fila->nombre.'">'.$fila->nombre.'</option>';
-                            } 
-                        ?>
-                    </div>
-                </select>
-                </div>
-                    <div class="col-md-2 "></div>
-                </div>
-                <div class="row">
-                    <div class="col-md-2 col-xs-12"><label class="form-label">Cantidad*</label></div>
-                    <div class="col-md-8 col-xs-12"><input class="form-control" type="number"
-                            placeholder="Ingrese cantidad" id="cantidadcarga"></div>
-                    <div class="col-md-2"></div>
-                </div>
+        </div>
+        <div class="row thirdRowOrder">
+            <div class="col-xs-12 col-md-12 col-lg-12">
+                <!-- <h3 style="margin-top: 5px;"><small>Datos del lote</small></h3> -->
+                <div class="form-inline">
+                    <!-- <div class="col-xs-12 col-md-3">
+                        <div class="form-group">
+                            <label class="form-label">Producto:</label>
+                            <input class="form-control" type="text" id="productolote" disabled>
+                        </div>
+                    </div> -->
+                    <!-- /.producto -->
+                    <!-- <div class="col-xs-12 col-md-3">
+                        <div class="form-group">
+                            <label class="form-label">Stock:</label>
+                            <input class="form-control" type="text" id="stocklote" disabled>
+                        </div>
+                    </div> -->
+                    <!-- /.stock -->
+
+                </div><!-- /.form-inline -->
+            </div><!-- /.col -->
+        </div><!-- /.thirdRowOrder -->
+        <div class="row" style="margin-top: 20px">
+            <div class="col-xs-6 col-md-3 col-md-offset-5 col-lg-2">
+                <button class="btn btn-block btn-primary" type="button" onclick="Cargar();">Cargar camión<?php #echo $lang["CargarCamion"];?></button>
             </div>
         </div>
         <div class="row" style="margin-top: 20px">
-            <div class="col-xs-3"></div>
-            <div class="col-xs-6"><button class="btn btn-block btn-primary" type="button"
-                    onclick="Cargar();">Cargar camión<?php #echo $lang["CargarCamion"];?></button></div>
-            <div class="col-xs-3"></div>
+            <input type="hidden" id="existe_tabla" value="no">
+            <div class="col-xs-12 table-responsive" id="tablacargas"></div>
         </div>
-    </div>
-    <div class="row" style="margin-top: 20px">
-        <input type="hidden" id="existe_tabla" value="no">
-        <div class="col-xs-12 table-responsive" id="tablacargas"></div>
-    </div>
-
-    <!-- /.box-body -->
+    </div><!-- /.box-body -->
     <div class="box-footer">
         <div class="row">
             <div class="col-md-8"></div>
@@ -158,8 +199,23 @@
         </div>
     </div>
     <!-- /.box-footer-->
+    <!-- MODAL REMITO -->
+    <?php $this->load->view(PRD. "camion/modal_remito") ?>
+    <!-- FIN MODAL REMITO -->
 </div>
 <script>
+//Variable core.tablas para identificar remitos valorizados
+var verListaPrecios = <?php echo $remitosValorizados ? $remitosValorizados[0]->valor : 'false' ?>;
+$(document).ready(function () {
+    $(".sel2").select2();
+    $('#lista_precios').select2({
+        placeholder: "-Seleccione lista de precios-",
+        allowClear: true,
+        // width: '100%',
+        templateResult: formatCustom
+    });
+});
+
 function Blanquealote() {
     document.getElementById('inputlotes').value = "";
 }
@@ -260,8 +316,8 @@ function ActualizaLote(lote) {
     
     document.getElementById('fechalote').value = lote.fecha;
     document.getElementById('envaselote').value = lote.tituloenvase;
-    document.getElementById('productolote').value = lote.tituloproducto;
-    document.getElementById('stocklote').value = lote.stock;
+    // document.getElementById('productolote').value = lote.tituloproducto;
+    // document.getElementById('stocklote').value = lote.stock;
 }
 
 function Cargar() {
@@ -295,6 +351,13 @@ function Cargar() {
             msj += "- No ha cargado la cantidad o dicha cantidad es superior al stock \n";
         }
     }
+    if(verListaPrecios){
+        var dataArticulo = validaArticuloListaPrecio();
+        if(!dataArticulo){
+            ban = false
+            msj += "- Artículo seleccionado no se encuentra en la lista de precios seleccionada \n";
+        }
+    }
     if (!ban) {
         alert(msj);
     } else {
@@ -304,27 +367,43 @@ function Cargar() {
         carga.cantidad = document.getElementById('cantidadcarga').value;
         carga.patente = document.getElementById('patentecamion').value;
         carga.motr_id = data_camion.id;
+        if(verListaPrecios){
+            carga.importeTotal = carga.cantidad * dataArticulo.precio;
+            carga.listaPrecio = $("#lista_precios option:selected").text();
+            carga.precio = dataArticulo.precio;
+            carga.core_id = dataArticulo.core_id;
+        }else{
+            carga.core_id = 1;// TODO: tengo que resolver como manejar el caso de empresas sin lista de precios
+            carga.precio = 0;
+            carga.importeTotal = 0;
+        }
         var html = '';
         if (existe == 'no') {
 
-            html += '<table id="tabla_carga" style="width: 90%;" class="table">';
+            html += '<table id="tabla_carga" class="table">';
             html += "<thead>";
             html += "<tr>";
             html += "<th>Acciones</th>";
             html += "<th>Lote</th>";
             html += "<th>Envase</th>";
-            html += "<th>Producto</th>";
+            html += "<th>Descripción producto</th>";
             html += "<th>Cliente</th>";
+            html += "<th>Lista de precios</th>";
             html += "<th>Cantidad</th>";
+            html += "<th>P.Unitario</th>";
+            html += "<th>Importe</th>";
             html += '</tr></thead><tbody>';
             html += "<tr data-json='" + JSON.stringify(carga) + "' id='" + carga.id + "'>";
             html +=
                 '<td><i class="fa fa-fw fa-minus text-light-blue tabla_carga_borrar" style="cursor: pointer; margin-left: 15px;" title="Eliminar"></i></td>';
             html += '<td>' + carga.titulo + '</td>';
             html += '<td>' + carga.tituloenvase + '</td>';
-            html += '<td>' + carga.tituloproducto + '</td>';
-            html += '<td>' + carga.nombreCli + '</td>';
+            html += '<td class="descripcion">' + carga.tituloproducto + '</td>';
+            html += '<td class="cliente">' + carga.nombreCli + '</td>';
+            html += '<td>' + carga.listaPrecio + '</td>';
             html += '<td>' + carga.cantidad + '</td>';
+            html += '<td>' + carga.precio + '</td>';
+            html += '<td>' + carga.importeTotal + '</td>';
             html += '</tr>';
             html += '</tbody></table>';
             document.getElementById('tablacargas').innerHTML = "";
@@ -338,9 +417,12 @@ function Cargar() {
                 '<td><i class="fa fa-fw fa-minus text-light-blue tabla_carga_borrar" style="cursor: pointer; margin-left: 15px;" title="Eliminar"></i></td>';
             html += '<td>' + carga.titulo + '</td>';
             html += '<td>' + carga.tituloenvase + '</td>';
-            html += '<td>' + carga.tituloproducto + '</td>';
-            html += '<td>' + carga.nombreCli + '</td>';
+            html += '<td class="descripcion">' + carga.tituloproducto + '</td>';
+            html += '<td class="cliente">' + carga.nombreCli + '</td>';
+            html += '<td>' + carga.listaPrecio + '</td>';
             html += '<td>' + carga.cantidad + '</td>';
+            html += '<td>' + carga.precio + '</td>';
+            html += '<td>' + carga.importeTotal + '</td>';
             html += '</tr>';
             $('#tabla_carga tbody').append(html);
             tabla = document.getElementById('tabla_carga').innerHTML;
@@ -353,11 +435,12 @@ function Cargar() {
         }
         document.getElementById('fechalote').value = "";
         document.getElementById('envaselote').value = "";
-        document.getElementById('productolote').value = "";
-        document.getElementById('stocklote').value = "";
         document.getElementById('cantidadcarga').value = "";
         document.getElementById('inputlotes').value = "";
-        document.getElementById('clientes').value = "";
+        $('#inputlotes').val(null).trigger('change');
+        $("#detalle").text("");
+        $('#clientes').val(null).trigger('change');
+        $('#lista_precios').val(null).trigger('change');
 
     }
 }
@@ -416,58 +499,51 @@ function ModalLotes() {
 }
 
 // Guarda la Carga de Camion
-function FinalizarCarga() {
-    existe = document.getElementById('existe_tabla').value;
+async function FinalizarCarga() {
+    const existe = document.getElementById('existe_tabla').value;
     if (existe == "no") {
-        alert("No ha cargado ningun lote");
+        error("Error","No ha cargado ningun lote");
     } else {
-        var lotes = [];
+        let lotes = [];
         $('#tabla_carga tbody').find('tr').each(function() {
-            json = "";
-            json = JSON.parse($(this).attr('data-json'));
+            let json = JSON.parse($(this).attr('data-json'));
             lotes.push(json);
         });
         lotes = JSON.stringify(lotes);
         wo();
-        $.ajax({
-            type: 'POST',
-            dataType:'JSON',
-            async: false,
-            data: {
-                lotes: lotes
-            },
-            url: '<?php echo base_url(PRD) ?>general/Camion/finalizarCarga',
-            success: function(result) {
 
-                console.log(result);
-                
-                if(result.status == true) {
-                    hecho('Guardado!','El camión se cargó exitosamente!');
-                    $('#tabla_carga tbody').empty();
-                    Actualiza($('#establecimientos').val());
-                    ActualizaLotes();
+        try {
+            const result = await $.ajax({
+                type: 'POST',
+                dataType: 'JSON',
+                data: {
+                    lotes: lotes
+                },
+                url: '<?php echo base_url(PRD) ?>general/Camion/finalizarCarga',
+            });
 
-                }
-                else{
-                    error('Error','No se puedo registrar carga');
-                }
-
-                return;
-
-                if (result == "ok") {
-                    linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
-
-                } else {
-                    error('Error','Se produjo un error al guardar la carga');
-                }
-
-            },error: function(rsp){
-                error('Error','Error al guardar carga');
-            },complete: function(){
-                wc();
+            if (result.status == true) {
+                // Genero el remito e imprimo
+                await generaRemito();
+                $('#tabla_carga').DataTable().clear().draw();
+                Actualiza($('#establecimientos').val());
+                ActualizaLotes();
+                //Limpio la data
+                $("#patentecamion").val("");
+                $("#fechacamion").val("");
+                $("#conductorcamion").val("");
+                $("#clientes").val("").trigger('change');
+                $("#lista_precios").val("").trigger('change');
+                $("#fechalote").val("");
+                hecho('Guardado!', 'El camión se cargó exitosamente!');
+            } else {
+                error('Error', 'No se puedo registrar carga');
             }
-
-        });
+        } catch (rsp) {
+            error('Error', 'Error al guardar carga');
+        } finally {
+            wc();
+        }
     }
 }
 $(document).off('click', '.tabla_carga_borrar').on('click', '.tabla_carga_borrar', {
@@ -475,4 +551,24 @@ $(document).off('click', '.tabla_carga_borrar').on('click', '.tabla_carga_borrar
     idrecipiente: 'tablacargas',
     idbandera: 'existe_tabla'
 }, remover);
+//Valida que el articulo seleccionado se encuentre en la lista de precios seleccionada
+function validaArticuloListaPrecio(){
+    var selectedOption = $('#lista_precios').find(':selected');
+    var dataJson = selectedOption.data('json');
+    if (dataJson.detalles_lista_precio.detalle_lista_precio != null) {
+        var listaPrecios = dataJson.detalles_lista_precio.detalle_lista_precio;
+        var dataLote = JSON.parse($('#inputlotes').find(':selected').attr('data-json'));
+        var matchedArti = listaPrecios.find(function(articulo) {
+            return articulo.arti_id === dataLote.producto;
+        });
+
+        if (matchedArti) {
+            return matchedArti;
+        } else {
+            return null;
+        }
+    } else {
+        return null;
+    }
+}
 </script>

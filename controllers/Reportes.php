@@ -7,8 +7,8 @@ require APPPATH . '/modules/'.PRD."reports/prodResponsable/Prod_Responsable.php"
 require APPPATH . '/modules/'.PRD."reports/ingresos/Ingresos.php";
 require APPPATH . '/modules/'.PRD."reports/salidas/Salidas.php";
 require APPPATH . '/modules/'.PRD."reports/asignacion_de_recursos/Asignacion_de_recursos.php";
-class Reportes extends CI_Controller
-{
+require APPPATH . '/modules/'.PRD."reports/historico_remitos/Historico_remitos.php";
+class Reportes extends CI_Controller {
 
   public function __construct()
   {
@@ -195,4 +195,28 @@ class Reportes extends CI_Controller
     $rsp['transportista'] = $this->Opcionesfiltros->getTransportistas();
     echo json_encode($rsp);
   }
+  /**
+   * - Levanta vista reporte de Historico de remitos
+   * - Recarga con datos filtrados
+   * @param
+   * @return view historico_remitos
+   * 
+   */
+  function historicoRemitos(){
+    $data = $this->input->post('data');
+      //  $tipo_producto = $data['tipo_producto'] != "TODOS" && !empty($data['tipo_producto']) ? empresa(). '-tipos_producto' . $data['tipo_producto'] : 'TODOS';
+
+      $data = [
+        'fec_desde' => $data['fec_desde'],
+        'fec_hasta' => $data['fec_hasta'],
+        'cliente' => $data['cliente'],
+      ];
+
+      log_message('DEBUG', '#TRAZA | TRAZ-PROD-TRAZASOFT | REPORTES | historicoRemitos() | $data: >> ' . json_encode($data));
+
+      $json = $this->Opcionesfiltros->getHistoricoRemitos($data);
+
+      $reporte = new Historico_remitos($json);
+      $reporte->run()->render();
+    }
 }
