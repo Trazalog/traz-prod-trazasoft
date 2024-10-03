@@ -41,24 +41,6 @@
                                     <th>Importe</th>
                                 </thead>
                                 <tbody>
-                                <!-- <tr>
-                                    <td>300</td>
-                                    <td>PIM800 - Pimenton Extra 100g</td>
-                                    <td>500,00</td>
-                                    <td>150000,00</td>
-                                </tr>
-                                <tr>
-                                    <td>200</td>
-                                    <td>PIM900 - Pimenton Extra 100g</td>
-                                    <td>300,00</td>
-                                    <td>60000,00</td>
-                                </tr>
-                                <tr>
-                                    <td>500</td>
-                                    <td>AJO330 - Ajo disecado 200g</td>
-                                    <td>100,00</td>
-                                    <td>50000,00</td>
-                                </tr> -->
                                 </tbody>
                             </table>
                             <div class="row">
@@ -71,8 +53,8 @@
                                 <!--_______ FIN TABLA ARTICULOS ______-->
                             </div>
                         </div>
-                        <h3><strong>TEXTO CONFIGURABLE</strong></h3>
-                        <p>OBSERVACIONES</p>
+                        <!-- <h3><strong>TEXTO CONFIGURABLE</strong></h3> -->
+                        <!-- <p>OBSERVACIONES</p> -->
                     </div>
                     <!-- / Bloque de cotizacion -->
                 </div>
@@ -109,91 +91,101 @@ function imprimirRemito() {
     });
 }
 async function generaRemito() {
-    wo();
-    var clientesProductos = {};
-    var listadoClientesCargados = [];
-    $('#tablacargas tbody tr').each(function() {
-        var jsonDecoded = JSON.parse($(this).attr("data-json"));
+    return new Promise(async (resolve, reject) => {
+        try {
+            wo();
+            var clientesProductos = {};
+            var listadoClientesCargados = [];
+            $('#tablacargas tbody tr').each(function() {
+                var jsonDecoded = JSON.parse($(this).attr("data-json"));
 
-        if (!clientesProductos[jsonDecoded.cliente]) {
-            clientesProductos[jsonDecoded.cliente] = [];
-            listadoClientesCargados.push({ id: jsonDecoded.cliente, nombre: jsonDecoded.nombreCli });
-        }
+                if (!clientesProductos[jsonDecoded.cliente]) {
+                    clientesProductos[jsonDecoded.cliente] = [];
+                    listadoClientesCargados.push({ id: jsonDecoded.cliente, nombre: jsonDecoded.nombreCli });
+                }
 
-        var productoExistente = clientesProductos[jsonDecoded.cliente].find(function(producto) {
-            return producto.arti_id === jsonDecoded.producto;
-        });
+                var productoExistente = clientesProductos[jsonDecoded.cliente].find(function(producto) {
+                    return producto.arti_id === jsonDecoded.producto;
+                });
 
-        if (productoExistente) {
-            productoExistente.cantidad += parseFloat(jsonDecoded.cantidad);
-            productoExistente.importe += parseFloat(jsonDecoded.importeTotal);
-        } else {
-            clientesProductos[jsonDecoded.cliente].push({
-                arti_id: jsonDecoded.producto,
-                descripcion: jsonDecoded.tituloproducto,
-                cantidad: jsonDecoded.cantidad,
-                precio: jsonDecoded.precio,
-                importe: jsonDecoded.importeTotal
+                if (productoExistente) {
+                    productoExistente.cantidad = parseFloat(productoExistente.cantidad) + parseFloat(jsonDecoded.cantidad);
+                    productoExistente.importe = parseFloat(productoExistente.importe) + parseFloat(jsonDecoded.importeTotal);
+                } else {
+                    clientesProductos[jsonDecoded.cliente].push({
+                        core_id: jsonDecoded.core_id,
+                        arti_id: jsonDecoded.producto,
+                        descripcion: jsonDecoded.tituloproducto,
+                        cantidad: jsonDecoded.cantidad,
+                        precio: jsonDecoded.precio,
+                        importe: jsonDecoded.importeTotal
+                    });
+                }
             });
+
+            var modalBody = $('#modalBodyRemito');
+            modalBody.find('#tabla_detalle tbody').empty();
+            var total = 0;
+            //Cargo la data en el remito
+            var fechaUnformatted = $("#fecha").val();
+            var fechaSpliteada = fechaUnformatted.split('-');
+            var formattedDate = fechaSpliteada[2] + '-' + fechaSpliteada[1] + '-' + fechaSpliteada[0];
+            $("#fechaRemito").text(formattedDate);
+            for (const cliente of listadoClientesCargados) {
+                modalBody.find('#clienteRemito').text(cliente.nombre);
+                clientesProductos[cliente.id].forEach(function(producto) {
+                    var row = '<tr>' +
+                        '<td>' + producto.cantidad + '</td>' +
+                        '<td>' + producto.descripcion + '</td>' +
+                        '<td>' + producto.precio + '</td>' +
+                        '<td>' + producto.importe + '</td>' +
+                        '</tr>';
+                    modalBody.find('#tabla_detalle').append(row);
+                    total += producto.importe;
+                });
+
+                modalBody.find('#footer_table2').val(total);
+                //Obtengo el nro del contador para remito desde core.tablas
+                var remitoID = await guardaRemito(clientesProductos[cliente.id],cliente.id);
+                $("#nroRemito").text(remitoID);
+                //Espero a que se resuelva la promesa para continuar las impresiones
+                await imprimirRemito();
+
+                modalBody.find('#tabla_detalle tbody').empty();
+                modalBody.find('#clienteRemito').empty();
+                total = 0;
+            }
+            wc();
+            resolve('Se generaron los remitos correctamente');
+        } catch (err) {
+            wc();
+            console.log(err);
+            error("Error", "Error al generar los remitos");
+            reject(err);
         }
     });
-
-    var modalBody = $('#modalBodyRemito');
-    modalBody.find('#tabla_detalle tbody').empty();
-    var total = 0;
-    //Cargo la data en el remito
-    var fechaUnformatted = $("#fecha").val();
-    var fechaSpliteada = fechaUnformatted.split('-');
-    var formattedDate = fechaSpliteada[2] + '-' + fechaSpliteada[1] + '-' + fechaSpliteada[0];
-    $("#fechaRemito").val(formattedDate);
-
-    for (const cliente of listadoClientesCargados) {
-        modalBody.find('#clienteRemito').text(cliente.nombre);
-        clientesProductos[cliente.id].forEach(function(producto) {
-            var row = '<tr>' +
-                '<td>' + producto.cantidad + '</td>' +
-                '<td>' + producto.descripcion + '</td>' +
-                '<td>' + producto.precio + '</td>' +
-                '<td>' + producto.importe + '</td>' +
-                '</tr>';
-            modalBody.find('#tabla_detalle').append(row);
-            total += producto.importe;
-        });
-
-        modalBody.find('#footer_table2').val(total);
-        //Obtengo el nro del contador para remito desde core.tablas
-        var remitoID = await getNroContadorRemito();
-        $("#nroRemito").text(remitoID);
-        //Espero a que se resuelva la promesa para continuar las impresiones
-        await imprimirRemito();
-
-        modalBody.find('#tabla_detalle tbody').empty();
-        modalBody.find('#clienteRemito').empty();
-        total = 0;
-    }
-    wc();
 }
-async function getNroContadorRemito () {
+async function guardaRemito (data,clie_id) {
     let nro_contador_remito = new Promise( function(resolve,reject){
         $.ajax({
             type: 'POST',
-            data: {},
+            data: {data,clie_id},
             cache: false,
             dataType: "json",
-            url: "<?php echo PRD; ?>camion/getNroContadorRemito",
+            url: "<?php echo PRD; ?>/general/camion/guardaRemito",
             success: function(data) { 
-
-                if(data.status){
-                    console.log(data.message);
-                    resolve();
+                console.log("finaliza el proceso de guardado de remito");
+                if(data.cabecera.status && data.detalle.status){
+                    console.log(data);
+                    resolve(data.nro_remito);
                 }else{
-                    console.log(data.message);
-                    reject();
+                    console.log(data);
+                    reject(data);
                 }
                  
             },
             error: function(data) {
-                reject();
+                reject(data);
             }
         });
     });

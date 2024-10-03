@@ -113,7 +113,7 @@
                     <div class="col-xs-6 col-md-3 col-md-offset-1">
                         <div class="form-group">
                             <label for="establecimientos" class="form-label">Cliente<?php hreq() ?>:</label>                                
-                            <select class="form-control select2 select2-hidden-accesible" id="clientes">
+                            <select class="form-control sel2 select2-hidden-accesible" id="clientes">
                                 <option value="" disabled selected>-Seleccione cliente-</option>
                                 <?php
                                     foreach($clientes as $fila){  
@@ -131,19 +131,25 @@
                         </div>
                     </div>
                     <!-- /.cantidad -->
+                     <?php if($listasPrecios): ?>
                     <div class="col-xs-12 col-md-5">
                         <div class="form-group">
-                            <label for="establecimientos" class="form-label">Lista precios<?php hreq() ?>:</label>                                
-                            <select class="form-control select2 select2-hidden-accesible" id="lista_precios">
-                                <option value="" disabled selected>-Seleccione lista de precios-</option>
+                            <label for="lista_precios" class="form-label">Lista precios<?php hreq() ?>:</label>                                
+                            <select class="form-control sel2 select2-hidden-accesible" id="lista_precios">
+                                <option value="" data-foo='' disabled selected>-Seleccione lista de precios-</option>
                                 <?php
-                                    foreach($listasPrecios as $lista){  
-                                        echo '<option value="'.$lista->lipr_id.'" " data-nombre="'.$lista->nombre.'">'.$lista->nombre.'</option>';
+                                    foreach($listasPrecios as $lista){
+                                        $descripcion = $lista->detalles_lista_precio->detalle_lista_precio[0]->descripcion ? '<small><cite>'.$lista->detalles_lista_precio->detalle_lista_precio[0]->descripcion.' </cite></small><label class="text-blue">♦ </label>' : '';
+                                        $version = $lista->detalles_lista_precio->detalle_lista_precio[0]->nro_version ? '<small><cite> Versión: v'.$lista->detalles_lista_precio->detalle_lista_precio[0]->nro_version.'</cite></small>' : '';
+                                        $aux = $descripcion ? $descripcion : '';
+                                        $aux .= $version ? $version : '';
+                                        echo "<option data-foo='$aux' data-json='".json_encode($lista)."' value='$lista->lipr_id' data-nombre='$lista->nombre'>$lista->nombre</option>";
                                     } 
                                 ?>
                             </select>
                         </div>
                     </div>
+                    <?php endif; ?>
                     <!-- /.lista precio -->
                 </div>
             </div>
@@ -198,6 +204,18 @@
     <!-- FIN MODAL REMITO -->
 </div>
 <script>
+//Variable core.tablas para identificar remitos valorizados
+var verListaPrecios = <?php echo $remitosValorizados ? $remitosValorizados[0]->valor : 'false' ?>;
+$(document).ready(function () {
+    $(".sel2").select2();
+    $('#lista_precios').select2({
+        placeholder: "-Seleccione lista de precios-",
+        allowClear: true,
+        // width: '100%',
+        templateResult: formatCustom
+    });
+});
+
 function Blanquealote() {
     document.getElementById('inputlotes').value = "";
 }
@@ -333,6 +351,13 @@ function Cargar() {
             msj += "- No ha cargado la cantidad o dicha cantidad es superior al stock \n";
         }
     }
+    if(verListaPrecios){
+        var dataArticulo = validaArticuloListaPrecio();
+        if(!dataArticulo){
+            ban = false
+            msj += "- Artículo seleccionado no se encuentra en la lista de precios seleccionada \n";
+        }
+    }
     if (!ban) {
         alert(msj);
     } else {
@@ -342,27 +367,43 @@ function Cargar() {
         carga.cantidad = document.getElementById('cantidadcarga').value;
         carga.patente = document.getElementById('patentecamion').value;
         carga.motr_id = data_camion.id;
+        if(verListaPrecios){
+            carga.importeTotal = carga.cantidad * dataArticulo.precio;
+            carga.listaPrecio = $("#lista_precios option:selected").text();
+            carga.precio = dataArticulo.precio;
+            carga.core_id = dataArticulo.core_id;
+        }else{
+            carga.core_id = 1;// TODO: tengo que resolver como manejar el caso de empresas sin lista de precios
+            carga.precio = 0;
+            carga.importeTotal = 0;
+        }
         var html = '';
         if (existe == 'no') {
 
-            html += '<table id="tabla_carga" style="width: 90%;" class="table">';
+            html += '<table id="tabla_carga" class="table">';
             html += "<thead>";
             html += "<tr>";
             html += "<th>Acciones</th>";
             html += "<th>Lote</th>";
             html += "<th>Envase</th>";
-            html += "<th>Producto</th>";
+            html += "<th>Descripción producto</th>";
             html += "<th>Cliente</th>";
+            html += "<th>Lista de precios</th>";
             html += "<th>Cantidad</th>";
+            html += "<th>P.Unitario</th>";
+            html += "<th>Importe</th>";
             html += '</tr></thead><tbody>';
             html += "<tr data-json='" + JSON.stringify(carga) + "' id='" + carga.id + "'>";
             html +=
                 '<td><i class="fa fa-fw fa-minus text-light-blue tabla_carga_borrar" style="cursor: pointer; margin-left: 15px;" title="Eliminar"></i></td>';
             html += '<td>' + carga.titulo + '</td>';
             html += '<td>' + carga.tituloenvase + '</td>';
-            html += '<td>' + carga.tituloproducto + '</td>';
-            html += '<td>' + carga.nombreCli + '</td>';
+            html += '<td class="descripcion">' + carga.tituloproducto + '</td>';
+            html += '<td class="cliente">' + carga.nombreCli + '</td>';
+            html += '<td>' + carga.listaPrecio + '</td>';
             html += '<td>' + carga.cantidad + '</td>';
+            html += '<td>' + carga.precio + '</td>';
+            html += '<td>' + carga.importeTotal + '</td>';
             html += '</tr>';
             html += '</tbody></table>';
             document.getElementById('tablacargas').innerHTML = "";
@@ -376,9 +417,12 @@ function Cargar() {
                 '<td><i class="fa fa-fw fa-minus text-light-blue tabla_carga_borrar" style="cursor: pointer; margin-left: 15px;" title="Eliminar"></i></td>';
             html += '<td>' + carga.titulo + '</td>';
             html += '<td>' + carga.tituloenvase + '</td>';
-            html += '<td>' + carga.tituloproducto + '</td>';
-            html += '<td>' + carga.nombreCli + '</td>';
+            html += '<td class="descripcion">' + carga.tituloproducto + '</td>';
+            html += '<td class="cliente">' + carga.nombreCli + '</td>';
+            html += '<td>' + carga.listaPrecio + '</td>';
             html += '<td>' + carga.cantidad + '</td>';
+            html += '<td>' + carga.precio + '</td>';
+            html += '<td>' + carga.importeTotal + '</td>';
             html += '</tr>';
             $('#tabla_carga tbody').append(html);
             tabla = document.getElementById('tabla_carga').innerHTML;
@@ -391,11 +435,12 @@ function Cargar() {
         }
         document.getElementById('fechalote').value = "";
         document.getElementById('envaselote').value = "";
-        document.getElementById('productolote').value = "";
-        document.getElementById('stocklote').value = "";
         document.getElementById('cantidadcarga').value = "";
         document.getElementById('inputlotes').value = "";
-        document.getElementById('clientes').value = "";
+        $('#inputlotes').val(null).trigger('change');
+        $("#detalle").text("");
+        $('#clientes').val(null).trigger('change');
+        $('#lista_precios').val(null).trigger('change');
 
     }
 }
@@ -454,61 +499,51 @@ function ModalLotes() {
 }
 
 // Guarda la Carga de Camion
-function FinalizarCarga() {
-    existe = document.getElementById('existe_tabla').value;
+async function FinalizarCarga() {
+    const existe = document.getElementById('existe_tabla').value;
     if (existe == "no") {
-        alert("No ha cargado ningun lote");
+        error("Error","No ha cargado ningun lote");
     } else {
-        var lotes = [];
+        let lotes = [];
         $('#tabla_carga tbody').find('tr').each(function() {
-            json = "";
-            json = JSON.parse($(this).attr('data-json'));
+            let json = JSON.parse($(this).attr('data-json'));
             lotes.push(json);
         });
         lotes = JSON.stringify(lotes);
-        console.log("HARCODEO FURIOSO");
-        hecho("DALE PA", "EEEEH VIERNEEEE");
-        return;
         wo();
-        $.ajax({
-            type: 'POST',
-            dataType:'JSON',
-            async: false,
-            data: {
-                lotes: lotes
-            },
-            url: '<?php echo base_url(PRD) ?>general/Camion/finalizarCarga',
-            success: function(result) {
 
-                console.log(result);
-                
-                if(result.status == true) {
-                    hecho('Guardado!','El camión se cargó exitosamente!');
-                    $('#tabla_carga tbody').empty();
-                    Actualiza($('#establecimientos').val());
-                    ActualizaLotes();
+        try {
+            const result = await $.ajax({
+                type: 'POST',
+                dataType: 'JSON',
+                data: {
+                    lotes: lotes
+                },
+                url: '<?php echo base_url(PRD) ?>general/Camion/finalizarCarga',
+            });
 
-                }
-                else{
-                    error('Error','No se puedo registrar carga');
-                }
-
-                return;
-
-                if (result == "ok") {
-                    linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');
-
-                } else {
-                    error('Error','Se produjo un error al guardar la carga');
-                }
-
-            },error: function(rsp){
-                error('Error','Error al guardar carga');
-            },complete: function(){
-                wc();
+            if (result.status == true) {
+                // Genero el remito e imprimo
+                await generaRemito();
+                $('#tabla_carga').DataTable().clear().draw();
+                Actualiza($('#establecimientos').val());
+                ActualizaLotes();
+                //Limpio la data
+                $("#patentecamion").val("");
+                $("#fechacamion").val("");
+                $("#conductorcamion").val("");
+                $("#clientes").val("").trigger('change');
+                $("#lista_precios").val("").trigger('change');
+                $("#fechalote").val("");
+                hecho('Guardado!', 'El camión se cargó exitosamente!');
+            } else {
+                error('Error', 'No se puedo registrar carga');
             }
-
-        });
+        } catch (rsp) {
+            error('Error', 'Error al guardar carga');
+        } finally {
+            wc();
+        }
     }
 }
 $(document).off('click', '.tabla_carga_borrar').on('click', '.tabla_carga_borrar', {
@@ -516,4 +551,24 @@ $(document).off('click', '.tabla_carga_borrar').on('click', '.tabla_carga_borrar
     idrecipiente: 'tablacargas',
     idbandera: 'existe_tabla'
 }, remover);
+//Valida que el articulo seleccionado se encuentre en la lista de precios seleccionada
+function validaArticuloListaPrecio(){
+    var selectedOption = $('#lista_precios').find(':selected');
+    var dataJson = selectedOption.data('json');
+    if (dataJson.detalles_lista_precio.detalle_lista_precio != null) {
+        var listaPrecios = dataJson.detalles_lista_precio.detalle_lista_precio;
+        var dataLote = JSON.parse($('#inputlotes').find(':selected').attr('data-json'));
+        var matchedArti = listaPrecios.find(function(articulo) {
+            return articulo.arti_id === dataLote.producto;
+        });
+
+        if (matchedArti) {
+            return matchedArti;
+        } else {
+            return null;
+        }
+    } else {
+        return null;
+    }
+}
 </script>
