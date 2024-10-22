@@ -35,7 +35,7 @@
                             <!-- ______ TABLA ARTICULOS ______ -->
                             <table id="tabla_detalle" class="table table-bordered table-striped">
                                 <thead class="thead-dark" bgcolor="#eeeeee">
-                                    <th>Cantidad</th>
+                                    <th style="width: 5%;">Cantidad</th>
                                     <th>Descripción</th>
                                     <th>P. Unitario</th>
                                     <th>Importe</th>
@@ -44,7 +44,7 @@
                                 </tbody>
                             </table>
                             <div class="row">
-                                <div class="col-md-offset-6 col-md-6">
+                                <div class="col-md-offset-6 col-md-6" style="text-align: right;">
                                     <label class="control-label" for="footer_table">Total:</label>
                                     <div class="input-group" style="display:inline-flex;">
                                         <input id="footer_table2" name="footer_table2" type="text" value="260000,00" class="form-control input-md" readonly>
@@ -134,17 +134,22 @@ async function generaRemito() {
             for (const cliente of listadoClientesCargados) {
                 modalBody.find('#clienteRemito').text(cliente.nombre);
                 clientesProductos[cliente.id].forEach(function(producto) {
+                    var precioFormateado = '$' + producto.precio.toFixed(2);
+                    var importeFormateado = '$' + producto.importe.toFixed(2);
+
                     var row = '<tr>' +
                         '<td>' + producto.cantidad + '</td>' +
                         '<td>' + producto.descripcion + '</td>' +
-                        '<td>' + producto.precio + '</td>' +
-                        '<td>' + producto.importe + '</td>' +
+                        '<td>' + precioFormateado + '</td>' +
+                        '<td>' + importeFormateado + '</td>' +
                         '</tr>';
                     modalBody.find('#tabla_detalle').append(row);
                     total += producto.importe;
                 });
 
-                modalBody.find('#footer_table2').val(total);
+                // Formatear el total con el signo $ y dos decimales
+                var totalFormateado = '$' + total.toFixed(2);
+                modalBody.find('#footer_table2').val(totalFormateado);
                 //Obtengo el nro del contador para remito desde core.tablas
                 var remitoID = await guardaRemito(clientesProductos[cliente.id],cliente.id);
                 $("#nroRemito").text(remitoID);
