@@ -322,17 +322,25 @@ async function dataLineasRemito(remi_id){
 
         // Limpiar la tabla antes de agregar nuevas filas
         tablaDetalle.empty();
-
         // Recorrer el arreglo de datos y agregar cada fila a la tabla
         productos.forEach(function(datos) {
-           var importe = datos.precio * datos.cantidad;
+
+             // Convertir cantidad y precio a números
+            var cantidad = parseFloat(datos.cantidad);
+            var precio = parseFloat(datos.precio);
+            
+            var importe = precio * cantidad;
+            
+            // Formatear la cantidad, mostrando decimales solo si no es un entero
+            var cantidadFormateada = Number.isInteger(cantidad) ? cantidad : cantidad.toFixed(1);
+
             // Crear una nueva fila con los datos y añadirla a la tabla
             var fila = `
                         <tr>
-                            <td>${datos.cantidad}</td>  
+                            <td>${cantidadFormateada}</td>  
                             <td>${datos.descripcion}</td>    
-                            <td>$${datos.precio}</td>
-                            <td>$${importe}  </td>
+                            <td>$${precio.toFixed(2)}</td>
+                            <td>$${importe.toFixed(2)}</td>
                         </tr>
                     `;
 

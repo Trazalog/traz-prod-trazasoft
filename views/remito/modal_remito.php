@@ -35,7 +35,7 @@
                             <!-- ______ TABLA ARTICULOS ______ -->
                             <table id="tabla_detalle" class="table table-bordered table-striped">
                                 <thead class="thead-dark" bgcolor="#eeeeee">
-                                    <th>Cantidad</th>
+                                    <th style="width: 5%;">Cantidad</th>
                                     <th>Descripción</th>
                                     <th>P. Unitario</th>
                                     <th>Importe</th>
@@ -44,7 +44,7 @@
                                 </tbody>
                             </table>
                             <div class="row">
-                                <div class="col-md-offset-6 col-md-6">
+                                <div class="col-md-offset-6 col-md-6" style="text-align: right;">
                                     <label class="control-label" for="footer_table">Total:</label>
                                     <div class="input-group" style="display:inline-flex;">
                                         <input id="footer_table2" name="footer_table2" type="text" class="form-control input-md" readonly>
