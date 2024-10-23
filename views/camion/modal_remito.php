@@ -12,7 +12,7 @@
                     <div class="row">
                         <input type="hidden" name="nro_contador_remito" id="nro_contador_remito" >
                         <div class="col-xs-5 col-md-5">
-                            <img src="<?php echo base_url() ?>imagenes/armo/armo_logo.png" id='armoLogo'>
+                            <img style="width: 230px; height: 80px" src="<?php echo base_url() ?>imagenes/armo/logo_remito.jpg" id='armoLogo'>
                             <h5 style="margin: 0px"><small>Costa canal 23232 - Pocito - San Juan - Argentina</small></h5>
                             <h5 style="margin: 0px"><small>Teléfono 343232423</small></h5>
                             <h5 style="margin: 0px"><small>aromas@aromasdelmonte.com</small></h5>
