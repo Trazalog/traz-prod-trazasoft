@@ -134,8 +134,8 @@ async function generaRemito() {
             for (const cliente of listadoClientesCargados) {
                 modalBody.find('#clienteRemito').text(cliente.nombre);
                 clientesProductos[cliente.id].forEach(function(producto) {
-                    var precioFormateado = '$' + producto.precio.toFixed(2);
-                    var importeFormateado = '$' + producto.importe.toFixed(2);
+                    var precioFormateado = '$' + parseFloat(producto.precio).toFixed(2);
+                    var importeFormateado = '$' + parseFloat(producto.importe).toFixed(2);
 
                     var row = '<tr>' +
                         '<td>' + producto.cantidad + '</td>' +
