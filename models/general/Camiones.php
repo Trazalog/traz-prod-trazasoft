@@ -408,4 +408,42 @@ class Camiones extends CI_Model
     	$clientes = $aux->cliente->clientes;
         return $clientes;
     }
+    /**
+    * Crea la cabecera del remito con su respectivo detalle
+    * @param array $dataRemito datos de la cebcera y el detalla del remito
+    * @return array respuesta del service
+    */
+    function crearRemito($dataRemito){
+        log_message('DEBUG', "#TRAZA | #TRAZ-PROD-TRAZASOFT| Camiones | crearRemito()  resp: >> " . json_encode($dataRemito));
+        $postCabecera['post_remito'] = array(
+            'nro_remito' => $dataRemito['nro_remito'],
+            'clie_id' => $dataRemito['clie_id'],
+            'empr_id' => empresa(),
+            'usr_alta' => userNick(),
+            'usr_app_alta' => userNick(),
+            'usr_ult_modif' => userNick(),
+            'usr_app_ult_modif' => userNick(),
+            'fec_ult_modif' => date('Y-m-d H:i:s')
+        );
+    	$rspRemito['cabecera'] = $this->rest->callAPI("POST",REST_LOG."/remito",$postCabecera);
+    
+    	if (!$rspRemito['cabecera']['status']) {
+            return $rspRemito['cabecera'];
+        }
+        //Obtengo el remi_id generado si fue exitosa la creacion de la cabecera
+        $remi_id = json_decode($rspRemito['cabecera']['data'])->respuesta->remi_id;
+        
+        $batch_req = [];
+        foreach ($dataRemito['detalleArticulos'] as $key) {
+          $aux['remi_id'] = $remi_id;
+          $aux['core_id'] = $key['core_id'];
+          $aux['cantidad'] = $key['cantidad'];
+    
+          $post['_post_remito_detalle'][] = $aux;
+        }
+        $batch_req['_post_remito_detalle_batch_req'] = $post;
+    	$rspRemito['detalle'] = $this->rest->callAPI("POST",REST_LOG."/remito_detalle_batch_req",$batch_req);
+
+        return $rspRemito;
+    }
 }
