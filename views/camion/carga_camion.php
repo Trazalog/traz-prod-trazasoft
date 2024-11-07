@@ -80,7 +80,7 @@
         <div class="row firstRowOrder">
             <div class="col-xs-12 col-md-12 col-lg-12">
                 <div class="form-inline">
-                    <div class="col-xs-12 col-md-6">
+                    <div class="col-xs-12 col-md-3">
                         <div class="col-xs-6 col-md-3">
                             <label class="form-label">Cód. Lote<?php hreq() ?>:</label>
                         </div>
@@ -103,6 +103,13 @@
                         </div>
                     </div>
                     <!-- /.envase -->
+                    <div class="col-xs-12 col-md-3">
+                        <div class="form-group">
+                            <label class="form-label">Stock:</label>
+                            <input class="form-control" type="text" id="stocklote" disabled>
+                        </div>
+                    </div>
+                    <!-- /.stock -->
                     
                 </div><!-- /.form-inline -->
             </div><!-- /.col -->
@@ -313,9 +320,10 @@ $("#clientes").change(function () {
 
 function ActualizaLote(lote) {
     console.log(lote);
-    
+
     document.getElementById('fechalote').value = lote.fecha;
     document.getElementById('envaselote').value = lote.tituloenvase;
+    document.getElementById('stocklote').value = lote.stock;
     // document.getElementById('productolote').value = lote.tituloproducto;
     // document.getElementById('stocklote').value = lote.stock;
 }
@@ -434,6 +442,7 @@ function Cargar() {
 
         }
         document.getElementById('fechalote').value = "";
+        document.getElementById('stocklote').value = "";
         document.getElementById('envaselote').value = "";
         document.getElementById('cantidadcarga').value = "";
         document.getElementById('inputlotes').value = "";
@@ -535,6 +544,7 @@ async function FinalizarCarga() {
                 $("#clientes").val("").trigger('change');
                 $("#lista_precios").val("").trigger('change');
                 $("#fechalote").val("");
+                $("#stocklote").val("");
                 hecho('Guardado!', 'El camión se cargó exitosamente!');
             } else {
                 error('Error', 'No se puedo registrar carga');
