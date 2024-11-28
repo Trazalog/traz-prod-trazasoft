@@ -19,6 +19,7 @@ class Etapa extends CI_Controller
         $this->load->model('general/Lotes');
         $this->load->model('general/Formulas');
         $this->load->model(FRM . 'Forms');
+        $this->load->model('traz-comp-almacenes/Tablas');
 
         // si esta vencida la sesion redirige al login
 		$data = $this->session->userdata();
@@ -932,5 +933,17 @@ class Etapa extends CI_Controller
         }else{
             echo json_encode(array("status" => false,"msj" => "No se encontraron etapas"));
         }
+    }
+
+
+    /**
+        * Obtiene de core.tablas true/false para decidir si valida o no tareas asignadas
+        * @return array true/false
+	*/
+    public function decideValidacionTareas(){
+        log_message('INFO','#TRAZA | #TRAZ-PROD-TRAZASOFT | Etapa | decideValidacionTareas() ');
+
+        $data = $this->Tablas->obtenerTablaEmpr_id('valida_tareas_produccion_lotes')['data'];
+        echo json_encode($data);
     }
 }

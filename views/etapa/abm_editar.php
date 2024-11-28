@@ -426,29 +426,100 @@
     }
     // levanta modal para finalizar la etapa solamente
     function finalizar() {
-        //validar control de calidad
-        let tablaTarea = document.getElementById("tareas-calendario");
-        let filas = tablaTarea.rows;
-        if (filas.length > 1) {
-            validarFormularioControlCalidad().then((result) => {
-                console.log(result);
-                wc();
-                if (result.status) {
 
-                    $("#modal_finalizar").modal('show');
+    // Llama a decideValidacion para ver si valida o no la tarea
+    // configurable en core.tablas 
+    decideValidacion()
+        .then((result) => {
+            console.log(result);
+            wc(); 
+            // Si decideValidacion devuelve true, validamos las filas
+            if (result) {
+                let tablaTarea = document.getElementById("tareas-calendario");
+                let filas = tablaTarea.rows;
+
+                if (filas.length > 1) {
+                    // Validar formulario de control de calidad si hay más de una fila
+                    validarFormularioControlCalidad()
+                        .then((result) => {
+                            console.log(result);
+                            wc(); // Finaliza el indicador de carga
+                            if (result.status) {
+                                $("#modal_finalizar").modal('show');
+                            } else {
+                                notificar(
+                                    'Nota',
+                                    '<b>Para realizar un reporte de producción el formulario de calidad debe estar aprobado</b>',
+                                    'warning'
+                                );
+                            }
+                        })
+                        .catch((err) => {
+                            wc();
+                            error();
+                            console.log(err);
+                        });
                 } else {
-                    notificar('Nota', '<b>Para realizar un reporte de producción el formulario de calidad debe estar aprobado</b>', 'warning');
+                    // Si no hay suficientes filas, notificar al usuario
+                    notificar(
+                        'Nota',
+                        '<b>Para realizar un reporte de producción debe haber tareas asignadas</b>',
+                        'warning'
+                    );
                 }
-            }).catch((err) => {
-                wc();
-                error();
-                console.log(err);
+            } else {
+                // Si decideValidacion devuelve false, validar formulario directamente
+                validarFormularioControlCalidad()
+                    .then((result) => {
+                        console.log(result);
+                        wc(); 
+                        if (result.status) {
+                            $("#modal_finalizar").modal('show');
+                        } else {
+                            notificar(
+                                'Nota',
+                                '<b>Para realizar un reporte de producción el formulario de calidad debe estar aprobado</b>',
+                                'warning'
+                            );
+                        }
+                    })
+                    .catch((err) => {
+                        wc();
+                        error();
+                        console.log(err);
+                    });
+            }
+        })
+        .catch((err) => {
+            wc();
+            error();
+            console.log(err);
+        });
+    }
+
+
+    //si devuelve true debe validar tarea asignada sino no debe validar
+    function decideValidacion() {
+        wo();
+        let validacionForm = new Promise((resolve, reject) => {
+            wo();
+            $.ajax({
+                type: 'GET',
+                dataType: 'JSON',
+                url: '<?php echo base_url(PRD) ?>general/etapa/decideValidacionTareas',
+                success: function(res) {
+
+                    resolve(res);
+                },
+                error: function(res) {
+                    reject(false);
+                }
             });
-        } else {
-            notificar('Nota', '<b>Para realizar un reporte de producción debe haber tareas asignadas</b>', 'warning');
-        }
+        });
+        return validacionForm;
 
     }
+
     $(document).off('click', '.tablamateriasasignadas_borrar').on('click', '.tablamateriasasignadas_borrar', {
         idtabla: 'tablamateriasasignadas',
         idrecipiente: 'materiasasignadas',
