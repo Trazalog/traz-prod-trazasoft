@@ -335,19 +335,19 @@ function Cargar() {
     msj = "";
     if (document.getElementById('establecimientos').value == "") {
         ban = false;
-        msj += "- No ha ingresado establecimiento \n";
+        msj += "- Por favor, seleccione establecimiento \n";
     }
     if (document.getElementById('camiones').value == "") {
         ban = false;
-        msj += "- No ha seleccionado camión \n";
+        msj += "- Por favor, seleccione camión \n";
     }
     if (document.getElementById('clientes').value == "") {
         ban = false;
-        msj += "- No ha seleccionado cliente \n";
+        msj += "- Por favor, seleccione cliente \n";
     }
     if (document.getElementById('inputlotes').value == "") {
         ban = false;
-        msj += "- No ha seleccionado lote \n";
+        msj += "- Por favor, seleccione lote \n";
     } else {
         carga = JSON.parse($('#inputlotes').attr('data-json'));
         console.log(carga);
@@ -356,18 +356,30 @@ function Cargar() {
         
         if (document.getElementById('cantidadcarga').value == "" || cantidad > carga.stock) {
             ban = false;
-            msj += "- No ha cargado la cantidad o dicha cantidad es superior al stock \n";
+            msj += "- Por favor, cargue la cantidad o dicha cantidad es superior al stock \n";
         }
     }
     if(verListaPrecios){
-        var dataArticulo = validaArticuloListaPrecio();
-        if(!dataArticulo){
-            ban = false
-            msj += "- Artículo seleccionado no se encuentra en la lista de precios seleccionada \n";
+        const listaPrecios = document.getElementById("lista_precios").value;
+        if(!listaPrecios){
+             ban = false
+            msj += "- Por favor, seleccione una lista de precios \n";
         }
+        else{
+                var dataArticulo = validaArticuloListaPrecio();
+                if(!dataArticulo){
+                    ban = false
+                    msj += "- Artículo seleccionado no se encuentra en la lista de precios seleccionada \n";
+                }
+            }
     }
     if (!ban) {
-        alert(msj);
+        //alert(msj);
+        Swal.fire({
+            title: msj,
+            text: "",
+            type: "info"
+            });
     } else {
         existe = document.getElementById('existe_tabla').value;
         carga.nombreCli= nombreCli;
@@ -532,8 +544,9 @@ async function FinalizarCarga() {
             });
 
             if (result.status == true) {
-                // Genero el remito e imprimo
-                await generaRemito();
+                // Genero el remito e imprimo solo si tiene remitos valorizados
+                if(verListaPrecios) await generaRemito();
+                
                 $('#tabla_carga').DataTable().clear().draw();
                 Actualiza($('#establecimientos').val());
                 ActualizaLotes();
