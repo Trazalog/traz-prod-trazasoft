@@ -208,7 +208,7 @@
                       <label for="form_id_edit" class="col-sm-4 control-label">Formulario:</label>
                       <div class="col-sm-8">
                         <!-- <input type="text" class="form-control habilitar" id="vehiculo_edit">  -->
-                        <select class="form-control select2 select2-hidden-accesible habilitar requerido" name="form_id" id="form_id_edit">
+                        <select class="form-control select2 select2-hidden-accesible habilitar" name="form_id" id="form_id_edit">
                           <option value="" disabled selected>-Seleccione opción-</option>	
                           <?php
                             foreach ($listarFormularios as $formulario) {

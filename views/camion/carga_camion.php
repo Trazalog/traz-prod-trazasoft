@@ -80,7 +80,7 @@
         <div class="row firstRowOrder">
             <div class="col-xs-12 col-md-12 col-lg-12">
                 <div class="form-inline">
-                    <div class="col-xs-12 col-md-6">
+                    <div class="col-xs-12 col-md-3">
                         <div class="col-xs-6 col-md-3">
                             <label class="form-label">Cód. Lote<?php hreq() ?>:</label>
                         </div>
@@ -103,6 +103,13 @@
                         </div>
                     </div>
                     <!-- /.envase -->
+                    <div class="col-xs-12 col-md-3">
+                        <div class="form-group">
+                            <label class="form-label">Stock:</label>
+                            <input class="form-control" type="text" id="stocklote" disabled>
+                        </div>
+                    </div>
+                    <!-- /.stock -->
                     
                 </div><!-- /.form-inline -->
             </div><!-- /.col -->
@@ -313,9 +320,10 @@ $("#clientes").change(function () {
 
 function ActualizaLote(lote) {
     console.log(lote);
-    
+
     document.getElementById('fechalote').value = lote.fecha;
     document.getElementById('envaselote').value = lote.tituloenvase;
+    document.getElementById('stocklote').value = lote.stock;
     // document.getElementById('productolote').value = lote.tituloproducto;
     // document.getElementById('stocklote').value = lote.stock;
 }
@@ -327,19 +335,19 @@ function Cargar() {
     msj = "";
     if (document.getElementById('establecimientos').value == "") {
         ban = false;
-        msj += "- No ha ingresado establecimiento \n";
+        msj += "- Por favor, seleccione establecimiento \n";
     }
     if (document.getElementById('camiones').value == "") {
         ban = false;
-        msj += "- No ha seleccionado camión \n";
+        msj += "- Por favor, seleccione camión \n";
     }
     if (document.getElementById('clientes').value == "") {
         ban = false;
-        msj += "- No ha seleccionado cliente \n";
+        msj += "- Por favor, seleccione cliente \n";
     }
     if (document.getElementById('inputlotes').value == "") {
         ban = false;
-        msj += "- No ha seleccionado lote \n";
+        msj += "- Por favor, seleccione lote \n";
     } else {
         carga = JSON.parse($('#inputlotes').attr('data-json'));
         console.log(carga);
@@ -348,18 +356,30 @@ function Cargar() {
         
         if (document.getElementById('cantidadcarga').value == "" || cantidad > carga.stock) {
             ban = false;
-            msj += "- No ha cargado la cantidad o dicha cantidad es superior al stock \n";
+            msj += "- Por favor, cargue la cantidad o dicha cantidad es superior al stock \n";
         }
     }
     if(verListaPrecios){
-        var dataArticulo = validaArticuloListaPrecio();
-        if(!dataArticulo){
-            ban = false
-            msj += "- Artículo seleccionado no se encuentra en la lista de precios seleccionada \n";
+        const listaPrecios = document.getElementById("lista_precios").value;
+        if(!listaPrecios){
+             ban = false
+            msj += "- Por favor, seleccione una lista de precios \n";
         }
+        else{
+                var dataArticulo = validaArticuloListaPrecio();
+                if(!dataArticulo){
+                    ban = false
+                    msj += "- Artículo seleccionado no se encuentra en la lista de precios seleccionada \n";
+                }
+            }
     }
     if (!ban) {
-        alert(msj);
+        //alert(msj);
+        Swal.fire({
+            title: msj,
+            text: "",
+            type: "info"
+            });
     } else {
         existe = document.getElementById('existe_tabla').value;
         carga.nombreCli= nombreCli;
@@ -434,6 +454,7 @@ function Cargar() {
 
         }
         document.getElementById('fechalote').value = "";
+        document.getElementById('stocklote').value = "";
         document.getElementById('envaselote').value = "";
         document.getElementById('cantidadcarga').value = "";
         document.getElementById('inputlotes').value = "";
@@ -523,8 +544,9 @@ async function FinalizarCarga() {
             });
 
             if (result.status == true) {
-                // Genero el remito e imprimo
-                await generaRemito();
+                // Genero el remito e imprimo solo si tiene remitos valorizados
+                if(verListaPrecios) await generaRemito();
+                
                 $('#tabla_carga').DataTable().clear().draw();
                 Actualiza($('#establecimientos').val());
                 ActualizaLotes();
@@ -535,6 +557,7 @@ async function FinalizarCarga() {
                 $("#clientes").val("").trigger('change');
                 $("#lista_precios").val("").trigger('change');
                 $("#fechalote").val("");
+                $("#stocklote").val("");
                 hecho('Guardado!', 'El camión se cargó exitosamente!');
             } else {
                 error('Error', 'No se puedo registrar carga');
