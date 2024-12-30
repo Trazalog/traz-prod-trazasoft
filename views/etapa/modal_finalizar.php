@@ -1,3 +1,10 @@
+<style>
+/* Aumentar el tamaño del modal qr*/
+#modalCodigos .modal-dialog {
+    max-width: 50%; 
+    width: auto; 
+}
+</style>
 <div class="modal" id="modal_finalizar" role="dialog" style="overflow-y: auto !important; " aria-labelledby="myModalLabel">
     <div class="modal-dialog modal-lg" role="document">
         <!-- modal viejo -->
@@ -498,7 +505,7 @@ $this->load->view(COD . 'componentes/modalGenerico');
     //////////////////////////////////////////
     // Configuracion y creacion código QR
     // Características para generacion del QR
-    function QR(e) {
+   async function QR(e) {
         //Limpio el modal
         $("#infoEtiqueta").empty();
         $("#contenedorCodigo").empty();
@@ -527,12 +534,43 @@ $this->load->view(COD . 'componentes/modalGenerico');
         dataQR.fecha = datosLote.fecha;
         dataQR.batch = datosLote.batch;
 
+        await logoEmpresaReporteProduccion();
+
         // agrega codigo QR al modal impresion
         getQR(config, dataQR, 'codigosQR/Traz-prod-trazasoft/Lotes');
 
         // levanta modal completo para su impresion
         verModalImpresion();
     }
+
+    //trae el logo de la empresa si esta cargado en core.tablas
+    async function logoEmpresaReporteProduccion() {
+
+        try {
+        // Realizar la llamada AJAX de manera sincrónica usando fetch
+        const response = await $.ajax({
+            type: 'POST',
+            data: {},
+            url: '<?php echo base_url(PRD) ?>general/CodigoQR/getLogoEmpresa'
+        });
+
+        // Parsear los datos obtenidos en la respuesta
+        const resp = JSON.parse(response);
+
+        //si tiene logo lo pega sino elimina el selector 
+        if(resp)
+            document.getElementById('logo').src = resp;
+        else 
+            document.querySelector('.logo-container').remove();
+
+      
+        wc();
+
+    } catch (error) {
+        wc();
+    }
+    }
+
 
     function asociarNocos() {
         var dataNoconsum = [];
