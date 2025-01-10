@@ -547,7 +547,6 @@
       dataType: 'JSON',
       url: recurso,
       success: function(result) {
-        $("#cargar_tabla").load("<?php echo base_url(PRD); ?>general/Etapa/listarEtapas");
         setTimeout(function(){ 
           wc();
           alertify.success("Artículo agregado con éxito");
@@ -556,6 +555,10 @@
         $('#articulo_id').val(null).trigger('change');
         $('#detalle').html('');
         $('#tipo_id').val(null).trigger('change');
+
+        // Volver a cargar los artículos en la tabla
+        var etap_id = $("#id_etap").val();
+        listarArticulosYTipos(etap_id);
       },
       error: function(result){
         wc();
@@ -563,6 +566,37 @@
       }
     });
   }
+
+  function listarArticulosYTipos(etap_id) {
+  $.ajax({
+    type: 'GET',
+    url: `index.php/<?php echo PRD ?>general/Etapa/listarArticulosYTipos?etap_id=${etap_id}`,
+    success: function (result) {
+      var tablaArticulos = $("#tabla_articulos").DataTable();
+      tablaArticulos.clear().draw();
+      if (result) {
+        $.each(result, function (index, value) {
+          var rowInstanciada = tablaArticulos.row.add([
+            "<button type='button' title='Eliminar Artículo' class='btn btn-primary btn-circle btnEliminar' onclick='eliminarArticulo(this)'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span></button>",
+            value.barcode,
+            value.descripcion,
+            value.tipo,
+            value.unidad_medida,
+            value.es_caja,
+            value.cantidad_caja
+          ]).draw().node();
+          $(rowInstanciada).attr('data-json', JSON.stringify(value));
+        });
+        $("#modalarticulos").modal('show');
+      }
+    },
+    error: function (result) {
+      alertify.error('Error al listar los artículos');
+    },
+    dataType: 'json'
+  });
+}
+
 
   function eliminarArticulo(e) {
     var data = JSON.parse($(e).closest('tr').attr('data-json'));
