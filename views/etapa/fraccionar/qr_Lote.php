@@ -1,8 +1,8 @@
 <div class='col-md-12 col-sm-12'>	
-    <h5 id='productoLote'>Lote: <strong><?php echo $titulo ?></strong></h5>
+    <h5 id='productoLote'>Lote: <strong><?php echo  $lotedestino ?></strong></h5>
 </div>
 <div class='col-md-12 col-sm-12'>	
-    <h5 id='codProductoLote'>Cód Producto: <strong><?php echo $lotedestino ?></strong></h5>
+    <h5 id='codProductoLote'>Cód Producto: <strong><?php echo $titulo ?></strong></h5>
 </div>
 <div class='col-md-12 col-sm-12'>	
     <h5 id='descripcionLote'>Descripción: <strong><?php echo $descripcion ?></strong></h5>
