@@ -37,6 +37,9 @@ class Reportes extends CI_Controller {
       $json = $this->Koolreport->depurarJson($url)->productos->producto;
       $reporte = new Produccion($json);
       $reporte->run()->render();
+
+       //cargo view de modal QR
+      $this->load->view(COD . 'componentes/modalGenerico');
       
     } else {
 
@@ -49,7 +52,9 @@ class Reportes extends CI_Controller {
 
       $reporte = new Produccion($json);
       $reporte->run()->render();
-      
+
+      //cargo view de modal QR
+      $this->load->view(COD . 'componentes/modalGenerico');
     }
   }
 

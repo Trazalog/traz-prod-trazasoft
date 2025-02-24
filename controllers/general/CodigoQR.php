@@ -8,6 +8,7 @@ class CodigoQR extends CI_Controller
     public function __construct(){
         parent::__construct();
         $this->load->model('general/CodigosQR');
+        $this->load->model(ALM.'Tablas');
     }
     /**
     *  Carga la vista vista para impresion en modal de codigo QR del No Consumible
@@ -27,7 +28,14 @@ class CodigoQR extends CI_Controller
     */
     public function cargaModalQRLote(){
         $data = $this->input->post();
-
         $this->load->view('etapa/fraccionar/qr_Lote', $data);
+    }
+
+     /**
+    *  Trae el logo de la empresa de core tablas que se coloca en la impresion del qr
+    */
+    public function getLogoEmpresa(){
+        $data = $this->Tablas->obtenerTablaEmpr_id('reporteProduccion_qr_logo')['data'][0]->valor;
+        echo json_encode($data);
     }
 }

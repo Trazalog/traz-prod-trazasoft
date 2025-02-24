@@ -9,9 +9,13 @@ use \koolreport\widgets\koolphp\Card;
 
 ?>
 
-
-
-
+<style>
+/* Aumentar el tamaño del modal qr*/
+#modalCodigos .modal-dialog {
+    max-width: 50%; 
+    width: auto; 
+}
+</style>
 
 <body>
 
@@ -91,62 +95,63 @@ use \koolreport\widgets\koolphp\Card;
 
               <div class="col-md-12">
 
-                <?php
-                Table::create(array(
-                  "dataStore" => $this->dataStore('data_produccion_table'),
-                  // "themeBase" => "bs4",
-                  // "showFooter" => true, // cambiar true por "top" para ubicarlo en la parte superior
-                  "headers" => array(
-                    array(
-                      "Reporte de Producción" => array("colSpan" => 6),
-                      // "Other Information" => array("colSpan" => 2),
-                    )
-                  ), // Para desactivar encabezado reemplazar "headers" por "showHeader"=>false
-                  "columns" => array(
-                    "batch_id" => array(
-                      "label" => "Batch"
-                    ),
-                    array(
-                      "label" => "Fecha",
-                      "value" => function($row) {
-                        $aux = explode("+",$row["fecha"]);
-                        $row["fecha"] = date("d-m-Y",strtotime($aux[0]));
-                        return $row["fecha"];
-                      },
-                      "type" => "date"
-                    ),
-                    "producto" => array(
-                      "label" => "Producto"
-                    ),
-                    "lote_id" => array(
-                      "label" => "Lote"
-                    ),
-                    "cantidad" => array(
-                      "label" => "Cantidad"
-                    ),
-                    "unidad_medida" => array(
-                      "label" => "Unidad Medida"
-                    ),
-                    "etapa" => array(
-                      "label" => "Etapa"
-                    ),
-                    "equipo" => array(
-                      "label" => "Operario/Equipo"
-                    )
-                  ),
-                  "cssClass" => array(
-                    // "table" => "table-bordered table-striped table-hover dataTable",
-                    "table" => "table-striped table-scroll table-hover  table-responsive dataTables_wrapper form-inline table-scroll table-responsive dt-bootstrap dataTable",
-                    "th" => "sorting"
-                    // "tr" => "cssItem"
-                    // "tf" => "cssFooter"
-                  )
-                ));
-                ?>
+              <?php
+                    Table::create(array(
+                      "dataStore" => $this->dataStore('data_produccion_table'),
+                      "headers" => array(
+                        array(
+                          "Reporte de Producción" => array("colSpan" => 8), 
+                        )
+                      ),
+                      "columns" => array(
+                        array(
+                        "label" => "Acciones",
+                        "value" => function($row) {
+                            $rowData = json_encode($row); // Convertimos la fila a JSON
+                            return '<i class="fa fa-fw fa-qrcode text-light-blue generarQR" style="cursor: pointer; margin-left: 15px;" title="QR" onclick="QR(this)" data-json=\'' . $rowData . '\'></i>';
+                            //return '<i class="fa fa-fw fa-qrcode text-light-blue generarQR" style="cursor: pointer; margin-left: 15px;" title="QR" onclick="QR(this)"></i>';
+                        }
+                        ), 
+                        "batch_id" => array(
+                          "label" => "Batch"
+                        ),
+                        array(
+                          "label" => "Fecha",
+                          "value" => function($row) {
+                            $aux = explode("+",$row["fecha"]);
+                            $row["fecha"] = date("d-m-Y", strtotime($aux[0]));
+                            return $row["fecha"];
+                          },
+                          "type" => "date"
+                        ),
+                        "producto" => array(
+                          "label" => "Producto"
+                        ),
+                        "lote_id" => array(
+                          "label" => "Lote"
+                        ),
+                        "cantidad" => array(
+                          "label" => "Cantidad"
+                        ),
+                        "unidad_medida" => array(
+                          "label" => "Unidad Medida"
+                        ),
+                        "etapa" => array(
+                          "label" => "Etapa"
+                        ),
+                        "equipo" => array(
+                          "label" => "Operario/Equipo"
+                        )
+                      ),
+                      "cssClass" => array(
+                        "table" => "table-striped table-scroll table-hover table-responsive dataTables_wrapper form-inline table-scroll table-responsive dt-bootstrap dataTable",
+                        "th" => "sorting"
+                      )
+                    ));
+              ?>
 
               </div>
             </div>
-
             <!--_________________FIN TABLA_________________-->
 
 
@@ -335,13 +340,14 @@ use \koolreport\widgets\koolphp\Card;
       });
     });
 
-    $('tr > td').each(function() {
-      if ($(this).text() == 0) {
-        $(this).text('-');
-        $(this).css('text-align', 'center');
-      }
-    });
-    
+$('tr > td').each(function() {
+  var cellValue = $(this).text().trim(); // Obtener el valor de la celda y eliminar espacios extra.
+  if (cellValue === "0") {
+    $(this).text('-'); // Cambiar el texto a guion si es 0.
+    $(this).css('text-align', 'center');
+  }
+});
+
     // $('#panel-derecho-body').load('<?php echo base_url() ?>index.php/Reportes/filtroProduccion');
 
     $('.flt-clear').click(function() {
@@ -420,5 +426,81 @@ use \koolreport\widgets\koolphp\Card;
         }
       })
     }
+
+
+// Configuración y creación del código QR
+async function QR(e) {
+  //Limpio el modal
+  $("#infoEtiqueta").empty();
+  $("#contenedorCodigo").empty();
+  $("#infoFooter").empty();
+
+  // configuración de código QR
+  var config = {};
+  config.titulo = "Código QR";
+  config.pixel = "7";
+  config.level = "L";
+  config.framSize = "2";
+
+
+  // Obtengo los datos del lote desde el atributo data-json del ícono
+  var datosLote = $(e).data('json');
+
+  datosLote.lotedestino = datosLote.barcode;
+  datosLote.titulo =  datosLote.lote_id;
+  datosLote.descripcion = datosLote.producto;
+  datosLote.id = datosLote.barcode;
+  datosLote.batch = datosLote.batch_id;
+
+  // Ajusta el formato de la fecha: reemplaza el guion por "T"
+  var fecha = moment(datosLote.fecha.replace('-', 'T'), 'YYYY-MM-DDTHH:mm');
+  datosLote.fecha = fecha.format('YYYY-MM-DD'); // Convertir al formato 'YYYY-MM-DD'
+
+
+  $("#infoEtiqueta").load("<?php echo PRD ?>general/CodigoQR/cargaModalQRLote", datosLote);
+        var dataQR = {};
+        dataQR.lote = datosLote.lote_id;
+        dataQR.descripcion = datosLote.producto;
+        dataQR.cantidad = datosLote.cantidad;
+        dataQR.fecha = datosLote.fecha;
+        dataQR.batch = datosLote.batch_id;
+
+        await logoEmpresaReporteProduccion();
+        // agrega codigo QR al modal impresion
+        getQR(config, dataQR, 'codigosQR/Traz-prod-trazasoft/Lotes');
+
+        // levanta modal completo para su impresion
+        verModalImpresion();
+
+
+}
+
+// Trae el logo de la empresa si está cargado en core.tablas
+async function logoEmpresaReporteProduccion() {
+    try {
+        // Realizar la llamada AJAX de manera sincrónica usando fetch
+        const response = await $.ajax({
+            type: 'POST',
+            data: {},
+            url: '<?php echo base_url(PRD) ?>general/CodigoQR/getLogoEmpresa'
+        });
+
+        // Parsear los datos obtenidos en la respuesta
+        const resp = JSON.parse(response);
+
+        // Si tiene logo, lo coloca, si no, elimina el selector
+        if (resp)
+            document.getElementById('logo').src = resp;
+        else 
+            document.querySelector('.logo-container').remove();
+
+        // Puede agregar cualquier otra lógica aquí
+        wc();
+    } catch (error) {
+        wc();
+        console.error('Error al obtener el logo:', error);
+    }
+}
+
   </script>
 </body>
