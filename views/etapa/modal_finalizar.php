@@ -234,7 +234,11 @@ $this->load->view(COD . 'componentes/modalGenerico');
     //Captura la unidad de medida y la actualiza en el campo
     $('#modal_finalizar').find('#inputproducto').on('change', function() {
         let data = $(this).find(':selected').data('json');
-        $('#um').val(data.um);
+        if (data && data.um) {
+            $('#um').val(data.um);
+        } else {
+            $('#um').val(''); 
+        }
     });
     function AgregarProducto() {
         ban = '';
