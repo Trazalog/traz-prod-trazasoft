@@ -44,6 +44,7 @@ class Camion extends CI_Controller
       }else{
         $data['remitosValorizados'] = $poseeRemitosValorizados;
       }
+      $data['empresa'] = empresa();
       $this->load->view('camion/carga_camion', $data);
     }
 
