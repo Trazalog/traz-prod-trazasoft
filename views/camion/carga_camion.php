@@ -209,7 +209,7 @@
             </div>
             <div class="col-md-2 col-xs-6">
                 <button type="button" class="btn btn-block btn-danger"
-                    onclick="linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');">Cancelar</button>
+                    onclick="linkTo('<?php echo base_url(PRD) ?>general/Camion/recepcionCamion');">Cancelar</button>
             </div>
         </div>
     </div>

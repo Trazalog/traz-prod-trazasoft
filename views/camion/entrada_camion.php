@@ -235,7 +235,6 @@ function ejecutarEnter(){
 
 }
 $('#patente').keyup(function(e) {
-
     if ($('#accioncamion').val() != 'descarga') return;
     this.value = this.value.replace(' ', '');
     if (e.keyCode === 13) {
