@@ -13,11 +13,11 @@
                         <div class="form-group">
                             <label for="establecimientos" class="form-label">Establecimiento<?php hreq() ?>:</label>
                             <select class="form-control select2 select2-hidden-accesible" onchange="Actualiza(this.value); ActualizaLotes();" id="establecimientos">
-                                <option value="" disabled selected>-Seleccione establecimiento-</option>
+                                <option value="" disabled>-Seleccione establecimiento-</option>
                                 <?php
                                 foreach($establecimientos as $fila)
                                 {  
-                                    echo '<option value="'.$fila->esta_id.'" >'.$fila->nombre.'</option>';
+                                    echo '<option value="'.$fila->esta_id.'" '.($fila === reset($establecimientos) ? 'selected' : '').'>'.$fila->nombre.'</option>';
                                 } 
                                 ?>
                             </select>
@@ -31,10 +31,18 @@
                     </div>
                     <!-- /.fecha seleccionada -->
                     <div class="col-xs-12 col-md-4">
-                        <div class="form-group">
-                            <label class="form-label" for="">Camiones ingresados<?php hreq() ?>:</label>
-                            <select id="camiones" class="form-control" onchange="DatosCamion()" disabled>
+                        <div class="form-group" style="display: flex; align-items: center;">
+                            <label class="form-label" for="" style="margin-right: 5px;">Camiones ingresados<?php hreq() ?>:</label>
+                            <select id="camiones" class="form-control" onchange="DatosCamion()" disabled style="margin-right: 10px; min-width: 150px;">
                             </select>
+                            <!-- Harkode Id de aromas -->
+                            <!-- /.boton para generar automaticamente camion interno para aromas -->
+                            <?php if (isset($empresa) && $empresa == 1): ?>
+                                <button type="button" class="btn btn-success" id="generarCamionInterno" onclick="crearTransportePropio()">
+                                    Generar camión interno
+                                </button>
+                            <?php endif; ?>
+                            
                         </div>
                     </div>
                     <!-- /.camiones -->
@@ -201,7 +209,7 @@
             </div>
             <div class="col-md-2 col-xs-6">
                 <button type="button" class="btn btn-block btn-danger"
-                    onclick="linkTo('<?php echo base_url(PRD) ?>general/Etapa/index');">Cancelar</button>
+                    onclick="linkTo('<?php echo base_url(PRD) ?>general/Camion/recepcionCamion');">Cancelar</button>
             </div>
         </div>
     </div>
@@ -218,16 +226,22 @@ $(document).ready(function () {
     $('#lista_precios').select2({
         placeholder: "-Seleccione lista de precios-",
         allowClear: true,
-        // width: '100%',
         templateResult: formatCustom
     });
+
+    // Seleccionar el primer establecimiento por defecto
+    var select = document.getElementById('establecimientos');
+    if (select.options.length > 1) {
+        select.selectedIndex = 1; // El índice 1 es el primer establecimiento (0 es el placeholder)
+        select.dispatchEvent(new Event('change')); // Disparamos el evento change para que se ejecute Actualiza()
+    }
 });
 
 function Blanquealote() {
     document.getElementById('inputlotes').value = "";
 }
 
-function Actualiza(establecimiento) {
+function Actualiza(establecimiento, esCamionInterno = false) {
     wo();
     $.ajax({
         type: 'POST',
@@ -250,14 +264,28 @@ function Actualiza(establecimiento) {
             document.getElementById('camiones').innerHTML = html;
             document.getElementById('camiones').disabled = false;
             document.getElementById('inputlotes').disabled = false;
-            // document.getElementById('btnlotes').disabled = false;
-        },error:function(){
+
+            // Accion cuando genera camion automatico
+            // Solo intentar seleccionar el camión interno si esCamionInterno es true
+            if(esCamionInterno) {
+                debugger;
+                var camionesSelect = document.getElementById('camiones');
+                for(var i = 0; i < camionesSelect.options.length; i++) {
+                    var option = camionesSelect.options[i];
+                    if(option.text.includes('Transporte-Propio')) {
+                        camionesSelect.selectedIndex = i;
+                        DatosCamion();
+                        break;
+                    }
+                }
+            }
+        },
+        error:function(){
             document.getElementById('camiones').innerHTML = "";
         },
         complete:function(){
             wc();
         }
-
     });
 }
 
@@ -522,6 +550,41 @@ async function FinalizarCarga() {
             });
 
             if (result.status == true) {
+
+                // id de aromas (la que tiene el botón de camión interno)
+                <?php if (isset($empresa) && $empresa == 1): ?>
+                
+                // Obtener los datos del camión actual del select
+                const camionSelect = document.getElementById('camiones');
+                const selectedOption = camionSelect.options[camionSelect.selectedIndex];
+                if (selectedOption && selectedOption.value) {
+                    // Datos para la salida del camión
+                    const salidaData = {
+                        motr_id: selectedOption.value,
+                        estado: "FINALIZADO",
+                        bruto: 1,
+                        tara: 1,
+                        neto: 1
+                    };
+                    debugger;
+                    // Llamada AJAX para guardar la salida
+                    try {
+                        const salidaResult = await $.ajax({
+                            type: 'POST',
+                            dataType: 'JSON',
+                            data: { data: salidaData },
+                            url: '<?php echo base_url(PRD) ?>general/Camion/guardarSalida',
+                        });
+
+                        if (!salidaResult.status) {
+                            error('Error', 'No se pudo registrar la salida del camión');
+                        }
+                    } catch (salidaError) {
+                        error('Error', 'Error al registrar la salida del camión');
+                    }
+                }
+                <?php endif; ?>
+
                 // Genero el remito e imprimo solo si tiene remitos valorizados
                 if(verListaPrecios) await generaRemito();
                 
@@ -572,4 +635,53 @@ function validaArticuloListaPrecio(){
         return null;
     }
 }
+
+// Genera un camion automaticamente y guarda en prd.movimientos_transportes
+function crearTransportePropio() {
+    var select = document.getElementById('establecimientos');
+    if (select.options.length > 1) { 
+        select.selectedIndex = 1;
+        select.dispatchEvent(new Event('change')); 
+
+        // Datos fijos para el camión interno
+        var data = {
+            accion: 'carga',
+            boleta: 'Transporte-Propio',
+            establecimiento: select.options[1].value,
+            fecha: new Date().toISOString().split('T')[0], 
+            proveedor: '1000',
+            cuit: '11111',
+            patente: 'Transporte-Propio',
+            acoplado: '',
+            conductor: 'Luis González',
+            tipo: 'Transporte Propio',
+            bruto: '0',
+            tara: '1',
+            neto: '1',
+            estado: 'EN CURSO',
+            empr_id: '1'
+        };
+
+        // Llamada AJAX para guardar el camión
+        $.ajax({
+            type: 'POST',
+            url: '<?php echo base_url(PRD) ?>general/Camion/setEntrada',
+            data: data,
+            dataType: 'JSON',
+            success: function(response) {
+                if(response.status) {
+                    // Actualizar la lista de camiones después de guardar
+                    Actualiza(select.options[1].value, true);
+                    hecho('Éxito', 'Camión interno generado correctamente');
+                } else {
+                    error('Error', 'No se pudo generar el camión interno');
+                }
+            },
+            error: function() {
+                error('Error', 'Error al generar el camión interno');
+            }
+        });
+    }
+}
+</script>
 </script>

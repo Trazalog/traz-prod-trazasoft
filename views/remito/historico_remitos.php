@@ -116,7 +116,6 @@
             render: function (data, type, row) {
                 // Aquí puedes personalizar los botones que quieres en la columna acciones
                 return `
-                    <i class="fa fa-search" style="cursor: pointer;margin: 3px;" title="Ver Detalles" onclick="ver(this)"></i>
                     <i class="fa fa-print" style="cursor: pointer;margin: 3px;" title="Imprimir" onclick="ReimprimirRemito(this)"></i>
                 `;
             } },

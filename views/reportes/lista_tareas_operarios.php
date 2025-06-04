@@ -108,7 +108,7 @@
 
 	// levanta modal de Reporte de Produccion
 	function verReporte(e) {
-
+debugger;
 			var data = getJson2(e);
 			s_batchId = data.id;
 			$mdl.modal("show");
