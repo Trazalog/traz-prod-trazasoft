@@ -37,12 +37,18 @@ class Camion extends CI_Controller
       $data['establecimientos'] = $this->Establecimientos->listarTodo()->establecimientos->establecimiento;
       $data['tipoEstablecimiento'] = $this->Noconsumibles->tipoEstablecimiento()['data'];
       $data['clientes']=$this->Clientes->Listar_Clientes();
-      $poseeRemitosValorizados = $this->Valores->getValor("posee_remitos_valorizados_carga_camion"); //TODO: verificar si el cliente posee remitos valorizados
+      $poseeRemitosValorizados = $this->Valores->getValor("posee_remitos_valorizados_carga_camion"); //verifica si el cliente posee remitos valorizados
+      $camionInterno = $this->Valores->getValor("camion_interno"); //verifica si debe aparecer boton genera camion interno
       if($poseeRemitosValorizados[0]->valor == 'true'){
         $data['remitosValorizados'] = $poseeRemitosValorizados;
         $data['listasPrecios']=$this->Precios->getListasPrecios();
       }else{
         $data['remitosValorizados'] = $poseeRemitosValorizados;
+      }
+      if($camionInterno[0]->valor == 'true'){
+        $data['camionInterno'] = true;
+      }else{
+        $data['camionInterno'] = false;
       }
       $data['empresa'] = empresa();
       $this->load->view('camion/carga_camion', $data);
