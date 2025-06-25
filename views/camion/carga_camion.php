@@ -405,16 +405,16 @@ function Cargar() {
             }
     }
     if (!ban) {
-        //alert(msj);
         Swal.fire({
             title: msj,
             text: "",
             type: "info"
-            });
+        });
     } else {
+        // Preparar la carga del nuevo artículo
         existe = document.getElementById('existe_tabla').value;
-        carga.nombreCli= nombreCli;
-        carga.cliente =document.getElementById('clientes').value;
+        carga.nombreCli = nombreCli;
+        carga.cliente = document.getElementById('clientes').value;
         carga.cantidad = document.getElementById('cantidadcarga').value;
         carga.patente = document.getElementById('patentecamion').value;
         carga.motr_id = data_camion.id;
@@ -430,62 +430,40 @@ function Cargar() {
             carga.precio = (0).toFixed(2);
             carga.importeTotal = (0).toFixed(2);
         }
-        var html = '';
+
+        // Construir la fila de la tabla
+        var html = "<tr data-json='" + JSON.stringify(carga) + "' id='" + carga.id + "'>";
+        html += '<td><i class="fa fa-fw fa-minus text-light-blue tabla_carga_borrar" style="cursor: pointer; margin-left: 15px;" title="Eliminar"></i></td>';
+        html += '<td>' + carga.titulo + '</td>';
+        html += '<td>' + carga.tituloenvase + '</td>';
+        html += '<td class="descripcion">' + carga.tituloproducto + '</td>';
+        html += '<td class="cliente">' + carga.nombreCli + '</td>';
+        html += '<td>' + carga.listaPrecio + '</td>';
+        html += '<td>' + carga.cantidad + '</td>';
+        html += '<td>' + carga.precio + '</td>';
+        html += '<td>' + carga.importeTotal + '</td>';
+        html += '</tr>';
+
+        // Si la tabla no existe, crearla
         if (existe == 'no') {
-
-            html += '<table id="tabla_carga" class="table">';
-            html += "<thead>";
-            html += "<tr>";
-            html += "<th>Acciones</th>";
-            html += "<th>Lote</th>";
-            html += "<th>Envase</th>";
-            html += "<th>Descripción producto</th>";
-            html += "<th>Cliente</th>";
-            html += "<th>Lista de precios</th>";
-            html += "<th>Cantidad</th>";
-            html += "<th>P.Unitario</th>";
-            html += "<th>Importe</th>";
-            html += '</tr></thead><tbody>';
-            html += "<tr data-json='" + JSON.stringify(carga) + "' id='" + carga.id + "'>";
-            html +=
-                '<td><i class="fa fa-fw fa-minus text-light-blue tabla_carga_borrar" style="cursor: pointer; margin-left: 15px;" title="Eliminar"></i></td>';
-            html += '<td>' + carga.titulo + '</td>';
-            html += '<td>' + carga.tituloenvase + '</td>';
-            html += '<td class="descripcion">' + carga.tituloproducto + '</td>';
-            html += '<td class="cliente">' + carga.nombreCli + '</td>';
-            html += '<td>' + carga.listaPrecio + '</td>';
-            html += '<td>' + carga.cantidad + '</td>';
-            html += '<td>' + carga.precio + '</td>';
-            html += '<td>' + carga.importeTotal + '</td>';
-            html += '</tr>';
-            html += '</tbody></table>';
-            document.getElementById('tablacargas').innerHTML = "";
+            html = '<table id="tabla_carga" class="table"><thead><tr><th>Acciones</th><th>Lote</th><th>Envase</th><th>Descripción producto</th><th>Cliente</th><th>Lista de precios</th><th>Cantidad</th><th>P.Unitario</th><th>Importe</th></tr></thead><tbody>' + html + '</tbody></table>';
             document.getElementById('tablacargas').innerHTML = html;
-            $('#tabla_carga').DataTable({});
+            var tabla = $('#tabla_carga').DataTable({
+                "paging": true,
+                "lengthChange": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false
+            });
             document.getElementById('existe_tabla').value = 'si';
-
-        } else if (existe == 'si') {
-            html += "<tr data-json='" + JSON.stringify(carga) + "' id='" + carga.id + "'>";
-            html +=
-                '<td><i class="fa fa-fw fa-minus text-light-blue tabla_carga_borrar" style="cursor: pointer; margin-left: 15px;" title="Eliminar"></i></td>';
-            html += '<td>' + carga.titulo + '</td>';
-            html += '<td>' + carga.tituloenvase + '</td>';
-            html += '<td class="descripcion">' + carga.tituloproducto + '</td>';
-            html += '<td class="cliente">' + carga.nombreCli + '</td>';
-            html += '<td>' + carga.listaPrecio + '</td>';
-            html += '<td>' + carga.cantidad + '</td>';
-            html += '<td>' + carga.precio + '</td>';
-            html += '<td>' + carga.importeTotal + '</td>';
-            html += '</tr>';
-            $('#tabla_carga tbody').append(html);
-            tabla = document.getElementById('tabla_carga').innerHTML;
-            tabla = '<table id="tabla_carga" class="table table-bordered table-hover">' + tabla + '</table>';
-            $('#tabla_carga').dataTable().fnDestroy();
-            document.getElementById('tablacargas').innerHTML = "";
-            document.getElementById('tablacargas').innerHTML = tabla;
-            $('#tabla_carga').DataTable({});
-
+        } else {
+            // Si la tabla ya existe, agregar la nueva fila con DataTable
+            var tabla = $('#tabla_carga').DataTable();
+            tabla.row.add($(html)).draw();
         }
+
+        // Limpiar los campos
         document.getElementById('fechalote').value = "";
         document.getElementById('stocklote').value = "";
         document.getElementById('envaselote').value = "";
@@ -495,7 +473,6 @@ function Cargar() {
         $("#detalle").text("");
         $('#clientes').val(null).trigger('change');
         $('#lista_precios').val(null).trigger('change');
-
     }
 }
 
@@ -559,8 +536,8 @@ async function FinalizarCarga() {
         error("Error","No ha cargado ningun lote");
     } else {
         let lotes = [];
-        $('#tabla_carga tbody').find('tr').each(function() {
-            let json = JSON.parse($(this).attr('data-json'));
+        $('#tabla_carga').DataTable().rows().every(function() {
+            let json = JSON.parse($(this.node()).attr('data-json'));
             lotes.push(json);
         });
         lotes = JSON.stringify(lotes);
