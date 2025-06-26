@@ -151,7 +151,7 @@ async function generaRemito() {
                         '<td>' + importeFormateado + '</td>' +
                         '</tr>';
                     modalBody.find('#tabla_detalle').append(row);
-                    total += producto.importe;
+                    total += parseFloat(producto.importe);
                 });
 
                 // Formatear el total con el signo $ y dos decimales

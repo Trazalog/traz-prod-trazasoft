@@ -946,4 +946,23 @@ class Etapa extends CI_Controller
         $data = $this->Tablas->obtenerTablaEmpr_id('valida_tareas_produccion_lotes')['data'];
         echo json_encode($data);
     }
+
+    /**
+        * Obtiene de productos de salida 
+        * @return array 
+	*/
+    public function obtenerProductosSalidaJson($etapId)
+    {
+        $productos_salida_etapa = $this->Etapas->getSalidaEtapa($etapId)['data'];
+        $data = [];
+        foreach ($productos_salida_etapa as $prod) {
+            $data[] = [
+                'value' => $prod->arti_id,         
+                'label' => $prod->descripcion,
+                'barcode' => $prod->barcode,
+                'um' => $prod->um      
+            ];
+        }
+        echo json_encode(['status' => true, 'data' => $data]);
+    }
 }

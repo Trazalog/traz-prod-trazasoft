@@ -271,7 +271,6 @@ function Actualiza(establecimiento, esCamionInterno = false) {
             // Accion cuando genera camion automatico
             // Solo intentar seleccionar el camión interno si esCamionInterno es true
             if(esCamionInterno) {
-                debugger;
                 var camionesSelect = document.getElementById('camiones');
                 for(var i = 0; i < camionesSelect.options.length; i++) {
                     var option = camionesSelect.options[i];
@@ -298,7 +297,10 @@ function DatosCamion() {
     document.getElementById('fechacamion').value = camion.fecha;
     document.getElementById('patentecamion').value = camion.patente;
     document.getElementById('conductorcamion').value = camion.conductor;
-    document.getElementById('idcamion').value = camion.id;
+    var idCamionInput = document.getElementById('idcamion');
+    if (idCamionInput) {
+        idCamionInput.value = camion.id;
+    }
     document.getElementById('existe_tabla').value = 'no';
     document.getElementById('tablacargas').innerHTML = "";
     data_camion = camion;
@@ -465,7 +467,7 @@ function Cargar() {
 
         // Limpiar los campos
         document.getElementById('fechalote').value = "";
-        document.getElementById('stocklote').value = "";
+        //document.getElementById('stocklote').value = "";
         document.getElementById('envaselote').value = "";
         document.getElementById('cantidadcarga').value = "";
         document.getElementById('inputlotes').value = "";
@@ -602,7 +604,7 @@ async function FinalizarCarga() {
                 $("#clientes").val("").trigger('change');
                 $("#lista_precios").val("").trigger('change');
                 $("#fechalote").val("");
-                $("#stocklote").val("");
+               //("#stocklote").val("");
                 hecho('Guardado!', 'El camión se cargó exitosamente!');
             } else {
                 error('Error', 'No se puedo registrar carga');
