@@ -224,6 +224,10 @@
 			var art      = getJson('#inputproducto');
 			var destino  = getJson('#productodestino');
 
+			if (art && art.value) {
+				data.id = art.value;
+			}
+
 			$tblRep.append(
 				`<tr id="${$tblRep.find('tr').length + 1}"
 					class="data-json batch-${s_batchId} cabecera"
