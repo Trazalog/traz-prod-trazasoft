@@ -960,7 +960,8 @@ class Etapa extends CI_Controller
                 'value' => $prod->arti_id,         
                 'label' => $prod->descripcion,
                 'barcode' => $prod->barcode,
-                'um' => $prod->um      
+                'um' => $prod->um,
+                'id' => $prod->arti_id      
             ];
         }
         echo json_encode(['status' => true, 'data' => $data]);
