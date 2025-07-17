@@ -646,14 +646,12 @@ function validaArticuloListaPrecio(){
 function crearTransportePropio() {
     var select = document.getElementById('establecimientos');
     if (select.options.length > 1) { 
-        select.selectedIndex = 1;
-        select.dispatchEvent(new Event('change')); 
 
         // Datos fijos para el camión interno
         var data = {
             accion: 'carga',
             boleta: 'Transporte-Propio',
-            establecimiento: select.options[1].value,
+            establecimiento: select.value,
             fecha: new Date().toISOString().split('T')[0], 
             proveedor: '1000',
             cuit: '11111',
@@ -677,7 +675,7 @@ function crearTransportePropio() {
             success: function(response) {
                 if(response.status) {
                     // Actualizar la lista de camiones después de guardar
-                    Actualiza(select.options[1].value, true);
+                    Actualiza(select.value, true);
                     hecho('Éxito', 'Camión interno generado correctamente');
                 } else {
                     error('Error', 'El camion se encuentra cargado, Por favor verifique en Camiones ingresados');
