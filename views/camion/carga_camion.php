@@ -6,75 +6,64 @@
         </div>
     </div>
     <div class="box-body">
+        <!--Primera fila: Camiones Establecimiento y Fecha-->
         <div class="row">
-            <div class="col-xs-12 col-md-12 col-lg-12">
-                <div class="form-inline">
-                    <div class="col-xs-12 col-md-5">
-                        <div class="form-group">
-                            <label for="establecimientos" class="form-label">Establecimiento<?php hreq() ?>:</label>
-                            <select class="form-control select2 select2-hidden-accesible" onchange="Actualiza(this.value); ActualizaLotes();" id="establecimientos">
-                                <option value="" disabled>-Seleccione establecimiento-</option>
-                                <?php
-                                foreach($establecimientos as $fila)
-                                {  
-                                    echo '<option value="'.$fila->esta_id.'" '.($fila === reset($establecimientos) ? 'selected' : '').'>'.$fila->nombre.'</option>';
-                                } 
-                                ?>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-md-3">
-                        <div class="form-group">
-                            <label for="fecha" class="form-label">Fecha<?php hreq() ?>:</label>
-                            <input type="date" id="fecha" value="<?php echo $fecha;?>" class="form-control">
-                        </div>
-                    </div>
-                    <!-- /.fecha seleccionada -->
-                    <div class="col-xs-12 col-md-4">
-                        <div class="form-group" style="display: flex; align-items: center;">
-                            <label class="form-label" for="" style="margin-right: 5px;">Camiones ingresados<?php hreq() ?>:</label>
-                            <select id="camiones" class="form-control" onchange="DatosCamion()" disabled style="margin-right: 10px; min-width: 150px;">
-                            </select>
-                            <!-- Harkode Id de aromas -->
-                            <!-- /.boton para generar automaticamente camion interno para aromas -->
-                            <?php if (isset($empresa) && $empresa == 1): ?>
-                                <button type="button" class="btn btn-success" id="generarCamionInterno" onclick="crearTransportePropio()">
-                                    Generar camión interno
-                                </button>
-                            <?php endif; ?>
-                            
-                        </div>
-                    </div>
-                    <!-- /.camiones -->
+            <div class="col-xs-12 col-md-6">
+                <div class="form-group" style="display: flex; align-items: center;">
+                    <label for="establecimientos" class="form-label" style="margin-right: 30px; min-width: 120px;">Establecimiento<?php hreq() ?>:</label>
+                    <select class="form-control form-control-sm select2 select2-hidden-accesible" onchange="Actualiza(this.value); ActualizaLotes();" id="establecimientos" style="max-width: 300px;">
+                        <option value="" disabled>-Seleccione establecimiento-</option>
+                        <?php
+                        foreach($establecimientos as $fila)
+                        {  
+                            echo '<option value="'.$fila->esta_id.'" '.($fila === reset($establecimientos) ? 'selected' : '').'>'.$fila->nombre.'</option>';
+                        } 
+                        ?>
+                    </select>
                 </div>
-            </div><!-- /.col -->
-        </div><!-- /.row -->
-        <div class="row">
-            <div class="col-xs-12 col-md-12 col-lg-12">
-                <h3 style="margin-top: 5px;"><small>Datos del Camión</small></h3>
-                <div class="form-inline">
-                    <input type="hidden" id="idcamion">
-                    <div class="col-xs-12 col-md-3 col-md-offset-1">
-                        <div class="form-group">
-                            <label class="form-label">Fecha:</label>
-                            <input class="form-control" id="fechacamion" type="text" disabled>
-                        </div>
+            </div>
+            <div class="col-xs-12 col-md-6">
+                <div class="form-group" style="display: flex; align-items: center;">
+                    <label for="fecha" class="form-label" style="margin-right: 10px; min-width: 60px;">Fecha<?php hreq() ?>:</label>
+                    <input type="date" id="fecha" value="<?php echo $fecha;?>" class="form-control form-control-sm" style="max-width: 300px;">
+                </div>
+            </div>
+        </div>
+        <!-- Segunda fila: Camiones ingresados y botón -->
+        <div class="row" style="margin-top: 10px;">
+            <div class="col-xs-12 col-md-6">
+                <div class="form-group" style="display: flex; align-items: center;">
+                    <label class="form-label" for="" style="margin-right: 10px; min-width: 120px;">Camiones ingresados<?php hreq() ?>:</label>
+                    <select id="camiones" class="form-control form-control-sm" onchange="DatosCamion()" disabled style="max-width: 300px;">
+                    </select>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-6">
+                <?php if($camionInterno): ?>
+                    <div class="form-group" style="display: flex; align-items: center;">
+                        <button type="button" class="btn btn-primary" id="generarCamionInterno" onclick="crearTransportePropio()" style="min-width: 200px;">Generar camión interno</button>
                     </div>
-                    <!-- /.fecha info camion -->
-                    <div class="col-xs-12 col-md-3">
-                        <div class="form-group">
-                            <label class="form-label">Patente:</label>
-                            <input class="form-control" id="patentecamion" type="text" disabled>
-                        </div>
-                    </div>
-                    <!-- /.patente -->
-                    <div class="col-xs-12 col-md-3">
-                        <div class="form-group">
-                            <label class="form-label">Conductor:</label>
-                            <input class="form-control" id="conductorcamion" type="text" disabled>
-                        </div>
-                    </div>
-                    <!-- /.conductor -->
+                <?php endif; ?>
+            </div>
+        </div>
+        <!-- Tercera fila: Fecha ingreso, Patente, Conductor -->
+        <div class="row" style="margin-top: 10px;">
+            <div class="col-xs-12 col-md-4">
+                <div class="form-group" style="display: flex; align-items: center;">
+                    <label class="form-label" style="margin-right: 60px; min-width: 90px;">Fecha ingreso</label>
+                    <input class="form-control form-control-sm" id="fechacamion" type="text" disabled style="max-width: 300px;">
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4">
+                <div class="form-group" style="display: flex; align-items: center;">
+                    <label class="form-label" style="margin-right: 10px; min-width: 70px;">Patente</label>
+                    <input class="form-control form-control-sm" id="patentecamion" type="text" disabled style="max-width: 300px;">
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4">
+                <div class="form-group" style="display: flex; align-items: center;">
+                    <label class="form-label" style="margin-right: 10px; min-width: 80px;">Conductor</label>
+                    <input class="form-control form-control-sm" id="conductorcamion" type="text" disabled style="max-width: 300px;">
                 </div>
             </div>
         </div>
@@ -85,88 +74,74 @@
         <h3 class="box-title">Datos de Carga</h3>
     </div>
     <div class="box-body">
+        <!-- Primera fila: Cód. Lote, Fecha lote, Envase -->
         <div class="row firstRowOrder">
-            <div class="col-xs-12 col-md-12 col-lg-12">
-                <div class="form-inline">
-                    <div class="col-xs-12 col-md-3">
-                        <div class="col-xs-6 col-md-3">
-                            <label class="form-label">Cód. Lote<?php hreq() ?>:</label>
-                        </div>
-                        <div class="col-md-9 ba">
+            <div class="col-xs-12 col-md-4">
+                <div class="form-group" style="display: flex; align-items: center;">
+                    <label class="form-label" style="margin-right: 10px; min-width: 90px;">Cód. Lote<?php hreq() ?>:</label>
+                    <div class="col-md-12 ba">
                             <?php echo selectBusquedaAvanzada('inputlotes'); ?>
-                        </div>
                     </div>
-                    <!-- /.lote -->
-                    <div class="col-xs-12 col-md-3">
-                        <div class="form-group">
-                            <label class="form-label">Fecha:</label>
-                            <input class="form-control" type="text" disabled id="fechalote">
-                        </div>
-                    </div>
-                    <!-- /.fecha -->
-                    <div class="col-xs-12 col-md-3">
-                        <div class="form-group">
-                            <label class="form-label">Envase:</label>
-                            <input class="form-control" type="text" id="envaselote" disabled>
-                        </div>
-                    </div>
-                    <!-- /.envase -->
-                    <div class="col-xs-12 col-md-3">
-                        <div class="form-group">
-                            <label class="form-label">Stock:</label>
-                            <input class="form-control" type="text" id="stocklote" disabled>
-                        </div>
-                    </div>
-                    <!-- /.stock -->
-                    
-                </div><!-- /.form-inline -->
-            </div><!-- /.col -->
-        </div><!-- /.firstRowOrder -->
-        <div style="margin-top:10px" class="row secondRowOrder">
-            <div class="col-xs-12 col-md-12 col-lg-12">
-                <div class="form-inline">
-                    <div class="col-xs-6 col-md-3 col-md-offset-1">
-                        <div class="form-group">
-                            <label for="establecimientos" class="form-label">Cliente<?php hreq() ?>:</label>                                
-                            <select class="form-control sel2 select2-hidden-accesible" id="clientes">
-                                <option value="" disabled selected>-Seleccione cliente-</option>
-                                <?php
-                                    foreach($clientes as $fila){  
-                                        echo '<option value="'.$fila->clie_id.'" " data-nombre="'.$fila->nombre.'">'.$fila->nombre.'</option>';
-                                    } 
-                                ?>
-                            </select>
-                        </div>
-                    </div>
-                    <!-- /.cliente -->
-                    <div class="col-xs-6 col-md-3">
-                        <div class="form-group">
-                            <label class="form-label">Cantidad<?php hreq() ?>:</label>
-                            <input class="form-control" type="number" placeholder="Ingrese cantidad" id="cantidadcarga">
-                        </div>
-                    </div>
-                    <!-- /.cantidad -->
-                     <?php if($listasPrecios): ?>
-                    <div class="col-xs-12 col-md-5">
-                        <div class="form-group">
-                            <label for="lista_precios" class="form-label">Lista precios<?php hreq() ?>:</label>                                
-                            <select class="form-control sel2 select2-hidden-accesible" id="lista_precios">
-                                <option value="" data-foo='' disabled selected>-Seleccione lista de precios-</option>
-                                <?php
-                                    foreach($listasPrecios as $lista){
-                                        $descripcion = $lista->detalles_lista_precio->detalle_lista_precio[0]->descripcion ? '<small><cite>'.$lista->detalles_lista_precio->detalle_lista_precio[0]->descripcion.' </cite></small><label class="text-blue">♦ </label>' : '';
-                                        $version = $lista->detalles_lista_precio->detalle_lista_precio[0]->nro_version ? '<small><cite> Versión: v'.$lista->detalles_lista_precio->detalle_lista_precio[0]->nro_version.'</cite></small>' : '';
-                                        $aux = $descripcion ? $descripcion : '';
-                                        $aux .= $version ? $version : '';
-                                        echo "<option data-foo='$aux' data-json='".json_encode($lista)."' value='$lista->lipr_id' data-nombre='$lista->nombre'>$lista->nombre</option>";
-                                    } 
-                                ?>
-                            </select>
-                        </div>
-                    </div>
-                    <?php endif; ?>
-                    <!-- /.lista precio -->
                 </div>
+            </div>
+            <div class="col-xs-12 col-md-4">
+                <div class="form-group" style="display: flex; align-items: center;">
+                    <label class="form-label" style="margin-right: 10px; min-width: 80px;">Fecha lote</label>
+                    <input class="form-control form-control-sm" type="text" disabled id="fechalote" style="max-width: 200px;">
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4">
+                <div class="form-group" style="display: flex; align-items: center;">
+                    <label class="form-label" style="margin-right: 10px; min-width: 60px;">Envase</label>
+                    <input class="form-control form-control-sm" type="text" id="envaselote" disabled style="max-width: 200px;">
+                </div>
+            </div>
+        </div>
+        <!-- Segunda fila: Cliente, Lista Precios, Cantidad -->
+        <div class="row secondRowOrder" style="margin-top: 10px;">
+            <div class="col-xs-12 col-md-4">
+                <div class="form-group" style="display: flex; align-items: center;">
+                    <label for="clientes" class="form-label" style="margin-right: 55px; min-width: 60px;">Cliente<?php hreq() ?>:</label>
+                    <select class="form-control sel2 select2-hidden-accesible" id="clientes" style="max-width: 200px;">
+                        <option value="" disabled selected>-Seleccione cliente-</option>
+                        <?php
+                            foreach($clientes as $fila){  
+                                echo '<option value="'.$fila->clie_id.'" data-nombre="'.$fila->nombre.'">'.$fila->nombre.'</option>';
+                            } 
+                        ?>
+                    </select>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4">
+                <?php if($listasPrecios): ?>
+                <div class="form-group" style="display: flex; align-items: center;">
+                    <label for="lista_precios" class="form-label" style="margin-right: 10px; min-width: 80px;">Lista Precios<?php hreq() ?>:</label>
+                    <select class="form-control sel2 select2-hidden-accesible" id="lista_precios" style="max-width: 350px;">
+                        <option value="" data-foo='' disabled selected>-Seleccione lista de precios-</option>
+                        <?php
+                            foreach($listasPrecios as $lista){
+                                $version = $lista->detalles_lista_precio->detalle_lista_precio[0]->nro_version ? '<label> - </label><small><cite>v'.$lista->detalles_lista_precio->detalle_lista_precio[0]->nro_version.'</cite></small><label> - </label>' : '';
+                                $descripcion = $lista->detalles_lista_precio->detalle_lista_precio[0]->descripcion ? '<small><cite>'.$lista->detalles_lista_precio->detalle_lista_precio[0]->descripcion.' </cite></small>' : '';
+                                $aux = $version ? $version : '';
+                                $aux .= $descripcion ? $descripcion : '';
+                                echo "<option data-foo='$aux' data-json='".json_encode($lista)."' value='$lista->lipr_id' data-nombre='$lista->nombre'>$lista->nombre</option>";
+                            } 
+                        ?>
+                    </select>
+                </div>
+                <?php endif; ?>
+            </div>
+            <div class="col-xs-12 col-md-4">
+                <div class="form-group" style="display: flex; align-items: center;">
+                    <label class="form-label" style="margin-right: 10px; min-width: 60px;">Cantidad<?php hreq() ?>:</label>
+                    <input class="form-control form-control-sm" type="number" placeholder="Ingrese cantidad" id="cantidadcarga" style="max-width: 120px;" step="any">
+                </div>
+            </div>
+        </div>
+        <!-- Tercera fila: Botón Cargar Camión -->
+        <div class="row" style="margin-top: 10px;">
+            <div class="col-xs-12 text-center">
+                <button class="btn btn-primary" type="button" onclick="Cargar();" style="width: 400px;">Cargar Camión</button>
             </div>
         </div>
         <div class="row thirdRowOrder">
@@ -192,11 +167,6 @@
             </div><!-- /.col -->
         </div><!-- /.thirdRowOrder -->
         <div class="row" style="margin-top: 20px">
-            <div class="col-xs-6 col-md-3 col-md-offset-5 col-lg-2">
-                <button class="btn btn-block btn-primary" type="button" onclick="Cargar();">Cargar camión<?php #echo $lang["CargarCamion"];?></button>
-            </div>
-        </div>
-        <div class="row" style="margin-top: 20px">
             <input type="hidden" id="existe_tabla" value="no">
             <div class="col-xs-12 table-responsive" id="tablacargas"></div>
         </div>
@@ -221,12 +191,45 @@
 <script>
 //Variable core.tablas para identificar remitos valorizados
 var verListaPrecios = <?php echo $remitosValorizados ? $remitosValorizados[0]->valor : 'false' ?>;
+
+//--- formato de los select ----
+// --- AGREGADO PARA MOSTRAR NOMBRE - VERSION - DESCRIPCION EN EL SELECT SELECCIONADO ---
+function formatCustom (state) {
+    if (!state.id) {
+        return state.text;
+    }
+    // Obtener el data-foo del option
+    var foo = $(state.element).data('foo');
+    if (foo) {
+        // Si foo ya tiene HTML, lo devolvemos como HTML
+        return $('<span>' + state.text + ' ' + foo + '</span>');
+    } else {
+        return state.text;
+    }
+}
+
+function formatCustomSelection (state) {
+    if (!state.id) {
+        return state.text;
+    }
+    var foo = $(state.element).data('foo');
+    if (foo) {
+        // Mostramos nombre - version - descripcion en el seleccionado
+        return $('<span>' + state.text + ' ' + foo + '</span>');
+    } else {
+        return state.text;
+    }
+}
+//---Fin formato de los select ----
+
 $(document).ready(function () {
     $(".sel2").select2();
+    //inicializacion select lista de precios
     $('#lista_precios').select2({
         placeholder: "-Seleccione lista de precios-",
         allowClear: true,
-        templateResult: formatCustom
+        templateResult: formatCustom,
+        templateSelection: formatCustomSelection
     });
 
     // Seleccionar el primer establecimiento por defecto
@@ -268,7 +271,6 @@ function Actualiza(establecimiento, esCamionInterno = false) {
             // Accion cuando genera camion automatico
             // Solo intentar seleccionar el camión interno si esCamionInterno es true
             if(esCamionInterno) {
-                debugger;
                 var camionesSelect = document.getElementById('camiones');
                 for(var i = 0; i < camionesSelect.options.length; i++) {
                     var option = camionesSelect.options[i];
@@ -295,7 +297,10 @@ function DatosCamion() {
     document.getElementById('fechacamion').value = camion.fecha;
     document.getElementById('patentecamion').value = camion.patente;
     document.getElementById('conductorcamion').value = camion.conductor;
-    document.getElementById('idcamion').value = camion.id;
+    var idCamionInput = document.getElementById('idcamion');
+    if (idCamionInput) {
+        idCamionInput.value = camion.id;
+    }
     document.getElementById('existe_tabla').value = 'no';
     document.getElementById('tablacargas').innerHTML = "";
     data_camion = camion;
@@ -351,7 +356,7 @@ function ActualizaLote(lote) {
 
     document.getElementById('fechalote').value = lote.fecha;
     document.getElementById('envaselote').value = lote.tituloenvase;
-    document.getElementById('stocklote').value = lote.stock;
+    //document.getElementById('stocklote').value = lote.stock;
     // document.getElementById('productolote').value = lote.tituloproducto;
     // document.getElementById('stocklote').value = lote.stock;
 }
@@ -415,16 +420,17 @@ function Cargar() {
         carga.cantidad = document.getElementById('cantidadcarga').value;
         carga.patente = document.getElementById('patentecamion').value;
         carga.motr_id = data_camion.id;
-
-        if (verListaPrecios) {
-            carga.importeTotal = carga.cantidad * dataArticulo.precio;
-            carga.listaPrecio = $("#lista_precios option:selected").text();
-            carga.precio = dataArticulo.precio;
+        if(verListaPrecios){
+            carga.importeTotal = (carga.cantidad * dataArticulo.precio).toFixed(2);
+            var foo = $("#lista_precios option:selected").data('foo');
+            var nombre = $("#lista_precios option:selected").text();
+            carga.listaPrecio = nombre + (foo ? ' ' + foo : '');
+            carga.precio = parseFloat(dataArticulo.precio).toFixed(2);
             carga.core_id = dataArticulo.core_id;
-        } else {
-            carga.core_id = 1; // Manejo de empresas sin lista de precios
-            carga.precio = 0;
-            carga.importeTotal = 0;
+        }else{
+            carga.core_id = 1;// TODO: tengo que resolver como manejar el caso de empresas sin lista de precios
+            carga.precio = (0).toFixed(2);
+            carga.importeTotal = (0).toFixed(2);
         }
 
         // Construir la fila de la tabla
@@ -461,7 +467,7 @@ function Cargar() {
 
         // Limpiar los campos
         document.getElementById('fechalote').value = "";
-        document.getElementById('stocklote').value = "";
+        //document.getElementById('stocklote').value = "";
         document.getElementById('envaselote').value = "";
         document.getElementById('cantidadcarga').value = "";
         document.getElementById('inputlotes').value = "";
@@ -552,7 +558,7 @@ async function FinalizarCarga() {
             if (result.status == true) {
 
                 // id de aromas (la que tiene el botón de camión interno)
-                <?php if (isset($empresa) && $empresa == 1): ?>
+                <?php if($listasPrecios): ?>
                 
                 // Obtener los datos del camión actual del select
                 const camionSelect = document.getElementById('camiones');
@@ -598,7 +604,7 @@ async function FinalizarCarga() {
                 $("#clientes").val("").trigger('change');
                 $("#lista_precios").val("").trigger('change');
                 $("#fechalote").val("");
-                $("#stocklote").val("");
+               //("#stocklote").val("");
                 hecho('Guardado!', 'El camión se cargó exitosamente!');
             } else {
                 error('Error', 'No se puedo registrar carga');
@@ -640,14 +646,12 @@ function validaArticuloListaPrecio(){
 function crearTransportePropio() {
     var select = document.getElementById('establecimientos');
     if (select.options.length > 1) { 
-        select.selectedIndex = 1;
-        select.dispatchEvent(new Event('change')); 
 
         // Datos fijos para el camión interno
         var data = {
             accion: 'carga',
             boleta: 'Transporte-Propio',
-            establecimiento: select.options[1].value,
+            establecimiento: select.value,
             fecha: new Date().toISOString().split('T')[0], 
             proveedor: '1000',
             cuit: '11111',
@@ -671,10 +675,10 @@ function crearTransportePropio() {
             success: function(response) {
                 if(response.status) {
                     // Actualizar la lista de camiones después de guardar
-                    Actualiza(select.options[1].value, true);
+                    Actualiza(select.value, true);
                     hecho('Éxito', 'Camión interno generado correctamente');
                 } else {
-                    error('Error', 'No se pudo generar el camión interno');
+                    error('Error', 'El camion se encuentra cargado, Por favor verifique en Camiones ingresados');
                 }
             },
             error: function() {
@@ -683,5 +687,5 @@ function crearTransportePropio() {
         });
     }
 }
-</script>
+
 </script>

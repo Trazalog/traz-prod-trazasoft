@@ -108,21 +108,28 @@
 
 	// levanta modal de Reporte de Produccion
 	function verReporte(e) {
-debugger;
-			var data = getJson2(e);
-			s_batchId = data.id;
-			$mdl.modal("show");
-			$('#codigo_lote').val(data.lote);
-			$('#num_orden_prod').val(data.orden);
-			$('#batch_id_padre').val(data.id);
-			$('#cant_origen').val(data.cantidad);
-			$('#depo_id').val(data.depo_id);
-			obtenerDepositos(data.esta_id);
-			/*obtenerResponsable(data.id);*/
-			reload('#articulos-salida', data.etap_id);
-			reload('#pnl-noco');
-			console.log(data);
+		var data = getJson2(e);
+		s_batchId = data.id;
+
+		$mdl.modal('show');
+		$('#codigo_lote').val(data.lote);
+		$('#num_orden_prod').val(data.orden);
+		$('#batch_id_padre').val(data.id);
+		$('#cant_origen').val(data.cantidad);
+		$('#depo_id').val(data.depo_id);
+
+		obtenerDepositos(data.esta_id);
+		obtenerProductoJson(data.etap_id);
+
+		$('#inputproducto').select2({
+			dropdownParent: $('#pnl-1'),
+			width: '100%'
+		});
+
+		reload('#pnl-noco');
+		console.log(data);
 	}
+
 
 	function obtenerResponsable(bacth_id){
 		if (!tareaId) {
@@ -185,27 +192,73 @@ debugger;
 			});
 	}
 
+	function fillSelectProducto(selector, data) {
+		var $select = $(selector);
+		$select.empty();
+		$select.append('<option value="" disabled selected>Seleccione una opción</option>');
+		data.forEach(function(item) {
+			$select.append('<option value="' + item.value + '" data-json=\'' + JSON.stringify(item) + '\'>' + item.label + '</option>');
+		});
+		$select.val(null).trigger('change');
+	} 
+
+	function obtenerProductoJson(etap_id) {
+		$.ajax({
+			url: '<?php echo base_url(PRD).'general/etapa/obtenerProductosSalidaJson' ?>/' + etap_id,
+			type: 'GET',
+			dataType: 'json',
+			success: function(result) {
+				if (result.status && result.data) {
+					fillSelectProducto('#inputproducto', result.data);
+				} else {
+					fillSelectProducto('#inputproducto', []);
+				}
+			}
+		});
+	}
 
 	$tblRep = $('#tbl-reportes').find('tbody');
 
 	function agregar() {
-			var data = getForm('#frm-etapa');
-			var art = getJson('#inputproducto');
-			var destino = getJson('#productodestino');
+			var data     = getForm('#frm-etapa');
+			var art      = getJson('#inputproducto');
+			var destino  = getJson('#productodestino');
+
+			if (art && art.value) {
+				data.id = art.value;
+			}
+
 			$tblRep.append(
-					`<tr id="${$tblRep.find('tr').length + 1}" class='data-json batch-${s_batchId} cabecera' data-json='${JSON.stringify(data)}' data-forzar='false'><td><b>Operario:</b> ${$('#operario option:selected').text()}<br><b>Artículo:</b> ${art.barcode} x ${data.cantidad}(${art.um})</td><td>${destino.nombre}</td>
-							<td class="botonera">
-									<button class="btn btn-link" title="Agregar no consumible" onclick="switchPane()"><i class="fa fa-download text-info"></i></button>
-									<button class="btn btn-link" title="Eliminar registro" onclick="$(this).closest('tr').remove()"><i class="fa fa-trash text-danger"></i></button>
-									<button class="btn btn-success ver-mas" title="Ver más" onclick="verMas(this)"><i class="fa fa-plus"></i></button>
-							</td>
-					</tr>
-					<tr style="display: none" class="info-extra"></tr>
-					`
+				`<tr id="${$tblRep.find('tr').length + 1}"
+					class="data-json batch-${s_batchId} cabecera"
+					data-json='${JSON.stringify(data)}' data-forzar="false">
+					<td>
+						<b>Operario:</b> ${$('#operario option:selected').text()}<br>
+						<b>Artículo:</b> ${art.barcode} x ${data.cantidad} (${art.um})
+					</td>
+					<td>${destino.nombre}</td>
+					<td class="botonera">
+						<button class="btn btn-link" title="Agregar no consumible" onclick="switchPane()">
+							<i class="fa fa-download text-info"></i>
+						</button>
+						<button class="btn btn-link" title="Eliminar registro" onclick="$(this).closest('tr').remove()">
+							<i class="fa fa-trash text-danger"></i>
+						</button>
+						<button class="btn btn-success ver-mas" title="Ver más" onclick="verMas(this)">
+							<i class="fa fa-plus"></i>
+						</button>
+					</td>
+				</tr>
+				<tr style="display: none" class="info-extra"></tr>`
 			);
-			$('#frm-etapa').find('.form-control:not(#codigo_lote)').val('');
-			$('.select2').trigger('change');
-	}
+
+		// Limpieza
+			$('input[name="cantidad"]').val('');
+			$('#inputproducto').val(null).trigger('change');
+			$('#productodestino').val(null).trigger('change');
+			$('#operario').val(null).trigger('change');
+
+	} 
 </script>
 
 
@@ -249,7 +302,9 @@ debugger;
 													<div class="col-md-12">
 														<div class="form-group">
 															<label>Producto:</label>
-															<?php  echo componente('articulos-salida',base_url(PRD).'general/etapa/obtenerProductosSalida') ?>
+															<?php
+																echo selectBusquedaAvanzada('inputproducto', 'producto', false, false, false, false, false, false);
+															?>
 														</div>
 													</div>
 													<div class="col-md-12">
