@@ -45,7 +45,7 @@
                 <input class="hidden" type="text" id="unificar">
                 <!-- Recursos de Trabajo -->
                 <div class="row form-group" style="margin-top:20px">
-                    <div class="col-md-3 col-xs-12"><label class="form-label">Operario:</label></div>
+                    <div class="col-md-3 col-xs-12"><label class="form-label">Operario<?php hreq() ?>:</label></div>
                     <div class="col-md-8 col-xs-12"><input class="form-control datalist" list="operarios" id="operario"><datalist id="operarios"><?php foreach ($rec_trabajo as $o) {
                             echo "<option value='$o->descripcion' data-json='" . json_encode($o) . "'></option>";
                         } ?></datalist>
@@ -242,6 +242,9 @@ $this->load->view(COD . 'componentes/modalGenerico');
     });
     function AgregarProducto() {
         ban = '';
+        if (!_isset($("#operario").val())) {
+            ban = "Debe seleccionar un Operario!";
+        }
         if (!_isset($("#inputproducto").val())) {
             ban = "Debe seleccionar un producto!";
         }
