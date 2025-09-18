@@ -368,6 +368,7 @@ function crearTablaReceta(tag){
                 }else{
                     //console.log("No hay articulos");
                     document.getElementById('tabla-Formula').hidden = true;
+                    notificar('Info','Por favor, agregar articulos en la receta.', 'info');
                 }
                 wc();
             },
@@ -499,6 +500,10 @@ function ControlaProducto() {
     if (document.getElementById('cantidad').value == "") {
         ban = false;
         msj += "No ha ingresado <b>cantidad</b>.<br>"
+    }
+    if (document.getElementById('tabla-Formula').hidden) {
+        ban = false;
+        msj += "No ha agregado articulos en la receta.<br>"
     }
     if (!ban) {
         error('Error',msj);
