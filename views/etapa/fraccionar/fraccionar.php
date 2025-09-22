@@ -473,9 +473,9 @@ function ActualizaEmpaques() {
     }
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Calcula el stock necesario multiplicando la cantidad de la receta por la cantidad ingresado pro el usuario
+// Calcula el stock necesario multiplicando la cantidad ingresado pro el usuario por la capacidad
 function CalculaStock() {
-    stock = document.getElementById('cantidadReceta').value * document.getElementById('cantidad').value;
+    stock = document.getElementById('volumen').value * document.getElementById('cantidad').value;
     document.getElementById('calculo').value = stock;
 }
 
