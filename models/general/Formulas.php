@@ -45,7 +45,7 @@ class Formulas extends CI_Model
 
 	public function getArticulosReceta($id)
 	{
-		$url = REST_PRD_ETAPAS . '/getArticulosReceta/' . $id;
+		$url = REST_PRD_ETAPAS . '/getArticulosRecetaV2/' . $id;
 		$rsp = $this->rest->callApi('GET', $url);
 		$rsp['data'] = json_decode($rsp['data']);
 		return $rsp['data'];

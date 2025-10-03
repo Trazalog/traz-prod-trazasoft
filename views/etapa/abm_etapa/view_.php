@@ -535,6 +535,36 @@
     if( !validarCampos('frmArticulo') ){
       return;
     }
+
+    // obtener id del select (antes faltaba y por eso la comprobacion fallaba)
+  var arti_id = $('#articulo_id').val();
+  if (!arti_id) {
+    alertify.error("Seleccione un artículo antes de guardar");
+    return;
+  }
+
+    debugger;
+    // Verificar si el artículo ya está en la tabla (evita duplicados client-side)
+      var existe = false;
+      $('#tabla_articulos tbody tr').each(function(){
+        var dataJson = $(this).attr('data-json') || $(this).data('json');
+        if(!dataJson) return;
+        try {
+          var obj = (typeof dataJson === 'string') ? JSON.parse(dataJson) : dataJson;
+          if(String(obj.arti_id) === String(arti_id)){
+            existe = true;
+            return false; // break each
+          }
+        } catch(e){
+          // ignore parse errors
+        }
+      });
+
+      if(existe){
+        error("info","El artículo ya se encuentra registrado. Por favor, seleccionar otro.");
+        return;
+      }
+
     var recurso = "";
     var form = $('#frmArticulo')[0];
     var datos = new FormData(form);
