@@ -30,12 +30,12 @@
                         <label class="form-check-label" for="">Batch ID</label>
                     </div>
                 </div>
-                <div class="form-group col-sm-5">
-                    <div class="col-sm-7">
+                <div class="form-group col-sm-6 col-xs-12" style="margin-top: 15px;">
+                    <div class="input-group">
                         <input type="text" class="form-control" id="batch" name="batch" placeholder="Ingrese código a buscar">
-                    </div>
-                    <div class="col-sm-3">
-                        <button type="button" class="btn btn-block btn-primary btn-flat" onclick="buscarBatch()">Buscar</button>
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-primary btn-flat" onclick="buscarBatch()">Buscar</button>
+                        </span>
                     </div>
                 </div>
             </div>
